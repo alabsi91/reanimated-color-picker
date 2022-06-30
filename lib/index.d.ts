@@ -97,6 +97,34 @@ interface HueProps {
   borderRadius?: number;
 }
 
+interface BrightnessProps {
+  /** - brightness slider handle (thumb) size (height*width). */
+  thumbSize?: number;
+
+  /**
+   * - brightness slider track height.
+   * - **Note** max height is `80`
+   */
+  trackHeight?: number;
+
+  /** - brightness slider border raduis. */
+  borderRadius?: number;
+}
+
+interface SaturationProps {
+  /** - saturation slider handle (thumb) size (height*width). */
+  thumbSize?: number;
+
+  /**
+   * - saturation slider track height.
+   * - **Note** max height is `80`
+   */
+  trackHeight?: number;
+
+  /** - saturation slider border raduis. */
+  borderRadius?: number;
+}
+
 interface OpacityProps {
   /** - opacity slider handle (thumb) size (height*width). */
   thumbSize?: number;
@@ -112,11 +140,12 @@ interface OpacityProps {
 }
 
 declare const ColorPicker: React.FunctionComponent<ColorPickerProps>;
-declare const Preview: React.FunctionComponent<PreviewPorps>;
-declare const Panel: React.FunctionComponent<PanelProps>;
-declare const HueSlider: React.FunctionComponent<HueProps>;
-declare const OpacitySlider: React.FunctionComponent<OpacityProps>;
-declare const Swatches: React.FunctionComponent<SwatchesPorps>;
+export declare const Preview: React.FunctionComponent<PreviewPorps>;
+export declare const Panel: React.FunctionComponent<PanelProps>;
+export declare const HueSlider: React.FunctionComponent<HueProps>;
+export declare const BrightnessSlider: React.FunctionComponent<BrightnessProps>;
+export declare const SaturationSlider: React.FunctionComponent<SaturationProps>;
+export declare const OpacitySlider: React.FunctionComponent<OpacityProps>;
+export declare const Swatches: React.FunctionComponent<SwatchesPorps>;
 
 export default ColorPicker;
-export { Preview, Panel, HueSlider, OpacitySlider, Swatches };

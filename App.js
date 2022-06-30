@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
-import ColorPicker, { Panel, Swatches, Preview, OpacitySlider, HueSlider } from './lib/ColorPicker';
+import ColorPicker, { Panel, Swatches, Preview, OpacitySlider, HueSlider, BrightnessSlider, SaturationSlider } from './lib/index';
 
 export default function App() {
   const [color, setColor] = useState('#8bc34b');
@@ -16,9 +16,11 @@ export default function App() {
       <ColorPicker value={color} width={280} onComplete={({ hex }) => console.log(hex)}>
         <Preview />
         <Panel />
-        <OpacitySlider />
         <HueSlider />
-        <Swatches />
+        <BrightnessSlider />
+        <SaturationSlider />
+        <OpacitySlider />
+        {/* <Swatches /> */}
       </ColorPicker>
     </View>
   );

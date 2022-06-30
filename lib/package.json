@@ -1,0 +1,28 @@
+{
+  "name": "reanimated-color-picker",
+  "version": "0.0.2",
+  "description": "",
+  "main": "index.js",
+  "source": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "publish": "npm publish"
+  },
+  "keywords": [
+    "react-native",
+    "color",
+    "picker",
+    "palette"
+  ],
+  "repository": "https://github.com/alabsi91/reanimated-color-picker",
+  "author": "Ahmed Alabsi <alabsi91@gmail.com> (https://github.com/alabsi91)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alabsi91/reanimated-color-picker/issues"
+  },
+  "homepage": "https://github.com/alabsi91/reanimated-color-picker",
+  "peerDependencies": {
+    "react-native-gesture-handler": ">=2.0.0",
+    "react-native-reanimated": ">=2.0.0"
+  }
+}
