@@ -1,5 +1,10 @@
 # :red_circle: :green_circle: :large_blue_circle: Reanimated Color Picker :red_circle: :green_circle: :large_blue_circle:
 
+![npm](https://img.shields.io/npm/v/reanimated-color-picker?style=for-the-badge)
+![GitHub](https://img.shields.io/github/license/alabsi91/reanimated-color-picker?style=for-the-badge)
+![GitHub issues](https://img.shields.io/github/issues/alabsi91/reanimated-color-picker?style=for-the-badge)
+![Platform](https://img.shields.io/badge/Platform-IOS%20%7C%20Android%20%7C%20Expo%20%7C%20Web-informational?style=for-the-badge)
+
 ### - Pure javascript customizable color picker for react-native.
 
 # :small_blue_diamond: Table of contents
