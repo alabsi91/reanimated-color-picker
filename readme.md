@@ -163,6 +163,7 @@ export default function App() {
 | :--------------- | :-----: | :-----: | :-------------------------------------------------------------------------------------------- |
 | colorFormat      | string  | `'hex'` | preview color text format: `'hex'`, `'rgb'`, `'rgba'`, `'hsl'`, `'hsla'`, `'hsv'` or `'hsva'` |
 | hideInitialColor | boolean | `false` | hide the initial color preview part                                                           |
+| hideText         | boolean | `false` | hide preview color text                                                                       |
 | style            | object  |    /    | preview container style                                                                       |
 | textStyle        | object  |    /    | preview text style                                                                            |
 

@@ -62,6 +62,9 @@ interface PreviewPorps {
   /** - hide initial color preview and show the picked color preview only. */
   hideInitialColor?: boolean;
 
+  /** - hide color preview text. */
+  hideText?: boolean;
+
   /**
    * - preview container style.
    * - **Note** some of the style properties will be overwritten.
