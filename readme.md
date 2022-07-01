@@ -7,11 +7,11 @@
 ![GitHub issues](https://img.shields.io/github/issues/alabsi91/reanimated-color-picker?style=for-the-badge)
 ![Platform](https://img.shields.io/badge/Platform-IOS%20%7C%20Android%20%7C%20Expo%20%7C%20Web-informational?style=for-the-badge)
 
-### - Pure javascript color picker for react-native.
+### - Pure JavaScript color picker for react-native.
 
-![example_1](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/example_1.png?raw=true)
+![Example_1](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/example_1.png?raw=true)
 
-![example_2](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/example_2.png?raw=true)
+![Example_2](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/example_2.png?raw=true)
 
 # :small_blue_diamond: Table of contents
 
@@ -24,7 +24,7 @@
 - :four: [Api](#small_blue_diamondapi).
 
   - [ColorPicker Wrapper](#small_red_trianglecolorpicker-wrapper)
-  - [Build In Components](#small_red_trianglebuild-in-components)
+  - [Built-in Components](#small_red_trianglebuilt-in-components)
     - [`<Preview />`](#small_orange_diamondpreview-).
     - [`<Panel />`](#small_orange_diamondpanel-).
     - [`<HueSlider />`](#small_orange_diamondhueslider-).
@@ -37,7 +37,7 @@
 
 # :small_blue_diamond:Prerequisites
 
-- Press the links bellow to follow the installation instructions.
+- Use the links below to follow the installation instructions.
 
 - [react-native-gesture-handler](https://docs.swmansion.com/react-native-gesture-handler/docs/installation).
 
@@ -56,8 +56,8 @@ npm i reanimated-color-picker
 
 # :small_blue_diamond:Usage
 
-- You can add, remove, rearrange or style the color picker build in components.
-- You can also add your own components.
+- You can add, remove, rearrange or style the color picker's built-in components.
+- You can also add your components.
 
 - Check out the working example [here](https://github.com/alabsi91/reanimated-color-picker/tree/main/Example).
 
@@ -99,59 +99,59 @@ export default function App() {
 
 ## :small_red_triangle:ColorPicker Wrapper
 
-- The `ColorPicker` Wrapper is responsible for managing the build in components.
+- The `ColorPicker` Wrapper is responsible for managing the built-in components.
 
 - It has the following props:
 
 ### :small_orange_diamond:value
 
 - The initial value of the color picker.
-- Accepts `'hex'`, `'rgb'`, `'rgba'`, `'hsl'`, `'hsla'`, and `named color` formats.
+- Accepts `'hex'`, `'rgb'`, `'rgba'`, `'hsl'`, `'hsla'` and `named color` formats.
 - `type: string`
 - `default: '#418181'`
 
 ### :small_orange_diamond:tracksHeight
 
-- Change all sliders track height.
+- Change all slider's track height.
 - `type: number`
 - `default: 25`
 
 ### :small_orange_diamond:thumbsSize
 
-- Change all sliders thumb size.
+- Change all slider's thumb size.
 - `type: number`
 - `default: 35`
 
 ### :small_orange_diamond:width
 
-- The width of the color picker wrapper.
-- All of build in components will inherit this width.
+- The width of the color picker's wrapper.
+- All built-in components will inherit this width.
 - `type: number`
 - `default: 300`
 
 ### :small_orange_diamond:style
 
-- Color picker wrapper style.
-- If you want to change the width use the `width` property.
+- Color picker's wrapper style.
+- If you want to change the width using the `width`` property.
 - `type: object`
 
-> **Note** some of the style properties will be overwritten.
+> **Note** some style properties will be overwritten.
 
 ### :small_orange_diamond:onChange
 
-- Called every time the color value changes.
-- The passed color object has the following properties: `hex`, `rgb`, `rgba`, `hsl`, `hsla`
+- Called every time the color value changed.
+- The passed color object has the following properties: `hex`, `rgb`, `rgba`, `hsl` and `hsla`
 - `type: (color: object) => void`
 - `default: null`
 
 ### :small_orange_diamond:onComplete
 
-- Called when the user lifts his finger from the slider or when clicks on a swatch.
-- The passed color object has the following properties: `hex`, `rgb`, `rgba`, `hsl`, `hsla`
+- Called when the user releases the slider handle or when a swatch is clicked.
+- The passed color object has the following properties: `hex`, `rgb`, `rgba`, `hsl` and `hsla`
 - `type: (color: object) => void`
 - `default: null`
 
-## :small_red_triangle:Build In Components
+## :small_red_triangle:Built-in Components
 
 ### :small_orange_diamond:`<Preview />`
 
@@ -167,26 +167,26 @@ export default function App() {
 | style            | object  |    /    | preview container style                                                                       |
 | textStyle        | object  |    /    | preview text style                                                                            |
 
-> **Note** some of the style properties will be overwritten.
+> **Note** some style properties will be overwritten.
 
 ### :small_orange_diamond:`<Panel />`
 
 ![panel](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/panel.png?raw=true)
 
-- A square to change color brightness and saturation.
+- A square-shaped slider used for changing the color's brightness and saturation.
 
 | Property  |  Type  | Default | Description                               |
 | :-------- | :----: | :-----: | :---------------------------------------- |
 | thumbSize | number |  `35`   | panel handle (thumb) size (height\*width) |
 | style     | object |    /    | panle container style                     |
 
-> **Note** some of the style properties will be overwritten.
+> **Note** some style properties will be overwritten.
 
 ### :small_orange_diamond:`<HueSlider />`
 
 ![hue](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/hue.png?raw=true)
 
-- A slider to changes color hue.
+- A slider used for changing the color's hue.
 
 | Property  |  Type  | Default | Description                                    |
 | :-------- | :----: | :-----: | :--------------------------------------------- |
@@ -194,13 +194,13 @@ export default function App() {
 | ringColor | string | `#fff`  | the color of the ring around the slider handle |
 | style     | object |    /    | hue slider container style                     |
 
-> **Note** some of the style properties will be overwritten.
+> **Note** some style properties will be overwritten.
 
 ### :small_orange_diamond:`<SaturationSlider />`
 
 ![saturation](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/saturation.png?raw=true)
 
-- A slider to changes color saturation.
+- A slider used for changing the color's saturation.
 
 | Property  |  Type  | Default | Description                                           |
 | :-------- | :----: | :-----: | :---------------------------------------------------- |
@@ -208,13 +208,13 @@ export default function App() {
 | ringColor | string | `#fff`  | the color of the ring around the slider handle        |
 | style     | object |    /    | saturation slider container style                     |
 
-> **Note** some of the style properties will be overwritten.
+> **Note** some style properties will be overwritten.
 
 ### :small_orange_diamond:`<BrightnessSlider />`
 
 ![brightness](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/brightness.png?raw=true)
 
-- A slider to changes color brightness.
+- A slider to change color brightness.
 
 | Property  |  Type  | Default | Description                                           |
 | :-------- | :----: | :-----: | :---------------------------------------------------- |
@@ -222,13 +222,13 @@ export default function App() {
 | ringColor | string | `#fff`  | the color of the ring around the slider handle        |
 | style     | object |    /    | brightness slider container style                     |
 
-> **Note** some of the style properties will be overwritten.
+> **Note** some style properties will be overwritten.
 
 ### :small_orange_diamond:`<OpacitySlider />`
 
 ![opacity](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/opacity.png?raw=true)
 
-- A slider to changes color opacity.
+- A slider is used for changing the color's opacity.
 
 | Property  |  Type  | Default | Description                                        |
 | :-------- | :----: | :-----: | :------------------------------------------------- |
@@ -236,13 +236,13 @@ export default function App() {
 | ringColor | string | `#fff`  | the color of the ring around the slider handle     |
 | style     | object |    /    | opacity slider container style                     |
 
-> **Note** some of the style properties will be overwritten.
+> **Note** some style properties will be overwritten.
 
 ### :small_orange_diamond:`<Swatches />`
 
 ![swatches](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/swatches.png?raw=true)
 
-- A list of swatches to select a color.
+- A list of colored swatches is used for quick color selection.
 
 | Property     |   Type    |     Default     | Description                         |
 | :----------- | :-------: | :-------------: | :---------------------------------- |
@@ -250,7 +250,7 @@ export default function App() {
 | style        |  object   |        /        | swatches container style            |
 | swatcheStyle |  object   |        /        | swatche style                       |
 
-> **Note** some of the style properties will be overwritten.
+> **Note** some style properties will be overwritten.
 
 # :small_blue_diamond:License
 
