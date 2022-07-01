@@ -59,7 +59,7 @@ export default function App() {
             <HueSlider />
             <OpacitySlider />
             <Swatches
-              swatcheStyle={styles.swatchStyle}
+              swatchStyle={styles.swatchStyle}
               colors={customSwatches1}
             />
           </ColorPicker>
@@ -113,7 +113,7 @@ export default function App() {
 
             <Swatches
               style={{ marginTop: 30 }}
-              swatcheStyle={[
+              swatchStyle={[
                 styles.swatchStyle,
                 { borderRadius: 20, width: 40, height: 40 },
               ]}

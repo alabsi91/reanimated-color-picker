@@ -46,7 +46,7 @@ interface SwatchesPorps {
    * - swatch style.
    * - **Note** some of the style properties will be overwritten.
    */
-  swatcheStyle?: StyleProp<ViewStyle>;
+  swatchStyle?: StyleProp<ViewStyle>;
 
   /** - swatches container style. */
   style?: StyleProp<ViewStyle>;

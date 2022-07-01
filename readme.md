@@ -21,7 +21,7 @@
 
 - :three: [Usage](#small_blue_diamondusage).
 
-- :four: [Api](#small_blue_diamondapi).
+- :four: [API](#small_blue_diamondapi).
 
   - [ColorPicker Wrapper](#small_red_trianglecolorpicker-wrapper)
   - [Built-in Components](#small_red_trianglebuilt-in-components)
@@ -95,7 +95,7 @@ export default function App() {
 }
 ```
 
-# :small_blue_diamond:Api
+# :small_blue_diamond:API
 
 ## :small_red_triangle:ColorPicker Wrapper
 
@@ -244,11 +244,11 @@ export default function App() {
 
 - A list of colored swatches is used for quick color selection.
 
-| Property     |   Type    |     Default     | Description                         |
-| :----------- | :-------: | :-------------: | :---------------------------------- |
-| colors       | string[ ] | material colors | to provide your own swatches colors |
-| style        |  object   |        /        | swatches container style            |
-| swatcheStyle |  object   |        /        | swatche style                       |
+| Property    |   Type    |     Default     | Description              |
+| :---------- | :-------: | :-------------: | :----------------------- |
+| colors      | string[ ] | material colors | custom swatches colors   |
+| style       |  object   |        /        | swatches container style |
+| swatchStyle |  object   |        /        | swatch style             |
 
 > **Note** some style properties will be overwritten.
 
