@@ -1,4 +1,6 @@
-# :red_circle: :green_circle: :large_blue_circle: Reanimated Color Picker :large_blue_circle: :green_circle: :red_circle:
+:red_circle: :green_circle: :large_blue_circle:
+
+# Reanimated Color Picker
 
 ![npm](https://img.shields.io/npm/v/reanimated-color-picker?style=for-the-badge)
 ![GitHub](https://img.shields.io/github/license/alabsi91/reanimated-color-picker?style=for-the-badge)
@@ -6,6 +8,10 @@
 ![Platform](https://img.shields.io/badge/Platform-IOS%20%7C%20Android%20%7C%20Expo%20%7C%20Web-informational?style=for-the-badge)
 
 ### - Pure javascript color picker for react-native.
+
+![example_1](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/example_1.png?raw=true)
+
+![example_2](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/example_2.png?raw=true)
 
 # :small_blue_diamond: Table of contents
 
@@ -149,7 +155,7 @@ export default function App() {
 
 ### :small_orange_diamond:`<Preview />`
 
-![preview](./images/preview.png)
+![preview](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/preview.png?raw=true)
 
 - The preview of the selected and the initial color.
 
@@ -164,7 +170,7 @@ export default function App() {
 
 ### :small_orange_diamond:`<Panel />`
 
-![panel](./images/panel.png)
+![panel](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/panel.png?raw=true)
 
 - A square to change color brightness and saturation.
 
@@ -177,7 +183,7 @@ export default function App() {
 
 ### :small_orange_diamond:`<HueSlider />`
 
-![hue](./images/hue.png)
+![hue](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/hue.png?raw=true)
 
 - A slider to changes color hue.
 
@@ -191,7 +197,7 @@ export default function App() {
 
 ### :small_orange_diamond:`<SaturationSlider />`
 
-![saturation](./images/saturation.png)
+![saturation](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/saturation.png?raw=true)
 
 - A slider to changes color saturation.
 
@@ -205,7 +211,7 @@ export default function App() {
 
 ### :small_orange_diamond:`<BrightnessSlider />`
 
-![brightness](./images/brightness.png)
+![brightness](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/brightness.png?raw=true)
 
 - A slider to changes color brightness.
 
@@ -219,7 +225,7 @@ export default function App() {
 
 ### :small_orange_diamond:`<OpacitySlider />`
 
-![opacity](./images/opacity.png)
+![opacity](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/opacity.png?raw=true)
 
 - A slider to changes color opacity.
 
@@ -233,7 +239,7 @@ export default function App() {
 
 ### :small_orange_diamond:`<Swatches />`
 
-![swatches](./images/swatches.png)
+![swatches](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/swatches.png?raw=true)
 
 - A list of swatches to select a color.
 
