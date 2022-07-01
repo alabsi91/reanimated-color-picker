@@ -76,67 +76,70 @@ interface PreviewPorps {
 }
 
 interface PanelProps {
-  /** - panel border raduis. */
-  borderRadius?: number;
-
   /** - panel handle (thumb) size (height*width). */
   thumbSize?: number;
+
+  /**
+   * - panle container style.
+   * - **Note** some of the style properties will be overridden.
+   */
+  style?: StyleProp<ViewStyle>;
 }
 
 interface HueProps {
   /** - hue slider handle (thumb) size (height*width). */
   thumbSize?: number;
 
-  /**
-   * - opacity slider track height.
-   * - **Note** max height is `80`
-   */
-  trackHeight?: number;
+  /** - hue slider handle (thumb) ring color. */
+  ringColor?: string;
 
-  /** - hue slider border raduis. */
-  borderRadius?: number;
+  /**
+   * - hue slider container style.
+   * - **Note** some of the style properties will be overridden.
+   */
+  style?: StyleProp<ViewStyle>;
 }
 
 interface BrightnessProps {
   /** - brightness slider handle (thumb) size (height*width). */
   thumbSize?: number;
 
-  /**
-   * - brightness slider track height.
-   * - **Note** max height is `80`
-   */
-  trackHeight?: number;
+  /** - brightness slider handle (thumb) ring color. */
+  ringColor?: string;
 
-  /** - brightness slider border raduis. */
-  borderRadius?: number;
+  /**
+   * - brightness slider container style.
+   * - **Note** some of the style properties will be overridden.
+   */
+  style?: StyleProp<ViewStyle>;
 }
 
 interface SaturationProps {
   /** - saturation slider handle (thumb) size (height*width). */
   thumbSize?: number;
 
-  /**
-   * - saturation slider track height.
-   * - **Note** max height is `80`
-   */
-  trackHeight?: number;
+  /** - saturation slider handle (thumb) ring color. */
+  ringColor?: string;
 
-  /** - saturation slider border raduis. */
-  borderRadius?: number;
+  /**
+   * - saturation slider container style.
+   * - **Note** some of the style properties will be overridden.
+   */
+  style?: StyleProp<ViewStyle>;
 }
 
 interface OpacityProps {
   /** - opacity slider handle (thumb) size (height*width). */
   thumbSize?: number;
 
-  /**
-   * - opacity slider track height.
-   * - **Note** max height is `80`
-   */
-  trackHeight?: number;
+  /** - opacity slider handle (thumb) ring color. */
+  ringColor?: string;
 
-  /** - opacity slider border raduis. */
-  borderRadius?: number;
+  /**
+   * - opacity slider container style.
+   * - **Note** some of the style properties will be overridden.
+   */
+  style?: StyleProp<ViewStyle>;
 }
 
 declare const ColorPicker: React.FunctionComponent<ColorPickerProps>;
