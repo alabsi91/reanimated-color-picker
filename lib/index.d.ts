@@ -44,7 +44,7 @@ interface ColorPickerProps {
 interface SwatchesPorps {
   /**
    * - swatch style.
-   * - **Note** `backgroundColor` is immutable.
+   * - **Note** some of the style properties will be overwritten.
    */
   swatcheStyle?: StyleProp<ViewStyle>;
 
@@ -64,7 +64,7 @@ interface PreviewPorps {
 
   /**
    * - preview container style.
-   * - **Note** `backgroundColor` is immutable.
+   * - **Note** some of the style properties will be overwritten.
    */
   style?: StyleProp<ViewStyle>;
 
@@ -81,7 +81,7 @@ interface PanelProps {
 
   /**
    * - panle container style.
-   * - **Note** some of the style properties will be overridden.
+   * - **Note** some of the style properties will be overwritten.
    */
   style?: StyleProp<ViewStyle>;
 }
@@ -95,7 +95,7 @@ interface HueProps {
 
   /**
    * - hue slider container style.
-   * - **Note** some of the style properties will be overridden.
+   * - **Note** some of the style properties will be overwritten.
    */
   style?: StyleProp<ViewStyle>;
 }
@@ -109,7 +109,7 @@ interface BrightnessProps {
 
   /**
    * - brightness slider container style.
-   * - **Note** some of the style properties will be overridden.
+   * - **Note** some of the style properties will be overwritten.
    */
   style?: StyleProp<ViewStyle>;
 }
@@ -123,7 +123,7 @@ interface SaturationProps {
 
   /**
    * - saturation slider container style.
-   * - **Note** some of the style properties will be overridden.
+   * - **Note** some of the style properties will be overwritten.
    */
   style?: StyleProp<ViewStyle>;
 }
@@ -137,7 +137,7 @@ interface OpacityProps {
 
   /**
    * - opacity slider container style.
-   * - **Note** some of the style properties will be overridden.
+   * - **Note** some of the style properties will be overwritten.
    */
   style?: StyleProp<ViewStyle>;
 }

@@ -1,10 +1,10 @@
 {
-  "name": "reanimated-color-picker-",
-  "version": "0.0.8",
+  "name": "reanimated-color-picker",
+  "version": "0.0.9",
   "description": "",
-  "main": "index.js",
-  "source": "index.js",
-  "types": "index.d.ts",
+  "main": "lib/index.js",
+  "source": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
     "publish": "npm publish"
   },
@@ -13,6 +13,9 @@
     "color",
     "picker",
     "palette"
+  ],
+  "files": [
+    "lib"
   ],
   "repository": "https://github.com/alabsi91/reanimated-color-picker",
   "author": "Ahmed Alabsi <alabsi91@gmail.com> (https://github.com/alabsi91)",
