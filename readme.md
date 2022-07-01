@@ -53,6 +53,8 @@ npm i reanimated-color-picker
 - You can add, remove, rearrange or style the color picker build in components.
 - You can also add your own components.
 
+- Check out the working example [here](https://github.com/alabsi91/reanimated-color-picker/tree/main/Example).
+
 ```jsx
 import React, { useState } from 'react';
 import { Button, Modal, View } from 'react-native';
@@ -147,6 +149,8 @@ export default function App() {
 
 ### :small_orange_diamond:`<Preview />`
 
+![preview](./images/preview.png)
+
 - The preview of the selected and the initial color.
 
 | Property         |  Type   | Default | Description                                                                                   |
@@ -160,6 +164,8 @@ export default function App() {
 
 ### :small_orange_diamond:`<Panel />`
 
+![panel](./images/panel.png)
+
 - A square to change color brightness and saturation.
 
 | Property  |  Type  | Default | Description                               |
@@ -170,6 +176,8 @@ export default function App() {
 > **Note** some of the style properties will be overwritten.
 
 ### :small_orange_diamond:`<HueSlider />`
+
+![hue](./images/hue.png)
 
 - A slider to changes color hue.
 
@@ -183,6 +191,8 @@ export default function App() {
 
 ### :small_orange_diamond:`<SaturationSlider />`
 
+![saturation](./images/saturation.png)
+
 - A slider to changes color saturation.
 
 | Property  |  Type  | Default | Description                                           |
@@ -194,6 +204,8 @@ export default function App() {
 > **Note** some of the style properties will be overwritten.
 
 ### :small_orange_diamond:`<BrightnessSlider />`
+
+![brightness](./images/brightness.png)
 
 - A slider to changes color brightness.
 
@@ -207,6 +219,8 @@ export default function App() {
 
 ### :small_orange_diamond:`<OpacitySlider />`
 
+![opacity](./images/opacity.png)
+
 - A slider to changes color opacity.
 
 | Property  |  Type  | Default | Description                                        |
@@ -218,6 +232,8 @@ export default function App() {
 > **Note** some of the style properties will be overwritten.
 
 ### :small_orange_diamond:`<Swatches />`
+
+![swatches](./images/swatches.png)
 
 - A list of swatches to select a color.
 
