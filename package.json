@@ -1,6 +1,6 @@
 {
   "name": "reanimated-color-picker",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "",
   "main": "lib/index.js",
   "source": "lib/index.js",
