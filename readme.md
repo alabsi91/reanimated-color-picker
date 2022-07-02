@@ -46,6 +46,8 @@
 
 - [react-native-reanimated](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/installation).
 
+- For `expo` platform, version `44` or higher is required.
+
 # :small_blue_diamond:Installation
 
 > **Note**
@@ -135,7 +137,7 @@ export default function App() {
 ### :small_orange_diamond:style
 
 - Color picker's wrapper style.
-- If you want to change the width using the `width`` property.
+- If you want to change the width using the `width` property.
 - `type: object`
 
 > **Note** some style properties will be overwritten.
@@ -206,7 +208,7 @@ export default function App() {
 
 ![hue](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/hue.png?raw=true)
 
-- A slider used for changing the color's hue.
+- A slider to change color's hue.
 
 | Property  |  Type  | Default | Description                                    |
 | :-------- | :----: | :-----: | :--------------------------------------------- |
@@ -220,7 +222,7 @@ export default function App() {
 
 ![saturation](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/saturation.png?raw=true)
 
-- A slider used for changing the color's saturation.
+- A slider to change color's saturation.
 
 | Property  |  Type  | Default | Description                                           |
 | :-------- | :----: | :-----: | :---------------------------------------------------- |
@@ -248,7 +250,7 @@ export default function App() {
 
 ![opacity](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/opacity.png?raw=true)
 
-- A slider is used for changing the color's opacity.
+- A slider to change color's opacity.
 
 | Property  |  Type  | Default | Description                                        |
 | :-------- | :----: | :-----: | :------------------------------------------------- |
