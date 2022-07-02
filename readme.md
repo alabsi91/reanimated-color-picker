@@ -64,7 +64,7 @@ npm i reanimated-color-picker
 - You can add, remove, rearrange or style the color picker's built-in components.
 - You can also add your components.
 
-- Check out the working example [here](https://github.com/alabsi91/reanimated-color-picker/tree/main/Example).
+- Check out the working example, for bare workflow [here](https://github.com/alabsi91/reanimated-color-picker/tree/main/Example), for Expo managed workflow [here](https://github.com/alabsi91/reanimated-color-picker/tree/main/ExampleExpo)
 
 ```jsx
 import React, { useState } from 'react';
