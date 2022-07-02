@@ -178,6 +178,8 @@ export default function App() {
 
 - A square-shaped slider (adobe style) used for changing the color's brightness and saturation.
 
+> **Note** you need to add [`<HueSlider />`](#small_orange_diamondhueslider-) alongside with it.
+
 | Property  |  Type  | Default | Description                               |
 | :-------- | :----: | :-----: | :---------------------------------------- |
 | thumbSize | number |  `35`   | panel handle (thumb) size (height\*width) |
@@ -190,6 +192,8 @@ export default function App() {
 ![panel2](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/panel2.png?raw=true)
 
 - A square-shaped slider (windows style) used for changing the color's hue and saturation.
+
+> **Note** you need to add [`<BrightnessSlider />`](#small_orange_diamondbrightnessslider-) alongside with it.
 
 | Property  |  Type  | Default | Description                               |
 | :-------- | :----: | :-----: | :---------------------------------------- |
