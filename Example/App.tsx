@@ -41,6 +41,7 @@ export default function App() {
   }));
 
   const onSelectColor = ({ hex }: { hex: string }) => {
+    console.log('hex :', hex);
     color.value = hex;
   };
 
