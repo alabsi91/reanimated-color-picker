@@ -26,7 +26,8 @@
   - [ColorPicker Wrapper](#small_red_trianglecolorpicker-wrapper)
   - [Built-in Components](#small_red_trianglebuilt-in-components)
     - [`<Preview />`](#small_orange_diamondpreview-).
-    - [`<Panel />`](#small_orange_diamondpanel-).
+    - [`<Panel1 />`](#small_orange_diamondpanel1-).
+    - [`<Panel2 />`](#small_orange_diamondpanel2-).
     - [`<HueSlider />`](#small_orange_diamondhueslider-).
     - [`<SaturationSlider />`](#small_orange_diamondsaturationslider-).
     - [`<BrightnessSlider />`](#small_orange_diamondbrightnessslider-).
@@ -171,7 +172,7 @@ export default function App() {
 
 ### :small_orange_diamond:`<Panel1 />`
 
-![panel](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/panel2.png?raw=true)
+![panel1](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/panel1.png?raw=true)
 
 - A square-shaped slider (adobe style) used for changing the color's brightness and saturation.
 
@@ -184,7 +185,7 @@ export default function App() {
 
 ### :small_orange_diamond:`<Panel2 />`
 
-![panel](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/panel2.png?raw=true)
+![panel2](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/panel2.png?raw=true)
 
 - A square-shaped slider (windows style) used for changing the color's hue and saturation.
 
