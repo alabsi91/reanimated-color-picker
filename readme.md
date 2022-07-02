@@ -169,11 +169,24 @@ export default function App() {
 
 > **Note** some style properties will be overwritten.
 
-### :small_orange_diamond:`<Panel />`
+### :small_orange_diamond:`<Panel1 />`
 
-![panel](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/panel.png?raw=true)
+![panel](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/panel2.png?raw=true)
 
-- A square-shaped slider used for changing the color's brightness and saturation.
+- A square-shaped slider (adobe style) used for changing the color's brightness and saturation.
+
+| Property  |  Type  | Default | Description                               |
+| :-------- | :----: | :-----: | :---------------------------------------- |
+| thumbSize | number |  `35`   | panel handle (thumb) size (height\*width) |
+| style     | object |    /    | panle container style                     |
+
+> **Note** some style properties will be overwritten.
+
+### :small_orange_diamond:`<Panel2 />`
+
+![panel](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/panel2.png?raw=true)
+
+- A square-shaped slider (windows style) used for changing the color's hue and saturation.
 
 | Property  |  Type  | Default | Description                               |
 | :-------- | :----: | :-----: | :---------------------------------------- |

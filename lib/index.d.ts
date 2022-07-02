@@ -147,7 +147,8 @@ interface OpacityProps {
 
 declare const ColorPicker: React.FunctionComponent<ColorPickerProps>;
 export declare const Preview: React.FunctionComponent<PreviewPorps>;
-export declare const Panel: React.FunctionComponent<PanelProps>;
+export declare const Panel1: React.FunctionComponent<PanelProps>;
+export declare const Panel2: React.FunctionComponent<PanelProps>;
 export declare const HueSlider: React.FunctionComponent<HueProps>;
 export declare const BrightnessSlider: React.FunctionComponent<BrightnessProps>;
 export declare const SaturationSlider: React.FunctionComponent<SaturationProps>;
