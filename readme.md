@@ -68,7 +68,7 @@ npm i reanimated-color-picker
 import React, { useState } from 'react';
 import { Button, Modal, View } from 'react-native';
 
-import ColorPicker, { Panel, Swatches, Preview, OpacitySlider, HueSlider } from 'reanimated-color-picker';
+import ColorPicker, { Panel1, Swatches, Preview, OpacitySlider, HueSlider } from 'reanimated-color-picker';
 
 export default function App() {
   const [showModal, setShowModal] = useState(false);
@@ -85,7 +85,7 @@ export default function App() {
       <Modal visible={showModal}>
         <ColorPicker value='red' onComplete={onSelectColor}>
           <Preview />
-          <Panel />
+          <Panel1 />
           <HueSlider />
           <OpacitySlider />
           <Swatches />
