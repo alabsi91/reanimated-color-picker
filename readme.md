@@ -17,26 +17,26 @@
 
 # :small_blue_diamond: Table of contents
 
-- :one: [Prerequisites](#small_blue_diamondprerequisites).
+- :one: [Prerequisites](#small_blue_diamondprerequisites)
 
-- :two: [Installation](#small_blue_diamondinstallation).
+- :two: [Installation](#small_blue_diamondinstallation)
 
-- :three: [Usage](#small_blue_diamondusage).
+- :three: [Usage](#small_blue_diamondusage)
 
-- :four: [API](#small_blue_diamondapi).
+- :four: [API](#small_blue_diamondapi)
 
   - [ColorPicker Wrapper](#small_red_trianglecolorpicker-wrapper)
   - [Built-in Components](#small_red_trianglebuilt-in-components)
-    - [`<Preview />`](#small_orange_diamondpreview-).
-    - [`<Panel1 />`](#small_orange_diamondpanel1-).
-    - [`<Panel2 />`](#small_orange_diamondpanel2-).
-    - [`<HueSlider />`](#small_orange_diamondhueslider-).
-    - [`<SaturationSlider />`](#small_orange_diamondsaturationslider-).
-    - [`<BrightnessSlider />`](#small_orange_diamondbrightnessslider-).
-    - [`<OpacitySlider />`](#small_orange_diamondopacityslider-).
-    - [`<Swatches />`](#small_orange_diamondswatches-).
+    - [`<Preview />`](#small_orange_diamondpreview-)
+    - [`<Panel1 />`](#small_orange_diamondpanel1-)
+    - [`<Panel2 />`](#small_orange_diamondpanel2-)
+    - [`<HueSlider />`](#small_orange_diamondhueslider-)
+    - [`<SaturationSlider />`](#small_orange_diamondsaturationslider-)
+    - [`<BrightnessSlider />`](#small_orange_diamondbrightnessslider-)
+    - [`<OpacitySlider />`](#small_orange_diamondopacityslider-)
+    - [`<Swatches />`](#small_orange_diamondswatches-)
 
-- :five: [License](#small_blue_diamondlicense).
+- :five: [License](#small_blue_diamondlicense)
 
 # :small_blue_diamond:Prerequisites
 
