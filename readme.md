@@ -13,6 +13,8 @@
 
 ![Example_2](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/example_2.png?raw=true)
 
+![Example_3](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/example_3.png?raw=true)
+
 # :small_blue_diamond: Table of contents
 
 - :one: [Prerequisites](#small_blue_diamondprerequisites).
