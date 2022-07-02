@@ -1,5 +1,6 @@
 # OSX
 #
+lib/
 .DS_Store
 .vscode
 # Xcode

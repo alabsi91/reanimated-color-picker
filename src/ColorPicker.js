@@ -1,12 +1,12 @@
-import React, { useRef, useEffect, useMemo } from 'react';
-import { View, Image, I18nManager, Pressable, TextInput, Text, StyleSheet } from 'react-native';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
+import { View, Image, I18nManager, Pressable, Text, StyleSheet } from 'react-native';
 import { PanGestureHandler, GestureHandlerRootView } from 'react-native-gesture-handler';
 import Animated, {
   runOnJS,
   useAnimatedGestureHandler,
   useAnimatedStyle,
   useSharedValue,
-  useAnimatedProps,
+  useDerivedValue,
   withTiming,
 } from 'react-native-reanimated';
 import { ALPHA_HEX, COLOR_HSVA, CONTRAST_RATIO, HSL_HEX, HSL_RGB, HSV_HSL } from './ColorsConversionFormulas';
@@ -43,33 +43,14 @@ const SWATCHES_COLORS = [
   '#607D8B',
 ];
 
-Animated.addWhitelistedNativeProps({ text: true });
-const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
+const ReText = ({ text, style }) => {
+  const [color, setColor] = useState(text.value);
 
-const ReText = props => {
-  const { text, style, customStyle } = { ...props };
+  useDerivedValue(() => {
+    runOnJS(setColor)(text.value);
+  }, [text.value]);
 
-  const animatedProps = useAnimatedProps(() => ({ text: text.value }));
-
-  return (
-    <AnimatedTextInput
-      underlineColorAndroid='transparent'
-      editable={false}
-      value={text.value}
-      style={[
-        {
-          fontWeight: 'bold',
-          padding: 0,
-          height: '100%',
-          width: '100%',
-          textAlign: 'center',
-        },
-        customStyle,
-        style,
-      ]}
-      {...{ animatedProps }}
-    />
-  );
+  return <Animated.Text style={[styles.previewText, ...style]}>{color}</Animated.Text>;
 };
 
 export default function ColorPicker({
@@ -652,16 +633,14 @@ export function Preview({
   return (
     <View style={[styles.preview, { width }, style]}>
       {!hideInitialColor && (
-        <View style={[styles.previewChildren, { backgroundColor: value }]}>
+        <View style={{ backgroundColor: value, flex: 1 }}>
           {!hideText && (
-            <Text style={[{ color: initialColorText.color }, { fontWeight: 'bold' }, textStyle]}>
-              {initialColorText.formated}
-            </Text>
+            <Text style={[{ color: initialColorText.color }, styles.previewText, textStyle]}>{initialColorText.formated}</Text>
           )}
         </View>
       )}
-      <Animated.View style={[styles.previewChildren, previewColorStyle]}>
-        {!hideText && <ReText text={previewText} style={previewTextColorStyle} customStyle={textStyle} />}
+      <Animated.View style={[{ flex: 1 }, previewColorStyle]}>
+        {!hideText && <ReText text={previewText} style={[textStyle, previewTextColorStyle]} />}
       </Animated.View>
     </View>
   );
@@ -1144,11 +1123,11 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     overflow: 'hidden',
   },
-  previewChildren: {
+  previewText: {
     flex: 1,
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    textAlignVertical: 'center',
   },
   swatcheContainer: {
     flexDirection: 'row',
