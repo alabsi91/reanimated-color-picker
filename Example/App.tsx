@@ -90,6 +90,7 @@ export default function App() {
                 height: 80,
                 marginBottom: -20,
                 borderRadius: 0,
+                justifyContent: 'flex-end',
                 shadowColor: '#000',
                 shadowOffset: {
                   width: 0,
@@ -97,12 +98,10 @@ export default function App() {
                 },
                 shadowOpacity: 0.25,
                 shadowRadius: 3.84,
-
                 elevation: 5,
               }}
               textStyle={{
                 fontSize: 16,
-                textAlignVertical: 'bottom',
                 paddingBottom: 10,
               }}
               colorFormat="hsl"

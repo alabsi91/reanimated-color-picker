@@ -1,13 +1,13 @@
 {
   "name": "reanimated-color-picker",
-  "version": "0.0.20",
+  "version": "0.0.21",
   "description": "Pure JavaScript color picker for react-native",
   "main": "lib/index.js",
   "source": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "publish": "npm run build && npm publish",
-    "build": "@powershell if(test-path lib){ rm lib -r } && babel src --out-dir lib --copy-files"
+    "build": "@powershell if(test-path lib){ rm lib -r } && babel src --out-dir lib --copy-files",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "react-native",

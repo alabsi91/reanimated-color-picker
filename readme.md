@@ -42,11 +42,11 @@
 
 - Use the links below to follow the installation instructions.
 
-- [react-native-gesture-handler](https://docs.swmansion.com/react-native-gesture-handler/docs/installation).
+- [react-native-gesture-handler](https://docs.swmansion.com/react-native-gesture-handler/docs/installation) version `2.0.0` or higher.
 
-- [react-native-reanimated](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/installation).
+- [react-native-reanimated](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/installation) version `2.0.0` or higher.
 
-- For `expo` platform, version `44` or higher is required.
+- For `Expo` manged workflow version `44` or higher is required.
 
 # :small_blue_diamond:Installation
 
@@ -64,7 +64,10 @@ npm i reanimated-color-picker
 - You can add, remove, rearrange or style the color picker's built-in components.
 - You can also add your components.
 
-- Check out the working example, for bare workflow [here](https://github.com/alabsi91/reanimated-color-picker/tree/main/Example), for Expo managed workflow [here](https://github.com/alabsi91/reanimated-color-picker/tree/main/ExampleExpo)
+- Check out the working examples:
+  - Bare workflow [here](https://github.com/alabsi91/reanimated-color-picker/tree/main/Example)
+  - Expo managed workflow [here](https://github.com/alabsi91/reanimated-color-picker/tree/main/ExampleExpo)
+  - Expo snack [here](https://snack.expo.dev/@alabsi91/reanimated-color-picker)
 
 ```jsx
 import React, { useState } from 'react';
@@ -276,4 +279,4 @@ export default function App() {
 
 # :small_blue_diamond:License
 
-- [**MIT**](https://github.com/alabsi91/reanimated-color-picker/blob/main/LICENSE)
+- Reanimated Color Picker library is licensed under [**The MIT License.**](https://github.com/alabsi91/reanimated-color-picker/blob/main/LICENSE)
