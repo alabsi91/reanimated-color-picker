@@ -32,7 +32,9 @@ export function SaturationSlider({
   ringColor = '#ffffff', // by user
   style = {}, // by user
 }) {
-  const trackHeight = style.height ?? tracksHeight;
+  const height = style.height ?? tracksHeight;
+  const borderRadius = style.borderRadius ?? 5;
+
   saturationThumbeSize.current = thumbSize;
 
   ringColor = COLOR_HSVA(ringColor);
@@ -48,7 +50,7 @@ export function SaturationSlider({
   const saturation_handleStyle = useAnimatedStyle(() => ({
     transform: [
       { translateX: saturationSlider_handlePos.value },
-      { translateY: -(thumbSize - trackHeight) / 2 },
+      { translateY: -(thumbSize - height) / 2 },
       { scale: scale_saturationHandle.value },
     ],
   }));
@@ -70,16 +72,13 @@ export function SaturationSlider({
 
         const saturationX = Math.round(percent * 100);
 
-        saturationSlider_handlePos.value = isRtl
-          ? percent * width - width + thumbSize / 2
-          : percent * width - thumbSize / 2;
+        saturationSlider_handlePos.value = isRtl ? percent * width - width + thumbSize / 2 : percent * width - thumbSize / 2;
         // panel 2 windows style
         saturationPanel1_handlePos.value = isRtl
           ? (saturationX / 100) * width - width + panel1ThumbeSize.current / 2
           : (saturationX / 100) * width - panel1ThumbeSize.current / 2;
         // panel 2 windows style
-        saturationPanel2_handlePos.value =
-          width - (saturationX / 100) * width - panel2ThumbeSize.current / 2;
+        saturationPanel2_handlePos.value = width - (saturationX / 100) * width - panel2ThumbeSize.current / 2;
 
         runOnJS(updateSaturation)(saturationX);
       },
@@ -88,29 +87,13 @@ export function SaturationSlider({
         runOnJS(onGestureEventFinish)();
       },
     },
-    [width],
+    [width]
   );
 
   return (
     <PanGestureHandler onGestureEvent={SaturationGestureEvent} minDist={0}>
-      <Animated.View
-        style={[
-          { position: 'relative', height: tracksHeight },
-          style,
-          { width },
-          styles.override,
-        ]}>
-        <Animated.View
-          style={[
-            styles.sliderImageContainer,
-            { borderRadius: style.borderRadius ?? 5 },
-            activeHueStyle,
-          ]}>
-          <Image
-            source={require('../assets/Saturation.png')}
-            style={styles.sliderImage}
-          />
-        </Animated.View>
+      <Animated.View style={[{ position: 'relative', borderRadius, height }, style, { width }, styles.override, activeHueStyle]}>
+        <Image source={require('../assets/Saturation.png')} style={[styles.sliderImage, { height, borderRadius }]} />
         <Animated.View
           style={[
             styles.handle,
@@ -122,14 +105,9 @@ export function SaturationSlider({
               borderColor: ringColor,
             },
             saturation_handleStyle,
-          ]}>
-          <Animated.View
-            style={[
-              styles.handleInner,
-              { borderRadius: thumbSize / 2 },
-              previewColorWithoutOpacity,
-            ]}
-          />
+          ]}
+        >
+          <Animated.View style={[styles.handleInner, { borderRadius: thumbSize / 2 }, previewColorWithoutOpacity]} />
         </Animated.View>
       </Animated.View>
     </PanGestureHandler>

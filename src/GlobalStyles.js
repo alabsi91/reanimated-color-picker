@@ -24,26 +24,11 @@ export default StyleSheet.create({
     borderWidth: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    zIndex: 100,
   },
   handleInner: {
     width: '75%',
     height: '75%',
-
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-
-    elevation: 5,
-  },
-  sliderImageContainer: {
-    width: '100%',
-    height: '100%',
-    borderRadius: 5,
-    overflow: 'hidden',
 
     shadowColor: '#000',
     shadowOffset: {

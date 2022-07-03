@@ -98,14 +98,7 @@ export function Panel1({
 
   return (
     <PanGestureHandler onGestureEvent={panel_GestureEvent} minDist={0}>
-      <Animated.View
-        style={[
-          styles.panel_container,
-          style,
-          { width, height: width },
-          styles.override,
-          activeHueStyle,
-        ]}>
+      <Animated.View style={[styles.panel_container, style, { width, height: width }, styles.override, activeHueStyle]}>
         <Image
           source={require('../assets/Background1.png')}
           style={{
@@ -123,14 +116,9 @@ export function Panel1({
               borderRadius: thumbSize / 2,
             },
             panel_handleStyle,
-          ]}>
-          <Animated.View
-            style={[
-              styles.handleInner,
-              { borderRadius: thumbSize / 2 },
-              previewColorWithoutOpacity,
-            ]}
-          />
+          ]}
+        >
+          <Animated.View style={[styles.handleInner, { borderRadius: thumbSize / 2 }, previewColorWithoutOpacity]} />
         </Animated.View>
       </Animated.View>
     </PanGestureHandler>

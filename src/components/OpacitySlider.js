@@ -28,7 +28,9 @@ export function OpacitySlider({
   ringColor = '#ffffff', // by user
   style = {}, // by user
 }) {
-  const trackHeight = style.height ?? tracksHeight;
+  const height = style.height ?? tracksHeight;
+  const borderRadius = style.borderRadius ?? 5;
+
   opacityThumbeSize.current = thumbSize;
 
   ringColor = COLOR_HSVA(ringColor);
@@ -44,7 +46,7 @@ export function OpacitySlider({
   const opacity_handleStyle = useAnimatedStyle(() => ({
     transform: [
       { translateX: opacity_handlePos.value },
-      { translateY: -(thumbSize - trackHeight) / 2 },
+      { translateY: -(thumbSize - height) / 2 },
       { scale: scale_opacityHandle.value },
     ],
   }));
@@ -63,9 +65,7 @@ export function OpacitySlider({
 
       const opacityX = Math.round(percent * 100);
 
-      opacity_handlePos.value = isRtl
-        ? percent * width - width + thumbSize / 2
-        : percent * width - thumbSize / 2;
+      opacity_handlePos.value = isRtl ? percent * width - width + thumbSize / 2 : percent * width - thumbSize / 2;
 
       runOnJS(updateOpacity)(opacityX);
     },
@@ -78,23 +78,9 @@ export function OpacitySlider({
   return (
     <PanGestureHandler onGestureEvent={opacityGestureEvent} minDist={0}>
       <Animated.View
-        style={[
-          { position: 'relative', height: tracksHeight },
-          style,
-          { width },
-          styles.override,
-        ]}>
-        <Animated.View
-          style={[
-            styles.sliderImageContainer,
-            { borderRadius: style.borderRadius ?? 5 },
-            activeHueStyle,
-          ]}>
-          <Image
-            source={require('../assets/Opacity.png')}
-            style={styles.sliderImage}
-          />
-        </Animated.View>
+        style={[{ position: 'relative', borderRadius, height }, style, { width }, styles.override, , activeHueStyle]}
+      >
+        <Image source={require('../assets/Opacity.png')} style={[styles.sliderImage, { height, borderRadius }]} />
         <Animated.View
           style={[
             styles.handle,
@@ -106,14 +92,9 @@ export function OpacitySlider({
               borderColor: ringColor,
             },
             opacity_handleStyle,
-          ]}>
-          <Animated.View
-            style={[
-              styles.handleInner,
-              { borderRadius: thumbSize / 2 },
-              previewColorWithoutOpacity,
-            ]}
-          />
+          ]}
+        >
+          <Animated.View style={[styles.handleInner, { borderRadius: thumbSize / 2 }, previewColorWithoutOpacity]} />
         </Animated.View>
       </Animated.View>
     </PanGestureHandler>

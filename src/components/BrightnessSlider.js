@@ -30,7 +30,9 @@ export function BrightnessSlider({
   ringColor = '#ffffff', // by user
   style = {}, // by user
 }) {
-  const trackHeight = style.height ?? tracksHeight;
+  const height = style.height ?? tracksHeight;
+  const borderRadius = style.borderRadius ?? 5;
+
   brightnessThumbeSize.current = thumbSize;
 
   ringColor = COLOR_HSVA(ringColor);
@@ -46,7 +48,7 @@ export function BrightnessSlider({
   const brightness_handleStyle = useAnimatedStyle(() => ({
     transform: [
       { translateX: brightnessSlider_handlePos.value },
-      { translateY: -(thumbSize - trackHeight) / 2 },
+      { translateY: -(thumbSize - height) / 2 },
       { scale: scale_brightnessHandle.value },
     ],
   }));
@@ -68,11 +70,8 @@ export function BrightnessSlider({
 
         const brightnessX = Math.round(percent * 100);
 
-        brightnessSlider_handlePos.value = isRtl
-          ? percent * width - width + thumbSize / 2
-          : percent * width - thumbSize / 2;
-        brightnessPanel1_handlePos.value =
-          width - (brightnessX / 100) * width - panel1ThumbeSize.current / 2;
+        brightnessSlider_handlePos.value = isRtl ? percent * width - width + thumbSize / 2 : percent * width - thumbSize / 2;
+        brightnessPanel1_handlePos.value = width - (brightnessX / 100) * width - panel1ThumbeSize.current / 2;
 
         runOnJS(updateBrightness)(brightnessX);
       },
@@ -81,29 +80,13 @@ export function BrightnessSlider({
         runOnJS(onGestureEventFinish)();
       },
     },
-    [width],
+    [width]
   );
 
   return (
     <PanGestureHandler onGestureEvent={BrightnessGestureEvent} minDist={0}>
-      <Animated.View
-        style={[
-          { position: 'relative', height: tracksHeight },
-          style,
-          { width },
-          styles.override,
-        ]}>
-        <Animated.View
-          style={[
-            styles.sliderImageContainer,
-            { borderRadius: style.borderRadius ?? 5 },
-            activeHueStyle,
-          ]}>
-          <Image
-            source={require('../assets/Brightness.png')}
-            style={styles.sliderImage}
-          />
-        </Animated.View>
+      <Animated.View style={[{ position: 'relative', borderRadius, height }, style, { width }, styles.override, activeHueStyle]}>
+        <Image source={require('../assets/Brightness.png')} style={[styles.sliderImage, { height, borderRadius }]} />
         <Animated.View
           style={[
             styles.handle,
@@ -115,14 +98,9 @@ export function BrightnessSlider({
               borderColor: ringColor,
             },
             brightness_handleStyle,
-          ]}>
-          <Animated.View
-            style={[
-              styles.handleInner,
-              { borderRadius: thumbSize / 2 },
-              previewColorWithoutOpacity,
-            ]}
-          />
+          ]}
+        >
+          <Animated.View style={[styles.handleInner, { borderRadius: thumbSize / 2 }, previewColorWithoutOpacity]} />
         </Animated.View>
       </Animated.View>
     </PanGestureHandler>

@@ -1,12 +1,12 @@
 {
   "name": "reanimated-color-picker",
-  "version": "0.0.21",
+  "version": "0.0.24",
   "description": "Pure JavaScript color picker for react-native",
-  "main": "lib/index.js",
-  "source": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "src/index.js",
+  "types": "src/index.d.ts",
   "scripts": {
-    "build": "@powershell if(test-path lib){ rm lib -r } && babel src --out-dir lib --copy-files",
+    "remove-web": "@powershell rm src -r -Include *.web.js",
+    "build": "npm run remove-web && babel src --out-dir src --out-file-extension .web.js --ignore src/index.js",
     "prepublishOnly": "npm run build"
   },
   "keywords": [
@@ -16,7 +16,7 @@
     "palette"
   ],
   "files": [
-    "lib"
+    "src"
   ],
   "repository": "https://github.com/alabsi91/reanimated-color-picker",
   "author": "Ahmed Alabsi <alabsi91@gmail.com> (https://github.com/alabsi91)",
@@ -33,6 +33,12 @@
   },
   "peerDependencies": {
     "react-native-gesture-handler": ">=2.0.0",
-    "react-native-reanimated": ">=2.0.0"
+    "react-native-reanimated": ">=2.0.0",
+    "expo": ">=44.0.0"
+  },
+  "peerDependenciesMeta": {
+    "expo": {
+      "optional": true
+    }
   }
 }

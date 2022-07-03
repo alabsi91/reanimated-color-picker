@@ -99,13 +99,7 @@ export function Panel2({
 
   return (
     <PanGestureHandler onGestureEvent={panel_GestureEvent} minDist={0}>
-      <Animated.View
-        style={[
-          styles.panel_container,
-          style,
-          { width, height: width },
-          styles.override,
-        ]}>
+      <Animated.View style={[styles.panel_container, style, { width, height: width }, styles.override]}>
         <Image
           source={require('../assets/Background2.png')}
           style={{
@@ -123,14 +117,9 @@ export function Panel2({
               borderRadius: thumbSize / 2,
             },
             panel_handleStyle,
-          ]}>
-          <Animated.View
-            style={[
-              styles.handleInner,
-              { borderRadius: thumbSize / 2 },
-              previewColorWithoutOpacity,
-            ]}
-          />
+          ]}
+        >
+          <Animated.View style={[styles.handleInner, { borderRadius: thumbSize / 2 }, previewColorWithoutOpacity]} />
         </Animated.View>
       </Animated.View>
     </PanGestureHandler>

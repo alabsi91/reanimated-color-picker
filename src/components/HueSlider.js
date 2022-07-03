@@ -29,7 +29,9 @@ export function HueSlider({
   ringColor = '#ffffff', // by user
   style = {}, // by user
 }) {
-  const trackHeight = style.height ?? tracksHeight;
+  const height = style.height ?? tracksHeight;
+  const borderRadius = style.borderRadius ?? 5;
+
   hueThumbeSize.current = thumbSize;
 
   ringColor = COLOR_HSVA(ringColor);
@@ -43,11 +45,7 @@ export function HueSlider({
   const scale_hueHandle = useSharedValue(1);
 
   const hue_handleStyle = useAnimatedStyle(() => ({
-    transform: [
-      { translateX: hue_handlePos.value },
-      { translateY: -(thumbSize - trackHeight) / 2 },
-      { scale: scale_hueHandle.value },
-    ],
+    transform: [{ translateX: hue_handlePos.value }, { translateY: -(thumbSize - height) / 2 }, { scale: scale_hueHandle.value }],
   }));
 
   const HueGestureEvent = useAnimatedGestureHandler(
@@ -65,9 +63,7 @@ export function HueSlider({
 
         const hueX = 360 - Math.round(percent * 360);
 
-        hue_handlePos.value = isRtl
-          ? percent * width - width + thumbSize / 2
-          : percent * width - thumbSize / 2;
+        hue_handlePos.value = isRtl ? percent * width - width + thumbSize / 2 : percent * width - thumbSize / 2;
 
         // panel 2 windows style
         huePanel2_handlePos.value = isRtl
@@ -81,28 +77,14 @@ export function HueSlider({
         runOnJS(onGestureEventFinish)();
       },
     },
-    [width],
+    [width]
   );
 
   return (
     <PanGestureHandler onGestureEvent={HueGestureEvent} minDist={0}>
-      <Animated.View
-        style={[
-          { position: 'relative', height: tracksHeight },
-          style,
-          { width },
-          styles.override,
-        ]}>
-        <View
-          style={[
-            styles.sliderImageContainer,
-            { borderRadius: style.borderRadius ?? 5 },
-          ]}>
-          <Image
-            source={require('../assets/Hue.png')}
-            style={styles.sliderImage}
-          />
-        </View>
+      <Animated.View style={[{ position: 'relative', borderRadius, height }, style, { width }, styles.override]}>
+        <Image source={require('../assets/Hue.png')} style={[styles.sliderImage, { height, borderRadius }]} />
+
         <Animated.View
           style={[
             styles.handle,
@@ -114,14 +96,9 @@ export function HueSlider({
               borderColor: ringColor,
             },
             hue_handleStyle,
-          ]}>
-          <Animated.View
-            style={[
-              styles.handleInner,
-              { borderRadius: thumbSize / 2 },
-              previewColorWithoutOpacity,
-            ]}
-          />
+          ]}
+        >
+          <Animated.View style={[styles.handleInner, { borderRadius: thumbSize / 2, zIndex: 100 }, previewColorWithoutOpacity]} />
         </Animated.View>
       </Animated.View>
     </PanGestureHandler>
