@@ -74,9 +74,9 @@ npm i reanimated-color-picker
 - You can also add your components.
 
 - Check out the working examples:
-  - Bare workflow [here](https://github.com/alabsi91/reanimated-color-picker/tree/main/Example)
-  - Expo managed workflow [here](https://github.com/alabsi91/reanimated-color-picker/tree/main/ExampleExpo)
-  - Expo snack [here](https://snack.expo.dev/@alabsi91/reanimated-color-picker)
+  - [Bare workflow](https://github.com/alabsi91/reanimated-color-picker/tree/main/Example)
+  - [Expo managed workflow](https://github.com/alabsi91/reanimated-color-picker/tree/main/ExampleExpo)
+  - [Expo snack](https://snack.expo.dev/@alabsi91/reanimated-color-picker)
 
 ```jsx
 import React, { useState } from 'react';
