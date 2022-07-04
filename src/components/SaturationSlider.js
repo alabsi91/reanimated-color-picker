@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Image, I18nManager } from 'react-native';
+import React, { useEffect, useRef, useState, useContext } from 'react';
+import { I18nManager, Image } from 'react-native';
 import { PanGestureHandler } from 'react-native-gesture-handler';
 import Animated, {
   runOnJS,
@@ -8,50 +8,52 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { COLOR_HSVA, HSL_HEX, HSV_HSL } from '../ColorsConversionFormulas';
-import styles from '../GlobalStyles';
+import { COLOR_HEX } from '../ColorsConversionFormulas';
+import styles, { CTX, getStyle } from '../GlobalStyles';
 
 const isRtl = I18nManager.isRTL;
 
-export function SaturationSlider({
-  width,
-  saturationThumbeSize,
-  panel2ThumbeSize,
-  panel1ThumbeSize,
-  setHandlesPos,
-  updateSaturation,
-  onGestureEventFinish,
-  saturationPanel1_handlePos,
-  saturationPanel2_handlePos,
-  saturationSlider_handlePos,
-  previewColorWithoutOpacity,
-  tracksHeight,
-  activeHueStyle,
-  thumbsSize,
-  thumbSize = thumbsSize, // by user
-  ringColor = '#ffffff', // by user
-  style = {}, // by user
-}) {
-  const height = style.height ?? tracksHeight;
-  const borderRadius = style.borderRadius ?? 5;
+export function SaturationSlider({ thumbSize, ringColor = '#ffffff', style = {}, vertical, reverse }) {
+  const {
+    registerHandle,
+    updateSaturation,
+    onGestureEventFinish,
+    previewColorWithoutOpacity,
+    slidersThickness,
+    activeHueStyle,
+    thumbsSize,
+  } = useContext(CTX);
 
-  saturationThumbeSize.current = thumbSize;
+  thumbSize = thumbSize ?? thumbsSize;
+  ringColor = COLOR_HEX(ringColor);
+  const borderRadius = getStyle(style, 'borderRadius', 5);
 
-  ringColor = COLOR_HSVA(ringColor);
-  ringColor = HSV_HSL(ringColor.h, ringColor.s, ringColor.b);
-  ringColor = HSL_HEX(ringColor.h, ringColor.s, ringColor.l);
+  const id = useRef('saturation' + Math.random()).current;
+
+  const [width, setWidth] = useState(getStyle(style, 'width', slidersThickness));
+  const [height, setHeight] = useState(getStyle(style, 'height', slidersThickness));
+
+  const handlePos = useSharedValue(0);
+  const handleScale = useSharedValue(1);
 
   useEffect(() => {
-    setHandlesPos();
-  }, []);
-
-  const scale_saturationHandle = useSharedValue(1); // for handles scale.
+    registerHandle({
+      id,
+      channel: 's',
+      axis: vertical ? 'y' : 'x',
+      width,
+      height,
+      thumbSize: thumbSize,
+      isReversed: reverse,
+      handle: handlePos,
+    });
+  }, [width, height]);
 
   const saturation_handleStyle = useAnimatedStyle(() => ({
     transform: [
-      { translateX: saturationSlider_handlePos.value },
-      { translateY: -(thumbSize - height) / 2 },
-      { scale: scale_saturationHandle.value },
+      { translateY: vertical ? handlePos.value : height / 2 - thumbSize / 2 },
+      { translateX: vertical ? (isRtl ? -width / 2 + thumbSize / 2 : width / 2 - thumbSize / 2) : handlePos.value },
+      { scale: handleScale.value },
     ],
   }));
 
@@ -59,41 +61,61 @@ export function SaturationSlider({
     {
       onStart: (event, ctx) => {
         ctx.x = event.x;
-        scale_saturationHandle.value = withTiming(1.2, {
-          duration: 100,
-        });
+        ctx.y = event.y;
+        handleScale.value = withTiming(1.2, { duration: 100 });
       },
       onActive: (event, ctx) => {
         const clamp = (v, max) => Math.min(Math.max(v, 0), max);
 
         const x = event.translationX;
-        const pos = clamp(x + ctx.x, width);
-        const percent = pos / width;
+        const y = event.translationY;
+        const posX = clamp(x + ctx.x, width);
+        const posY = clamp(y + ctx.y, height);
+        const percentX = posX / width;
+        const percentY = posY / height;
 
-        const saturationX = Math.round(percent * 100);
+        const saturationX = reverse ? 100 - Math.round(percentX * 100) : Math.round(percentX * 100);
+        const saturationY = reverse ? 100 - Math.round(percentY * 100) : Math.round(percentY * 100);
 
-        saturationSlider_handlePos.value = isRtl ? percent * width - width + thumbSize / 2 : percent * width - thumbSize / 2;
-        // panel 2 windows style
-        saturationPanel1_handlePos.value = isRtl
-          ? (saturationX / 100) * width - width + panel1ThumbeSize.current / 2
-          : (saturationX / 100) * width - panel1ThumbeSize.current / 2;
-        // panel 2 windows style
-        saturationPanel2_handlePos.value = width - (saturationX / 100) * width - panel2ThumbeSize.current / 2;
+        const saturation = vertical ? saturationY : saturationX;
 
-        runOnJS(updateSaturation)(saturationX);
+        runOnJS(updateSaturation)(saturation);
       },
       onFinish: () => {
-        scale_saturationHandle.value = withTiming(1, { duration: 100 });
+        handleScale.value = withTiming(1, { duration: 100 });
         runOnJS(onGestureEventFinish)();
       },
     },
-    [width]
+    [width, height]
   );
+
+  const onLayout = ({ nativeEvent }) => {
+    setWidth(nativeEvent.layout.width);
+    setHeight(nativeEvent.layout.height);
+  };
+
+  const imageRotate = vertical ? (reverse ? '270deg' : '90deg') : reverse ? '180deg' : '0deg';
+  const imageTranslateY = (reverse && isRtl) || (!reverse && !isRtl) ? height / 2 - width / 2 : -height / 2 + width / 2;
+
+  const imageStyle = typeof height === 'number' &&
+    typeof width === 'number' && {
+      width: vertical ? height : width,
+      height: vertical ? width : height,
+      borderRadius,
+      transform: [
+        { rotate: imageRotate },
+        { translateX: vertical ? (reverse ? -height / 2 + width / 2 : height / 2 - width / 2) : 0 },
+        { translateY: vertical ? imageTranslateY : 0 },
+      ],
+    };
 
   return (
     <PanGestureHandler onGestureEvent={SaturationGestureEvent} minDist={0}>
-      <Animated.View style={[{ position: 'relative', borderRadius, height }, style, { width }, styles.override, activeHueStyle]}>
-        <Image source={require('../assets/Saturation.png')} style={[styles.sliderImage, { height, borderRadius }]} />
+      <Animated.View
+        onLayout={onLayout}
+        style={[{ borderRadius }, vertical ? { width } : { height }, style, { position: 'relative' }, activeHueStyle]}
+      >
+        <Image source={require('../assets/Saturation.png')} style={imageStyle} />
         <Animated.View
           style={[
             styles.handle,

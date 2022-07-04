@@ -2,7 +2,7 @@
 #
 .DS_Store
 .vscode
-/src/*.web.js
+*.web.js
 # Xcode
 #
 build/

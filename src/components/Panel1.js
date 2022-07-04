@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Image, I18nManager } from 'react-native';
+import React, { useEffect, useRef, useState, useContext } from 'react';
+import { Image } from 'react-native';
 import { PanGestureHandler } from 'react-native-gesture-handler';
 import Animated, {
   runOnJS,
@@ -8,105 +8,109 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import styles from '../GlobalStyles';
+import styles, { CTX, getStyle } from '../GlobalStyles';
 
-const isRtl = I18nManager.isRTL;
+export function Panel1({ thumbSize, style = {} }) {
+  const {
+    registerHandle,
+    activeHueStyle,
+    previewTextColor,
+    previewColorWithoutOpacity,
+    updateSaturation,
+    updateBrightness,
+    onGestureEventFinish,
+    thumbsSize,
+  } = useContext(CTX);
 
-export function Panel1({
-  activeHueStyle,
-  previewTextColor,
-  previewColorWithoutOpacity,
-  saturationPanel1_handlePos,
-  brightnessPanel1_handlePos,
-  saturationPanel2_handlePos,
-  saturationSlider_handlePos,
-  brightnessSlider_handlePos,
-  updateSB,
-  onGestureEventFinish,
-  setHandlesPos,
-  panel1ThumbeSize,
-  panel2ThumbeSize,
-  brightnessThumbeSize,
-  saturationThumbeSize,
-  width,
-  thumbsSize,
-  thumbSize = thumbsSize, // by user
-  style = {}, // by user
-}) {
-  panel1ThumbeSize.current = thumbSize;
+  thumbSize = thumbSize ?? thumbsSize;
+  const borderRadius = getStyle(style, 'borderRadius', 5);
+
+  const idX = useRef('opacity' + Math.random()).current;
+  const idY = useRef('opacity' + Math.random()).current;
+
+  const [width, setWidth] = useState(0);
+  const [height, setHeight] = useState(0);
+
+  const handlePosX = useSharedValue(0);
+  const handlePosY = useSharedValue(0);
+  const handleScale = useSharedValue(1);
 
   useEffect(() => {
-    setHandlesPos();
-  }, []);
-
-  const scale_panelHandle = useSharedValue(1);
+    registerHandle({
+      id: idX,
+      channel: 's',
+      axis: 'x',
+      width,
+      height,
+      thumbSize: thumbSize,
+      isReversed: false,
+      handle: handlePosX,
+    });
+    registerHandle({
+      id: idY,
+      channel: 'b',
+      axis: 'y',
+      width,
+      height,
+      thumbSize: thumbSize,
+      isReversed: true,
+      handle: handlePosY,
+    });
+  }, [width, height]);
 
   const panel_handleStyle = useAnimatedStyle(() => ({
-    backgroundColor:
-      previewTextColor.value === '#ffffff' ? '#ffffff50' : '#00000050',
+    backgroundColor: previewTextColor.value === '#ffffff' ? '#ffffff50' : '#00000050',
     borderColor: previewTextColor.value,
-    transform: [
-      { translateX: saturationPanel1_handlePos.value },
-      { translateY: brightnessPanel1_handlePos.value },
-      { scale: scale_panelHandle.value },
-    ],
+    transform: [{ translateX: handlePosX.value }, { translateY: handlePosY.value }, { scale: handleScale.value }],
   }));
 
-  const panel_GestureEvent = useAnimatedGestureHandler({
-    onStart: (event, ctx) => {
-      ctx.x = event.x;
-      ctx.y = event.y;
-      scale_panelHandle.value = withTiming(1.2, { duration: 100 });
+  const updateSB = (saturation, brightness) => {
+    updateSaturation(saturation);
+    updateBrightness(brightness);
+  };
+
+  const panel_GestureEvent = useAnimatedGestureHandler(
+    {
+      onStart: (event, ctx) => {
+        ctx.x = event.x;
+        ctx.y = event.y;
+        handleScale.value = withTiming(1.2, { duration: 100 });
+      },
+      onActive: (event, ctx) => {
+        const clamp = (v, max) => Math.min(Math.max(v, 0), max);
+
+        const x = event.translationX;
+        const y = event.translationY;
+        const posX = clamp(x + ctx.x, width);
+        const posY = clamp(y + ctx.y, height);
+        const percentX = posX / width;
+        const percentY = posY / height;
+
+        const saturationX = Math.round(percentX * 100);
+        const brightnessY = Math.round(100 - percentY * 100);
+
+        runOnJS(updateSB)(saturationX, brightnessY);
+      },
+      onFinish: () => {
+        handleScale.value = withTiming(1, { duration: 100 });
+        runOnJS(onGestureEventFinish)();
+      },
     },
-    onActive: (event, ctx) => {
-      const clamp = (v, max) => Math.min(Math.max(v, 0), max);
+    [width, height]
+  );
 
-      const x = event.translationX;
-      const y = event.translationY;
-      const posX = clamp(x + ctx.x, width);
-      const posY = clamp(y + ctx.y, width);
-      const percentX = posX / width;
-      const percentY = posY / width;
-
-      const saturationX = Math.round(percentX * 100);
-      const brightnessY = Math.round(100 - percentY * 100);
-
-      saturationPanel1_handlePos.value = isRtl
-        ? percentX * width - width + thumbSize / 2
-        : percentX * width - thumbSize / 2;
-      brightnessPanel1_handlePos.value = percentY * width - thumbSize / 2;
-
-      brightnessSlider_handlePos.value = isRtl
-        ? (brightnessY / 100) * width - width + brightnessThumbeSize.current / 2
-        : (brightnessY / 100) * width - brightnessThumbeSize.current / 2;
-
-      saturationSlider_handlePos.value = isRtl
-        ? (saturationX / 100) * width - width + saturationThumbeSize.current / 2
-        : (saturationX / 100) * width - saturationThumbeSize.current / 2;
-
-      // panel 2 windows style
-      saturationPanel2_handlePos.value =
-        width - (saturationX / 100) * width - panel2ThumbeSize.current / 2;
-
-      runOnJS(updateSB)(saturationX, brightnessY);
-    },
-    onFinish: () => {
-      scale_panelHandle.value = withTiming(1, { duration: 100 });
-      runOnJS(onGestureEventFinish)();
-    },
-  });
+  const onLayout = ({ nativeEvent }) => {
+    setWidth(nativeEvent.layout.width);
+    setHeight(nativeEvent.layout.height);
+  };
 
   return (
     <PanGestureHandler onGestureEvent={panel_GestureEvent} minDist={0}>
-      <Animated.View style={[styles.panel_container, style, { width, height: width }, styles.override, activeHueStyle]}>
-        <Image
-          source={require('../assets/Background1.png')}
-          style={{
-            borderRadius: style.borderRadius ?? 5,
-            width,
-            height: width,
-          }}
-        />
+      <Animated.View
+        onLayout={onLayout}
+        style={[styles.panel_container, { height: width }, style, { position: 'relative' }, activeHueStyle]}
+      >
+        <Image source={require('../assets/Background1.png')} style={{ borderRadius, width, height }} />
         <Animated.View
           style={[
             styles.handle,

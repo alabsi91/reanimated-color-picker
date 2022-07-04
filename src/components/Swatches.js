@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, StyleSheet, Pressable } from 'react-native';
-
-import { COLOR_HSVA } from '../ColorsConversionFormulas';
+import { CTX } from '../GlobalStyles';
 
 const SWATCHES_COLORS = [
   '#f44336',
@@ -25,26 +24,17 @@ const SWATCHES_COLORS = [
   '#607D8B',
 ];
 
-export function Swatches({
-  width,
-  initialColor,
-  setHandlesPos,
-  onChange,
-  onComplete,
-  returnedResults,
-  colors = SWATCHES_COLORS, // by user
-  style = {}, // by user
-  swatchStyle = {}, // by user
-}) {
+export function Swatches({ colors = SWATCHES_COLORS, style = {}, swatchStyle = {} }) {
+  const { setColor, onChange, onGestureEventFinish, returnedResults } = useContext(CTX);
+
   const onPress = swatch => {
-    initialColor.current = COLOR_HSVA(swatch);
-    setHandlesPos();
+    setColor(swatch);
     onChange?.(returnedResults());
-    onComplete?.(returnedResults());
+    onGestureEventFinish();
   };
 
   return (
-    <View style={[styles.swatcheContainer, { width }, style]}>
+    <View style={[styles.swatcheContainer, style]}>
       {colors.map((swatch, i) => (
         <Pressable
           key={swatch + i}
@@ -58,6 +48,7 @@ export function Swatches({
 
 const styles = StyleSheet.create({
   swatcheContainer: {
+    alignSelf: 'stretch',
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',

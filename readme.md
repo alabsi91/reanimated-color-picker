@@ -9,6 +9,15 @@
 
 ### - Pure JavaScript color picker for react-native.
 
+# :warning: :warning: :warning: :warning:
+
+### Warning
+
+- This project is still in beta stage.
+- Some properties names may change.
+
+# :warning: :warning: :warning: :warning:
+
 ![Example_1](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/example_1.png?raw=true)
 
 ![Example_2](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/example_2.png?raw=true)
@@ -36,7 +45,9 @@
     - [`<OpacitySlider />`](#small_orange_diamondopacityslider-)
     - [`<Swatches />`](#small_orange_diamondswatches-)
 
-- :five: [License](#small_blue_diamondlicense)
+- :five: [Example](#small_blue_diamondexample)
+
+- :six: [License](#small_blue_diamondlicense)
 
 # :small_blue_diamond:Prerequisites
 
@@ -118,24 +129,18 @@ export default function App() {
 - `type: string`
 - `default: '#418181'`
 
-### :small_orange_diamond:tracksHeight
+### :small_orange_diamond:slidersThickness
 
-- Change all slider's track height.
+- A global style to change the thickness of all the sliders.
+- The thickness is the slider's width in `vertical` orientation and height in `horizontal` orientation.
 - `type: number`
 - `default: 25`
 
 ### :small_orange_diamond:thumbsSize
 
-- Change all slider's thumb size.
+- A global style to change the size of all the sliders' thumbs.
 - `type: number`
 - `default: 35`
-
-### :small_orange_diamond:width
-
-- The width of the color picker's wrapper.
-- All built-in components will inherit this width.
-- `type: number`
-- `default: 300`
 
 ### :small_orange_diamond:style
 
@@ -213,11 +218,13 @@ export default function App() {
 
 - A slider to change color's hue.
 
-| Property  |  Type  | Default | Description                                    |
-| :-------- | :----: | :-----: | :--------------------------------------------- |
-| thumbSize | number |  `35`   | hue slider handle (thumb) size (height\*width) |
-| ringColor | string | `#fff`  | the color of the ring around the slider handle |
-| style     | object |    /    | hue slider container style                     |
+| Property  |  Type   | Default | Description                                    |
+| :-------- | :-----: | :-----: | :--------------------------------------------- |
+| thumbSize | number  |  `35`   | hue slider handle (thumb) size (height\*width) |
+| ringColor | string  | `#fff`  | the color of the ring around the slider handle |
+| reverse   | boolean | `false` | reverse slider direction                       |
+| vertical  | boolean | `false` | change slider orientation                      |
+| style     | object  |    /    | hue slider container style                     |
 
 > **Note** some style properties will be overwritten.
 
@@ -227,11 +234,13 @@ export default function App() {
 
 - A slider to change color's saturation.
 
-| Property  |  Type  | Default | Description                                           |
-| :-------- | :----: | :-----: | :---------------------------------------------------- |
-| thumbSize | number |  `35`   | saturation slider handle (thumb) size (height\*width) |
-| ringColor | string | `#fff`  | the color of the ring around the slider handle        |
-| style     | object |    /    | saturation slider container style                     |
+| Property  |  Type   | Default | Description                                           |
+| :-------- | :-----: | :-----: | :---------------------------------------------------- |
+| thumbSize | number  |  `35`   | saturation slider handle (thumb) size (height\*width) |
+| ringColor | string  | `#fff`  | the color of the ring around the slider handle        |
+| reverse   | boolean | `false` | reverse slider direction                              |
+| vertical  | boolean | `false` | change slider orientation                             |
+| style     | object  |    /    | saturation slider container style                     |
 
 > **Note** some style properties will be overwritten.
 
@@ -241,11 +250,13 @@ export default function App() {
 
 - A slider to change color brightness.
 
-| Property  |  Type  | Default | Description                                           |
-| :-------- | :----: | :-----: | :---------------------------------------------------- |
-| thumbSize | number |  `35`   | brightness slider handle (thumb) size (height\*width) |
-| ringColor | string | `#fff`  | the color of the ring around the slider handle        |
-| style     | object |    /    | brightness slider container style                     |
+| Property  |  Type   | Default | Description                                           |
+| :-------- | :-----: | :-----: | :---------------------------------------------------- |
+| thumbSize | number  |  `35`   | brightness slider handle (thumb) size (height\*width) |
+| ringColor | string  | `#fff`  | the color of the ring around the slider handle        |
+| reverse   | boolean | `false` | reverse slider direction                              |
+| vertical  | boolean | `false` | change slider orientation                             |
+| style     | object  |    /    | brightness slider container style                     |
 
 > **Note** some style properties will be overwritten.
 
@@ -255,11 +266,13 @@ export default function App() {
 
 - A slider to change color's opacity.
 
-| Property  |  Type  | Default | Description                                        |
-| :-------- | :----: | :-----: | :------------------------------------------------- |
-| thumbSize | number |  `35`   | opacity slider handle (thumb) size (height\*width) |
-| ringColor | string | `#fff`  | the color of the ring around the slider handle     |
-| style     | object |    /    | opacity slider container style                     |
+| Property  |  Type   | Default | Description                                        |
+| :-------- | :-----: | :-----: | :------------------------------------------------- |
+| thumbSize | number  |  `35`   | opacity slider handle (thumb) size (height\*width) |
+| ringColor | string  | `#fff`  | the color of the ring around the slider handle     |
+| reverse   | boolean | `false` | reverse slider direction                           |
+| vertical  | boolean | `false` | change slider orientation                          |
+| style     | object  |    /    | opacity slider container style                     |
 
 > **Note** some style properties will be overwritten.
 
@@ -276,6 +289,12 @@ export default function App() {
 | swatchStyle |  object   |        /        | swatch style             |
 
 > **Note** some style properties will be overwritten.
+
+# :small_blue_diamond:Example
+
+- [Bare workflow](https://github.com/alabsi91/reanimated-color-picker/tree/main/Example)
+- [Expo managed workflow](https://github.com/alabsi91/reanimated-color-picker/tree/main/ExampleExpo)
+- [Expo snack](https://snack.expo.dev/@alabsi91/reanimated-color-picker)
 
 # :small_blue_diamond:License
 

@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Image, I18nManager } from 'react-native';
+import React, { useEffect, useRef, useState, useContext } from 'react';
+import { I18nManager, Image } from 'react-native';
 import { PanGestureHandler } from 'react-native-gesture-handler';
 import Animated, {
   runOnJS,
@@ -8,79 +8,114 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { COLOR_HSVA, HSL_HEX, HSV_HSL } from '../ColorsConversionFormulas';
-import styles from '../GlobalStyles';
+import { COLOR_HEX } from '../ColorsConversionFormulas';
+import styles, { CTX, getStyle } from '../GlobalStyles';
 
 const isRtl = I18nManager.isRTL;
 
-export function OpacitySlider({
-  width,
-  opacityThumbeSize,
-  setHandlesPos,
-  activeHueStyle,
-  opacity_handlePos,
-  updateOpacity,
-  onGestureEventFinish,
-  previewColorWithoutOpacity,
-  tracksHeight,
-  thumbsSize,
-  thumbSize = thumbsSize, // by user
-  ringColor = '#ffffff', // by user
-  style = {}, // by user
-}) {
-  const height = style.height ?? tracksHeight;
-  const borderRadius = style.borderRadius ?? 5;
+export function OpacitySlider({ thumbSize, ringColor = '#ffffff', style = {}, vertical, reverse }) {
+  const {
+    registerHandle,
+    activeHueStyle,
+    updateOpacity,
+    onGestureEventFinish,
+    previewColorWithoutOpacity,
+    slidersThickness,
+    thumbsSize,
+  } = useContext(CTX);
 
-  opacityThumbeSize.current = thumbSize;
+  thumbSize = thumbSize ?? thumbsSize;
+  ringColor = COLOR_HEX(ringColor);
+  const borderRadius = getStyle(style, 'borderRadius', 5);
 
-  ringColor = COLOR_HSVA(ringColor);
-  ringColor = HSV_HSL(ringColor.h, ringColor.s, ringColor.b);
-  ringColor = HSL_HEX(ringColor.h, ringColor.s, ringColor.l);
+  const id = useRef('opacity' + Math.random()).current;
+
+  const [width, setWidth] = useState(getStyle(style, 'width', slidersThickness));
+  const [height, setHeight] = useState(getStyle(style, 'height', slidersThickness));
+
+  const handlePos = useSharedValue(0);
+  const handleScale = useSharedValue(1);
 
   useEffect(() => {
-    setHandlesPos();
-  }, []);
-
-  const scale_opacityHandle = useSharedValue(1);
+    registerHandle({
+      id,
+      channel: 'a',
+      axis: vertical ? 'y' : 'x',
+      width,
+      height,
+      thumbSize: thumbSize,
+      isReversed: reverse,
+      handle: handlePos,
+    });
+  }, [width, height]);
 
   const opacity_handleStyle = useAnimatedStyle(() => ({
     transform: [
-      { translateX: opacity_handlePos.value },
-      { translateY: -(thumbSize - height) / 2 },
-      { scale: scale_opacityHandle.value },
+      { translateY: vertical ? handlePos.value : height / 2 - thumbSize / 2 },
+      { translateX: vertical ? (isRtl ? -width / 2 + thumbSize / 2 : width / 2 - thumbSize / 2) : handlePos.value },
+      { scale: handleScale.value },
     ],
   }));
 
-  const opacityGestureEvent = useAnimatedGestureHandler({
-    onStart: (event, ctx) => {
-      ctx.x = event.x;
-      scale_opacityHandle.value = withTiming(1.2, { duration: 100 });
+  const opacityGestureEvent = useAnimatedGestureHandler(
+    {
+      onStart: (event, ctx) => {
+        ctx.x = event.x;
+        ctx.y = event.y;
+        handleScale.value = withTiming(1.2, { duration: 100 });
+      },
+      onActive: (event, ctx) => {
+        const clamp = (v, max) => Math.min(Math.max(v, 0), max);
+
+        const x = event.translationX;
+        const y = event.translationY;
+        const posX = clamp(x + ctx.x, width);
+        const posY = clamp(y + ctx.y, height);
+        const percentX = posX / width;
+        const percentY = posY / height;
+
+        const opacityX = reverse ? 100 - Math.round(percentX * 100) : Math.round(percentX * 100);
+        const opacityY = reverse ? 100 - Math.round(percentY * 100) : Math.round(percentY * 100);
+
+        const opacity = vertical ? opacityY : opacityX;
+
+        runOnJS(updateOpacity)(opacity);
+      },
+      onFinish: () => {
+        handleScale.value = withTiming(1, { duration: 100 });
+        runOnJS(onGestureEventFinish)();
+      },
     },
-    onActive: (event, ctx) => {
-      const clamp = (v, max) => Math.min(Math.max(v, 0), max);
+    [width, height]
+  );
 
-      const x = event.translationX;
-      const pos = clamp(x + ctx.x, width);
-      const percent = pos / width;
+  const onLayout = ({ nativeEvent }) => {
+    setWidth(nativeEvent.layout.width);
+    setHeight(nativeEvent.layout.height);
+  };
 
-      const opacityX = Math.round(percent * 100);
+  const imageRotate = vertical ? (reverse ? '270deg' : '90deg') : reverse ? '180deg' : '0deg';
+  const imageTranslateY = (reverse && isRtl) || (!reverse && !isRtl) ? height / 2 - width / 2 : -height / 2 + width / 2;
 
-      opacity_handlePos.value = isRtl ? percent * width - width + thumbSize / 2 : percent * width - thumbSize / 2;
-
-      runOnJS(updateOpacity)(opacityX);
-    },
-    onFinish: () => {
-      scale_opacityHandle.value = withTiming(1, { duration: 100 });
-      runOnJS(onGestureEventFinish)();
-    },
-  });
+  const imageStyle = typeof height === 'number' &&
+    typeof width === 'number' && {
+      width: vertical ? height : width,
+      height: vertical ? width : height,
+      borderRadius,
+      transform: [
+        { rotate: imageRotate },
+        { translateX: vertical ? (reverse ? -height / 2 + width / 2 : height / 2 - width / 2) : 0 },
+        { translateY: vertical ? imageTranslateY : 0 },
+      ],
+    };
 
   return (
     <PanGestureHandler onGestureEvent={opacityGestureEvent} minDist={0}>
       <Animated.View
-        style={[{ position: 'relative', borderRadius, height }, style, { width }, styles.override, , activeHueStyle]}
+        onLayout={onLayout}
+        style={[{ borderRadius }, vertical ? { width } : { height }, style, { position: 'relative' }, activeHueStyle]}
       >
-        <Image source={require('../assets/Opacity.png')} style={[styles.sliderImage, { height, borderRadius }]} />
+        <Image source={require('../assets/Opacity.png')} style={imageStyle} />
         <Animated.View
           style={[
             styles.handle,

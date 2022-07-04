@@ -11,18 +11,16 @@ interface returnedResults {
 }
 
 interface ColorPickerProps {
-  /** - hue and opacity sliders track height. */
-  tracksHeight?: number;
+  /** - global style for all slider components
+   * - thickness is the width of the slider in vertical mode or the height in horizontal mode.
+   */
+  slidersThickness?: number;
 
-  /** - sliders handles (thumbs) size (height*width). */
+  /** - gobal style for all slider components to change handles thumb size (height*width) */
   thumbsSize?: number;
-
-  /** - color picker component width. */
-  width?: number;
 
   /**
    * - color picker wrapper style.
-   * - if you want to change the width use the width prop.
    */
   style?: StyleProp<ViewStyle>;
 
@@ -96,6 +94,12 @@ interface HueProps {
   /** - hue slider handle (thumb) ring color. */
   ringColor?: string;
 
+  /** - reverse hue slider direction. */
+  reverse?: boolean;
+
+  /** - vertical hue slider. */
+  vertical?: boolean;
+
   /**
    * - hue slider container style.
    * - **Note** some of the style properties will be overwritten.
@@ -109,6 +113,12 @@ interface BrightnessProps {
 
   /** - brightness slider handle (thumb) ring color. */
   ringColor?: string;
+
+  /** - reverse brightness slider direction. */
+  reverse?: boolean;
+
+  /** - vertical brightness slider. */
+  vertical?: boolean;
 
   /**
    * - brightness slider container style.
@@ -124,6 +134,12 @@ interface SaturationProps {
   /** - saturation slider handle (thumb) ring color. */
   ringColor?: string;
 
+  /** - reverse saturation slider direction. */
+  reverse?: boolean;
+
+  /** - vertical saturation slider. */
+  vertical?: boolean;
+
   /**
    * - saturation slider container style.
    * - **Note** some of the style properties will be overwritten.
@@ -137,6 +153,12 @@ interface OpacityProps {
 
   /** - opacity slider handle (thumb) ring color. */
   ringColor?: string;
+
+  /** - reverse opacity slider direction. */
+  reverse?: boolean;
+
+  /** - vertical opacity slider. */
+  vertical?: boolean;
 
   /**
    * - opacity slider container style.

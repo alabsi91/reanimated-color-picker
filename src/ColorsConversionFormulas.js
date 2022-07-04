@@ -106,7 +106,7 @@ export const HSL_HSV = (h, s, l) => {
 };
 
 export const COLOR_HSVA = colorStr => {
-  colorStr = colorStr.trim();
+  colorStr = colorStr.toLowerCase().trim();
   const isRgba = colorStr.startsWith('rgba');
   const isRgb = colorStr.startsWith('rgb');
   const isHex = colorStr.startsWith('#');
@@ -183,6 +183,14 @@ export const COLOR_HSVA = colorStr => {
   }
 
   throw new Error('Invalid color');
+};
+
+export const COLOR_HEX = color => {
+  const isValidHex = /^#([A-Fa-f0-9]{3,4}){1,2}$/.test(color);
+  if (isValidHex) return color;
+  const { h, s, b } = COLOR_HSVA(color);
+  const hsl = HSV_HSL(h, s, b);
+  return HSL_HEX(hsl.h, hsl.s, hsl.l);
 };
 
 const luminanceRGB = (r, g, b) => {

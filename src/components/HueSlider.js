@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { View, Image, I18nManager } from 'react-native';
+import React, { useEffect, useRef, useState, useContext } from 'react';
+import { I18nManager, Image } from 'react-native';
 import { PanGestureHandler } from 'react-native-gesture-handler';
 import Animated, {
   runOnJS,
@@ -8,82 +8,106 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { COLOR_HSVA, HSL_HEX, HSV_HSL } from '../ColorsConversionFormulas';
-import styles from '../GlobalStyles';
+import { COLOR_HEX } from '../ColorsConversionFormulas';
+import styles, { CTX, getStyle } from '../GlobalStyles';
 
 const isRtl = I18nManager.isRTL;
 
-export function HueSlider({
-  width,
-  hueThumbeSize,
-  setHandlesPos,
-  updateHue,
-  onGestureEventFinish,
-  hue_handlePos,
-  huePanel2_handlePos,
-  previewColorWithoutOpacity,
-  tracksHeight,
-  panel2ThumbeSize,
-  thumbsSize,
-  thumbSize = thumbsSize, // by user
-  ringColor = '#ffffff', // by user
-  style = {}, // by user
-}) {
-  const height = style.height ?? tracksHeight;
-  const borderRadius = style.borderRadius ?? 5;
+export function HueSlider({ thumbSize, ringColor = '#ffffff', style = {}, vertical, reverse }) {
+  const { registerHandle, updateHue, onGestureEventFinish, previewColorWithoutOpacity, slidersThickness, thumbsSize } =
+    useContext(CTX);
 
-  hueThumbeSize.current = thumbSize;
+  thumbSize = thumbSize ?? thumbsSize;
+  ringColor = COLOR_HEX(ringColor);
+  const borderRadius = getStyle(style, 'borderRadius', 5);
 
-  ringColor = COLOR_HSVA(ringColor);
-  ringColor = HSV_HSL(ringColor.h, ringColor.s, ringColor.b);
-  ringColor = HSL_HEX(ringColor.h, ringColor.s, ringColor.l);
+  const id = useRef('hue' + Math.random()).current;
+
+  const [width, setWidth] = useState(getStyle(style, 'width', slidersThickness));
+  const [height, setHeight] = useState(getStyle(style, 'height', slidersThickness));
+
+  const handlePos = useSharedValue(0);
+  const handleScale = useSharedValue(1);
 
   useEffect(() => {
-    setHandlesPos();
-  }, []);
-
-  const scale_hueHandle = useSharedValue(1);
+    registerHandle({
+      id,
+      channel: 'h',
+      axis: vertical ? 'y' : 'x',
+      width,
+      height,
+      thumbSize: thumbSize,
+      isReversed: !reverse,
+      handle: handlePos,
+    });
+  }, [height, width]);
 
   const hue_handleStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: hue_handlePos.value }, { translateY: -(thumbSize - height) / 2 }, { scale: scale_hueHandle.value }],
+    transform: [
+      { translateY: vertical ? handlePos.value : height / 2 - thumbSize / 2 },
+      { translateX: vertical ? (isRtl ? -width / 2 + thumbSize / 2 : width / 2 - thumbSize / 2) : handlePos.value },
+      { scale: handleScale.value },
+    ],
   }));
 
   const HueGestureEvent = useAnimatedGestureHandler(
     {
       onStart: (event, ctx) => {
         ctx.x = event.x;
-        scale_hueHandle.value = withTiming(1.2, { duration: 100 });
+        ctx.y = event.y;
+        handleScale.value = withTiming(1.2, { duration: 100 });
       },
       onActive: (event, ctx) => {
         const clamp = (v, max) => Math.min(Math.max(v, 0), max);
 
         const x = event.translationX;
-        const pos = clamp(x + ctx.x, width);
-        const percent = pos / width;
+        const y = event.translationY;
+        const posX = clamp(x + ctx.x, width);
+        const posY = clamp(y + ctx.y, height);
+        const percentX = posX / width;
+        const percentY = posY / height;
 
-        const hueX = 360 - Math.round(percent * 360);
+        const hueX = reverse ? Math.round(percentX * 360) : 360 - Math.round(percentX * 360);
+        const hueY = reverse ? Math.round(percentY * 360) : 360 - Math.round(percentY * 360);
+        const hue = vertical ? hueY : hueX;
 
-        hue_handlePos.value = isRtl ? percent * width - width + thumbSize / 2 : percent * width - thumbSize / 2;
-
-        // panel 2 windows style
-        huePanel2_handlePos.value = isRtl
-          ? (hueX / 360) * width - width + panel2ThumbeSize.current / 2
-          : (hueX / 360) * width - panel2ThumbeSize.current / 2;
-
-        runOnJS(updateHue)(hueX);
+        runOnJS(updateHue)(hue);
       },
       onFinish: () => {
-        scale_hueHandle.value = withTiming(1, { duration: 100 });
+        handleScale.value = withTiming(1, { duration: 100 });
         runOnJS(onGestureEventFinish)();
       },
     },
-    [width]
+    [height, width]
   );
+
+  const onLayout = ({ nativeEvent }) => {
+    setWidth(nativeEvent.layout.width);
+    setHeight(nativeEvent.layout.height);
+  };
+
+  const imageRotate = vertical ? (reverse ? '270deg' : '90deg') : reverse ? '180deg' : '0deg';
+  const imageTranslateY = (reverse && isRtl) || (!reverse && !isRtl) ? height / 2 - width / 2 : -height / 2 + width / 2;
+
+  const imageStyle = typeof height === 'number' &&
+    typeof width === 'number' && {
+      width: vertical ? height : width,
+      height: vertical ? width : height,
+      borderRadius,
+      transform: [
+        { rotate: imageRotate },
+        { translateX: vertical ? (reverse ? -height / 2 + width / 2 : height / 2 - width / 2) : 0 },
+        { translateY: vertical ? imageTranslateY : 0 },
+      ],
+    };
 
   return (
     <PanGestureHandler onGestureEvent={HueGestureEvent} minDist={0}>
-      <Animated.View style={[{ position: 'relative', borderRadius, height }, style, { width }, styles.override]}>
-        <Image source={require('../assets/Hue.png')} style={[styles.sliderImage, { height, borderRadius }]} />
+      <Animated.View
+        onLayout={onLayout}
+        style={[{ borderRadius }, vertical ? { width } : { height }, style, { position: 'relative' }]}
+      >
+        <Image source={require('../assets/Hue.png')} style={imageStyle} />
 
         <Animated.View
           style={[
