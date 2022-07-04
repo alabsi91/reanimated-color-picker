@@ -55,6 +55,8 @@ export default function Example4({ onSelectColor, color }: porpsType) {
 
             <Swatches style={{ marginTop: 30 }} swatchStyle={[styles.swatchStyle, styles.shadow]} colors={customSwatches} />
           </ColorPicker>
+
+          <Button title='Close' onPress={() => setShowModal(false)} />
         </View>
       </Modal>
     </>

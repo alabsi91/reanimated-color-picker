@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect, useContext } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Animated, { runOnJS, useDerivedValue } from 'react-native-reanimated';
-import { CONTRAST_RATIO } from '../ColorsConversionFormulas';
+import { COLOR_HSVA, CONTRAST_RATIO } from '../ColorsConversionFormulas';
 import { CTX, getStyle } from '../GlobalStyles';
 
 const CONTRAST_RATIO_MIN = 4.5;
@@ -24,10 +24,11 @@ export function Preview({ style = {}, textStyle = {}, colorFormat = 'hex', hideI
   const justifyContent = getStyle(style, 'justifyContent', 'center');
 
   const initialColorText = useMemo(() => {
-    const { h, s, b } = initialColor.current;
-    const formated = returnedResults(initialColor.current)[colorFormat];
+    const { h, s, b, a } = COLOR_HSVA(value);
+    const formated = returnedResults({ h, s, b, a })[colorFormat];
     const contrast = CONTRAST_RATIO(h, s, b, '#fff');
     const color = contrast < CONTRAST_RATIO_MIN ? '#000' : '#fff';
+    console.log('formated :', formated);
     return { formated, color };
   }, [value, colorFormat]);
 

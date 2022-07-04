@@ -218,3 +218,38 @@ export const CONTRAST_RATIO = (h, s, v, hex) => {
     darkest = Math.min(lum1, lum2);
   return +((brightest + 0.05) / (darkest + 0.05)).toFixed(1);
 };
+
+export const HSL_FORMAT = color => {
+  const { h, s, l } = HSV_HSL(color.h, color.s, color.b);
+  return `hsl(${h}, ${s}%, ${l}%)`;
+};
+
+export const HSLA_FORMAT = color => {
+  const { h, s, l } = HSV_HSL(color.h, color.s, color.b);
+  return `hsla(${h}, ${s}%, ${l}%, ${color.a / 100})`;
+};
+
+export const HEX_FORMAT = color => {
+  const { h, s, l } = HSV_HSL(color.h, color.s, color.b);
+  return HSL_HEX(h, s, l) + (color.a === 100 ? '' : ALPHA_HEX(color.a));
+};
+
+export const RGB_FORMAT = color => {
+  const { h, s, l } = HSV_HSL(color.h, color.s, color.b);
+  const { r, g, b } = HSL_RGB(h, s, l);
+  return `rgb(${r}, ${g}, ${b})`;
+};
+
+export const RGBA_FORMAT = color => {
+  const { h, s, l } = HSV_HSL(color.h, color.s, color.b);
+  const { r, g, b } = HSL_RGB(h, s, l);
+  return `rgba(${r}, ${g}, ${b}, ${color.a / 100})`;
+};
+
+export const HSV_FORMAT = color => {
+  return `hsv(${color.h}, ${color.s}%, ${color.b}%)`;
+};
+
+export const HSVA_FORMAT = color => {
+  return `hsva(${color.h}, ${color.s}%, ${color.b}%, ${color.a / 100})`;
+};

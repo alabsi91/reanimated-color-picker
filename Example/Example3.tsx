@@ -41,7 +41,11 @@ export default function Example3({ onSelectColor, color }: porpsType) {
               <BrightnessSlider style={[{ height: '100%', width: 30 }, styles.shadow]} vertical reverse />
               <Panel2 style={[{ flex: 1, marginStart: 20 }, styles.shadow]} />
             </View>
-            <OpacitySlider style={[{ marginBottom: 40 }, styles.shadow]} ringColor='#5f0f40' />
+
+            <View style={styles.panelBrightnessContainer}>
+              <Preview style={[styles.circlePreview, styles.shadow]} hideInitialColor hideText />
+              <OpacitySlider style={[{ flexGrow: 1 }, styles.shadow]} ringColor='gray' reverse />
+            </View>
 
             <Preview
               style={[styles.previewStyle, styles.shadow]}
@@ -52,6 +56,8 @@ export default function Example3({ onSelectColor, color }: porpsType) {
 
             <Swatches swatchStyle={styles.swatchStyle} colors={customSwatches} />
           </ColorPicker>
+
+          <Button title='Close' onPress={() => setShowModal(false)} />
         </View>
       </Modal>
     </>
@@ -67,12 +73,19 @@ const styles = StyleSheet.create({
     flexWrap: 'nowrap',
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 30,
+    marginBottom: 20,
+  },
+  circlePreview: {
+    width: 30,
+    height: 30,
+    borderRadius: 20,
+    marginEnd: 20,
   },
   previewStyle: {
     height: 55,
     borderRadius: 5,
     marginBottom: 30,
+    marginTop: 20,
   },
   swatchStyle: {
     borderRadius: 5,

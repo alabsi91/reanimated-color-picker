@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Modal, StyleSheet, View } from 'react-native';
 import { SharedValue } from 'react-native-reanimated';
-import ColorPicker, { Panel1, Swatches, Preview, OpacitySlider, HueSlider } from 'reanimated-color-picker';
+import ColorPicker, { Panel1, Swatches, Preview, OpacitySlider, HueSlider } from '../src/index';
 
 const customSwatches = [
   '#001219',
@@ -50,6 +50,8 @@ export default function Example1({ onSelectColor, color }: porpsType) {
 
             <Swatches swatchStyle={styles.swatchStyle} colors={customSwatches} />
           </ColorPicker>
+
+          <Button title='Close' onPress={() => setShowModal(false)} />
         </View>
       </Modal>
     </>

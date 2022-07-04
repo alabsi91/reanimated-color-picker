@@ -2,7 +2,18 @@ import React, { useRef, useEffect } from 'react';
 import { I18nManager, Text, StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
-import { ALPHA_HEX, COLOR_HSVA, CONTRAST_RATIO, HSL_HEX, HSL_RGB, HSV_HSL } from './ColorsConversionFormulas';
+import {
+  COLOR_HSVA,
+  CONTRAST_RATIO,
+  HEX_FORMAT,
+  HSLA_FORMAT,
+  HSL_FORMAT,
+  HSL_HEX,
+  HSVA_FORMAT,
+  HSV_FORMAT,
+  RGBA_FORMAT,
+  RGB_FORMAT,
+} from './ColorsConversionFormulas';
 import { CTX } from './GlobalStyles';
 
 const isRtl = I18nManager.isRTL,
@@ -16,7 +27,7 @@ export default function ColorPicker({
   onComplete,
   style = {},
   children = <Text>NO CHILDREN</Text>,
-} = {}) {
+}) {
   const isFirstRender = useRef(true);
   const initialColor = useRef(COLOR_HSVA(value));
   const previewColorFormat = useRef('hex');
@@ -26,64 +37,15 @@ export default function ColorPicker({
   const brightness = useRef(initialColor.current.b);
   const alpha = useRef(initialColor.current.a);
 
-  const handle_settings = useRef([]); // all hanldes props goes here.
+  const registeredHandles = useRef([]); // all handles props goes here.
 
-  const color_hsl = (color = { h: hue.current, s: saturation.current, b: brightness.current }) => {
-    const { h, s, l } = HSV_HSL(color.h, color.s, color.b);
-    return `hsl(${h}, ${s}%, ${l}%)`;
-  };
-  const color_hsla = (
-    color = {
+  const color_hex = () =>
+    HEX_FORMAT({
       h: hue.current,
       s: saturation.current,
       b: brightness.current,
       a: alpha.current,
-    }
-  ) => {
-    const { h, s, l } = HSV_HSL(color.h, color.s, color.b);
-    return `hsla(${h}, ${s}%, ${l}%, ${color.a / 100})`;
-  };
-  const color_hex = (
-    color = {
-      h: hue.current,
-      s: saturation.current,
-      b: brightness.current,
-      a: alpha.current,
-    }
-  ) => {
-    const { h, s, l } = HSV_HSL(color.h, color.s, color.b);
-    return HSL_HEX(h, s, l) + (color.a === 100 ? '' : ALPHA_HEX(color.a));
-  };
-  const color_rgb = (color = { h: hue.current, s: saturation.current, b: brightness.current }) => {
-    const { h, s, l } = HSV_HSL(color.h, color.s, color.b);
-    const { r, g, b } = HSL_RGB(h, s, l);
-    return `rgb(${r}, ${g}, ${b})`;
-  };
-  const color_rgba = (
-    color = {
-      h: hue.current,
-      s: saturation.current,
-      b: brightness.current,
-      a: alpha.current,
-    }
-  ) => {
-    const { h, s, l } = HSV_HSL(color.h, color.s, color.b);
-    const { r, g, b } = HSL_RGB(h, s, l);
-    return `rgba(${r}, ${g}, ${b}, ${color.a / 100})`;
-  };
-  const color_hsv = (color = { h: hue.current, s: saturation.current, b: brightness.current }) => {
-    return `hsv(${color.h}, ${color.s}%, ${color.b}%)`;
-  };
-  const color_hsva = (
-    color = {
-      h: hue.current,
-      s: saturation.current,
-      b: brightness.current,
-      a: alpha.current,
-    }
-  ) => {
-    return `hsva(${color.h}, ${color.s}%, ${color.b}%, ${color.a / 100})`;
-  };
+    });
 
   const returnedResults = (
     color = {
@@ -94,13 +56,13 @@ export default function ColorPicker({
     }
   ) => {
     return {
-      hex: color_hex(color),
-      rgb: color_rgb(color),
-      rgba: color_rgba(color),
-      hsl: color_hsl(color),
-      hsla: color_hsla(color),
-      hsv: color_hsv(color),
-      hsva: color_hsva(color),
+      hex: HEX_FORMAT(color),
+      rgb: RGB_FORMAT(color),
+      rgba: RGBA_FORMAT(color),
+      hsl: HSL_FORMAT(color),
+      hsla: HSLA_FORMAT(color),
+      hsv: HSV_FORMAT(color),
+      hsva: HSVA_FORMAT(color),
     };
   };
 
@@ -132,7 +94,7 @@ export default function ColorPicker({
     previewTextColor.value =
       contrast < CONTRAST_RATIO_MIN ? (previewTextColor.value === '#ffffff' ? '#000000' : '#ffffff') : previewTextColor.value;
     // update handles position.
-    const brightnessHandles = handle_settings.current.filter(setting => setting.channel === 'b');
+    const brightnessHandles = registeredHandles.current.filter(setting => setting.channel === 'b');
     applySettings(brightnessHandles, false);
     // call onChange callback if exists.
     onChange?.(returnedResults());
@@ -147,7 +109,7 @@ export default function ColorPicker({
     previewTextColor.value =
       contrast < CONTRAST_RATIO_MIN ? (previewTextColor.value === '#ffffff' ? '#000000' : '#ffffff') : previewTextColor.value;
     // change handles position.
-    const saturationHandles = handle_settings.current.filter(setting => setting.channel === 's');
+    const saturationHandles = registeredHandles.current.filter(setting => setting.channel === 's');
     applySettings(saturationHandles, false);
     // call onChange callback if exists.
     onChange?.(returnedResults());
@@ -164,7 +126,7 @@ export default function ColorPicker({
     // update only hue color.
     activeHue.value = HSL_HEX(hueChannel, 100, 50);
     // update handles position.
-    const hueHandles = handle_settings.current.filter(setting => setting.channel === 'h');
+    const hueHandles = registeredHandles.current.filter(setting => setting.channel === 'h');
     applySettings(hueHandles, false);
     // call onChange callback if exists.
     onChange?.(returnedResults());
@@ -175,13 +137,13 @@ export default function ColorPicker({
     previewColor.value = color_hex(); // to update result color.
     previewText.value = returnedResults()[previewColorFormat.current]; // update result text
     // update handles position.
-    const opacityHandles = handle_settings.current.filter(setting => setting.channel === 'a');
+    const opacityHandles = registeredHandles.current.filter(setting => setting.channel === 'a');
     applySettings(opacityHandles, false);
     // call onChange callback if exists.
     onChange?.(returnedResults());
   };
 
-  const applySettings = (settings = handle_settings.current, withAnimation = true) => {
+  const applySettings = (settings = registeredHandles.current, withAnimation = true) => {
     const duration = 100;
     const color = { h: hue.current, s: saturation.current, b: brightness.current, a: alpha.current };
 
@@ -206,15 +168,15 @@ export default function ColorPicker({
   };
 
   const registerHandle = settings => {
-    const currentSettings = handle_settings.current;
-    const index = handle_settings.current.findIndex(current => current.id && current.id === settings.id);
+    const currentSettings = registeredHandles.current;
+    const index = registeredHandles.current.findIndex(current => current.id && current.id === settings.id);
 
     // update handle
     if (index !== -1) {
       currentSettings[index] = settings;
-      handle_settings.current = currentSettings;
+      registeredHandles.current = currentSettings;
     } else {
-      handle_settings.current.push(settings);
+      registeredHandles.current.push(settings);
     }
 
     applySettings([settings], false);
@@ -248,7 +210,7 @@ export default function ColorPicker({
       return;
     }
     initialColor.current = COLOR_HSVA(value);
-    applySettings();
+    setColor(value);
   }, [value]);
 
   const ctxValue = {
