@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Modal, StyleSheet, View } from 'react-native';
 import { SharedValue } from 'react-native-reanimated';
-import ColorPicker, { Panel1, Swatches, Preview, OpacitySlider, HueSlider } from '../src/index';
+import ColorPicker, { Panel1, Swatches, Preview, OpacitySlider, HueSlider } from 'reanimated-color-picker';
 
 const customSwatches = [
   '#001219',
