@@ -29,13 +29,13 @@ export default function ColorPicker({
   children = <Text>NO CHILDREN</Text>,
 }) {
   const isFirstRender = useRef(true);
-  const initialColor = useRef(COLOR_HSVA(value));
-  const previewColorFormat = useRef('hex');
 
+  const initialColor = useRef(COLOR_HSVA(value));
   const hue = useRef(initialColor.current.h);
   const saturation = useRef(initialColor.current.s);
   const brightness = useRef(initialColor.current.b);
   const alpha = useRef(initialColor.current.a);
+  const colorHash = useSharedValue(`${hue.current},${saturation.current},${brightness.current},${alpha.current}`); // to track changes
 
   const registeredHandles = useRef([]); // all handles props goes here.
 
@@ -66,19 +66,21 @@ export default function ColorPicker({
     };
   };
 
+  // preview background color.
   const previewColor = useSharedValue(color_hex());
-  const previewColorStyle = useAnimatedStyle(() => ({
-    backgroundColor: previewColor.value,
-  }));
+  const previewColorStyle = useAnimatedStyle(() => ({ backgroundColor: previewColor.value }));
+
+  // current color with opacity.
   const previewColorWithoutOpacity = useAnimatedStyle(() => ({
     backgroundColor: previewColor.value.length > 7 ? previewColor.value.substring(0, 7) : previewColor.value,
   }));
+
+  // current color's hue.
   const activeHue = useSharedValue(HSL_HEX(hue.current, 100, 50));
   const activeHueStyle = useAnimatedStyle(() => ({ backgroundColor: activeHue.value }));
 
-  const previewTextColor = useSharedValue('#ffffff'); // for result text color
-  const previewText = useSharedValue(returnedResults()[previewColorFormat.current]); // for result text
-
+  // white or black text color depending on the contrast ratio.
+  const previewTextColor = useSharedValue('#ffffff');
   const previewTextColorStyle = useAnimatedStyle(() => ({ color: previewTextColor.value }));
 
   const onGestureEventFinish = () => {
@@ -88,7 +90,8 @@ export default function ColorPicker({
   const updateBrightness = brightnessChannel => {
     brightness.current = brightnessChannel;
     previewColor.value = color_hex(); // to update result color.
-    previewText.value = returnedResults()[previewColorFormat.current]; // update result text
+    colorHash.value = `${hue.current},${saturation.current},${brightness.current},${alpha.current}`;
+
     // change result text color based on the contrast ratio
     const contrast = CONTRAST_RATIO(hue.current, saturation.current, brightness.current, previewTextColor.value);
     previewTextColor.value =
@@ -103,7 +106,8 @@ export default function ColorPicker({
   const updateSaturation = saturationChannel => {
     saturation.current = saturationChannel;
     previewColor.value = color_hex(); // to update result color.
-    previewText.value = returnedResults()[previewColorFormat.current]; // update result text
+    colorHash.value = `${hue.current},${saturation.current},${brightness.current},${alpha.current}`;
+
     // change result text color based on the contrast ratio
     const contrast = CONTRAST_RATIO(hue.current, saturation.current, brightness.current, previewTextColor.value);
     previewTextColor.value =
@@ -118,7 +122,8 @@ export default function ColorPicker({
   const updateHue = hueChannel => {
     hue.current = hueChannel;
     previewColor.value = color_hex(); // to update result color.
-    previewText.value = returnedResults()[previewColorFormat.current]; // update color text
+    colorHash.value = `${hue.current},${saturation.current},${brightness.current},${alpha.current}`;
+
     // change result text color based on the contrast ratio.
     const contrast = CONTRAST_RATIO(hue.current, saturation.current, brightness.current, previewTextColor.value);
     previewTextColor.value =
@@ -135,7 +140,8 @@ export default function ColorPicker({
   const updateOpacity = alphaChannel => {
     alpha.current = alphaChannel;
     previewColor.value = color_hex(); // to update result color.
-    previewText.value = returnedResults()[previewColorFormat.current]; // update result text
+    colorHash.value = `${hue.current},${saturation.current},${brightness.current},${alpha.current}`;
+
     // update handles position.
     const opacityHandles = registeredHandles.current.filter(setting => setting.channel === 'a');
     applySettings(opacityHandles, false);
@@ -189,10 +195,10 @@ export default function ColorPicker({
     saturation.current = s;
     brightness.current = b;
     alpha.current = a;
+    colorHash.value = `${hue.current},${saturation.current},${brightness.current},${alpha.current}`;
 
     // for colors
     previewColor.value = color_hex(); // update result color.
-    previewText.value = returnedResults()[previewColorFormat.current]; // update result text
     activeHue.value = HSL_HEX(h, 100, 50);
 
     // change result text color based on lightness
@@ -207,6 +213,7 @@ export default function ColorPicker({
   useEffect(() => {
     if (isFirstRender.current) {
       isFirstRender.current = false;
+      setColor(value);
       return;
     }
     initialColor.current = COLOR_HSVA(value);
@@ -216,12 +223,11 @@ export default function ColorPicker({
   const ctxValue = {
     activeHueStyle,
 
-    previewText,
     previewTextColor,
     previewTextColorStyle,
     previewColorStyle,
     previewColorWithoutOpacity,
-    previewColorFormat,
+    colorHash,
 
     setColor,
 

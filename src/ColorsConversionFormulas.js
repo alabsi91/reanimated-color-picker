@@ -247,9 +247,9 @@ export const RGBA_FORMAT = color => {
 };
 
 export const HSV_FORMAT = color => {
-  return `hsv(${color.h}, ${color.s}%, ${color.b}%)`;
+  return `hsv(${Math.round(color.h)}, ${Math.round(color.s)}%, ${Math.round(color.b)}%)`;
 };
 
 export const HSVA_FORMAT = color => {
-  return `hsva(${color.h}, ${color.s}%, ${color.b}%, ${color.a / 100})`;
+  return `hsva(${Math.round(color.h)}, ${Math.round(color.s)}%, ${Math.round(color.b)}%, ${color.a / 100})`;
 };

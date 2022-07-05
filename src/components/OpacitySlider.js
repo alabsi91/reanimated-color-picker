@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useContext } from 'react';
+import React, { useEffect, useRef, useState, useContext, useCallback } from 'react';
 import { I18nManager, Image } from 'react-native';
 import { PanGestureHandler } from 'react-native-gesture-handler';
 import Animated, {
@@ -47,7 +47,7 @@ export function OpacitySlider({ thumbSize, ringColor = '#ffffff', style = {}, ve
       isReversed: reverse,
       handle: handlePos,
     });
-  }, [width, height]);
+  }, [height, width, thumbSize, vertical, reverse]);
 
   const opacity_handleStyle = useAnimatedStyle(() => ({
     transform: [
@@ -86,13 +86,13 @@ export function OpacitySlider({ thumbSize, ringColor = '#ffffff', style = {}, ve
         runOnJS(onGestureEventFinish)();
       },
     },
-    [width, height]
+    [height, width, thumbSize, vertical, reverse]
   );
 
-  const onLayout = ({ nativeEvent }) => {
-    setWidth(nativeEvent.layout.width);
-    setHeight(nativeEvent.layout.height);
-  };
+  const onLayout = useCallback(({ nativeEvent: { layout } }) => {
+    setWidth(Math.round(layout.width));
+    setHeight(Math.round(layout.height));
+  }, []);
 
   const imageRotate = vertical ? (reverse ? '270deg' : '90deg') : reverse ? '180deg' : '0deg';
   const imageTranslateY = (reverse && isRtl) || (!reverse && !isRtl) ? height / 2 - width / 2 : -height / 2 + width / 2;

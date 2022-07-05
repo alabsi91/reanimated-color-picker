@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useContext } from 'react';
+import React, { useState, useMemo, useContext } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Animated, { runOnJS, useDerivedValue } from 'react-native-reanimated';
 import { COLOR_HSVA, CONTRAST_RATIO } from '../ColorsConversionFormulas';
@@ -6,21 +6,23 @@ import { CTX, getStyle } from '../GlobalStyles';
 
 const CONTRAST_RATIO_MIN = 4.5;
 
-const ReText = ({ text, style }) => {
-  const [color, setColor] = useState(text.value);
+const ReText = ({ text, style, hash }) => {
+  const [color, setColor] = useState(text());
+
+  const updateText = () => {
+    setColor(text());
+  };
 
   useDerivedValue(() => {
-    runOnJS(setColor)(text.value);
-  }, [text.value]);
+    runOnJS(updateText)(hash.value); // passing a value is not necessary, but it doesn't work without it.
+  }, [hash.value]);
 
   return <Animated.Text style={[styles.previewText, ...style]}>{color}</Animated.Text>;
 };
 
 export function Preview({ style = {}, textStyle = {}, colorFormat = 'hex', hideInitialColor = false, hideText = false }) {
-  const { initialColor, returnedResults, value, previewColorStyle, previewText, previewTextColorStyle, previewColorFormat } =
-    useContext(CTX);
+  const { returnedResults, value, previewColorStyle, colorHash, previewTextColorStyle } = useContext(CTX);
 
-  previewColorFormat.current = colorFormat;
   const justifyContent = getStyle(style, 'justifyContent', 'center');
 
   const initialColorText = useMemo(() => {
@@ -28,13 +30,10 @@ export function Preview({ style = {}, textStyle = {}, colorFormat = 'hex', hideI
     const formated = returnedResults({ h, s, b, a })[colorFormat];
     const contrast = CONTRAST_RATIO(h, s, b, '#fff');
     const color = contrast < CONTRAST_RATIO_MIN ? '#000' : '#fff';
-    console.log('formated :', formated);
     return { formated, color };
   }, [value, colorFormat]);
 
-  useEffect(() => {
-    previewText.value = returnedResults(initialColor.current)[colorFormat];
-  }, []);
+  const updateText = () => returnedResults()[colorFormat];
 
   return (
     <View style={[styles.previewWrapper, style]}>
@@ -46,7 +45,7 @@ export function Preview({ style = {}, textStyle = {}, colorFormat = 'hex', hideI
         </View>
       )}
       <Animated.View style={[styles.previewContainer, { justifyContent }, previewColorStyle]}>
-        {!hideText && <ReText text={previewText} style={[textStyle, previewTextColorStyle]} />}
+        {!hideText && <ReText text={updateText} hash={colorHash} style={[textStyle, previewTextColorStyle]} />}
       </Animated.View>
     </View>
   );

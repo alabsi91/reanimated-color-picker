@@ -37,6 +37,7 @@
   - [ColorPicker Wrapper](#small_red_trianglecolorpicker-wrapper)
   - [Built-in Components](#small_red_trianglebuilt-in-components)
     - [`<Preview />`](#small_orange_diamondpreview-)
+    - [`<PreviewText />`](#small_orange_diamondpreviewtext-)
     - [`<Panel1 />`](#small_orange_diamondpanel1-)
     - [`<Panel2 />`](#small_orange_diamondpanel2-)
     - [`<HueSlider />`](#small_orange_diamondhueslider-)
@@ -176,11 +177,20 @@ export default function App() {
 | :--------------- | :--------------------: | :-----: | :-------------------------------------------------------------------------------------------- |
 | colorFormat      |        `string`        | `'hex'` | preview color text format: `'hex'`, `'rgb'`, `'rgba'`, `'hsl'`, `'hsla'`, `'hsv'` or `'hsva'` |
 | hideInitialColor |       `boolean`        | `false` | hide the initial color preview part                                                           |
-| hideText         |       `boolean`        | `false` | hide preview color texts                                                                       |
+| hideText         |       `boolean`        | `false` | hide preview color texts                                                                      |
 | style            | `StyleProp<ViewStyle>` |    /    | preview container style                                                                       |
 | textStyle        | `StyleProp<TextStyle>` |    /    | preview text style                                                                            |
 
 > **Note** some style properties will be overwritten.
+
+### :small_orange_diamond:`<PreviewText />`
+
+- A React Native `<Text>` component that displays the preview color text.
+
+| Property    |          Type          | Default | Description                                                                                   |
+| :---------- | :--------------------: | :-----: | :-------------------------------------------------------------------------------------------- |
+| colorFormat |        `string`        | `'hex'` | preview color text format: `'hex'`, `'rgb'`, `'rgba'`, `'hsl'`, `'hsla'`, `'hsv'` or `'hsva'` |
+| style       | `StyleProp<TextStyle>` |    /    | preview text style                                                                            |
 
 ### :small_orange_diamond:`<Panel1 />`
 
@@ -190,9 +200,9 @@ export default function App() {
 
 > **Note** you need to add [`<HueSlider />`](#small_orange_diamondhueslider-) alongside with it.
 
-| Property  |  Type  | Default | Description                               |
-| :-------- | :----: | :-----: | :---------------------------------------- |
-| thumbSize | `number` |  `35`   | panel's handle (thumb) size (height\*width) |
+| Property  |          Type          | Default | Description                                 |
+| :-------- | :--------------------: | :-----: | :------------------------------------------ |
+| thumbSize |        `number`        |  `35`   | panel's handle (thumb) size (height\*width) |
 | style     | `StyleProp<ViewStyle>` |    /    | panel's container style                     |
 
 > **Note** some style properties will be overwritten.
@@ -205,9 +215,9 @@ export default function App() {
 
 > **Note** you need to add [`<BrightnessSlider />`](#small_orange_diamondbrightnessslider-) alongside with it.
 
-| Property  |  Type  | Default | Description                               |
-| :-------- | :----: | :-----: | :---------------------------------------- |
-| thumbSize | `number` |  `35`   | panel's handle (thumb) size (height\*width) |
+| Property  |          Type          | Default | Description                                 |
+| :-------- | :--------------------: | :-----: | :------------------------------------------ |
+| thumbSize |        `number`        |  `35`   | panel's handle (thumb) size (height\*width) |
 | style     | `StyleProp<ViewStyle>` |    /    | panel's container style                     |
 
 > **Note** some style properties will be overwritten.
@@ -218,13 +228,13 @@ export default function App() {
 
 - A slider to change color's hue.
 
-| Property  |  Type   | Default | Description                                    |
-| :-------- | :-----: | :-----: | :--------------------------------------------- |
-| thumbSize | `number`  |  `35`   | hue slider handle (thumb) size (height\*width) |
-| ringColor | `string`  | `#fff`  | the color of the ring around the slider handle |
-| reverse   | `boolean` | `false` | reverse slider direction                       |
-| vertical  | `boolean` | `false` | change slider orientation                      |
-| style     | `StyleProp<ViewStyle>`  |    /    | hue slider container style                     |
+| Property  |          Type          | Default | Description                                    |
+| :-------- | :--------------------: | :-----: | :--------------------------------------------- |
+| thumbSize |        `number`        |  `35`   | hue slider handle (thumb) size (height\*width) |
+| ringColor |        `string`        | `#fff`  | the color of the ring around the slider handle |
+| reverse   |       `boolean`        | `false` | reverse slider direction                       |
+| vertical  |       `boolean`        | `false` | change slider orientation                      |
+| style     | `StyleProp<ViewStyle>` |    /    | hue slider container style                     |
 
 > **Note** some style properties will be overwritten.
 
@@ -234,13 +244,13 @@ export default function App() {
 
 - A slider to change color's saturation.
 
-| Property  |  Type   | Default | Description                                           |
-| :-------- | :-----: | :-----: | :---------------------------------------------------- |
-| thumbSize | `number`  |  `35`   | saturation slider handle (thumb) size (height\*width) |
-| ringColor | `string`  | `#fff`  | the color of the ring around the slider handle        |
-| reverse   | `boolean` | `false` | reverse slider direction                              |
-| vertical  | `boolean` | `false` | change slider orientation                             |
-| style     | `StyleProp<ViewStyle>`  |    /    | saturation slider container style                     |
+| Property  |          Type          | Default | Description                                           |
+| :-------- | :--------------------: | :-----: | :---------------------------------------------------- |
+| thumbSize |        `number`        |  `35`   | saturation slider handle (thumb) size (height\*width) |
+| ringColor |        `string`        | `#fff`  | the color of the ring around the slider handle        |
+| reverse   |       `boolean`        | `false` | reverse slider direction                              |
+| vertical  |       `boolean`        | `false` | change slider orientation                             |
+| style     | `StyleProp<ViewStyle>` |    /    | saturation slider container style                     |
 
 > **Note** some style properties will be overwritten.
 
@@ -250,13 +260,13 @@ export default function App() {
 
 - A slider to change color brightness.
 
-| Property  |  Type   | Default | Description                                           |
-| :-------- | :-----: | :-----: | :---------------------------------------------------- |
-| thumbSize | `number`  |  `35`   | brightness slider handle (thumb) size (height\*width) |
-| ringColor | `string`  | `#fff`  | the color of the ring around the slider handle        |
-| reverse   | `boolean` | `false` | reverse slider direction                              |
-| vertical  | `boolean` | `false` | change slider orientation                             |
-| style     | `StyleProp<ViewStyle>`  |    /    | brightness slider container style                     |
+| Property  |          Type          | Default | Description                                           |
+| :-------- | :--------------------: | :-----: | :---------------------------------------------------- |
+| thumbSize |        `number`        |  `35`   | brightness slider handle (thumb) size (height\*width) |
+| ringColor |        `string`        | `#fff`  | the color of the ring around the slider handle        |
+| reverse   |       `boolean`        | `false` | reverse slider direction                              |
+| vertical  |       `boolean`        | `false` | change slider orientation                             |
+| style     | `StyleProp<ViewStyle>` |    /    | brightness slider container style                     |
 
 > **Note** some style properties will be overwritten.
 
@@ -266,13 +276,13 @@ export default function App() {
 
 - A slider to change color's opacity.
 
-| Property  |  Type   | Default | Description                                        |
-| :-------- | :-----: | :-----: | :------------------------------------------------- |
-| thumbSize | `number`  |  `35`   | opacity slider handle (thumb) size (height\*width) |
-| ringColor | `string`  | `#fff`  | the color of the ring around the slider handle     |
-| reverse   | `boolean` | `false` | reverse slider direction                           |
-| vertical  | `boolean` | `false` | change slider orientation                          |
-| style     | `StyleProp<ViewStyle>`  |    /    | opacity slider container style                     |
+| Property  |          Type          | Default | Description                                        |
+| :-------- | :--------------------: | :-----: | :------------------------------------------------- |
+| thumbSize |        `number`        |  `35`   | opacity slider handle (thumb) size (height\*width) |
+| ringColor |        `string`        | `#fff`  | the color of the ring around the slider handle     |
+| reverse   |       `boolean`        | `false` | reverse slider direction                           |
+| vertical  |       `boolean`        | `false` | change slider orientation                          |
+| style     | `StyleProp<ViewStyle>` |    /    | opacity slider container style                     |
 
 > **Note** some style properties will be overwritten.
 
@@ -282,11 +292,11 @@ export default function App() {
 
 - A list of colored swatches is used for quick color selection.
 
-| Property    |   Type    |     Default     | Description              |
-| :---------- | :-------: | :-------------: | :----------------------- |
-| colors      | `string[]` | material colors | custom swatches colors   |
-| style       |  `StyleProp<ViewStyle>`   |        /        | swatches container style |
-| swatchStyle |  `StyleProp<ViewStyle>`   |        /        | swatch style             |
+| Property    |          Type          |     Default     | Description              |
+| :---------- | :--------------------: | :-------------: | :----------------------- |
+| colors      |       `string[]`       | material colors | custom swatches colors   |
+| style       | `StyleProp<ViewStyle>` |        /        | swatches container style |
+| swatchStyle | `StyleProp<ViewStyle>` |        /        | swatch style             |
 
 > **Note** some style properties will be overwritten.
 

@@ -76,6 +76,14 @@ interface PreviewPorps {
   textStyle?: StyleProp<TextStyle>;
 }
 
+interface PreviewTextProps {
+  /** - show color preview in specific format. */
+  colorFormat?: 'hex' | 'rgb' | 'rgba' | 'hsl' | 'hsla' | 'hsv' | 'hsva';
+
+  /** - preview text style */
+  style?: StyleProp<TextStyle>;
+}
+
 interface PanelProps {
   /** - panel handle (thumb) size (height*width). */
   thumbSize?: number;
@@ -169,6 +177,7 @@ interface OpacityProps {
 
 declare const ColorPicker: React.FunctionComponent<ColorPickerProps>;
 export declare const Preview: React.FunctionComponent<PreviewPorps>;
+export declare const PreviewText: React.FunctionComponent<PreviewTextProps>;
 export declare const Panel1: React.FunctionComponent<PanelProps>;
 export declare const Panel2: React.FunctionComponent<PanelProps>;
 export declare const HueSlider: React.FunctionComponent<HueProps>;

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useContext } from 'react';
+import React, { useEffect, useRef, useState, useContext, useCallback } from 'react';
 import { Image } from 'react-native';
 import { PanGestureHandler } from 'react-native-gesture-handler';
 import Animated, {
@@ -25,8 +25,8 @@ export function Panel1({ thumbSize, style = {} }) {
   thumbSize = thumbSize ?? thumbsSize;
   const borderRadius = getStyle(style, 'borderRadius', 5);
 
-  const idX = useRef('opacity' + Math.random()).current;
-  const idY = useRef('opacity' + Math.random()).current;
+  const idX = useRef('panel1' + Math.random()).current;
+  const idY = useRef('panel1' + Math.random()).current;
 
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
@@ -42,7 +42,7 @@ export function Panel1({ thumbSize, style = {} }) {
       axis: 'x',
       width,
       height,
-      thumbSize: thumbSize,
+      thumbSize,
       isReversed: false,
       handle: handlePosX,
     });
@@ -52,11 +52,11 @@ export function Panel1({ thumbSize, style = {} }) {
       axis: 'y',
       width,
       height,
-      thumbSize: thumbSize,
+      thumbSize,
       isReversed: true,
       handle: handlePosY,
     });
-  }, [width, height]);
+  }, [height, width, thumbSize]);
 
   const panel_handleStyle = useAnimatedStyle(() => ({
     backgroundColor: previewTextColor.value === '#ffffff' ? '#ffffff50' : '#00000050',
@@ -96,13 +96,13 @@ export function Panel1({ thumbSize, style = {} }) {
         runOnJS(onGestureEventFinish)();
       },
     },
-    [width, height]
+    [height, width]
   );
 
-  const onLayout = ({ nativeEvent }) => {
-    setWidth(nativeEvent.layout.width);
-    setHeight(nativeEvent.layout.height);
-  };
+  const onLayout = useCallback(({ nativeEvent: { layout } }) => {
+    setWidth(Math.round(layout.width));
+    setHeight(Math.round(layout.height));
+  }, []);
 
   return (
     <PanGestureHandler onGestureEvent={panel_GestureEvent} minDist={0}>
@@ -110,7 +110,7 @@ export function Panel1({ thumbSize, style = {} }) {
         onLayout={onLayout}
         style={[styles.panel_container, { height: width }, style, { position: 'relative' }, activeHueStyle]}
       >
-        <Image source={require('../assets/Background1.png')} style={{ borderRadius, width, height }} />
+        <Image source={require('../assets/Background1.png')} style={{ borderRadius, width: '100%', height: '100%' }} />
         <Animated.View
           style={[
             styles.handle,

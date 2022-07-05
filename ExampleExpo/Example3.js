@@ -1,19 +1,31 @@
 import React, { useState } from 'react';
-import { Button, Modal, StyleSheet, View } from 'react-native';
-import ColorPicker, { Swatches, Preview, OpacitySlider, Panel2, BrightnessSlider } from 'reanimated-color-picker';
+import { Button, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
+import ColorPicker, { Swatches, Preview, OpacitySlider, Panel2, BrightnessSlider, PreviewText } from 'reanimated-color-picker';
 
-const customSwatches = [
-  '#f72585',
-  '#b5179e',
-  '#7209b7',
-  '#560bad',
-  '#480ca8',
-  '#3a0ca3',
-  '#3f37c9',
-  '#4361ee',
-  '#4895ef',
-  '#4cc9f0',
-];
+const customSwatches = ['#f72585', '#b5179e', '#7209b7', '#560bad', '#480ca8'];
+
+function FormatsTabs() {
+  const [Format, setFormat] = useState('hex');
+  return (
+    <View style={[{ backgroundColor: '#edf2f4', padding: 10, borderRadius: 5, marginTop: 10 }, styles.shadow]}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Pressable onPress={() => setFormat('hex')}>
+          <Text style={styles.tabText}>HEX</Text>
+        </Pressable>
+        <Pressable onPress={() => setFormat('rgba')}>
+          <Text style={styles.tabText}>RGBA</Text>
+        </Pressable>
+        <Pressable onPress={() => setFormat('hsla')}>
+          <Text style={styles.tabText}>HSLA</Text>
+        </Pressable>
+        <Pressable onPress={() => setFormat('hsva')}>
+          <Text style={styles.tabText}>HSVA</Text>
+        </Pressable>
+      </View>
+      <PreviewText style={{ marginVertical: 20, fontSize: 18, color: '#293241' }} colorFormat={Format} />
+    </View>
+  );
+}
 
 export default function Example3({ onSelectColor, color }) {
   const [showModal, setShowModal] = useState(false);
@@ -26,29 +38,28 @@ export default function Example3({ onSelectColor, color }) {
         <View style={styles.container}>
           <ColorPicker
             value={color.value}
-            slidersThickness={25}
+            slidersThickness={30}
             thumbsSize={30}
             style={{ width: '75%', justifyContent: 'center' }}
             onComplete={onSelectColor}
           >
             <View style={styles.panelBrightnessContainer}>
-              <BrightnessSlider style={[{ height: '100%', width: 30 }, styles.shadow]} vertical reverse />
-              <Panel2 style={[{ flex: 1, marginStart: 20 }, styles.shadow]} />
+              <Panel2 style={[{ flex: 1, marginEnd: 20 }, styles.shadow]} />
+              <BrightnessSlider style={[{ height: '100%' }, styles.shadow]} vertical reverse />
             </View>
 
             <View style={styles.panelBrightnessContainer}>
-              <Preview style={[styles.circlePreview, styles.shadow]} hideInitialColor hideText />
               <OpacitySlider style={[{ flexGrow: 1 }, styles.shadow]} ringColor='gray' reverse />
+              <Preview style={[styles.circlePreview, styles.shadow]} hideInitialColor hideText />
             </View>
 
-            <Preview
-              style={[styles.previewStyle, styles.shadow]}
-              textStyle={{ fontSize: 16 }}
-              hideInitialColor
-              colorFormat='hsl'
-            />
+            <FormatsTabs />
 
-            <Swatches swatchStyle={styles.swatchStyle} colors={customSwatches} />
+            <Swatches
+              style={{ marginTop: 40, justifyContent: 'space-between' }}
+              swatchStyle={styles.swatchStyle}
+              colors={customSwatches}
+            />
           </ColorPicker>
 
           <Button title='Close' onPress={() => setShowModal(false)} />
@@ -66,6 +77,15 @@ const styles = StyleSheet.create({
     maxWidth: 500,
     margin: 'auto',
   },
+  tabText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#000',
+    backgroundColor: '#fff',
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+    borderRadius: 5,
+  },
   panelBrightnessContainer: {
     flexWrap: 'nowrap',
     flexDirection: 'row',
@@ -76,7 +96,7 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 20,
-    marginEnd: 20,
+    marginStart: 20,
   },
   previewStyle: {
     height: 55,
@@ -88,11 +108,9 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     height: 40,
     width: 40,
-    marginHorizontal: 10,
-    marginBottom: 15,
   },
   shadow: {
-    shadowColor: '#000',
+    shadowColor: '#293241',
     shadowOffset: {
       width: 0,
       height: 2,
