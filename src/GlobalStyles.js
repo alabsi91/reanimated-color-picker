@@ -1,5 +1,7 @@
 import { createContext } from 'react';
-import { StyleSheet } from 'react-native';
+import { I18nManager, StyleSheet } from 'react-native';
+
+const isRtl = I18nManager.isRTL;
 
 export const CTX = createContext();
 
@@ -21,7 +23,7 @@ export default StyleSheet.create({
   },
   handle: {
     position: 'absolute',
-    left: 0,
+    ...(isRtl ? { right: 0 } : { left: 0 }),
     top: 0,
     borderWidth: 1,
     justifyContent: 'center',

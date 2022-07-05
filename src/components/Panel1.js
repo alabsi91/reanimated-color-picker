@@ -58,7 +58,7 @@ export function Panel1({ thumbSize, style = {} }) {
     });
   }, [height, width, thumbSize]);
 
-  const panel_handleStyle = useAnimatedStyle(() => ({
+  const handleStyle = useAnimatedStyle(() => ({
     backgroundColor: previewTextColor.value === '#ffffff' ? '#ffffff50' : '#00000050',
     borderColor: previewTextColor.value,
     transform: [{ translateX: handlePosX.value }, { translateY: handlePosY.value }, { scale: handleScale.value }],
@@ -69,7 +69,7 @@ export function Panel1({ thumbSize, style = {} }) {
     updateBrightness(brightness);
   };
 
-  const panel_GestureEvent = useAnimatedGestureHandler(
+  const gestureEvent = useAnimatedGestureHandler(
     {
       onStart: (event, ctx) => {
         ctx.x = event.x;
@@ -105,7 +105,7 @@ export function Panel1({ thumbSize, style = {} }) {
   }, []);
 
   return (
-    <PanGestureHandler onGestureEvent={panel_GestureEvent} minDist={0}>
+    <PanGestureHandler onGestureEvent={gestureEvent} minDist={0}>
       <Animated.View
         onLayout={onLayout}
         style={[styles.panel_container, { height: width }, style, { position: 'relative' }, activeHueStyle]}
@@ -119,7 +119,7 @@ export function Panel1({ thumbSize, style = {} }) {
               height: thumbSize,
               borderRadius: thumbSize / 2,
             },
-            panel_handleStyle,
+            handleStyle,
           ]}
         >
           <Animated.View style={[styles.handleInner, { borderRadius: thumbSize / 2 }, previewColorWithoutOpacity]} />

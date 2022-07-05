@@ -95,6 +95,11 @@ interface PanelProps {
   style?: StyleProp<ViewStyle>;
 }
 
+interface Panel2Props extends PanelProps {
+  /** - reverse (flip) hue direction. */
+  reverse?: boolean;
+}
+
 interface HueProps {
   /** - hue slider handle (thumb) size (height*width). */
   thumbSize?: number;
@@ -179,7 +184,7 @@ declare const ColorPicker: React.FunctionComponent<ColorPickerProps>;
 export declare const Preview: React.FunctionComponent<PreviewPorps>;
 export declare const PreviewText: React.FunctionComponent<PreviewTextProps>;
 export declare const Panel1: React.FunctionComponent<PanelProps>;
-export declare const Panel2: React.FunctionComponent<PanelProps>;
+export declare const Panel2: React.FunctionComponent<Panel2Props>;
 export declare const HueSlider: React.FunctionComponent<HueProps>;
 export declare const BrightnessSlider: React.FunctionComponent<BrightnessProps>;
 export declare const SaturationSlider: React.FunctionComponent<SaturationProps>;

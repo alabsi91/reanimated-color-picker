@@ -37,20 +37,20 @@ export function HueSlider({ thumbSize, ringColor = '#ffffff', style = {}, vertic
       width,
       height,
       thumbSize: thumbSize,
-      isReversed: !reverse,
+      isReversed: reverse,
       handle: handlePos,
     });
   }, [height, width, thumbSize, vertical, reverse]);
 
-  const hue_handleStyle = useAnimatedStyle(() => ({
+  const handleStyle = useAnimatedStyle(() => ({
     transform: [
       { translateY: vertical ? handlePos.value : height / 2 - thumbSize / 2 },
-      { translateX: vertical ? (isRtl ? -width / 2 + thumbSize / 2 : width / 2 - thumbSize / 2) : handlePos.value },
+      { translateX: vertical ? width / 2 - thumbSize / 2 : handlePos.value },
       { scale: handleScale.value },
     ],
   }));
 
-  const HueGestureEvent = useAnimatedGestureHandler(
+  const gestureEvent = useAnimatedGestureHandler(
     {
       onStart: (event, ctx) => {
         ctx.x = event.x;
@@ -67,8 +67,8 @@ export function HueSlider({ thumbSize, ringColor = '#ffffff', style = {}, vertic
         const percentX = posX / width;
         const percentY = posY / height;
 
-        const hueX = reverse ? Math.round(percentX * 360) : 360 - Math.round(percentX * 360);
-        const hueY = reverse ? Math.round(percentY * 360) : 360 - Math.round(percentY * 360);
+        const hueX = reverse ? 360 - Math.round(percentX * 360) : Math.round(percentX * 360);
+        const hueY = reverse ? 360 - Math.round(percentY * 360) : Math.round(percentY * 360);
         const hue = vertical ? hueY : hueX;
 
         runOnJS(updateHue)(hue);
@@ -102,7 +102,7 @@ export function HueSlider({ thumbSize, ringColor = '#ffffff', style = {}, vertic
     };
 
   return (
-    <PanGestureHandler onGestureEvent={HueGestureEvent} minDist={0}>
+    <PanGestureHandler onGestureEvent={gestureEvent} minDist={0}>
       <Animated.View
         onLayout={onLayout}
         style={[{ borderRadius }, vertical ? { width } : { height }, style, { position: 'relative' }]}
@@ -119,7 +119,7 @@ export function HueSlider({ thumbSize, ringColor = '#ffffff', style = {}, vertic
               backgroundColor: ringColor + 50,
               borderColor: ringColor,
             },
-            hue_handleStyle,
+            handleStyle,
           ]}
         >
           <Animated.View style={[styles.handleInner, { borderRadius: thumbSize / 2, zIndex: 100 }, previewColorWithoutOpacity]} />

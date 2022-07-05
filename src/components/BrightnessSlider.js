@@ -49,15 +49,15 @@ export function BrightnessSlider({ thumbSize, ringColor = '#ffffff', style = {},
     });
   }, [height, width, thumbSize, vertical, reverse]);
 
-  const brightness_handleStyle = useAnimatedStyle(() => ({
+  const handleStyle = useAnimatedStyle(() => ({
     transform: [
       { translateY: vertical ? handlePos.value : height / 2 - thumbSize / 2 },
-      { translateX: vertical ? (isRtl ? -width / 2 + thumbSize / 2 : width / 2 - thumbSize / 2) : handlePos.value },
+      { translateX: vertical ? width / 2 - thumbSize / 2 : handlePos.value },
       { scale: handleScale.value },
     ],
   }));
 
-  const BrightnessGestureEvent = useAnimatedGestureHandler(
+  const gestureEvent = useAnimatedGestureHandler(
     {
       onStart: (event, ctx) => {
         ctx.x = event.x;
@@ -110,7 +110,7 @@ export function BrightnessSlider({ thumbSize, ringColor = '#ffffff', style = {},
     };
 
   return (
-    <PanGestureHandler onGestureEvent={BrightnessGestureEvent} minDist={0}>
+    <PanGestureHandler onGestureEvent={gestureEvent} minDist={0}>
       <Animated.View
         onLayout={onLayout}
         style={[{ borderRadius }, vertical ? { width } : { height }, style, { position: 'relative' }, activeHueStyle]}
@@ -126,7 +126,7 @@ export function BrightnessSlider({ thumbSize, ringColor = '#ffffff', style = {},
               backgroundColor: ringColor + 50,
               borderColor: ringColor,
             },
-            brightness_handleStyle,
+            handleStyle,
           ]}
         >
           <Animated.View style={[styles.handleInner, { borderRadius: thumbSize / 2 }, previewColorWithoutOpacity]} />

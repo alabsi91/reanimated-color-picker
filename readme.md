@@ -83,7 +83,7 @@ npm i reanimated-color-picker
 
 ```jsx
 import React, { useState } from 'react';
-import { Button, Modal, View } from 'react-native';
+import { Button, Modal, StyleSheet, View } from 'react-native';
 
 import ColorPicker, { Panel1, Swatches, Preview, OpacitySlider, HueSlider } from 'reanimated-color-picker';
 
@@ -97,10 +97,10 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Button title='Color Picker' onPress={() => setShowModal1(true)} />
+      <Button title='Color Picker' onPress={() => setShowModal(true)} />
 
-      <Modal visible={showModal}>
-        <ColorPicker value='red' onComplete={onSelectColor}>
+      <Modal visible={showModal} animationType='slide'>
+        <ColorPicker style={{ width: '70%' }} value='red' onComplete={onSelectColor}>
           <Preview />
           <Panel1 />
           <HueSlider />
@@ -113,6 +113,12 @@ export default function App() {
     </View>
   );
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+});
 ```
 
 # :small_blue_diamond:API
@@ -218,6 +224,7 @@ export default function App() {
 | Property  |          Type          | Default | Description                                 |
 | :-------- | :--------------------: | :-----: | :------------------------------------------ |
 | thumbSize |        `number`        |  `35`   | panel's handle (thumb) size (height\*width) |
+| reverse   |       `boolean`        | `false` | reverse (flip) hue direction                |
 | style     | `StyleProp<ViewStyle>` |    /    | panel's container style                     |
 
 > **Note** some style properties will be overwritten.

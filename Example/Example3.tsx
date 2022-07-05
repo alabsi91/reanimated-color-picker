@@ -101,12 +101,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginStart: 20,
   },
-  previewStyle: {
-    height: 55,
-    borderRadius: 5,
-    marginBottom: 30,
-    marginTop: 20,
-  },
   swatchStyle: {
     borderRadius: 5,
     height: 40,
