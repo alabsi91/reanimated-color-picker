@@ -8,24 +8,16 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { COLOR_HEX } from '../ColorsConversionFormulas';
-import styles, { CTX, getStyle } from '../GlobalStyles';
+import { CTX, getStyle } from '../GlobalStyles';
+import Thumb from './Thumbs';
 
 const isRtl = I18nManager.isRTL;
 
-export function BrightnessSlider({ thumbSize, ringColor = '#ffffff', style = {}, vertical, reverse }) {
-  const {
-    registerHandle,
-    updateBrightness,
-    onGestureEventFinish,
-    previewColorWithoutOpacity,
-    slidersThickness,
-    activeHueStyle,
-    thumbsSize,
-  } = useContext(CTX);
+export function BrightnessSlider({ thumbShape, thumbSize, thumbColor = '#ffffff', style = {}, vertical, reverse }) {
+  const { registerHandle, updateBrightness, onGestureEventFinish, solidColor, slidersThickness, activeHueStyle, thumbsSize } =
+    useContext(CTX);
 
   thumbSize = thumbSize ?? thumbsSize;
-  ringColor = COLOR_HEX(ringColor);
   const borderRadius = getStyle(style, 'borderRadius', 5);
 
   const id = useRef('brightness' + Math.random()).current;
@@ -43,7 +35,7 @@ export function BrightnessSlider({ thumbSize, ringColor = '#ffffff', style = {},
       axis: vertical ? 'y' : 'x',
       width,
       height,
-      thumbSize: thumbSize,
+      thumbSize,
       isReversed: reverse,
       handle: handlePos,
     });
@@ -116,21 +108,7 @@ export function BrightnessSlider({ thumbSize, ringColor = '#ffffff', style = {},
         style={[{ borderRadius }, vertical ? { width } : { height }, style, { position: 'relative' }, activeHueStyle]}
       >
         <Image source={require('../assets/Brightness.png')} style={imageStyle} />
-        <Animated.View
-          style={[
-            styles.handle,
-            {
-              width: thumbSize,
-              height: thumbSize,
-              borderRadius: thumbSize / 2,
-              backgroundColor: ringColor + 50,
-              borderColor: ringColor,
-            },
-            handleStyle,
-          ]}
-        >
-          <Animated.View style={[styles.handleInner, { borderRadius: thumbSize / 2 }, previewColorWithoutOpacity]} />
-        </Animated.View>
+        <Thumb {...{ thumbShape, thumbSize, thumbColor, handleStyle, solidColor, vertical }} />
       </Animated.View>
     </PanGestureHandler>
   );

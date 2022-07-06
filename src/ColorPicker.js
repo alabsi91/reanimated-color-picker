@@ -69,8 +69,8 @@ export default function ColorPicker({
   const previewColor = useSharedValue(color_hex());
   const previewColorStyle = useAnimatedStyle(() => ({ backgroundColor: previewColor.value }));
 
-  // current color with opacity.
-  const previewColorWithoutOpacity = useAnimatedStyle(() => ({
+  // current color without the alpha channel.
+  const solidColor = useAnimatedStyle(() => ({
     backgroundColor: previewColor.value.length > 7 ? previewColor.value.substring(0, 7) : previewColor.value,
   }));
 
@@ -78,73 +78,73 @@ export default function ColorPicker({
   const activeHue = useSharedValue(HSL_HEX(hue.current, 100, 50));
   const activeHueStyle = useAnimatedStyle(() => ({ backgroundColor: activeHue.value }));
 
-  // white or black text color depending on the contrast ratio.
-  const previewTextColor = useSharedValue('#ffffff');
-  const previewTextColorStyle = useAnimatedStyle(() => ({ color: previewTextColor.value }));
+  // white or black color depending on the contrast ratio.
+  const invertedColor = useSharedValue('#ffffff');
 
   const onGestureEventFinish = () => {
     onComplete?.(returnedResults());
   };
 
+  // set white or black color depending on the contrast ratio.
+  const setInvertedColor = () => {
+    const color1 = { h: hue.current, s: saturation.current, b: brightness.current, a: alpha.current };
+    const color2 = invertedColor.value;
+    const inverted = invertedColor.value === '#ffffff' ? '#000000' : '#ffffff';
+    const contrast = CONTRAST_RATIO(color1, color2);
+    invertedColor.value = contrast < CONTRAST_RATIO_MIN ? inverted : invertedColor.value;
+  };
+
   const updateBrightness = brightnessChannel => {
     brightness.current = brightnessChannel;
-    previewColor.value = color_hex(); // to update result color.
+    previewColor.value = color_hex();
     colorHash.value = `${hue.current},${saturation.current},${brightness.current},${alpha.current}`;
 
-    // change result text color based on the contrast ratio
-    const contrast = CONTRAST_RATIO(hue.current, saturation.current, brightness.current, previewTextColor.value);
-    previewTextColor.value =
-      contrast < CONTRAST_RATIO_MIN ? (previewTextColor.value === '#ffffff' ? '#000000' : '#ffffff') : previewTextColor.value;
-    // update handles position.
+    setInvertedColor();
+
+    // update handles positions.
     const brightnessHandles = registeredHandles.current.filter(setting => setting.channel === 'b');
     applySettings(brightnessHandles, false);
-    // call onChange callback if exists.
+
     onChange?.(returnedResults());
   };
 
   const updateSaturation = saturationChannel => {
     saturation.current = saturationChannel;
-    previewColor.value = color_hex(); // to update result color.
+    previewColor.value = color_hex();
     colorHash.value = `${hue.current},${saturation.current},${brightness.current},${alpha.current}`;
 
-    // change result text color based on the contrast ratio
-    const contrast = CONTRAST_RATIO(hue.current, saturation.current, brightness.current, previewTextColor.value);
-    previewTextColor.value =
-      contrast < CONTRAST_RATIO_MIN ? (previewTextColor.value === '#ffffff' ? '#000000' : '#ffffff') : previewTextColor.value;
-    // change handles position.
+    setInvertedColor();
+
+    // change handles positions.
     const saturationHandles = registeredHandles.current.filter(setting => setting.channel === 's');
     applySettings(saturationHandles, false);
-    // call onChange callback if exists.
+
     onChange?.(returnedResults());
   };
 
   const updateHue = hueChannel => {
     hue.current = hueChannel;
-    previewColor.value = color_hex(); // to update result color.
+    previewColor.value = color_hex();
     colorHash.value = `${hue.current},${saturation.current},${brightness.current},${alpha.current}`;
 
-    // change result text color based on the contrast ratio.
-    const contrast = CONTRAST_RATIO(hue.current, saturation.current, brightness.current, previewTextColor.value);
-    previewTextColor.value =
-      contrast < CONTRAST_RATIO_MIN ? (previewTextColor.value === '#ffffff' ? '#000000' : '#ffffff') : previewTextColor.value;
-    // update only hue color.
-    activeHue.value = HSL_HEX(hueChannel, 100, 50);
-    // update handles position.
+    setInvertedColor();
+    activeHue.value = HSL_HEX(hueChannel, 100, 50); // update only hue color.
+    // update handles positions.
     const hueHandles = registeredHandles.current.filter(setting => setting.channel === 'h');
     applySettings(hueHandles, false);
-    // call onChange callback if exists.
+
     onChange?.(returnedResults());
   };
 
   const updateOpacity = alphaChannel => {
     alpha.current = alphaChannel;
-    previewColor.value = color_hex(); // to update result color.
+    previewColor.value = color_hex();
     colorHash.value = `${hue.current},${saturation.current},${brightness.current},${alpha.current}`;
 
-    // update handles position.
+    // update handles positions.
     const opacityHandles = registeredHandles.current.filter(setting => setting.channel === 'a');
     applySettings(opacityHandles, false);
-    // call onChange callback if exists.
+
     onChange?.(returnedResults());
   };
 
@@ -153,22 +153,13 @@ export default function ColorPicker({
     const color = { h: hue.current, s: saturation.current, b: brightness.current, a: alpha.current };
 
     for (let i = 0; i < settings.length; i++) {
-      const setting = settings[i];
-      const { isReversed, width, height, thumbSize } = setting;
-      const isVertical = setting.axis === 'y';
-      const channel = color[setting.channel];
-      const channelMax = setting.channel === 'h' ? 360 : 100;
-      const percent = (channel / channelMax) * (isVertical ? height : width);
+      const { isReversed, width, height, thumbSize, axis, channel, handle } = settings[i];
+      const channelMax = channel === 'h' ? 360 : 100;
+      const length = axis === 'y' ? height : width; // height for vertical axis, width for horizontal axis.
+      const percent = (color[channel] / channelMax) * length;
 
-      // vertical
-      if (isVertical) {
-        const pos = (isReversed ? height - percent : percent) - thumbSize / 2;
-        setting.handle.value = withAnimation ? withTiming(pos, { duration }) : pos;
-        continue;
-      }
-      // horizontal
-      const pos = (isReversed ? width - percent : percent) + -thumbSize / 2;
-      setting.handle.value = withAnimation ? withTiming(pos, { duration }) : pos;
+      const pos = (isReversed ? length - percent : percent) - thumbSize / 2;
+      handle.value = withAnimation ? withTiming(pos, { duration }) : pos;
     }
   };
 
@@ -180,11 +171,10 @@ export default function ColorPicker({
     if (index !== -1) {
       currentSettings[index] = settings;
       registeredHandles.current = currentSettings;
-    } else {
-      registeredHandles.current.push(settings);
+      applySettings([settings]); // update handle position only when settings updated because it will for sure.
+      return;
     }
-
-    applySettings([settings], false);
+    registeredHandles.current.push(settings);
   };
 
   const setColor = color => {
@@ -200,10 +190,7 @@ export default function ColorPicker({
     previewColor.value = color_hex(); // update result color.
     activeHue.value = HSL_HEX(h, 100, 50);
 
-    // change result text color based on lightness
-    const contrast = CONTRAST_RATIO(hue.current, saturation.current, brightness.current, previewTextColor.value);
-    previewTextColor.value =
-      contrast < CONTRAST_RATIO_MIN ? (previewTextColor.value === '#ffffff' ? '#000000' : '#ffffff') : previewTextColor.value;
+    setInvertedColor();
 
     applySettings();
   };
@@ -212,10 +199,7 @@ export default function ColorPicker({
   useEffect(() => {
     if (isFirstRender.current) {
       isFirstRender.current = false;
-      // change preview text color based on the contrast ratio.
-      const contrast = CONTRAST_RATIO(hue.current, saturation.current, brightness.current, previewTextColor.value);
-      previewTextColor.value =
-        contrast < CONTRAST_RATIO_MIN ? (previewTextColor.value === '#ffffff' ? '#000000' : '#ffffff') : previewTextColor.value;
+      setInvertedColor();
       return;
     }
 
@@ -226,10 +210,9 @@ export default function ColorPicker({
   const ctxValue = {
     activeHueStyle,
 
-    previewTextColor,
-    previewTextColorStyle,
+    invertedColor,
     previewColorStyle,
-    previewColorWithoutOpacity,
+    solidColor,
     colorHash,
 
     setColor,

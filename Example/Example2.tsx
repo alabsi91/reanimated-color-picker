@@ -29,8 +29,8 @@ export default function Example1({ onSelectColor, color }: porpsType) {
             <Preview style={[styles.previewStyle, styles.shadow]} textStyle={{ fontSize: 16 }} />
             <Panel1 style={styles.shadow} />
 
-            <HueSlider style={styles.shadow} ringColor='#22223b' />
-            <OpacitySlider style={styles.shadow} ringColor='#22223b' />
+            <HueSlider style={styles.shadow} thumbColor='#22223b' />
+            <OpacitySlider style={styles.shadow} thumbColor='#22223b' />
 
             <Swatches swatchStyle={styles.swatchStyle} colors={customSwatches} />
           </ColorPicker>

@@ -9,17 +9,11 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import styles, { CTX, getStyle } from '../GlobalStyles';
+import Thumb from './Thumbs';
 
 export function Panel2({ thumbSize, style = {}, reverse = false }) {
-  const {
-    registerHandle,
-    previewTextColor,
-    previewColorWithoutOpacity,
-    onGestureEventFinish,
-    updateHue,
-    updateSaturation,
-    thumbsSize,
-  } = useContext(CTX);
+  const { registerHandle, invertedColor, solidColor, onGestureEventFinish, updateHue, updateSaturation, thumbsSize } =
+    useContext(CTX);
 
   thumbSize = thumbSize ?? thumbsSize;
   const borderRadius = getStyle(style, 'borderRadius', 5);
@@ -58,8 +52,8 @@ export function Panel2({ thumbSize, style = {}, reverse = false }) {
   }, [height, width, thumbSize, reverse]);
 
   const handleStyle = useAnimatedStyle(() => ({
-    backgroundColor: previewTextColor.value === '#ffffff' ? '#ffffff50' : '#00000050',
-    borderColor: previewTextColor.value,
+    backgroundColor: invertedColor.value === '#ffffff' ? '#ffffff50' : '#00000050',
+    borderColor: invertedColor.value,
     transform: [{ translateX: handlePosX.value }, { translateY: handlePosY.value }, { scale: handleScale.value }],
   }));
 
@@ -108,21 +102,10 @@ export function Panel2({ thumbSize, style = {}, reverse = false }) {
       <Animated.View onLayout={onLayout} style={[styles.panel_container, { height: width }, style, { position: 'relative' }]}>
         <Image
           source={require('../assets/Background2.png')}
-          style={{ borderRadius, width, height, transform: [{ scaleX: reverse ? -1 : 1 }] }}
+          style={{ borderRadius, width: '100%', height: '100%', transform: [{ scaleX: reverse ? -1 : 1 }] }}
+          resizeMode='stretch'
         />
-        <Animated.View
-          style={[
-            styles.handle,
-            {
-              width: thumbSize,
-              height: thumbSize,
-              borderRadius: thumbSize / 2,
-            },
-            handleStyle,
-          ]}
-        >
-          <Animated.View style={[styles.handleInner, { borderRadius: thumbSize / 2 }, previewColorWithoutOpacity]} />
-        </Animated.View>
+        <Thumb {...{ thumbShape: 'ring', thumbSize, handleStyle, solidColor }} />
       </Animated.View>
     </PanGestureHandler>
   );

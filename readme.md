@@ -46,7 +46,7 @@
     - [`<OpacitySlider />`](#small_orange_diamondopacityslider-)
     - [`<Swatches />`](#small_orange_diamondswatches-)
 
-- :five: [Example](#small_blue_diamondexample)
+- :five: [Examples](#small_blue_diamondexamples)
 
 - :six: [License](#small_blue_diamondlicense)
 
@@ -91,7 +91,7 @@ export default function App() {
   const [showModal, setShowModal] = useState(false);
 
   const onSelectColor = ({ hex }) => {
-    // do something with the selected color
+    // do something with the selected color.
     console.log(hex);
   };
 
@@ -113,6 +113,7 @@ export default function App() {
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -153,7 +154,7 @@ const styles = StyleSheet.create({
 
 - Color picker's container style.
 - If you want to change the width using the `width` property.
-- `type: StyleProp<ViewStyle>`
+- `type: ViewStyle`
 
 > **Note** some style properties will be overwritten.
 
@@ -179,13 +180,13 @@ const styles = StyleSheet.create({
 
 - The preview of the selected and the initial color.
 
-| Property         |          Type          | Default | Description                                                                                   |
-| :--------------- | :--------------------: | :-----: | :-------------------------------------------------------------------------------------------- |
-| colorFormat      |        `string`        | `'hex'` | preview color text format: `'hex'`, `'rgb'`, `'rgba'`, `'hsl'`, `'hsla'`, `'hsv'` or `'hsva'` |
-| hideInitialColor |       `boolean`        | `false` | hide the initial color preview part                                                           |
-| hideText         |       `boolean`        | `false` | hide preview color texts                                                                      |
-| style            | `StyleProp<ViewStyle>` |    /    | preview container style                                                                       |
-| textStyle        | `StyleProp<TextStyle>` |    /    | preview text style                                                                            |
+| Property         |    Type     | Default | Description                                                                                   |
+| :--------------- | :---------: | :-----: | :-------------------------------------------------------------------------------------------- |
+| colorFormat      |  `string`   | `'hex'` | preview color text format: `'hex'`, `'rgb'`, `'rgba'`, `'hsl'`, `'hsla'`, `'hsv'` or `'hsva'` |
+| hideInitialColor |  `boolean`  | `false` | hide the initial color preview part                                                           |
+| hideText         |  `boolean`  | `false` | hide preview color texts                                                                      |
+| style            | `ViewStyle` |    /    | preview container style                                                                       |
+| textStyle        | `TextStyle` |    /    | preview text style                                                                            |
 
 > **Note** some style properties will be overwritten.
 
@@ -193,10 +194,10 @@ const styles = StyleSheet.create({
 
 - A React Native `<Text>` component that displays the preview color text.
 
-| Property    |          Type          | Default | Description                                                                                   |
-| :---------- | :--------------------: | :-----: | :-------------------------------------------------------------------------------------------- |
-| colorFormat |        `string`        | `'hex'` | preview color text format: `'hex'`, `'rgb'`, `'rgba'`, `'hsl'`, `'hsla'`, `'hsv'` or `'hsva'` |
-| style       | `StyleProp<TextStyle>` |    /    | preview text style                                                                            |
+| Property    |    Type     | Default | Description                                                                                   |
+| :---------- | :---------: | :-----: | :-------------------------------------------------------------------------------------------- |
+| colorFormat |  `string`   | `'hex'` | preview color text format: `'hex'`, `'rgb'`, `'rgba'`, `'hsl'`, `'hsla'`, `'hsv'` or `'hsva'` |
+| style       | `TextStyle` |    /    | preview text style                                                                            |
 
 ### :small_orange_diamond:`<Panel1 />`
 
@@ -206,10 +207,10 @@ const styles = StyleSheet.create({
 
 > **Note** you need to add [`<HueSlider />`](#small_orange_diamondhueslider-) alongside with it.
 
-| Property  |          Type          | Default | Description                                 |
-| :-------- | :--------------------: | :-----: | :------------------------------------------ |
-| thumbSize |        `number`        |  `35`   | panel's handle (thumb) size (height\*width) |
-| style     | `StyleProp<ViewStyle>` |    /    | panel's container style                     |
+| Property  |    Type     | Default | Description                                 |
+| :-------- | :---------: | :-----: | :------------------------------------------ |
+| thumbSize |  `number`   |  `35`   | panel's handle (thumb) size (height\*width) |
+| style     | `ViewStyle` |    /    | panel's container style                     |
 
 > **Note** some style properties will be overwritten.
 
@@ -221,11 +222,11 @@ const styles = StyleSheet.create({
 
 > **Note** you need to add [`<BrightnessSlider />`](#small_orange_diamondbrightnessslider-) alongside with it.
 
-| Property  |          Type          | Default | Description                                 |
-| :-------- | :--------------------: | :-----: | :------------------------------------------ |
-| thumbSize |        `number`        |  `35`   | panel's handle (thumb) size (height\*width) |
-| reverse   |       `boolean`        | `false` | reverse (flip) hue direction                |
-| style     | `StyleProp<ViewStyle>` |    /    | panel's container style                     |
+| Property  |    Type     | Default | Description                                 |
+| :-------- | :---------: | :-----: | :------------------------------------------ |
+| thumbSize |  `number`   |  `35`   | panel's handle (thumb) size (height\*width) |
+| reverse   |  `boolean`  | `false` | reverse (flip) hue direction                |
+| style     | `ViewStyle` |    /    | panel's container style                     |
 
 > **Note** some style properties will be overwritten.
 
@@ -235,13 +236,14 @@ const styles = StyleSheet.create({
 
 - A slider to change color's hue.
 
-| Property  |          Type          | Default | Description                                    |
-| :-------- | :--------------------: | :-----: | :--------------------------------------------- |
-| thumbSize |        `number`        |  `35`   | hue slider handle (thumb) size (height\*width) |
-| ringColor |        `string`        | `#fff`  | the color of the ring around the slider handle |
-| reverse   |       `boolean`        | `false` | reverse slider direction                       |
-| vertical  |       `boolean`        | `false` | change slider orientation                      |
-| style     | `StyleProp<ViewStyle>` |    /    | hue slider container style                     |
+| Property   |    Type     | Default  | Description                                                                                                           |
+| :--------- | :---------: | :------: | :-------------------------------------------------------------------------------------------------------------------- |
+| thumbSize  |  `number`   |   `35`   | hue slider handle (thumb) size (height\*width)                                                                        |
+| thumbColor |  `string`   | `'#fff'` | the color of the slider handle                                                                                        |
+| thumbShape |  `string`   | `'ring'` | change the thumb shape: `'ring'`, `'solid'`, `'line'`, `'plus'`, `'triangleUp'`, `'triangleDown'`, `'doubleTriangle'` |
+| reverse    |  `boolean`  | `false`  | reverse slider direction                                                                                              |
+| vertical   |  `boolean`  | `false`  | change slider orientation                                                                                             |
+| style      | `ViewStyle` |    /     | hue slider container style                                                                                            |
 
 > **Note** some style properties will be overwritten.
 
@@ -251,13 +253,14 @@ const styles = StyleSheet.create({
 
 - A slider to change color's saturation.
 
-| Property  |          Type          | Default | Description                                           |
-| :-------- | :--------------------: | :-----: | :---------------------------------------------------- |
-| thumbSize |        `number`        |  `35`   | saturation slider handle (thumb) size (height\*width) |
-| ringColor |        `string`        | `#fff`  | the color of the ring around the slider handle        |
-| reverse   |       `boolean`        | `false` | reverse slider direction                              |
-| vertical  |       `boolean`        | `false` | change slider orientation                             |
-| style     | `StyleProp<ViewStyle>` |    /    | saturation slider container style                     |
+| Property   |    Type     | Default  | Description                                                                                                           |
+| :--------- | :---------: | :------: | :-------------------------------------------------------------------------------------------------------------------- |
+| thumbSize  |  `number`   |   `35`   | saturation slider handle (thumb) size (height\*width)                                                                 |
+| thumbColor |  `string`   | `'#fff'` | the color of the slider handle                                                                                        |
+| thumbShape |  `string`   | `'ring'` | change the thumb shape: `'ring'`, `'solid'`, `'line'`, `'plus'`, `'triangleUp'`, `'triangleDown'`, `'doubleTriangle'` |
+| reverse    |  `boolean`  | `false`  | reverse slider direction                                                                                              |
+| vertical   |  `boolean`  | `false`  | change slider orientation                                                                                             |
+| style      | `ViewStyle` |    /     | saturation slider container style                                                                                     |
 
 > **Note** some style properties will be overwritten.
 
@@ -267,13 +270,14 @@ const styles = StyleSheet.create({
 
 - A slider to change color brightness.
 
-| Property  |          Type          | Default | Description                                           |
-| :-------- | :--------------------: | :-----: | :---------------------------------------------------- |
-| thumbSize |        `number`        |  `35`   | brightness slider handle (thumb) size (height\*width) |
-| ringColor |        `string`        | `#fff`  | the color of the ring around the slider handle        |
-| reverse   |       `boolean`        | `false` | reverse slider direction                              |
-| vertical  |       `boolean`        | `false` | change slider orientation                             |
-| style     | `StyleProp<ViewStyle>` |    /    | brightness slider container style                     |
+| Property   |    Type     | Default  | Description                                                                                                           |
+| :--------- | :---------: | :------: | :-------------------------------------------------------------------------------------------------------------------- |
+| thumbSize  |  `number`   |   `35`   | brightness slider handle (thumb) size (height\*width)                                                                 |
+| thumbColor |  `string`   | `'#fff'` | the color of the slider handle                                                                                        |
+| thumbShape |  `string`   | `'ring'` | change the thumb shape: `'ring'`, `'solid'`, `'line'`, `'plus'`, `'triangleUp'`, `'triangleDown'`, `'doubleTriangle'` |
+| reverse    |  `boolean`  | `false`  | reverse slider direction                                                                                              |
+| vertical   |  `boolean`  | `false`  | change slider orientation                                                                                             |
+| style      | `ViewStyle` |    /     | brightness slider container style                                                                                     |
 
 > **Note** some style properties will be overwritten.
 
@@ -283,13 +287,14 @@ const styles = StyleSheet.create({
 
 - A slider to change color's opacity.
 
-| Property  |          Type          | Default | Description                                        |
-| :-------- | :--------------------: | :-----: | :------------------------------------------------- |
-| thumbSize |        `number`        |  `35`   | opacity slider handle (thumb) size (height\*width) |
-| ringColor |        `string`        | `#fff`  | the color of the ring around the slider handle     |
-| reverse   |       `boolean`        | `false` | reverse slider direction                           |
-| vertical  |       `boolean`        | `false` | change slider orientation                          |
-| style     | `StyleProp<ViewStyle>` |    /    | opacity slider container style                     |
+| Property   |    Type     | Default  | Description                                                                                                           |
+| :--------- | :---------: | :------: | :-------------------------------------------------------------------------------------------------------------------- |
+| thumbSize  |  `number`   |   `35`   | opacity slider handle (thumb) size (height\*width)                                                                    |
+| thumbColor |  `string`   | `'#fff'` | the color of the slider handle                                                                                        |
+| thumbShape |  `string`   | `'ring'` | change the thumb shape: `'ring'`, `'solid'`, `'line'`, `'plus'`, `'triangleUp'`, `'triangleDown'`, `'doubleTriangle'` |
+| reverse    |  `boolean`  | `false`  | reverse slider direction                                                                                              |
+| vertical   |  `boolean`  | `false`  | change slider orientation                                                                                             |
+| style      | `ViewStyle` |    /     | opacity slider container style                                                                                        |
 
 > **Note** some style properties will be overwritten.
 
@@ -299,15 +304,15 @@ const styles = StyleSheet.create({
 
 - A list of colored swatches is used for quick color selection.
 
-| Property    |          Type          |     Default     | Description              |
-| :---------- | :--------------------: | :-------------: | :----------------------- |
-| colors      |       `string[]`       | material colors | custom swatches colors   |
-| style       | `StyleProp<ViewStyle>` |        /        | swatches container style |
-| swatchStyle | `StyleProp<ViewStyle>` |        /        | swatch style             |
+| Property    |    Type     |     Default     | Description              |
+| :---------- | :---------: | :-------------: | :----------------------- |
+| colors      | `string[]`  | material colors | custom swatches colors   |
+| style       | `ViewStyle` |        /        | swatches container style |
+| swatchStyle | `ViewStyle` |        /        | swatch style             |
 
 > **Note** some style properties will be overwritten.
 
-# :small_blue_diamond:Example
+# :small_blue_diamond:Examples
 
 - [Bare workflow](https://github.com/alabsi91/reanimated-color-picker/tree/main/Example)
 - [Expo managed workflow](https://github.com/alabsi91/reanimated-color-picker/tree/main/ExampleExpo)

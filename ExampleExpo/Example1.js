@@ -37,8 +37,8 @@ export default function Example1({ onSelectColor, color }) {
               <Preview style={[styles.previewStyle, styles.shadow]} hideInitialColor hideText />
 
               <View style={{ flexDirection: 'column', justifyContent: 'center', flex: 1 }}>
-                <HueSlider style={[{ marginBottom: 20 }, styles.shadow]} ringColor='gray' />
-                <OpacitySlider style={styles.shadow} ringColor='gray' />
+                <HueSlider style={[{ marginBottom: 20 }, styles.shadow]} thumbColor='gray' />
+                <OpacitySlider style={styles.shadow} thumbColor='gray' />
               </View>
             </View>
 

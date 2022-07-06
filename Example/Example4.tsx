@@ -42,16 +42,16 @@ export default function Example4({ onSelectColor, color }: porpsType) {
             />
 
             <Text style={styles.sliderLabel}>Hue:</Text>
-            <HueSlider ringColor='gray' style={styles.sliderStyle} />
+            <HueSlider thumbColor='gray' style={styles.sliderStyle} />
 
             <Text style={styles.sliderLabel}>Brightness:</Text>
-            <BrightnessSlider ringColor='gray' style={styles.sliderStyle} />
+            <BrightnessSlider thumbColor='gray' style={styles.sliderStyle} />
 
             <Text style={styles.sliderLabel}>Saturation:</Text>
-            <SaturationSlider ringColor='gray' style={styles.sliderStyle} />
+            <SaturationSlider thumbColor='gray' style={styles.sliderStyle} />
 
             <Text style={styles.sliderLabel}>Opacity:</Text>
-            <OpacitySlider ringColor='gray' style={styles.sliderStyle} />
+            <OpacitySlider thumbColor='gray' style={styles.sliderStyle} />
 
             <Swatches style={{ marginTop: 30 }} swatchStyle={[styles.swatchStyle, styles.shadow]} colors={customSwatches} />
           </ColorPicker>

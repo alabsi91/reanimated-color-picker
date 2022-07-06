@@ -9,13 +9,14 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import styles, { CTX, getStyle } from '../GlobalStyles';
+import Thumb from './Thumbs';
 
 export function Panel1({ thumbSize, style = {} }) {
   const {
     registerHandle,
     activeHueStyle,
-    previewTextColor,
-    previewColorWithoutOpacity,
+    invertedColor,
+    solidColor,
     updateSaturation,
     updateBrightness,
     onGestureEventFinish,
@@ -59,8 +60,8 @@ export function Panel1({ thumbSize, style = {} }) {
   }, [height, width, thumbSize]);
 
   const handleStyle = useAnimatedStyle(() => ({
-    backgroundColor: previewTextColor.value === '#ffffff' ? '#ffffff50' : '#00000050',
-    borderColor: previewTextColor.value,
+    backgroundColor: invertedColor.value === '#ffffff' ? '#ffffff50' : '#00000050',
+    borderColor: invertedColor.value,
     transform: [{ translateX: handlePosX.value }, { translateY: handlePosY.value }, { scale: handleScale.value }],
   }));
 
@@ -110,20 +111,12 @@ export function Panel1({ thumbSize, style = {} }) {
         onLayout={onLayout}
         style={[styles.panel_container, { height: width }, style, { position: 'relative' }, activeHueStyle]}
       >
-        <Image source={require('../assets/Background1.png')} style={{ borderRadius, width: '100%', height: '100%' }} />
-        <Animated.View
-          style={[
-            styles.handle,
-            {
-              width: thumbSize,
-              height: thumbSize,
-              borderRadius: thumbSize / 2,
-            },
-            handleStyle,
-          ]}
-        >
-          <Animated.View style={[styles.handleInner, { borderRadius: thumbSize / 2 }, previewColorWithoutOpacity]} />
-        </Animated.View>
+        <Image
+          source={require('../assets/Background1.png')}
+          style={{ borderRadius, width: '100%', height: '100%' }}
+          resizeMode='stretch'
+        />
+        <Thumb {...{ thumbShape: 'ring', thumbSize, handleStyle, solidColor }} />
       </Animated.View>
     </PanGestureHandler>
   );

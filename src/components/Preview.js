@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useContext } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import Animated, { runOnJS, useDerivedValue } from 'react-native-reanimated';
+import Animated, { runOnJS, useAnimatedStyle, useDerivedValue } from 'react-native-reanimated';
 import { COLOR_HSVA, CONTRAST_RATIO } from '../ColorsConversionFormulas';
 import { CTX, getStyle } from '../GlobalStyles';
 
@@ -21,19 +21,20 @@ const ReText = ({ text, style, hash }) => {
 };
 
 export function Preview({ style = {}, textStyle = {}, colorFormat = 'hex', hideInitialColor = false, hideText = false }) {
-  const { returnedResults, value, previewColorStyle, colorHash, previewTextColorStyle } = useContext(CTX);
+  const { returnedResults, value, previewColorStyle, colorHash, invertedColor } = useContext(CTX);
 
   const justifyContent = getStyle(style, 'justifyContent', 'center');
 
   const initialColorText = useMemo(() => {
     const { h, s, b, a } = COLOR_HSVA(value);
     const formated = returnedResults({ h, s, b, a })[colorFormat];
-    const contrast = CONTRAST_RATIO(h, s, b, '#fff');
+    const contrast = CONTRAST_RATIO({ h, s, b }, '#fff');
     const color = contrast < CONTRAST_RATIO_MIN ? '#000' : '#fff';
     return { formated, color };
   }, [value, colorFormat]);
 
   const updateText = () => returnedResults()[colorFormat];
+  const invertedColorStyle = useAnimatedStyle(() => ({ color: invertedColor.value }));
 
   return (
     <View style={[styles.previewWrapper, style]}>
@@ -45,7 +46,7 @@ export function Preview({ style = {}, textStyle = {}, colorFormat = 'hex', hideI
         </View>
       )}
       <Animated.View style={[styles.previewContainer, { justifyContent }, previewColorStyle]}>
-        {!hideText && <ReText text={updateText} hash={colorHash} style={[textStyle, previewTextColorStyle]} />}
+        {!hideText && <ReText text={updateText} hash={colorHash} style={[textStyle, invertedColorStyle]} />}
       </Animated.View>
     </View>
   );

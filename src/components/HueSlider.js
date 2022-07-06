@@ -8,17 +8,15 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { COLOR_HEX } from '../ColorsConversionFormulas';
-import styles, { CTX, getStyle } from '../GlobalStyles';
+import { CTX, getStyle } from '../GlobalStyles';
+import Thumb from './Thumbs';
 
 const isRtl = I18nManager.isRTL;
 
-export function HueSlider({ thumbSize, ringColor = '#ffffff', style = {}, vertical, reverse }) {
-  const { registerHandle, updateHue, onGestureEventFinish, previewColorWithoutOpacity, slidersThickness, thumbsSize } =
-    useContext(CTX);
+export function HueSlider({ thumbShape, thumbSize, thumbColor = '#ffffff', style = {}, vertical, reverse }) {
+  const { registerHandle, updateHue, onGestureEventFinish, solidColor, slidersThickness, thumbsSize } = useContext(CTX);
 
   thumbSize = thumbSize ?? thumbsSize;
-  ringColor = COLOR_HEX(ringColor);
   const borderRadius = getStyle(style, 'borderRadius', 5);
 
   const id = useRef('hue' + Math.random()).current;
@@ -36,7 +34,7 @@ export function HueSlider({ thumbSize, ringColor = '#ffffff', style = {}, vertic
       axis: vertical ? 'y' : 'x',
       width,
       height,
-      thumbSize: thumbSize,
+      thumbSize,
       isReversed: reverse,
       handle: handlePos,
     });
@@ -108,22 +106,7 @@ export function HueSlider({ thumbSize, ringColor = '#ffffff', style = {}, vertic
         style={[{ borderRadius }, vertical ? { width } : { height }, style, { position: 'relative' }]}
       >
         <Image source={require('../assets/Hue.png')} style={imageStyle} />
-
-        <Animated.View
-          style={[
-            styles.handle,
-            {
-              width: thumbSize,
-              height: thumbSize,
-              borderRadius: thumbSize / 2,
-              backgroundColor: ringColor + 50,
-              borderColor: ringColor,
-            },
-            handleStyle,
-          ]}
-        >
-          <Animated.View style={[styles.handleInner, { borderRadius: thumbSize / 2, zIndex: 100 }, previewColorWithoutOpacity]} />
-        </Animated.View>
+        <Thumb {...{ thumbShape, thumbSize, thumbColor, handleStyle, solidColor }} />
       </Animated.View>
     </PanGestureHandler>
   );

@@ -36,16 +36,16 @@ export default function Example4({ onSelectColor, color }) {
             />
 
             <Text style={styles.sliderLabel}>Hue:</Text>
-            <HueSlider ringColor='gray' style={[{ borderRadius: 15, marginBottom: 25 }, styles.shadow]} />
+            <HueSlider thumbColor='gray' style={[{ borderRadius: 15, marginBottom: 25 }, styles.shadow]} />
 
             <Text style={styles.sliderLabel}>Brightness:</Text>
-            <BrightnessSlider ringColor='gray' style={[{ borderRadius: 15, marginBottom: 25 }, styles.shadow]} />
+            <BrightnessSlider thumbColor='gray' style={[{ borderRadius: 15, marginBottom: 25 }, styles.shadow]} />
 
             <Text style={styles.sliderLabel}>Saturation:</Text>
-            <SaturationSlider ringColor='gray' style={[{ borderRadius: 15, marginBottom: 25 }, styles.shadow]} />
+            <SaturationSlider thumbColor='gray' style={[{ borderRadius: 15, marginBottom: 25 }, styles.shadow]} />
 
             <Text style={styles.sliderLabel}>Opacity:</Text>
-            <OpacitySlider ringColor='gray' style={[{ borderRadius: 15, marginBottom: 25 }, styles.shadow]} />
+            <OpacitySlider thumbColor='gray' style={[{ borderRadius: 15, marginBottom: 25 }, styles.shadow]} />
 
             <Swatches style={{ marginTop: 30 }} swatchStyle={[styles.swatchStyle, styles.shadow]} colors={customSwatches} />
           </ColorPicker>

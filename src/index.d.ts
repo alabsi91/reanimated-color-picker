@@ -10,6 +10,8 @@ interface returnedResults {
   hsva: string;
 }
 
+type thumbShapeType = 'ring' | 'solid' | 'line' | 'plus' | 'triangleUp' | 'triangleDown' | 'doubleTriangle';
+
 interface ColorPickerProps {
   /** - global style for all slider components
    * - thickness is the width of the slider in vertical mode or the height in horizontal mode.
@@ -104,8 +106,11 @@ interface HueProps {
   /** - hue slider handle (thumb) size (height*width). */
   thumbSize?: number;
 
-  /** - hue slider handle (thumb) ring color. */
-  ringColor?: string;
+  /** - hue slider handle (thumb) color. */
+  thumbColor?: string;
+
+  /** - hue slider handle (thumb) shape. */
+  thumbShape?: thumbShapeType;
 
   /** - reverse hue slider direction. */
   reverse?: boolean;
@@ -124,8 +129,8 @@ interface BrightnessProps {
   /** - brightness slider handle (thumb) size (height*width). */
   thumbSize?: number;
 
-  /** - brightness slider handle (thumb) ring color. */
-  ringColor?: string;
+  /** - brightness slider handle (thumb) color. */
+  thumbColor?: string;
 
   /** - reverse brightness slider direction. */
   reverse?: boolean;
@@ -144,8 +149,11 @@ interface SaturationProps {
   /** - saturation slider handle (thumb) size (height*width). */
   thumbSize?: number;
 
-  /** - saturation slider handle (thumb) ring color. */
-  ringColor?: string;
+  /** - saturation slider handle (thumb) color. */
+  thumbColor?: string;
+
+  /** - saturation slider handle (thumb) shape. */
+  thumbShape?: thumbShapeType;
 
   /** - reverse saturation slider direction. */
   reverse?: boolean;
@@ -164,8 +172,11 @@ interface OpacityProps {
   /** - opacity slider handle (thumb) size (height*width). */
   thumbSize?: number;
 
-  /** - opacity slider handle (thumb) ring color. */
-  ringColor?: string;
+  /** - opacity slider handle (thumb) color. */
+  thumbColor?: string;
+
+  /** - opacity slider handle (thumb) shape. */
+  thumbShape?: thumbShapeType;
 
   /** - reverse opacity slider direction. */
   reverse?: boolean;

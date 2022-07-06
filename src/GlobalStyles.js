@@ -25,7 +25,6 @@ export default StyleSheet.create({
     position: 'absolute',
     ...(isRtl ? { right: 0 } : { left: 0 }),
     top: 0,
-    borderWidth: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -33,6 +32,17 @@ export default StyleSheet.create({
     width: '75%',
     height: '75%',
 
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
+  },
+  shadow: {
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

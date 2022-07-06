@@ -209,10 +209,10 @@ const luminanceHEX = hex => {
   return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
 };
 
-export const CONTRAST_RATIO = (h, s, v, hex) => {
-  const hsl = HSV_HSL(h, s, v),
-    { r, g, b } = HSL_RGB(hsl.h, hsl.s, hsl.l),
-    lum1 = luminanceRGB(r, g, b),
+export const CONTRAST_RATIO = ({ h, s, b }, hex) => {
+  const hsl = HSV_HSL(h, s, b),
+    { r: red, g: green, b: blue } = HSL_RGB(hsl.h, hsl.s, hsl.l),
+    lum1 = luminanceRGB(red, green, blue),
     lum2 = luminanceHEX(hex),
     brightest = Math.max(lum1, lum2),
     darkest = Math.min(lum1, lum2);

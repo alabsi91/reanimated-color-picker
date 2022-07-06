@@ -55,7 +55,7 @@ export default function Example3({ onSelectColor, color }: porpsType) {
             </View>
 
             <View style={styles.panelBrightnessContainer}>
-              <OpacitySlider style={[{ flexGrow: 1 }, styles.shadow]} ringColor='gray' reverse />
+              <OpacitySlider style={[{ flexGrow: 1 }, styles.shadow]} thumbColor='gray' reverse />
               <Preview style={[styles.circlePreview, styles.shadow]} hideInitialColor hideText />
             </View>
 
