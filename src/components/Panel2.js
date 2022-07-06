@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useContext, useCallback } from 'react';
-import { Image } from 'react-native';
+import { ImageBackground } from 'react-native';
 import { PanGestureHandler } from 'react-native-gesture-handler';
 import Animated, {
   runOnJS,
@@ -100,9 +100,9 @@ export function Panel2({ thumbSize, style = {}, reverse = false }) {
   return (
     <PanGestureHandler onGestureEvent={gestureEvent} minDist={0}>
       <Animated.View onLayout={onLayout} style={[styles.panel_container, { height: width }, style, { position: 'relative' }]}>
-        <Image
+        <ImageBackground
           source={require('../assets/Background2.png')}
-          style={{ borderRadius, width: '100%', height: '100%', transform: [{ scaleX: reverse ? -1 : 1 }] }}
+          style={[styles.panel_image, { borderRadius }]}
           resizeMode='stretch'
         />
         <Thumb {...{ thumbShape: 'ring', thumbSize, handleStyle, solidColor }} />
