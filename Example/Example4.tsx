@@ -1,14 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Modal, StyleSheet, View, Text, I18nManager } from 'react-native';
 import { SharedValue } from 'react-native-reanimated';
-import ColorPicker, {
-  Swatches,
-  Preview,
-  OpacitySlider,
-  BrightnessSlider,
-  HueSlider,
-  SaturationSlider,
-} from 'reanimated-color-picker';
+import ColorPicker, { Swatches, Preview, OpacitySlider, BrightnessSlider, HueSlider, SaturationSlider } from 'reanimated-color-picker';
 
 const customSwatches = ['#ffbe0b', '#fb5607', '#ff006e', '#8338ec', '#3a86ff'];
 const isRTL = I18nManager.isRTL;
@@ -32,7 +25,7 @@ export default function Example4({ onSelectColor, color }: porpsType) {
             onComplete={onSelectColor}
             style={{ width: '75%', justifyContent: 'center' }}
             slidersThickness={30}
-            thumbsSize={45}
+            thumbsSize={40}
           >
             <Preview
               style={[styles.previewStyle, styles.shadow]}
@@ -42,16 +35,16 @@ export default function Example4({ onSelectColor, color }: porpsType) {
             />
 
             <Text style={styles.sliderLabel}>Hue:</Text>
-            <HueSlider thumbColor='gray' style={styles.sliderStyle} />
+            <HueSlider thumbShape='pill' style={styles.sliderStyle} />
 
             <Text style={styles.sliderLabel}>Brightness:</Text>
-            <BrightnessSlider thumbColor='gray' style={styles.sliderStyle} />
+            <BrightnessSlider thumbShape='pill' style={styles.sliderStyle} />
 
             <Text style={styles.sliderLabel}>Saturation:</Text>
-            <SaturationSlider thumbColor='gray' style={styles.sliderStyle} />
+            <SaturationSlider thumbShape='pill' style={styles.sliderStyle} />
 
             <Text style={styles.sliderLabel}>Opacity:</Text>
-            <OpacitySlider thumbColor='gray' style={styles.sliderStyle} />
+            <OpacitySlider thumbShape='pill' style={styles.sliderStyle} />
 
             <Swatches style={{ marginTop: 30 }} swatchStyle={[styles.swatchStyle, styles.shadow]} colors={customSwatches} />
           </ColorPicker>

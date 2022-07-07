@@ -13,7 +13,7 @@ import Thumb from './Thumbs';
 
 const isRtl = I18nManager.isRTL;
 
-export function SaturationSlider({ thumbShape, thumbSize, thumbColor = '#ffffff', style = {}, vertical, reverse }) {
+export function SaturationSlider({ thumbShape, thumbSize, thumbColor, style = {}, vertical, reverse }) {
   const { registerHandle, updateSaturation, onGestureEventFinish, solidColor, slidersThickness, activeHueStyle, thumbsSize } =
     useContext(CTX);
 
@@ -108,7 +108,7 @@ export function SaturationSlider({ thumbShape, thumbSize, thumbColor = '#ffffff'
         style={[{ borderRadius }, vertical ? { width } : { height }, style, { position: 'relative' }, activeHueStyle]}
       >
         <Image source={require('../assets/Saturation.png')} style={imageStyle} />
-        <Thumb {...{ thumbShape, thumbSize, thumbColor, handleStyle, solidColor }} />
+        <Thumb {...{ channel: 's', thumbShape, thumbSize, thumbColor, handleStyle, solidColor }} />
       </Animated.View>
     </PanGestureHandler>
   );

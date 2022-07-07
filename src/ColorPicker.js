@@ -80,6 +80,10 @@ export default function ColorPicker({
 
   // white or black color depending on the contrast ratio.
   const invertedColor = useSharedValue('#ffffff');
+  const invertedColorHue = useSharedValue('#ffffff');
+  const invertedColorBrightness = useSharedValue('#ffffff');
+  const invertedColorSaturation = useSharedValue('#ffffff');
+  const invertedColorOpacity = useSharedValue('#ffffff');
 
   const onGestureEventFinish = () => {
     onComplete?.(returnedResults());
@@ -87,11 +91,16 @@ export default function ColorPicker({
 
   // set white or black color depending on the contrast ratio.
   const setInvertedColor = () => {
-    const color1 = { h: hue.current, s: saturation.current, b: brightness.current, a: alpha.current };
-    const color2 = invertedColor.value;
-    const inverted = invertedColor.value === '#ffffff' ? '#000000' : '#ffffff';
-    const contrast = CONTRAST_RATIO(color1, color2);
-    invertedColor.value = contrast < CONTRAST_RATIO_MIN ? inverted : invertedColor.value;
+    setInverted({}, invertedColor);
+    setInverted({ s: 100, b: 50 }, invertedColorHue);
+    setInverted({ s: 100 }, invertedColorBrightness);
+    setInverted({ b: 60 }, invertedColorSaturation);
+    setInverted({ s: alpha.current, b: 60 }, invertedColorOpacity);
+  };
+  const setInverted = ({ h = hue.current, s = saturation.current, b = brightness.current }, color2) => {
+    const inverted = color2.value === '#ffffff' ? '#000000' : '#ffffff';
+    const contrast = CONTRAST_RATIO({ h, s, b }, color2.value);
+    color2.value = contrast < CONTRAST_RATIO_MIN ? inverted : color2.value;
   };
 
   const updateBrightness = brightnessChannel => {
@@ -141,6 +150,7 @@ export default function ColorPicker({
     previewColor.value = color_hex();
     colorHash.value = `${hue.current},${saturation.current},${brightness.current},${alpha.current}`;
 
+    setInvertedColor();
     // update handles positions.
     const opacityHandles = registeredHandles.current.filter(setting => setting.channel === 'a');
     applySettings(opacityHandles, false);
@@ -157,6 +167,16 @@ export default function ColorPicker({
       const channelMax = channel === 'h' ? 360 : 100;
       const length = axis === 'y' ? height : width; // height for vertical axis, width for horizontal axis.
       const percent = (color[channel] / channelMax) * length;
+
+      if (axis === 'angle') {
+        const [handleX, handleY] = handle;
+        const center = width / 2;
+        const distance = (color.s / 100) * (width / 2);
+        const posX = width - Math.round(Math.cos((color.h * Math.PI) / 180) * distance + center) - thumbSize / 2;
+        const posY = width - Math.round(Math.sin((color.h * Math.PI) / 180) * distance + center) - thumbSize / 2;
+        handleX.value = withAnimation ? withTiming(posX, { duration }) : posX;
+        handleY.value = withAnimation ? withTiming(posY, { duration }) : posY;
+      }
 
       const pos = (isReversed ? length - percent : percent) - thumbSize / 2;
       handle.value = withAnimation ? withTiming(pos, { duration }) : pos;
@@ -211,6 +231,10 @@ export default function ColorPicker({
     activeHueStyle,
 
     invertedColor,
+    invertedColorHue,
+    invertedColorBrightness,
+    invertedColorSaturation,
+    invertedColorOpacity,
     previewColorStyle,
     solidColor,
     colorHash,
@@ -225,8 +249,8 @@ export default function ColorPicker({
     slidersThickness,
     thumbsSize,
 
-    value,
     initialColor,
+    value,
     returnedResults,
     registerHandle,
 

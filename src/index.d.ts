@@ -10,7 +10,7 @@ interface returnedResults {
   hsva: string;
 }
 
-type thumbShapeType = 'ring' | 'solid' | 'line' | 'plus' | 'triangleUp' | 'triangleDown' | 'doubleTriangle';
+type thumbShapeType = 'ring' | 'solid' | 'hollow' | 'line' | 'plus' | 'pill' | 'triangleUp' | 'triangleDown' | 'doubleTriangle';
 
 interface ColorPickerProps {
   /** - global style for all slider components
@@ -90,6 +90,11 @@ interface PanelProps {
   /** - panel handle (thumb) size (height*width). */
   thumbSize?: number;
 
+  /** - panel handle (thumb) color. */
+  thumbColor?: string;
+
+  /** - panel handle (thumb) shape. */
+  thumbShape?: thumbShapeType;
   /**
    * - panle container style.
    * - **Note** some of the style properties will be overwritten.
@@ -131,6 +136,9 @@ interface BrightnessProps {
 
   /** - brightness slider handle (thumb) color. */
   thumbColor?: string;
+
+  /** - brightness slider handle (thumb) shape. */
+  thumbShape?: thumbShapeType;
 
   /** - reverse brightness slider direction. */
   reverse?: boolean;
@@ -196,6 +204,7 @@ export declare const Preview: React.FunctionComponent<PreviewPorps>;
 export declare const PreviewText: React.FunctionComponent<PreviewTextProps>;
 export declare const Panel1: React.FunctionComponent<PanelProps>;
 export declare const Panel2: React.FunctionComponent<Panel2Props>;
+export declare const Panel3: React.FunctionComponent<PanelProps>;
 export declare const HueSlider: React.FunctionComponent<HueProps>;
 export declare const BrightnessSlider: React.FunctionComponent<BrightnessProps>;
 export declare const SaturationSlider: React.FunctionComponent<SaturationProps>;

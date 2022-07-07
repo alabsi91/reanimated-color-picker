@@ -40,6 +40,7 @@
     - [`<PreviewText />`](#small_orange_diamondpreviewtext-)
     - [`<Panel1 />`](#small_orange_diamondpanel1-)
     - [`<Panel2 />`](#small_orange_diamondpanel2-)
+    - [`<Panel3 />`](#small_orange_diamondpanel3-)
     - [`<HueSlider />`](#small_orange_diamondhueslider-)
     - [`<SaturationSlider />`](#small_orange_diamondsaturationslider-)
     - [`<BrightnessSlider />`](#small_orange_diamondbrightnessslider-)
@@ -207,12 +208,16 @@ const styles = StyleSheet.create({
 
 > **Note** you need to add [`<HueSlider />`](#small_orange_diamondhueslider-) alongside with it.
 
-| Property  |    Type     | Default | Description                                 |
-| :-------- | :---------: | :-----: | :------------------------------------------ |
-| thumbSize |  `number`   |  `35`   | panel's handle (thumb) size (height\*width) |
-| style     | `ViewStyle` |    /    | panel's container style                     |
+| Property   |    Type     |        Default        | Description                                                                                                                                 |
+| :--------- | :---------: | :-------------------: | :------------------------------------------------------------------------------------------------------------------------------------------ |
+| thumbSize  |  `number`   |         `35`          | panel's handle (thumb) size (height\*width)                                                                                                 |
+| thumbColor |  `string`   | interactive`*` | change thumb color                                                                                                                          |
+| thumbShape |  `string`   |       `'ring'`        | change the thumb shape: `'ring'`, `'solid'`, `'hollow'`, `'line'`, `'plus'`, `'pill'`, `'triangleUp'`, `'triangleDown'`, `'doubleTriangle'` |
+| style      | `ViewStyle` |           /           | panel's container style                                                                                                                     |
 
 > **Note** some style properties will be overwritten.
+
+> **:asterisk: interactive**: the thumb color will be changed depending on the contrast ratio if no color value is passed.
 
 ### :small_orange_diamond:`<Panel2 />`
 
@@ -222,13 +227,38 @@ const styles = StyleSheet.create({
 
 > **Note** you need to add [`<BrightnessSlider />`](#small_orange_diamondbrightnessslider-) alongside with it.
 
-| Property  |    Type     | Default | Description                                 |
-| :-------- | :---------: | :-----: | :------------------------------------------ |
-| thumbSize |  `number`   |  `35`   | panel's handle (thumb) size (height\*width) |
-| reverse   |  `boolean`  | `false` | reverse (flip) hue direction                |
-| style     | `ViewStyle` |    /    | panel's container style                     |
+| Property   |    Type     |        Default        | Description                                                                                                                                 |
+| :--------- | :---------: | :-------------------: | :------------------------------------------------------------------------------------------------------------------------------------------ |
+| thumbSize  |  `number`   |         `35`          | panel's handle (thumb) size (height\*width)                                                                                                 |
+| thumbColor |  `string`   | interactive`*` | change thumb color                                                                                                                          |
+| thumbShape |  `string`   |       `'ring'`        | change the thumb shape: `'ring'`, `'solid'`, `'hollow'`, `'line'`, `'plus'`, `'pill'`, `'triangleUp'`, `'triangleDown'`, `'doubleTriangle'` |
+| reverse    |  `boolean`  |        `false`        | reverse (flip) hue direction                                                                                                                |
+| style      | `ViewStyle` |           /           | panel's container style                                                                                                                     |
 
 > **Note** some style properties will be overwritten.
+
+> **:asterisk: interactive**: the thumb color will be changed depending on the contrast ratio if no color value is passed.
+
+### :small_orange_diamond:`<Panel3 />`
+
+![panel2](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/panel3.png?raw=true)
+
+- A circle-shaped slider used for changing the color's hue and saturation.
+- Moves around the panel center to change the color's hue.
+- Moves away or toward the panel center to change the color's saturation.
+
+> **Note** you need to add [`<BrightnessSlider />`](#small_orange_diamondbrightnessslider-) alongside with it.
+
+| Property   |    Type     |        Default        | Description                                                                                                                                 |
+| :--------- | :---------: | :-------------------: | :------------------------------------------------------------------------------------------------------------------------------------------ |
+| thumbSize  |  `number`   |         `35`          | panel's handle (thumb) size (height\*width)                                                                                                 |
+| thumbColor |  `string`   | interactive`*` | change thumb color                                                                                                                          |
+| thumbShape |  `string`   |       `'ring'`        | change the thumb shape: `'ring'`, `'solid'`, `'hollow'`, `'line'`, `'plus'`, `'pill'`, `'triangleUp'`, `'triangleDown'`, `'doubleTriangle'` |
+| style      | `ViewStyle` |           /           | panel's container style                                                                                                                     |
+
+> **Note** some style properties will be overwritten.
+
+> **:asterisk: interactive**: the thumb color will be changed depending on the contrast ratio if no color value is passed.
 
 ### :small_orange_diamond:`<HueSlider />`
 
@@ -236,16 +266,18 @@ const styles = StyleSheet.create({
 
 - A slider to change color's hue.
 
-| Property   |    Type     | Default  | Description                                                                                                           |
-| :--------- | :---------: | :------: | :-------------------------------------------------------------------------------------------------------------------- |
-| thumbSize  |  `number`   |   `35`   | hue slider handle (thumb) size (height\*width)                                                                        |
-| thumbColor |  `string`   | `'#fff'` | the color of the slider handle                                                                                        |
-| thumbShape |  `string`   | `'ring'` | change the thumb shape: `'ring'`, `'solid'`, `'line'`, `'plus'`, `'triangleUp'`, `'triangleDown'`, `'doubleTriangle'` |
-| reverse    |  `boolean`  | `false`  | reverse slider direction                                                                                              |
-| vertical   |  `boolean`  | `false`  | change slider orientation                                                                                             |
-| style      | `ViewStyle` |    /     | hue slider container style                                                                                            |
+| Property   |    Type     |        Default        | Description                                                                                                                                 |
+| :--------- | :---------: | :-------------------: | :------------------------------------------------------------------------------------------------------------------------------------------ |
+| thumbSize  |  `number`   |         `35`          | hue slider handle (thumb) size (height\*width)                                                                                              |
+| thumbColor |  `string`   | interactive`*` | change thumb color                                                                                                                          |
+| thumbShape |  `string`   |       `'ring'`        | change the thumb shape: `'ring'`, `'solid'`, `'hollow'`, `'line'`, `'plus'`, `'pill'`, `'triangleUp'`, `'triangleDown'`, `'doubleTriangle'` |
+| reverse    |  `boolean`  |        `false`        | reverse slider direction                                                                                                                    |
+| vertical   |  `boolean`  |        `false`        | change slider orientation                                                                                                                   |
+| style      | `ViewStyle` |           /           | hue slider container style                                                                                                                  |
 
 > **Note** some style properties will be overwritten.
+
+> **:asterisk: interactive**: the thumb color will be changed depending on the contrast ratio if no color value is passed.
 
 ### :small_orange_diamond:`<SaturationSlider />`
 
@@ -253,16 +285,18 @@ const styles = StyleSheet.create({
 
 - A slider to change color's saturation.
 
-| Property   |    Type     | Default  | Description                                                                                                           |
-| :--------- | :---------: | :------: | :-------------------------------------------------------------------------------------------------------------------- |
-| thumbSize  |  `number`   |   `35`   | saturation slider handle (thumb) size (height\*width)                                                                 |
-| thumbColor |  `string`   | `'#fff'` | the color of the slider handle                                                                                        |
-| thumbShape |  `string`   | `'ring'` | change the thumb shape: `'ring'`, `'solid'`, `'line'`, `'plus'`, `'triangleUp'`, `'triangleDown'`, `'doubleTriangle'` |
-| reverse    |  `boolean`  | `false`  | reverse slider direction                                                                                              |
-| vertical   |  `boolean`  | `false`  | change slider orientation                                                                                             |
-| style      | `ViewStyle` |    /     | saturation slider container style                                                                                     |
+| Property   |    Type     |        Default        | Description                                                                                                                                 |
+| :--------- | :---------: | :-------------------: | :------------------------------------------------------------------------------------------------------------------------------------------ |
+| thumbSize  |  `number`   |         `35`          | saturation slider handle (thumb) size (height\*width)                                                                                       |
+| thumbColor |  `string`   | interactive`*` | change thumb color                                                                                                                          |
+| thumbShape |  `string`   |       `'ring'`        | change the thumb shape: `'ring'`, `'solid'`, `'hollow'`, `'line'`, `'plus'`, `'pill'`, `'triangleUp'`, `'triangleDown'`, `'doubleTriangle'` |
+| reverse    |  `boolean`  |        `false`        | reverse slider direction                                                                                                                    |
+| vertical   |  `boolean`  |        `false`        | change slider orientation                                                                                                                   |
+| style      | `ViewStyle` |           /           | saturation slider container style                                                                                                           |
 
 > **Note** some style properties will be overwritten.
+
+> **:asterisk: interactive**: the thumb color will be changed depending on the contrast ratio if no color value is passed.
 
 ### :small_orange_diamond:`<BrightnessSlider />`
 
@@ -270,16 +304,18 @@ const styles = StyleSheet.create({
 
 - A slider to change color brightness.
 
-| Property   |    Type     | Default  | Description                                                                                                           |
-| :--------- | :---------: | :------: | :-------------------------------------------------------------------------------------------------------------------- |
-| thumbSize  |  `number`   |   `35`   | brightness slider handle (thumb) size (height\*width)                                                                 |
-| thumbColor |  `string`   | `'#fff'` | the color of the slider handle                                                                                        |
-| thumbShape |  `string`   | `'ring'` | change the thumb shape: `'ring'`, `'solid'`, `'line'`, `'plus'`, `'triangleUp'`, `'triangleDown'`, `'doubleTriangle'` |
-| reverse    |  `boolean`  | `false`  | reverse slider direction                                                                                              |
-| vertical   |  `boolean`  | `false`  | change slider orientation                                                                                             |
-| style      | `ViewStyle` |    /     | brightness slider container style                                                                                     |
+| Property   |    Type     |        Default        | Description                                                                                                                                 |
+| :--------- | :---------: | :-------------------: | :------------------------------------------------------------------------------------------------------------------------------------------ |
+| thumbSize  |  `number`   |         `35`          | brightness slider handle (thumb) size (height\*width)                                                                                       |
+| thumbColor |  `string`   | interactive`*` | change thumb color                                                                                                                          |
+| thumbShape |  `string`   |       `'ring'`        | change the thumb shape: `'ring'`, `'solid'`, `'hollow'`, `'line'`, `'plus'`, `'pill'`, `'triangleUp'`, `'triangleDown'`, `'doubleTriangle'` |
+| reverse    |  `boolean`  |        `false`        | reverse slider direction                                                                                                                    |
+| vertical   |  `boolean`  |        `false`        | change slider orientation                                                                                                                   |
+| style      | `ViewStyle` |           /           | brightness slider container style                                                                                                           |
 
 > **Note** some style properties will be overwritten.
+
+> **:asterisk: interactive**: the thumb color will be changed depending on the contrast ratio if no color value is passed.
 
 ### :small_orange_diamond:`<OpacitySlider />`
 
@@ -287,16 +323,18 @@ const styles = StyleSheet.create({
 
 - A slider to change color's opacity.
 
-| Property   |    Type     | Default  | Description                                                                                                           |
-| :--------- | :---------: | :------: | :-------------------------------------------------------------------------------------------------------------------- |
-| thumbSize  |  `number`   |   `35`   | opacity slider handle (thumb) size (height\*width)                                                                    |
-| thumbColor |  `string`   | `'#fff'` | the color of the slider handle                                                                                        |
-| thumbShape |  `string`   | `'ring'` | change the thumb shape: `'ring'`, `'solid'`, `'line'`, `'plus'`, `'triangleUp'`, `'triangleDown'`, `'doubleTriangle'` |
-| reverse    |  `boolean`  | `false`  | reverse slider direction                                                                                              |
-| vertical   |  `boolean`  | `false`  | change slider orientation                                                                                             |
-| style      | `ViewStyle` |    /     | opacity slider container style                                                                                        |
+| Property   |    Type     |        Default        | Description                                                                                                                                 |
+| :--------- | :---------: | :-------------------: | :------------------------------------------------------------------------------------------------------------------------------------------ |
+| thumbSize  |  `number`   |         `35`          | opacity slider handle (thumb) size (height\*width)                                                                                          |
+| thumbColor |  `string`   | interactive`*` | change thumb color                                                                                                                          |
+| thumbShape |  `string`   |       `'ring'`        | change the thumb shape: `'ring'`, `'solid'`, `'hollow'`, `'line'`, `'plus'`, `'pill'`, `'triangleUp'`, `'triangleDown'`, `'doubleTriangle'` |
+| reverse    |  `boolean`  |        `false`        | reverse slider direction                                                                                                                    |
+| vertical   |  `boolean`  |        `false`        | change slider orientation                                                                                                                   |
+| style      | `ViewStyle` |           /           | opacity slider container style                                                                                                              |
 
 > **Note** some style properties will be overwritten.
+
+> **:asterisk: interactive**: the thumb color will be changed depending on the contrast ratio if no color value is passed.
 
 ### :small_orange_diamond:`<Swatches />`
 

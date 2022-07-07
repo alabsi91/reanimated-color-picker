@@ -13,7 +13,7 @@ import Thumb from './Thumbs';
 
 const isRtl = I18nManager.isRTL;
 
-export function HueSlider({ thumbShape, thumbSize, thumbColor = '#ffffff', style = {}, vertical, reverse }) {
+export function HueSlider({ thumbShape, thumbSize, thumbColor, style = {}, vertical, reverse }) {
   const { registerHandle, updateHue, onGestureEventFinish, solidColor, slidersThickness, thumbsSize } = useContext(CTX);
 
   thumbSize = thumbSize ?? thumbsSize;
@@ -106,7 +106,7 @@ export function HueSlider({ thumbShape, thumbSize, thumbColor = '#ffffff', style
         style={[{ borderRadius }, vertical ? { width } : { height }, style, { position: 'relative' }]}
       >
         <Image source={require('../assets/Hue.png')} style={imageStyle} />
-        <Thumb {...{ thumbShape, thumbSize, thumbColor, handleStyle, solidColor }} />
+        <Thumb {...{ channel: 'h', thumbShape, thumbSize, thumbColor, handleStyle, solidColor }} />
       </Animated.View>
     </PanGestureHandler>
   );

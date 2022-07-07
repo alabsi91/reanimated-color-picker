@@ -11,9 +11,8 @@ import Animated, {
 import styles, { CTX, getStyle } from '../GlobalStyles';
 import Thumb from './Thumbs';
 
-export function Panel2({ thumbSize, style = {}, reverse = false }) {
-  const { registerHandle, invertedColor, solidColor, onGestureEventFinish, updateHue, updateSaturation, thumbsSize } =
-    useContext(CTX);
+export function Panel2({ thumbShape, thumbSize, thumbColor, style = {}, reverse = false }) {
+  const { registerHandle, solidColor, onGestureEventFinish, updateHue, updateSaturation, thumbsSize } = useContext(CTX);
 
   thumbSize = thumbSize ?? thumbsSize;
   const borderRadius = getStyle(style, 'borderRadius', 5);
@@ -52,8 +51,6 @@ export function Panel2({ thumbSize, style = {}, reverse = false }) {
   }, [height, width, thumbSize, reverse]);
 
   const handleStyle = useAnimatedStyle(() => ({
-    backgroundColor: invertedColor.value === '#ffffff' ? '#ffffff50' : '#00000050',
-    borderColor: invertedColor.value,
     transform: [{ translateX: handlePosX.value }, { translateY: handlePosY.value }, { scale: handleScale.value }],
   }));
 
@@ -105,7 +102,7 @@ export function Panel2({ thumbSize, style = {}, reverse = false }) {
           style={[styles.panel_image, { borderRadius }]}
           resizeMode='stretch'
         />
-        <Thumb {...{ thumbShape: 'ring', thumbSize, handleStyle, solidColor }} />
+        <Thumb {...{ channel: 's', thumbShape, thumbSize, thumbColor, handleStyle, solidColor }} />
       </Animated.View>
     </PanGestureHandler>
   );

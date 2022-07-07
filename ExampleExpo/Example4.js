@@ -26,7 +26,7 @@ export default function Example4({ onSelectColor, color }) {
             onComplete={onSelectColor}
             style={{ width: '75%', justifyContent: 'center' }}
             slidersThickness={30}
-            thumbsSize={45}
+            thumbsSize={40}
           >
             <Preview
               style={[styles.previewStyle, styles.shadow]}
@@ -36,16 +36,16 @@ export default function Example4({ onSelectColor, color }) {
             />
 
             <Text style={styles.sliderLabel}>Hue:</Text>
-            <HueSlider thumbColor='gray' style={[{ borderRadius: 15, marginBottom: 25 }, styles.shadow]} />
+            <HueSlider thumbShape='pill' style={[{ borderRadius: 15, marginBottom: 25 }, styles.shadow]} />
 
             <Text style={styles.sliderLabel}>Brightness:</Text>
-            <BrightnessSlider thumbColor='gray' style={[{ borderRadius: 15, marginBottom: 25 }, styles.shadow]} />
+            <BrightnessSlider thumbShape='pill' style={[{ borderRadius: 15, marginBottom: 25 }, styles.shadow]} />
 
             <Text style={styles.sliderLabel}>Saturation:</Text>
-            <SaturationSlider thumbColor='gray' style={[{ borderRadius: 15, marginBottom: 25 }, styles.shadow]} />
+            <SaturationSlider thumbShape='pill' style={[{ borderRadius: 15, marginBottom: 25 }, styles.shadow]} />
 
             <Text style={styles.sliderLabel}>Opacity:</Text>
-            <OpacitySlider thumbColor='gray' style={[{ borderRadius: 15, marginBottom: 25 }, styles.shadow]} />
+            <OpacitySlider thumbShape='pill' style={[{ borderRadius: 15, marginBottom: 25 }, styles.shadow]} />
 
             <Swatches style={{ marginTop: 30 }} swatchStyle={[styles.swatchStyle, styles.shadow]} colors={customSwatches} />
           </ColorPicker>

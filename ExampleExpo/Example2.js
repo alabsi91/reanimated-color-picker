@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Modal, StyleSheet, View } from 'react-native';
-import ColorPicker, { Panel1, Swatches, Preview, OpacitySlider, HueSlider } from 'reanimated-color-picker';
+import ColorPicker, { Panel3, Swatches, Preview, OpacitySlider, BrightnessSlider } from 'reanimated-color-picker';
 
 const customSwatches = ['#8a00d4', '#d527b7', '#f782c2', '#f9c46b', '#e3e3e3'];
 
@@ -21,10 +21,10 @@ export default function Example1({ onSelectColor, color }) {
             onComplete={onSelectColor}
           >
             <Preview style={[styles.previewStyle, styles.shadow]} textStyle={{ fontSize: 16 }} />
-            <Panel1 style={styles.shadow} />
+            <Panel3 style={[styles.shadow]} />
 
-            <HueSlider style={styles.shadow} thumbColor='#22223b' />
-            <OpacitySlider style={styles.shadow} thumbColor='#22223b' />
+            <BrightnessSlider style={styles.shadow} thumbShape='line' />
+            <OpacitySlider style={styles.shadow} thumbShape='line' />
 
             <Swatches swatchStyle={styles.swatchStyle} colors={customSwatches} />
           </ColorPicker>

@@ -13,7 +13,7 @@ import Thumb from './Thumbs';
 
 const isRtl = I18nManager.isRTL;
 
-export function BrightnessSlider({ thumbShape, thumbSize, thumbColor = '#ffffff', style = {}, vertical, reverse }) {
+export function BrightnessSlider({ thumbShape, thumbSize, thumbColor, style = {}, vertical, reverse }) {
   const { registerHandle, updateBrightness, onGestureEventFinish, solidColor, slidersThickness, activeHueStyle, thumbsSize } =
     useContext(CTX);
 
@@ -108,7 +108,7 @@ export function BrightnessSlider({ thumbShape, thumbSize, thumbColor = '#ffffff'
         style={[{ borderRadius }, vertical ? { width } : { height }, style, { position: 'relative' }, activeHueStyle]}
       >
         <Image source={require('../assets/Brightness.png')} style={imageStyle} />
-        <Thumb {...{ thumbShape, thumbSize, thumbColor, handleStyle, solidColor, vertical }} />
+        <Thumb {...{ channel: 'b', thumbShape, thumbSize, thumbColor, handleStyle, solidColor, vertical }} />
       </Animated.View>
     </PanGestureHandler>
   );

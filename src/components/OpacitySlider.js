@@ -13,7 +13,7 @@ import Thumb from './Thumbs';
 
 const isRtl = I18nManager.isRTL;
 
-export function OpacitySlider({ thumbShape, thumbSize, thumbColor = '#ffffff', style = {}, vertical, reverse }) {
+export function OpacitySlider({ thumbShape, thumbSize, thumbColor, style = {}, vertical, reverse }) {
   const { registerHandle, activeHueStyle, updateOpacity, onGestureEventFinish, solidColor, slidersThickness, thumbsSize } =
     useContext(CTX);
 
@@ -108,7 +108,7 @@ export function OpacitySlider({ thumbShape, thumbSize, thumbColor = '#ffffff', s
         style={[{ borderRadius }, vertical ? { width } : { height }, style, { position: 'relative' }, activeHueStyle]}
       >
         <Image source={require('../assets/Opacity.png')} style={imageStyle} />
-        <Thumb {...{ thumbShape, thumbSize, thumbColor, handleStyle, solidColor }} />
+        <Thumb {...{ channel: 'a', thumbShape, thumbSize, thumbColor, handleStyle, solidColor }} />
       </Animated.View>
     </PanGestureHandler>
   );

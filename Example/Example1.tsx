@@ -37,14 +37,14 @@ export default function Example1({ onSelectColor, color }: porpsType) {
             style={{ width: '75%', justifyContent: 'center' }}
             onComplete={onSelectColor}
           >
-            <Panel1 style={[{ height: 250, marginBottom: 30 }, styles.shadow]} />
+            <Panel1 style={[{ height: 200, marginBottom: 30 }, styles.shadow]} />
 
             <View style={styles.hueOpacityPreviewContainer}>
               <Preview style={[styles.previewStyle, styles.shadow]} hideInitialColor hideText />
 
               <View style={{ flexDirection: 'column', justifyContent: 'center', flex: 1 }}>
-                <HueSlider style={[{ marginBottom: 20 }, styles.shadow]} thumbColor='gray' />
-                <OpacitySlider style={styles.shadow} thumbColor='gray' />
+                <HueSlider thumbShape='triangleDown' style={[{ marginBottom: 20 }, styles.shadow]} thumbColor='#00121a' />
+                <OpacitySlider thumbShape='triangleUp' style={styles.shadow} thumbColor='#00121a' />
               </View>
             </View>
 

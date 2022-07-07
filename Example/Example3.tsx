@@ -16,16 +16,13 @@ function FormatsTabs() {
     <View style={[{ backgroundColor: '#edf2f4', padding: 10, borderRadius: 5, marginTop: 10 }, styles.shadow]}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         <Pressable onPress={() => setFormat('hex')}>
-          <Text style={styles.tabText}>HEX</Text>
+          <Text style={[styles.tabText, { borderColor: Format === 'hex' ? '#666666' : '#fff' }]}>HEX</Text>
         </Pressable>
         <Pressable onPress={() => setFormat('rgba')}>
-          <Text style={styles.tabText}>RGBA</Text>
+          <Text style={[styles.tabText, { borderColor: Format === 'rgba' ? '#666666' : '#fff' }]}>RGBA</Text>
         </Pressable>
         <Pressable onPress={() => setFormat('hsla')}>
-          <Text style={styles.tabText}>HSLA</Text>
-        </Pressable>
-        <Pressable onPress={() => setFormat('hsva')}>
-          <Text style={styles.tabText}>HSVA</Text>
+          <Text style={[styles.tabText, { borderColor: Format === 'hsla' ? '#666666' : '#fff' }]}>HSLA</Text>
         </Pressable>
       </View>
       <PreviewText style={{ marginVertical: 20, fontSize: 18, color: '#293241' }} colorFormat={Format} />
@@ -51,11 +48,17 @@ export default function Example3({ onSelectColor, color }: porpsType) {
           >
             <View style={styles.panelBrightnessContainer}>
               <Panel2 style={[{ flex: 1, marginEnd: 20 }, styles.shadow]} />
-              <BrightnessSlider style={[{ height: '100%' }, styles.shadow]} vertical reverse />
+              <BrightnessSlider style={[{ height: '100%' }, styles.shadow]} thumbShape='hollow' vertical reverse />
             </View>
 
             <View style={styles.panelBrightnessContainer}>
-              <OpacitySlider style={[{ flexGrow: 1 }, styles.shadow]} thumbColor='gray' reverse />
+              <OpacitySlider
+                style={[{ flexGrow: 1 }, styles.shadow]}
+                thumbSize={25}
+                thumbShape='solid'
+                thumbColor='#00121a'
+                reverse
+              />
               <Preview style={[styles.circlePreview, styles.shadow]} hideInitialColor hideText />
             </View>
 
@@ -84,6 +87,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: '#000',
+    borderWidth: 1,
     backgroundColor: '#fff',
     paddingHorizontal: 15,
     paddingVertical: 5,
