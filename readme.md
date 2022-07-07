@@ -243,8 +243,8 @@ const styles = StyleSheet.create({
 ![panel2](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/panel3.png?raw=true)
 
 - A circle-shaped slider used for changing the color's hue and saturation.
-- Moves around the center to change the color's hue.
-- Moves away or toward the center to change the color's saturation.
+- Move the handle around the center to change the color's hue.
+- Move the handle away or toward the center to change the color's saturation.
 
 > **Note** you need to add [`<BrightnessSlider />`](#small_orange_diamondbrightnessslider-) alongside with it.
 
