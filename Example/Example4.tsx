@@ -22,11 +22,11 @@ export default function Example4({ onSelectColor, color }: porpsType) {
         <View style={styles.container}>
           <ColorPicker
             value={color.value}
-            onComplete={onSelectColor}
-            style={{ width: '75%', justifyContent: 'center' }}
             sliderThickness={30}
             thumbSize={35}
             thumbShape='pill'
+            onComplete={onSelectColor}
+            style={{ width: '75%', justifyContent: 'center' }}
           >
             <Preview
               style={[styles.previewStyle, styles.shadow]}

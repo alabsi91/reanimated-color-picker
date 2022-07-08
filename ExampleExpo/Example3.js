@@ -36,23 +36,18 @@ export default function Example3({ onSelectColor, color }) {
           <ColorPicker
             value={color.value}
             sliderThickness={30}
-            thumbSize={30}
-            style={{ width: '75%', justifyContent: 'center' }}
+            thumbSize={33}
+            thumbShape='rect'
             onComplete={onSelectColor}
+            style={{ width: '75%', justifyContent: 'center' }}
           >
             <View style={styles.panelBrightnessContainer}>
               <Panel2 style={[{ flex: 1, marginEnd: 20 }, styles.shadow]} />
-              <BrightnessSlider style={[{ height: '100%' }, styles.shadow]} thumbShape='hollow' vertical reverse />
+              <BrightnessSlider style={[{ height: '100%' }, styles.shadow]} vertical reverse />
             </View>
 
             <View style={styles.panelBrightnessContainer}>
-              <OpacitySlider
-                style={[{ flexGrow: 1 }, styles.shadow]}
-                thumbSize={25}
-                thumbShape='solid'
-                thumbColor='#00121a'
-                reverse
-              />
+              <OpacitySlider style={[{ flexGrow: 1 }, styles.shadow]} reverse />
               <Preview style={[styles.circlePreview, styles.shadow]} hideInitialColor hideText />
             </View>
 
@@ -89,6 +84,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 5,
     borderRadius: 5,
+    borderWidth: 1,
   },
   panelBrightnessContainer: {
     flexWrap: 'nowrap',

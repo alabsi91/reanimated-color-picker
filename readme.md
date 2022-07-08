@@ -15,11 +15,6 @@
 
 ### - Supports right to left (RTL) layout.
 
-### :warning: :warning: Warning :warning: :warning:
-
-- This project is still in the beta stage.
-- Some properties may change.
-
 ![Example_1](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/example_1.png?raw=true)
 ![Example_2](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/example_2.png?raw=true)
 ![Example_3](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/example_3.png?raw=true) ![Example_4](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/example_4.png?raw=true)
