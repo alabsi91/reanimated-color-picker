@@ -216,12 +216,12 @@ const styles = StyleSheet.create({
 
 > **Note** you need to add [`<HueSlider />`](#small_orange_diamondhueslider-) alongside with it.
 
-| Property   |    Type     |    Default     | Description                                                                                                                               |
-| :--------- | :---------: | :------------: | :---------------------------------------------------------------------------------------------------------------------------------------- |
-| thumbSize  |  `number`   |      `35`      | panel's handle (thumb) size (height\*width)                                                                                               |
-| thumbColor |  `string`   | interactive`*` | change thumb's color                                                                                                                      |
-| thumbShape |  `string`   |    `'ring'`    | change thumb's shape: `'ring'`, `'solid'`, `'hollow'`, `'line'`, `'plus'`, `'pill'`, `'triangleUp'`, `'triangleDown'`, `'doubleTriangle'` |
-| style      | `ViewStyle` |       /        | panel's container style                                                                                                                   |
+| Property   |    Type     |    Default     | Description                                                                                                                                                     |
+| :--------- | :---------: | :------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| thumbSize  |  `number`   |      `35`      | panel's handle (thumb) size (height\*width)                                                                                                                     |
+| thumbColor |  `string`   | interactive`*` | change thumb's color                                                                                                                                            |
+| thumbShape |  `string`   |    `'ring'`    | change thumb's shape: `'ring'`, `'solid'`, `'hollow'`, `'line'`, `'plus'`, `'pill'`, `'triangleUp'`, `'triangleDown'`, `'doubleTriangle'`, `'rect'`, `'circle'` |
+| style      | `ViewStyle` |       /        | panel's container style                                                                                                                                         |
 
 > **Note** some style properties will be overwritten.
 
@@ -235,13 +235,13 @@ const styles = StyleSheet.create({
 
 > **Note** you need to add [`<BrightnessSlider />`](#small_orange_diamondbrightnessslider-) alongside with it.
 
-| Property   |    Type     |    Default     | Description                                                                                                                               |
-| :--------- | :---------: | :------------: | :---------------------------------------------------------------------------------------------------------------------------------------- |
-| thumbSize  |  `number`   |      `35`      | panel's handle (thumb) size (height\*width)                                                                                               |
-| thumbColor |  `string`   | interactive`*` | change thumb's color                                                                                                                      |
-| thumbShape |  `string`   |    `'ring'`    | change thumb's shape: `'ring'`, `'solid'`, `'hollow'`, `'line'`, `'plus'`, `'pill'`, `'triangleUp'`, `'triangleDown'`, `'doubleTriangle'` |
-| reverse    |  `boolean`  |    `false`     | reverse (flip) hue direction                                                                                                              |
-| style      | `ViewStyle` |       /        | panel's container style                                                                                                                   |
+| Property   |    Type     |    Default     | Description                                                                                                                                                     |
+| :--------- | :---------: | :------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| thumbSize  |  `number`   |      `35`      | panel's handle (thumb) size (height\*width)                                                                                                                     |
+| thumbColor |  `string`   | interactive`*` | change thumb's color                                                                                                                                            |
+| thumbShape |  `string`   |    `'ring'`    | change thumb's shape: `'ring'`, `'solid'`, `'hollow'`, `'line'`, `'plus'`, `'pill'`, `'triangleUp'`, `'triangleDown'`, `'doubleTriangle'`, `'rect'`, `'circle'` |
+| reverse    |  `boolean`  |    `false`     | reverse (flip) hue direction                                                                                                                                    |
+| style      | `ViewStyle` |       /        | panel's container style                                                                                                                                         |
 
 > **Note** some style properties will be overwritten.
 
@@ -257,12 +257,12 @@ const styles = StyleSheet.create({
 
 > **Note** you need to add [`<BrightnessSlider />`](#small_orange_diamondbrightnessslider-) alongside with it.
 
-| Property   |    Type     |    Default     | Description                                                                                                                               |
-| :--------- | :---------: | :------------: | :---------------------------------------------------------------------------------------------------------------------------------------- |
-| thumbSize  |  `number`   |      `35`      | panel's handle (thumb) size (height\*width)                                                                                               |
-| thumbColor |  `string`   | interactive`*` | change thumb's color                                                                                                                      |
-| thumbShape |  `string`   |    `'ring'`    | change thumb's shape: `'ring'`, `'solid'`, `'hollow'`, `'line'`, `'plus'`, `'pill'`, `'triangleUp'`, `'triangleDown'`, `'doubleTriangle'` |
-| style      | `ViewStyle` |       /        | panel's container style                                                                                                                   |
+| Property   |    Type     |    Default     | Description                                                                                                                                                     |
+| :--------- | :---------: | :------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| thumbSize  |  `number`   |      `35`      | panel's handle (thumb) size (height\*width)                                                                                                                     |
+| thumbColor |  `string`   | interactive`*` | change thumb's color                                                                                                                                            |
+| thumbShape |  `string`   |    `'ring'`    | change thumb's shape: `'ring'`, `'solid'`, `'hollow'`, `'line'`, `'plus'`, `'pill'`, `'triangleUp'`, `'triangleDown'`, `'doubleTriangle'`, `'rect'`, `'circle'` |
+| style      | `ViewStyle` |       /        | panel's container style                                                                                                                                         |
 
 > **Note** some style properties will be overwritten.
 

@@ -109,7 +109,7 @@ export function Panel3({ thumbShape, thumbSize, thumbColor, style = {} }) {
         style={[styles.panel_container, style, { position: 'relative', borderRadius, aspectRatio: 1 }]}
       >
         <ImageBackground
-          source={require('../assets/Background3.png')}
+          source={require('../assets/Panel3.png')}
           style={[styles.panel_image, { borderRadius }]}
           resizeMode='stretch'
         />
