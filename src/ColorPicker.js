@@ -19,8 +19,9 @@ import { CTX } from './GlobalStyles';
 const CONTRAST_RATIO_MIN = 4.5;
 
 export default function ColorPicker({
-  slidersThickness = 25,
-  thumbsSize = 25 * 1.4,
+  sliderThickness = 25,
+  thumbSize = 35,
+  thumbShape = 'ring',
   value = '#418181',
   onChange,
   onComplete,
@@ -163,7 +164,7 @@ export default function ColorPicker({
     const color = { h: hue.current, s: saturation.current, b: brightness.current, a: alpha.current };
 
     for (let i = 0; i < settings.length; i++) {
-      const { isReversed, width, height, thumbSize, axis, channel, handle } = settings[i];
+      const { isReversed, width, height, axis, channel, handle, thumbSize: handleSize } = settings[i];
       const channelMax = channel === 'h' ? 360 : 100;
       const length = axis === 'y' ? height : width; // height for vertical axis, width for horizontal axis.
       const percent = (color[channel] / channelMax) * length;
@@ -172,8 +173,8 @@ export default function ColorPicker({
         const [handleX, handleY] = handle;
         const center = width / 2;
         const distance = (color.s / 100) * (width / 2);
-        const posX = width - Math.round(Math.cos((color.h * Math.PI) / 180) * distance + center) - thumbSize / 2;
-        const posY = width - Math.round(Math.sin((color.h * Math.PI) / 180) * distance + center) - thumbSize / 2;
+        const posX = width - Math.round(Math.cos((color.h * Math.PI) / 180) * distance + center) - handleSize / 2;
+        const posY = width - Math.round(Math.sin((color.h * Math.PI) / 180) * distance + center) - handleSize / 2;
         handleX.value = withAnimation ? withTiming(posX, { duration }) : posX;
         handleY.value = withAnimation ? withTiming(posY, { duration }) : posY;
       }
@@ -246,8 +247,9 @@ export default function ColorPicker({
     updateOpacity,
     updateHue,
 
-    slidersThickness,
-    thumbsSize,
+    sliderThickness,
+    thumbSize,
+    thumbShape,
 
     initialColor,
     value,

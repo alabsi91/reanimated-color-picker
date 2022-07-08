@@ -25,8 +25,8 @@ export default function Example4({ onSelectColor, color }) {
             value={color.value}
             onComplete={onSelectColor}
             style={{ width: '75%', justifyContent: 'center' }}
-            slidersThickness={30}
-            thumbsSize={40}
+            sliderThickness={30}
+            thumbSize={40}
           >
             <Preview
               style={[styles.previewStyle, styles.shadow]}

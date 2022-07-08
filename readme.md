@@ -11,13 +11,13 @@
 
 ### - Highly customizable.
 
-### - Supports IOS, Android, Expo and Web platforms.
+### - Supports IOS, Android, Expo, and Web platforms.
 
 ### - Supports right to left (RTL) layout.
 
 ### :warning: :warning: Warning :warning: :warning:
 
-- This project is still in beta stage.
+- This project is still in the beta stage.
 - Some properties may change.
 
 ![Example_1](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/example_1.png?raw=true)
@@ -47,9 +47,11 @@
     - [`<OpacitySlider />`](#small_orange_diamondopacityslider-)
     - [`<Swatches />`](#small_orange_diamondswatches-)
 
-- :five: [Examples](#small_blue_diamondexamples)
+- :five: [Slider Props](#small_blue_diamondslider-props)
 
-- :six: [License](#small_blue_diamondlicense)
+- :six: [Examples](#small_blue_diamondexamples)
+
+- :seven: [License](#small_blue_diamondlicense)
 
 # :small_blue_diamond:Prerequisites
 
@@ -59,7 +61,7 @@
 
 - [react-native-reanimated](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/installation) version `2.0.0` or higher.
 
-- For `Expo` manged workflow version `44` or higher is required.
+- For `Expo` managed workflow version `44` or higher is required.
 
 # :small_blue_diamond:Installation
 
@@ -130,27 +132,34 @@ const styles = StyleSheet.create({
 
 - It has the following props:
 
-### :small_orange_diamond:value
+### :white_small_square:value
 
 - The initial value of the color picker.
 - Accepts `'hex'`, `'rgb'`, `'rgba'`, `'hsl'`, `'hsla'` and `named color` formats.
 - `type: string`
 - `default: '#418181'`
 
-### :small_orange_diamond:slidersThickness
+### :white_small_square:sliderThickness
 
-- A global style to change the thickness of all descendant sliders components.
+- A global property to change the thickness of all descendant sliders components.
 - The thickness is the slider's width in case of `vertical` orientation and height in case of `horizontal` orientation.
 - `type: number`
 - `default: 25`
 
-### :small_orange_diamond:thumbsSize
+### :white_small_square:thumbSize
 
-- A global style to change the thumb size of all descendant sliders components.
+- A global property to change the thumb size of all descendant sliders components.
 - `type: number`
 - `default: 35`
 
-### :small_orange_diamond:style
+### :white_small_square:thumbShape
+
+- A global property to change the shape and appearance of the thumb of all descendant sliders components.
+- `type: string`
+- `default: 'ring'`
+- `values: 'ring' | 'solid' | 'hollow' | 'line' | 'plus' | 'pill' | 'triangleUp' | 'triangleDown' | 'doubleTriangle' | 'rect' | 'circle'`
+
+### :white_small_square:style
 
 - Color picker's container style.
 - If you want to change the width using the `width` property.
@@ -158,17 +167,17 @@ const styles = StyleSheet.create({
 
 > **Note** some style properties will be overwritten.
 
-### :small_orange_diamond:onChange
+### :white_small_square:onChange
 
 - Called every time the color value changed.
-- The passed color object has the following properties: `hex`, `rgb`, `rgba`, `hsl` and `hsla`
+- The passed color object has the following properties: `hex`, `rgb`, `rgba`, `hsl`, and `hsla`
 - `type: (color: object) => void`
 - `default: null`
 
-### :small_orange_diamond:onComplete
+### :white_small_square:onComplete
 
 - Called when the user releases the slider handle or when a swatch is clicked.
-- The passed color object has the following properties: `hex`, `rgb`, `rgba`, `hsl` and `hsla`
+- The passed color object has the following properties: `hex`, `rgb`, `rgba`, `hsl`, and `hsla`
 - `type: (color: object) => void`
 - `default: null`
 
@@ -203,7 +212,7 @@ const styles = StyleSheet.create({
 
 ![panel1](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/panel1.png?raw=true)
 
-- A square-shaped slider (adobe style) used for changing the color's brightness and saturation.
+- A square-shaped slider (adobe style) is used for changing the color's brightness and saturation.
 
 > **Note** you need to add [`<HueSlider />`](#small_orange_diamondhueslider-) alongside with it.
 
@@ -222,7 +231,7 @@ const styles = StyleSheet.create({
 
 ![panel2](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/panel2.png?raw=true)
 
-- A square-shaped slider (windows style) used for changing the color's hue and saturation.
+- A square-shaped slider (windows style) is used for changing the color's hue and saturation.
 
 > **Note** you need to add [`<BrightnessSlider />`](#small_orange_diamondbrightnessslider-) alongside with it.
 
@@ -242,7 +251,7 @@ const styles = StyleSheet.create({
 
 ![panel2](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/panel3.png?raw=true)
 
-- A circle-shaped slider used for changing the color's hue and saturation.
+- A circle-shaped slider is used for changing the color's hue and saturation.
 - Move the handle around the center to change the color's hue.
 - Move the handle away or toward the center to change the color's saturation.
 
@@ -263,77 +272,33 @@ const styles = StyleSheet.create({
 
 ![hue](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/hue.png?raw=true)
 
-- A slider to change color's hue.
+- A slider to change the color's hue.
 
-| Property   |    Type     |    Default     | Description                                                                                                                               |
-| :--------- | :---------: | :------------: | :---------------------------------------------------------------------------------------------------------------------------------------- |
-| thumbSize  |  `number`   |      `35`      | hue slider handle (thumb) size (height\*width)                                                                                            |
-| thumbColor |  `string`   | interactive`*` | change thumb's color                                                                                                                      |
-| thumbShape |  `string`   |    `'ring'`    | change thumb's shape: `'ring'`, `'solid'`, `'hollow'`, `'line'`, `'plus'`, `'pill'`, `'triangleUp'`, `'triangleDown'`, `'doubleTriangle'` |
-| reverse    |  `boolean`  |    `false`     | reverse slider direction                                                                                                                  |
-| vertical   |  `boolean`  |    `false`     | change slider orientation                                                                                                                 |
-| style      | `ViewStyle` |       /        | hue slider container style                                                                                                                |
-
-> **Note** some style properties will be overwritten.
-
-> **:asterisk: interactive**: the thumb color will be changed depending on the contrast ratio if no color value is passed.
+- Check out the [Slider Props](#small_blue_diamondslider-props) for more info.
 
 ### :small_orange_diamond:`<SaturationSlider />`
 
 ![saturation](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/saturation.png?raw=true)
 
-- A slider to change color's saturation.
+- A slider to change the color's saturation.
 
-| Property   |    Type     |    Default     | Description                                                                                                                               |
-| :--------- | :---------: | :------------: | :---------------------------------------------------------------------------------------------------------------------------------------- |
-| thumbSize  |  `number`   |      `35`      | saturation slider handle (thumb) size (height\*width)                                                                                     |
-| thumbColor |  `string`   | interactive`*` | change thumb's color                                                                                                                      |
-| thumbShape |  `string`   |    `'ring'`    | change thumb's shape: `'ring'`, `'solid'`, `'hollow'`, `'line'`, `'plus'`, `'pill'`, `'triangleUp'`, `'triangleDown'`, `'doubleTriangle'` |
-| reverse    |  `boolean`  |    `false`     | reverse slider direction                                                                                                                  |
-| vertical   |  `boolean`  |    `false`     | change slider orientation                                                                                                                 |
-| style      | `ViewStyle` |       /        | saturation slider container style                                                                                                         |
-
-> **Note** some style properties will be overwritten.
-
-> **:asterisk: interactive**: the thumb color will be changed depending on the contrast ratio if no color value is passed.
+- Check out the [Slider Props](#small_blue_diamondslider-props) for more info.
 
 ### :small_orange_diamond:`<BrightnessSlider />`
 
 ![brightness](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/brightness.png?raw=true)
 
-- A slider to change color brightness.
+- A slider to change the color brightness.
 
-| Property   |    Type     |    Default     | Description                                                                                                                               |
-| :--------- | :---------: | :------------: | :---------------------------------------------------------------------------------------------------------------------------------------- |
-| thumbSize  |  `number`   |      `35`      | brightness slider handle (thumb) size (height\*width)                                                                                     |
-| thumbColor |  `string`   | interactive`*` | change thumb's color                                                                                                                      |
-| thumbShape |  `string`   |    `'ring'`    | change thumb's shape: `'ring'`, `'solid'`, `'hollow'`, `'line'`, `'plus'`, `'pill'`, `'triangleUp'`, `'triangleDown'`, `'doubleTriangle'` |
-| reverse    |  `boolean`  |    `false`     | reverse slider direction                                                                                                                  |
-| vertical   |  `boolean`  |    `false`     | change slider orientation                                                                                                                 |
-| style      | `ViewStyle` |       /        | brightness slider container style                                                                                                         |
-
-> **Note** some style properties will be overwritten.
-
-> **:asterisk: interactive**: the thumb color will be changed depending on the contrast ratio if no color value is passed.
+- Check out the [Slider Props](#small_blue_diamondslider-props) for more info.
 
 ### :small_orange_diamond:`<OpacitySlider />`
 
 ![opacity](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/opacity.png?raw=true)
 
-- A slider to change color's opacity.
+- A slider to change the color's opacity.
 
-| Property   |    Type     |    Default     | Description                                                                                                                               |
-| :--------- | :---------: | :------------: | :---------------------------------------------------------------------------------------------------------------------------------------- |
-| thumbSize  |  `number`   |      `35`      | opacity slider handle (thumb) size (height\*width)                                                                                        |
-| thumbColor |  `string`   | interactive`*` | change thumb's color                                                                                                                      |
-| thumbShape |  `string`   |    `'ring'`    | change thumb's shape: `'ring'`, `'solid'`, `'hollow'`, `'line'`, `'plus'`, `'pill'`, `'triangleUp'`, `'triangleDown'`, `'doubleTriangle'` |
-| reverse    |  `boolean`  |    `false`     | reverse slider direction                                                                                                                  |
-| vertical   |  `boolean`  |    `false`     | change slider orientation                                                                                                                 |
-| style      | `ViewStyle` |       /        | opacity slider container style                                                                                                            |
-
-> **Note** some style properties will be overwritten.
-
-> **:asterisk: interactive**: the thumb color will be changed depending on the contrast ratio if no color value is passed.
+- Check out the [Slider Props](#small_blue_diamondslider-props) for more info.
 
 ### :small_orange_diamond:`<Swatches />`
 
@@ -346,6 +311,50 @@ const styles = StyleSheet.create({
 | colors      | `string[]`  | material colors | custom swatches colors   |
 | style       | `ViewStyle` |        /        | swatches container style |
 | swatchStyle | `ViewStyle` |        /        | swatch style             |
+
+> **Note** some style properties will be overwritten.
+
+# :small_blue_diamond:Slider Props
+
+- `HueSlider`, `SaturationSlider`, `BrightnessSlider` and `OpacitySlider` sliders accept the following props:
+
+## :white_small_square:thumbSize
+
+- The size of the slider's thumb.
+- `type: number`
+- `default: 35`
+
+## :white_small_square:thumbColor
+
+- The color of the slider's thumb.
+- `type: string`
+- `default: interactive*`
+
+> **:asterisk: interactive**: the thumb color will be changed depending on the contrast ratio if no color value is passed.
+
+## :white_small_square:thumbShape
+
+- The shape and appearance of the slider's thumb.
+- `type: string`
+- `default: 'ring'`
+- `values: 'ring' | 'solid' | 'hollow' | 'line' | 'plus' | 'pill' | 'triangleUp' | 'triangleDown' | 'doubleTriangle' | 'rect' | 'circle'`
+
+## :white_small_square:reverse
+
+- Reverse the slider direction.
+- `type: boolean`
+- `default: false`
+
+## :white_small_square:vertical
+
+- Change the slider orientation.
+- `type: boolean`
+- `default: false`
+
+## :white_small_square:style
+
+- The style of the slider's container.
+- `type: ViewStyle`
 
 > **Note** some style properties will be overwritten.
 

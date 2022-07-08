@@ -14,16 +14,25 @@ import Thumb from './Thumbs';
 const isRtl = I18nManager.isRTL;
 
 export function BrightnessSlider({ thumbShape, thumbSize, thumbColor, style = {}, vertical, reverse }) {
-  const { registerHandle, updateBrightness, onGestureEventFinish, solidColor, slidersThickness, activeHueStyle, thumbsSize } =
-    useContext(CTX);
+  const {
+    registerHandle,
+    updateBrightness,
+    onGestureEventFinish,
+    solidColor,
+    sliderThickness,
+    activeHueStyle,
+    thumbSize: thumbsSize,
+    thumbShape: thumbsShape,
+  } = useContext(CTX);
 
   thumbSize = thumbSize ?? thumbsSize;
+  thumbShape = thumbShape ?? thumbsShape;
   const borderRadius = getStyle(style, 'borderRadius', 5);
 
   const id = useRef('brightness' + Math.random()).current;
 
-  const [width, setWidth] = useState(getStyle(style, 'width', slidersThickness));
-  const [height, setHeight] = useState(getStyle(style, 'height', slidersThickness));
+  const [width, setWidth] = useState(getStyle(style, 'width', sliderThickness));
+  const [height, setHeight] = useState(getStyle(style, 'height', sliderThickness));
 
   const handlePos = useSharedValue(0);
   const handleScale = useSharedValue(1);

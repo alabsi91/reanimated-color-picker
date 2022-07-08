@@ -10,20 +10,33 @@ interface returnedResults {
   hsva: string;
 }
 
-type thumbShapeType = 'ring' | 'solid' | 'hollow' | 'line' | 'plus' | 'pill' | 'triangleUp' | 'triangleDown' | 'doubleTriangle';
+type thumbShapeType =
+  | 'ring'
+  | 'solid'
+  | 'hollow'
+  | 'line'
+  | 'plus'
+  | 'pill'
+  | 'triangleUp'
+  | 'triangleDown'
+  | 'doubleTriangle'
+  | 'rect'
+  | 'circle';
 
 interface ColorPickerProps {
-  /** - global style for all slider components
+  /**
+   * - a global property to change the thickness of all descendant sliders components.
    * - thickness is the width of the slider in vertical mode or the height in horizontal mode.
    */
-  slidersThickness?: number;
+  sliderThickness?: number;
 
-  /** - gobal style for all slider components to change handles thumb size (height*width) */
-  thumbsSize?: number;
+  /** - a global property to change the thumb size of all descendant sliders components. */
+  thumbSize?: number;
 
-  /**
-   * - color picker wrapper style.
-   */
+  /** - a global property to change the shape and appearance of the thumb of all descendant sliders components. */
+  thumbShape?: thumbShapeType;
+
+  /** - color picker wrapper style. */
   style?: StyleProp<ViewStyle>;
 
   /**
@@ -107,93 +120,24 @@ interface Panel2Props extends PanelProps {
   reverse?: boolean;
 }
 
-interface HueProps {
-  /** - hue slider handle (thumb) size (height*width). */
+interface SliderPorps {
+  /** - slider's handle (thumb) size (height*width). */
   thumbSize?: number;
 
-  /** - hue slider handle (thumb) color. */
+  /** - slider's handle (thumb) color. */
   thumbColor?: string;
 
-  /** - hue slider handle (thumb) shape. */
+  /** - slider's handle (thumb) shape. */
   thumbShape?: thumbShapeType;
 
-  /** - reverse hue slider direction. */
+  /** - reverse slider direction. */
   reverse?: boolean;
 
-  /** - vertical hue slider. */
+  /** - vertical slider. */
   vertical?: boolean;
 
   /**
-   * - hue slider container style.
-   * - **Note** some of the style properties will be overwritten.
-   */
-  style?: StyleProp<ViewStyle>;
-}
-
-interface BrightnessProps {
-  /** - brightness slider handle (thumb) size (height*width). */
-  thumbSize?: number;
-
-  /** - brightness slider handle (thumb) color. */
-  thumbColor?: string;
-
-  /** - brightness slider handle (thumb) shape. */
-  thumbShape?: thumbShapeType;
-
-  /** - reverse brightness slider direction. */
-  reverse?: boolean;
-
-  /** - vertical brightness slider. */
-  vertical?: boolean;
-
-  /**
-   * - brightness slider container style.
-   * - **Note** some of the style properties will be overwritten.
-   */
-  style?: StyleProp<ViewStyle>;
-}
-
-interface SaturationProps {
-  /** - saturation slider handle (thumb) size (height*width). */
-  thumbSize?: number;
-
-  /** - saturation slider handle (thumb) color. */
-  thumbColor?: string;
-
-  /** - saturation slider handle (thumb) shape. */
-  thumbShape?: thumbShapeType;
-
-  /** - reverse saturation slider direction. */
-  reverse?: boolean;
-
-  /** - vertical saturation slider. */
-  vertical?: boolean;
-
-  /**
-   * - saturation slider container style.
-   * - **Note** some of the style properties will be overwritten.
-   */
-  style?: StyleProp<ViewStyle>;
-}
-
-interface OpacityProps {
-  /** - opacity slider handle (thumb) size (height*width). */
-  thumbSize?: number;
-
-  /** - opacity slider handle (thumb) color. */
-  thumbColor?: string;
-
-  /** - opacity slider handle (thumb) shape. */
-  thumbShape?: thumbShapeType;
-
-  /** - reverse opacity slider direction. */
-  reverse?: boolean;
-
-  /** - vertical opacity slider. */
-  vertical?: boolean;
-
-  /**
-   * - opacity slider container style.
+   * - slider's container style.
    * - **Note** some of the style properties will be overwritten.
    */
   style?: StyleProp<ViewStyle>;
@@ -205,10 +149,10 @@ export declare const PreviewText: React.FunctionComponent<PreviewTextProps>;
 export declare const Panel1: React.FunctionComponent<PanelProps>;
 export declare const Panel2: React.FunctionComponent<Panel2Props>;
 export declare const Panel3: React.FunctionComponent<PanelProps>;
-export declare const HueSlider: React.FunctionComponent<HueProps>;
-export declare const BrightnessSlider: React.FunctionComponent<BrightnessProps>;
-export declare const SaturationSlider: React.FunctionComponent<SaturationProps>;
-export declare const OpacitySlider: React.FunctionComponent<OpacityProps>;
+export declare const HueSlider: React.FunctionComponent<SliderPorps>;
+export declare const BrightnessSlider: React.FunctionComponent<SliderPorps>;
+export declare const SaturationSlider: React.FunctionComponent<SliderPorps>;
+export declare const OpacitySlider: React.FunctionComponent<SliderPorps>;
 export declare const Swatches: React.FunctionComponent<SwatchesPorps>;
 
 export default ColorPicker;

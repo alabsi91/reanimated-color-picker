@@ -35,8 +35,8 @@ export default function Example3({ onSelectColor, color }) {
         <View style={styles.container}>
           <ColorPicker
             value={color.value}
-            slidersThickness={30}
-            thumbsSize={30}
+            sliderThickness={30}
+            thumbSize={30}
             style={{ width: '75%', justifyContent: 'center' }}
             onComplete={onSelectColor}
           >

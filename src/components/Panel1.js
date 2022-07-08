@@ -12,8 +12,15 @@ import styles, { CTX, getStyle } from '../GlobalStyles';
 import Thumb from './Thumbs';
 
 export function Panel1({ thumbShape, thumbSize, thumbColor, style = {} }) {
-  const { registerHandle, activeHueStyle, solidColor, updateSaturation, updateBrightness, onGestureEventFinish, thumbsSize } =
-    useContext(CTX);
+  const {
+    registerHandle,
+    activeHueStyle,
+    solidColor,
+    updateSaturation,
+    updateBrightness,
+    onGestureEventFinish,
+    thumbSize: thumbsSize,
+  } = useContext(CTX);
 
   thumbSize = thumbSize ?? thumbsSize;
   const borderRadius = getStyle(style, 'borderRadius', 5);

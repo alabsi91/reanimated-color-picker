@@ -41,24 +41,19 @@ export default function Example3({ onSelectColor, color }: porpsType) {
         <View style={styles.container}>
           <ColorPicker
             value={color.value}
-            slidersThickness={30}
-            thumbsSize={30}
-            style={{ width: '75%', justifyContent: 'center' }}
+            sliderThickness={30}
+            thumbSize={35}
+            thumbShape='rect'
             onComplete={onSelectColor}
+            style={{ width: '75%', justifyContent: 'center' }}
           >
             <View style={styles.panelBrightnessContainer}>
               <Panel2 style={[{ flex: 1, marginEnd: 20 }, styles.shadow]} />
-              <BrightnessSlider style={[{ height: '100%' }, styles.shadow]} thumbShape='hollow' vertical reverse />
+              <BrightnessSlider style={[{ height: '100%' }, styles.shadow]} vertical reverse />
             </View>
 
             <View style={styles.panelBrightnessContainer}>
-              <OpacitySlider
-                style={[{ flexGrow: 1 }, styles.shadow]}
-                thumbSize={25}
-                thumbShape='solid'
-                thumbColor='#00121a'
-                reverse
-              />
+              <OpacitySlider style={[{ flexGrow: 1 }, styles.shadow]} thumbColor='#00121a' reverse />
               <Preview style={[styles.circlePreview, styles.shadow]} hideInitialColor hideText />
             </View>
 

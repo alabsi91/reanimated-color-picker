@@ -12,7 +12,14 @@ import styles, { CTX } from '../GlobalStyles';
 import Thumb from './Thumbs';
 
 export function Panel3({ thumbShape, thumbSize, thumbColor, style = {} }) {
-  const { registerHandle, solidColor, onGestureEventFinish, updateHue, updateSaturation, thumbsSize } = useContext(CTX);
+  const {
+    registerHandle,
+    solidColor,
+    onGestureEventFinish,
+    updateHue,
+    updateSaturation,
+    thumbSize: thumbsSize,
+  } = useContext(CTX);
 
   thumbSize = thumbSize ?? thumbsSize;
 

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { I18nManager, StyleSheet } from 'react-native';
+import { I18nManager, StyleSheet, View } from 'react-native';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { COLOR_HEX } from '../ColorsConversionFormulas';
 import styles, { CTX } from '../GlobalStyles';
@@ -61,7 +61,6 @@ export default function Thumb({ thumbShape = 'ring', thumbSize, thumbColor, hand
       backgroundColor: thumbColor,
       width: vertical ? '100%' : thikcness,
       height: vertical ? thikcness : '100%',
-      transform: [{ rotate: '180deg' }],
     };
     const invertedStyle = useAnimatedStyle(() => ({ backgroundColor: thumbColor || inverted.value }));
 
@@ -73,15 +72,13 @@ export default function Thumb({ thumbShape = 'ring', thumbSize, thumbColor, hand
   };
 
   const Pill = () => {
-    const thikcness = 10;
     const style = { width, height };
     const pillStyle = {
       borderRadius,
       borderColor: thumbColor,
       borderWidth: 2,
-      width: vertical ? '100%' : thikcness,
-      height: vertical ? thikcness : '100%',
-      transform: [{ rotate: '180deg' }],
+      width: vertical ? '100%' : 10,
+      height: vertical ? 10 : '100%',
     };
     const invertedStyle = useAnimatedStyle(() => ({ borderColor: thumbColor || inverted.value }));
     return (
@@ -92,20 +89,18 @@ export default function Thumb({ thumbShape = 'ring', thumbSize, thumbColor, hand
   };
 
   const Plus = () => {
-    const thikcness = 1;
+    const thikcness = 2;
     const style = { width, height, borderRadius, borderWidth: thikcness };
     const line1 = {
       borderRadius,
       position: 'absolute',
       width: vertical ? '100%' : thikcness,
       height: vertical ? thikcness : '100%',
-      transform: [{ rotate: '180deg' }],
     };
     const line2 = {
       borderRadius,
       width: vertical ? thikcness : '100%',
       height: vertical ? '100%' : thikcness,
-      transform: [{ rotate: '180deg' }],
     };
     const invertedStyle = useAnimatedStyle(() => ({ backgroundColor: thumbColor || inverted.value }));
     const invertedBorderStyle = useAnimatedStyle(() => ({ borderColor: thumbColor || inverted.value }));
@@ -169,28 +164,59 @@ export default function Thumb({ thumbShape = 'ring', thumbSize, thumbColor, hand
       flexDirection: vertical ? (isRtl ? 'row' : 'row-reverse') : 'column',
     };
     const triangleUpStyle = {
-      borderBottomWidth: width / 2,
-      borderLeftWidth: width / 4,
-      borderRightWidth: width / 4,
+      borderBottomWidth: 10,
+      borderLeftWidth: 5,
+      borderRightWidth: 5,
       transform: [{ rotate: vertical ? '90deg' : '0deg' }],
     };
     const triangleDownStyle = {
-      borderBottomWidth: width / 2,
-      borderLeftWidth: width / 4,
-      borderRightWidth: width / 4,
-      ...(vertical ? (isRtl ? { marginEnd: 2 } : { marginStart: 2 }) : { marginBottom: 2 }), // gap between triangles
+      borderBottomWidth: 10,
+      borderLeftWidth: 5,
+      borderRightWidth: 5,
       transform: [{ rotate: vertical ? '270deg' : '180deg' }],
     };
     const invertedStyle = useAnimatedStyle(() => ({ borderBottomColor: thumbColor || inverted.value }));
     return (
       <Animated.View style={[styles.handle, style, handleStyle]}>
         <Animated.View style={[shapes.triangle, triangleDownStyle, invertedStyle]} />
+        <View style={{ width: '50%', height: '50%' }} />
         <Animated.View style={[shapes.triangle, triangleUpStyle, invertedStyle]} />
       </Animated.View>
     );
   };
 
-  const thumbs = { Ring, Solid, Hollow, Line, Plus, Pill, TriangleUp, TriangleDown, DoubleTriangle };
+  const Rect = () => {
+    const style = { width, height };
+    const pillStyle = {
+      borderWidth: 1,
+      width: vertical ? '100%' : 14,
+      height: vertical ? 14 : '100%',
+    };
+    const invertedStyle = useAnimatedStyle(() => ({ borderColor: inverted.value }));
+    return (
+      <Animated.View style={[styles.handle, style, handleStyle]}>
+        <Animated.View style={[pillStyle, styles.shadow, invertedStyle, solidColor]} />
+      </Animated.View>
+    );
+  };
+
+  const Circle = () => {
+    const style = { width, height };
+    const pillStyle = {
+      borderRadius,
+      borderWidth: 1,
+      width: '100%',
+      height: '100%',
+    };
+    const invertedStyle = useAnimatedStyle(() => ({ borderColor: inverted.value }));
+    return (
+      <Animated.View style={[styles.handle, style, handleStyle]}>
+        <Animated.View style={[pillStyle, styles.shadow, invertedStyle, solidColor]} />
+      </Animated.View>
+    );
+  };
+
+  const thumbs = { Ring, Solid, Hollow, Line, Plus, Pill, TriangleUp, TriangleDown, DoubleTriangle, Rect, Circle };
 
   thumbShape = thumbShape.toLowerCase().charAt(0).toUpperCase() + thumbShape.slice(1);
   const Element = () => (thumbs.hasOwnProperty(thumbShape) ? thumbs[thumbShape]() : thumbs.Ring());
