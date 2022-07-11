@@ -92,11 +92,11 @@ export default function ColorPicker({
 
   // set white or black color depending on the contrast ratio.
   const setInvertedColor = () => {
-    setInverted({}, invertedColor);
-    setInverted({ s: 100, b: 50 }, invertedColorHue);
-    setInverted({ s: 100 }, invertedColorBrightness);
-    setInverted({ b: 60 }, invertedColorSaturation);
-    setInverted({ s: alpha.current, b: 60 }, invertedColorOpacity);
+    setInverted({}, invertedColor); // for panel thumb.
+    setInverted({ s: 100, b: 100 }, invertedColorHue); // for hue thumb.
+    setInverted({ s: 100 }, invertedColorBrightness); // for brightness thumb.
+    setInverted({ b: 70 }, invertedColorSaturation); // for saturation thumb.
+    setInverted({ s: alpha.current, b: 70 }, invertedColorOpacity); // for opacity thumb.
   };
   const setInverted = ({ h = hue.current, s = saturation.current, b = brightness.current }, color2) => {
     const inverted = color2.value === '#ffffff' ? '#000000' : '#ffffff';

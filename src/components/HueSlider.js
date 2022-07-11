@@ -112,7 +112,7 @@ export function HueSlider({ thumbShape, thumbSize, thumbColor, style = {}, verti
     <PanGestureHandler onGestureEvent={gestureEvent} minDist={0}>
       <Animated.View
         onLayout={onLayout}
-        style={[{ borderRadius }, vertical ? { width } : { height }, style, { position: 'relative' }]}
+        style={[{ borderRadius }, vertical ? { width } : { height }, style, { position: 'relative', borderWidth: 0, padding: 0 }]}
       >
         <Image source={require('../assets/Hue.png')} style={imageStyle} />
         <Thumb {...{ channel: 'h', thumbShape, thumbSize, thumbColor, handleStyle, solidColor }} />

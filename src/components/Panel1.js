@@ -106,7 +106,13 @@ export function Panel1({ thumbShape, thumbSize, thumbColor, style = {} }) {
     <PanGestureHandler onGestureEvent={gestureEvent} minDist={0}>
       <Animated.View
         onLayout={onLayout}
-        style={[styles.panel_container, { height: width }, style, { position: 'relative' }, activeHueStyle]}
+        style={[
+          styles.panel_container,
+          { height: width },
+          style,
+          { position: 'relative', borderWidth: 0, padding: 0 },
+          activeHueStyle,
+        ]}
       >
         <ImageBackground
           source={require('../assets/Panel1.png')}

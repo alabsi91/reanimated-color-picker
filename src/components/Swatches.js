@@ -27,8 +27,9 @@ const SWATCHES_COLORS = [
 export function Swatches({ colors = SWATCHES_COLORS, style = {}, swatchStyle = {} }) {
   const { setColor, onChange, onGestureEventFinish, returnedResults } = useContext(CTX);
 
-  const onPress = swatch => {
+  const onPress = async swatch => {
     setColor(swatch);
+    await new Promise(resolve => setTimeout(resolve, 150));
     onChange?.(returnedResults());
     onGestureEventFinish();
   };

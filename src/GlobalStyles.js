@@ -8,11 +8,11 @@ export const CTX = createContext();
 export function getStyle(style, property, defaultValue) {
   const isArray = Array.isArray(style);
   if (isArray) {
-    const all = style.filter(s => s[property] !== undefined).map(s => s[property]);
+    const all = style.filter(s => s?.[property] !== undefined).map(s => s[property]);
     if (all.length > 0) return all[all.length - 1];
     return defaultValue;
   }
-  return style[property] ?? defaultValue;
+  return style?.[property] ?? defaultValue;
 }
 
 export default StyleSheet.create({

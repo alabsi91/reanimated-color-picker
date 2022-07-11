@@ -28,7 +28,7 @@ export default function Example1({ onSelectColor, color }: porpsType) {
             style={{ width: '75%', justifyContent: 'space-evenly' }}
           >
             <Preview style={[styles.previewStyle, styles.shadow]} textStyle={{ fontSize: 16 }} />
-            <Panel3 style={[styles.shadow]} />
+            <Panel3 style={styles.shadow} />
 
             <BrightnessSlider style={styles.shadow} />
             <OpacitySlider style={styles.shadow} />

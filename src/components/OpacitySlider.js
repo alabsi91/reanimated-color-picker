@@ -114,7 +114,13 @@ export function OpacitySlider({ thumbShape, thumbSize, thumbColor, style = {}, v
     <PanGestureHandler onGestureEvent={gestureEvent} minDist={0}>
       <Animated.View
         onLayout={onLayout}
-        style={[{ borderRadius }, vertical ? { width } : { height }, style, { position: 'relative' }, activeHueStyle]}
+        style={[
+          { borderRadius },
+          vertical ? { width } : { height },
+          style,
+          { position: 'relative', borderWidth: 0, padding: 0 },
+          activeHueStyle,
+        ]}
       >
         <Image source={require('../assets/Opacity.png')} style={imageStyle} />
         <Thumb {...{ channel: 'a', thumbShape, thumbSize, thumbColor, handleStyle, solidColor }} />

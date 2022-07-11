@@ -114,7 +114,13 @@ export function BrightnessSlider({ thumbShape, thumbSize, thumbColor, style = {}
     <PanGestureHandler onGestureEvent={gestureEvent} minDist={0}>
       <Animated.View
         onLayout={onLayout}
-        style={[{ borderRadius }, vertical ? { width } : { height }, style, { position: 'relative' }, activeHueStyle]}
+        style={[
+          { borderRadius },
+          vertical ? { width } : { height },
+          style,
+          { position: 'relative', borderWidth: 0, padding: 0 },
+          activeHueStyle,
+        ]}
       >
         <Image source={require('../assets/Brightness.png')} style={imageStyle} />
         <Thumb {...{ channel: 'b', thumbShape, thumbSize, thumbColor, handleStyle, solidColor, vertical }} />

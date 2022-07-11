@@ -103,7 +103,10 @@ export function Panel2({ thumbShape, thumbSize, thumbColor, style = {}, reverse 
 
   return (
     <PanGestureHandler onGestureEvent={gestureEvent} minDist={0}>
-      <Animated.View onLayout={onLayout} style={[styles.panel_container, { height: width }, style, { position: 'relative' }]}>
+      <Animated.View
+        onLayout={onLayout}
+        style={[styles.panel_container, { height: width }, style, { position: 'relative', borderWidth: 0, padding: 0 }]}
+      >
         <ImageBackground
           source={require('../assets/Panel2.png')}
           style={[styles.panel_image, { borderRadius }]}
