@@ -1,5 +1,5 @@
 ---
-sidebar_position: 2
+sidebar_position: 10
 sidebar_label: PreviewText
 description: A React Native <Text> component that displays the preview color text.
 ---
@@ -8,7 +8,7 @@ description: A React Native <Text> component that displays the preview color tex
 
 - A React Native `<Text>` component that displays the preview color text.
 
-| Property    |    Type     | Default | Description                                                                                   |
-| :---------- | :---------: | :-----: | :-------------------------------------------------------------------------------------------- |
-| colorFormat |  `string`   | `'hex'` | preview color text format: `'hex'`, `'rgb'`, `'rgba'`, `'hsl'`, `'hsla'`, `'hsv'` or `'hsva'` |
-| style       | `TextStyle` |    /    | preview text style                                                                            |
+| Property    |    Type     | Default | Description                            |
+| :---------- | :---------: | :-----: | :------------------------------------- |
+| colorFormat |  `string`   | `'hex'` | preview color text format: <formats /> |
+| style       | `TextStyle` |    /    | preview text style                     |

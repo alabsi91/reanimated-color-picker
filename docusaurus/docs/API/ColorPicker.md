@@ -12,7 +12,7 @@ description: Responsible for managing the built-in components
 ## value
 
 - The initial value of the color picker.
-- Accepts `'hex'`, `'rgb'`, `'rgba'`, `'hsl'`, `'hsla'` and `named color` formats.
+- Accepts `'hex' | 'rgb' | 'rgba' | 'hsl' | 'hsla' | named colors` formats.
 - `type: string`
 - `default: '#418181'`
 

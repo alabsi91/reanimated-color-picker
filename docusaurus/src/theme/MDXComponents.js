@@ -1,12 +1,15 @@
 import React from 'react';
-// Import the original mapper
 import MDXComponents from '@theme-original/MDXComponents';
 import Snack from '@site/src/components/Snack';
 
 export default {
-  // Re-use the default mapping
   ...MDXComponents,
-  // Map the "highlight" tag to our <Highlight /> component!
-  // `Highlight` will receive all props that were passed to `highlight` in MDX
   snack: Snack,
+  shapes: () => (
+    <code>
+      'ring' | 'solid' | 'hollow' | 'line' | 'plus' | 'pill' | 'triangleUp' | 'triangleDown' | 'doubleTriangle' | 'rect' |
+      'circle'
+    </code>
+  ),
+  formats: () => <code>'hex' | 'rgb' | 'rgba' | 'hsl' | 'hsla' | 'hsv' | 'hsva'</code>,
 };

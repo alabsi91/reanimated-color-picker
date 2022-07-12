@@ -1,5 +1,5 @@
 ---
-sidebar_position: 6
+sidebar_position: 8
 sidebar_label: Panel3
 description: A circle-shaped slider is used for changing the color's hue and saturation.
 ---
@@ -18,12 +18,12 @@ description: A circle-shaped slider is used for changing the color's hue and sat
 
 :::
 
-| Property   |    Type     |    Default     | Description                                                                                                                                                     |
-| :--------- | :---------: | :------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| thumbSize  |  `number`   |      `35`      | panel's handle (thumb) size (height\*width)                                                                                                                     |
-| thumbColor |  `string`   | interactive`*` | change thumb's color                                                                                                                                            |
-| thumbShape |  `string`   |    `'ring'`    | change thumb's shape: `'ring'`, `'solid'`, `'hollow'`, `'line'`, `'plus'`, `'pill'`, `'triangleUp'`, `'triangleDown'`, `'doubleTriangle'`, `'rect'`, `'circle'` |
-| style      | `ViewStyle` |       /        | panel's container style                                                                                                                                         |
+| Property   |    Type     |    Default     | Description                                 |
+| :--------- | :---------: | :------------: | :------------------------------------------ |
+| thumbSize  |  `number`   |      `35`      | panel's handle (thumb) size (height\*width) |
+| thumbColor |  `string`   | interactive`*` | change thumb's color                        |
+| thumbShape |  `string`   |    `'ring'`    | change thumb's shape: <shapes/>             |
+| style      | `ViewStyle` |       /        | panel's container style                     |
 
 :::note
 

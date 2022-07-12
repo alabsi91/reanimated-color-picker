@@ -16,7 +16,7 @@ description: A list of colored swatches is used for quick color selection.
 | style       | `ViewStyle` |        /        | swatches container style |
 | swatchStyle | `ViewStyle` |        /        | swatch style             |
 
-:::note
+:::info note
 
 - Some style properties will be overwritten.
 

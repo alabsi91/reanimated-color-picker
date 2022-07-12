@@ -1,5 +1,5 @@
 ---
-sidebar_position: 5
+sidebar_position: 7
 sidebar_label: Panel2
 description: A square-shaped slider (windows style) is used for changing the color's hue and saturation.
 ---
@@ -16,13 +16,13 @@ description: A square-shaped slider (windows style) is used for changing the col
 
 :::
 
-| Property   |    Type     |    Default     | Description                                                                                                                                                     |
-| :--------- | :---------: | :------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| thumbSize  |  `number`   |      `35`      | panel's handle (thumb) size (height\*width)                                                                                                                     |
-| thumbColor |  `string`   | interactive`*` | change thumb's color                                                                                                                                            |
-| thumbShape |  `string`   |    `'ring'`    | change thumb's shape: `'ring'`, `'solid'`, `'hollow'`, `'line'`, `'plus'`, `'pill'`, `'triangleUp'`, `'triangleDown'`, `'doubleTriangle'`, `'rect'`, `'circle'` |
-| reverse    |  `boolean`  |    `false`     | reverse (flip) hue direction                                                                                                                                    |
-| style      | `ViewStyle` |       /        | panel's container style                                                                                                                                         |
+| Property   |    Type     |    Default     | Description                                 |
+| :--------- | :---------: | :------------: | :------------------------------------------ |
+| thumbSize  |  `number`   |      `35`      | panel's handle (thumb) size (height\*width) |
+| thumbColor |  `string`   | interactive`*` | change thumb's color                        |
+| thumbShape |  `string`   |    `'ring'`    | change thumb's shape: <shapes/>             |
+| reverse    |  `boolean`  |    `false`     | reverse (flip) hue direction                |
+| style      | `ViewStyle` |       /        | panel's container style                     |
 
 :::note
 

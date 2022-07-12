@@ -71,6 +71,8 @@ npm i reanimated-color-picker
 
 # :small_blue_diamond:Usage
 
+### -  We recommend reading the detailed documentation for using ColorPicker [here.](https://alabsi91.github.io/reanimated-color-picker/)
+
 - You can add, remove, rearrange or style the color picker's built-in components.
 
 - Check out the working examples:

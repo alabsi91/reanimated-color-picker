@@ -6,10 +6,7 @@ sidebar_position: 4
 
 - You can add, remove, rearrange or style the color picker's built-in components.
 
-- Check out the working examples:
-  - [Bare workflow](https://github.com/alabsi91/reanimated-color-picker/tree/main/Example)
-  - [Expo managed workflow](https://github.com/alabsi91/reanimated-color-picker/tree/main/ExampleExpo)
-  - [Expo snack](https://snack.expo.dev/@alabsi91/reanimated-color-picker)
+- Check out the working examples: [Examples](./Examples)
 
 ```jsx
 import React, { useState } from 'react';
