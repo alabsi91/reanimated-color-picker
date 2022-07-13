@@ -10,28 +10,52 @@ description: A square-shaped slider (windows style) is used for changing the col
 
 - A square-shaped slider (windows style) is used for changing the color's hue and saturation.
 
-:::note
+:::info note
 
 - You need to add [`<BrightnessSlider />`](#small_orange_diamondbrightnessslider-) alongside with it.
 
 :::
 
-| Property   |    Type     |    Default     | Description                                 |
-| :--------- | :---------: | :------------: | :------------------------------------------ |
-| thumbSize  |  `number`   |      `35`      | panel's handle (thumb) size (height\*width) |
-| thumbColor |  `string`   | interactive`*` | change thumb's color                        |
-| thumbShape |  `string`   |    `'ring'`    | change thumb's shape: <shapes/>             |
-| reverse    |  `boolean`  |    `false`     | reverse (flip) hue direction                |
-| style      | `ViewStyle` |       /        | panel's container style                     |
+## Props
 
-:::note
+### `thumbSize`
 
-- Some style properties will be overwritten.
+- Panel's handle (thumb) size (height\*width).
+- `type: number`
+- `default: 35`
 
-:::
+### `thumbColor`
+
+- Change thumb's color ).
+- `type: string`
+- `default`: interactive\*
 
 :::info **\*interactive**
 
 - The thumb color will be changed depending on the contrast ratio if no color value is passed.
+
+:::
+
+### `thumbShape`
+
+- Change thumb's shape and apperance.
+- `type: string`
+- `values`: <shapes/>
+- `default: 'ring'`
+
+### `reverse`
+
+- Reverse (flip) hue direction.
+- `type: boolean`
+- `default: false`
+
+### `style`
+
+- Panel's container style.
+- `type: ViewStyle`
+
+:::info note
+
+- Some style properties will be overwritten.
 
 :::

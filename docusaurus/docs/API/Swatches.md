@@ -10,11 +10,23 @@ description: A list of colored swatches is used for quick color selection.
 
 - A list of colored swatches is used for quick color selection.
 
-| Property    |    Type     |     Default     | Description              |
-| :---------- | :---------: | :-------------: | :----------------------- |
-| colors      | `string[]`  | material colors | custom swatches colors   |
-| style       | `ViewStyle` |        /        | swatches container style |
-| swatchStyle | `ViewStyle` |        /        | swatch style             |
+## Props
+
+### `colors`
+
+- Custom swatches colors.
+- `type: string[]`
+- `default: material colors`
+
+### `style`
+
+- Swatches container style.
+- `type: ViewStyle`
+
+### `swatchStyle`
+
+- Swatch style.
+- `type: ViewStyle`
 
 :::info note
 

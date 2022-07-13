@@ -10,16 +10,39 @@ description: The preview of the selected and the initial color.
 
 - The preview of the selected and the initial color.
 
-| Property         |    Type     | Default | Description                            |
-| :--------------- | :---------: | :-----: | :------------------------------------- |
-| colorFormat      |  `string`   | `'hex'` | preview color text format: <formats /> |
-| hideInitialColor |  `boolean`  | `false` | hide the initial color preview part    |
-| hideText         |  `boolean`  | `false` | hide preview color texts               |
-| style            | `ViewStyle` |    /    | preview container style                |
-| textStyle        | `TextStyle` |    /    | preview text style                     |
+## Props
+
+### `colorFormat`
+
+- Preview color text format.
+- `type: string`
+- `values`: <colorFormats/>
+- `default: 'hex'`
+
+### `hideInitialColor`
+
+- Hide the initial color preview part.
+- `type: boolean`
+- `default: false`
+
+### `hideText`
+
+- Hide preview color text.
+- `type: boolean`
+- `default: false`
+
+### `style`
+
+- Preview container style.
+- `type: ViewStyle`
 
 :::info note
 
 - Some style properties will be overwritten.
 
 :::
+
+### `textStyle`
+
+- preview color text style.
+- `type: TextStyle`

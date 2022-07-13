@@ -8,7 +8,14 @@ description: A React Native <Text> component that displays the preview color tex
 
 - A React Native `<Text>` component that displays the preview color text.
 
-| Property    |    Type     | Default | Description                            |
-| :---------- | :---------: | :-----: | :------------------------------------- |
-| colorFormat |  `string`   | `'hex'` | preview color text format: <formats /> |
-| style       | `TextStyle` |    /    | preview text style                     |
+## Props
+
+### `colorFormat`
+
+- Preview color text format.
+- `type: string`
+- `values`: <formats/>
+
+### `style`
+- Preview color text style.
+- `type: TextStyle`
