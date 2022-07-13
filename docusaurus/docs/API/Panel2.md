@@ -10,9 +10,13 @@ description: A square-shaped slider (windows style) is used for changing the col
 
 - A square-shaped slider (windows style) is used for changing the color's hue and saturation.
 
-:::info note
+- Move the handle horizontally to change the color's saturation.
 
-- You need to add [`<BrightnessSlider />`](#small_orange_diamondbrightnessslider-) alongside with it.
+- Move the handle vertically to change the color's hue.
+
+:::tip
+
+- Add [`<BrightnessSlider />`](./BrightnessSlider) also to get control of the color three channels.
 
 :::
 
@@ -26,7 +30,7 @@ description: A square-shaped slider (windows style) is used for changing the col
 
 ### `thumbColor`
 
-- Change thumb's color ).
+- Change thumb's color.
 - `type: string`
 - `default`: interactive\*
 

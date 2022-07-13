@@ -12,10 +12,10 @@ description: A React Native <Text> component that displays the preview color tex
 
 ### `colorFormat`
 
-- Preview color text format.
+- Preview color's format.
 - `type: string`
-- `values`: <formats/>
+- `values:`<formats/>
 
 ### `style`
-- Preview color text style.
+- Preview text style.
 - `type: TextStyle`

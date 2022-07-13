@@ -10,9 +10,13 @@ description: A square-shaped slider (adobe style) is used for changing the color
 
 - A square-shaped slider (adobe style) is used for changing the color's brightness and saturation.
 
-:::info note
+- Move the handle horizontally to change the color's saturation.
 
-- You need to add [`<HueSlider />`](#small_orange_diamondhueslider-) alongside with it.
+- Move the handle vertically to change the color's brightness.
+
+:::tip
+
+- Add [`<HueSlider />`](./HueSlider) also to get control of the color three channels.
 
 :::
 
@@ -38,7 +42,7 @@ description: A square-shaped slider (adobe style) is used for changing the color
 
 ### `thumbShape`
 
-- Change thumb's shape and apperance.
+- Change thumb's shape and appearance.
 - `type: string`
 - `values`: <shapes/>
 - `default: 'ring'`

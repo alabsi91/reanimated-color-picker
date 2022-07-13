@@ -8,13 +8,13 @@ description: A circle-shaped slider is used for changing the color's hue and sat
 
 ![panel2](../../../images/panel3.png)
 
-- A circle-shaped slider is used for changing the color's hue and saturation.
+- A circle-shaped slider (wheel style) is used for changing the color's hue and saturation.
 - Move the handle around the center to change the color's hue.
 - Move the handle away or toward the center to change the color's saturation.
 
-:::info note
+:::tip
 
-- You need to add [`<BrightnessSlider />`](#small_orange_diamondbrightnessslider-) alongside with it.
+- Add [`<BrightnessSlider />`](./BrightnessSlider) also to get control of the color three channels.
 
 :::
 
@@ -40,7 +40,7 @@ description: A circle-shaped slider is used for changing the color's hue and sat
 
 ### `thumbShape`
 
-- Change thumb's shape and apperance.
+- Change thumb's shape and appearance.
 - `type: string`
 - `values`: <shapes/>
 - `default: 'ring'`

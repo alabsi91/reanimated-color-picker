@@ -7,19 +7,46 @@ description: Responsible for managing the built-in components
 
 - The `ColorPicker` Wrapper is responsible for managing the built-in components.
 
+:::caution
+
+Every built-in component should be wrapped in the `ColorPicker` component.
+
+:::
+
+- You can nest components inside `ColorPicker` wrapper to reach the desired level of customization.
+
+```jsx
+<ColorPicker>
+  <Preview />
+
+  <View>
+    <Panel1 />
+    <HueSlider vertical />
+  </View>
+
+  <View>
+    <Text>Opacity</Text>
+    <OpacitySlider />
+  </View>
+
+  <Swatches />
+</ColorPicker>
+```
+
 ## Props
 
 ### `value`
 
-- The initial value of the color picker.
-- Accepts `'hex' | 'rgb' | 'rgba' | 'hsl' | 'hsla' | named colors` formats.
+- The initial color that the color picker should show on load.
+- If the `value` property is changed, the color picker will update the shown color.
+- Accepts: `'hex' | 'rgb' | 'rgba' | 'hsl' | 'hsla' | named colors` formats.
 - `type: string`
 - `default: '#418181'`
 
 ### `sliderThickness`
 
 - A global property to change the thickness of all descendant sliders components.
-- The thickness is the slider's width in case of `vertical` orientation and height in case of `horizontal` orientation.
+- The thickness is the slider's width in case of `vertical` orientation and the height in case of `horizontal` orientation.
 - `type: number`
 - `default: 25`
 
@@ -31,15 +58,14 @@ description: Responsible for managing the built-in components
 
 ### `thumbShape`
 
-- A global property to change the shape and appearance of the thumb of all descendant sliders components.
+- A global property to change thumb's shape and appearance of all descendant sliders components.
 - `type: string`
 - `default: 'ring'`
-- `values: 'ring' | 'solid' | 'hollow' | 'line' | 'plus' | 'pill' | 'triangleUp' | 'triangleDown' | 'doubleTriangle' | 'rect' | 'circle'`
+- `values:`<shapes/>
 
 ### `style`
 
 - Color picker's container style.
-- If you want to change the width using the `width` property.
 - `type: ViewStyle`
 
 :::info note
@@ -50,10 +76,17 @@ description: Responsible for managing the built-in components
 
 ### `onChange`
 
-- Called every time the color value changed.
+- Called every time the user changes the color.
 - The passed color object has the following properties: `hex`, `rgb`, `rgba`, `hsl`, and `hsla`
 - `type: (color: object) => void`
 - `default: null`
+
+:::tip
+
+- Avoid using `setState` in `onChange` callback as it will cause performance issues.
+- Using `useSharedValue` from `react-native-reanimated` library is recommended.
+
+:::
 
 ### `onComplete`
 

@@ -10,13 +10,19 @@ description: The preview of the selected and the initial color.
 
 - The preview of the selected and the initial color.
 
+:::tip
+
+- If you want only the preview text, you can use the [`<PreviewText />`](./PreviewText) component.
+
+:::
+
 ## Props
 
 ### `colorFormat`
 
-- Preview color text format.
+- Preview color's format.
 - `type: string`
-- `values`: <colorFormats/>
+- `values:`<formats/>
 - `default: 'hex'`
 
 ### `hideInitialColor`
@@ -27,7 +33,7 @@ description: The preview of the selected and the initial color.
 
 ### `hideText`
 
-- Hide preview color text.
+- Hide preview texts.
 - `type: boolean`
 - `default: false`
 
@@ -44,5 +50,5 @@ description: The preview of the selected and the initial color.
 
 ### `textStyle`
 
-- preview color text style.
+- Preview texts style.
 - `type: TextStyle`
