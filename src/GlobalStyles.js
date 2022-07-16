@@ -3,6 +3,7 @@ import { I18nManager, StyleSheet } from 'react-native';
 
 const isRtl = I18nManager.isRTL;
 
+/** @type {import('react').Context<import('./index').TCTX>} */
 export const CTX = createContext();
 
 export function getStyle(style, property, defaultValue) {

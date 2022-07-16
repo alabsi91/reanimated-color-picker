@@ -90,6 +90,7 @@ export function BrightnessSlider({ thumbShape, thumbSize, thumbColor, style = {}
     [height, width, thumbSize, vertical, reverse]
   );
 
+  /* Setting the width and height of the slider. */
   const onLayout = useCallback(({ nativeEvent: { layout } }) => {
     setWidth(Math.round(layout.width));
     setHeight(Math.round(layout.height));
