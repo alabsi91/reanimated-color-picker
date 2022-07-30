@@ -69,7 +69,7 @@ const config = {
       },
       footer: {
         style: 'dark',
-        copyright: 'Reanimated Color Picker library is licensed under The MIT License.',
+        copyright: 'Released under the MIT License.',
       },
       prism: {
         theme: lightCodeTheme,
