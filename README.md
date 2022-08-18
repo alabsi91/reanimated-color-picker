@@ -42,7 +42,7 @@ npm i reanimated-color-picker
 
 # :small_blue_diamond:Usage
 
-- We recommend reading the detailed documentation for using ColorPicker [here.](https://alabsi91.github.io/reanimated-color-picker/)
+### [📖 View the documentation site 📖](https://alabsi91.github.io/reanimated-color-picker/)
 
 # :small_blue_diamond:License
 
