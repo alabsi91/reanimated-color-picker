@@ -11,7 +11,10 @@ import Animated, {
 import styles, { CTX } from '../GlobalStyles';
 import Thumb from './Thumbs';
 
-export function Panel3({ thumbShape, thumbSize, thumbColor, style = {} }) {
+import type { LayoutChangeEvent } from 'react-native';
+import type { PanelProps } from '../types';
+
+export function Panel3({ thumbShape, thumbSize, thumbColor, style = {} }: PanelProps) {
   const {
     registerHandle,
     solidColor,
@@ -21,7 +24,7 @@ export function Panel3({ thumbShape, thumbSize, thumbColor, style = {} }) {
     thumbSize: thumbsSize,
   } = useContext(CTX);
 
-  thumbSize = thumbSize ?? thumbsSize;
+  const thumb_Size = thumbSize ?? thumbsSize;
 
   const idX = useRef('panel3' + Math.random()).current;
   const idY = useRef('panel3' + Math.random()).current;
@@ -41,7 +44,7 @@ export function Panel3({ thumbShape, thumbSize, thumbColor, style = {} }) {
       axis: 'angle',
       width,
       height: width,
-      thumbSize,
+      thumbSize: thumb_Size,
       isReversed: false,
       handle: [handlePosX, handlePosY],
     });
@@ -51,7 +54,7 @@ export function Panel3({ thumbShape, thumbSize, thumbColor, style = {} }) {
       axis: 'angle',
       width,
       height: width,
-      thumbSize,
+      thumbSize: thumb_Size,
       isReversed: false,
       handle: [handlePosX, handlePosY],
     });
@@ -61,20 +64,20 @@ export function Panel3({ thumbShape, thumbSize, thumbColor, style = {} }) {
     transform: [{ translateX: handlePosX.value }, { translateY: handlePosY.value }, { scale: handleScale.value }],
   }));
 
-  const updateHS = (hue, saturation) => {
+  const updateHS = (hue: number, saturation: number) => {
     updateHue(hue);
     updateSaturation(saturation);
   };
 
   const gestureEvent = useAnimatedGestureHandler(
     {
-      onStart: (event, ctx) => {
+      onStart: (event, ctx: { x: number; y: number }) => {
         ctx.x = event.x;
         ctx.y = event.y;
         handleScale.value = withTiming(1.2, { duration: 100 });
       },
       onActive: event => {
-        const clamp = (v, max) => Math.min(Math.max(v, 0), max);
+        const clamp = (v: number, max: number) => Math.min(Math.max(v, 0), max);
 
         const center = width / 2;
         const dx = center - event.x;
@@ -98,7 +101,7 @@ export function Panel3({ thumbShape, thumbSize, thumbColor, style = {} }) {
     [width]
   );
 
-  const onLayout = useCallback(({ nativeEvent: { layout } }) => {
+  const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
     setWidth(Math.round(layout.width));
   }, []);
 
@@ -117,7 +120,7 @@ export function Panel3({ thumbShape, thumbSize, thumbColor, style = {} }) {
           style={[styles.panel_image, { borderRadius }]}
           resizeMode='stretch'
         />
-        <Thumb {...{ channel: 's', thumbShape, thumbSize, thumbColor, handleStyle, solidColor }} />
+        <Thumb {...{ channel: 's', thumbShape, thumbSize: thumb_Size, thumbColor, handleStyle, solidColor }} />
       </Animated.View>
     </PanGestureHandler>
   );

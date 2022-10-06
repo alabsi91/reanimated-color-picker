@@ -1,0 +1,16 @@
+{
+  "extends": "@tsconfig/react-native/tsconfig.json",
+  "include": ["src/**/*"],
+  
+  "compilerOptions": {
+    "types": ["react-native"],
+    "noEmit": false,
+    "outDir": "lib",
+    "declaration": true,
+    "sourceMap": true,
+    "module": "ESNext",
+    "isolatedModules": true,
+    "target": "ESNext",
+    "skipLibCheck": true
+  }
+}

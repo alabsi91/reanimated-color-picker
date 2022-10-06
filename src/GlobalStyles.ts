@@ -1,19 +1,22 @@
 import { createContext } from 'react';
 import { I18nManager, StyleSheet } from 'react-native';
 
+import type { TCTX } from './types';
+import type { StyleProp, ViewStyle } from 'react-native';
+
 const isRtl = I18nManager.isRTL;
 
-/** @type {import('react').Context<import('./index').TCTX>} */
-export const CTX = createContext();
+export const CTX = createContext<TCTX>(null!);
 
-export function getStyle(style, property, defaultValue) {
+export function getStyle<T extends keyof ViewStyle>(style: StyleProp<ViewStyle>, property: T, defaultValue: ViewStyle[T]) {
   const isArray = Array.isArray(style);
   if (isArray) {
-    const all = style.filter(s => s?.[property] !== undefined).map(s => s[property]);
+    const all = style.filter(s => s && (s as ViewStyle)[property] !== undefined).map(s => (s as ViewStyle)[property]);
     if (all.length > 0) return all[all.length - 1];
     return defaultValue;
   }
-  return style?.[property] ?? defaultValue;
+
+  return (style as ViewStyle)?.[property] ?? defaultValue;
 }
 
 export default StyleSheet.create({

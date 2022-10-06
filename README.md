@@ -40,6 +40,11 @@
 npm i reanimated-color-picker
 ```
 
+# :small_blue_diamond:Fabric support
+
+- `react-native-gesture-handler` supports the new architecture since version `2.3.0`.
+- `react-native-reanimated` supports the new architecture since version `3.0.0`.
+
 # :small_blue_diamond:Usage
 
 ### [📖 View the documentation site 📖](https://alabsi91.github.io/reanimated-color-picker/)

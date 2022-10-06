@@ -4,9 +4,21 @@ import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { COLOR_HEX } from '../ColorsConversionFormulas';
 import styles, { CTX } from '../GlobalStyles';
 
+import type { thumbShapeType } from '../types';
+import type { ViewProps } from 'react-native';
+
 const isRtl = I18nManager.isRTL;
 
-export default function Thumb({ thumbShape = 'ring', thumbSize, thumbColor, handleStyle, vertical, channel }) {
+type Props = {
+  thumbShape?: thumbShapeType;
+  thumbSize: number;
+  thumbColor?: string;
+  handleStyle: {};
+  vertical?: boolean;
+  channel?: 'h' | 'b' | 's' | 'a';
+};
+
+export default function Thumb({ thumbShape = 'ring', thumbSize, thumbColor, handleStyle, vertical = false, channel }: Props) {
   const { width, height, borderRadius } = { width: thumbSize, height: thumbSize, borderRadius: thumbSize / 2 };
   const { invertedColorHue, invertedColorBrightness, invertedColorSaturation, invertedColorOpacity, invertedColor, solidColor } =
     useContext(CTX);
@@ -23,8 +35,15 @@ export default function Thumb({ thumbShape = 'ring', thumbSize, thumbColor, hand
       : invertedColor;
 
   const Ring = () => {
-    thumbColor = thumbColor ? COLOR_HEX(thumbColor) : null;
-    const style = { width, height, borderRadius, backgroundColor: thumbColor + 50, borderColor: thumbColor, borderWidth: 1 };
+    const thumb_Color = thumbColor ? COLOR_HEX(thumbColor) : undefined;
+    const style = {
+      width,
+      height,
+      borderRadius,
+      backgroundColor: (thumb_Color || '#ffffff') + 50,
+      borderColor: thumbColor,
+      borderWidth: 1,
+    };
     const invertedStyle = useAnimatedStyle(() => ({
       backgroundColor: (thumbColor && thumbColor + '50') || (inverted.value === '#ffffff' ? '#ffffff50' : '#00000050'),
       borderColor: thumbColor || inverted.value,
@@ -96,7 +115,7 @@ export default function Thumb({ thumbShape = 'ring', thumbSize, thumbColor, hand
       position: 'absolute',
       width: vertical ? '100%' : thikcness,
       height: vertical ? thikcness : '100%',
-    };
+    } as ViewProps;
     const line2 = {
       borderRadius,
       width: vertical ? thikcness : '100%',
@@ -218,8 +237,8 @@ export default function Thumb({ thumbShape = 'ring', thumbSize, thumbColor, hand
 
   const thumbs = { Ring, Solid, Hollow, Line, Plus, Pill, TriangleUp, TriangleDown, DoubleTriangle, Rect, Circle };
 
-  thumbShape = thumbShape.toLowerCase().charAt(0).toUpperCase() + thumbShape.slice(1);
-  const Element = () => (thumbs.hasOwnProperty(thumbShape) ? thumbs[thumbShape]() : thumbs.Ring());
+  const thumb_Shape = (thumbShape.toLowerCase().charAt(0).toUpperCase() + thumbShape.slice(1)) as keyof typeof thumbs;
+  const Element = () => (thumbs.hasOwnProperty(thumbShape) ? thumbs[thumb_Shape]() : thumbs.Ring());
 
   return <Element />;
 }

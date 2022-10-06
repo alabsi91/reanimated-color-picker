@@ -3,12 +3,15 @@ import { Text, StyleSheet } from 'react-native';
 import { runOnJS, useDerivedValue } from 'react-native-reanimated';
 import { CTX } from '../GlobalStyles';
 
-export function PreviewText({ style = {}, colorFormat = 'hex' }) {
+import type { SharedValue } from 'react-native-reanimated';
+import type { PreviewTextProps } from '../types';
+
+export function PreviewText({ style = {}, colorFormat = 'hex' }: PreviewTextProps) {
   const { returnedResults, colorHash } = useContext(CTX);
 
   const [text, setText] = useState(returnedResults()[colorFormat]);
 
-  const updateText = () => {
+  const updateText = (_t: SharedValue<string>) => {
     setText(returnedResults()[colorFormat]);
   };
 

@@ -16,6 +16,9 @@ import {
 } from './ColorsConversionFormulas';
 import { CTX } from './GlobalStyles';
 
+import type { SharedValue } from 'react-native-reanimated';
+import type { ColorPickerProps, TCTX, THandleSettings } from './types';
+
 const CONTRAST_RATIO_MIN = 4.5;
 
 export default function ColorPicker({
@@ -27,7 +30,7 @@ export default function ColorPicker({
   onComplete,
   style = {},
   children = <Text>NO CHILDREN</Text>,
-}) {
+}: ColorPickerProps) {
   const isFirstRender = useRef(true);
 
   const initialColor = useRef(COLOR_HSVA(value));
@@ -37,8 +40,7 @@ export default function ColorPicker({
   const alpha = useRef(initialColor.current.a);
   const colorHash = useSharedValue(`${hue.current},${saturation.current},${brightness.current},${alpha.current}`); // to track color changes
 
-  /** @type {import('react').MutableRefObject<import('./index').THandleSettings[]>} */
-  const registeredHandles = useRef([]); // all registered handles properties.
+  const registeredHandles = useRef<THandleSettings[]>([]); // all registered handles properties.
 
   /** It takes the current values of the hue, saturation, brightness, and alpha sliders and returns a hexadecimal color value. */
   const color_hex = () =>
@@ -49,11 +51,7 @@ export default function ColorPicker({
       a: alpha.current,
     });
 
-  /**
-   * Converts HSVA color values as an object to an object of formated color as a string.
-   * @param {{ h: number, s: number, b: number, a: number }} color
-   * @returns {import('./index').returnedResults} An object with color formats.
-   */
+  /** Converts HSVA color values as an object to an object of formated color as a string. */
   const returnedResults = (
     color = {
       h: hue.current,
@@ -105,14 +103,14 @@ export default function ColorPicker({
     setInverted({ b: 70 }, invertedColorSaturation); // for saturation thumb.
     setInverted({ s: alpha.current, b: 70 }, invertedColorOpacity); // for opacity thumb.
   };
-  const setInverted = ({ h = hue.current, s = saturation.current, b = brightness.current }, color2) => {
+  const setInverted = ({ h = hue.current, s = saturation.current, b = brightness.current }, color2: SharedValue<string>) => {
     const inverted = color2.value === '#ffffff' ? '#000000' : '#ffffff';
     const contrast = CONTRAST_RATIO({ h, s, b }, color2.value);
     color2.value = contrast < CONTRAST_RATIO_MIN ? inverted : color2.value;
   };
 
   /** This function updates the brightness channel of the color picker. */
-  const updateBrightness = brightnessChannel => {
+  const updateBrightness = (brightnessChannel: number) => {
     brightness.current = brightnessChannel;
     previewColor.value = color_hex();
     colorHash.value = `${hue.current},${saturation.current},${brightness.current},${alpha.current}`;
@@ -128,9 +126,9 @@ export default function ColorPicker({
 
   /**
    * This function updates the saturation channel of the color picker.
-   * @param {number} saturationChannel The new saturation channel value.
-   * */
-  const updateSaturation = saturationChannel => {
+   * @param saturationChannel The new saturation channel value.
+   */
+  const updateSaturation = (saturationChannel: number) => {
     saturation.current = saturationChannel;
     previewColor.value = color_hex();
     colorHash.value = `${hue.current},${saturation.current},${brightness.current},${alpha.current}`;
@@ -145,7 +143,7 @@ export default function ColorPicker({
   };
 
   /** This function updates the hue channel of the color picker. */
-  const updateHue = hueChannel => {
+  const updateHue = (hueChannel: number) => {
     hue.current = hueChannel;
     previewColor.value = color_hex();
     colorHash.value = `${hue.current},${saturation.current},${brightness.current},${alpha.current}`;
@@ -160,7 +158,7 @@ export default function ColorPicker({
   };
 
   /** This function updates the opacity channel of the color picker. */
-  const updateOpacity = alphaChannel => {
+  const updateOpacity = (alphaChannel: number) => {
     alpha.current = alphaChannel;
     previewColor.value = color_hex();
     colorHash.value = `${hue.current},${saturation.current},${brightness.current},${alpha.current}`;
@@ -175,8 +173,8 @@ export default function ColorPicker({
 
   /**
    * This function updates the color picker's handles positions.
-   * @param { import('./index').THandleSettings } settings - an array of objects that contain every handle's settings.
-   * @param { boolean } [withAnimation=true] - whether to animate the changes or not.
+   * @param settings - an array of objects that contain every handle's settings.
+   * @param withAnimation - whether to animate the changes or not.
    */
   const applySettings = (settings = registeredHandles.current, withAnimation = true) => {
     const duration = 150;
@@ -189,7 +187,7 @@ export default function ColorPicker({
       const percent = (color[channel] / channelMax) * length;
 
       if (axis === 'angle') {
-        const [handleX, handleY] = handle;
+        const [handleX, handleY] = handle as SharedValue<number>[];
         const center = width / 2;
         const distance = (color.s / 100) * (width / 2);
         const posX = width - Math.round(Math.cos((color.h * Math.PI) / 180) * distance + center) - handleSize / 2;
@@ -199,15 +197,12 @@ export default function ColorPicker({
       }
 
       const pos = (isReversed ? length - percent : percent) - thumbSize / 2;
-      handle.value = withAnimation ? withTiming(pos, { duration }) : pos;
+      (handle as SharedValue<number>).value = withAnimation ? withTiming(pos, { duration }) : pos;
     }
   };
 
-  /**
-   * Registers/Update a slider handle to be updated when the color picker's color changes.
-   * @param { import('./index').THandleSettings } settings - handle settings.
-   */
-  const registerHandle = settings => {
+  /** Registers/Update a slider handle to be updated when the color picker's color changes. */
+  const registerHandle = (settings: THandleSettings) => {
     const currentSettings = registeredHandles.current;
     const index = registeredHandles.current.findIndex(current => current.id && current.id === settings.id);
 
@@ -223,9 +218,9 @@ export default function ColorPicker({
 
   /**
    * The function apply a color to the color picker.
-   * @param { string } color - color to be set in any format.
+   * @param color - color to be set in any format.
    */
-  const setColor = color => {
+  const setColor = (color: string) => {
     const { h, s, b, a } = COLOR_HSVA(color); // convert color to HSBA object.
 
     hue.current = h;
@@ -255,8 +250,7 @@ export default function ColorPicker({
     setColor(value);
   }, [value]);
 
-  /** @type {import('./index').TCTX} */
-  const ctxValue = {
+  const ctxValue: TCTX = {
     activeHueStyle,
 
     invertedColor,

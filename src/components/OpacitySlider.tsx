@@ -11,28 +11,34 @@ import Animated, {
 import { CTX, getStyle } from '../GlobalStyles';
 import Thumb from './Thumbs';
 
+import type { LayoutChangeEvent } from 'react-native';
+import type { SliderPorps } from '../types';
+
 const isRtl = I18nManager.isRTL;
 
-export function SaturationSlider({ thumbShape, thumbSize, thumbColor, style = {}, vertical, reverse }) {
+export function OpacitySlider({ thumbShape, thumbSize, thumbColor, style = {}, vertical = false, reverse = false }: SliderPorps) {
   const {
     registerHandle,
-    updateSaturation,
+    activeHueStyle,
+    updateOpacity,
     onGestureEventFinish,
     solidColor,
     sliderThickness,
-    activeHueStyle,
     thumbSize: thumbsSize,
     thumbShape: thumbsShape,
   } = useContext(CTX);
 
-  thumbSize = thumbSize ?? thumbsSize;
   thumbShape = thumbShape ?? thumbsShape;
+  const thumb_Size = thumbSize ?? thumbsSize;
   const borderRadius = getStyle(style, 'borderRadius', 5);
 
-  const id = useRef('saturation' + Math.random()).current;
+  const id = useRef('opacity' + Math.random()).current;
 
-  const [width, setWidth] = useState(getStyle(style, 'width', sliderThickness));
-  const [height, setHeight] = useState(getStyle(style, 'height', sliderThickness));
+  const getWidth = getStyle(style, 'width', sliderThickness);
+  const getHeight = getStyle(style, 'height', sliderThickness);
+
+  const [width, setWidth] = useState(typeof getWidth === 'number' ? getWidth : sliderThickness);
+  const [height, setHeight] = useState(typeof getHeight === 'number' ? getHeight : sliderThickness);
 
   const handlePos = useSharedValue(0);
   const handleScale = useSharedValue(1);
@@ -40,11 +46,11 @@ export function SaturationSlider({ thumbShape, thumbSize, thumbColor, style = {}
   useEffect(() => {
     registerHandle({
       id,
-      channel: 's',
+      channel: 'a',
       axis: vertical ? 'y' : 'x',
       width,
       height,
-      thumbSize,
+      thumbSize: thumb_Size,
       isReversed: reverse,
       handle: handlePos,
     });
@@ -52,21 +58,21 @@ export function SaturationSlider({ thumbShape, thumbSize, thumbColor, style = {}
 
   const handleStyle = useAnimatedStyle(() => ({
     transform: [
-      { translateY: vertical ? handlePos.value : height / 2 - thumbSize / 2 },
-      { translateX: vertical ? width / 2 - thumbSize / 2 : handlePos.value },
+      { translateY: vertical ? handlePos.value : height / 2 - thumb_Size / 2 },
+      { translateX: vertical ? width / 2 - thumb_Size / 2 : handlePos.value },
       { scale: handleScale.value },
     ],
   }));
 
   const gestureEvent = useAnimatedGestureHandler(
     {
-      onStart: (event, ctx) => {
+      onStart: (event, ctx: { x: number; y: number }) => {
         ctx.x = event.x;
         ctx.y = event.y;
         handleScale.value = withTiming(1.2, { duration: 100 });
       },
       onActive: (event, ctx) => {
-        const clamp = (v, max) => Math.min(Math.max(v, 0), max);
+        const clamp = (v: number, max: number) => Math.min(Math.max(v, 0), max);
 
         const x = event.translationX;
         const y = event.translationY;
@@ -75,12 +81,12 @@ export function SaturationSlider({ thumbShape, thumbSize, thumbColor, style = {}
         const percentX = posX / width;
         const percentY = posY / height;
 
-        const saturationX = reverse ? 100 - Math.round(percentX * 100) : Math.round(percentX * 100);
-        const saturationY = reverse ? 100 - Math.round(percentY * 100) : Math.round(percentY * 100);
+        const opacityX = reverse ? 100 - Math.round(percentX * 100) : Math.round(percentX * 100);
+        const opacityY = reverse ? 100 - Math.round(percentY * 100) : Math.round(percentY * 100);
 
-        const saturation = vertical ? saturationY : saturationX;
+        const opacity = vertical ? opacityY : opacityX;
 
-        runOnJS(updateSaturation)(saturation);
+        runOnJS(updateOpacity)(opacity);
       },
       onFinish: () => {
         handleScale.value = withTiming(1, { duration: 100 });
@@ -90,7 +96,7 @@ export function SaturationSlider({ thumbShape, thumbSize, thumbColor, style = {}
     [height, width, thumbSize, vertical, reverse]
   );
 
-  const onLayout = useCallback(({ nativeEvent: { layout } }) => {
+  const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
     setWidth(Math.round(layout.width));
     setHeight(Math.round(layout.height));
   }, []);
@@ -122,8 +128,8 @@ export function SaturationSlider({ thumbShape, thumbSize, thumbColor, style = {}
           activeHueStyle,
         ]}
       >
-        <Image source={require('../assets/Saturation.png')} style={imageStyle} />
-        <Thumb {...{ channel: 's', thumbShape, thumbSize, thumbColor, handleStyle, solidColor }} />
+        <Image source={require('../assets/Opacity.png')} style={imageStyle} />
+        <Thumb {...{ channel: 'a', thumbShape, thumbSize: thumb_Size, thumbColor, handleStyle, solidColor, vertical }} />
       </Animated.View>
     </PanGestureHandler>
   );

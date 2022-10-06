@@ -48,12 +48,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#e8e8e8',
     paddingBottom: 0,
   },
-  hueOpacityContainer: {
-    flexWrap: 'nowrap',
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 50,
-  },
   previewStyle: {
     height: 50,
     borderRadius: 5,

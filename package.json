@@ -1,14 +1,12 @@
 {
   "name": "reanimated-color-picker",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Pure JavaScript color picker for react-native",
-  "main": "src/index.js",
-  "types": "src/index.d.ts",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
-    "remove-web": "@powershell rm src -r -Include *.web.js",
-    "build": "npm run remove-web && babel src -d src --out-file-extension .web.js --ignore src/index.js",
-    "prepublishOnly": "npm run build",
-    "postpublish": "npm run remove-web"
+    "build": "@powershell rm lib -r && tsc && babel lib -d lib --out-file-extension .web.js --ignore lib/index.js,lib/types.js && @powershell Copy-Item -Path src\\assets -Destination lib\\assets -Recurse",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "react-native",
@@ -19,7 +17,7 @@
     "palette"
   ],
   "files": [
-    "src"
+    "lib"
   ],
   "repository": "https://github.com/alabsi91/reanimated-color-picker",
   "author": "Ahmed Alabsi <alabsi91@gmail.com> (https://github.com/alabsi91)",
@@ -31,17 +29,35 @@
   "devDependencies": {
     "@babel/cli": "^7.18.6",
     "@babel/core": "^7.12.9",
+    "@react-native-community/eslint-config": "^3.1.0",
+    "@tsconfig/react-native": "^2.0.2",
+    "@types/react-native": "^0.70.4",
     "metro-react-native-babel-preset": "^0.67.0",
-    "react-native-reanimated": "^2.9.1"
+    "react-native-reanimated": "^2.9.1",
+    "typescript": "^4.8.4"
   },
   "peerDependencies": {
+    "expo": ">=44.0.0",
     "react-native-gesture-handler": ">=2.0.0",
-    "react-native-reanimated": ">=2.0.0",
-    "expo": ">=44.0.0"
+    "react-native-reanimated": ">=2.0.0"
   },
   "peerDependenciesMeta": {
     "expo": {
       "optional": true
+    }
+  },
+  "eslintConfig": {
+    "extends": "@react-native-community",
+    "rules": {
+      "react-native/no-inline-styles": 0,
+      "prettier/prettier": 0,
+      "jsx-quotes": 0,
+      "curly": 0,
+      "no-shadow": 0,
+      "no-bitwise": 0,
+      "react-hooks/exhaustive-deps": 0,
+      "react-native/no-unused-styles": 1,
+      "react/no-unstable-nested-components": 0
     }
   }
 }

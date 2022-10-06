@@ -11,7 +11,7 @@ export interface returnedResults {
   hsva: string;
 }
 
-type thumbShapeType =
+export type thumbShapeType =
   | 'ring'
   | 'solid'
   | 'hollow'
@@ -103,10 +103,10 @@ export interface TCTX {
   onGestureEventFinish: () => void;
 
   /** This function is called everytime the color is changed. */
-  onChange: (color: returnedResults) => void;
+  onChange?: (color: returnedResults) => void;
 }
 
-interface ColorPickerProps {
+export interface ColorPickerProps {
   /**
    * - a global property to change the thickness of all descendant sliders components.
    * - thickness is the width of the slider in vertical mode or the height in horizontal mode.
@@ -137,7 +137,7 @@ interface ColorPickerProps {
   children?: React.ReactNode;
 }
 
-interface SwatchesPorps {
+export interface SwatchesPorps {
   /**
    * - swatch style.
    * - **Note** some of the style properties will be overwritten.
@@ -151,7 +151,7 @@ interface SwatchesPorps {
   colors?: string[];
 }
 
-interface PreviewPorps {
+export interface PreviewPorps {
   /** - show color preview in specific format. */
   colorFormat?: 'hex' | 'rgb' | 'rgba' | 'hsl' | 'hsla' | 'hsv' | 'hsva';
 
@@ -174,7 +174,7 @@ interface PreviewPorps {
   textStyle?: StyleProp<TextStyle>;
 }
 
-interface PreviewTextProps {
+export interface PreviewTextProps {
   /** - show color preview in specific format. */
   colorFormat?: 'hex' | 'rgb' | 'rgba' | 'hsl' | 'hsla' | 'hsv' | 'hsva';
 
@@ -182,7 +182,7 @@ interface PreviewTextProps {
   style?: StyleProp<TextStyle>;
 }
 
-interface PanelProps {
+export interface PanelProps {
   /** - panel handle (thumb) size (height*width). */
   thumbSize?: number;
 
@@ -198,12 +198,12 @@ interface PanelProps {
   style?: StyleProp<ViewStyle>;
 }
 
-interface Panel2Props extends PanelProps {
+export interface Panel2Props extends PanelProps {
   /** - reverse (flip) hue direction. */
   reverse?: boolean;
 }
 
-interface SliderPorps {
+export interface SliderPorps {
   /** - slider's handle (thumb) size (height*width). */
   thumbSize?: number;
 
@@ -225,17 +225,3 @@ interface SliderPorps {
    */
   style?: StyleProp<ViewStyle>;
 }
-
-declare const ColorPicker: React.FunctionComponent<ColorPickerProps>;
-export declare const Preview: React.FunctionComponent<PreviewPorps>;
-export declare const PreviewText: React.FunctionComponent<PreviewTextProps>;
-export declare const Panel1: React.FunctionComponent<PanelProps>;
-export declare const Panel2: React.FunctionComponent<Panel2Props>;
-export declare const Panel3: React.FunctionComponent<PanelProps>;
-export declare const HueSlider: React.FunctionComponent<SliderPorps>;
-export declare const BrightnessSlider: React.FunctionComponent<SliderPorps>;
-export declare const SaturationSlider: React.FunctionComponent<SliderPorps>;
-export declare const OpacitySlider: React.FunctionComponent<SliderPorps>;
-export declare const Swatches: React.FunctionComponent<SwatchesPorps>;
-
-export default ColorPicker;

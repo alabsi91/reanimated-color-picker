@@ -45,12 +45,6 @@ const styles = StyleSheet.create({
     maxWidth: 500,
     margin: 'auto',
   },
-  hueOpacityContainer: {
-    flexWrap: 'nowrap',
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 50,
-  },
   previewStyle: {
     height: 50,
     borderRadius: 10,

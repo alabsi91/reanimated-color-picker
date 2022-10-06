@@ -11,7 +11,10 @@ import Animated, {
 import styles, { CTX, getStyle } from '../GlobalStyles';
 import Thumb from './Thumbs';
 
-export function Panel2({ thumbShape, thumbSize, thumbColor, style = {}, reverse = false }) {
+import type { LayoutChangeEvent } from 'react-native';
+import type { Panel2Props } from '../types';
+
+export function Panel2({ thumbShape, thumbSize, thumbColor, style = {}, reverse = false }: Panel2Props) {
   const {
     registerHandle,
     solidColor,
@@ -21,7 +24,7 @@ export function Panel2({ thumbShape, thumbSize, thumbColor, style = {}, reverse 
     thumbSize: thumbsSize,
   } = useContext(CTX);
 
-  thumbSize = thumbSize ?? thumbsSize;
+  const thumb_Size = thumbSize ?? thumbsSize;
   const borderRadius = getStyle(style, 'borderRadius', 5);
 
   const idX = useRef('panel2' + Math.random()).current;
@@ -41,7 +44,7 @@ export function Panel2({ thumbShape, thumbSize, thumbColor, style = {}, reverse 
       axis: 'x',
       width,
       height,
-      thumbSize,
+      thumbSize: thumb_Size,
       isReversed: reverse,
       handle: handlePosX,
     });
@@ -51,7 +54,7 @@ export function Panel2({ thumbShape, thumbSize, thumbColor, style = {}, reverse 
       axis: 'y',
       width,
       height,
-      thumbSize,
+      thumbSize: thumb_Size,
       isReversed: true,
       handle: handlePosY,
     });
@@ -61,20 +64,20 @@ export function Panel2({ thumbShape, thumbSize, thumbColor, style = {}, reverse 
     transform: [{ translateX: handlePosX.value }, { translateY: handlePosY.value }, { scale: handleScale.value }],
   }));
 
-  const updateHS = (hue, saturation) => {
+  const updateHS = (hue: number, saturation: number) => {
     updateHue(hue);
     updateSaturation(saturation);
   };
 
   const gestureEvent = useAnimatedGestureHandler(
     {
-      onStart: (event, ctx) => {
+      onStart: (event, ctx: { x: number; y: number }) => {
         ctx.x = event.x;
         ctx.y = event.y;
         handleScale.value = withTiming(1.2, { duration: 100 });
       },
       onActive: (event, ctx) => {
-        const clamp = (v, max) => Math.min(Math.max(v, 0), max);
+        const clamp = (v: number, max: number) => Math.min(Math.max(v, 0), max);
 
         const x = event.translationX;
         const y = event.translationY;
@@ -96,7 +99,7 @@ export function Panel2({ thumbShape, thumbSize, thumbColor, style = {}, reverse 
     [height, width, reverse]
   );
 
-  const onLayout = useCallback(({ nativeEvent: { layout } }) => {
+  const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
     setWidth(Math.round(layout.width));
     setHeight(Math.round(layout.height));
   }, []);
@@ -112,7 +115,7 @@ export function Panel2({ thumbShape, thumbSize, thumbColor, style = {}, reverse 
           style={[styles.panel_image, { borderRadius }]}
           resizeMode='stretch'
         />
-        <Thumb {...{ channel: 's', thumbShape, thumbSize, thumbColor, handleStyle, solidColor }} />
+        <Thumb {...{ channel: 's', thumbShape, thumbSize: thumb_Size, thumbColor, handleStyle, solidColor }} />
       </Animated.View>
     </PanGestureHandler>
   );

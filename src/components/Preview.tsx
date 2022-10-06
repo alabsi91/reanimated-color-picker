@@ -4,12 +4,16 @@ import Animated, { runOnJS, useAnimatedStyle, useDerivedValue } from 'react-nati
 import { COLOR_HSVA, CONTRAST_RATIO } from '../ColorsConversionFormulas';
 import { CTX, getStyle } from '../GlobalStyles';
 
+import type { PreviewPorps } from '../types';
+import type { StyleProp, TextStyle } from 'react-native';
+import type { SharedValue } from 'react-native-reanimated';
+
 const CONTRAST_RATIO_MIN = 4.5;
 
-const ReText = ({ text, style, hash }) => {
+const ReText = ({ text, style, hash }: { text: () => string; style: StyleProp<TextStyle>; hash: SharedValue<string> }) => {
   const [color, setColor] = useState(text());
 
-  const updateText = () => {
+  const updateText = (_t: string) => {
     setColor(text());
   };
 
@@ -17,10 +21,17 @@ const ReText = ({ text, style, hash }) => {
     runOnJS(updateText)(hash.value); // passing a value is not necessary, but it doesn't work without it.
   }, [hash.value]);
 
-  return <Animated.Text style={[styles.previewText, ...style]}>{color}</Animated.Text>;
+  const tStyle = Array.isArray(style) ? style : [style];
+  return <Animated.Text style={[styles.previewText, ...tStyle]}>{color}</Animated.Text>;
 };
 
-export function Preview({ style = {}, textStyle = {}, colorFormat = 'hex', hideInitialColor = false, hideText = false }) {
+export function Preview({
+  style = {},
+  textStyle = {},
+  colorFormat = 'hex',
+  hideInitialColor = false,
+  hideText = false,
+}: PreviewPorps) {
   const { returnedResults, value, previewColorStyle, colorHash, invertedColor } = useContext(CTX);
 
   const justifyContent = getStyle(style, 'justifyContent', 'center');

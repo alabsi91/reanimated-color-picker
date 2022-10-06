@@ -3,17 +3,17 @@ import NamedColors from './NamedColors';
 /**
  * The function takes in a hue value, a saturation value, and a lightness value, and returns an object
  * with the corresponding red, green, and blue values.
- * @param { number } h - hue (0-360)
- * @param { number } s - saturation
- * @param { number } l - lightness
- * @returns {{ r: number, g: number: b: number }} The RGB color as an object.
+ * @param h - hue (0-360)
+ * @param s - saturation
+ * @param l - lightness
+ * @returns  The RGB color as an object.
  */
-export const HSL_RGB = (h, s, l) => {
+export const HSL_RGB = (h: number, s: number, l: number) => {
   s /= 100;
   l /= 100;
-  const k = n => (n + h / 30) % 12;
+  const k = (n: number) => (n + h / 30) % 12;
   const a = s * Math.min(l, 1 - l);
-  const f = n => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+  const f = (n: number) => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
 
   return {
     r: Math.round(255 * f(0)),
@@ -24,10 +24,10 @@ export const HSL_RGB = (h, s, l) => {
 
 /**
  * It takes a number between 0 and 100 and returns a hexadecimal string between 00 and FF.
- * @param { number } number - a number between 0 and 100
- * @returns { string } a hexadecimal value.
+ * @param number - a number between 0 and 100
+ * @returns a hexadecimal value.
  */
-export const ALPHA_HEX = number => {
+export const ALPHA_HEX = (number: number) => {
   const op = Math.floor((number / 100) * 255);
   const hex = op.toString(16);
   return op < 16 ? '0' + hex : hex;
@@ -35,15 +35,15 @@ export const ALPHA_HEX = number => {
 
 /**
  * It takes a hue, saturation, and lightness value and returns a hex color
- * @param { number } h - Hue (0-360)
- * @param { number } s - saturation (0-100)
- * @param { number } l - lightness
- * @returns { string } A hex color.
+ * @param h - Hue (0-360)
+ * @param s - saturation (0-100)
+ * @param l - lightness
+ * @returns A hex color.
  */
-export const HSL_HEX = (h, s, l) => {
+export const HSL_HEX = (h: number, s: number, l: number) => {
   l /= 100;
   const a = (s * Math.min(l, 1 - l)) / 100;
-  const f = n => {
+  const f = (n: number) => {
     const k = (n + h / 30) % 12;
     const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
     return Math.round(255 * color)
@@ -55,12 +55,12 @@ export const HSL_HEX = (h, s, l) => {
 
 /**
  * It takes a hsv color and returns a hsl color as an object with the h, s, and l values.
- * @param { number } h - Hue
- * @param { number } s - saturation
- * @param { number } b - brightness
- * @returns {{ h: number, s: number, l: number }} A hsl color as an object with the properties h, s, and l.
+ * @param h - Hue
+ * @param s - saturation
+ * @param b - brightness
+ * @returns - A hsl color as an object with the properties h, s, and l.
  */
-export const HSV_HSL = (h, s, b) => {
+export const HSV_HSL = (h: number, s: number, b: number) => {
   s /= 100;
   b /= 100;
   let l = ((2 - s) * b) / 2;
@@ -71,20 +71,20 @@ export const HSV_HSL = (h, s, b) => {
 
 /**
  * It takes a color in RGB format and returns the same color in HSV format
- * @param { number } r - red value
- * @param { number } g - The green value of the color.
- * @param { number } b - Brightness
- * @returns {{ h: number, s: number, b: number }} An object with the properties h, s, and b.
+ * @param r - red value
+ * @param g - The green value of the color.
+ * @param b - Brightness
+ * @returns - An object with the properties h, s, and b.
  */
-export const RGB_HSV = (r, g, b) => {
-  let rabs, gabs, babs, rr, gg, bb, h, s, v, diff, diffc, percentRoundFn;
+export const RGB_HSV = (r: number, g: number, b: number) => {
+  let rabs, gabs, babs, rr, gg, bb, h, s, v: number, diff: number, diffc, percentRoundFn;
   rabs = r / 255;
   gabs = g / 255;
   babs = b / 255;
   // eslint-disable-next-line no-sequences
   (v = Math.max(rabs, gabs, babs)), (diff = v - Math.min(rabs, gabs, babs));
-  diffc = c => (v - c) / 6 / diff + 1 / 2;
-  percentRoundFn = num => Math.round(num * 100) / 100;
+  diffc = (c: number) => (v - c) / 6 / diff + 1 / 2;
+  percentRoundFn = (num: number) => Math.round(num * 100) / 100;
   if (diff === 0) {
     h = s = 0;
   } else {
@@ -100,14 +100,14 @@ export const RGB_HSV = (r, g, b) => {
     } else if (babs === v) {
       h = 2 / 3 + gg - rr;
     }
-    if (h < 0) {
-      h += 1;
-    } else if (h > 1) {
-      h -= 1;
+    if ((h as number) < 0) {
+      (h as number) += 1;
+    } else if ((h as number) > 1) {
+      (h as number) -= 1;
     }
   }
   return {
-    h: Math.round(h * 360),
+    h: Math.round((h as number) * 360),
     s: percentRoundFn(s * 100),
     b: percentRoundFn(v * 100),
   };
@@ -115,20 +115,20 @@ export const RGB_HSV = (r, g, b) => {
 
 /**
  * It takes a hex string, splits it into chunks, converts each chunk to a number between 0 and 255, and returns an object with the RGB values
- * @param { string } hex - A hex color string.
- * @returns {{ r: number, g: number, b: number, a: number }} The RGBA color as an object.
+ * @param hex - A hex color string.
+ * @returns - The RGBA color as an object.
  */
-export const HEX_RGB = hex => {
-  const isValidHex = h => /^#([A-Fa-f0-9]{3,4}){1,2}$/.test(h);
+export const HEX_RGB = (hex: string) => {
+  const isValidHex = (h: string) => /^#([A-Fa-f0-9]{3,4}){1,2}$/.test(h);
 
-  const getChunksFromString = (st, chunkSize) => st.match(new RegExp(`.{${chunkSize}}`, 'g'));
+  const getChunksFromString = (st: string, chunkSize: number) => st.match(new RegExp(`.{${chunkSize}}`, 'g'));
 
-  const convertHexUnitTo256 = hexStr => parseInt(hexStr.repeat(2 / hexStr.length), 16);
+  const convertHexUnitTo256 = (hexStr: string) => parseInt(hexStr.repeat(2 / hexStr.length), 16);
 
   if (!isValidHex(hex)) throw new Error('Invalid HEX');
 
   const chunkSize = Math.floor((hex.length - 1) / 3);
-  const hexArr = getChunksFromString(hex.slice(1), chunkSize);
+  const hexArr = getChunksFromString(hex.slice(1), chunkSize)!;
   const [r, g, b, a] = hexArr.map(convertHexUnitTo256);
   const alpha = Math.round((a / 255) * 100);
   return { r, g, b, a: !isNaN(alpha) ? alpha : 100 };
@@ -136,32 +136,32 @@ export const HEX_RGB = hex => {
 
 /**
  * Convert a hexadecimal color value to an HSV color object.
- * @param { string } hex - A hex color string.
- * @returns {{ h: number, s: number, b: number, a: number }} An object with the properties h, s, b, and a.
+ * @param hex - A hex color string.
+ * @returns - An object with the properties h, s, b, and a.
  */
-export const HEX_HSV = hex => {
+export const HEX_HSV = (hex: string) => {
   const { r, g, b, a } = HEX_RGB(hex);
   return { ...RGB_HSV(r, g, b), a };
 };
 
 /**
  * Convert HSL to RGB, then convert RGB to HSV.
- * @param { number } h - Hue (0-360)
- * @param { number } s - saturation
- * @param { number } l - lightness
- * @returns {{ h: number, s: number, b: number }} An object with the properties h, s, and v.
+ * @param h - Hue (0-360)
+ * @param s - saturation
+ * @param l - lightness
+ * @returns - An object with the properties h, s, and v.
  */
-export const HSL_HSV = (h, s, l) => {
+export const HSL_HSV = (h: number, s: number, l: number) => {
   const { r, g, b } = HSL_RGB(h, s, l);
   return RGB_HSV(r, g, b);
 };
 
 /**
  * It takes a color string in any format and returns an object with the color's hue, saturation, value, and alpha
- * @param { string } colorStr - A color string.
- * @returns {{ h: number, s: number, b: number, a: number }} An object with the properties h, s, b, and a.
+ * @param colorStr - A color string.
+ * @returns - An object with the properties h, s, b, and a.
  */
-export const COLOR_HSVA = colorStr => {
+export const COLOR_HSVA = (colorStr: string) => {
   colorStr = colorStr.toLowerCase().trim();
   const isRgba = colorStr.startsWith('rgba');
   const isRgb = colorStr.startsWith('rgb');
@@ -196,7 +196,7 @@ export const COLOR_HSVA = colorStr => {
 
   if (isHex) return HEX_HSV(colorStr);
 
-  if (isNamedColor) return HEX_HSV(NamedColors[colorStr]);
+  if (isNamedColor) return HEX_HSV(NamedColors[colorStr as keyof typeof NamedColors]);
 
   if (isHsla) {
     const match = colorStr.match(regex)?.[1];
@@ -243,10 +243,10 @@ export const COLOR_HSVA = colorStr => {
 
 /**
  * It converts a color to a hex value
- * @param { string } color - A color string in any format
- * @returns { string } A hex color code.
+ * @param color - A color string in any format
+ * @returns - A hex color code.
  */
-export const COLOR_HEX = color => {
+export const COLOR_HEX = (color: string) => {
   const isValidHex = /^#([A-Fa-f0-9]{3,4}){1,2}$/.test(color);
   if (isValidHex) return color;
   const { h, s, b } = COLOR_HSVA(color);
@@ -256,12 +256,12 @@ export const COLOR_HEX = color => {
 
 /**
  * It takes three numbers, each representing a color channel (red, green, blue), and returns a number between 0 and 1 representing the color's luminance.
- * @param { number } r - red value
- * @param { number } g - The green value of the color.
- * @param { number } b - The brightness of the color.
- * @returns { number } The luminance of the color.
+ * @param r - red value
+ * @param g - The green value of the color.
+ * @param b - The brightness of the color.
+ * @returns - The luminance of the color.
  */
-const luminanceRGB = (r, g, b) => {
+const luminanceRGB = (r: number, g: number, b: number) => {
   const a = [r, g, b].map(v => {
     v /= 255;
     return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
@@ -271,10 +271,10 @@ const luminanceRGB = (r, g, b) => {
 
 /**
  * Convert the hex color to RGB, then convert the RGB color to luminance value.
- * @param { string } hex - A hex color code.
- * @returns { number } The luminance of the hex color.
+ * @param hex - A hex color code.
+ * @returns The luminance of the hex color.
  */
-const luminanceHEX = hex => {
+const luminanceHEX = (hex: string) => {
   const { r, g, b } = HEX_RGB(hex);
   const a = [r, g, b].map(v => {
     v /= 255;
@@ -285,11 +285,11 @@ const luminanceHEX = hex => {
 
 /**
  * It takes a color in HSV format and a color in hex format and returns the contrast ratio between the two colors
- * @param {{ h:number, s:number, b:number }} color1 - A hsv color object.
- * @param { string } hex - The hex value of the color you want to compare against.
- * @returns { number } The contrast ratio between the two colors.
+ * @param color1 - A hsv color object.
+ * @param hex - The hex value of the color you want to compare against.
+ * @returns - The contrast ratio between the two colors.
  */
-export const CONTRAST_RATIO = ({ h, s, b }, hex) => {
+export const CONTRAST_RATIO = ({ h, s, b }: { h: number; s: number; b: number }, hex: string) => {
   const hsl = HSV_HSL(h, s, b),
     { r: red, g: green, b: blue } = HSL_RGB(hsl.h, hsl.s, hsl.l),
     lum1 = luminanceRGB(red, green, blue),
@@ -301,40 +301,40 @@ export const CONTRAST_RATIO = ({ h, s, b }, hex) => {
 
 /**
  * It converts the HSV color to HSL color string.
- * @param {{ h: number, s: number, b: number }} color - A hsv color object.
- * @returns { string } A string of the color in HSL format.
+ * @param color - A hsv color object.
+ * @returns - A string of the color in HSL format.
  */
-export const HSL_FORMAT = color => {
+export const HSL_FORMAT = (color: { h: number; s: number; b: number }) => {
   const { h, s, l } = HSV_HSL(color.h, color.s, color.b);
   return `hsl(${h}, ${s}%, ${l}%)`;
 };
 
 /**
  * It converts the HSV color to HSLA color string.
- * @param {{ h: number, s: number, b: number, a: number }} color - A hsv color object.
- * @returns {string} A string of the color in HSL format.
+ * @param color - A hsv color object.
+ * @returns A string of the color in HSL format.
  */
-export const HSLA_FORMAT = color => {
+export const HSLA_FORMAT = (color: { h: number; s: number; b: number; a: number }) => {
   const { h, s, l } = HSV_HSL(color.h, color.s, color.b);
   return `hsla(${h}, ${s}%, ${l}%, ${color.a / 100})`;
 };
 
 /**
  * Convert HSV to HSL, then HSL to HEX, then add the alpha value to the end of the HEX string.
- * @param {{ h: number, s: number, b: number, a: number }} color - A hsv color object.
- * @returns { string } A string of the color in hex format.
+ * @param color - A hsv color object.
+ * @returns - A string of the color in hex format.
  */
-export const HEX_FORMAT = color => {
+export const HEX_FORMAT = (color: { h: number; s: number; b: number; a: number }) => {
   const { h, s, l } = HSV_HSL(color.h, color.s, color.b);
   return HSL_HEX(h, s, l) + (color.a === 100 ? '' : ALPHA_HEX(color.a));
 };
 
 /**
  * Convert the color from HSV to HSL, then convert the color from HSL to RGB
- * @param {{ h: number, s: number, b: number }} color - A hsv color object.
- * @returns { string } A string of the color in RGB format.
+ * @param color - A hsv color object.
+ * @returns - A string of the color in RGB format.
  */
-export const RGB_FORMAT = color => {
+export const RGB_FORMAT = (color: { h: number; s: number; b: number }) => {
   const { h, s, l } = HSV_HSL(color.h, color.s, color.b);
   const { r, g, b } = HSL_RGB(h, s, l);
   return `rgb(${r}, ${g}, ${b})`;
@@ -342,10 +342,10 @@ export const RGB_FORMAT = color => {
 
 /**
  * Convert HSV to HSL, then HSL to RGB, then return the RGBA value as a string
- * @param {{ h: number, s: number, b: number, a: number }} color - A hsv color object.
- * @returns { string } A string in the format of "rgba(r, g, b, a)"
+ * @param color - A hsv color object.
+ * @returns - A string in the format of "rgba(r, g, b, a)"
  */
-export const RGBA_FORMAT = color => {
+export const RGBA_FORMAT = (color: { h: number; s: number; b: number; a: number }) => {
   const { h, s, l } = HSV_HSL(color.h, color.s, color.b);
   const { r, g, b } = HSL_RGB(h, s, l);
   return `rgba(${r}, ${g}, ${b}, ${color.a / 100})`;
@@ -353,18 +353,18 @@ export const RGBA_FORMAT = color => {
 
 /**
  * Convert the color from HSV object to string.
- * @param {{ h: number, s: number, b: number }} color - A hsv color object.
- * @returns { string } A string with the color in HSV format.
+ * @param color - A hsv color object.
+ * @returns - A string with the color in HSV format.
  */
-export const HSV_FORMAT = color => {
+export const HSV_FORMAT = (color: { h: number; s: number; b: number }) => {
   return `hsv(${Math.round(color.h)}, ${Math.round(color.s)}%, ${Math.round(color.b)}%)`;
 };
 
 /**
  * Convert the color from HSV object to string.
- * @param {{ h: number, s: number, b: number, a: number }} color - A hsv color object.
- * @returns { string } A string with the color in HSVA format.
+ * @param color - A hsv color object.
+ * @returns - A string with the color in HSVA format.
  */
-export const HSVA_FORMAT = color => {
+export const HSVA_FORMAT = (color: { h: number; s: number; b: number; a: number }) => {
   return `hsva(${Math.round(color.h)}, ${Math.round(color.s)}%, ${Math.round(color.b)}%, ${color.a / 100})`;
 };
