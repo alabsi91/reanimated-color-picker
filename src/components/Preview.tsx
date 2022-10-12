@@ -34,7 +34,7 @@ export function Preview({
 }: PreviewPorps) {
   const { returnedResults, value, previewColorStyle, colorHash, invertedColor } = useContext(CTX);
 
-  const justifyContent = getStyle(style, 'justifyContent', 'center');
+  const justifyContent = getStyle(style, 'justifyContent') ?? 'center';
 
   const initialColorText = useMemo(() => {
     const { h, s, b, a } = COLOR_HSVA(value);

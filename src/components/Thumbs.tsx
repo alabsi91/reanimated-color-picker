@@ -238,7 +238,7 @@ export default function Thumb({ thumbShape = 'ring', thumbSize, thumbColor, hand
   const thumbs = { Ring, Solid, Hollow, Line, Plus, Pill, TriangleUp, TriangleDown, DoubleTriangle, Rect, Circle };
 
   const thumb_Shape = (thumbShape.toLowerCase().charAt(0).toUpperCase() + thumbShape.slice(1)) as keyof typeof thumbs;
-  const Element = () => (thumbs.hasOwnProperty(thumbShape) ? thumbs[thumb_Shape]() : thumbs.Ring());
+  const Element = () => (thumbs.hasOwnProperty(thumb_Shape) ? thumbs[thumb_Shape]() : thumbs.Ring());
 
   return <Element />;
 }

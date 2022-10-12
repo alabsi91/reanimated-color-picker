@@ -8,15 +8,9 @@ const isRtl = I18nManager.isRTL;
 
 export const CTX = createContext<TCTX>(null!);
 
-export function getStyle<T extends keyof ViewStyle>(style: StyleProp<ViewStyle>, property: T, defaultValue: ViewStyle[T]) {
-  const isArray = Array.isArray(style);
-  if (isArray) {
-    const all = style.filter(s => s && (s as ViewStyle)[property] !== undefined).map(s => (s as ViewStyle)[property]);
-    if (all.length > 0) return all[all.length - 1];
-    return defaultValue;
-  }
-
-  return (style as ViewStyle)?.[property] ?? defaultValue;
+export function getStyle<T extends keyof ViewStyle>(style: StyleProp<ViewStyle>, property: T): ViewStyle[T] | undefined {
+  const flattened = StyleSheet.flatten(style);
+  return flattened[property];
 }
 
 export default StyleSheet.create({

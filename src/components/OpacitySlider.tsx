@@ -30,12 +30,12 @@ export function OpacitySlider({ thumbShape, thumbSize, thumbColor, style = {}, v
 
   thumbShape = thumbShape ?? thumbsShape;
   const thumb_Size = thumbSize ?? thumbsSize;
-  const borderRadius = getStyle(style, 'borderRadius', 5);
+  const borderRadius = getStyle(style, 'borderRadius') ?? 5;
 
   const id = useRef('opacity' + Math.random()).current;
 
-  const getWidth = getStyle(style, 'width', sliderThickness);
-  const getHeight = getStyle(style, 'height', sliderThickness);
+  const getWidth = getStyle(style, 'width');
+  const getHeight = getStyle(style, 'height');
 
   const [width, setWidth] = useState(typeof getWidth === 'number' ? getWidth : sliderThickness);
   const [height, setHeight] = useState(typeof getHeight === 'number' ? getHeight : sliderThickness);

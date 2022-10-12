@@ -29,12 +29,12 @@ export function HueSlider({ thumbShape, thumbSize, thumbColor, style = {}, verti
 
   thumbShape = thumbShape ?? thumbsShape;
   const thumb_Size = thumbSize ?? thumbsSize;
-  const borderRadius = getStyle(style, 'borderRadius', 5) as number;
+  const borderRadius = getStyle(style, 'borderRadius') ?? 5;
 
   const id = useRef('hue' + Math.random()).current;
 
-  const getWidth = getStyle(style, 'width', sliderThickness);
-  const getHeight = getStyle(style, 'height', sliderThickness);
+  const getWidth = getStyle(style, 'width');
+  const getHeight = getStyle(style, 'height');
 
   const [width, setWidth] = useState(typeof getWidth === 'number' ? getWidth : sliderThickness);
   const [height, setHeight] = useState(typeof getHeight === 'number' ? getHeight : sliderThickness);

@@ -26,7 +26,7 @@ export function Panel1({ thumbShape, thumbSize, thumbColor, style = {} }: PanelP
   } = useContext(CTX);
 
   const thumb_Size = thumbSize ?? thumbsSize;
-  const borderRadius = getStyle(style, 'borderRadius', 5);
+  const borderRadius = getStyle(style, 'borderRadius') ?? 5;
 
   const idX = useRef('panel1' + Math.random()).current;
   const idY = useRef('panel1' + Math.random()).current;
