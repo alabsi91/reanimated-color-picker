@@ -7,7 +7,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Reanimated Color Picker',
-  tagline: 'Pure JavaScript color picker for react-native',
+  tagline: 'A Pure JavaScript Color Picker for React Native',
   url: 'https://github.com',
   baseUrl: '/reanimated-color-picker/',
   onBrokenLinks: 'throw',

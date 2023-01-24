@@ -16,6 +16,6 @@ export default function Snack() {
         height: '800px',
         width: '100%',
       }}
-    ></div>
+    />
   );
 }

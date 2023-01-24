@@ -38,4 +38,6 @@ hide_table_of_contents: true
 - [PreviewText](./API/PreviewText)
 - [Swatches](./API/Swatches)
 
-### 4. [Examples](./Examples)
+### 4. [ColorKit](./ColorKit)
+
+### 5. [Examples](./Examples)
