@@ -1,20 +1,20 @@
 ---
 sidebar_position: 8
 sidebar_label: Panel3
-description: A circle-shaped slider is used for changing the color's hue and saturation.
+description: The circle-shaped slider, with its wheel style design, is utilized to adjust the hue and saturation of colors.
 ---
 
 # `<Panel3 />`
 
 ![panel2](../../../images/panel3.png)
 
-- A circle-shaped slider (wheel style) is used for changing the color's hue and saturation.
+- The circle-shaped slider, with its wheel style design, is utilized to adjust the hue and saturation of colors.
 - Move the handle around the center to change the color's hue.
 - Move the handle away or toward the center to change the color's saturation.
 
 :::tip
 
-- Add [`<BrightnessSlider />`](./BrightnessSlider) also to get control of the color three channels.
+- Add [`<BrightnessSlider />`](./BrightnessSlider) component also to gain control over the three color channels.
 
 :::
 
@@ -52,6 +52,6 @@ description: A circle-shaped slider is used for changing the color's hue and sat
 
 :::info note
 
-- Some style properties will be overwritten.
+- Certain style properties will be overridden.
 
 :::

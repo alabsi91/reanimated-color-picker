@@ -1,0 +1,565 @@
+---
+sidebar_position: 6
+---
+
+`colorKit` is a collection of color tools that are utilized internally within the `ColorPicker`.
+
+## Supported Colors
+
+#### RBG
+
+- `'rgb(255, 0, 255)'`
+- `'rgb(255 0 255)'`
+- `'rgba(255, 0, 255, 1.0)'`
+- `'rgba(255 0 255 / 1.0)'`
+- `{r: number, g: number, b: number, a: number}`
+- `{r: number, g: number, b: number}`
+
+#### HEX
+
+- `'#f0f'` (#rgb)
+- `'#ff00ff'` (#rrggbb)
+- `'#f0ff`' (#rgba)
+- `'#ff00ff00'` (#rrggbbaa)
+
+#### HSL
+
+- `'hsl(360, 100%, 100%)'`
+- `'hsl(360deg, 100%, 100%)'`
+- `'hsl(360 100% 100%)'`
+- `'hsl(360deg 100% 100%)'`
+- `'hsla(360, 100%, 100%, 1.0)'`
+- `'hsla(360deg, 100%, 100%, 1.0)'`
+- `'hsla(360 100% 100% / 1.0)'`
+- `'hsla(360deg 100% 100% / 1.0)'`
+- `{h: number, s: number, l: number}`
+- `{h: number, s: number, l: number, a: number}`
+
+#### HSV
+
+- `'hsv(360, 100%, 100%)'`
+- `'hsv(360deg, 100%, 100%)'`
+- `'hsv(360 100% 100%)'`
+- `'hsv(360deg 100% 100%)'`
+- `'hsva(360, 100%, 100%, 1.0)'`
+- `'hsva(360deg, 100%, 100%, 1.0)'`
+- `'hsva(360 100% 100% / 1.0)'`
+- `'hsva(360deg 100% 100% / 1.0)'`
+- `{h: number, s: number, v: number}`
+- `{h: number, s: number, v: number, a: number}`
+
+#### HWB
+
+- `'hwb(360, 100%, 100%)'`
+- `'hwb(360deg, 100%, 100%)'`
+- `'hwb(360 100% 100%)'`
+- `'hwb(360deg 100% 100%)'`
+- `'hwba(360, 100%, 100%, 1.0)'`
+- `'hwba(360deg, 100%, 100%, 1.0)'`
+- `'hwba(360 100% 100% / 1.0)'`
+- `'hwba(360deg 100% 100% / 1.0)'`
+- `{h: number, w: number, b: number}`
+- `{h: number, w: number, b: number, a: number}`
+
+#### Color ints
+
+- `0xf0f` (0xrgb)
+- `0xff00ff` (0xrrggbb)
+- `0xf0ff` (0xrgba)
+- `0xff00ff00` (0xrrggbbaa)
+
+#### Color keywords
+
+Named colors implementation follows the [CSS3/SVG specification](https://www.w3.org/TR/css-color-3/#svg-color).
+
+- aliceblue (`#f0f8ff`)
+- antiquewhite (`#faebd7`)
+- aqua (`#00ffff`)
+- aquamarine (`#7fffd4`)
+- azure (`#f0ffff`)
+- and more ...
+
+## Color Conversion
+
+### RGB
+
+Convert any of the [supported color](#supported-colors) formats into the `RGB` format.
+
+```js
+import { colorKit } from 'reanimated-color-picker';
+
+colorKit.RGB('hsl(360, 100%, 100%)').string(); // rgb(255, 255, 255)
+colorKit.RGB('hsl(360, 100%, 100%)').string(true); // rgba(255, 255, 255, 1) force rbga
+colorKit.RGB('#f0ff').object(); // { r: 255, g: 0, b: 255, a: 1 }
+colorKit.RGB({ h: 360, s: 100, v: 50 }).array(); // [128, 0, 0, 1]
+```
+
+### HEX
+
+Convert any of the [supported color](#supported-colors) formats into the `HEX` format.
+
+```js
+import { colorKit } from 'reanimated-color-picker';
+
+colorKit.HEX('red'); //  #ff0000
+colorKit.HEX('hsv(360, 10%, 100%)'); // #ffe6e6
+colorKit.HEX('rgba(25, 255, 255, 1)'); // #19ffff
+colorKit.HEX({ h: 360, s: 100, l: 50 }); // #ff0000
+```
+
+### HSL
+
+Convert any of the [supported color](#supported-colors) formats into the `HSL` format.
+
+```js
+import { colorKit } from 'reanimated-color-picker';
+
+colorKit.HSL('orange').string(); // hsl(39, 100%, 50%)
+colorKit.HSL('#503e7a').string(true); // hsla(258, 33%, 36%, 1)
+colorKit.HSL('rgb(114, 99, 29)').object(); // { h: 49, s: 59, l: 28, a: 1 }
+colorKit.HSL({ a: 1, h: 336, s: 44, v: 28 }).array(); // [336, 28, 22, 1]
+```
+
+### HSV
+
+Convert any of the [supported color](#supported-colors) formats into the `HSV` format.
+
+```js
+import { colorKit } from 'reanimated-color-picker';
+
+colorKit.HSV('orange').string(true); // hsva(258, 49%, 48%, 1)
+colorKit.HSV('#503e7a').string(); // hsv(258, 49%, 48%)
+colorKit.HSV('rgb(114, 99, 29)').object(); // { h: 49, s: 75, l: 45, a: 1 }
+colorKit.HSV({ a: 1, h: 336, s: 44, v: 28 }).array(); // [336, 44, 28, 1]
+```
+
+### HWB
+
+Convert any of the [supported color](#supported-colors) formats into the `HWB` format.
+
+```js
+import { colorKit } from 'reanimated-color-picker';
+
+colorKit.HWB('orange').string(); // hwb(39, 0%, 0%)
+colorKit.HWB('#503e7a').string(true); // hwba(258, 24%, 52%, 1)
+colorKit.HWB('rgb(114, 99, 29)').object(); // { h: 49, w: 12, l: 55, a: 1 }
+colorKit.HWB({ a: 1, h: 336, s: 44, v: 28 }).array(); // [336, 16, 72, 1]
+```
+
+## Color Information
+
+### `getFormat`
+
+Identify the color format of a given `string` or `object`, and return `null` for invalid colors.
+
+```js
+colorKit.getFormat('orange'); // named
+
+colorKit.getFormat('rgb(211, 168, 151)'); // rgb
+colorKit.getFormat('rgba(211, 168, 151, 1)'); // rgba
+colorKit.getFormat({ r: 211, g: 168, b: 151 }); // rgb
+colorKit.getFormat({ r: 211, g: 168, b: 151, a: 1 }); // rgba
+
+colorKit.getFormat('hsl(224, 77%, 28%)'); // hsl
+colorKit.getFormat('hsla(224, 77%, 28%, 1)'); // hsla
+colorKit.getFormat({ h: 224, s: 77, l: 28 }); // hsl
+colorKit.getFormat({ h: 224, s: 77, l: 28, a: 1 }); // hsla
+
+colorKit.getFormat('hsva(289, 99%, 40%, 1)'); // hsv
+colorKit.getFormat('hsv(289, 99%, 40%)'); // hsva
+colorKit.getFormat({ h: 289, s: 99, v: 40 }); // hsv
+colorKit.getFormat({ h: 289, s: 99, v: 40, a: 1 }); // hsva
+
+colorKit.getFormat('hwba(289, 99%, 40%, 1)'); // hwb
+colorKit.getFormat('hwb(289, 99%, 40%)'); // hwba
+colorKit.getFormat({ h: 289, w: 99, b: 40 }); // hwb
+colorKit.getFormat({ h: 289, w: 99, b: 40, a: 1 }); // hwba
+
+colorKit.getFormat('#fff'); // hex3
+colorKit.getFormat('#ffff'); // hex4
+colorKit.getFormat('#ffffffff'); // hex8
+
+colorKit.getFormat('rgb(211, 168, 151, 1)'); // null (should be 'rgba(211, 168, 151, 1)')
+```
+
+### `getRed`
+
+Get the `red` channel value of a given color.
+
+```js
+colorKit.getRed('red'); // 255
+```
+
+### `getGreen`
+
+Get the `green` channel value of a given color.
+
+```js
+colorKit.getGreen('rgb(0, 200, 0)'); // 200
+```
+
+### `getBlue`
+
+Get the `green` channel value of a given color.
+
+```js
+colorKit.getBlue('hsl(200, 60%, 50%)'); // 204
+```
+
+### `getHue`
+
+Get the `hue` channel value of a given color.
+
+```js
+colorKit.getHue('#87c270'); // 103
+```
+
+### `getLuminance`
+
+Get color's HSL `luminosity` channel value.
+
+If you want the overall `luminosity` of a color use [`getLuminanceWCAG`](#getluminancewcag) method.
+
+```js
+colorKit.getLuminance({ r: 67, g: 59, b: 79, a: 1 }); // 27
+```
+
+### `getBrightness`
+
+Get the HSV's `value` (brightness) channel value of a given color.
+
+```js
+colorKit.getBrightness({ h: 127, s: 36, l: 8, a: 1 }); // 11
+```
+
+### `getAlpha`
+
+Get the `alpha` channel value of a given color.
+
+```js
+colorKit.getAlpha('#d2c765c7'); // 0.78
+```
+
+### `getLuminanceWCAG`
+
+Returns the perceived `luminance` of the given color, from `0-1` as defined by [Web Content Accessibility Guidelines (Version 2.0)](https://www.w3.org/TR/WCAG20/).
+
+```js
+colorKit.getLuminanceWCAG('rgba(176, 7, 120, 1)'); // 0.10738130030129947
+```
+
+### `contrastRatio`
+
+Calculates the contrast ratio between two colors, useful for ensuring accessibility and readability.
+
+```js
+colorKit.contrastRatio('yellow', 'rgba(40, 38, 43, 1)'); // 13.95
+```
+
+### `isDark`
+
+Returns a boolean indicating whether the color is considered "dark" or not.
+
+```js
+colorKit.isDark('hsla(224, 77%, 28%, 1)'); // true
+```
+
+### `isLight`
+
+Returns a boolean indicating whether the color is considered "light" or not.
+
+```js
+colorKit.isLight('hsla(224, 77%, 28%, 1)'); // false
+```
+
+## Color Manipulation
+
+### `setRed`
+
+Set the `red` value of a color to a specific amount.
+
+```js
+colorKit.setRed('#a5a2a1', 150).hex(); // #c8a2a1
+colorKit.setRed('#a5a2a1', 200).rgb().string(); // rgb(200, 162, 161)
+colorKit.setRed('#a5a2a1', 200).rgb().object(); // { r: 200, g: 162, b: 161, a: 1 }
+colorKit.setRed('#a5a2a1', 200).rgb().array(); // [200, 162, 161, 1]
+colorKit.setRed('#a5a2a1', 200).hsl().string(); // hsl(2, 26%, 71%)
+colorKit.setRed('#a5a2a1', 200).hsl().object(); // { h: 2, s: 26, l: 71, a: 1 }
+colorKit.setRed('#a5a2a1', 200).hsl().array(); // [2, 26, 71, 1]
+colorKit.setRed('#a5a2a1', 200).hsv().string(); // hsv(2, 20%, 78%)
+colorKit.setRed('#a5a2a1', 200).hsv().object(); // { h: 2, s: 20, l: 78, a: 1 }
+colorKit.setRed('#a5a2a1', 200).hsv().array(); // [2, 20, 78, 1]
+```
+
+### `increaseRed`
+
+Increase the `red` value of a color by the given percentage/amount.
+
+```js
+colorKit.increaseRed('#bb661b', 50).hex(); // #ed661b
+colorKit.increaseRed('#bb661b', '50%').hex(); // #ff661b
+```
+
+### `decreaseRed`
+
+Decrease the `red` value of a color by the given percentage/amount.
+
+```js
+colorKit.decreaseRed('#bb661b', 50).hex(); // #89661b
+colorKit.decreaseRed('#bb661b', '50%').hex(); // #5e661b
+```
+
+### `setGreen`
+
+Set the `green` value of a color to a specific amount.
+
+```js
+colorKit.setGreen('#d7e2d0', 50).hex(); // #d732d0
+```
+
+### `increaseGreen`
+
+Increase the `green` value of a color by the given percentage/amount.
+
+```js
+colorKit.increaseGreen('#d7e2d0', 50).hex(); // #d7ffd0
+colorKit.increaseGreen('#d7e2d0', '10%').hex(); // #d7f9d0
+```
+
+### `decreaseGreen`
+
+Decrease the `green` value of a color by the given percentage/amount.
+
+```js
+colorKit.decreaseGreen('#d7e2d0', 50).hex(); // #d7b0d0
+colorKit.decreaseGreen('#d7e2d0', '10%').hex(); // #d7cbd0
+```
+
+### `setBlue`
+
+Set the `blue` value of a color to a specific amount.
+
+```js
+colorKit.setBlue('#5d8e92', 50).hex(); // #5d3292
+```
+
+### `increaseBlue`
+
+Increase the `blue` value of a color by the given percentage/amount.
+
+```js
+colorKit.increaseBlue('#5d8e92', 50).hex(); // #5d8ec4
+colorKit.increaseBlue('#5d8e92', '50%').hex(); // #5d8edb
+```
+
+### `decreaseBlue`
+
+Decrease the `blue` value of a color by the given percentage/amount.
+
+```js
+colorKit.decreaseBlue('#5d8e92', 50).hex(); // #5d8e60
+colorKit.decreaseBlue('#5d8e92', '50%').hex(); // #5d8e49
+```
+
+### `setHue`
+
+Set the `hue` value of a color to a specific amount.
+
+```js
+colorKit.setHue('#2c1a51', 50).hex(); // #51481a
+```
+
+### `increaseHue`
+
+Increase the `Hue` value of a color by the given percentage/amount.
+
+```js
+colorKit.increaseHue('#2c1a51', 50).hex(); // #511a48
+colorKit.increaseHue('#2c1a51', '50%').hex(); // #511a1a
+```
+
+### `decreaseHue`
+
+Decrease the `Hue` value of a color by the given percentage/amount.
+
+```js
+colorKit.decreaseHue('#2c1a51', 50).hex(); // #1a3651
+colorKit.decreaseHue('#2c1a51', '50%').hex(); // #1a5123
+```
+
+### `spin`
+
+Spin the `hue` channel by a certain percentage/amount.
+
+```js
+colorKit.spin('#2c1a51', 350).hex(); // #231a51
+colorKit.spin('#2c1a51', '350%').hex(); // #40511a
+```
+
+### `setSaturation`
+
+Set the `saturation` value of a color to a specific amount.
+
+```js
+colorKit.setSaturation('#482e45', 100).hex(); // #750068
+```
+
+### `saturate`
+
+Increase the `saturation` value of a color by the given percentage/amount.
+
+```js
+colorKit.saturate('#482e45', 50).hex(); // #65105b
+colorKit.saturate('#482e45', '50%').hex(); // #4e2749
+```
+
+### `desaturate`
+
+Decrease the `saturation` value of a color by the given percentage/amount.
+
+```js
+colorKit.desaturate('#482e45', 50).hex(); // #3b3b3b
+colorKit.desaturate('#482e45', '50%').hex(); // #413440
+```
+
+### `setLuminance`
+
+Set HSL's `luminosity` channel for a given color to a specific amount.
+
+```js
+colorKit.setLuminance('#dadafc', 50).hex(); // #1313ec
+```
+
+### `brighten`
+
+Increase the `brightness` of the given color by a certain percentage/amount.
+
+```js
+colorKit.brighten('#dadafc', 50).hex(); // #ffffff
+colorKit.brighten('#dadafc', '5%').hex(); // #f1f1fe
+```
+
+### `darken`
+
+Decrease the `brightness` of the given color by a certain percentage/amount.
+
+```js
+colorKit.darken('#dadafc', 50).hex(); // #1010c6
+colorKit.darken('#dadafc', '50%').hex(); // #1212d9
+```
+
+### `setBrightness`
+
+Set HSV's `value` (brightness) channel for a given color to a specific amount.
+
+```js
+colorKit.setBrightness('#dadafc', 50).hex(); // #6f6f80
+```
+
+### `increaseBrightness`
+
+Increase HSV's `value` (brightness) channel value of a color by the given percentage/amount
+
+```js
+colorKit.increaseBrightness('#dadafc', 50).hex(); // #dedeff
+colorKit.increaseBrightness('#dadafc', '5%').hex(); // #dedeff
+```
+
+### `decreaseBrightness`
+
+Decrease HSV's `value` (brightness) channel value of a color by the given percentage/amount
+
+```js
+colorKit.decreaseBrightness('#dadafc', 50).hex(); // #6d6d7d
+colorKit.decreaseBrightness('#dadafc', '50%').hex(); // #6f6f80
+```
+
+### `setAlpha`
+
+Set the `alpha` value of a color to a specific amount.
+
+### `increaseAlpha`
+
+Increase the `alpha` value of a color by the given percentage/amount.
+
+### `decreaseAlpha`
+
+Decrease the `alpha` value of a color by the given percentage/amount.
+
+## Color Utilities
+
+### `blend`
+
+Blends two colors by a certain amount.
+
+```js
+colorKit.blend('red', 'yellow', 50).hex(); // #ff8000
+```
+
+### `invert`
+
+Invert (negate) a color, black becomes white, white becomes black, blue becomes orange and so on.
+
+```js
+colorKit.invert('#000').hex(); // #ffffff
+```
+
+### `grayscale`
+
+Completely desaturates a color into greyscale.
+
+```js
+colorKit.grayscale('#172140').hex(); // #212121
+```
+
+### `adjustContrast`
+
+Returns the first color (text color) with the desired contrast ratio against the second color (background color).
+
+```js
+colorKit.adjustContrast('rgb(50, 50, 50)', '#fff', 4.5).hex(); // #777777
+```
+
+### `randomHslColor`
+
+Generate a random color from `HSL` values.
+
+You can provide a range between two values for each channel.
+
+```js
+colorKit.randomHslColor({ h: [0, 360], s: [0, 100], l: [0, 100], a: [1, 1] }).hex(); // #b07345
+colorKit.randomHslColor().hex(); // #d0bfd6
+```
+
+### `randomHsvColor`
+
+Generate a random color from `HSV` values.
+
+You can provide a range between two values for each channel.
+
+```js
+colorKit.randomHsvColor({ h: [0, 360], s: [0, 100], v: [0, 100], a: [1, 1] }).hex(); // #59078c
+colorKit.randomHsvColor().hex(); // #2b553f
+```
+
+### `randomRgbColor`
+
+Generate a random color from `rgb` values.
+
+You can provide a range between two values for each channel.
+
+```js
+colorKit.randomRgbColor({ r: [0, 360], g: [0, 100], b: [0, 100], a: [1, 1] }).hex(); // #ff0f0b
+colorKit.randomRgbColor().hex(); // #b07345
+```
+
+### `randomHwbColor`
+
+Generate a random color from `hwb` values.
+
+You can provide a range between two values for each channel.
+
+```js
+colorKit.randomHwbColor({ h: [0, 360], w: [0, 100], b: [0, 100], a: [1, 1] }).hex(); // #ff0f0b
+colorKit.randomHwbColor().hex(); // #b07345
+```

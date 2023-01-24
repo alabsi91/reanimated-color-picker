@@ -1,14 +1,14 @@
 ---
 sidebar_position: 11
 sidebar_label: Swatches
-description: A list of colored swatches is used for quick color selection.
+description: A list of color swatches is utilized for efficient color selection.
 ---
 
 # `<Swatches />`
 
 ![swatches](../../../images/swatches.png)
 
-- A list of colored swatches is used for quick color selection.
+- A list of color swatches is utilized for efficient color selection.
 
 ## Props
 
@@ -30,6 +30,6 @@ description: A list of colored swatches is used for quick color selection.
 
 :::info note
 
-- Some style properties will be overwritten.
+- Certain style properties will be overridden.
 
 :::

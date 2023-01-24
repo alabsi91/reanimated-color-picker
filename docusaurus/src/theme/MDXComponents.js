@@ -11,5 +11,5 @@ export default {
       'circle'
     </code>
   ),
-  formats: () => <code>'hex' | 'rgb' | 'rgba' | 'hsl' | 'hsla' | 'hsv' | 'hsva'</code>,
+  formats: () => <code>'hex' | 'rgb' | 'rgba' | 'hsl' | 'hsla' | 'hsv' | 'hsva' | 'hwb' | 'hwba'</code>,
 };

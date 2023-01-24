@@ -6,13 +6,13 @@ hide_table_of_contents: true
 
 # Reanimated Color Picker
 
-#### - Pure JavaScript color picker for react-native.
+#### - A Pure JavaScript Color Picker for React Native.
 
 #### - Highly customizable.
 
 #### - Supports IOS, Android, Expo, and Web platforms.
 
-#### - Supports right to left (RTL) layout.
+#### - Supports right-to-left (RTL) layouts.
 
 ![Example_1](../../images/example_1.png) ![Example_2](../../images/example_2.png)
 

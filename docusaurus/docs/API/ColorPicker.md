@@ -9,11 +9,11 @@ description: Responsible for managing the built-in components
 
 :::caution
 
-Every built-in component should be wrapped in the `ColorPicker` component.
+All built-in components should be wrapped within the `ColorPicker` component.
 
 :::
 
-- You can nest components inside `ColorPicker` wrapper to reach the desired level of customization.
+- You can nest components within the `ColorPicker` wrapper to achieve the desired level of customization.
 
 ```jsx
 <ColorPicker>
@@ -37,60 +37,60 @@ Every built-in component should be wrapped in the `ColorPicker` component.
 
 ### `value`
 
-- The initial color that the color picker should show on load.
-- If the `value` property is changed, the color picker will update the shown color.
-- Accepts: `'hex' | 'rgb' | 'rgba' | 'hsl' | 'hsla' | named colors` formats.
+- The initial color that should be displayed when the `ColorPicker` is loaded.
+- If the `value` property is modified, the `ColorPicker` will automatically update the displayed color.
+- Accepts: `'hex' | 'rgb' | 'rgba' | 'hsl' | 'hsla' | 'hsv' | 'hsva' | 'hwb' | 'hwba' | named colors` formats.
 - `type: string`
 - `default: '#418181'`
 
 ### `sliderThickness`
 
-- A global property to change the thickness of all descendant sliders components.
-- The thickness is the slider's width in case of `vertical` orientation and the height in case of `horizontal` orientation.
+- A global property that allows for changing the thickness of all descendant slider components.
+- The thickness refers to the `width` of the slider in the case of a `vertical` orientation, and the `height` in the case of a `horizontal` orientation.
 - `type: number`
 - `default: 25`
 
 ### `thumbSize`
 
-- A global property to change the thumb size of all descendant sliders components.
+- A global property for changing the thumb size of all descendant slider components.
 - `type: number`
 - `default: 35`
 
 ### `thumbShape`
 
-- A global property to change thumb's shape and appearance of all descendant sliders components.
+- A global property that allows for the alteration of the thumb shape and appearance of all descendant slider components.
 - `type: string`
 - `default: 'ring'`
 - `values:`<shapes/>
 
 ### `style`
 
-- Color picker's container style.
+- The container style of the `ColorPicker`.
 - `type: ViewStyle`
 
 :::info note
 
-- Some style properties will be overwritten.
+- Certain style properties will be overridden.
 
 :::
 
 ### `onChange`
 
-- Called every time the user changes the color.
-- The passed color object has the following properties: `hex`, `rgb`, `rgba`, `hsl`, and `hsla`
+- Triggers every time the user modifies the color.
+- The passed color object has the following properties: `hex`, `rgb`, `rgba`, `hsv`, `hsva`, `hwb`, `hwba`, `hsl`, and `hsla`
 - `type: (color: object) => void`
 - `default: null`
 
 :::tip
 
-- Avoid using `setState` in `onChange` callback as it will cause performance issues.
-- Using `useSharedValue` from `react-native-reanimated` library is recommended.
+- To prevent performance issues, it is best to avoid using `setState` in the `onChange` callback.
+- It is highly recommended to utilize the `useSharedValue` function from the `react-native-reanimated` library.
 
 :::
 
 ### `onComplete`
 
-- Called when the user releases the slider handle or when a swatch is clicked.
-- The passed color object has the following properties: `hex`, `rgb`, `rgba`, `hsl`, and `hsla`
+- Triggered upon the user releasing the slider handle or clicking on a swatch.
+- The passed color object has the following properties: `hex`, `rgb`, `rgba`, `hsv`, `hsva`, `hwb`, `hwba`, `hsl`, and `hsla`
 - `type: (color: object) => void`
 - `default: null`

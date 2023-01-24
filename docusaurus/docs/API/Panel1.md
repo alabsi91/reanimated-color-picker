@@ -1,14 +1,14 @@
 ---
 sidebar_position: 6
 sidebar_label: Panel1
-description: A square-shaped slider (adobe style) is used for changing the color's brightness and saturation.
+description: A square-shaped slider, reminiscent of Adobe style, is utilized to adjust the brightness and saturation of colors.
 ---
 
 # `<Panel1 />`
 
 ![panel1](../../../images/panel1.png)
 
-- A square-shaped slider (adobe style) is used for changing the color's brightness and saturation.
+- A square-shaped slider, reminiscent of Adobe style, is utilized to adjust the brightness and saturation of colors..
 
 - Move the handle horizontally to change the color's saturation.
 
@@ -16,7 +16,7 @@ description: A square-shaped slider (adobe style) is used for changing the color
 
 :::tip
 
-- Add [`<HueSlider />`](./HueSlider) also to get control of the color three channels.
+- Add [`<HueSlider />`](./HueSlider) component also to gain control over the three color channels.
 
 :::
 
@@ -36,7 +36,7 @@ description: A square-shaped slider (adobe style) is used for changing the color
 
 :::info **\*interactive**
 
-- The thumb color will be changed depending on the contrast ratio if no color value is passed.
+- The color of the thumb will be adjusted according to the contrast ratio, in the absence of a specific color value.
 
 :::
 
@@ -54,6 +54,6 @@ description: A square-shaped slider (adobe style) is used for changing the color
 
 :::info note
 
-- Some style properties will be overwritten.
+- Certain style properties will be overridden.
 
 :::

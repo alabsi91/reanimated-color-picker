@@ -2,18 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { Text, StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
-import {
-  COLOR_HSVA,
-  CONTRAST_RATIO,
-  HEX_FORMAT,
-  HSLA_FORMAT,
-  HSL_FORMAT,
-  HSL_HEX,
-  HSVA_FORMAT,
-  HSV_FORMAT,
-  RGBA_FORMAT,
-  RGB_FORMAT,
-} from './ColorsConversionFormulas';
+import colorKit from './colorKit';
 import { CTX } from './GlobalStyles';
 
 import type { SharedValue } from 'react-native-reanimated';
@@ -33,10 +22,10 @@ export default function ColorPicker({
 }: ColorPickerProps) {
   const isFirstRender = useRef(true);
 
-  const initialColor = useRef(COLOR_HSVA(value));
+  const initialColor = useRef(colorKit.HSV(value).object());
   const hue = useRef(initialColor.current.h);
   const saturation = useRef(initialColor.current.s);
-  const brightness = useRef(initialColor.current.b);
+  const brightness = useRef(initialColor.current.v);
   const alpha = useRef(initialColor.current.a);
   const colorHash = useSharedValue(`${hue.current},${saturation.current},${brightness.current},${alpha.current}`); // to track color changes
 
@@ -44,10 +33,10 @@ export default function ColorPicker({
 
   /** It takes the current values of the hue, saturation, brightness, and alpha sliders and returns a hexadecimal color value. */
   const color_hex = () =>
-    HEX_FORMAT({
+    colorKit.HEX({
       h: hue.current,
       s: saturation.current,
-      b: brightness.current,
+      v: brightness.current,
       a: alpha.current,
     });
 
@@ -56,18 +45,20 @@ export default function ColorPicker({
     color = {
       h: hue.current,
       s: saturation.current,
-      b: brightness.current,
+      v: brightness.current,
       a: alpha.current,
     }
   ) => {
     return {
-      hex: HEX_FORMAT(color),
-      rgb: RGB_FORMAT(color),
-      rgba: RGBA_FORMAT(color),
-      hsl: HSL_FORMAT(color),
-      hsla: HSLA_FORMAT(color),
-      hsv: HSV_FORMAT(color),
-      hsva: HSVA_FORMAT(color),
+      hex: colorKit.HEX(color),
+      rgb: colorKit.RGB(color).string(false),
+      rgba: colorKit.RGB(color).string(true),
+      hsl: colorKit.HSL(color).string(false),
+      hsla: colorKit.HSL(color).string(true),
+      hsv: colorKit.HSV(color).string(false),
+      hsva: colorKit.HSV(color).string(true),
+      hwb: colorKit.HWB(color).string(false),
+      hwba: colorKit.HWB(color).string(true),
     };
   };
 
@@ -81,7 +72,7 @@ export default function ColorPicker({
   }));
 
   // current color's hue.
-  const activeHue = useSharedValue(HSL_HEX(hue.current, 100, 50));
+  const activeHue = useSharedValue(colorKit.HEX({ h: hue.current, s: 100, l: 50, a: 1 }));
   const activeHueStyle = useAnimatedStyle(() => ({ backgroundColor: activeHue.value }));
 
   // white or black color depending on the contrast ratio.
@@ -98,14 +89,14 @@ export default function ColorPicker({
   // set white or black color depending on the contrast ratio.
   const setInvertedColor = () => {
     setInverted({}, invertedColor); // for panel thumb.
-    setInverted({ s: 100, b: 100 }, invertedColorHue); // for hue thumb.
+    setInverted({ s: 100, v: 100 }, invertedColorHue); // for hue thumb.
     setInverted({ s: 100 }, invertedColorBrightness); // for brightness thumb.
-    setInverted({ b: 70 }, invertedColorSaturation); // for saturation thumb.
-    setInverted({ s: alpha.current, b: 70 }, invertedColorOpacity); // for opacity thumb.
+    setInverted({ v: 70 }, invertedColorSaturation); // for saturation thumb.
+    setInverted({ s: alpha.current, v: 70 }, invertedColorOpacity); // for opacity thumb.
   };
-  const setInverted = ({ h = hue.current, s = saturation.current, b = brightness.current }, color2: SharedValue<string>) => {
+  const setInverted = ({ h = hue.current, s = saturation.current, v = brightness.current }, color2: SharedValue<string>) => {
     const inverted = color2.value === '#ffffff' ? '#000000' : '#ffffff';
-    const contrast = CONTRAST_RATIO({ h, s, b }, color2.value);
+    const contrast = colorKit.contrastRatio({ h, s, v, a: 1 }, color2.value);
     color2.value = contrast < CONTRAST_RATIO_MIN ? inverted : color2.value;
   };
 
@@ -118,7 +109,7 @@ export default function ColorPicker({
     setInvertedColor();
 
     // update handles positions.
-    const brightnessHandles = registeredHandles.current.filter(setting => setting.channel === 'b');
+    const brightnessHandles = registeredHandles.current.filter(setting => setting.channel === 'v');
     applySettings(brightnessHandles, false);
 
     onChange?.(returnedResults());
@@ -149,7 +140,7 @@ export default function ColorPicker({
     colorHash.value = `${hue.current},${saturation.current},${brightness.current},${alpha.current}`;
 
     setInvertedColor();
-    activeHue.value = HSL_HEX(hueChannel, 100, 50); // update only hue color.
+    activeHue.value = colorKit.HEX({ h: hueChannel, s: 100, l: 50, a: 1 }); // update only hue color.
     // update handles positions.
     const hueHandles = registeredHandles.current.filter(setting => setting.channel === 'h');
     applySettings(hueHandles, false);
@@ -178,13 +169,13 @@ export default function ColorPicker({
    */
   const applySettings = (settings = registeredHandles.current, withAnimation = true) => {
     const duration = 150;
-    const color = { h: hue.current, s: saturation.current, b: brightness.current, a: alpha.current };
+    const color = { h: hue.current, s: saturation.current, v: brightness.current, a: alpha.current };
 
     for (let i = 0; i < settings.length; i++) {
       const { isReversed, width, height, axis, channel, handle, thumbSize: handleSize } = settings[i];
       const channelMax = channel === 'h' ? 360 : 100;
       const length = axis === 'y' ? height : width; // height for vertical axis, width for horizontal axis.
-      const percent = (color[channel] / channelMax) * length;
+      const percent = ((channel === 'a' ? color[channel] * 100 : color[channel]) / channelMax) * length;
 
       if (axis === 'angle') {
         const [handleX, handleY] = handle as SharedValue<number>[];
@@ -221,17 +212,17 @@ export default function ColorPicker({
    * @param color - color to be set in any format.
    */
   const setColor = (color: string) => {
-    const { h, s, b, a } = COLOR_HSVA(color); // convert color to HSBA object.
+    const { h, s, v, a } = colorKit.HSV(color).object(); // convert color to HSBA object.
 
     hue.current = h;
     saturation.current = s;
-    brightness.current = b;
+    brightness.current = v;
     alpha.current = a;
     colorHash.value = `${hue.current},${saturation.current},${brightness.current},${alpha.current}`;
 
     // for colors
     previewColor.value = color_hex(); // update result color.
-    activeHue.value = HSL_HEX(h, 100, 50);
+    activeHue.value = colorKit.HEX({ h, s: 100, l: 50, a: 1 });
 
     setInvertedColor();
 
@@ -246,7 +237,7 @@ export default function ColorPicker({
       return;
     }
 
-    initialColor.current = COLOR_HSVA(value);
+    initialColor.current = colorKit.HSV(value).object();
     setColor(value);
   }, [value]);
 

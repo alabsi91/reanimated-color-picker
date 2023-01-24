@@ -4,9 +4,9 @@ sidebar_position: 4
 
 # Usage
 
-- You can add, remove, rearrange or style the color picker's built-in components.
+- You can add, remove, rearrange, or style the built-in components of the color picker.
 
-- Check out the working examples: [Examples](./Examples)
+- Please take a look at the functioning examples: [Examples](./Examples)
 
 ```jsx
 import React, { useState } from 'react';

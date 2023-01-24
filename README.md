@@ -7,13 +7,13 @@
 ![GitHub issues](https://img.shields.io/github/issues/alabsi91/reanimated-color-picker?style=for-the-badge)
 ![Platform](https://img.shields.io/badge/Platform-IOS%20%7C%20Android%20%7C%20Expo%20%7C%20Web-informational?style=for-the-badge)
 
-### - Pure JavaScript color picker for react-native.
+### - A Pure JavaScript Color Picker for React Native.
 
 ### - Highly customizable.
 
 ### - Supports IOS, Android, Expo, and Web platforms.
 
-### - Supports right to left (RTL) layout.
+### - Supports right-to-left (RTL) layouts.
 
 ![Example_1](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/example_1.png?raw=true)
 ![Example_2](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/example_2.png?raw=true)
@@ -21,7 +21,7 @@
 
 # :small_blue_diamond:Prerequisites
 
-- Use the links below to follow the installation instructions.
+- Follow the installation instructions by using the links provided below.
 
 - [react-native-gesture-handler](https://docs.swmansion.com/react-native-gesture-handler/docs/installation) version `2.0.0` or higher.
 

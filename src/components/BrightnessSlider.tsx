@@ -53,7 +53,7 @@ export function BrightnessSlider({
   useEffect(() => {
     registerHandle({
       id,
-      channel: 'b',
+      channel: 'v',
       axis: vertical ? 'y' : 'x',
       width,
       height,
@@ -137,7 +137,7 @@ export function BrightnessSlider({
         ]}
       >
         <Image source={require('../assets/Brightness.png')} style={imageStyle} />
-        <Thumb {...{ channel: 'b', thumbShape, thumbSize: thumb_Size, thumbColor, handleStyle, solidColor, vertical }} />
+        <Thumb {...{ channel: 'v', thumbShape, thumbSize: thumb_Size, thumbColor, handleStyle, solidColor, vertical }} />
       </Animated.View>
     </PanGestureHandler>
   );

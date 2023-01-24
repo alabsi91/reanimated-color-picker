@@ -86,7 +86,7 @@ export function OpacitySlider({ thumbShape, thumbSize, thumbColor, style = {}, v
 
         const opacity = vertical ? opacityY : opacityX;
 
-        runOnJS(updateOpacity)(opacity);
+        runOnJS(updateOpacity)(opacity / 100);
       },
       onFinish: () => {
         handleScale.value = withTiming(1, { duration: 100 });

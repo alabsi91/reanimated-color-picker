@@ -9,6 +9,8 @@ export interface returnedResults {
   hsla: string;
   hsv: string;
   hsva: string;
+  hwb: string;
+  hwba: string;
 }
 
 export type thumbShapeType =
@@ -26,7 +28,7 @@ export type thumbShapeType =
 
 export type THandleSettings = {
   id: string;
-  channel: 'h' | 's' | 'b' | 'a';
+  channel: 'h' | 's' | 'v' | 'a';
   axis: 'x' | 'y' | 'angle';
   width: number;
   height: number;
@@ -88,13 +90,13 @@ export interface TCTX {
   thumbShape: thumbShapeType;
 
   /** The initial color in hsva fromat as an object extracted from `value` property */
-  initialColor: React.MutableRefObject<{ h: number; s: number; b: number; a: number }>;
+  initialColor: React.MutableRefObject<{ h: number; s: number; v: number; a: number }>;
 
   /** The initial color value as a `string` */
   value: string;
 
   /** The returned results of the color picker. */
-  returnedResults: (color?: { h: number; s: number; b: number; a: number }) => returnedResults;
+  returnedResults: (color?: { h: number; s: number; v: number; a: number }) => returnedResults;
 
   /** This function to register/update a slider handle to be managed by the color picker wrapper. */
   registerHandle: (settings: THandleSettings) => void;
@@ -124,7 +126,7 @@ export interface ColorPickerProps {
 
   /**
    * - initial color.
-   * - Accepts `hex`, `rgb`, `rgba`, `hsl`, `hsla`, and `named color` formats.
+   * - Accepts `hex`, `rgb`, `rgba`, `hsl`, `hsla`, `hsv`, `hsva`, `hwb`, `hwba` and `named color` formats.
    */
   value?: string;
 
@@ -153,7 +155,7 @@ export interface SwatchesPorps {
 
 export interface PreviewPorps {
   /** - show color preview in specific format. */
-  colorFormat?: 'hex' | 'rgb' | 'rgba' | 'hsl' | 'hsla' | 'hsv' | 'hsva';
+  colorFormat?: 'hex' | 'rgb' | 'rgba' | 'hsl' | 'hsla' | 'hsv' | 'hsva' | 'hwb' | 'hwba';
 
   /** - hide initial color preview and show the picked color preview only. */
   hideInitialColor?: boolean;
@@ -176,7 +178,7 @@ export interface PreviewPorps {
 
 export interface PreviewTextProps {
   /** - show color preview in specific format. */
-  colorFormat?: 'hex' | 'rgb' | 'rgba' | 'hsl' | 'hsla' | 'hsv' | 'hsva';
+  colorFormat?: 'hex' | 'rgb' | 'rgba' | 'hsl' | 'hsla' | 'hsv' | 'hsva' | 'hwb' | 'hwba';
 
   /** - preview text style */
   style?: StyleProp<TextStyle>;

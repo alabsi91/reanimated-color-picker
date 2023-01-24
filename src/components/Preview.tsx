@@ -1,12 +1,12 @@
 import React, { useState, useMemo, useContext } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Animated, { runOnJS, useAnimatedStyle, useDerivedValue } from 'react-native-reanimated';
-import { COLOR_HSVA, CONTRAST_RATIO } from '../ColorsConversionFormulas';
 import { CTX, getStyle } from '../GlobalStyles';
 
 import type { PreviewPorps } from '../types';
 import type { StyleProp, TextStyle } from 'react-native';
 import type { SharedValue } from 'react-native-reanimated';
+import colorKit from '../colorKit';
 
 const CONTRAST_RATIO_MIN = 4.5;
 
@@ -37,9 +37,9 @@ export function Preview({
   const justifyContent = getStyle(style, 'justifyContent') ?? 'center';
 
   const initialColorText = useMemo(() => {
-    const { h, s, b, a } = COLOR_HSVA(value);
-    const formated = returnedResults({ h, s, b, a })[colorFormat];
-    const contrast = CONTRAST_RATIO({ h, s, b }, '#fff');
+    const { h, s, v, a } = colorKit.HSV(value).object();
+    const formated = returnedResults({ h, s, v, a })[colorFormat];
+    const contrast = colorKit.contrastRatio({ h, s, v }, '#fff');
     const color = contrast < CONTRAST_RATIO_MIN ? '#000' : '#fff';
     return { formated, color };
   }, [value, colorFormat]);

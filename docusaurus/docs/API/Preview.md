@@ -44,7 +44,7 @@ description: The preview of the selected and the initial color.
 
 :::info note
 
-- Some style properties will be overwritten.
+- Certain style properties will be overridden.
 
 :::
 

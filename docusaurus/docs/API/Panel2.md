@@ -1,14 +1,14 @@
 ---
 sidebar_position: 7
 sidebar_label: Panel2
-description: A square-shaped slider (windows style) is used for changing the color's hue and saturation.
+description: A square-shaped slider (windows style) is utilized to adjust the hue and saturation channels.
 ---
 
 # `<Panel2 />`
 
 ![panel2](../../../images/panel2.png)
 
-- A square-shaped slider (windows style) is used for changing the color's hue and saturation.
+- A square-shaped slider (windows style) is utilized to adjust the hue and saturation channels.
 
 - Move the handle horizontally to change the color's saturation.
 
@@ -16,7 +16,7 @@ description: A square-shaped slider (windows style) is used for changing the col
 
 :::tip
 
-- Add [`<BrightnessSlider />`](./BrightnessSlider) also to get control of the color three channels.
+- Add [`<BrightnessSlider />`](./BrightnessSlider) component also to gain control over the three color channels.
 
 :::
 
@@ -60,6 +60,6 @@ description: A square-shaped slider (windows style) is used for changing the col
 
 :::info note
 
-- Some style properties will be overwritten.
+- Certain style properties will be overridden.
 
 :::

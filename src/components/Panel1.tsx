@@ -51,7 +51,7 @@ export function Panel1({ thumbShape, thumbSize, thumbColor, style = {} }: PanelP
     });
     registerHandle({
       id: idY,
-      channel: 'b',
+      channel: 'v',
       axis: 'y',
       width,
       height,
