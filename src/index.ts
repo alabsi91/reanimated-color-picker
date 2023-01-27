@@ -13,3 +13,5 @@ export { BrightnessSlider } from './components/BrightnessSlider';
 export { OpacitySlider } from './components/OpacitySlider';
 export { Swatches } from './components/Swatches';
 export { colorKit };
+
+export * from './types';

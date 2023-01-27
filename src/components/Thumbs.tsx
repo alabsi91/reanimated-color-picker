@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { I18nManager, StyleSheet, View } from 'react-native';
-import Animated, { useAnimatedStyle } from 'react-native-reanimated';
+import Animated, { runOnJS, useAnimatedStyle, useDerivedValue, useSharedValue } from 'react-native-reanimated';
 import styles, { CTX } from '../GlobalStyles';
 
 import type { SharedValue, AnimatedStyleProp } from 'react-native-reanimated';
@@ -224,19 +224,37 @@ type Props = {
 
 export default function Thumb({ thumbShape = 'ring', thumbSize, thumbColor, handleStyle, vertical = false, channel }: Props) {
   const { width, height, borderRadius } = { width: thumbSize, height: thumbSize, borderRadius: thumbSize / 2 };
-  const { invertedColorHue, invertedColorBrightness, invertedColorSaturation, invertedColorOpacity, invertedColor, solidColor } =
-    useContext(CTX);
+  const { hueValue, saturationValue, brightnessValue, alphaValue } = useContext(CTX);
 
-  const inverted =
-    channel === 'h'
-      ? invertedColorHue
-      : channel === 'v'
-      ? invertedColorBrightness
-      : channel === 's'
-      ? invertedColorSaturation
-      : channel === 'a'
-      ? invertedColorOpacity
-      : invertedColor;
+  const resultColor = useSharedValue('#ffffff');
+  const solidColor = useAnimatedStyle(() => ({ backgroundColor: resultColor.value }));
+  const setResultColor = (color: { h: number; s: number; v: number; a?: number }) => {
+    resultColor.value = colorKit.HEX(color);
+  };
+
+  const inverted = useSharedValue('#ffffff');
+  const setInverted = (color1: { h: number; s: number; v: number; a?: number }) => {
+    const color = inverted.value === '#ffffff' ? '#000000' : '#ffffff';
+    const contrast = colorKit.contrastRatio(color1, inverted.value);
+    inverted.value = contrast < 4.5 ? color : inverted.value;
+  };
+
+  // When the values of channels change
+  useDerivedValue(() => {
+    const values =
+      channel === 'h'
+        ? { h: hueValue.value, s: 100, v: 100 }
+        : channel === 'v'
+        ? { h: hueValue.value, s: 100, v: brightnessValue.value }
+        : channel === 's'
+        ? { h: hueValue.value, s: saturationValue.value, v: 70 }
+        : channel === 'a'
+        ? { h: hueValue.value, s: alphaValue.value, v: 70 }
+        : { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
+
+    runOnJS(setInverted)(values);
+    runOnJS(setResultColor)({ h: hueValue.value, s: saturationValue.value, v: brightnessValue.value });
+  });
 
   const thumb_Shape = (thumbShape.toLowerCase().charAt(0).toUpperCase() + thumbShape.slice(1)) as keyof typeof Thumbs;
   const thumbProps = {

@@ -24,18 +24,16 @@ const SWATCHES_COLORS = [
   '#607D8B',
 ];
 
-const sleep = (ms: number) => new Promise<void>(resolve => setTimeout(resolve, ms));
 
 import type { SwatchesPorps } from '../types';
 
 export function Swatches({ colors = SWATCHES_COLORS, style = {}, swatchStyle = {} }: SwatchesPorps) {
-  const { setColor, onChange, onGestureEventFinish, returnedResults } = useContext(CTX);
+  const { setColor, onGestureChange, onGestureEnd } = useContext(CTX);
 
   const onPress = async (swatch: string) => {
     setColor(swatch);
-    await sleep(150);
-    onChange?.(returnedResults());
-    onGestureEventFinish();
+    onGestureChange(swatch);
+    onGestureEnd(swatch);
   };
 
   return (

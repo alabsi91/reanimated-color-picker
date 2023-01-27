@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useContext } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import Animated, { runOnJS, useAnimatedStyle, useDerivedValue } from 'react-native-reanimated';
+import Animated, { runOnJS, useAnimatedStyle, useDerivedValue, useSharedValue } from 'react-native-reanimated';
 import { CTX, getStyle } from '../GlobalStyles';
 
 import type { PreviewPorps } from '../types';
@@ -8,18 +8,17 @@ import type { StyleProp, TextStyle } from 'react-native';
 import type { SharedValue } from 'react-native-reanimated';
 import colorKit from '../colorKit';
 
-const CONTRAST_RATIO_MIN = 4.5;
-
-const ReText = ({ text, style, hash }: { text: () => string; style: StyleProp<TextStyle>; hash: SharedValue<string> }) => {
+const ReText = ({ text, style, hash }: { text: () => string; style: StyleProp<TextStyle>; hash: SharedValue<number>[] }) => {
   const [color, setColor] = useState(text());
 
-  const updateText = (_t: string) => {
+  const updateText = () => {
     setColor(text());
   };
 
   useDerivedValue(() => {
-    runOnJS(updateText)(hash.value); // passing a value is not necessary, but it doesn't work without it.
-  }, [hash.value]);
+    hash.forEach(e => e.value);
+    runOnJS(updateText)();
+  });
 
   const tStyle = Array.isArray(style) ? style : [style];
   return <Animated.Text style={[styles.previewText, ...tStyle]}>{color}</Animated.Text>;
@@ -32,20 +31,38 @@ export function Preview({
   hideInitialColor = false,
   hideText = false,
 }: PreviewPorps) {
-  const { returnedResults, value, previewColorStyle, colorHash, invertedColor } = useContext(CTX);
+  const { hueValue, saturationValue, brightnessValue, alphaValue, returnedResults, value } = useContext(CTX);
 
   const justifyContent = getStyle(style, 'justifyContent') ?? 'center';
 
+  // To track changes in the color channel values of the ReText component.
+  const colorHash = [hueValue, saturationValue, brightnessValue, alphaValue];
+
   const initialColorText = useMemo(() => {
-    const { h, s, v, a } = colorKit.HSV(value).object();
-    const formated = returnedResults({ h, s, v, a })[colorFormat];
-    const contrast = colorKit.contrastRatio({ h, s, v }, '#fff');
-    const color = contrast < CONTRAST_RATIO_MIN ? '#000' : '#fff';
-    return { formated, color };
+    const contrast = colorKit.contrastRatio(value, '#fff');
+    const color = contrast < 4.5 ? '#000' : '#fff';
+    return { formated: returnedResults()[colorFormat], color };
   }, [value, colorFormat]);
 
-  const updateText = () => returnedResults()[colorFormat];
-  const invertedColorStyle = useAnimatedStyle(() => ({ color: invertedColor.value }));
+  const textColor = useSharedValue('#fff');
+  const textColorStyle = useAnimatedStyle(() => ({ color: textColor.value }));
+  const setTextColor = (color1: { h: number; s: number; v: number; a?: number }) => {
+    const color = textColor.value === '#ffffff' ? '#000000' : '#ffffff';
+    const contrast = colorKit.contrastRatio(color1, textColor.value);
+    textColor.value = contrast < 4.5 ? color : textColor.value;
+  };
+
+  const previewColor = useSharedValue('#fff');
+  const previewColorStyle = useAnimatedStyle(() => ({ backgroundColor: previewColor.value }));
+  const setPreviewColor = (color: { h: number; s: number; v: number; a: number }) => {
+    previewColor.value = colorKit.HEX(color);
+  };
+
+  // When the values of channels change
+  useDerivedValue(() => {
+    runOnJS(setPreviewColor)({ h: hueValue.value, s: saturationValue.value, v: brightnessValue.value, a: alphaValue.value });
+    runOnJS(setTextColor)({ h: hueValue.value, s: saturationValue.value, v: brightnessValue.value });
+  });
 
   return (
     <View style={[styles.previewWrapper, style]}>
@@ -57,7 +74,7 @@ export function Preview({
         </View>
       )}
       <Animated.View style={[styles.previewContainer, { justifyContent }, previewColorStyle]}>
-        {!hideText && <ReText text={updateText} hash={colorHash} style={[textStyle, invertedColorStyle]} />}
+        {!hideText && <ReText text={() => returnedResults()[colorFormat]} hash={colorHash} style={[textStyle, textColorStyle]} />}
       </Animated.View>
     </View>
   );

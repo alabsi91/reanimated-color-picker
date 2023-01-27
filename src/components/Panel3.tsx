@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState, useContext, useCallback } from 'react';
+import React, { useState, useContext, useCallback } from 'react';
 import { ImageBackground } from 'react-native';
 import { PanGestureHandler } from 'react-native-gesture-handler';
 import Animated, {
   runOnJS,
   useAnimatedGestureHandler,
   useAnimatedStyle,
+  useDerivedValue,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
@@ -16,58 +17,39 @@ import type { PanelProps } from '../types';
 
 export function Panel3({ thumbShape, thumbSize, thumbColor, style = {} }: PanelProps) {
   const {
-    registerHandle,
-    solidColor,
-    onGestureEventFinish,
-    updateHue,
-    updateSaturation,
+    hueValue,
+    saturationValue,
+    onGestureChange,
+    onGestureEnd,
     thumbSize: thumbsSize,
+    thumbColor: thumbsColor,
   } = useContext(CTX);
 
-  const thumb_Size = thumbSize ?? thumbsSize;
-
-  const idX = useRef('panel3' + Math.random()).current;
-  const idY = useRef('panel3' + Math.random()).current;
+  const thumb_size = thumbSize ?? thumbsSize;
+  const thumb_color = thumbColor ?? thumbsColor;
 
   const [width, setWidth] = useState(0);
-
   const borderRadius = width / 2;
 
-  const handlePosX = useSharedValue(0);
-  const handlePosY = useSharedValue(0);
   const handleScale = useSharedValue(1);
 
-  useEffect(() => {
-    registerHandle({
-      id: idX,
-      channel: 'h',
-      axis: 'angle',
-      width,
-      height: width,
-      thumbSize: thumb_Size,
-      isReversed: false,
-      handle: [handlePosX, handlePosY],
-    });
-    registerHandle({
-      id: idY,
-      channel: 's',
-      axis: 'angle',
-      width,
-      height: width,
-      thumbSize: thumb_Size,
-      isReversed: false,
-      handle: [handlePosX, handlePosY],
-    });
+  const handlePosX = useDerivedValue(() => {
+    const center = width / 2;
+    const distance = (saturationValue.value / 100) * (width / 2);
+    const posX = width - Math.round(Math.cos((hueValue.value * Math.PI) / 180) * distance + center) - thumb_size / 2;
+    return posX;
+  }, [width, thumbSize]);
+
+  const handlePosY = useDerivedValue(() => {
+    const center = width / 2;
+    const distance = (saturationValue.value / 100) * (width / 2);
+    const posY = width - Math.round(Math.sin((hueValue.value * Math.PI) / 180) * distance + center) - thumb_size / 2;
+    return posY;
   }, [width, thumbSize]);
 
   const handleStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: handlePosX.value }, { translateY: handlePosY.value }, { scale: handleScale.value }],
   }));
-
-  const updateHS = (hue: number, saturation: number) => {
-    updateHue(hue);
-    updateSaturation(saturation);
-  };
 
   const gestureEvent = useAnimatedGestureHandler(
     {
@@ -79,23 +61,22 @@ export function Panel3({ thumbShape, thumbSize, thumbColor, style = {} }: PanelP
       onActive: event => {
         const clamp = (v: number, max: number) => Math.min(Math.max(v, 0), max);
 
-        const center = width / 2;
-        const dx = center - event.x;
-        const dy = center - event.y;
-        const radius = clamp(Math.sqrt(dx * dx + dy * dy), width / 2); // distance from center
-        const theta = Math.atan2(dy, dx) * (180 / Math.PI); // [0 - 180] range
-        const angle = theta < 0 ? 360 + theta : theta; // [0 - 360] range
+        const center = width / 2,
+          dx = center - event.x,
+          dy = center - event.y,
+          radius = clamp(Math.sqrt(dx * dx + dy * dy), width / 2), // distance from center
+          theta = Math.atan2(dy, dx) * (180 / Math.PI), // [0 - 180] range
+          angle = theta < 0 ? 360 + theta : theta, // [0 - 360] range
+          radiusPercent = radius / (width / 2);
 
-        const radiusPercent = radius / (width / 2);
+        hueValue.value = Math.round(angle);
+        saturationValue.value = Math.round(radiusPercent * 100);
 
-        const hue = Math.round(angle);
-        const saturation = Math.round(radiusPercent * 100);
-
-        runOnJS(updateHS)(hue, saturation);
+        runOnJS(onGestureChange)();
       },
       onFinish: () => {
         handleScale.value = withTiming(1, { duration: 100 });
-        runOnJS(onGestureEventFinish)();
+        runOnJS(onGestureEnd)();
       },
     },
     [width]
@@ -120,7 +101,7 @@ export function Panel3({ thumbShape, thumbSize, thumbColor, style = {} }: PanelP
           style={[styles.panel_image, { borderRadius }]}
           resizeMode='stretch'
         />
-        <Thumb {...{ channel: 's', thumbShape, thumbSize: thumb_Size, thumbColor, handleStyle, solidColor }} />
+        <Thumb {...{ channel: 's', thumbShape, thumbSize: thumb_size, thumbColor: thumb_color, handleStyle }} />
       </Animated.View>
     </PanGestureHandler>
   );

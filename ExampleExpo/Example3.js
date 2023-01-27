@@ -9,14 +9,20 @@ function FormatsTabs() {
   return (
     <View style={[{ backgroundColor: '#edf2f4', padding: 10, borderRadius: 5, marginTop: 10 }, styles.shadow]}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Pressable onPress={() => setFormat('rgba')}>
+          <Text style={[styles.tabText, { borderColor: Format === 'rgba' ? '#666666' : '#fff' }]}>RGB</Text>
+        </Pressable>
         <Pressable onPress={() => setFormat('hex')}>
           <Text style={[styles.tabText, { borderColor: Format === 'hex' ? '#666666' : '#fff' }]}>HEX</Text>
         </Pressable>
-        <Pressable onPress={() => setFormat('rgba')}>
-          <Text style={[styles.tabText, { borderColor: Format === 'rgba' ? '#666666' : '#fff' }]}>RGBA</Text>
-        </Pressable>
         <Pressable onPress={() => setFormat('hsla')}>
-          <Text style={[styles.tabText, { borderColor: Format === 'hsla' ? '#666666' : '#fff' }]}>HSLA</Text>
+          <Text style={[styles.tabText, { borderColor: Format === 'hsla' ? '#666666' : '#fff' }]}>HSL</Text>
+        </Pressable>
+        <Pressable onPress={() => setFormat('hsva')}>
+          <Text style={[styles.tabText, { borderColor: Format === 'hsva' ? '#666666' : '#fff' }]}>HSV</Text>
+        </Pressable>
+        <Pressable onPress={() => setFormat('hwba')}>
+          <Text style={[styles.tabText, { borderColor: Format === 'hwba' ? '#666666' : '#fff' }]}>HWB</Text>
         </Pressable>
       </View>
       <PreviewText style={{ marginVertical: 20, fontSize: 18, color: '#293241' }} colorFormat={Format} />
@@ -47,7 +53,7 @@ export default function Example3({ onSelectColor, color }) {
             </View>
 
             <View style={styles.panelBrightnessContainer}>
-              <OpacitySlider style={[{ flexGrow: 1 }, styles.shadow]} reverse />
+              <OpacitySlider style={[{ flex: 1 }, styles.shadow]} reverse />
               <Preview style={[styles.circlePreview, styles.shadow]} hideInitialColor hideText />
             </View>
 
@@ -77,12 +83,12 @@ const styles = StyleSheet.create({
     margin: 'auto',
   },
   tabText: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 'bold',
     color: '#000',
     backgroundColor: '#fff',
-    paddingHorizontal: 15,
-    paddingVertical: 5,
+    textAlign: 'center',
+    padding: 5,
     borderRadius: 5,
     borderWidth: 1,
   },

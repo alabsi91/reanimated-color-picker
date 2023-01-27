@@ -56,6 +56,12 @@ All built-in components should be wrapped within the `ColorPicker` component.
 - `type: number`
 - `default: 35`
 
+### `thumbColor`
+
+- A global property for changing the thumb color of all descendant slider components.
+- `type: string`
+- `default: undefined`
+
 ### `thumbShape`
 
 - A global property that allows for the alteration of the thumb shape and appearance of all descendant slider components.

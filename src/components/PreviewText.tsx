@@ -3,21 +3,22 @@ import { Text, StyleSheet } from 'react-native';
 import { runOnJS, useDerivedValue } from 'react-native-reanimated';
 import { CTX } from '../GlobalStyles';
 
-import type { SharedValue } from 'react-native-reanimated';
 import type { PreviewTextProps } from '../types';
 
 export function PreviewText({ style = {}, colorFormat = 'hex' }: PreviewTextProps) {
-  const { returnedResults, colorHash } = useContext(CTX);
+  const { returnedResults, hueValue, saturationValue, brightnessValue, alphaValue } = useContext(CTX);
 
   const [text, setText] = useState(returnedResults()[colorFormat]);
 
-  const updateText = (_t: SharedValue<string>) => {
+  const updateText = () => {
     setText(returnedResults()[colorFormat]);
   };
 
   useDerivedValue(() => {
-    runOnJS(updateText)(colorHash); // passing a value is not necessary, but it doesn't work without it.
-  }, [colorHash.value, colorFormat]);
+    // To track changes in the color channel values of the ReText component.
+    [hueValue.value, saturationValue.value, brightnessValue.value, alphaValue.value];
+    runOnJS(updateText)();
+  }, [colorFormat]);
 
   return <Text style={[styles.previewText, style]}>{text}</Text>;
 }

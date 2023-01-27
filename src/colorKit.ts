@@ -1,4 +1,4 @@
-type ColorFormats = 'hex3' | 'hex4' | 'hex6' | 'hex8' | 'hsl' | 'hsla' | 'rgb' | 'rgba' | 'hsva' | 'hsv' | 'hwba' | 'hwb';
+export type ColorFormats = 'hex3' | 'hex4' | 'hex6' | 'hex8' | 'hsl' | 'hsla' | 'rgb' | 'rgba' | 'hsva' | 'hsv' | 'hwba' | 'hwb';
 type ColorString = keyof typeof namedColors | string;
 type rgbaT = { r: number; g: number; b: number; a: number };
 type rgbT = Omit<rgbaT, 'a'>;
@@ -8,7 +8,7 @@ type hsvaT = { h: number; s: number; v: number; a: number };
 type hsvT = Omit<hsvaT, 'a'>;
 type hwbaT = { h: number; w: number; b: number; a: number };
 type hwbT = Omit<hwbaT, 'a'>;
-type AnyFormat = ColorString | rgbaT | rgbT | hslaT | hslT | hsvaT | hsvT | hwbaT | hwbT | number;
+export type AnyFormat = ColorString | rgbaT | rgbT | hslaT | hslT | hsvaT | hsvT | hwbaT | hwbT | number;
 type colorTypes<T extends {}> = {
   object: () => T;
   string: (alpha?: boolean) => string;
@@ -22,13 +22,13 @@ type ConversionMethods = {
   hwb: () => colorTypes<hwbaT>;
 };
 
-function clamp(value: number, min: number, max: number): number {
-  return Math.max(min, Math.min(value, max));
-}
+const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(value, max));
+const clampRGB = (value: number) => clamp(Math.round(value), 0, 255);
+const clampHue = (value: number) => clamp(Math.round(value), 0, 360);
+const clamp100 = (value: number) => clamp(Math.round(value), 0, 100);
+const clampAlpha = (value: number) => clamp(+value.toFixed(2), 0, 1);
 
-function randomNumber(min: number, max: number): number {
-  return Math.random() * (max - min) + min;
-}
+const randomNumber = (min: number, max: number) => Math.random() * (max - min) + min;
 
 const namedColors = {
   aliceblue: '#f0f8ff',
@@ -283,7 +283,9 @@ class PrivateMethods {
     const colorType = this.detectColorFormat(color);
 
     if (!colorType?.includes('rgb')) {
-      console.error('The string provided is not an RGB or RGBA color!! returning the color "black" instead.');
+      console.error(
+        '[colorKit] is unable to parse the string into an `RGB` or `RGBA` object. As a result, the color "black" will be returned instead.'
+      );
       return { r: 0, g: 0, b: 0, a: 1 };
     }
 
@@ -293,13 +295,14 @@ class PrivateMethods {
       for (let i = 0; i < entry.length; i++) if (entry[i].test(color)) match = color.match(entry[i]);
     } else match = color.match(entry);
 
-    if (!match) console.error('Error occurred while destructuring RGB values from the given string!!');
+    if (!match)
+      console.error('[colorKit] An error occurred while attempting to destructuring `RGB` values from the given string!!');
 
     return {
-      r: parseInt(match?.[1] ?? '0', 10),
-      g: parseInt(match?.[2] ?? '0', 10),
-      b: parseInt(match?.[3] ?? '0', 10),
-      a: parseFloat(match?.[4] ?? '1'),
+      r: clampRGB(parseInt(match?.[1] ?? '0', 10)),
+      g: clampRGB(parseInt(match?.[2] ?? '0', 10)),
+      b: clampRGB(parseInt(match?.[3] ?? '0', 10)),
+      a: clampAlpha(parseFloat(match?.[4] ?? '1')),
     };
   }
   /** - Convert an `RGB` or `RGBA` color to its corresponding `Hex` color */
@@ -310,6 +313,7 @@ class PrivateMethods {
         : { r: color.r, g: color.g, b: color.b, a: (color as rgbaT).a ?? 1 };
 
     const toHex = (c: number): string => {
+      c = clampRGB(c);
       const hex = c.toString(16);
       return hex.length === 1 ? '0' + hex : hex;
     };
@@ -317,7 +321,7 @@ class PrivateMethods {
     const red = toHex(r),
       green = toHex(g),
       blue = toHex(b),
-      alpha = a === 1 ? '' : toHex(Math.round(a * 255));
+      alpha = a === 1 ? '' : toHex(a * 255);
     return `#${red + green + blue + alpha}`;
   }
   /** - Convert an `RGB` or `RGBA` color to an `HSLA` object representation */
@@ -353,11 +357,11 @@ class PrivateMethods {
       h /= 6;
     }
 
-    h = Math.round(h * 360);
-    s = Math.round(s * 100);
-    l = Math.round(l * 100);
+    h = clampHue(h * 360);
+    s = clamp100(s * 100);
+    l = clamp100(l * 100);
 
-    return { h, s, l, a };
+    return { h, s, l, a: clampAlpha(a) };
   }
   /** - Convert `RGB` or `RGBA` color to an `HSVA`  object representation */
   RGB_HSVA(color: string | rgbaT | rgbT): hsvaT {
@@ -389,10 +393,10 @@ class PrivateMethods {
     }
 
     return {
-      h: Math.round(h * 360),
-      s: Math.round(s * 100),
-      v: Math.round(v * 100),
-      a,
+      h: clampHue(h * 360),
+      s: clamp100(s * 100),
+      v: clamp100(v * 100),
+      a: clampAlpha(a),
     };
   }
   /** - Convert `RGB` or `RGBA` color to an `HWBA`  object representation */
@@ -405,14 +409,14 @@ class PrivateMethods {
 
     const { h } = this.RGB_HSLA(color);
 
-    const white = clamp(Math.round(Math.min(red, green, blue) * 100), 0, 100);
-    const black = clamp(Math.round((1 - Math.max(red, green, blue)) * 100), 0, 100);
+    const white = Math.min(red, green, blue) * 100;
+    const black = (1 - Math.max(red, green, blue)) * 100;
 
     return {
-      h,
-      w: white,
-      b: black,
-      a,
+      h: clampHue(h),
+      w: clamp100(white),
+      b: clamp100(black),
+      a: clampAlpha(a),
     };
   }
 
@@ -424,7 +428,9 @@ class PrivateMethods {
     const colorType = this.detectColorFormat(color.trim().toLowerCase());
 
     if (!colorType?.includes('hex')) {
-      console.error('The string provided is not an HEX color!! returning the color "black" instead');
+      console.error(
+        '[colorKit] is unable to normalize the `HEX` string provided. As a result, the color "black" will be returned instead.'
+      );
       return '#000000ff';
     }
 
@@ -448,13 +454,14 @@ class PrivateMethods {
       for (let i = 0; i < entry.length; i++) if (entry[i].test(hex)) match = hex.match(entry[i]);
     } else match = hex.match(entry);
 
-    if (!match) console.error('Error occurred while destructuring HEX values from the given string!!');
+    if (!match)
+      console.error('[colorKit] An error occurred while attempting to destructuring `HEX` values from the given string!!');
 
     return {
-      r: parseInt(match?.[1] ?? '0', 16),
-      g: parseInt(match?.[2] ?? '0', 16),
-      b: parseInt(match?.[3] ?? '0', 16),
-      a: +(parseInt(match?.[4] ?? '0', 16) / 255).toFixed(2),
+      r: clampRGB(parseInt(match?.[1] ?? '0', 16)),
+      g: clampRGB(parseInt(match?.[2] ?? '0', 16)),
+      b: clampRGB(parseInt(match?.[3] ?? '0', 16)),
+      a: clampAlpha(parseInt(match?.[4] ?? '0', 16) / 255),
     };
   }
   /** - Convert any `HEX` color to an `HSVA` object representation */
@@ -481,7 +488,9 @@ class PrivateMethods {
     const colorType = this.detectColorFormat(color);
 
     if (!colorType?.includes('hsl')) {
-      console.error('The string provided is not an HSL or HSLA color!! returning the color "black" instead');
+      console.error(
+        '[colorKit] is unable to parse the string into an `HSL` or `HSLA` object. As a result, the color "black" will be returned instead.'
+      );
       return { h: 0, s: 0, l: 0, a: 1 };
     }
 
@@ -491,13 +500,14 @@ class PrivateMethods {
       for (let i = 0; i < entry.length; i++) if (entry[i].test(color)) match = color.match(entry[i]);
     } else match = color.match(entry);
 
-    if (!match) console.error('Error occurred while destructuring HSL values from the given string!!');
+    if (!match)
+      console.error('[colorKit] An error occurred while attempting to destructuring `HSL` values from the given string!!');
 
     return {
-      h: parseInt(match?.[1] ?? '0', 10),
-      s: parseInt(match?.[2] ?? '0', 10),
-      l: parseInt(match?.[3] ?? '0', 10),
-      a: parseFloat(match?.[4] ?? '1'),
+      h: clampHue(parseInt(match?.[1] ?? '0', 10)),
+      s: clamp100(parseInt(match?.[2] ?? '0', 10)),
+      l: clamp100(parseInt(match?.[3] ?? '0', 10)),
+      a: clampAlpha(parseFloat(match?.[4] ?? '1')),
     };
   }
   /** - Convert `HSL` or `HSLA` color to an `RGBA` object representation */
@@ -526,10 +536,10 @@ class PrivateMethods {
       b = hue2rgb(p, q, h - 1 / 3);
 
     return {
-      r: Math.round(r * 255),
-      g: Math.round(g * 255),
-      b: Math.round(b * 255),
-      a: a,
+      r: clampRGB(r * 255),
+      g: clampRGB(g * 255),
+      b: clampRGB(b * 255),
+      a: clampAlpha(a),
     };
   }
   /** - Convert `HSL` or `HSLA` color to `HEX` color */
@@ -540,6 +550,7 @@ class PrivateMethods {
         : { h: color.h, s: color.s, l: color.l, a: (color as hslaT).a ?? 1 };
 
     const toHex = (c: number): string => {
+      c = clampRGB(c);
       const hex = c.toString(16);
       return hex.length === 1 ? '0' + hex : hex;
     };
@@ -548,7 +559,7 @@ class PrivateMethods {
       red = toHex(r),
       green = toHex(g),
       blue = toHex(b),
-      alpha = a === 1 ? '' : toHex(Math.round(a * 255));
+      alpha = a === 1 ? '' : toHex(a * 255);
 
     return `#${red + green + blue + alpha}`;
   }
@@ -564,10 +575,10 @@ class PrivateMethods {
       sNew = v === 0 ? 0 : 2 - (2 * l) / v;
 
     return {
-      h,
-      s: clamp(Math.round(sNew * 100), 0, 100),
-      v: clamp(Math.round(v * 100), 0, 100),
-      a,
+      h: clampHue(h),
+      s: clamp100(sNew * 100),
+      v: clamp100(v * 100),
+      a: clampAlpha(a),
     };
   }
   /** - Convert `HSL` or `HSLA` color to an `HWBA` object representation */
@@ -583,7 +594,9 @@ class PrivateMethods {
     const colorType = this.detectColorFormat(color);
 
     if (!colorType?.includes('hsv')) {
-      console.error('The string provided is not an HSV or HSVA color!! returning the color "black" instead');
+      console.error(
+        '[colorKit] is unable to parse the string into an `HSV` or `HSVA` object. As a result, the color "black" will be returned instead.'
+      );
       return { h: 0, s: 0, v: 0, a: 1 };
     }
 
@@ -593,29 +606,30 @@ class PrivateMethods {
       for (let i = 0; i < entry.length; i++) if (entry[i].test(color)) match = color.match(entry[i]);
     } else match = color.match(entry);
 
-    if (!match) console.error('Error occurred while destructuring HSV values from the given string!!');
+    if (!match)
+      console.error('[colorKit] An error occurred while attempting to destructuring `HSL` values from the given string!!');
 
     return {
-      h: parseInt(match?.[1] ?? '0', 10),
-      s: parseInt(match?.[2] ?? '0', 10),
-      v: parseInt(match?.[3] ?? '0', 10),
-      a: parseFloat(match?.[4] ?? '1'),
+      h: clampHue(parseInt(match?.[1] ?? '0', 10)),
+      s: clamp100(parseInt(match?.[2] ?? '0', 10)),
+      v: clamp100(parseInt(match?.[3] ?? '0', 10)),
+      a: clampAlpha(parseFloat(match?.[4] ?? '1')),
     };
   }
   /** - Convert `HSV` color to an `RGBA` object representation */
   HSV_RGBA(color: hsvaT | hsvT | string): rgbaT {
     const hsva = typeof color === 'string' ? this.getHsvObject(color.trim().toLowerCase()) : color;
 
-    const h = hsva.h / 360;
-    const s = hsva.s / 100;
-    const v = hsva.v / 100;
-    const a = (hsva as hsvaT).a ?? 1;
+    const h = hsva.h / 360,
+      s = hsva.s / 100,
+      v = hsva.v / 100,
+      a = (hsva as hsvaT).a ?? 1;
 
-    const i = Math.floor(h * 6);
-    const f = h * 6 - i;
-    const p = v * (1 - s);
-    const q = v * (1 - f * s);
-    const t = v * (1 - (1 - f) * s);
+    const i = Math.floor(h * 6),
+      f = h * 6 - i,
+      p = v * (1 - s),
+      q = v * (1 - f * s),
+      t = v * (1 - (1 - f) * s);
 
     let r = 0,
       g = 0,
@@ -654,26 +668,31 @@ class PrivateMethods {
     }
 
     return {
-      r: clamp(Math.round(r * 255), 0, 255),
-      g: clamp(Math.round(g * 255), 0, 255),
-      b: clamp(Math.round(b * 255), 0, 255),
-      a,
+      r: clampRGB(r * 255),
+      g: clampRGB(g * 255),
+      b: clampRGB(b * 255),
+      a: clampAlpha(a),
     };
   }
   /** - Convert `HSV` color to an `HSLA` object representation */
   HSV_HSLA(color: hsvaT | hsvT | string): hslaT {
     const hsva = typeof color === 'string' ? this.getHsvObject(color.trim().toLowerCase()) : color;
 
-    const h = hsva.h;
-    const s = hsva.s / 100;
-    const v = hsva.v / 100;
-    const a = (hsva as hsvaT).a ?? 1;
+    const h = hsva.h,
+      s = hsva.s / 100,
+      v = hsva.v / 100,
+      a = (hsva as hsvaT).a ?? 1;
 
-    const l = ((2 - s) * v) / 2;
-    const sl = s * v;
-    const sln = l !== 0 && l !== 1 ? sl / (l < 0.5 ? l * 2 : 2 - l * 2) : sl;
+    const l = ((2 - s) * v) / 2,
+      sl = s * v,
+      sln = l !== 0 && l !== 1 ? sl / (l < 0.5 ? l * 2 : 2 - l * 2) : sl;
 
-    return { h, s: clamp(Math.round(sln * 100), 0, 100), l: clamp(Math.round(l * 100), 0, 100), a };
+    return {
+      h: clampHue(h),
+      s: clamp100(sln * 100),
+      l: clamp100(l * 100),
+      a: clampAlpha(a),
+    };
   }
   /** - Convert `HSV` color to an `Hex` color */
   HSV_HEX(color: hsvaT | hsvT | string): string {
@@ -685,13 +704,17 @@ class PrivateMethods {
   HSV_HWBA(color: hsvaT | hsvT | string): hwbaT {
     const hsva = typeof color === 'string' ? this.getHsvObject(color.trim().toLowerCase()) : color;
 
-    const { h, s, v } = hsva;
-    const a = (hsva as hsvaT).a ?? 1;
+    const { h, s, v } = hsva,
+      a = (hsva as hsvaT).a ?? 1,
+      w = (1 - s / 100) * v,
+      b = (1 - v / 100) * 100;
 
-    const w = clamp(Math.round((1 - s / 100) * v), 0, 100);
-    const b = clamp(Math.round((1 - v / 100) * 100), 0, 100);
-
-    return { h, w, b, a };
+    return {
+      h: clampHue(h),
+      w: clamp100(w),
+      b: clamp100(b),
+      a: clampAlpha(a),
+    };
   }
 
   // * HWB
@@ -701,7 +724,9 @@ class PrivateMethods {
     const colorType = this.detectColorFormat(color);
 
     if (!colorType?.includes('hwb')) {
-      console.error('The string provided is not an HWB or HWBA color!! returning the color "black" instead');
+      console.error(
+        '[colorKit] is unable to parse the string into an `HWB` or `HWBA` object. As a result, the color "black" will be returned instead.'
+      );
       return { h: 0, w: 0, b: 0, a: 1 };
     }
 
@@ -711,13 +736,14 @@ class PrivateMethods {
       for (let i = 0; i < entry.length; i++) if (entry[i].test(color)) match = color.match(entry[i]);
     } else match = color.match(entry);
 
-    if (!match) console.error('Error occurred while destructuring HWB values from the given string!!');
+    if (!match)
+      console.error('[colorKit] An error occurred while attempting to destructuring `HWB` values from the given string!!');
 
     return {
-      h: parseInt(match?.[1] ?? '0', 10),
-      w: parseInt(match?.[2] ?? '0', 10),
-      b: parseInt(match?.[3] ?? '100', 10),
-      a: parseFloat(match?.[4] ?? '1'),
+      h: clampHue(parseInt(match?.[1] ?? '0', 10)),
+      w: clamp100(parseInt(match?.[2] ?? '0', 10)),
+      b: clamp100(parseInt(match?.[3] ?? '100', 10)),
+      a: clampAlpha(parseFloat(match?.[4] ?? '1')),
     };
   }
   /** - Convert `HWB` or `HWBA` color to an `RGBA` object representation */
@@ -730,7 +756,7 @@ class PrivateMethods {
       a = (hwba as hwbaT)?.a ?? 1;
 
     if (w + b >= 1) {
-      const gray = clamp(Math.round((w * 255) / (w + b)), 0, 255);
+      const gray = clampRGB((w * 255) / (w + b));
       return {
         r: gray,
         g: gray,
@@ -753,10 +779,10 @@ class PrivateMethods {
       blue = calcHue(0, 1, h - 1 / 3) * (1 - w - b) + w;
 
     return {
-      r: clamp(Math.round(red * 255), 0, 255),
-      g: clamp(Math.round(green * 255), 0, 255),
-      b: clamp(Math.round(blue * 255), 0, 255),
-      a,
+      r: clampRGB(red * 255),
+      g: clampRGB(green * 255),
+      b: clampRGB(blue * 255),
+      a: clampAlpha(a),
     };
   }
   /** - Convert `HWB` or `HWBA` color to an `Hex` color */
@@ -773,10 +799,15 @@ class PrivateMethods {
       b = hwba.b / 100,
       a = (hwba as hwbaT)?.a ?? 1;
 
-    const v = clamp(Math.round((1 - b) * 100), 0, 100);
-    const s = clamp(Math.round((1 - w / (v / 100)) * 100), 0, 100);
+    const v = (1 - b) * 100;
+    const s = (1 - w / (v / 100)) * 100;
 
-    return { h, s, v, a };
+    return {
+      h: clampHue(h),
+      s: clamp100(s),
+      v: clamp100(v),
+      a: clampAlpha(a),
+    };
   }
   /** - Convert `HWB` or `HWBA` color to an `HSLA` object representation */
   HWB_HSLA(color: hwbaT | hwbT | string): hslaT {
@@ -957,28 +988,44 @@ class Colors {
     if (colorType === 'rgb' || colorType === 'rgba') {
       return {
         string: (alpha?: boolean) => {
-          const { r, g, b, a } = typeof color === 'string' ? this._.getRgbObject(color) : (color as rgbaT);
+          const rgba = typeof color === 'string' ? this._.getRgbObject(color) : (color as rgbaT),
+            r = clampRGB(rgba.r),
+            g = clampRGB(rgba.g),
+            b = clampRGB(rgba.b),
+            a = clampAlpha(rgba.a ?? 1);
 
-          if (typeof alpha === 'undefined')
-            return typeof a === 'number' && a !== 1 ? `rgba(${r}, ${g}, ${b}, ${a})` : `rgb(${r}, ${g}, ${b})`;
+          if (typeof alpha === 'undefined') return a !== 1 ? `rgba(${r}, ${g}, ${b}, ${a})` : `rgb(${r}, ${g}, ${b})`;
 
-          if (alpha) return `rgba(${r}, ${g}, ${b}, ${a ?? 1})`;
+          if (alpha) return `rgba(${r}, ${g}, ${b}, ${a})`;
 
           return `rgb(${r}, ${g}, ${b})`;
         },
         array: () => {
-          const { r, g, b, a } = typeof color === 'string' ? this._.getRgbObject(color) : (color as rgbaT);
-          return [r, g, b, a ?? 1];
+          const rgba = typeof color === 'string' ? this._.getRgbObject(color) : (color as rgbaT),
+            r = clampRGB(rgba.r),
+            g = clampRGB(rgba.g),
+            b = clampRGB(rgba.b),
+            a = clampAlpha(rgba.a ?? 1);
+
+          return [r, g, b, a];
         },
         object: () => {
-          const { r, g, b, a } = typeof color === 'string' ? this._.getRgbObject(color) : (color as rgbaT);
-          return { r, g, b, a: a ?? 1 };
+          const rgba = typeof color === 'string' ? this._.getRgbObject(color) : (color as rgbaT),
+            r = clampRGB(rgba.r),
+            g = clampRGB(rgba.g),
+            b = clampRGB(rgba.b),
+            a = clampAlpha(rgba.a ?? 1);
+
+          return { r, g, b, a };
         },
       };
     }
 
     // ! error
-    console.error('error converting color to RGB!! returning the color "black" instead');
+    console.error(
+      '[colorKit] An error occurred while attempting to convert the provided parameter into an `RGB` color. As a result, the default color "black" will be used instead.'
+    );
+
     return {
       string: (alpha?: boolean) => (alpha ? 'rgba(0, 0, 0, 1)' : 'rgb(0, 0, 0)'),
       array: () => [0, 0, 0, 1],
@@ -1017,7 +1064,10 @@ class Colors {
     if (colorType?.includes('hex')) return color as string;
 
     // ! error
-    console.error('error converting color to HEX!! returning the color "black" instead');
+    console.error(
+      '[colorKit] An error occurred while attempting to convert the provided parameter into an `HEX` color. As a result, the default color "black" will be used instead.'
+    );
+
     return '#000000';
   }
 
@@ -1116,28 +1166,44 @@ class Colors {
     if (colorType === 'hsl' || colorType === 'hsla') {
       return {
         string: (alpha?: boolean) => {
-          const { h, s, l, a } = typeof color === 'string' ? this._.getHslObject(color) : (color as hslaT);
+          const hsla = typeof color === 'string' ? this._.getHslObject(color) : (color as hslaT),
+            h = clampHue(hsla.h),
+            s = clamp100(hsla.s),
+            l = clamp100(hsla.l),
+            a = clampAlpha(hsla.a ?? 1);
 
-          if (typeof alpha === 'undefined')
-            return typeof a === 'number' && a !== 1 ? `hsla(${h}, ${s}%, ${l}%, ${a})` : `hsl(${h}, ${s}%, ${l}%)`;
+          if (typeof alpha === 'undefined') return a !== 1 ? `hsla(${h}, ${s}%, ${l}%, ${a})` : `hsl(${h}, ${s}%, ${l}%)`;
 
-          if (alpha) return `hsla(${h}, ${s}%, ${l}%, ${a ?? 1})`;
+          if (alpha) return `hsla(${h}, ${s}%, ${l}%, ${a})`;
 
           return `hsl(${h}, ${s}%, ${l}%)`;
         },
         array: () => {
-          const { h, s, l, a } = typeof color === 'string' ? this._.getHslObject(color) : (color as hslaT);
-          return [h, s, l, a ?? 1];
+          const hsla = typeof color === 'string' ? this._.getHslObject(color) : (color as hslaT),
+            h = clampHue(hsla.h),
+            s = clamp100(hsla.s),
+            l = clamp100(hsla.l),
+            a = clampAlpha(hsla.a ?? 1);
+
+          return [h, s, l, a];
         },
         object: () => {
-          const { h, s, l, a } = typeof color === 'string' ? this._.getHslObject(color) : (color as hslaT);
-          return { h, s, l, a: a ?? 1 };
+          const hsla = typeof color === 'string' ? this._.getHslObject(color) : (color as hslaT),
+            h = clampHue(hsla.h),
+            s = clamp100(hsla.s),
+            l = clamp100(hsla.l),
+            a = clampAlpha(hsla.a ?? 1);
+
+          return { h, s, l, a };
         },
       };
     }
 
     // ! error
-    console.error('error converting color to HSL!! returning the color "black" instead');
+    console.error(
+      '[colorKit] An error occurred while attempting to convert the provided parameter into an `HSL` color. As a result, the default color "black" will be used instead.'
+    );
+
     return {
       string: (alpha?: boolean) => (alpha ? 'hsla(0, 0%, 0%, 1)' : 'hsl(0, 0%, 0%)'),
       array: () => [0, 0, 0, 1],
@@ -1240,28 +1306,44 @@ class Colors {
     if (colorType === 'hsv' || colorType === 'hsva') {
       return {
         string: (alpha?: boolean) => {
-          const { h, s, v, a } = typeof color === 'string' ? this._.getHsvObject(color) : (color as hsvaT);
+          const hsva = typeof color === 'string' ? this._.getHsvObject(color) : (color as hsvaT),
+            h = clampHue(hsva.h),
+            s = clamp100(hsva.s),
+            v = clamp100(hsva.v),
+            a = clampAlpha(hsva.a ?? 1);
 
-          if (typeof alpha === 'undefined')
-            return typeof a === 'number' && a !== 1 ? `hsva(${h}, ${s}%, ${v}%, ${a})` : `hsv(${h}, ${s}%, ${v}%)`;
+          if (typeof alpha === 'undefined') return a !== 1 ? `hsva(${h}, ${s}%, ${v}%, ${a})` : `hsv(${h}, ${s}%, ${v}%)`;
 
-          if (alpha) return `hsva(${h}, ${s}%, ${v}%, ${a ?? 1})`;
+          if (alpha) return `hsva(${h}, ${s}%, ${v}%, ${a})`;
 
           return `hsv(${h}, ${s}%, ${v}%)`;
         },
         array: () => {
-          const { h, s, v, a } = typeof color === 'string' ? this._.getHsvObject(color) : (color as hsvaT);
-          return [h, s, v, a ?? 1];
+          const hsva = typeof color === 'string' ? this._.getHsvObject(color) : (color as hsvaT),
+            h = clampHue(hsva.h),
+            s = clamp100(hsva.s),
+            v = clamp100(hsva.v),
+            a = clampAlpha(hsva.a ?? 1);
+
+          return [h, s, v, a];
         },
         object: () => {
-          const { h, s, v, a } = typeof color === 'string' ? this._.getHsvObject(color) : (color as hsvaT);
-          return { h, s, v, a: a ?? 1 };
+          const hsva = typeof color === 'string' ? this._.getHsvObject(color) : (color as hsvaT),
+            h = clampHue(hsva.h),
+            s = clamp100(hsva.s),
+            v = clamp100(hsva.v),
+            a = clampAlpha(hsva.a ?? 1);
+
+          return { h, s, v, a };
         },
       };
     }
 
     // ! error
-    console.error('error converting color to HSV!! returning the color "black" instead');
+    console.error(
+      '[colorKit] An error occurred while attempting to convert the provided parameter into an `HSV` color. As a result, the default color "black" will be used instead.'
+    );
+
     return {
       string: (alpha?: boolean) => (alpha ? 'hsva(0, 0%, 0%, 1)' : 'hsv(0, 0%, 0%)'),
       array: () => [0, 0, 0, 1],
@@ -1364,28 +1446,44 @@ class Colors {
     if (colorType === 'hwb' || colorType === 'hwba') {
       return {
         string: (alpha?: boolean) => {
-          const { h, w, b, a } = typeof color === 'string' ? this._.getHwbObject(color) : (color as hwbaT);
+          const hwba = typeof color === 'string' ? this._.getHwbObject(color) : (color as hwbaT),
+            h = clampHue(hwba.h),
+            w = clamp100(hwba.w),
+            b = clamp100(hwba.b),
+            a = clampAlpha(hwba.a ?? 1);
 
-          if (typeof alpha === 'undefined')
-            return typeof a === 'number' && a !== 1 ? `hwba(${h}, ${w}%, ${b}%, ${a})` : `hwb(${h}, ${w}%, ${b}%)`;
+          if (typeof alpha === 'undefined') return a !== 1 ? `hwba(${h}, ${w}%, ${b}%, ${a})` : `hwb(${h}, ${w}%, ${b}%)`;
 
-          if (alpha) return `hwba(${h}, ${w}%, ${b}%, ${a ?? 1})`;
+          if (alpha) return `hwba(${h}, ${w}%, ${b}%, ${a})`;
 
           return `hwb(${h}, ${w}%, ${b}%)`;
         },
         array: () => {
-          const { h, w, b, a } = typeof color === 'string' ? this._.getHwbObject(color) : (color as hwbaT);
-          return [h, w, b, a ?? 1];
+          const hwba = typeof color === 'string' ? this._.getHwbObject(color) : (color as hwbaT),
+            h = clampHue(hwba.h),
+            w = clamp100(hwba.w),
+            b = clamp100(hwba.b),
+            a = clampAlpha(hwba.a ?? 1);
+
+          return [h, w, b, a];
         },
         object: () => {
-          const { h, w, b, a } = typeof color === 'string' ? this._.getHwbObject(color) : (color as hwbaT);
-          return { h, w, b, a: a ?? 1 };
+          const hwba = typeof color === 'string' ? this._.getHwbObject(color) : (color as hwbaT),
+            h = clampHue(hwba.h),
+            w = clamp100(hwba.w),
+            b = clamp100(hwba.b),
+            a = clampAlpha(hwba.a ?? 1);
+
+          return { h, w, b, a };
         },
       };
     }
 
     // ! error
-    console.error('error converting color to HWB!! returning the color "black" instead');
+    console.error(
+      '[colorKit] An error occurred while attempting to convert the provided parameter into an `HWB` color. As a result, the default color "black" will be used instead.'
+    );
+
     return {
       string: (alpha?: boolean) => (alpha ? 'hwba(0, 0%, 100%, 1)' : 'hwb(0, 0%, 100%)'),
       array: () => [0, 0, 100, 1],

@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState, useContext, useCallback } from 'react';
+import React, { useState, useContext, useCallback } from 'react';
 import { I18nManager, Image } from 'react-native';
 import { PanGestureHandler } from 'react-native-gesture-handler';
 import Animated, {
   runOnJS,
   useAnimatedGestureHandler,
   useAnimatedStyle,
+  useDerivedValue,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
@@ -25,51 +26,45 @@ export function SaturationSlider({
   reverse = false,
 }: SliderPorps) {
   const {
-    registerHandle,
-    updateSaturation,
-    onGestureEventFinish,
-    solidColor,
+    saturationValue,
+    hueValue,
+    onGestureChange,
+    onGestureEnd,
     sliderThickness,
-    activeHueStyle,
     thumbSize: thumbsSize,
     thumbShape: thumbsShape,
+    thumbColor: thumbsColor,
   } = useContext(CTX);
 
   thumbShape = thumbShape ?? thumbsShape;
-  const thumb_Size = thumbSize ?? thumbsSize;
+  const thumb_size = thumbSize ?? thumbsSize;
+  const thumb_color = thumbColor ?? thumbsColor;
+
   const borderRadius = getStyle(style, 'borderRadius') ?? 5;
-
-  const id = useRef('saturation' + Math.random()).current;
-
   const getWidth = getStyle(style, 'width');
   const getHeight = getStyle(style, 'height');
 
   const [width, setWidth] = useState(typeof getWidth === 'number' ? getWidth : sliderThickness);
   const [height, setHeight] = useState(typeof getHeight === 'number' ? getHeight : sliderThickness);
 
-  const handlePos = useSharedValue(0);
   const handleScale = useSharedValue(1);
 
-  useEffect(() => {
-    registerHandle({
-      id,
-      channel: 's',
-      axis: vertical ? 'y' : 'x',
-      width,
-      height,
-      thumbSize: thumb_Size,
-      isReversed: reverse,
-      handle: handlePos,
-    });
+  const handlePos = useDerivedValue(() => {
+    const length = vertical ? height : width;
+    const percent = (saturationValue.value / 100) * length;
+    const pos = (reverse ? length - percent : percent) - thumb_size / 2;
+    return pos;
   }, [height, width, thumbSize, vertical, reverse]);
 
   const handleStyle = useAnimatedStyle(() => ({
     transform: [
-      { translateY: vertical ? handlePos.value : height / 2 - thumb_Size / 2 },
-      { translateX: vertical ? width / 2 - thumb_Size / 2 : handlePos.value },
+      { translateY: vertical ? handlePos.value : height / 2 - thumb_size / 2 },
+      { translateX: vertical ? width / 2 - thumb_size / 2 : handlePos.value },
       { scale: handleScale.value },
     ],
   }));
+
+  const activeHueStyle = useAnimatedStyle(() => ({ backgroundColor: `hsl(${hueValue.value}, 100%, 50%)` }));
 
   const gestureEvent = useAnimatedGestureHandler(
     {
@@ -81,23 +76,22 @@ export function SaturationSlider({
       onActive: (event, ctx) => {
         const clamp = (v: number, max: number) => Math.min(Math.max(v, 0), max);
 
-        const x = event.translationX;
-        const y = event.translationY;
-        const posX = clamp(x + ctx.x, width);
-        const posY = clamp(y + ctx.y, height);
-        const percentX = posX / width;
-        const percentY = posY / height;
+        const x = event.translationX,
+          y = event.translationY,
+          posX = clamp(x + ctx.x, width),
+          posY = clamp(y + ctx.y, height),
+          percentX = posX / width,
+          percentY = posY / height,
+          saturationX = reverse ? 100 - Math.round(percentX * 100) : Math.round(percentX * 100),
+          saturationY = reverse ? 100 - Math.round(percentY * 100) : Math.round(percentY * 100);
 
-        const saturationX = reverse ? 100 - Math.round(percentX * 100) : Math.round(percentX * 100);
-        const saturationY = reverse ? 100 - Math.round(percentY * 100) : Math.round(percentY * 100);
+        saturationValue.value = vertical ? saturationY : saturationX;
 
-        const saturation = vertical ? saturationY : saturationX;
-
-        runOnJS(updateSaturation)(saturation);
+        runOnJS(onGestureChange)();
       },
       onFinish: () => {
         handleScale.value = withTiming(1, { duration: 100 });
-        runOnJS(onGestureEventFinish)();
+        runOnJS(onGestureEnd)();
       },
     },
     [height, width, thumbSize, vertical, reverse]
@@ -110,7 +104,6 @@ export function SaturationSlider({
 
   const imageRotate = vertical ? (reverse ? '270deg' : '90deg') : reverse ? '180deg' : '0deg';
   const imageTranslateY = (reverse && isRtl) || (!reverse && !isRtl) ? height / 2 - width / 2 : -height / 2 + width / 2;
-
   const imageStyle = typeof height === 'number' &&
     typeof width === 'number' && {
       width: vertical ? height : width,
@@ -136,7 +129,7 @@ export function SaturationSlider({
         ]}
       >
         <Image source={require('../assets/Saturation.png')} style={imageStyle} />
-        <Thumb {...{ channel: 's', thumbShape, thumbSize: thumb_Size, thumbColor, handleStyle, solidColor }} />
+        <Thumb {...{ channel: 's', thumbShape, thumbSize: thumb_size, thumbColor: thumb_color, handleStyle }} />
       </Animated.View>
     </PanGestureHandler>
   );

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SharedValue } from 'react-native-reanimated';
 import ColorPicker, { Swatches, Preview, OpacitySlider, Panel2, BrightnessSlider, PreviewText } from 'reanimated-color-picker';
+import type { PreviewTextProps } from 'reanimated-color-picker';
 
 const customSwatches = ['#f72585', '#b5179e', '#7209b7', '#560bad', '#480ca8'];
 
@@ -11,18 +12,24 @@ interface porpsType {
 }
 
 function FormatsTabs() {
-  const [Format, setFormat] = useState<any>('hex');
+  const [Format, setFormat] = useState<PreviewTextProps['colorFormat']>('hex');
   return (
     <View style={[{ backgroundColor: '#edf2f4', padding: 10, borderRadius: 5, marginTop: 10 }, styles.shadow]}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Pressable onPress={() => setFormat('rgba')}>
+          <Text style={[styles.tabText, { borderColor: Format === 'rgba' ? '#666666' : '#fff' }]}>RGB</Text>
+        </Pressable>
         <Pressable onPress={() => setFormat('hex')}>
           <Text style={[styles.tabText, { borderColor: Format === 'hex' ? '#666666' : '#fff' }]}>HEX</Text>
         </Pressable>
-        <Pressable onPress={() => setFormat('rgba')}>
-          <Text style={[styles.tabText, { borderColor: Format === 'rgba' ? '#666666' : '#fff' }]}>RGBA</Text>
-        </Pressable>
         <Pressable onPress={() => setFormat('hsla')}>
-          <Text style={[styles.tabText, { borderColor: Format === 'hsla' ? '#666666' : '#fff' }]}>HSLA</Text>
+          <Text style={[styles.tabText, { borderColor: Format === 'hsla' ? '#666666' : '#fff' }]}>HSL</Text>
+        </Pressable>
+        <Pressable onPress={() => setFormat('hsva')}>
+          <Text style={[styles.tabText, { borderColor: Format === 'hsva' ? '#666666' : '#fff' }]}>HSV</Text>
+        </Pressable>
+        <Pressable onPress={() => setFormat('hwba')}>
+          <Text style={[styles.tabText, { borderColor: Format === 'hwba' ? '#666666' : '#fff' }]}>HWB</Text>
         </Pressable>
       </View>
       <PreviewText style={{ marginVertical: 20, fontSize: 18, color: '#293241' }} colorFormat={Format} />
@@ -79,13 +86,12 @@ const styles = StyleSheet.create({
     paddingBottom: 0,
   },
   tabText: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 'bold',
     color: '#000',
     borderWidth: 1,
     backgroundColor: '#fff',
-    paddingHorizontal: 15,
-    paddingVertical: 5,
+    padding: 5,
     borderRadius: 5,
   },
   panelBrightnessContainer: {
