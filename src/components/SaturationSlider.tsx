@@ -129,7 +129,7 @@ export function SaturationSlider({
         ]}
       >
         <Image source={require('../assets/Saturation.png')} style={imageStyle} />
-        <Thumb {...{ channel: 's', thumbShape, thumbSize: thumb_size, thumbColor: thumb_color, handleStyle }} />
+        <Thumb {...{ channel: 's', thumbShape, thumbSize: thumb_size, thumbColor: thumb_color, handleStyle, vertical }} />
       </Animated.View>
     </PanGestureHandler>
   );
