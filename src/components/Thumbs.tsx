@@ -249,7 +249,7 @@ export default function Thumb({ thumbShape = 'ring', thumbSize, thumbColor, hand
         : channel === 's'
         ? { h: hueValue.value, s: saturationValue.value, v: 70 }
         : channel === 'a'
-        ? { h: hueValue.value, s: alphaValue.value, v: 70 }
+        ? { h: hueValue.value, s: alphaValue.value * 100, v: 70 }
         : { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
 
     runOnJS(setInverted)(values);

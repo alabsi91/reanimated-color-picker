@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StatusBar, StyleSheet } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import Example1 from './Example1';
 import Example2 from './Example2';
@@ -18,12 +18,16 @@ export default function App() {
   };
 
   return (
-    <Animated.View style={[styles.container, animatedStyle]}>
-      <Example1 color={color} onSelectColor={onSelectColor} />
-      <Example2 color={color} onSelectColor={onSelectColor} />
-      <Example3 color={color} onSelectColor={onSelectColor} />
-      <Example4 color={color} onSelectColor={onSelectColor} />
-    </Animated.View>
+    <>
+      <StatusBar backgroundColor='transparent' translucent />
+
+      <Animated.View style={[styles.container, animatedStyle]}>
+        <Example1 color={color} onSelectColor={onSelectColor} />
+        <Example2 color={color} onSelectColor={onSelectColor} />
+        <Example3 color={color} onSelectColor={onSelectColor} />
+        <Example4 color={color} onSelectColor={onSelectColor} />
+      </Animated.View>
+    </>
   );
 }
 

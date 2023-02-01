@@ -28,7 +28,7 @@ export default function Example1({ onSelectColor, color }: porpsType) {
     <>
       <Button title='Color Picker 1' onPress={() => setShowModal(true)} />
 
-      <Modal onRequestClose={() => setShowModal(false)} visible={showModal} animationType='slide'>
+      <Modal onRequestClose={() => setShowModal(false)} visible={showModal} animationType='slide' statusBarTranslucent>
         <View style={styles.container}>
           <ColorPicker
             value={color.value}

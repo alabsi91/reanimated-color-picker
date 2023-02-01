@@ -8,7 +8,7 @@ import type { StyleProp, TextStyle } from 'react-native';
 import type { SharedValue } from 'react-native-reanimated';
 import colorKit from '../colorKit';
 
-const ReText = ({ text, style, hash }: { text: () => string; style: StyleProp<TextStyle>; hash: SharedValue<number>[] }) => {
+const ReText = ({ text, style, hash }: { text: () => string; style: StyleProp<TextStyle>[]; hash: SharedValue<number>[] }) => {
   const [color, setColor] = useState(text());
 
   const updateText = () => {
@@ -20,8 +20,7 @@ const ReText = ({ text, style, hash }: { text: () => string; style: StyleProp<Te
     runOnJS(updateText)();
   });
 
-  const tStyle = Array.isArray(style) ? style : [style];
-  return <Animated.Text style={[styles.previewText, ...tStyle]}>{color}</Animated.Text>;
+  return <Animated.Text style={[styles.previewText, ...style]}>{color}</Animated.Text>;
 };
 
 export function Preview({
@@ -90,6 +89,7 @@ const styles = StyleSheet.create({
   previewContainer: {
     flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
   },
   previewText: {
     fontWeight: 'bold',
