@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Text, StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useSharedValue, withTiming } from 'react-native-reanimated';
@@ -11,6 +11,7 @@ import type { ColorPickerProps, TCTX } from './types';
 
 export default function ColorPicker({
   sliderThickness = 25,
+  thumbAnimationDuration = 200,
   thumbSize = 35,
   thumbShape = 'ring',
   thumbColor,
@@ -20,14 +21,20 @@ export default function ColorPicker({
   style = {},
   children = <Text>NO CHILDREN</Text>,
 }: ColorPickerProps) {
+  const initialColor = useRef(colorKit.HSV(value).object()).current;
   // color's channles values.
-  const hueValue = useSharedValue(0);
-  const saturationValue = useSharedValue(0);
-  const brightnessValue = useSharedValue(0);
-  const alphaValue = useSharedValue(1);
+  const hueValue = useSharedValue(initialColor.h);
+  const saturationValue = useSharedValue(initialColor.s);
+  const brightnessValue = useSharedValue(initialColor.v);
+  const alphaValue = useSharedValue(initialColor.a);
 
   const returnedResults = (color?: AnyFormat) => {
-    color = color ?? { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value, a: alphaValue.value };
+    color = color ?? {
+      h: hueValue.value,
+      s: saturationValue.value,
+      v: brightnessValue.value,
+      a: alphaValue.value,
+    };
     return {
       hex: colorKit.HEX(color),
       rgb: colorKit.RGB(color).string(false),
@@ -52,11 +59,10 @@ export default function ColorPicker({
   const setColor = (color: string) => {
     const { h, s, v, a } = colorKit.HSV(color).object();
 
-    const duration = 200;
-    hueValue.value = withTiming(h, { duration });
-    saturationValue.value = withTiming(s, { duration });
-    brightnessValue.value = withTiming(v, { duration });
-    alphaValue.value = withTiming(a, { duration });
+    hueValue.value = withTiming(h, { duration: thumbAnimationDuration });
+    saturationValue.value = withTiming(s, { duration: thumbAnimationDuration });
+    brightnessValue.value = withTiming(v, { duration: thumbAnimationDuration });
+    alphaValue.value = withTiming(a, { duration: thumbAnimationDuration });
   };
 
   useEffect(() => {

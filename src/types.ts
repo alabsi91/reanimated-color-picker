@@ -69,6 +69,9 @@ export interface ColorPickerProps {
    */
   sliderThickness?: number;
 
+  /** - a global property to change the duration which the thumbs animate when the value prop changes. */
+  thumbAnimationDuration?: number;
+
   /** - a global property to change the thumb size of all descendant sliders components. */
   thumbSize?: number;
 
