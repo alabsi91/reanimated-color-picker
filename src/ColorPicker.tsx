@@ -59,11 +59,10 @@ export default function ColorPicker({
   const setColor = (color: string) => {
     const { h, s, v, a } = colorKit.HSV(color).object();
 
-    const duration = thumbAnimationDuration;
-    hueValue.value = withTiming(h, { duration });
-    saturationValue.value = withTiming(s, { duration });
-    brightnessValue.value = withTiming(v, { duration });
-    alphaValue.value = withTiming(a, { duration });
+    hueValue.value = withTiming(h, { duration: thumbAnimationDuration });
+    saturationValue.value = withTiming(s, { duration: thumbAnimationDuration });
+    brightnessValue.value = withTiming(v, { duration: thumbAnimationDuration });
+    alphaValue.value = withTiming(a, { duration: thumbAnimationDuration });
   };
 
   useEffect(() => {
