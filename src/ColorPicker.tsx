@@ -10,98 +10,97 @@ import type {AnyFormat} from './colorKit';
 import type {ColorPickerProps, TCTX} from './types';
 
 export default function ColorPicker({
-	sliderThickness = 25,
-	thumbSize = 35,
-	thumbShape = 'ring',
-	thumbColor,
-	value = '#fff',
-	onChange,
-	onComplete,
-	style = {},
-	children = <Text>NO CHILDREN</Text>,
+  sliderThickness = 25,
+  thumbSize = 35,
+  thumbShape = 'ring',
+  thumbColor,
+  value = '#fff',
+  onChange,
+  onComplete,
+  style = {},
+  children = <Text>NO CHILDREN</Text>,
 }: ColorPickerProps) {
-	const setInitialColor = useRef(false);
+  const initialColorSet = useRef(false);
+  // color's channles values.
+  const hueValue = useSharedValue(0);
+  const saturationValue = useSharedValue(0);
+  const brightnessValue = useSharedValue(0);
+  const alphaValue = useSharedValue(1);
 
-	// color's channles values.
-	const hueValue = useSharedValue(0);
-	const saturationValue = useSharedValue(0);
-	const brightnessValue = useSharedValue(0);
-	const alphaValue = useSharedValue(1);
+  const returnedResults = (color?: AnyFormat) => {
+    color = color ?? {
+      h: hueValue.value,
+      s: saturationValue.value,
+      v: brightnessValue.value,
+      a: alphaValue.value,
+    };
+    return {
+      hex: colorKit.HEX(color),
+      rgb: colorKit.RGB(color).string(false),
+      rgba: colorKit.RGB(color).string(true),
+      hsl: colorKit.HSL(color).string(false),
+      hsla: colorKit.HSL(color).string(true),
+      hsv: colorKit.HSV(color).string(false),
+      hsva: colorKit.HSV(color).string(true),
+      hwb: colorKit.HWB(color).string(false),
+      hwba: colorKit.HWB(color).string(true),
+    };
+  };
 
-	const returnedResults = (color?: AnyFormat) => {
-		color = color ?? {
-			h: hueValue.value,
-			s: saturationValue.value,
-			v: brightnessValue.value,
-			a: alphaValue.value,
-		};
-		return {
-			hex: colorKit.HEX(color),
-			rgb: colorKit.RGB(color).string(false),
-			rgba: colorKit.RGB(color).string(true),
-			hsl: colorKit.HSL(color).string(false),
-			hsla: colorKit.HSL(color).string(true),
-			hsv: colorKit.HSV(color).string(false),
-			hsva: colorKit.HSV(color).string(true),
-			hwb: colorKit.HWB(color).string(false),
-			hwba: colorKit.HWB(color).string(true),
-		};
-	};
+  const onGestureEnd = (color?: AnyFormat) => {
+    onComplete?.(returnedResults(color));
+  };
 
-	const onGestureEnd = (color?: AnyFormat) => {
-		onComplete?.(returnedResults(color));
-	};
+  const onGestureChange = (color?: AnyFormat) => {
+    onChange?.(returnedResults(color));
+  };
 
-	const onGestureChange = (color?: AnyFormat) => {
-		onChange?.(returnedResults(color));
-	};
+  const setColor = (color: string) => {
+    const {h, s, v, a} = colorKit.HSV(color).object();
 
-	const setColor = (color: string) => {
-		const {h, s, v, a} = colorKit.HSV(color).object();
+    const duration = initialColorSet.current ? 200 : 0;
+    hueValue.value = withTiming(h, {duration});
+    saturationValue.value = withTiming(s, {duration});
+    brightnessValue.value = withTiming(v, {duration});
+    alphaValue.value = withTiming(a, {duration});
+  };
 
-		const duration = setInitialColor.current ? 200 : 0;
-		hueValue.value = withTiming(h, {duration});
-		saturationValue.value = withTiming(s, {duration});
-		brightnessValue.value = withTiming(v, {duration});
-		alphaValue.value = withTiming(a, {duration});
-	};
+  useEffect(() => {
+    setColor(value);
+    initialColorSet.current = true;
+  }, [value]);
 
-	useEffect(() => {
-		setColor(value);
-		setInitialColor.current = true;
-	}, [value]);
+  const ctxValue: TCTX = {
+    hueValue,
+    saturationValue,
+    brightnessValue,
+    alphaValue,
 
-	const ctxValue: TCTX = {
-		hueValue,
-		saturationValue,
-		brightnessValue,
-		alphaValue,
+    sliderThickness,
+    thumbSize,
+    thumbShape,
+    thumbColor,
 
-		sliderThickness,
-		thumbSize,
-		thumbShape,
-		thumbColor,
+    value,
+    setColor,
 
-		value,
-		setColor,
+    returnedResults,
+    onGestureEnd,
+    onGestureChange,
+  };
 
-		returnedResults,
-		onGestureEnd,
-		onGestureChange,
-	};
-
-	return (
-		<GestureHandlerRootView style={[styles.wrapper, style]}>
-			<CTX.Provider value={ctxValue}>{children}</CTX.Provider>
-		</GestureHandlerRootView>
-	);
+  return (
+    <GestureHandlerRootView style={[styles.wrapper, style]}>
+      <CTX.Provider value={ctxValue}>{children}</CTX.Provider>
+    </GestureHandlerRootView>
+  );
 }
 
 const styles = StyleSheet.create({
-	wrapper: {
-		flexDirection: 'column',
-		justifyContent: 'space-evenly',
-		alignSelf: 'center',
-		flex: 1,
-	},
+  wrapper: {
+    flexDirection: 'column',
+    justifyContent: 'space-evenly',
+    alignSelf: 'center',
+    flex: 1,
+  },
 });
