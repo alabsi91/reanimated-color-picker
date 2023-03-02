@@ -50,6 +50,12 @@ All built-in components should be wrapped within the `ColorPicker` component.
 - `type: number`
 - `default: 25`
 
+### `thumbAnimationDuration`
+
+- A global property to change the duration which the thumbs animate when the value prop changes.
+- `type: number`
+- `default: 200`
+
 ### `thumbSize`
 
 - A global property for changing the thumb size of all descendant slider components.
