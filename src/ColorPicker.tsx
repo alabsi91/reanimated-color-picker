@@ -1,99 +1,107 @@
-import React, { useEffect } from 'react';
-import { Text, StyleSheet } from 'react-native';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { useSharedValue, withTiming } from 'react-native-reanimated';
+import React, {useEffect, useRef} from 'react';
+import {Text, StyleSheet} from 'react-native';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {useSharedValue, withTiming} from 'react-native-reanimated';
 
 import colorKit from './colorKit';
-import { CTX } from './GlobalStyles';
+import {CTX} from './GlobalStyles';
 
-import type { AnyFormat } from './colorKit';
-import type { ColorPickerProps, TCTX } from './types';
+import type {AnyFormat} from './colorKit';
+import type {ColorPickerProps, TCTX} from './types';
 
 export default function ColorPicker({
-  sliderThickness = 25,
-  thumbSize = 35,
-  thumbShape = 'ring',
-  thumbColor,
-  value = '#fff',
-  onChange,
-  onComplete,
-  style = {},
-  children = <Text>NO CHILDREN</Text>,
+	sliderThickness = 25,
+	thumbSize = 35,
+	thumbShape = 'ring',
+	thumbColor,
+	value = '#fff',
+	onChange,
+	onComplete,
+	style = {},
+	children = <Text>NO CHILDREN</Text>,
 }: ColorPickerProps) {
-  // color's channles values.
-  const hueValue = useSharedValue(0);
-  const saturationValue = useSharedValue(0);
-  const brightnessValue = useSharedValue(0);
-  const alphaValue = useSharedValue(1);
+	const setInitialColor = useRef(false);
 
-  const returnedResults = (color?: AnyFormat) => {
-    color = color ?? { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value, a: alphaValue.value };
-    return {
-      hex: colorKit.HEX(color),
-      rgb: colorKit.RGB(color).string(false),
-      rgba: colorKit.RGB(color).string(true),
-      hsl: colorKit.HSL(color).string(false),
-      hsla: colorKit.HSL(color).string(true),
-      hsv: colorKit.HSV(color).string(false),
-      hsva: colorKit.HSV(color).string(true),
-      hwb: colorKit.HWB(color).string(false),
-      hwba: colorKit.HWB(color).string(true),
-    };
-  };
+	// color's channles values.
+	const hueValue = useSharedValue(0);
+	const saturationValue = useSharedValue(0);
+	const brightnessValue = useSharedValue(0);
+	const alphaValue = useSharedValue(1);
 
-  const onGestureEnd = (color?: AnyFormat) => {
-    onComplete?.(returnedResults(color));
-  };
+	const returnedResults = (color?: AnyFormat) => {
+		color = color ?? {
+			h: hueValue.value,
+			s: saturationValue.value,
+			v: brightnessValue.value,
+			a: alphaValue.value,
+		};
+		return {
+			hex: colorKit.HEX(color),
+			rgb: colorKit.RGB(color).string(false),
+			rgba: colorKit.RGB(color).string(true),
+			hsl: colorKit.HSL(color).string(false),
+			hsla: colorKit.HSL(color).string(true),
+			hsv: colorKit.HSV(color).string(false),
+			hsva: colorKit.HSV(color).string(true),
+			hwb: colorKit.HWB(color).string(false),
+			hwba: colorKit.HWB(color).string(true),
+		};
+	};
 
-  const onGestureChange = (color?: AnyFormat) => {
-    onChange?.(returnedResults(color));
-  };
+	const onGestureEnd = (color?: AnyFormat) => {
+		onComplete?.(returnedResults(color));
+	};
 
-  const setColor = (color: string) => {
-    const { h, s, v, a } = colorKit.HSV(color).object();
+	const onGestureChange = (color?: AnyFormat) => {
+		onChange?.(returnedResults(color));
+	};
 
-    const duration = 200;
-    hueValue.value = withTiming(h, { duration });
-    saturationValue.value = withTiming(s, { duration });
-    brightnessValue.value = withTiming(v, { duration });
-    alphaValue.value = withTiming(a, { duration });
-  };
+	const setColor = (color: string) => {
+		const {h, s, v, a} = colorKit.HSV(color).object();
 
-  useEffect(() => {
-    setColor(value);
-  }, [value]);
+		const duration = setInitialColor.current ? 200 : 0;
+		hueValue.value = withTiming(h, {duration});
+		saturationValue.value = withTiming(s, {duration});
+		brightnessValue.value = withTiming(v, {duration});
+		alphaValue.value = withTiming(a, {duration});
+	};
 
-  const ctxValue: TCTX = {
-    hueValue,
-    saturationValue,
-    brightnessValue,
-    alphaValue,
+	useEffect(() => {
+		setColor(value);
+		setInitialColor.current = true;
+	}, [value]);
 
-    sliderThickness,
-    thumbSize,
-    thumbShape,
-    thumbColor,
+	const ctxValue: TCTX = {
+		hueValue,
+		saturationValue,
+		brightnessValue,
+		alphaValue,
 
-    value,
-    setColor,
+		sliderThickness,
+		thumbSize,
+		thumbShape,
+		thumbColor,
 
-    returnedResults,
-    onGestureEnd,
-    onGestureChange,
-  };
+		value,
+		setColor,
 
-  return (
-    <GestureHandlerRootView style={[styles.wrapper, style]}>
-      <CTX.Provider value={ctxValue}>{children}</CTX.Provider>
-    </GestureHandlerRootView>
-  );
+		returnedResults,
+		onGestureEnd,
+		onGestureChange,
+	};
+
+	return (
+		<GestureHandlerRootView style={[styles.wrapper, style]}>
+			<CTX.Provider value={ctxValue}>{children}</CTX.Provider>
+		</GestureHandlerRootView>
+	);
 }
 
 const styles = StyleSheet.create({
-  wrapper: {
-    flexDirection: 'column',
-    justifyContent: 'space-evenly',
-    alignSelf: 'center',
-    flex: 1,
-  },
+	wrapper: {
+		flexDirection: 'column',
+		justifyContent: 'space-evenly',
+		alignSelf: 'center',
+		flex: 1,
+	},
 });
