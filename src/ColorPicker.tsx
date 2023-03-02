@@ -1,13 +1,13 @@
-import React, {useEffect, useRef} from 'react';
-import {Text, StyleSheet} from 'react-native';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import {useSharedValue, withTiming} from 'react-native-reanimated';
+import React, { useEffect, useRef } from 'react';
+import { Text, StyleSheet } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { useSharedValue, withTiming } from 'react-native-reanimated';
 
 import colorKit from './colorKit';
-import {CTX} from './GlobalStyles';
+import { CTX } from './GlobalStyles';
 
-import type {AnyFormat} from './colorKit';
-import type {ColorPickerProps, TCTX} from './types';
+import type { AnyFormat } from './colorKit';
+import type { ColorPickerProps, TCTX } from './types';
 
 export default function ColorPicker({
   sliderThickness = 25,
@@ -56,13 +56,13 @@ export default function ColorPicker({
   };
 
   const setColor = (color: string) => {
-    const {h, s, v, a} = colorKit.HSV(color).object();
+    const { h, s, v, a } = colorKit.HSV(color).object();
 
     const duration = initialColorSet.current ? 200 : 0;
-    hueValue.value = withTiming(h, {duration});
-    saturationValue.value = withTiming(s, {duration});
-    brightnessValue.value = withTiming(v, {duration});
-    alphaValue.value = withTiming(a, {duration});
+    hueValue.value = withTiming(h, { duration });
+    saturationValue.value = withTiming(s, { duration });
+    brightnessValue.value = withTiming(v, { duration });
+    alphaValue.value = withTiming(a, { duration });
   };
 
   useEffect(() => {
