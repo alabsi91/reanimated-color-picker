@@ -53,7 +53,7 @@ export function Panel1({ thumbShape, thumbSize, thumbColor, style = {} }: PanelP
     return Math.min(Math.max(v, 0), max);
   };
 
-  function setValueFromGestureEvent(event: PanGestureHandlerEventPayload) {
+  const setValueFromGestureEvent = (event: PanGestureHandlerEventPayload) => {
     'worklet';
     const posX = clamp(event.x, width.value),
       posY = clamp(event.y, height.value),
