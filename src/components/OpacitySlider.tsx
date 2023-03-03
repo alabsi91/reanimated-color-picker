@@ -68,7 +68,7 @@ export function OpacitySlider({ thumbShape, thumbSize, thumbColor, style = {}, v
       valX = reverse ? 100 - Math.round(percentX * 100) : Math.round(percentX * 100),
       valY = reverse ? 100 - Math.round(percentY * 100) : Math.round(percentY * 100);
 
-    alphaValue.value = vertical ? valY : valX;
+    alphaValue.value = (vertical ? valY : valX) / 100;
 
     runOnJS(onGestureChange)();
   }
