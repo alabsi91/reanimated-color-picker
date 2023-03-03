@@ -1,11 +1,10 @@
-import React, { useState, useContext, useCallback } from 'react';
-import { I18nManager, Image } from 'react-native';
+import React, { useContext } from 'react';
+import { I18nManager } from 'react-native';
 import { PanGestureHandler } from 'react-native-gesture-handler';
 import Animated, {
   runOnJS,
   useAnimatedGestureHandler,
   useAnimatedStyle,
-  useDerivedValue,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
@@ -36,25 +35,21 @@ export function HueSlider({ thumbShape, thumbSize, thumbColor, style = {}, verti
   const getWidth = getStyle(style, 'width');
   const getHeight = getStyle(style, 'height');
 
-  const [width, setWidth] = useState(typeof getWidth === 'number' ? getWidth : sliderThickness);
-  const [height, setHeight] = useState(typeof getHeight === 'number' ? getHeight : sliderThickness);
+  const width = useSharedValue(vertical ? sliderThickness : typeof getWidth === 'number' ? getWidth : 0);
+  const height = useSharedValue(!vertical ? sliderThickness : typeof getHeight === 'number' ? getHeight : 0);
 
   const handleScale = useSharedValue(1);
 
-  const handlePos = useDerivedValue(() => {
-    const length = vertical ? height : width;
-    const percent = (hueValue.value / 360) * length;
-    const pos = (reverse ? length - percent : percent) - thumb_size / 2;
-    return pos;
-  }, [height, width, thumbSize, vertical, reverse]);
-
-  const handleStyle = useAnimatedStyle(() => ({
-    transform: [
-      { translateY: vertical ? handlePos.value : height / 2 - thumb_size / 2 },
-      { translateX: vertical ? width / 2 - thumb_size / 2 : handlePos.value },
-      { scale: handleScale.value },
-    ],
-  }));
+  const handleStyle = useAnimatedStyle(() => {
+    const length = vertical ? height.value : width.value,
+      percent = (hueValue.value / 360) * length,
+      pos = (reverse ? length - percent : percent) - thumb_size / 2,
+      posY = vertical ? pos : height.value / 2 - thumb_size / 2,
+      posX = vertical ? width.value / 2 - thumb_size / 2 : pos;
+    return {
+      transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }],
+    };
+  }, [thumbSize, vertical, reverse]);
 
   const gestureEvent = useAnimatedGestureHandler(
     {
@@ -68,10 +63,10 @@ export function HueSlider({ thumbShape, thumbSize, thumbColor, style = {}, verti
 
         const x = event.translationX,
           y = event.translationY,
-          posX = clamp(x + ctx.x, width),
-          posY = clamp(y + ctx.y, height),
-          percentX = posX / width,
-          percentY = posY / height,
+          posX = clamp(x + ctx.x, width.value),
+          posY = clamp(y + ctx.y, height.value),
+          percentX = posX / width.value,
+          percentY = posY / height.value,
           hueX = reverse ? 360 - Math.round(percentX * 360) : Math.round(percentX * 360),
           hueY = reverse ? 360 - Math.round(percentY * 360) : Math.round(percentY * 360);
 
@@ -84,35 +79,39 @@ export function HueSlider({ thumbShape, thumbSize, thumbColor, style = {}, verti
         runOnJS(onGestureEnd)();
       },
     },
-    [height, width, thumbSize, vertical, reverse]
+    [thumbSize, vertical, reverse]
   );
 
-  const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
-    setWidth(Math.round(layout.width));
-    setHeight(Math.round(layout.height));
-  }, []);
+  const onLayout = ({ nativeEvent: { layout } }: LayoutChangeEvent) => {
+    if (!vertical) width.value = withTiming(Math.round(layout.width), { duration: 5 });
+    if (vertical) height.value = withTiming(Math.round(layout.height), { duration: 5 });
+  };
 
-  const imageRotate = vertical ? (reverse ? '270deg' : '90deg') : reverse ? '180deg' : '0deg';
-  const imageTranslateY = (reverse && isRtl) || (!reverse && !isRtl) ? height / 2 - width / 2 : -height / 2 + width / 2;
-  const imageStyle = typeof height === 'number' &&
-    typeof width === 'number' && {
-      width: vertical ? height : width,
-      height: vertical ? width : height,
+  const imageStyle = useAnimatedStyle(() => {
+    const imageRotate = vertical ? (reverse ? '270deg' : '90deg') : reverse ? '180deg' : '0deg';
+    const imageTranslateY =
+      (reverse && isRtl) || (!reverse && !isRtl) ? height.value / 2 - width.value / 2 : -height.value / 2 + width.value / 2;
+    return {
+      width: vertical ? height.value : width.value,
+      height: vertical ? width.value : height.value,
       borderRadius,
       transform: [
         { rotate: imageRotate },
-        { translateX: vertical ? (reverse ? -height / 2 + width / 2 : height / 2 - width / 2) : 0 },
+        { translateX: vertical ? (reverse ? -height.value / 2 + width.value / 2 : height.value / 2 - width.value / 2) : 0 },
         { translateY: vertical ? imageTranslateY : 0 },
       ],
     };
+  }, [vertical, reverse, sliderThickness]);
+
+  const thicknessStyle = vertical ? { width: sliderThickness } : { height: sliderThickness };
 
   return (
     <PanGestureHandler onGestureEvent={gestureEvent} minDist={0}>
       <Animated.View
         onLayout={onLayout}
-        style={[{ borderRadius }, vertical ? { width } : { height }, style, { position: 'relative', borderWidth: 0, padding: 0 }]}
+        style={[{ borderRadius }, style, thicknessStyle, { position: 'relative', borderWidth: 0, padding: 0 }]}
       >
-        <Image source={require('../assets/Hue.png')} style={imageStyle} />
+        <Animated.Image source={require('../assets/Hue.png')} style={imageStyle} />
         <Thumb {...{ channel: 'h', thumbShape, thumbSize: thumb_size, thumbColor: thumb_color, handleStyle, vertical }} />
       </Animated.View>
     </PanGestureHandler>

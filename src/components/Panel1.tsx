@@ -1,11 +1,10 @@
-import React, { useState, useContext, useCallback } from 'react';
+import React, { useContext, useCallback } from 'react';
 import { ImageBackground } from 'react-native';
 import { PanGestureHandler } from 'react-native-gesture-handler';
 import Animated, {
   runOnJS,
   useAnimatedGestureHandler,
   useAnimatedStyle,
-  useDerivedValue,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
@@ -29,63 +28,55 @@ export function Panel1({ thumbShape, thumbSize, thumbColor, style = {} }: PanelP
   const thumb_size = thumbSize ?? thumbsSize;
   const thumb_color = thumbColor ?? thumbsColor;
   const borderRadius = getStyle(style, 'borderRadius') ?? 5;
+  const getHeight = getStyle(style, 'height') ?? 200;
 
-  const [width, setWidth] = useState(0);
-  const [height, setHeight] = useState(0);
+  const width = useSharedValue(0);
+  const height = useSharedValue(0);
 
   const handleScale = useSharedValue(1);
 
-  const handlePosX = useDerivedValue(() => {
-    const percent = (saturationValue.value / 100) * width;
-    const pos = percent - thumb_size / 2;
-    return pos;
-  }, [height, width, thumbSize]);
-
-  const handlePosY = useDerivedValue(() => {
-    const percent = (brightnessValue.value / 100) * height;
-    const pos = height - percent - thumb_size / 2;
-    return pos;
-  }, [height, width, thumbSize]);
-
-  const handleStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: handlePosX.value }, { translateY: handlePosY.value }, { scale: handleScale.value }],
-  }));
+  const handleStyle = useAnimatedStyle(() => {
+    const percentX = (saturationValue.value / 100) * width.value;
+    const posX = percentX - thumb_size / 2;
+    const percentY = (brightnessValue.value / 100) * height.value;
+    const posY = height.value - percentY - thumb_size / 2;
+    return {
+      transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }],
+    };
+  }, [thumbSize]);
 
   const activeHueStyle = useAnimatedStyle(() => ({ backgroundColor: `hsl(${hueValue.value}, 100%, 50%)` }));
 
-  const gestureEvent = useAnimatedGestureHandler(
-    {
-      onStart: (event, ctx: { x: number; y: number }) => {
-        ctx.x = event.x;
-        ctx.y = event.y;
-        handleScale.value = withTiming(1.2, { duration: 100 });
-      },
-      onActive: (event, ctx) => {
-        const clamp = (v: number, max: number) => Math.min(Math.max(v, 0), max);
-
-        const x = event.translationX,
-          y = event.translationY,
-          posX = clamp(x + ctx.x, width),
-          posY = clamp(y + ctx.y, height),
-          percentX = posX / width,
-          percentY = posY / height;
-
-        saturationValue.value = Math.round(percentX * 100);
-        brightnessValue.value = Math.round(100 - percentY * 100);
-
-        runOnJS(onGestureChange)();
-      },
-      onFinish: () => {
-        handleScale.value = withTiming(1, { duration: 100 });
-        runOnJS(onGestureEnd)();
-      },
+  const gestureEvent = useAnimatedGestureHandler({
+    onStart: (event, ctx: { x: number; y: number }) => {
+      ctx.x = event.x;
+      ctx.y = event.y;
+      handleScale.value = withTiming(1.2, { duration: 100 });
     },
-    [height, width]
-  );
+    onActive: (event, ctx) => {
+      const clamp = (v: number, max: number) => Math.min(Math.max(v, 0), max);
+
+      const x = event.translationX,
+        y = event.translationY,
+        posX = clamp(x + ctx.x, width.value),
+        posY = clamp(y + ctx.y, height.value),
+        percentX = posX / width.value,
+        percentY = posY / height.value;
+
+      saturationValue.value = Math.round(percentX * 100);
+      brightnessValue.value = Math.round(100 - percentY * 100);
+
+      runOnJS(onGestureChange)();
+    },
+    onFinish: () => {
+      handleScale.value = withTiming(1, { duration: 100 });
+      runOnJS(onGestureEnd)();
+    },
+  });
 
   const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
-    setWidth(Math.round(layout.width));
-    setHeight(Math.round(layout.height));
+    width.value = Math.round(layout.width);
+    height.value = Math.round(layout.height);
   }, []);
 
   return (
@@ -94,7 +85,7 @@ export function Panel1({ thumbShape, thumbSize, thumbColor, style = {} }: PanelP
         onLayout={onLayout}
         style={[
           styles.panel_container,
-          { height: width },
+          { height: getHeight },
           style,
           { position: 'relative', borderWidth: 0, padding: 0 },
           activeHueStyle,

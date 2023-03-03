@@ -1,11 +1,10 @@
-import React, { useState, useContext, useCallback } from 'react';
+import React, {  useContext, useCallback } from 'react';
 import { ImageBackground } from 'react-native';
 import { PanGestureHandler } from 'react-native-gesture-handler';
 import Animated, {
   runOnJS,
   useAnimatedGestureHandler,
   useAnimatedStyle,
-  useDerivedValue,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
@@ -29,27 +28,21 @@ export function Panel2({ thumbShape, thumbSize, thumbColor, reverse = false, sty
   const thumb_color = thumbColor ?? thumbsColor;
 
   const borderRadius = getStyle(style, 'borderRadius') ?? 5;
+  const getHeight = getStyle(style, 'height') ?? 200;
 
-  const [width, setWidth] = useState(0);
-  const [height, setHeight] = useState(0);
+
+  const width = useSharedValue(0);
+  const height = useSharedValue(0);
 
   const handleScale = useSharedValue(1);
 
-  const handlePosX = useDerivedValue(() => {
-    const percent = (hueValue.value / 360) * width;
-    const pos = (reverse ? width - percent : percent) - thumb_size / 2;
-    return pos;
-  }, [height, width, thumbSize, reverse]);
-
-  const handlePosY = useDerivedValue(() => {
-    const percent = (saturationValue.value / 100) * height;
-    const pos = height - percent - thumb_size / 2;
-    return pos;
-  }, [height, width, thumbSize, reverse]);
-
-  const handleStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: handlePosX.value }, { translateY: handlePosY.value }, { scale: handleScale.value }],
-  }));
+  const handleStyle = useAnimatedStyle(() => {
+    const percentX = (hueValue.value / 360) * width.value;
+    const posX = (reverse ? width.value - percentX : percentX) - thumb_size / 2;
+    const percentY = (saturationValue.value / 100) * height.value;
+    const posY = height.value - percentY - thumb_size / 2;
+    return { transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }] };
+  }, [thumbSize, reverse]);
 
   const gestureEvent = useAnimatedGestureHandler(
     {
@@ -63,10 +56,10 @@ export function Panel2({ thumbShape, thumbSize, thumbColor, reverse = false, sty
 
         const x = event.translationX,
           y = event.translationY,
-          posX = clamp(x + ctx.x, width),
-          posY = clamp(y + ctx.y, height),
-          percentX = posX / width,
-          percentY = posY / height;
+          posX = clamp(x + ctx.x, width.value),
+          posY = clamp(y + ctx.y, height.value),
+          percentX = posX / width.value,
+          percentY = posY / height.value;
 
         hueValue.value = reverse ? 360 - Math.round(percentX * 360) : Math.round(percentX * 360);
         saturationValue.value = Math.round(100 - percentY * 100);
@@ -78,19 +71,19 @@ export function Panel2({ thumbShape, thumbSize, thumbColor, reverse = false, sty
         runOnJS(onGestureEnd)();
       },
     },
-    [height, width, reverse]
+    [ width.value, reverse]
   );
 
   const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
-    setWidth(Math.round(layout.width));
-    setHeight(Math.round(layout.height));
+    width.value = (Math.round(layout.width));
+    height.value = (Math.round(layout.height));
   }, []);
 
   return (
     <PanGestureHandler onGestureEvent={gestureEvent} minDist={0}>
       <Animated.View
         onLayout={onLayout}
-        style={[styles.panel_container, { height: width }, style, { position: 'relative', borderWidth: 0, padding: 0 }]}
+        style={[styles.panel_container, { height: getHeight }, style, { position: 'relative', borderWidth: 0, padding: 0 }]}
       >
         <ImageBackground
           source={require('../assets/Panel2.png')}
