@@ -71,10 +71,10 @@ export function SaturationSlider({
       onActive: (event, ctx) => {
         const clamp = (v: number, max: number) => Math.min(Math.max(v, 0), max);
 
-        const x = event.translationX,
-          y = event.translationY,
-          posX = clamp(x + ctx.x, width.value),
-          posY = clamp(y + ctx.y, height.value),
+        const x = event.x,
+          y = event.y,
+          posX = clamp(x, width.value),
+          posY = clamp(y, height.value),
           percentX = posX / width.value,
           percentY = posY / height.value,
           saturationX = reverse ? 100 - Math.round(percentX * 100) : Math.round(percentX * 100),
