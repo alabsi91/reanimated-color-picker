@@ -63,8 +63,8 @@ export function HueSlider({ thumbShape, thumbSize, thumbColor, style = {}, verti
       posY = clamp(event.y, height.value),
       percentX = posX / width.value,
       percentY = posY / height.value,
-      valX = reverse ? 100 - Math.round(percentX * 100) : Math.round(percentX * 100),
-      valY = reverse ? 100 - Math.round(percentY * 100) : Math.round(percentY * 100);
+      valX = reverse ? 360 - Math.round(percentX * 360) : Math.round(percentX * 360),
+      valY = reverse ? 360 - Math.round(percentY * 360) : Math.round(percentY * 360);
 
     hueValue.value = vertical ? valY : valX;
 
