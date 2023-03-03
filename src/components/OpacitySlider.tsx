@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { I18nManager } from 'react-native';
-import { PanGestureHandler } from 'react-native-gesture-handler';
+import { PanGestureHandler, PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 import Animated, {
   runOnJS,
   useAnimatedGestureHandler,
@@ -12,11 +12,11 @@ import { CTX, getStyle } from '../GlobalStyles';
 import Thumb from './Thumbs';
 
 import type { LayoutChangeEvent } from 'react-native';
-import type { SliderPorps } from '../types';
+import type { SliderProps } from '../types';
 
 const isRtl = I18nManager.isRTL;
 
-export function OpacitySlider({ thumbShape, thumbSize, thumbColor, style = {}, vertical = false, reverse = false }: SliderPorps) {
+export function OpacitySlider({ thumbShape, thumbSize, thumbColor, style = {}, vertical = false, reverse = false }: SliderProps) {
   const {
     alphaValue,
     hueValue,
@@ -54,27 +54,27 @@ export function OpacitySlider({ thumbShape, thumbSize, thumbColor, style = {}, v
 
   const activeHueStyle = useAnimatedStyle(() => ({ backgroundColor: `hsl(${hueValue.value}, 100%, 50%)` }));
 
+  const clamp = (v: number, max: number) => Math.min(Math.max(v, 0), max);
+
+  const setValueFromGestureEvent = (event: PanGestureHandlerEventPayload) => {
+    const posX = clamp(event.x, width.value),
+      posY = clamp(event.y, height.value),
+      percentX = posX / width.value,
+      percentY = posY / height.value,
+      valX = reverse ? 100 - Math.round(percentX * 100) : Math.round(percentX * 100),
+      valY = reverse ? 100 - Math.round(percentY * 100) : Math.round(percentY * 100);
+
+    alphaValue.value = vertical ? valY : valX;
+  }
+
   const gestureEvent = useAnimatedGestureHandler(
     {
-      onStart: (event, ctx: { x: number; y: number }) => {
-        ctx.x = event.x;
-        ctx.y = event.y;
+      onStart: (event) => {
         handleScale.value = withTiming(1.2, { duration: 100 });
+        runOnJS(setValueFromGestureEvent)(event);
       },
-      onActive: (event, ctx) => {
-        const clamp = (v: number, max: number) => Math.min(Math.max(v, 0), max);
-
-        const x = event.x,
-          y = event.y,
-          posX = clamp(x, width.value),
-          posY = clamp(y, height.value),
-          percentX = posX / width.value,
-          percentY = posY / height.value,
-          opacityX = reverse ? 100 - Math.round(percentX * 100) : Math.round(percentX * 100),
-          opacityY = reverse ? 100 - Math.round(percentY * 100) : Math.round(percentY * 100);
-
-        alphaValue.value = (vertical ? opacityY : opacityX) / 100;
-
+      onActive: (event) => {
+        runOnJS(setValueFromGestureEvent)(event);
         runOnJS(onGestureChange)();
       },
       onFinish: () => {
@@ -82,7 +82,7 @@ export function OpacitySlider({ thumbShape, thumbSize, thumbColor, style = {}, v
         runOnJS(onGestureEnd)();
       },
     },
-    [height.value, width.value, thumbSize, vertical, reverse]
+    [thumbSize, vertical, reverse]
   );
 
   const onLayout = ({ nativeEvent: { layout } }: LayoutChangeEvent) => {

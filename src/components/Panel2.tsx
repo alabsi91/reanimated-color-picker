@@ -13,6 +13,7 @@ import Thumb from './Thumbs';
 
 import type { LayoutChangeEvent } from 'react-native';
 import type { Panel2Props } from '../types';
+import { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
 export function Panel2({ thumbShape, thumbSize, thumbColor, reverse = false, style = {} }: Panel2Props) {
   const {
@@ -44,26 +45,26 @@ export function Panel2({ thumbShape, thumbSize, thumbColor, reverse = false, sty
     return { transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }] };
   }, [thumbSize, reverse]);
 
+  const clamp = (v: number, max: number) => Math.min(Math.max(v, 0), max);
+
+  const setValueFromGestureEvent = (event: PanGestureHandlerEventPayload) => {
+    const posX = clamp(event.x, width.value),
+      posY = clamp(event.y, height.value),
+      percentX = posX / width.value,
+      percentY = posY / height.value;
+
+    hueValue.value = reverse ? 360 - Math.round(percentX * 360) : Math.round(percentX * 360);
+    saturationValue.value = Math.round(100 - percentY * 100);
+  }
+
   const gestureEvent = useAnimatedGestureHandler(
     {
-      onStart: (event, ctx: { x: number; y: number }) => {
-        ctx.x = event.x;
-        ctx.y = event.y;
+      onStart: (event) => {
         handleScale.value = withTiming(1.2, { duration: 100 });
+        runOnJS(setValueFromGestureEvent)(event);
       },
-      onActive: (event, ctx) => {
-        const clamp = (v: number, max: number) => Math.min(Math.max(v, 0), max);
-
-        const x = event.x,
-          y = event.y,
-          posX = clamp(x, width.value),
-          posY = clamp(y, height.value),
-          percentX = posX / width.value,
-          percentY = posY / height.value;
-
-        hueValue.value = reverse ? 360 - Math.round(percentX * 360) : Math.round(percentX * 360);
-        saturationValue.value = Math.round(100 - percentY * 100);
-
+      onActive: (event) => {
+        runOnJS(setValueFromGestureEvent)(event);
         runOnJS(onGestureChange)();
       },
       onFinish: () => {
@@ -71,7 +72,6 @@ export function Panel2({ thumbShape, thumbSize, thumbColor, reverse = false, sty
         runOnJS(onGestureEnd)();
       },
     },
-    [ width.value, reverse]
   );
 
   const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {

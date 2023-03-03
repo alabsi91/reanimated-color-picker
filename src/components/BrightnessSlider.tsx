@@ -12,7 +12,8 @@ import { CTX, getStyle } from '../GlobalStyles';
 import Thumb from './Thumbs';
 
 import type { LayoutChangeEvent } from 'react-native';
-import type { SliderPorps } from '../types';
+import type { SliderProps } from '../types';
+import { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
 const isRtl = I18nManager.isRTL;
 
@@ -23,7 +24,7 @@ export function BrightnessSlider({
   style = {},
   vertical = false,
   reverse = false,
-}: SliderPorps) {
+}: SliderProps) {
   const {
     brightnessValue,
     hueValue,
@@ -61,27 +62,27 @@ export function BrightnessSlider({
 
   const activeHueStyle = useAnimatedStyle(() => ({ backgroundColor: `hsl(${hueValue.value}, 100%, 50%)` }));
 
+  const clamp = (v: number, max: number) => Math.min(Math.max(v, 0), max);
+
+  const setValueFromGestureEvent = (event: PanGestureHandlerEventPayload) => {
+    const posX = clamp(event.x, width.value),
+      posY = clamp(event.y, height.value),
+      percentX = posX / width.value,
+      percentY = posY / height.value,
+      valX = reverse ? 100 - Math.round(percentX * 100) : Math.round(percentX * 100),
+      valY = reverse ? 100 - Math.round(percentY * 100) : Math.round(percentY * 100);
+
+    brightnessValue.value = vertical ? valY : valX;
+  }
+
   const gestureEvent = useAnimatedGestureHandler(
     {
-      onStart: (event, ctx: { x: number; y: number }) => {
-        ctx.x = event.x;
-        ctx.y = event.y;
+      onStart: (event) => {
         handleScale.value = withTiming(1.2, { duration: 100 });
+        runOnJS(setValueFromGestureEvent)(event);
       },
-      onActive: (event, ctx) => {
-        const clamp = (v: number, max: number) => Math.min(Math.max(v, 0), max);
-
-        const x = event.x,
-          y = event.y,
-          posX = clamp(x, width.value),
-          posY = clamp(y, height.value),
-          percentX = posX / width.value,
-          percentY = posY / height.value,
-          brightnessX = reverse ? 100 - Math.round(percentX * 100) : Math.round(percentX * 100),
-          brightnessY = reverse ? 100 - Math.round(percentY * 100) : Math.round(percentY * 100);
-
-        brightnessValue.value = vertical ? brightnessY : brightnessX;
-
+      onActive: (event) => {
+        runOnJS(setValueFromGestureEvent)(event);
         runOnJS(onGestureChange)();
       },
       onFinish: () => {
