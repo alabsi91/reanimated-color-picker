@@ -67,6 +67,8 @@ export function HueSlider({ thumbShape, thumbSize, thumbColor, style = {}, verti
       valY = reverse ? 100 - Math.round(percentY * 100) : Math.round(percentY * 100);
 
     hueValue.value = vertical ? valY : valX;
+
+    runOnJS(onGestureChange)();
   }
 
   const gestureEvent = useAnimatedGestureHandler(
@@ -77,7 +79,6 @@ export function HueSlider({ thumbShape, thumbSize, thumbColor, style = {}, verti
       },
       onActive: (event) => {
         setValueFromGestureEvent(event);
-        runOnJS(onGestureChange)();
       },
       onFinish: () => {
         handleScale.value = withTiming(1, { duration: 100 });

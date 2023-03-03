@@ -59,6 +59,8 @@ export function Panel2({ thumbShape, thumbSize, thumbColor, reverse = false, sty
 
     hueValue.value = reverse ? 360 - Math.round(percentX * 360) : Math.round(percentX * 360);
     saturationValue.value = Math.round(100 - percentY * 100);
+
+    runOnJS(onGestureChange)();
   }
 
   const gestureEvent = useAnimatedGestureHandler(
@@ -69,7 +71,6 @@ export function Panel2({ thumbShape, thumbSize, thumbColor, reverse = false, sty
       },
       onActive: (event) => {
         setValueFromGestureEvent(event);
-        runOnJS(onGestureChange)();
       },
       onFinish: () => {
         handleScale.value = withTiming(1, { duration: 100 });
