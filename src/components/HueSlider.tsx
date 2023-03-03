@@ -61,10 +61,10 @@ export function HueSlider({ thumbShape, thumbSize, thumbColor, style = {}, verti
       onActive: (event, ctx) => {
         const clamp = (v: number, max: number) => Math.min(Math.max(v, 0), max);
 
-        const x = event.translationX,
-          y = event.translationY,
-          posX = clamp(x + ctx.x, width.value),
-          posY = clamp(y + ctx.y, height.value),
+        const x = event.x,
+          y = event.y,
+          posX = clamp(x, width.value),
+          posY = clamp(y, height.value),
           percentX = posX / width.value,
           percentY = posY / height.value,
           hueX = reverse ? 360 - Math.round(percentX * 360) : Math.round(percentX * 360),
