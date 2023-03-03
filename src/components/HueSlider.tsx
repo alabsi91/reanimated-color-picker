@@ -73,10 +73,10 @@ export function HueSlider({ thumbShape, thumbSize, thumbColor, style = {}, verti
     {
       onStart: (event) => {
         handleScale.value = withTiming(1.2, { duration: 100 });
-        runOnJS(setValueFromGestureEvent)(event);
+        setValueFromGestureEvent(event);
       },
       onActive: (event) => {
-        runOnJS(setValueFromGestureEvent)(event);
+        setValueFromGestureEvent(event);
         runOnJS(onGestureChange)();
       },
       onFinish: () => {
