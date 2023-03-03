@@ -104,5 +104,6 @@ All built-in components should be wrapped within the `ColorPicker` component.
 
 - Triggered upon the user releasing the slider handle or clicking on a swatch.
 - The passed color object has the following properties: `hex`, `rgb`, `rgba`, `hsv`, `hsva`, `hwb`, `hwba`, `hsl`, and `hsla`
+- As of this writing, the new `react-native-gesture-handler` implementation does not support the events which trigger this callback
 - `type: (color: object) => void`
 - `default: null`
