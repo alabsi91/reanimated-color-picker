@@ -45,9 +45,13 @@ export function Panel2({ thumbShape, thumbSize, thumbColor, reverse = false, sty
     return { transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }] };
   }, [thumbSize, reverse]);
 
-  const clamp = (v: number, max: number) => Math.min(Math.max(v, 0), max);
+  const clamp = (v: number, max: number) => {
+    'worklet';
+    return Math.min(Math.max(v, 0), max);
+  };
 
-  const setValueFromGestureEvent = (event: PanGestureHandlerEventPayload) => {
+  function setValueFromGestureEvent(event: PanGestureHandlerEventPayload) {
+    'worklet';
     const posX = clamp(event.x, width.value),
       posY = clamp(event.y, height.value),
       percentX = posX / width.value,

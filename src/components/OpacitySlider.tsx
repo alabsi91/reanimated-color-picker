@@ -54,9 +54,13 @@ export function OpacitySlider({ thumbShape, thumbSize, thumbColor, style = {}, v
 
   const activeHueStyle = useAnimatedStyle(() => ({ backgroundColor: `hsl(${hueValue.value}, 100%, 50%)` }));
 
-  const clamp = (v: number, max: number) => Math.min(Math.max(v, 0), max);
+  const clamp = (v: number, max: number) => {
+    'worklet';
+    return Math.min(Math.max(v, 0), max);
+  };
 
-  const setValueFromGestureEvent = (event: PanGestureHandlerEventPayload) => {
+  function setValueFromGestureEvent(event: PanGestureHandlerEventPayload) {
+    'worklet';
     const posX = clamp(event.x, width.value),
       posY = clamp(event.y, height.value),
       percentX = posX / width.value,

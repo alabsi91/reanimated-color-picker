@@ -44,9 +44,13 @@ export function Panel3({ thumbShape, thumbSize, thumbColor, style = {} }: PanelP
     };
   }, [thumbSize]);
 
-  const clamp = (v: number, max: number) => Math.min(Math.max(v, 0), max);
+  const clamp = (v: number, max: number) => {
+    'worklet';
+    return Math.min(Math.max(v, 0), max);
+  };
 
-  const setValueFromGestureEvent = (event: PanGestureHandlerEventPayload) => {
+  function setValueFromGestureEvent(event: PanGestureHandlerEventPayload) {
+    'worklet';
     const center = width.value / 2,
       dx = center - event.x,
       dy = center - event.y,
