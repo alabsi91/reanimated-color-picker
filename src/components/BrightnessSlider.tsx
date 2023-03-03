@@ -28,6 +28,7 @@ export function BrightnessSlider({
   const {
     brightnessValue,
     hueValue,
+    saturationValue,
     onGestureChange,
     onGestureEnd,
     sliderThickness,
@@ -60,7 +61,7 @@ export function BrightnessSlider({
     };
   }, [thumbSize, vertical, reverse]);
 
-  const activeHueStyle = useAnimatedStyle(() => ({ backgroundColor: `hsl(${hueValue.value}, 100%, 50%)` }));
+  const activeHueStyle = useAnimatedStyle(() => ({ backgroundColor: `hsl(${hueValue.value}, ${saturationValue.value}%, 50%)` }));
 
   const clamp = (v: number, max: number) => {
     'worklet';
