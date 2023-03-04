@@ -8,7 +8,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { CTX, getStyle } from '../GlobalStyles';
+import { clamp, CTX, getStyle } from '../GlobalStyles';
 import Thumb from './Thumbs';
 
 import type { LayoutChangeEvent } from 'react-native';
@@ -54,11 +54,6 @@ export function OpacitySlider({ thumbShape, thumbSize, thumbColor, style = {}, v
   }, [thumbSize, vertical, reverse]);
 
   const activeHueStyle = useAnimatedStyle(() => ({ backgroundColor: `hsl(${hueValue.value}, 100%, 50%)` }));
-
-  const clamp = (v: number, max: number) => {
-    'worklet';
-    return Math.min(Math.max(v, 0), max);
-  };
 
   const setValueFromGestureEvent = (event: PanGestureHandlerEventPayload) => {
     'worklet';

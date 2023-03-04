@@ -8,7 +8,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { CTX, getStyle } from '../GlobalStyles';
+import { clamp, CTX, getStyle } from '../GlobalStyles';
 import Thumb from './Thumbs';
 
 import type { LayoutChangeEvent } from 'react-native';
@@ -51,11 +51,6 @@ export function HueSlider({ thumbShape, thumbSize, thumbColor, style = {}, verti
       transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }],
     };
   }, [thumbSize, vertical, reverse]);
-
-  const clamp = (v: number, max: number) => {
-    'worklet';
-    return Math.min(Math.max(v, 0), max);
-  };
 
   const setValueFromGestureEvent = (event: PanGestureHandlerEventPayload) => {
     'worklet';

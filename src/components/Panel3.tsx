@@ -8,7 +8,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import styles, { CTX } from '../GlobalStyles';
+import styles, { clamp, CTX } from '../GlobalStyles';
 import Thumb from './Thumbs';
 
 import type { LayoutChangeEvent } from 'react-native';
@@ -43,11 +43,6 @@ export function Panel3({ thumbShape, thumbSize, thumbColor, style = {} }: PanelP
       transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }],
     };
   }, [thumbSize]);
-
-  const clamp = (v: number, max: number) => {
-    'worklet';
-    return Math.min(Math.max(v, 0), max);
-  };
 
   const setValueFromGestureEvent = (event: PanGestureHandlerEventPayload) => {
     'worklet';

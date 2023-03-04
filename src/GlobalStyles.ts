@@ -13,6 +13,11 @@ export function getStyle<T extends keyof ViewStyle>(style: StyleProp<ViewStyle>,
   return flattened[property];
 }
 
+export function clamp(v: number, max: number) {
+  'worklet';
+  return Math.min(Math.max(v, 0), max);
+}
+
 export default StyleSheet.create({
   panel_container: {
     position: 'relative',
