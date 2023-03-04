@@ -13,6 +13,7 @@ import Thumb from './Thumbs';
 
 import type { LayoutChangeEvent } from 'react-native';
 import type { PanelProps } from '../types';
+import { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
 export function Panel3({ thumbShape, thumbSize, thumbColor, style = {} }: PanelProps) {
   const {
@@ -43,33 +44,43 @@ export function Panel3({ thumbShape, thumbSize, thumbColor, style = {} }: PanelP
     };
   }, [thumbSize]);
 
-  const gestureEvent = useAnimatedGestureHandler({
-    onStart: (event, ctx: { x: number; y: number }) => {
-      ctx.x = event.x;
-      ctx.y = event.y;
-      handleScale.value = withTiming(1.2, { duration: 100 });
-    },
-    onActive: event => {
-      const clamp = (v: number, max: number) => Math.min(Math.max(v, 0), max);
+  const clamp = (v: number, max: number) => {
+    'worklet';
+    return Math.min(Math.max(v, 0), max);
+  };
 
-      const center = width.value / 2,
-        dx = center - event.x,
-        dy = center - event.y,
-        radius = clamp(Math.sqrt(dx * dx + dy * dy), width.value / 2), // distance from center
-        theta = Math.atan2(dy, dx) * (180 / Math.PI), // [0 - 180] range
-        angle = theta < 0 ? 360 + theta : theta, // [0 - 360] range
-        radiusPercent = radius / (width.value / 2);
+  const setValueFromGestureEvent = (event: PanGestureHandlerEventPayload) => {
+    'worklet';
+    const center = width.value / 2,
+      dx = center - event.x,
+      dy = center - event.y,
+      radius = clamp(Math.sqrt(dx * dx + dy * dy), width.value / 2), // distance from center
+      theta = Math.atan2(dy, dx) * (180 / Math.PI), // [0 - 180] range
+      angle = theta < 0 ? 360 + theta : theta, // [0 - 360] range
+      radiusPercent = radius / (width.value / 2);
 
-      hueValue.value = Math.round(angle);
-      saturationValue.value = Math.round(radiusPercent * 100);
+    hueValue.value = Math.round(angle);
+    saturationValue.value = Math.round(radiusPercent * 100);
 
-      runOnJS(onGestureChange)();
+    runOnJS(onGestureChange)();
+  };
+
+  const gestureEvent = useAnimatedGestureHandler(
+    {
+      onStart: event => {
+        handleScale.value = withTiming(1.2, { duration: 100 });
+        setValueFromGestureEvent(event);
+      },
+      onActive: event => {
+        setValueFromGestureEvent(event);
+      },
+      onFinish: () => {
+        handleScale.value = withTiming(1, { duration: 100 });
+        runOnJS(onGestureEnd)();
+      },
     },
-    onFinish: () => {
-      handleScale.value = withTiming(1, { duration: 100 });
-      runOnJS(onGestureEnd)();
-    },
-  });
+    [width.value]
+  );
 
   const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
     const layoutWidth = Math.round(layout.width);

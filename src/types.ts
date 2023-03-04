@@ -165,7 +165,7 @@ export interface Panel2Props extends PanelProps {
   reverse?: boolean;
 }
 
-export interface SliderPorps {
+export interface SliderProps {
   /** - slider's handle (thumb) size (height*width). */
   thumbSize?: number;
 

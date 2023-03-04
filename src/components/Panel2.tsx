@@ -1,4 +1,4 @@
-import React, {  useContext, useCallback } from 'react';
+import React, { useContext, useCallback } from 'react';
 import { ImageBackground } from 'react-native';
 import { PanGestureHandler } from 'react-native-gesture-handler';
 import Animated, {
@@ -13,6 +13,7 @@ import Thumb from './Thumbs';
 
 import type { LayoutChangeEvent } from 'react-native';
 import type { Panel2Props } from '../types';
+import { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
 export function Panel2({ thumbShape, thumbSize, thumbColor, reverse = false, style = {} }: Panel2Props) {
   const {
@@ -30,7 +31,6 @@ export function Panel2({ thumbShape, thumbSize, thumbColor, reverse = false, sty
   const borderRadius = getStyle(style, 'borderRadius') ?? 5;
   const getHeight = getStyle(style, 'height') ?? 200;
 
-
   const width = useSharedValue(0);
   const height = useSharedValue(0);
 
@@ -44,39 +44,44 @@ export function Panel2({ thumbShape, thumbSize, thumbColor, reverse = false, sty
     return { transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }] };
   }, [thumbSize, reverse]);
 
+  const clamp = (v: number, max: number) => {
+    'worklet';
+    return Math.min(Math.max(v, 0), max);
+  };
+
+  const setValueFromGestureEvent = (event: PanGestureHandlerEventPayload) => {
+    'worklet';
+    const posX = clamp(event.x, width.value),
+      posY = clamp(event.y, height.value),
+      percentX = posX / width.value,
+      percentY = posY / height.value;
+
+    hueValue.value = reverse ? 360 - Math.round(percentX * 360) : Math.round(percentX * 360);
+    saturationValue.value = Math.round(100 - percentY * 100);
+
+    runOnJS(onGestureChange)();
+  };
+
   const gestureEvent = useAnimatedGestureHandler(
     {
-      onStart: (event, ctx: { x: number; y: number }) => {
-        ctx.x = event.x;
-        ctx.y = event.y;
+      onStart: event => {
         handleScale.value = withTiming(1.2, { duration: 100 });
+        setValueFromGestureEvent(event);
       },
-      onActive: (event, ctx) => {
-        const clamp = (v: number, max: number) => Math.min(Math.max(v, 0), max);
-
-        const x = event.x,
-          y = event.y,
-          posX = clamp(x, width.value),
-          posY = clamp(y, height.value),
-          percentX = posX / width.value,
-          percentY = posY / height.value;
-
-        hueValue.value = reverse ? 360 - Math.round(percentX * 360) : Math.round(percentX * 360);
-        saturationValue.value = Math.round(100 - percentY * 100);
-
-        runOnJS(onGestureChange)();
+      onActive: event => {
+        setValueFromGestureEvent(event);
       },
       onFinish: () => {
         handleScale.value = withTiming(1, { duration: 100 });
         runOnJS(onGestureEnd)();
       },
     },
-    [ width.value, reverse]
+    [width.value, height.value, reverse]
   );
 
   const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
-    width.value = (Math.round(layout.width));
-    height.value = (Math.round(layout.height));
+    width.value = Math.round(layout.width);
+    height.value = Math.round(layout.height);
   }, []);
 
   return (

@@ -24,7 +24,6 @@ const SWATCHES_COLORS = [
   '#607D8B',
 ];
 
-
 import type { SwatchesPorps } from '../types';
 
 export function Swatches({ colors = SWATCHES_COLORS, style = {}, swatchStyle = {} }: SwatchesPorps) {
