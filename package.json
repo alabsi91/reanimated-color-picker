@@ -40,7 +40,7 @@
   "peerDependencies": {
     "expo": ">=44.0.0",
     "react-native-gesture-handler": ">=2.0.0",
-    "react-native-reanimated": ">=2.0.0"
+    "react-native-reanimated": "^2.0.0 || ^3.0.0"
   },
   "peerDependenciesMeta": {
     "expo": {
