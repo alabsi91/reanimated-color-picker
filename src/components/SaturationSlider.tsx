@@ -95,7 +95,7 @@ export function SaturationSlider({
         runOnJS(onGestureEnd)();
       },
     },
-    [thumbSize, vertical, reverse]
+    [width.value, height.value, vertical, reverse]
   );
 
   const onLayout = ({ nativeEvent: { layout } }: LayoutChangeEvent) => {

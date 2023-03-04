@@ -65,19 +65,22 @@ export function Panel3({ thumbShape, thumbSize, thumbColor, style = {} }: PanelP
     runOnJS(onGestureChange)();
   };
 
-  const gestureEvent = useAnimatedGestureHandler({
-    onStart: event => {
-      handleScale.value = withTiming(1.2, { duration: 100 });
-      setValueFromGestureEvent(event);
+  const gestureEvent = useAnimatedGestureHandler(
+    {
+      onStart: event => {
+        handleScale.value = withTiming(1.2, { duration: 100 });
+        setValueFromGestureEvent(event);
+      },
+      onActive: event => {
+        setValueFromGestureEvent(event);
+      },
+      onFinish: () => {
+        handleScale.value = withTiming(1, { duration: 100 });
+        runOnJS(onGestureEnd)();
+      },
     },
-    onActive: event => {
-      setValueFromGestureEvent(event);
-    },
-    onFinish: () => {
-      handleScale.value = withTiming(1, { duration: 100 });
-      runOnJS(onGestureEnd)();
-    },
-  });
+    [width.value]
+  );
 
   const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
     const layoutWidth = Math.round(layout.width);

@@ -87,7 +87,7 @@ export function OpacitySlider({ thumbShape, thumbSize, thumbColor, style = {}, v
         runOnJS(onGestureEnd)();
       },
     },
-    [thumbSize, vertical, reverse]
+    [width.value, height.value, vertical, reverse]
   );
 
   const onLayout = ({ nativeEvent: { layout } }: LayoutChangeEvent) => {
