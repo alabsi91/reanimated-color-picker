@@ -13,7 +13,7 @@ import Thumb from './Thumbs';
 
 import type { LayoutChangeEvent } from 'react-native';
 import type { SliderProps } from '../types';
-import { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
+import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
 const isRtl = I18nManager.isRTL;
 

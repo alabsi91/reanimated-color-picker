@@ -13,7 +13,7 @@ import Thumb from './Thumbs';
 
 import type { LayoutChangeEvent } from 'react-native';
 import type { PanelProps } from '../types';
-import { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
+import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
 export function Panel3({ thumbShape, thumbSize, thumbColor, style = {} }: PanelProps) {
   const {

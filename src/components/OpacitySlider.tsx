@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { I18nManager } from 'react-native';
-import { PanGestureHandler, PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
+import { PanGestureHandler } from 'react-native-gesture-handler';
 import Animated, {
   runOnJS,
   useAnimatedGestureHandler,
@@ -13,6 +13,7 @@ import Thumb from './Thumbs';
 
 import type { LayoutChangeEvent } from 'react-native';
 import type { SliderProps } from '../types';
+import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
 const isRtl = I18nManager.isRTL;
 
