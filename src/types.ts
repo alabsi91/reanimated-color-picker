@@ -93,7 +93,10 @@ export interface ColorPickerProps {
   /** - called when the user moves the sliders. */
   onChange?: (colors: returnedResults) => void;
 
-  /** - called when the user lifts his finger off the sliders. */
+  /**
+   * - called when the user lifts his finger off the sliders.
+   * - CAUTION : As of `react-native-gesture-handler@2.9.0` the new web implementation does not support the events which trigger this callback.
+   */
   onComplete?: (colors: returnedResults) => void;
 
   children?: React.ReactNode;
