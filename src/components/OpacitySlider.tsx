@@ -71,15 +71,15 @@ export function OpacitySlider({ thumbShape, thumbSize, thumbColor, style = {}, v
     alphaValue.value = (vertical ? valY : valX) / 100;
 
     runOnJS(onGestureChange)();
-  }
+  };
 
   const gestureEvent = useAnimatedGestureHandler(
     {
-      onStart: (event) => {
+      onStart: event => {
         handleScale.value = withTiming(1.2, { duration: 100 });
         setValueFromGestureEvent(event);
       },
-      onActive: (event) => {
+      onActive: event => {
         setValueFromGestureEvent(event);
       },
       onFinish: () => {

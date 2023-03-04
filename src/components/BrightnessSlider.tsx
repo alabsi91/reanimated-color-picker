@@ -79,15 +79,15 @@ export function BrightnessSlider({
     brightnessValue.value = vertical ? valY : valX;
 
     runOnJS(onGestureChange)();
-  }
+  };
 
   const gestureEvent = useAnimatedGestureHandler(
     {
-      onStart: (event) => {
+      onStart: event => {
         handleScale.value = withTiming(1.2, { duration: 100 });
         setValueFromGestureEvent(event);
       },
-      onActive: (event) => {
+      onActive: event => {
         setValueFromGestureEvent(event);
       },
       onFinish: () => {

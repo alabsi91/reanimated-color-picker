@@ -1,4 +1,4 @@
-import React, {  useContext, useCallback } from 'react';
+import React, { useContext, useCallback } from 'react';
 import { ImageBackground } from 'react-native';
 import { PanGestureHandler } from 'react-native-gesture-handler';
 import Animated, {
@@ -31,7 +31,6 @@ export function Panel2({ thumbShape, thumbSize, thumbColor, reverse = false, sty
   const borderRadius = getStyle(style, 'borderRadius') ?? 5;
   const getHeight = getStyle(style, 'height') ?? 200;
 
-
   const width = useSharedValue(0);
   const height = useSharedValue(0);
 
@@ -61,27 +60,25 @@ export function Panel2({ thumbShape, thumbSize, thumbColor, reverse = false, sty
     saturationValue.value = Math.round(100 - percentY * 100);
 
     runOnJS(onGestureChange)();
-  }
+  };
 
-  const gestureEvent = useAnimatedGestureHandler(
-    {
-      onStart: (event) => {
-        handleScale.value = withTiming(1.2, { duration: 100 });
-        setValueFromGestureEvent(event);
-      },
-      onActive: (event) => {
-        setValueFromGestureEvent(event);
-      },
-      onFinish: () => {
-        handleScale.value = withTiming(1, { duration: 100 });
-        runOnJS(onGestureEnd)();
-      },
+  const gestureEvent = useAnimatedGestureHandler({
+    onStart: event => {
+      handleScale.value = withTiming(1.2, { duration: 100 });
+      setValueFromGestureEvent(event);
     },
-  );
+    onActive: event => {
+      setValueFromGestureEvent(event);
+    },
+    onFinish: () => {
+      handleScale.value = withTiming(1, { duration: 100 });
+      runOnJS(onGestureEnd)();
+    },
+  });
 
   const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
-    width.value = (Math.round(layout.width));
-    height.value = (Math.round(layout.height));
+    width.value = Math.round(layout.width);
+    height.value = Math.round(layout.height);
   }, []);
 
   return (

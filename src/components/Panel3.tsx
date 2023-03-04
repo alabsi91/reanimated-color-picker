@@ -63,23 +63,21 @@ export function Panel3({ thumbShape, thumbSize, thumbColor, style = {} }: PanelP
     saturationValue.value = Math.round(radiusPercent * 100);
 
     runOnJS(onGestureChange)();
-  }
+  };
 
-  const gestureEvent = useAnimatedGestureHandler(
-    {
-      onStart: (event) => {
-        handleScale.value = withTiming(1.2, { duration: 100 });
-        setValueFromGestureEvent(event);
-      },
-      onActive: (event) => {
-        setValueFromGestureEvent(event);
-      },
-      onFinish: () => {
-        handleScale.value = withTiming(1, { duration: 100 });
-        runOnJS(onGestureEnd)();
-      },
+  const gestureEvent = useAnimatedGestureHandler({
+    onStart: event => {
+      handleScale.value = withTiming(1.2, { duration: 100 });
+      setValueFromGestureEvent(event);
     },
-  );
+    onActive: event => {
+      setValueFromGestureEvent(event);
+    },
+    onFinish: () => {
+      handleScale.value = withTiming(1, { duration: 100 });
+      runOnJS(onGestureEnd)();
+    },
+  });
 
   const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
     const layoutWidth = Math.round(layout.width);
