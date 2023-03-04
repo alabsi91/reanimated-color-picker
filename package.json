@@ -33,6 +33,7 @@
     "@tsconfig/react-native": "^2.0.2",
     "@types/react-native": "^0.70.4",
     "metro-react-native-babel-preset": "^0.67.0",
+    "prettier": "2.8.4",
     "react-native-reanimated": "^2.9.1",
     "typescript": "^4.8.4"
   },
@@ -50,7 +51,7 @@
     "extends": "@react-native-community",
     "rules": {
       "react-native/no-inline-styles": 0,
-      "prettier/prettier": 0,
+      "prettier/prettier": 1,
       "jsx-quotes": 0,
       "curly": 0,
       "no-shadow": 0,
