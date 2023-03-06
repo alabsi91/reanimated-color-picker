@@ -64,12 +64,12 @@ export function HueSlider({
 
   const activeSaturationStyle = useAnimatedStyle(() => ({
     backgroundColor: `hsla(0, 0%, ${adaptSpectrum ? brightnessValue.value : 50}%, ${
-      adaptSpectrum ? 1 - saturationValue.value / 100 : 50
+      adaptSpectrum ? 1 - saturationValue.value / 100 : 0
     })`,
   }));
   const activeBrightnessStyle = useAnimatedStyle(() => ({
     backgroundColor: `hsla(0, ${adaptSpectrum ? 1 - brightnessValue.value / 2 : 50}%, 0%, ${
-      adaptSpectrum ? 1 - brightnessValue.value / 100 : 100
+      adaptSpectrum ? 1 - brightnessValue.value / 100 : 0
     })`,
   }));
 
