@@ -18,6 +18,7 @@ import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler
 const isRtl = I18nManager.isRTL;
 
 export function SaturationSlider({
+  adaptColor = false,
   thumbShape,
   thumbSize,
   thumbColor,
@@ -26,6 +27,7 @@ export function SaturationSlider({
   reverse = false,
 }: SliderProps) {
   const {
+    brightnessValue,
     saturationValue,
     hueValue,
     onGestureChange,
@@ -60,7 +62,9 @@ export function SaturationSlider({
     };
   }, [thumbSize, vertical, reverse]);
 
-  const activeHueStyle = useAnimatedStyle(() => ({ backgroundColor: `hsl(${hueValue.value}, 100%, 50%)` }));
+  const activeColorStyle = useAnimatedStyle(() => ({
+    backgroundColor: `hsl(${hueValue.value}, 100%, ${adaptColor ? brightnessValue.value / 2 : 50}%)`,
+  }));
 
   const setValueFromGestureEvent = (event: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -108,7 +112,9 @@ export function SaturationSlider({
       borderRadius,
       transform: [
         { rotate: imageRotate },
-        { translateX: vertical ? (reverse ? -height.value / 2 + width.value / 2 : height.value / 2 - width.value / 2) : 0 },
+        {
+          translateX: vertical ? (reverse ? -height.value / 2 + width.value / 2 : height.value / 2 - width.value / 2) : 0,
+        },
         { translateY: vertical ? imageTranslateY : 0 },
       ],
     };
@@ -120,10 +126,19 @@ export function SaturationSlider({
     <PanGestureHandler onGestureEvent={gestureEvent} minDist={0}>
       <Animated.View
         onLayout={onLayout}
-        style={[{ borderRadius }, style, { position: 'relative', borderWidth: 0, padding: 0 }, thicknessStyle, activeHueStyle]}
+        style={[{ borderRadius }, style, { position: 'relative', borderWidth: 0, padding: 0 }, thicknessStyle, activeColorStyle]}
       >
         <Animated.Image source={require('../assets/Saturation.png')} style={imageStyle} />
-        <Thumb {...{ channel: 's', thumbShape, thumbSize: thumb_size, thumbColor: thumb_color, handleStyle, vertical }} />
+        <Thumb
+          {...{
+            channel: 's',
+            thumbShape,
+            thumbSize: thumb_size,
+            thumbColor: thumb_color,
+            handleStyle,
+            vertical,
+          }}
+        />
       </Animated.View>
     </PanGestureHandler>
   );

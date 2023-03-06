@@ -184,6 +184,9 @@ export interface SliderProps {
   /** - vertical slider. */
   vertical?: boolean;
 
+  /** - color adapts to changes in brightness and saturation */
+  adaptColor?: boolean;
+
   /**
    * - slider's container style.
    * - **Note** Certain style properties will be overridden.
