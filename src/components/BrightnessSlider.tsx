@@ -18,7 +18,7 @@ import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler
 const isRtl = I18nManager.isRTL;
 
 export function BrightnessSlider({
-  adaptColor = false,
+  adaptSpectrum = false,
   thumbShape,
   thumbSize,
   thumbColor,
@@ -63,7 +63,7 @@ export function BrightnessSlider({
   }, [thumbSize, vertical, reverse]);
 
   const activeColorStyle = useAnimatedStyle(() => ({
-    backgroundColor: `hsl(${hueValue.value}, 100%, ${adaptColor ? 100 - saturationValue.value / 2 : 50}%)`,
+    backgroundColor: `hsl(${hueValue.value}, 100%, ${adaptSpectrum ? 100 - saturationValue.value / 2 : 50}%)`,
   }));
 
   const setValueFromGestureEvent = (event: PanGestureHandlerEventPayload) => {
