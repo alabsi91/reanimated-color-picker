@@ -17,7 +17,16 @@ import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler
 
 const isRtl = I18nManager.isRTL;
 
-export function OpacitySlider({ thumbShape, thumbSize, thumbColor, style = {}, vertical = false, reverse = false }: SliderProps) {
+export function OpacitySlider({
+  thumbShape,
+  thumbSize,
+  thumbColor,
+  thumbStyle,
+  thumbInnerStyle,
+  style = {},
+  vertical = false,
+  reverse = false,
+}: SliderProps) {
   const {
     alphaValue,
     hueValue,
@@ -27,11 +36,15 @@ export function OpacitySlider({ thumbShape, thumbSize, thumbColor, style = {}, v
     thumbSize: thumbsSize,
     thumbShape: thumbsShape,
     thumbColor: thumbsColor,
+    thumbStyle: thumbsStyle,
+    thumbInnerStyle: thumbsInnerStyle,
   } = useContext(CTX);
 
   thumbShape = thumbShape ?? thumbsShape;
   const thumb_size = thumbSize ?? thumbsSize;
   const thumb_color = thumbColor ?? thumbsColor;
+  const thumb_style = thumbStyle ?? thumbsStyle ?? {};
+  const thumb_inner_style = thumbInnerStyle ?? thumbsInnerStyle ?? {};
 
   const borderRadius = getStyle(style, 'borderRadius') ?? 5;
   const getWidth = getStyle(style, 'width');
@@ -49,9 +62,10 @@ export function OpacitySlider({ thumbShape, thumbSize, thumbColor, style = {}, v
       posY = vertical ? pos : height.value / 2 - thumb_size / 2,
       posX = vertical ? width.value / 2 - thumb_size / 2 : pos;
     return {
+      ...thumb_style,
       transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }],
     };
-  }, [thumbSize, vertical, reverse]);
+  }, [thumbSize, thumb_style, vertical, reverse]);
 
   const activeHueStyle = useAnimatedStyle(() => ({ backgroundColor: `hsl(${hueValue.value}, 100%, 50%)` }));
 
@@ -116,7 +130,17 @@ export function OpacitySlider({ thumbShape, thumbSize, thumbColor, style = {}, v
         style={[{ borderRadius }, style, { position: 'relative', borderWidth: 0, padding: 0 }, thicknessStyle, activeHueStyle]}
       >
         <Animated.Image source={require('../assets/Opacity.png')} style={imageStyle} />
-        <Thumb {...{ channel: 'a', thumbShape, thumbSize: thumb_size, thumbColor: thumb_color, handleStyle, vertical }} />
+        <Thumb
+          {...{
+            channel: 'a',
+            thumbShape,
+            thumbSize: thumb_size,
+            thumbColor: thumb_color,
+            handleStyle,
+            innerStyle: thumb_inner_style,
+            vertical,
+          }}
+        />
       </Animated.View>
     </PanGestureHandler>
   );
