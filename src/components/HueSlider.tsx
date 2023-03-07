@@ -22,6 +22,8 @@ export function HueSlider({
   thumbShape,
   thumbSize,
   thumbColor,
+  thumbInnerStyle,
+  thumbStyle,
   style = {},
   vertical = false,
   reverse = false,
@@ -36,11 +38,15 @@ export function HueSlider({
     thumbSize: thumbsSize,
     thumbShape: thumbsShape,
     thumbColor: thumbsColor,
+    thumbStyle: thumbsStyle,
+    thumbInnerStyle: thumbsInnerStyle,
   } = useContext(CTX);
 
   thumbShape = thumbShape ?? thumbsShape;
   const thumb_size = thumbSize ?? thumbsSize;
   const thumb_color = thumbColor ?? thumbsColor;
+  const thumb_style = thumbStyle ?? thumbsStyle ?? {};
+  const thumb_inner_style = thumbInnerStyle ?? thumbsInnerStyle ?? {};
 
   const borderRadius = getStyle(style, 'borderRadius') ?? 5;
   const getWidth = getStyle(style, 'width');
@@ -58,9 +64,10 @@ export function HueSlider({
       posY = vertical ? pos : height.value / 2 - thumb_size / 2,
       posX = vertical ? width.value / 2 - thumb_size / 2 : pos;
     return {
+      ...thumb_style,
       transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }],
     };
-  }, [thumbSize, vertical, reverse]);
+  }, [thumbSize, thumb_style, vertical, reverse]);
 
   const activeSaturationStyle = useAnimatedStyle(() => ({
     backgroundColor: `hsla(0, 0%, ${adaptSpectrum ? brightnessValue.value : 50}%, ${
@@ -145,6 +152,7 @@ export function HueSlider({
             thumbSize: thumb_size,
             thumbColor: thumb_color,
             handleStyle,
+            innerStyle: thumb_inner_style,
             vertical,
           }}
         />
