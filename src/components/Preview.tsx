@@ -1,12 +1,13 @@
 import React, { useState, useMemo, useContext } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Animated, { runOnJS, useAnimatedStyle, useDerivedValue, useSharedValue } from 'react-native-reanimated';
-import { CTX, getStyle } from '../GlobalStyles';
+import { getStyle } from '../utils';
 
 import type { PreviewPorps } from '../types';
 import type { StyleProp, TextStyle } from 'react-native';
 import type { SharedValue } from 'react-native-reanimated';
 import colorKit from '../colorKit';
+import { CTX } from '../ColorPicker';
 
 const ReText = ({ text, style, hash }: { text: () => string; style: StyleProp<TextStyle>[]; hash: SharedValue<number>[] }) => {
   const [color, setColor] = useState(text());

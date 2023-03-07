@@ -1,13 +1,14 @@
-import React, { useEffect, useRef } from 'react';
+import React, { createContext, useEffect, useRef } from 'react';
 import { Text, StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useSharedValue, withTiming } from 'react-native-reanimated';
 
 import colorKit from './colorKit';
-import { CTX } from './GlobalStyles';
 
 import type { AnyFormat } from './colorKit';
 import type { ColorPickerProps, TCTX } from './types';
+
+export const CTX = createContext<TCTX>(null!);
 
 export default function ColorPicker({
   sliderThickness = 25,
