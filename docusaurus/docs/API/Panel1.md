@@ -47,16 +47,6 @@ description: A square-shaped slider, reminiscent of Adobe style, is utilized to 
 - `values`: <shapes/>
 - `default: 'ring'`
 
-### `thumbStyle`
-
-- Thumb's containing View's style.
-- `type: ViewStyle`
-
-### `thumbInnerStyle`
-
-- Thumb's inner View(s) style.
-- `type: ViewStyle`
-
 ### `style`
 
 - Panel's container style.
