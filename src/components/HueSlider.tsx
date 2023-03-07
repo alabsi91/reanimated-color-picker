@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { I18nManager } from 'react-native';
+import { I18nManager, StyleSheet } from 'react-native';
 import { PanGestureHandler } from 'react-native-gesture-handler';
 import Animated, {
   runOnJS,
@@ -18,6 +18,7 @@ import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler
 const isRtl = I18nManager.isRTL;
 
 export function HueSlider({
+  adaptSpectrum = false,
   thumbShape,
   thumbSize,
   thumbColor,
@@ -30,7 +31,9 @@ export function HueSlider({
   const {
     onGestureChange,
     onGestureEnd,
+    brightnessValue,
     hueValue,
+    saturationValue,
     sliderThickness,
     thumbSize: thumbsSize,
     thumbShape: thumbsShape,
@@ -65,6 +68,17 @@ export function HueSlider({
       transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }],
     };
   }, [thumbSize, thumb_style, vertical, reverse]);
+
+  const activeSaturationStyle = useAnimatedStyle(() => ({
+    backgroundColor: `hsla(0, 0%, ${adaptSpectrum ? brightnessValue.value : 50}%, ${
+      adaptSpectrum ? 1 - saturationValue.value / 100 : 0
+    })`,
+  }));
+  const activeBrightnessStyle = useAnimatedStyle(() => ({
+    backgroundColor: `hsla(0, ${adaptSpectrum ? 1 - brightnessValue.value / 2 : 50}%, 0%, ${
+      adaptSpectrum ? 1 - brightnessValue.value / 100 : 0
+    })`,
+  }));
 
   const setValueFromGestureEvent = (event: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -112,7 +126,9 @@ export function HueSlider({
       borderRadius,
       transform: [
         { rotate: imageRotate },
-        { translateX: vertical ? (reverse ? -height.value / 2 + width.value / 2 : height.value / 2 - width.value / 2) : 0 },
+        {
+          translateX: vertical ? (reverse ? -height.value / 2 + width.value / 2 : height.value / 2 - width.value / 2) : 0,
+        },
         { translateY: vertical ? imageTranslateY : 0 },
       ],
     };
@@ -127,6 +143,8 @@ export function HueSlider({
         style={[{ borderRadius }, style, thicknessStyle, { position: 'relative', borderWidth: 0, padding: 0 }]}
       >
         <Animated.Image source={require('../assets/Hue.png')} style={imageStyle} />
+        <Animated.View style={[activeSaturationStyle, StyleSheet.absoluteFillObject]} />
+        <Animated.View style={[activeBrightnessStyle, StyleSheet.absoluteFillObject]} />
         <Thumb
           {...{
             channel: 'h',
