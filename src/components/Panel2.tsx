@@ -17,7 +17,15 @@ import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler
 import { CTX } from '../ColorPicker';
 import { styles } from '../styles';
 
-export function Panel2({ thumbShape, thumbSize, thumbColor, reverse = false, style = {} }: Panel2Props) {
+export function Panel2({
+  thumbShape,
+  thumbSize,
+  thumbColor,
+  thumbStyle,
+  thumbInnerStyle,
+  reverse = false,
+  style = {},
+}: Panel2Props) {
   const {
     hueValue,
     saturationValue,
@@ -25,10 +33,14 @@ export function Panel2({ thumbShape, thumbSize, thumbColor, reverse = false, sty
     onGestureEnd,
     thumbSize: thumbsSize,
     thumbColor: thumbsColor,
+    thumbStyle: thumbsStyle,
+    thumbInnerStyle: thumbsInnerStyle,
   } = useContext(CTX);
 
   const thumb_size = thumbSize ?? thumbsSize;
   const thumb_color = thumbColor ?? thumbsColor;
+  const thumb_style = thumbStyle ?? thumbsStyle ?? {};
+  const thumb_inner_style = thumbInnerStyle ?? thumbsInnerStyle ?? {};
 
   const borderRadius = getStyle(style, 'borderRadius') ?? 5;
   const getHeight = getStyle(style, 'height') ?? 200;
@@ -43,8 +55,8 @@ export function Panel2({ thumbShape, thumbSize, thumbColor, reverse = false, sty
     const posX = (reverse ? width.value - percentX : percentX) - thumb_size / 2;
     const percentY = (saturationValue.value / 100) * height.value;
     const posY = height.value - percentY - thumb_size / 2;
-    return { transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }] };
-  }, [thumbSize, reverse]);
+    return { ...thumb_style, transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }] };
+  }, [thumbSize, thumb_style, reverse]);
 
   const setValueFromGestureEvent = (event: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -92,7 +104,16 @@ export function Panel2({ thumbShape, thumbSize, thumbColor, reverse = false, sty
           style={[styles.panel_image, { borderRadius, transform: [{ scaleX: reverse ? -1 : 1 }] }]}
           resizeMode='stretch'
         />
-        <Thumb {...{ channel: 's', thumbShape, thumbSize: thumb_size, thumbColor: thumb_color, handleStyle }} />
+        <Thumb
+          {...{
+            channel: 's',
+            thumbShape,
+            thumbSize: thumb_size,
+            thumbColor: thumb_color,
+            innerStyle: thumb_inner_style,
+            handleStyle,
+          }}
+        />
       </Animated.View>
     </PanGestureHandler>
   );

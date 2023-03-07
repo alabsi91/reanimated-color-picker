@@ -19,10 +19,12 @@ import { CTX } from '../ColorPicker';
 const isRtl = I18nManager.isRTL;
 
 export function OpacitySlider({
-  adaptSpectrum = false,
+    adaptSpectrum = false,
   thumbShape,
   thumbSize,
   thumbColor,
+  thumbStyle,
+  thumbInnerStyle,
   style = {},
   vertical = false,
   reverse = false,
@@ -38,11 +40,15 @@ export function OpacitySlider({
     thumbSize: thumbsSize,
     thumbShape: thumbsShape,
     thumbColor: thumbsColor,
+    thumbStyle: thumbsStyle,
+    thumbInnerStyle: thumbsInnerStyle,
   } = useContext(CTX);
 
   thumbShape = thumbShape ?? thumbsShape;
   const thumb_size = thumbSize ?? thumbsSize;
   const thumb_color = thumbColor ?? thumbsColor;
+  const thumb_style = thumbStyle ?? thumbsStyle ?? {};
+  const thumb_inner_style = thumbInnerStyle ?? thumbsInnerStyle ?? {};
 
   const borderRadius = getStyle(style, 'borderRadius') ?? 5;
   const getWidth = getStyle(style, 'width');
@@ -60,9 +66,10 @@ export function OpacitySlider({
       posY = vertical ? pos : height.value / 2 - thumb_size / 2,
       posX = vertical ? width.value / 2 - thumb_size / 2 : pos;
     return {
+      ...thumb_style,
       transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }],
     };
-  }, [thumbSize, vertical, reverse]);
+  }, [thumbSize, thumb_style, vertical, reverse]);
 
   const activeColorStyle = useAnimatedStyle(() => ({
     backgroundColor: hsva2Hsla(
@@ -142,6 +149,7 @@ export function OpacitySlider({
             thumbSize: thumb_size,
             thumbColor: thumb_color,
             handleStyle,
+            innerStyle: thumb_inner_style,
             vertical,
           }}
         />
