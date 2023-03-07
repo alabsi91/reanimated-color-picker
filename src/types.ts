@@ -171,6 +171,13 @@ export interface PanelProps {
 
   /** - panel handle (thumb) shape. */
   thumbShape?: thumbShapeType;
+
+  /** - slider's handle (thumb) outer View style. */
+  thumbStyle?: thumbStyleType;
+
+  /** - slider's handle (thumb) inner View style. */
+  thumbInnerStyle?: thumbInnerStyleType;
+
   /**
    * - panle container style.
    * - **Note** Certain style properties will be overridden.

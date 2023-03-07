@@ -47,6 +47,16 @@ description: A square-shaped slider (windows style) is utilized to adjust the hu
 - `values`: <shapes/>
 - `default: 'ring'`
 
+### `thumbStyle`
+
+- Thumb's containing View's style.
+- `type: ViewStyle`
+
+### `thumbInnerStyle`
+
+- Thumb's inner View(s) style.
+- `type: ViewStyle`
+
 ### `reverse`
 
 - Reverse (flip) hue direction.
