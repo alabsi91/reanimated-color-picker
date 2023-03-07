@@ -8,7 +8,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { clamp, CTX, getStyle } from '../GlobalStyles';
+import { clamp, CTX, getStyle, hsva2Hsla } from '../GlobalStyles';
 import Thumb from './Thumbs';
 
 import type { LayoutChangeEvent } from 'react-native';
@@ -64,9 +64,11 @@ export function OpacitySlider({
   }, [thumbSize, vertical, reverse]);
 
   const activeColorStyle = useAnimatedStyle(() => ({
-    backgroundColor: `hsl(${hueValue.value}, ${adaptSpectrum ? saturationValue.value : 100}%, ${
-      adaptSpectrum ? brightnessValue.value / 2 : 50
-    }%)`,
+    backgroundColor: hsva2Hsla(
+      hueValue.value,
+      adaptSpectrum ? saturationValue.value : 100,
+      adaptSpectrum ? brightnessValue.value : 100
+    ),
   }));
 
   const setValueFromGestureEvent = (event: PanGestureHandlerEventPayload) => {

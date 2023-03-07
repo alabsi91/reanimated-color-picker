@@ -8,7 +8,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { clamp, CTX, getStyle } from '../GlobalStyles';
+import { clamp, CTX, getStyle, hsva2Hsla } from '../GlobalStyles';
 import Thumb from './Thumbs';
 
 import type { LayoutChangeEvent } from 'react-native';
@@ -63,14 +63,15 @@ export function HueSlider({
   }, [thumbSize, vertical, reverse]);
 
   const activeSaturationStyle = useAnimatedStyle(() => ({
-    backgroundColor: `hsla(0, 0%, ${adaptSpectrum ? brightnessValue.value : 50}%, ${
+    backgroundColor: hsva2Hsla(
+      0,
+      0,
+      adaptSpectrum ? brightnessValue.value : 100,
       adaptSpectrum ? 1 - saturationValue.value / 100 : 0
-    })`,
+    ),
   }));
   const activeBrightnessStyle = useAnimatedStyle(() => ({
-    backgroundColor: `hsla(0, ${adaptSpectrum ? 1 - brightnessValue.value / 2 : 50}%, 0%, ${
-      adaptSpectrum ? 1 - brightnessValue.value / 100 : 0
-    })`,
+    backgroundColor: hsva2Hsla(0, 100, 0, adaptSpectrum ? 1 - brightnessValue.value / 100 : 0),
   }));
 
   const setValueFromGestureEvent = (event: PanGestureHandlerEventPayload) => {
