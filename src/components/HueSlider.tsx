@@ -64,15 +64,10 @@ export function HueSlider({
   }, [thumbSize, vertical, reverse]);
 
   const activeSaturationStyle = useAnimatedStyle(() => ({
-    backgroundColor: hsva2Hsla(
-      0,
-      0,
-      adaptSpectrum ? brightnessValue.value : 100,
-      adaptSpectrum ? 1 - saturationValue.value / 100 : 0
-    ),
+    backgroundColor: hsva2Hsla(0, 0, brightnessValue.value, 1 - saturationValue.value / 100),
   }));
   const activeBrightnessStyle = useAnimatedStyle(() => ({
-    backgroundColor: hsva2Hsla(0, 100, 0, adaptSpectrum ? 1 - brightnessValue.value / 100 : 0),
+    backgroundColor: hsva2Hsla(0, 0, 0, 1 - brightnessValue.value / 100),
   }));
 
   const setValueFromGestureEvent = (event: PanGestureHandlerEventPayload) => {
