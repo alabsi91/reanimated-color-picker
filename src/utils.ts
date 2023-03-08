@@ -14,18 +14,12 @@ export function clamp(v: number, max: number) {
 export function hsva2Hsla(h: number, s: number, v: number, a = 1) {
   'worklet';
 
-  // both hsv and hsl values are in [0, 100]
-  const l = ((2 - s / 100) * v) / 2;
+  s = s / 100;
+  v = v / 100;
 
-  if (l !== 0) {
-    if (l === 100) {
-      s = 0;
-    } else if (l < 50) {
-      s = (s * v) / (l * 2);
-    } else {
-      s = (s * v) / (200 - l * 2);
-    }
-  }
+  const l = ((2 - s) * v) / 2,
+    sl = s * v,
+    sln = l !== 0 && l !== 1 ? sl / (l < 0.5 ? l * 2 : 2 - l * 2) : sl;
 
-  return `hsla(${h}, ${s}%, ${l}%, ${a})`;
+  return `hsla(${h}, ${sln * 100}%, ${l * 100}%, ${a})`;
 }
