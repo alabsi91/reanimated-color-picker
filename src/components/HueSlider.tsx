@@ -138,8 +138,12 @@ export function HueSlider({
         style={[{ borderRadius }, style, thicknessStyle, { position: 'relative', borderWidth: 0, padding: 0 }]}
       >
         <Animated.Image source={require('../assets/Hue.png')} style={imageStyle} />
-        <Animated.View style={[activeSaturationStyle, StyleSheet.absoluteFillObject]} />
-        <Animated.View style={[activeBrightnessStyle, StyleSheet.absoluteFillObject]} />
+        {adaptSpectrum && (
+          <>
+            <Animated.View style={[{ borderRadius }, activeSaturationStyle, StyleSheet.absoluteFillObject]} />
+            <Animated.View style={[{ borderRadius }, activeBrightnessStyle, StyleSheet.absoluteFillObject]} />
+          </>
+        )}
         <Thumb
           {...{
             channel: 'h',
