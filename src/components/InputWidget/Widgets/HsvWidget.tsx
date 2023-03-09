@@ -76,6 +76,7 @@ export default function HsvWidget({
           onChangeText={onHueChange}
           onBlur={onBlur}
           onFocus={onFocus}
+          selectTextOnFocus
         />
         <Text style={[styles.inputTitle, inputTitleStyle]}>H</Text>
       </View>
@@ -87,6 +88,7 @@ export default function HsvWidget({
           onChangeText={onSaturationChange}
           onBlur={onBlur}
           onFocus={onFocus}
+          selectTextOnFocus
         />
         <Text style={[styles.inputTitle, inputTitleStyle]}>S</Text>
       </View>
@@ -98,6 +100,7 @@ export default function HsvWidget({
           onChangeText={onValueChange}
           onBlur={onBlur}
           onFocus={onFocus}
+          selectTextOnFocus
         />
         <Text style={[styles.inputTitle, inputTitleStyle]}>V</Text>
       </View>
@@ -109,6 +112,7 @@ export default function HsvWidget({
           onChangeText={onAlphaChange}
           onBlur={onBlur}
           onFocus={onFocus}
+          selectTextOnFocus
         />
         <Text style={[styles.inputTitle, inputTitleStyle]}>A</Text>
       </View>

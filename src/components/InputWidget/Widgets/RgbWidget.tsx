@@ -76,6 +76,7 @@ export default function RgbWidget({
           onChangeText={onRedChange}
           onBlur={onBlur}
           onFocus={onFocus}
+          selectTextOnFocus
         />
         <Text style={[styles.inputTitle, inputTitleStyle]}>R</Text>
       </View>
@@ -87,6 +88,7 @@ export default function RgbWidget({
           onChangeText={onGreenChange}
           onBlur={onBlur}
           onFocus={onFocus}
+          selectTextOnFocus
         />
         <Text style={[styles.inputTitle, inputTitleStyle]}>G</Text>
       </View>
@@ -98,6 +100,7 @@ export default function RgbWidget({
           onChangeText={onBlueChange}
           onBlur={onBlur}
           onFocus={onFocus}
+          selectTextOnFocus
         />
         <Text style={[styles.inputTitle, inputTitleStyle]}>B</Text>
       </View>
@@ -109,6 +112,7 @@ export default function RgbWidget({
           onChangeText={onAlphaChange}
           onBlur={onBlur}
           onFocus={onFocus}
+          selectTextOnFocus
         />
         <Text style={[styles.inputTitle, inputTitleStyle]}>A</Text>
       </View>
