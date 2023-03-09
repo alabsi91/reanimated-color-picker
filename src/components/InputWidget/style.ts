@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     textAlign: 'center',
     fontSize: 16,
+    color: '#000',
   },
   inputTitle: {
     textAlign: 'center',
