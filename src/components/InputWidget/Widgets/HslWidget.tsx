@@ -76,6 +76,7 @@ export default function HslWidget({
           onChangeText={onHueChange}
           onBlur={onBlur}
           onFocus={onFocus}
+          selectTextOnFocus
         />
         <Text style={[styles.inputTitle, inputTitleStyle]}>H</Text>
       </View>
@@ -87,6 +88,7 @@ export default function HslWidget({
           onChangeText={onSaturationChange}
           onBlur={onBlur}
           onFocus={onFocus}
+          selectTextOnFocus
         />
         <Text style={[styles.inputTitle, inputTitleStyle]}>S</Text>
       </View>
@@ -98,6 +100,7 @@ export default function HslWidget({
           onChangeText={onLumChange}
           onBlur={onBlur}
           onFocus={onFocus}
+          selectTextOnFocus
         />
         <Text style={[styles.inputTitle, inputTitleStyle]}>L</Text>
       </View>
@@ -109,6 +112,7 @@ export default function HslWidget({
           onChangeText={onAlphaChange}
           onBlur={onBlur}
           onFocus={onFocus}
+          selectTextOnFocus
         />
         <Text style={[styles.inputTitle, inputTitleStyle]}>A</Text>
       </View>

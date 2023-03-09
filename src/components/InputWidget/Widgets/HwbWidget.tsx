@@ -76,6 +76,7 @@ export default function HwbWidget({
           onChangeText={onHueChange}
           onBlur={onBlur}
           onFocus={onFocus}
+          selectTextOnFocus
         />
         <Text style={[styles.inputTitle, inputTitleStyle]}>H</Text>
       </View>
@@ -87,6 +88,7 @@ export default function HwbWidget({
           onChangeText={onWhiteChange}
           onBlur={onBlur}
           onFocus={onFocus}
+          selectTextOnFocus
         />
         <Text style={[styles.inputTitle, inputTitleStyle]}>W</Text>
       </View>
@@ -98,6 +100,7 @@ export default function HwbWidget({
           onChangeText={onBlackChange}
           onBlur={onBlur}
           onFocus={onFocus}
+          selectTextOnFocus
         />
         <Text style={[styles.inputTitle, inputTitleStyle]}>B</Text>
       </View>
@@ -109,6 +112,7 @@ export default function HwbWidget({
           onChangeText={onAlphaChange}
           onBlur={onBlur}
           onFocus={onFocus}
+          selectTextOnFocus
         />
         <Text style={[styles.inputTitle, inputTitleStyle]}>A</Text>
       </View>
