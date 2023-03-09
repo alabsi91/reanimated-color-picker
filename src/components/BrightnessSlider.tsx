@@ -19,7 +19,7 @@ import { CTX } from '../ColorPicker';
 const isRtl = I18nManager.isRTL;
 
 export function BrightnessSlider({
-                                   adaptSpectrum = false,
+  adaptSpectrum = false,
   thumbShape,
   thumbSize,
   thumbColor,
@@ -134,7 +134,7 @@ export function BrightnessSlider({
     <PanGestureHandler onGestureEvent={gestureEvent} minDist={0}>
       <Animated.View
         onLayout={onLayout}
-        style={[{ borderRadius }, style, { position: 'relative', borderWidth: 0, padding: 0 }, thicknessStyle, activeHueStyle]}
+        style={[{ borderRadius }, style, { position: 'relative', borderWidth: 0, padding: 0 }, thicknessStyle, activeColorStyle]}
       >
         <Animated.Image source={require('../assets/Brightness.png')} style={imageStyle} />
         <Thumb

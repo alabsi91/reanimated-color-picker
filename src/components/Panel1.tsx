@@ -54,7 +54,7 @@ export function Panel1({ thumbShape, thumbSize, thumbColor, renderThumb, thumbSt
     };
   }, [thumbSize]);
 
-  const activeHueStyle = useAnimatedStyle(() => ({ backgroundColor: `hsl(${hueValue.value}, 100%, 50%)` }));
+  const activeColorStyle = useAnimatedStyle(() => ({ backgroundColor: `hsl(${hueValue.value}, 100%, 50%)` }));
 
   const setValueFromGestureEvent = (event: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -100,7 +100,7 @@ export function Panel1({ thumbShape, thumbSize, thumbColor, renderThumb, thumbSt
           { height: getHeight },
           style,
           { position: 'relative', borderWidth: 0, padding: 0 },
-          activeHueStyle,
+          activeColorStyle,
         ]}
       >
         <ImageBackground

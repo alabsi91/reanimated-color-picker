@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { I18nManager } from 'react-native';
+import { I18nManager, StyleSheet } from 'react-native';
 import { PanGestureHandler } from 'react-native-gesture-handler';
 import Animated, {
   runOnJS,
@@ -19,7 +19,7 @@ import { CTX } from '../ColorPicker';
 const isRtl = I18nManager.isRTL;
 
 export function HueSlider({
-                            adaptSpectrum = false,
+  adaptSpectrum = false,
   thumbShape,
   thumbSize,
   thumbColor,
@@ -33,7 +33,9 @@ export function HueSlider({
   const {
     onGestureChange,
     onGestureEnd,
+    brightnessValue,
     hueValue,
+    saturationValue,
     sliderThickness,
     thumbSize: thumbsSize,
     thumbShape: thumbsShape,
