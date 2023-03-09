@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, TextInput, Text } from 'react-native';
 import { runOnJS, useDerivedValue } from 'react-native-reanimated';
 
@@ -20,6 +20,7 @@ export default function HwbWidget({
   const [hwbValues, setHwbValues] = useState(colorKit.HWB(returnedResults().hwba).object());
 
   const isFocesed = useRef(false);
+  const alphaInputRef = useRef<TextInput>(null!);
 
   const updateText = () => {
     const { h, w, b, a } = colorKit.HWB(returnedResults().hwba).object();
@@ -33,29 +34,25 @@ export default function HwbWidget({
 
   const onHueChange = (text: string) => {
     let hue = +text;
-    if (typeof hue !== 'number' || isNaN(hue)) return;
-    hue = clamp(hue, 360);
+    hue = clamp(isNaN(hue) ? 0 : hue, 360);
     setHwbValues(prev => ({ ...prev, h: hue }));
     onChange(`hwba(${hue}, ${hwbValues.w}%, ${hwbValues.b}%, ${hwbValues.a})`);
   };
   const onWhiteChange = (text: string) => {
     let whitness = +text;
-    if (typeof whitness !== 'number' || isNaN(whitness)) return;
-    whitness = clamp(whitness, 100);
+    whitness = clamp(isNaN(whitness) ? 0 : whitness, 100);
     setHwbValues(prev => ({ ...prev, w: whitness }));
     onChange(`hwba(${hwbValues.h}, ${whitness}%, ${hwbValues.b}%, ${hwbValues.a})`);
   };
   const onBlackChange = (text: string) => {
     let blackness = +text;
-    if (typeof blackness !== 'number' || isNaN(blackness)) return;
-    blackness = clamp(blackness, 100);
+    blackness = clamp(isNaN(blackness) ? 0 : blackness, 100);
     setHwbValues(prev => ({ ...prev, b: blackness }));
     onChange(`hwba(${hwbValues.h}, ${hwbValues.w}%, ${blackness}%, ${hwbValues.a})`);
   };
   const onAlphaChange = (text: string) => {
-    let alpha = +text;
-    if (typeof alpha !== 'number' || isNaN(alpha)) return;
-    alpha = clamp(alpha, 1);
+    let alpha = parseFloat(text);
+    alpha = clamp(isNaN(alpha) ? 0 : alpha, 1);
     setHwbValues(prev => ({ ...prev, a: alpha }));
     onChange(`hwba(${hwbValues.h}, ${hwbValues.w}%, ${hwbValues.b}%, ${alpha})`);
   };
@@ -65,17 +62,25 @@ export default function HwbWidget({
   };
   const onBlur = () => {
     isFocesed.current = false;
+    if (!hwbValues.a) alphaInputRef.current.setNativeProps({ text: hwbValues.a + '' || '0' });
   };
+
+  useEffect(() => {
+    alphaInputRef.current.setNativeProps({ text: hwbValues.a + '' || '0' });
+  }, [hwbValues.a]);
+
   return (
     <>
       <View style={styles.inputsContainer}>
         <TextInput
           style={[styles.input, inputStyle]}
-          keyboardType='number-pad'
           value={hwbValues.h + ''}
           onChangeText={onHueChange}
           onBlur={onBlur}
           onFocus={onFocus}
+          keyboardType='number-pad'
+          autoComplete='off'
+          autoCorrect={false}
           selectTextOnFocus
         />
         <Text style={[styles.inputTitle, inputTitleStyle]}>H</Text>
@@ -83,11 +88,13 @@ export default function HwbWidget({
       <View style={styles.inputsContainer}>
         <TextInput
           style={[styles.input, inputStyle]}
-          keyboardType='number-pad'
           value={hwbValues.w + ''}
           onChangeText={onWhiteChange}
           onBlur={onBlur}
           onFocus={onFocus}
+          keyboardType='number-pad'
+          autoComplete='off'
+          autoCorrect={false}
           selectTextOnFocus
         />
         <Text style={[styles.inputTitle, inputTitleStyle]}>W</Text>
@@ -95,23 +102,28 @@ export default function HwbWidget({
       <View style={styles.inputsContainer}>
         <TextInput
           style={[styles.input, inputStyle]}
-          keyboardType='number-pad'
           value={hwbValues.b + ''}
           onChangeText={onBlackChange}
           onBlur={onBlur}
           onFocus={onFocus}
+          keyboardType='number-pad'
+          autoComplete='off'
+          autoCorrect={false}
           selectTextOnFocus
         />
         <Text style={[styles.inputTitle, inputTitleStyle]}>B</Text>
       </View>
       <View style={styles.inputsContainer}>
         <TextInput
+          ref={alphaInputRef}
           style={[styles.input, inputStyle]}
-          keyboardType='number-pad'
-          value={hwbValues.a + ''}
+          defaultValue={hwbValues.a + ''}
           onChangeText={onAlphaChange}
           onBlur={onBlur}
           onFocus={onFocus}
+          keyboardType='decimal-pad'
+          autoComplete='off'
+          autoCorrect={false}
           selectTextOnFocus
         />
         <Text style={[styles.inputTitle, inputTitleStyle]}>A</Text>

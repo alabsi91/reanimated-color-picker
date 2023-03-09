@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, TextInput, Text } from 'react-native';
 import { runOnJS, useDerivedValue } from 'react-native-reanimated';
 
@@ -20,6 +20,7 @@ export default function HslWidget({
   const [hslValues, setHslValues] = useState(colorKit.HSL(returnedResults().hsla).object());
 
   const isFocesed = useRef(false);
+  const alphaInputRef = useRef<TextInput>(null!);
 
   const updateText = () => {
     const { h, s, l, a } = colorKit.HSL(returnedResults().hsla).object();
@@ -33,29 +34,25 @@ export default function HslWidget({
 
   const onHueChange = (text: string) => {
     let hue = +text;
-    if (typeof hue !== 'number' || isNaN(hue)) return;
-    hue = clamp(hue, 360);
+    hue = clamp(isNaN(hue) ? 0 : hue, 360);
     setHslValues(prev => ({ ...prev, h: hue }));
     onChange(`hsla(${hue}, ${hslValues.s}%, ${hslValues.l}%, ${hslValues.a})`);
   };
   const onSaturationChange = (text: string) => {
     let saturation = +text;
-    if (typeof saturation !== 'number' || isNaN(saturation)) return;
-    saturation = clamp(saturation, 100);
+    saturation = clamp(isNaN(saturation) ? 0 : saturation, 100);
     setHslValues(prev => ({ ...prev, s: saturation }));
     onChange(`hsla(${hslValues.h}, ${saturation}%, ${hslValues.l}%, ${hslValues.a})`);
   };
   const onLumChange = (text: string) => {
     let lum = +text;
-    if (typeof lum !== 'number' || isNaN(lum)) return;
-    lum = clamp(lum, 100);
+    lum = clamp(isNaN(lum) ? 0 : lum, 100);
     setHslValues(prev => ({ ...prev, l: lum }));
     onChange(`hsla(${hslValues.h}, ${hslValues.s}%, ${lum}%, ${hslValues.a})`);
   };
   const onAlphaChange = (text: string) => {
-    let alpha = +text;
-    if (typeof alpha !== 'number' || isNaN(alpha)) return;
-    alpha = clamp(alpha, 1);
+    let alpha = parseFloat(text);
+    alpha = clamp(isNaN(alpha) ? 0 : alpha, 1);
     setHslValues(prev => ({ ...prev, a: alpha }));
     onChange(`hsla(${hslValues.h}, ${hslValues.s}%, ${hslValues.l}%, ${alpha})`);
   };
@@ -65,17 +62,25 @@ export default function HslWidget({
   };
   const onBlur = () => {
     isFocesed.current = false;
+    if (!hslValues.a) alphaInputRef.current.setNativeProps({ text: hslValues.a + '' || '0' });
   };
+
+  useEffect(() => {
+    alphaInputRef.current.setNativeProps({ text: hslValues.a + '' || '0' });
+  }, [hslValues.a]);
+
   return (
     <>
       <View style={styles.inputsContainer}>
         <TextInput
           style={[styles.input, inputStyle]}
-          keyboardType='number-pad'
           value={hslValues.h + ''}
           onChangeText={onHueChange}
           onBlur={onBlur}
           onFocus={onFocus}
+          keyboardType='number-pad'
+          autoComplete='off'
+          autoCorrect={false}
           selectTextOnFocus
         />
         <Text style={[styles.inputTitle, inputTitleStyle]}>H</Text>
@@ -83,11 +88,13 @@ export default function HslWidget({
       <View style={styles.inputsContainer}>
         <TextInput
           style={[styles.input, inputStyle]}
-          keyboardType='number-pad'
           value={hslValues.s + ''}
           onChangeText={onSaturationChange}
           onBlur={onBlur}
           onFocus={onFocus}
+          keyboardType='number-pad'
+          autoComplete='off'
+          autoCorrect={false}
           selectTextOnFocus
         />
         <Text style={[styles.inputTitle, inputTitleStyle]}>S</Text>
@@ -100,18 +107,23 @@ export default function HslWidget({
           onChangeText={onLumChange}
           onBlur={onBlur}
           onFocus={onFocus}
+          autoComplete='off'
+          autoCorrect={false}
           selectTextOnFocus
         />
         <Text style={[styles.inputTitle, inputTitleStyle]}>L</Text>
       </View>
       <View style={styles.inputsContainer}>
         <TextInput
+          ref={alphaInputRef}
           style={[styles.input, inputStyle]}
-          keyboardType='number-pad'
-          value={hslValues.a + ''}
+          defaultValue={hslValues.a + ''}
           onChangeText={onAlphaChange}
           onBlur={onBlur}
           onFocus={onFocus}
+          keyboardType='decimal-pad'
+          autoComplete='off'
+          autoCorrect={false}
           selectTextOnFocus
         />
         <Text style={[styles.inputTitle, inputTitleStyle]}>A</Text>

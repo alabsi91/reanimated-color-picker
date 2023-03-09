@@ -52,6 +52,8 @@ export default function HexWidget({
         onChangeText={onTextChange}
         onBlur={onBlur}
         onFocus={onFocus}
+        autoComplete='off'
+        autoCorrect={false}
         selectTextOnFocus
       />
       <Text style={[styles.inputTitle, inputTitleStyle]}>HEX</Text>
