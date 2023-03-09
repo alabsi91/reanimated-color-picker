@@ -63,10 +63,9 @@ description: A square-shaped slider (windows style) is utilized to adjust the hu
 - Overrides `thumbShape`
 - `type: (props: ThumbProps) => ReactElement`
 
-:::tip
+:::tip Example Usage
 
 ```jsx
-// example usage
 renderThumb={({ handleStyle, width, height }) => (
     <Animated.View
       style={[

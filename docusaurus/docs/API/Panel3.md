@@ -61,10 +61,9 @@ description: The circle-shaped slider, with its wheel style design, is utilized 
 - Overrides `thumbShape`
 - `type: (props: ThumbProps) => ReactElement`
 
-:::tip
+:::tip Example Usage
 
 ```jsx
-// example usage
 renderThumb={({ handleStyle, width, height }) => (
     <Animated.View
       style={[
