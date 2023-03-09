@@ -46,10 +46,9 @@ export function Panel1({ thumbShape, thumbSize, thumbColor, thumbStyle, thumbInn
     const percentY = (brightnessValue.value / 100) * height.value;
     const posY = height.value - percentY - thumb_size / 2;
     return {
-      ...thumb_style,
       transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }],
     };
-  }, [thumbSize, thumb_style]);
+  }, [thumbSize]);
 
   const activeHueStyle = useAnimatedStyle(() => ({ backgroundColor: `hsl(${hueValue.value}, 100%, 50%)` }));
 
@@ -105,7 +104,16 @@ export function Panel1({ thumbShape, thumbSize, thumbColor, thumbStyle, thumbInn
           style={[styles.panel_image, { borderRadius }]}
           resizeMode='stretch'
         />
-        <Thumb {...{ thumbShape, thumbSize: thumb_size, thumbColor: thumb_color, innerStyle: thumb_inner_style, handleStyle }} />
+        <Thumb
+          {...{
+            thumbShape,
+            thumbSize: thumb_size,
+            thumbColor: thumb_color,
+            innerStyle: thumb_inner_style,
+            style: thumb_style,
+            handleStyle,
+          }}
+        />
       </Animated.View>
     </PanGestureHandler>
   );

@@ -44,10 +44,9 @@ export function Panel3({ thumbShape, thumbSize, thumbColor, thumbStyle, thumbInn
       posY = width.value - Math.round(Math.sin((hueValue.value * Math.PI) / 180) * distance + center) - thumb_size / 2,
       posX = width.value - Math.round(Math.cos((hueValue.value * Math.PI) / 180) * distance + center) - thumb_size / 2;
     return {
-      ...thumb_style,
       transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }],
     };
-  }, [thumbSize, thumb_style]);
+  }, [thumbSize]);
 
   const setValueFromGestureEvent = (event: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -102,6 +101,7 @@ export function Panel3({ thumbShape, thumbSize, thumbColor, thumbStyle, thumbInn
             thumbSize: thumb_size,
             thumbColor: thumb_color,
             innerStyle: thumb_inner_style,
+            style: thumb_style,
             handleStyle,
           }}
         />

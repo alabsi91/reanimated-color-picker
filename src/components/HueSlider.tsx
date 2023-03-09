@@ -61,10 +61,9 @@ export function HueSlider({
       posY = vertical ? pos : height.value / 2 - thumb_size / 2,
       posX = vertical ? width.value / 2 - thumb_size / 2 : pos;
     return {
-      ...thumb_style,
       transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }],
     };
-  }, [thumbSize, thumb_style, vertical, reverse]);
+  }, [thumbSize, vertical, reverse]);
 
   const setValueFromGestureEvent = (event: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -135,6 +134,7 @@ export function HueSlider({
             thumbColor: thumb_color,
             handleStyle,
             innerStyle: thumb_inner_style,
+            style: thumb_style,
             vertical,
           }}
         />

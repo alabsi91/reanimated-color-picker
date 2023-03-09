@@ -53,8 +53,8 @@ export function Panel2({
     const posX = (reverse ? width.value - percentX : percentX) - thumb_size / 2;
     const percentY = (saturationValue.value / 100) * height.value;
     const posY = height.value - percentY - thumb_size / 2;
-    return { ...thumb_style, transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }] };
-  }, [thumbSize, thumb_style, reverse]);
+    return { transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }] };
+  }, [thumbSize, reverse]);
 
   const setValueFromGestureEvent = (event: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -109,6 +109,7 @@ export function Panel2({
             thumbSize: thumb_size,
             thumbColor: thumb_color,
             innerStyle: thumb_inner_style,
+            style: thumb_style,
             handleStyle,
           }}
         />
