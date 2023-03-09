@@ -23,13 +23,15 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: '#000',
-    paddingVertical: 5,
+    borderColor: 'gray',
+    borderRadius: 4,
+    paddingVertical: 2,
     paddingHorizontal: 10,
     textAlign: 'center',
   },
   inputTitle: {
     textAlign: 'center',
+    color: 'gray',
     paddingVertical: 5,
   },
 });
