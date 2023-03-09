@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { I18nManager } from 'react-native';
+import { I18nManager, StyleSheet } from 'react-native';
 import { PanGestureHandler } from 'react-native-gesture-handler';
 import Animated, {
   runOnJS,
@@ -8,20 +8,31 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { clamp, CTX, getStyle } from '../GlobalStyles';
+import { clamp, getStyle, hsva2Hsla } from '../utils';
 import Thumb from './Thumbs';
 
 import type { LayoutChangeEvent } from 'react-native';
 import type { SliderProps } from '../types';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
+import { CTX } from '../ColorPicker';
 
 const isRtl = I18nManager.isRTL;
 
-export function HueSlider({ thumbShape, thumbSize, thumbColor, style = {}, vertical = false, reverse = false }: SliderProps) {
+export function HueSlider({
+  adaptSpectrum = false,
+  thumbShape,
+  thumbSize,
+  thumbColor,
+  style = {},
+  vertical = false,
+  reverse = false,
+}: SliderProps) {
   const {
     onGestureChange,
     onGestureEnd,
+    brightnessValue,
     hueValue,
+    saturationValue,
     sliderThickness,
     thumbSize: thumbsSize,
     thumbShape: thumbsShape,
@@ -51,6 +62,13 @@ export function HueSlider({ thumbShape, thumbSize, thumbColor, style = {}, verti
       transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }],
     };
   }, [thumbSize, vertical, reverse]);
+
+  const activeSaturationStyle = useAnimatedStyle(() => ({
+    backgroundColor: hsva2Hsla(0, 0, brightnessValue.value, 1 - saturationValue.value / 100),
+  }));
+  const activeBrightnessStyle = useAnimatedStyle(() => ({
+    backgroundColor: hsva2Hsla(0, 0, 0, 1 - brightnessValue.value / 100),
+  }));
 
   const setValueFromGestureEvent = (event: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -98,7 +116,9 @@ export function HueSlider({ thumbShape, thumbSize, thumbColor, style = {}, verti
       borderRadius,
       transform: [
         { rotate: imageRotate },
-        { translateX: vertical ? (reverse ? -height.value / 2 + width.value / 2 : height.value / 2 - width.value / 2) : 0 },
+        {
+          translateX: vertical ? (reverse ? -height.value / 2 + width.value / 2 : height.value / 2 - width.value / 2) : 0,
+        },
         { translateY: vertical ? imageTranslateY : 0 },
       ],
     };
@@ -113,7 +133,22 @@ export function HueSlider({ thumbShape, thumbSize, thumbColor, style = {}, verti
         style={[{ borderRadius }, style, thicknessStyle, { position: 'relative', borderWidth: 0, padding: 0 }]}
       >
         <Animated.Image source={require('../assets/Hue.png')} style={imageStyle} />
-        <Thumb {...{ channel: 'h', thumbShape, thumbSize: thumb_size, thumbColor: thumb_color, handleStyle, vertical }} />
+        {adaptSpectrum && (
+          <>
+            <Animated.View style={[{ borderRadius }, activeSaturationStyle, StyleSheet.absoluteFillObject]} />
+            <Animated.View style={[{ borderRadius }, activeBrightnessStyle, StyleSheet.absoluteFillObject]} />
+          </>
+        )}
+        <Thumb
+          {...{
+            channel: 'h',
+            thumbShape,
+            thumbSize: thumb_size,
+            thumbColor: thumb_color,
+            handleStyle,
+            vertical,
+          }}
+        />
       </Animated.View>
     </PanGestureHandler>
   );

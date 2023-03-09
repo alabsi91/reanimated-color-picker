@@ -1,12 +1,13 @@
 import React, { useContext } from 'react';
 import { I18nManager, StyleSheet, View } from 'react-native';
 import Animated, { runOnJS, useAnimatedStyle, useDerivedValue, useSharedValue } from 'react-native-reanimated';
-import styles, { CTX } from '../GlobalStyles';
 
 import type { SharedValue, AnimatedStyleProp } from 'react-native-reanimated';
 import type { ViewStyle } from 'react-native';
 import type { thumbShapeType } from '../types';
 import colorKit from '../colorKit';
+import { styles } from '../styles';
+import { CTX } from '../ColorPicker';
 
 const isRtl = I18nManager.isRTL;
 
