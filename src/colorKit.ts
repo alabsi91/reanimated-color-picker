@@ -800,7 +800,8 @@ class PrivateMethods {
       a = (hwba as hwbaT)?.a ?? 1;
 
     const v = (1 - b) * 100;
-    const s = (1 - w / (v / 100)) * 100;
+    let s = (1 - w / (v / 100)) * 100;
+    s = isNaN(s) ? 0 : s;
 
     return {
       h: clampHue(h),
