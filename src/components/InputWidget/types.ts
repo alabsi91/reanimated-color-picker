@@ -1,4 +1,4 @@
-import type { StyleProp, TextStyle, ViewStyle } from 'react-native';
+import type { StyleProp, TextStyle, ViewStyle, ImageStyle } from 'react-native';
 import type { TCTX } from '../../types';
 
 export type WidgetProps = {
@@ -21,4 +21,5 @@ export type InputWidgetProps = {
   inputTitleStyle?: StyleProp<TextStyle>;
   containerStyle?: StyleProp<ViewStyle>;
   iconColor?: string;
+  iconStyle?: StyleProp<ImageStyle>;
 };

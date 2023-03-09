@@ -21,6 +21,7 @@ export function InputWidget({
   containerStyle = {},
   inputStyle = {},
   inputTitleStyle = {},
+  iconStyle = {},
 }: InputWidgetProps) {
   const { setColor, returnedResults, hueValue, saturationValue, brightnessValue, alphaValue } = useContext(CTX);
 
@@ -79,8 +80,12 @@ export function InputWidget({
       {formats.length > 1 && (
         <View>
           <Pressable onPress={cycle}>
-            {/* @ts-expect-error */}
-            <Image tintColor={iconColor} style={styles.arrowButton} source={require('../../assets/arrow-icon.png')} />
+            <Image
+              // @ts-expect-error
+              tintColor={iconColor}
+              style={[styles.arrowButton, iconStyle]}
+              source={require('../../assets/arrow-icon.png')}
+            />
           </Pressable>
           <Text style={styles.inputTitle} />
         </View>
