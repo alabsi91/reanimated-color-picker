@@ -93,6 +93,7 @@ All built-in components should be wrapped within the `ColorPicker` component.
 
 :::tip
 
+```jsx
 // example usage
 renderThumb={({ handleStyle, width, height }) => (
     <Animated.View
@@ -103,7 +104,7 @@ renderThumb={({ handleStyle, width, height }) => (
       ]}
     />
   )}
-  
+```
 :::
 
 ### `style`

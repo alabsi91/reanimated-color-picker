@@ -63,6 +63,7 @@ description: The circle-shaped slider, with its wheel style design, is utilized 
 
 :::tip
 
+```jsx
 // example usage
 renderThumb={({ handleStyle, width, height }) => (
     <Animated.View
@@ -73,7 +74,7 @@ renderThumb={({ handleStyle, width, height }) => (
       ]}
     />
   )}
-  
+```
 :::
 
 ### `style`

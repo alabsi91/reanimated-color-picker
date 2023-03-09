@@ -63,6 +63,22 @@ description: A square-shaped slider, reminiscent of Adobe style, is utilized to 
 - Overrides `thumbShape`
 - `type: (props: ThumbProps) => ReactElement`
 
+:::tip
+
+```jsx
+// example usage
+renderThumb={({ handleStyle, width, height }) => (
+    <Animated.View
+      style={[
+        StyleSheet.absoluteFillObject,
+        handleStyle,
+        { backgroundColor: 'red', width, height },
+      ]}
+    />
+  )}
+```
+:::
+
 ### `style`
 
 - Panel's container style.

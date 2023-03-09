@@ -65,6 +65,7 @@ description: A square-shaped slider (windows style) is utilized to adjust the hu
 
 :::tip
 
+```jsx
 // example usage
 renderThumb={({ handleStyle, width, height }) => (
     <Animated.View
@@ -75,7 +76,7 @@ renderThumb={({ handleStyle, width, height }) => (
       ]}
     />
   )}
-  
+```
 :::
 
 ### `reverse`
