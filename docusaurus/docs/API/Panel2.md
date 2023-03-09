@@ -62,8 +62,7 @@ description: A square-shaped slider (windows style) is utilized to adjust the hu
 - Function which receives `ThumbProps` and returns a custom thumb component.
 - Overrides `thumbShape`
 - `type: (props: ThumbProps) => ReactElement`
-
-:::tip Example Usage
+- Example Usage:
 
 ```jsx
 renderThumb={({ handleStyle, width, height }) => (
@@ -76,7 +75,6 @@ renderThumb={({ handleStyle, width, height }) => (
     />
   )}
 ```
-:::
 
 ### `reverse`
 

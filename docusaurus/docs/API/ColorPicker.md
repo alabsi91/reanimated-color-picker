@@ -90,8 +90,7 @@ All built-in components should be wrapped within the `ColorPicker` component.
 - A global property for using the same custom thumb for all descendant slider components.
 - Overrides `thumbShape`
 - `type: (props: ThumbProps) => ReactElement`
-
-:::tip Example Usage
+- Example Usage:
 
 ```jsx
 renderThumb={({ handleStyle, width, height }) => (
@@ -104,7 +103,6 @@ renderThumb={({ handleStyle, width, height }) => (
     />
   )}
 ```
-:::
 
 ### `style`
 

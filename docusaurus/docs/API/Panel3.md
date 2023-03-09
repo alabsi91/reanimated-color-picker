@@ -60,8 +60,7 @@ description: The circle-shaped slider, with its wheel style design, is utilized 
 - Function which receives `ThumbProps` and returns a custom thumb component.
 - Overrides `thumbShape`
 - `type: (props: ThumbProps) => ReactElement`
-
-:::tip Example Usage
+- Example Usage:
 
 ```jsx
 renderThumb={({ handleStyle, width, height }) => (
@@ -74,7 +73,6 @@ renderThumb={({ handleStyle, width, height }) => (
     />
   )}
 ```
-:::
 
 ### `style`
 
