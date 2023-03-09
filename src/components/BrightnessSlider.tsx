@@ -8,16 +8,18 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { clamp, CTX, getStyle } from '../GlobalStyles';
+import { clamp, getStyle, hsva2Hsla } from '../utils';
 import Thumb from './Thumbs';
 
 import type { LayoutChangeEvent } from 'react-native';
 import type { SliderProps } from '../types';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
+import { CTX } from '../ColorPicker';
 
 const isRtl = I18nManager.isRTL;
 
 export function BrightnessSlider({
+                                   adaptSpectrum = false,
   thumbShape,
   thumbSize,
   thumbColor,
@@ -31,6 +33,7 @@ export function BrightnessSlider({
   const {
     brightnessValue,
     hueValue,
+    saturationValue,
     onGestureChange,
     onGestureEnd,
     sliderThickness,
@@ -69,7 +72,9 @@ export function BrightnessSlider({
     };
   }, [thumbSize, vertical, reverse]);
 
-  const activeHueStyle = useAnimatedStyle(() => ({ backgroundColor: `hsl(${hueValue.value}, 100%, 50%)` }));
+  const activeColorStyle = useAnimatedStyle(() => ({
+    backgroundColor: hsva2Hsla(hueValue.value, adaptSpectrum ? saturationValue.value : 100, 100),
+  }));
 
   const setValueFromGestureEvent = (event: PanGestureHandlerEventPayload) => {
     'worklet';

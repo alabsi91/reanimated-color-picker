@@ -8,16 +8,18 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { clamp, CTX, getStyle } from '../GlobalStyles';
+import { clamp, getStyle, hsva2Hsla } from '../utils';
 import Thumb from './Thumbs';
 
 import type { LayoutChangeEvent } from 'react-native';
 import type { SliderProps } from '../types';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
+import { CTX } from '../ColorPicker';
 
 const isRtl = I18nManager.isRTL;
 
 export function HueSlider({
+                            adaptSpectrum = false,
   thumbShape,
   thumbSize,
   thumbColor,
@@ -67,6 +69,13 @@ export function HueSlider({
       transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }],
     };
   }, [thumbSize, vertical, reverse]);
+
+  const activeSaturationStyle = useAnimatedStyle(() => ({
+    backgroundColor: hsva2Hsla(0, 0, brightnessValue.value, 1 - saturationValue.value / 100),
+  }));
+  const activeBrightnessStyle = useAnimatedStyle(() => ({
+    backgroundColor: hsva2Hsla(0, 0, 0, 1 - brightnessValue.value / 100),
+  }));
 
   const setValueFromGestureEvent = (event: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -129,6 +138,12 @@ export function HueSlider({
         style={[{ borderRadius }, style, thicknessStyle, { position: 'relative', borderWidth: 0, padding: 0 }]}
       >
         <Animated.Image source={require('../assets/Hue.png')} style={imageStyle} />
+        {adaptSpectrum && (
+          <>
+            <Animated.View style={[{ borderRadius }, activeSaturationStyle, StyleSheet.absoluteFillObject]} />
+            <Animated.View style={[{ borderRadius }, activeBrightnessStyle, StyleSheet.absoluteFillObject]} />
+          </>
+        )}
         <Thumb
           {...{
             channel: 'h',

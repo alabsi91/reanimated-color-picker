@@ -1,24 +1,6 @@
-import { createContext } from 'react';
 import { I18nManager, StyleSheet } from 'react-native';
 
-import type { TCTX } from './types';
-import type { StyleProp, ViewStyle } from 'react-native';
-
-const isRtl = I18nManager.isRTL;
-
-export const CTX = createContext<TCTX>(null!);
-
-export function getStyle<T extends keyof ViewStyle>(style: StyleProp<ViewStyle>, property: T): ViewStyle[T] | undefined {
-  const flattened = StyleSheet.flatten(style);
-  return flattened[property];
-}
-
-export function clamp(v: number, max: number) {
-  'worklet';
-  return Math.min(Math.max(v, 0), max);
-}
-
-export default StyleSheet.create({
+export const styles = StyleSheet.create({
   panel_container: {
     position: 'relative',
     alignSelf: 'stretch',
@@ -34,7 +16,7 @@ export default StyleSheet.create({
   },
   handle: {
     position: 'absolute',
-    ...(isRtl ? { right: 0 } : { left: 0 }),
+    ...(I18nManager.isRTL ? { right: 0 } : { left: 0 }),
     top: 0,
     justifyContent: 'center',
     alignItems: 'center',

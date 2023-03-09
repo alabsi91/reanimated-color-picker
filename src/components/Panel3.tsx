@@ -8,12 +8,14 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import styles, { clamp, CTX } from '../GlobalStyles';
+import { clamp } from '../utils';
 import Thumb from './Thumbs';
 
 import type { LayoutChangeEvent } from 'react-native';
 import type { PanelProps } from '../types';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
+import { CTX } from '../ColorPicker';
+import { styles } from '../styles';
 
 export function Panel3({ thumbShape, thumbSize, thumbColor, renderThumb, thumbStyle, thumbInnerStyle, style = {} }: PanelProps) {
   const {
