@@ -4,14 +4,14 @@ const isRtl = I18nManager.isRTL;
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: isRtl ? 'row-reverse' : 'row',
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },
   arrowButton: {
     width: 24,
     height: 24,
-    marginHorizontal: 10,
+    marginLeft: 10,
   },
   inputsWrapper: {
     flex: 1,
@@ -25,9 +25,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'gray',
     borderRadius: 4,
-    paddingVertical: 2,
+    paddingVertical: 6,
     paddingHorizontal: 10,
     textAlign: 'center',
+    fontSize: 16,
   },
   inputTitle: {
     textAlign: 'center',
