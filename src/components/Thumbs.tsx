@@ -61,13 +61,13 @@ const Thumbs = {
     );
   },
   Line: ({ width, height, borderRadius, thumbColor, inverted, handleStyle, innerStyle, style, vertical }: ThumbProps) => {
-    const thikcness = 3;
+    const thickness = 3;
     const computedStyle = { width, height };
     const lineStyle = {
       borderRadius,
       backgroundColor: thumbColor,
-      width: vertical ? '100%' : thikcness,
-      height: vertical ? thikcness : '100%',
+      width: vertical ? '100%' : thickness,
+      height: vertical ? thickness : '100%',
     };
     const invertedStyle = useAnimatedStyle(() => ({ backgroundColor: thumbColor || inverted.value }));
 
@@ -94,18 +94,18 @@ const Thumbs = {
     );
   },
   Plus: ({ width, height, borderRadius, thumbColor, inverted, handleStyle, innerStyle, style, vertical }: ThumbProps) => {
-    const thikcness = 2;
-    const computedStyle = { width, height, borderRadius, borderWidth: thikcness };
+    const thickness = 2;
+    const computedStyle = { width, height, borderRadius, borderWidth: thickness };
     const line1 = {
       borderRadius,
       position: 'absolute' as const,
-      width: vertical ? '100%' : thikcness,
-      height: vertical ? thikcness : '100%',
+      width: vertical ? '100%' : thickness,
+      height: vertical ? thickness : '100%',
     };
     const line2 = {
       borderRadius,
-      width: vertical ? thikcness : '100%',
-      height: vertical ? '100%' : thikcness,
+      width: vertical ? thickness : '100%',
+      height: vertical ? '100%' : thickness,
     };
     const invertedStyle = useAnimatedStyle(() => ({ backgroundColor: thumbColor || inverted.value }));
     const invertedBorderStyle = useAnimatedStyle(() => ({ borderColor: thumbColor || inverted.value }));
