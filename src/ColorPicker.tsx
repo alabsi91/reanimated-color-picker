@@ -15,6 +15,7 @@ export default function ColorPicker({
   thumbSize = 35,
   thumbShape = 'ring',
   thumbColor,
+  renderThumb,
   thumbStyle,
   thumbInnerStyle,
   value = '#fff',
@@ -81,6 +82,7 @@ export default function ColorPicker({
     thumbSize,
     thumbShape,
     thumbColor,
+    renderThumb,
     thumbStyle,
     thumbInnerStyle,
 

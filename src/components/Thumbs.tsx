@@ -10,7 +10,7 @@ import colorKit from '../colorKit';
 
 const isRtl = I18nManager.isRTL;
 
-type ThumbProps = {
+export type ThumbProps = {
   width: number;
   height: number;
   borderRadius: number;
@@ -20,6 +20,7 @@ type ThumbProps = {
   innerStyle?: {};
   style?: {};
   solidColor: AnimatedStyleProp<ViewStyle>;
+  renderThumb?: (props: ThumbProps) => JSX.Element;
   vertical?: boolean;
 };
 
@@ -227,6 +228,7 @@ export default function Thumb({
   innerStyle,
   style,
   thumbColor,
+  renderThumb,
   thumbShape = 'ring',
   thumbSize,
   vertical = false,
@@ -265,7 +267,7 @@ export default function Thumb({
     runOnJS(setResultColor)({ h: hueValue.value, s: saturationValue.value, v: brightnessValue.value });
   });
 
-  const thumbProps = {
+  const thumbProps: ThumbProps = {
     width,
     height,
     borderRadius,
@@ -277,6 +279,12 @@ export default function Thumb({
     style,
     thumbColor,
   };
+
+  if (renderThumb) {
+    return renderThumb(thumbProps);
+  }
+
+  const thumb_Shape = (thumbShape.toLowerCase().charAt(0).toUpperCase() + thumbShape.slice(1)) as keyof typeof Thumbs;
   const Element = () => (Thumbs.hasOwnProperty(thumb_Shape) ? Thumbs[thumb_Shape](thumbProps) : Thumbs.Ring(thumbProps));
 
   return <Element />;

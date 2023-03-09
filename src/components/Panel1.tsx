@@ -15,7 +15,7 @@ import type { LayoutChangeEvent } from 'react-native';
 import type { PanelProps } from '../types';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
-export function Panel1({ thumbShape, thumbSize, thumbColor, thumbStyle, thumbInnerStyle, style = {} }: PanelProps) {
+export function Panel1({ thumbShape, thumbSize, thumbColor, renderThumb, thumbStyle, thumbInnerStyle, style = {} }: PanelProps) {
   const {
     hueValue,
     saturationValue,
@@ -24,12 +24,14 @@ export function Panel1({ thumbShape, thumbSize, thumbColor, thumbStyle, thumbInn
     onGestureEnd,
     thumbSize: thumbsSize,
     thumbColor: thumbsColor,
+    renderThumb: renderThumbs,
     thumbStyle: thumbsStyle,
     thumbInnerStyle: thumbsInnerStyle,
   } = useContext(CTX);
 
   const thumb_size = thumbSize ?? thumbsSize;
   const thumb_color = thumbColor ?? thumbsColor;
+  const render_thumb = renderThumb ?? renderThumbs;
   const thumb_style = thumbStyle ?? thumbsStyle ?? {};
   const thumb_inner_style = thumbInnerStyle ?? thumbsInnerStyle ?? {};
   const borderRadius = getStyle(style, 'borderRadius') ?? 5;
@@ -109,6 +111,7 @@ export function Panel1({ thumbShape, thumbSize, thumbColor, thumbStyle, thumbInn
             thumbShape,
             thumbSize: thumb_size,
             thumbColor: thumb_color,
+            renderThumb: render_thumb,
             innerStyle: thumb_inner_style,
             style: thumb_style,
             handleStyle,

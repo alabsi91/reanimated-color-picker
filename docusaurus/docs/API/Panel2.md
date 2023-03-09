@@ -57,6 +57,27 @@ description: A square-shaped slider (windows style) is utilized to adjust the hu
 - Thumb's inner View(s) style.
 - `type: ViewStyle`
 
+### `renderThumb`
+
+- Function which receives `ThumbProps` and returns a custom thumb component.
+- Overrides `thumbShape`
+- `type: (props: ThumbProps) => ReactElement`
+
+:::tip
+
+// example usage
+renderThumb={({ handleStyle, width, height }) => (
+    <Animated.View
+      style={[
+        StyleSheet.absoluteFillObject,
+        handleStyle,
+        { backgroundColor: 'red', width, height },
+      ]}
+    />
+  )}
+  
+:::
+
 ### `reverse`
 
 - Reverse (flip) hue direction.

@@ -57,6 +57,12 @@ description: A square-shaped slider, reminiscent of Adobe style, is utilized to 
 - Thumb's inner View(s) style.
 - `type: ViewStyle`
 
+### `renderThumb`
+
+- Function which receives `ThumbProps` and returns a custom thumb component.
+- Overrides `thumbShape`
+- `type: (props: ThumbProps) => ReactElement`
+
 ### `style`
 
 - Panel's container style.

@@ -21,6 +21,7 @@ export function HueSlider({
   thumbShape,
   thumbSize,
   thumbColor,
+  renderThumb,
   thumbInnerStyle,
   thumbStyle,
   style = {},
@@ -35,6 +36,7 @@ export function HueSlider({
     thumbSize: thumbsSize,
     thumbShape: thumbsShape,
     thumbColor: thumbsColor,
+    renderThumb: renderThumbs,
     thumbStyle: thumbsStyle,
     thumbInnerStyle: thumbsInnerStyle,
   } = useContext(CTX);
@@ -42,6 +44,7 @@ export function HueSlider({
   thumbShape = thumbShape ?? thumbsShape;
   const thumb_size = thumbSize ?? thumbsSize;
   const thumb_color = thumbColor ?? thumbsColor;
+  const render_thumb = renderThumb ?? renderThumbs;
   const thumb_style = thumbStyle ?? thumbsStyle ?? {};
   const thumb_inner_style = thumbInnerStyle ?? thumbsInnerStyle ?? {};
 
@@ -132,6 +135,7 @@ export function HueSlider({
             thumbShape,
             thumbSize: thumb_size,
             thumbColor: thumb_color,
+            renderThumb: render_thumb,
             handleStyle,
             innerStyle: thumb_inner_style,
             style: thumb_style,
