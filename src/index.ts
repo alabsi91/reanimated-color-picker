@@ -12,6 +12,8 @@ export { SaturationSlider } from './components/SaturationSlider';
 export { BrightnessSlider } from './components/BrightnessSlider';
 export { OpacitySlider } from './components/OpacitySlider';
 export { Swatches } from './components/Swatches';
+export { InputWidget } from './components/InputWidget/InputWidget';
+
 export { colorKit };
 
 export * from './types';
