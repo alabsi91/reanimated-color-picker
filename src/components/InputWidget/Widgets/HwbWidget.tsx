@@ -62,7 +62,7 @@ export default function HwbWidget({
   };
   const onBlur = () => {
     isFocesed.current = false;
-    if (!hwbValues.a) alphaInputRef.current.setNativeProps({ text: hwbValues.a + '' || '0' });
+    alphaInputRef.current.setNativeProps({ text: clamp(hwbValues.a, 1) + '' });
   };
 
   useEffect(() => {

@@ -62,7 +62,7 @@ export default function RgbWidget({
   };
   const onBlur = () => {
     isFocesed.current = false;
-    if (!rgbValues.a) alphaInputRef.current.setNativeProps({ text: rgbValues.a + '' || '0' });
+    alphaInputRef.current.setNativeProps({ text: clamp(rgbValues.a, 1) + '' });
   };
 
   useEffect(() => {
