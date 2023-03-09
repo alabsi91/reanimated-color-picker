@@ -4,7 +4,7 @@ import { runOnJS, useDerivedValue } from 'react-native-reanimated';
 
 import colorKit from '../../../colorKit';
 import styles from '../style';
-import { clamp } from '../../../utils';
+import { clamp } from '../../../GlobalStyles';
 import { WidgetProps } from '../types';
 
 export default function HwbWidget({
