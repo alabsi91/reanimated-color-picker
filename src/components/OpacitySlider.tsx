@@ -8,19 +8,30 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { clamp, CTX, getStyle } from '../GlobalStyles';
+import { clamp, getStyle, hsva2Hsla } from '../utils';
 import Thumb from './Thumbs';
 
 import type { LayoutChangeEvent } from 'react-native';
 import type { SliderProps } from '../types';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
+import { CTX } from '../ColorPicker';
 
 const isRtl = I18nManager.isRTL;
 
-export function OpacitySlider({ thumbShape, thumbSize, thumbColor, style = {}, vertical = false, reverse = false }: SliderProps) {
+export function OpacitySlider({
+  adaptSpectrum = false,
+  thumbShape,
+  thumbSize,
+  thumbColor,
+  style = {},
+  vertical = false,
+  reverse = false,
+}: SliderProps) {
   const {
     alphaValue,
+    brightnessValue,
     hueValue,
+    saturationValue,
     onGestureChange,
     onGestureEnd,
     sliderThickness,
@@ -53,7 +64,13 @@ export function OpacitySlider({ thumbShape, thumbSize, thumbColor, style = {}, v
     };
   }, [thumbSize, vertical, reverse]);
 
-  const activeHueStyle = useAnimatedStyle(() => ({ backgroundColor: `hsl(${hueValue.value}, 100%, 50%)` }));
+  const activeColorStyle = useAnimatedStyle(() => ({
+    backgroundColor: hsva2Hsla(
+      hueValue.value,
+      adaptSpectrum ? saturationValue.value : 100,
+      adaptSpectrum ? brightnessValue.value : 100
+    ),
+  }));
 
   const setValueFromGestureEvent = (event: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -101,7 +118,9 @@ export function OpacitySlider({ thumbShape, thumbSize, thumbColor, style = {}, v
       borderRadius,
       transform: [
         { rotate: imageRotate },
-        { translateX: vertical ? (reverse ? -height.value / 2 + width.value / 2 : height.value / 2 - width.value / 2) : 0 },
+        {
+          translateX: vertical ? (reverse ? -height.value / 2 + width.value / 2 : height.value / 2 - width.value / 2) : 0,
+        },
         { translateY: vertical ? imageTranslateY : 0 },
       ],
     };
@@ -113,10 +132,19 @@ export function OpacitySlider({ thumbShape, thumbSize, thumbColor, style = {}, v
     <PanGestureHandler onGestureEvent={gestureEvent} minDist={0}>
       <Animated.View
         onLayout={onLayout}
-        style={[{ borderRadius }, style, { position: 'relative', borderWidth: 0, padding: 0 }, thicknessStyle, activeHueStyle]}
+        style={[{ borderRadius }, style, { position: 'relative', borderWidth: 0, padding: 0 }, thicknessStyle, activeColorStyle]}
       >
         <Animated.Image source={require('../assets/Opacity.png')} style={imageStyle} />
-        <Thumb {...{ channel: 'a', thumbShape, thumbSize: thumb_size, thumbColor: thumb_color, handleStyle, vertical }} />
+        <Thumb
+          {...{
+            channel: 'a',
+            thumbShape,
+            thumbSize: thumb_size,
+            thumbColor: thumb_color,
+            handleStyle,
+            vertical,
+          }}
+        />
       </Animated.View>
     </PanGestureHandler>
   );
