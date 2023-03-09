@@ -1,5 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, Pressable, Image } from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import { CTX } from '../../GlobalStyles';
 import HexWidget from './Widgets/HexWidget';
@@ -62,11 +63,19 @@ export function InputWidget({
     }
   };
 
+  const opacity = useSharedValue(0);
+  const fadeStyle = useAnimatedStyle(() => ({ opacity: opacity.value }));
+
+  useEffect(() => {
+    opacity.value = 0;
+    opacity.value = withTiming(1);
+  }, [format]);
+
   return (
     <View style={[styles.container, containerStyle]}>
-      <View style={styles.inputsWrapper}>
+      <Animated.View style={[styles.inputsWrapper, fadeStyle]}>
         <Input />
-      </View>
+      </Animated.View>
       {formats.length > 1 && (
         <View>
           <Pressable onPress={cycle}>
