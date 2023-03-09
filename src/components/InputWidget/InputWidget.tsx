@@ -23,7 +23,8 @@ export function InputWidget({
   inputTitleStyle = {},
   iconStyle = {},
 }: InputWidgetProps) {
-  const { setColor, returnedResults, hueValue, saturationValue, brightnessValue, alphaValue } = useContext(CTX);
+  const { setColor, returnedResults, hueValue, saturationValue, brightnessValue, alphaValue, onGestureChange, onGestureEnd } =
+    useContext(CTX);
 
   const [format, setFormat] = useState<typeof defaultFormat>(
     formats.includes(defaultFormat) ? defaultFormat : formats[0] ?? 'HEX'
@@ -31,6 +32,8 @@ export function InputWidget({
 
   const onChange = (color: string) => {
     setColor(color);
+    onGestureChange(color);
+    onGestureEnd(color);
   };
 
   const cycle = () => {
