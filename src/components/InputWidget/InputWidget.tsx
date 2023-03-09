@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unstable-nested-components */
 import React, { useContext, useState } from 'react';
 import { View, Text, Pressable, Image } from 'react-native';
 
@@ -14,7 +13,7 @@ import type { InputWidgetProps } from './types';
 
 const defaultFormats = ['HEX', 'RGB', 'HSL', 'HWB', 'HSV'] as const;
 
-export default function InputWidget({
+export function InputWidget({
   defaultFormat = 'HEX',
   formats = defaultFormats,
   iconColor = 'black',
