@@ -53,8 +53,8 @@ const Thumbs = {
   },
   Hollow: ({ width, height, borderRadius, thumbColor, adaptiveColor, handleStyle, innerStyle, style }: ThumbProps) => {
     const computedStyle = { width, height, borderRadius, borderWidth: 2 };
-    const invertedStyle = useAnimatedStyle(() => ({ borderColor: thumbColor || inverted.value }));
-    const invertedBgStyle = useAnimatedStyle(() => ({ backgroundColor: thumbColor || inverted.value }));
+    const invertedStyle = useAnimatedStyle(() => ({ borderColor: thumbColor || adaptiveColor.value }));
+    const invertedBgStyle = useAnimatedStyle(() => ({ backgroundColor: thumbColor || adaptiveColor.value }));
     return (
       <Animated.View style={[styles.handle, style, computedStyle, invertedStyle, handleStyle]}>
         <Animated.View style={[{ width: 4, height: 4, borderRadius: 2 }, invertedBgStyle, styles.shadow, innerStyle]} />
@@ -218,7 +218,7 @@ const Thumbs = {
   },
 };
 
-type Props = Omit<ThumbProps, 'borderRadius' | 'height' | 'inverted' | 'width' | 'solidColor'> & {
+type Props = Omit<ThumbProps, 'borderRadius' | 'height' | 'width' | 'solidColor'> & {
   adaptSpectrum?: boolean;
   channel?: 'h' | 's' | 'v' | 'a';
   thumbShape?: thumbShapeType;
