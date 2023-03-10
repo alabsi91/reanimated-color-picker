@@ -143,6 +143,7 @@ export function OpacitySlider({
             thumbColor: thumb_color,
             handleStyle,
             vertical,
+            adaptSpectrum,
           }}
         />
       </Animated.View>
