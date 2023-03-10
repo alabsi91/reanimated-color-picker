@@ -218,7 +218,7 @@ const Thumbs = {
   },
 };
 
-type Props = Omit<ThumbProps, 'borderRadius' | 'height' | 'width' | 'solidColor'> & {
+type Props = Omit<ThumbProps, 'borderRadius' | 'height' | 'width' | 'solidColor' | 'adaptiveColor'> & {
   adaptSpectrum?: boolean;
   channel?: 'h' | 's' | 'v' | 'a';
   thumbShape?: thumbShapeType;
