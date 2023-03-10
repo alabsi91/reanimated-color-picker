@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { I18nManager } from 'react-native';
+import { I18nManager, StyleSheet } from 'react-native';
 import { PanGestureHandler } from 'react-native-gesture-handler';
 import Animated, {
   runOnJS,
@@ -64,7 +64,11 @@ export function SaturationSlider({
   }, [thumbSize, vertical, reverse]);
 
   const activeColorStyle = useAnimatedStyle(() => ({
-    backgroundColor: hsva2Hsla(hueValue.value, 100, adaptSpectrum ? brightnessValue.value : 100),
+    backgroundColor: hsva2Hsla(hueValue.value, 100, 100),
+  }));
+
+  const activeBrightnessStyle = useAnimatedStyle(() => ({
+    backgroundColor: hsva2Hsla(0, 0, 0, 1 - brightnessValue.value / 100),
   }));
 
   const setValueFromGestureEvent = (event: PanGestureHandlerEventPayload) => {
@@ -130,6 +134,7 @@ export function SaturationSlider({
         style={[{ borderRadius }, style, { position: 'relative', borderWidth: 0, padding: 0 }, thicknessStyle, activeColorStyle]}
       >
         <Animated.Image source={require('../assets/Saturation.png')} style={imageStyle} />
+        {adaptSpectrum && <Animated.View style={[{ borderRadius }, activeBrightnessStyle, StyleSheet.absoluteFillObject]} />}
         <Thumb
           {...{
             channel: 's',
