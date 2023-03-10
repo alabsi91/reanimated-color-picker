@@ -6,25 +6,29 @@ import type { SharedValue, AnimatedStyleProp } from 'react-native-reanimated';
 import type { ViewStyle } from 'react-native';
 import type { thumbShapeType } from '../types';
 import colorKit from '../colorKit';
-import { styles } from '../styles';
 import { CTX } from '../ColorPicker';
+import { styles } from '../styles';
 
 const isRtl = I18nManager.isRTL;
 
-type ThumbProps = {
+export type ThumbProps = {
   width: number;
   height: number;
   borderRadius: number;
   thumbColor?: string;
   adaptiveColor: SharedValue<string>;
   handleStyle: {};
+  innerStyle?: {};
+  style?: {};
   solidColor: AnimatedStyleProp<ViewStyle>;
-  vertical: boolean;
+  renderThumb?: (props: ThumbProps) => JSX.Element;
+  vertical?: boolean;
 };
+
 const Thumbs = {
-  Ring: ({ width, height, borderRadius, thumbColor, adaptiveColor, handleStyle, solidColor }: ThumbProps) => {
+  Ring: ({ width, height, borderRadius, thumbColor, adaptiveColor, handleStyle, innerStyle, solidColor, style }: ThumbProps) => {
     const thumb_Color = thumbColor ? colorKit.HEX(thumbColor) : undefined;
-    const style = {
+    const computedStyle = {
       width,
       height,
       borderRadius,
@@ -37,45 +41,45 @@ const Thumbs = {
       borderColor: thumbColor || adaptiveColor.value,
     }));
     return (
-      <Animated.View style={[styles.handle, style, invertedStyle, handleStyle]}>
-        <Animated.View style={[styles.handleInner, { borderRadius, zIndex: 100 }, solidColor]} />
+      <Animated.View style={[styles.handle, style, computedStyle, invertedStyle, handleStyle]}>
+        <Animated.View style={[styles.handleInner, styles.shadow, { borderRadius, zIndex: 100 }, solidColor, innerStyle]} />
       </Animated.View>
     );
   },
-  Solid: ({ width, height, borderRadius, thumbColor, adaptiveColor, handleStyle }: ThumbProps) => {
-    const style = { width, height, borderRadius, backgroundColor: thumbColor || 'gray', borderWidth: 1 };
+  Solid: ({ width, height, borderRadius, thumbColor, adaptiveColor, handleStyle, style }: ThumbProps) => {
+    const computedStyle = { width, height, borderRadius, backgroundColor: thumbColor || 'gray', borderWidth: 1 };
     const invertedStyle = useAnimatedStyle(() => ({ borderColor: adaptiveColor.value }));
-    return <Animated.View style={[styles.handle, style, styles.shadow, invertedStyle, handleStyle]} />;
+    return <Animated.View style={[styles.handle, computedStyle, style, styles.shadow, invertedStyle, handleStyle]} />;
   },
-  Hollow: ({ width, height, borderRadius, thumbColor, adaptiveColor, handleStyle }: ThumbProps) => {
-    const style = { width, height, borderRadius, borderWidth: 2 };
+  Hollow: ({ width, height, borderRadius, thumbColor, adaptiveColor, handleStyle, innerStyle, style }: ThumbProps) => {
+    const computedStyle = { width, height, borderRadius, borderWidth: 2 };
     const invertedStyle = useAnimatedStyle(() => ({ borderColor: thumbColor || adaptiveColor.value }));
     const invertedBgStyle = useAnimatedStyle(() => ({ backgroundColor: thumbColor || adaptiveColor.value }));
     return (
-      <Animated.View style={[styles.handle, style, invertedStyle, handleStyle]}>
-        <Animated.View style={[{ width: 4, height: 4, borderRadius: 2 }, invertedBgStyle, styles.shadow]} />
+      <Animated.View style={[styles.handle, style, computedStyle, invertedStyle, handleStyle]}>
+        <Animated.View style={[{ width: 4, height: 4, borderRadius: 2 }, invertedBgStyle, styles.shadow, innerStyle]} />
       </Animated.View>
     );
   },
-  Line: ({ width, height, borderRadius, thumbColor, adaptiveColor, handleStyle, vertical }: ThumbProps) => {
-    const thikcness = 3;
-    const style = { width, height };
+  Line: ({ width, height, borderRadius, thumbColor, adaptiveColor, handleStyle, innerStyle, style, vertical }: ThumbProps) => {
+    const thickness = 3;
+    const computedStyle = { width, height };
     const lineStyle = {
       borderRadius,
       backgroundColor: thumbColor,
-      width: vertical ? '100%' : thikcness,
-      height: vertical ? thikcness : '100%',
+      width: vertical ? '100%' : thickness,
+      height: vertical ? thickness : '100%',
     };
     const invertedStyle = useAnimatedStyle(() => ({ backgroundColor: thumbColor || adaptiveColor.value }));
 
     return (
-      <Animated.View style={[styles.handle, style, handleStyle]}>
-        <Animated.View style={[lineStyle, styles.shadow, invertedStyle]} />
+      <Animated.View style={[styles.handle, style, computedStyle, handleStyle]}>
+        <Animated.View style={[lineStyle, styles.shadow, invertedStyle, innerStyle]} />
       </Animated.View>
     );
   },
-  Pill: ({ width, height, borderRadius, thumbColor, adaptiveColor, handleStyle, vertical }: ThumbProps) => {
-    const style = { width, height };
+  Pill: ({ width, height, borderRadius, thumbColor, adaptiveColor, handleStyle, innerStyle, style, vertical }: ThumbProps) => {
+    const computedStyle = { width, height };
     const pillStyle = {
       borderRadius,
       borderColor: thumbColor,
@@ -85,37 +89,37 @@ const Thumbs = {
     };
     const invertedStyle = useAnimatedStyle(() => ({ borderColor: thumbColor || adaptiveColor.value }));
     return (
-      <Animated.View style={[styles.handle, style, handleStyle]}>
-        <Animated.View style={[pillStyle, styles.shadow, invertedStyle]} />
+      <Animated.View style={[styles.handle, computedStyle, style, handleStyle]}>
+        <Animated.View style={[pillStyle, styles.shadow, invertedStyle, innerStyle]} />
       </Animated.View>
     );
   },
-  Plus: ({ width, height, borderRadius, thumbColor, adaptiveColor, handleStyle, vertical }: ThumbProps) => {
-    const thikcness = 2;
-    const style = { width, height, borderRadius, borderWidth: thikcness };
+  Plus: ({ width, height, borderRadius, thumbColor, adaptiveColor, handleStyle, innerStyle, style, vertical }: ThumbProps) => {
+    const thickness = 2;
+    const computedStyle = { width, height, borderRadius, borderWidth: thickness };
     const line1 = {
       borderRadius,
       position: 'absolute' as const,
-      width: vertical ? '100%' : thikcness,
-      height: vertical ? thikcness : '100%',
+      width: vertical ? '100%' : thickness,
+      height: vertical ? thickness : '100%',
     };
     const line2 = {
       borderRadius,
-      width: vertical ? thikcness : '100%',
-      height: vertical ? '100%' : thikcness,
+      width: vertical ? thickness : '100%',
+      height: vertical ? '100%' : thickness,
     };
     const invertedStyle = useAnimatedStyle(() => ({ backgroundColor: thumbColor || adaptiveColor.value }));
     const invertedBorderStyle = useAnimatedStyle(() => ({ borderColor: thumbColor || adaptiveColor.value }));
 
     return (
-      <Animated.View style={[styles.handle, style, invertedBorderStyle, handleStyle]}>
-        <Animated.View style={[line1, styles.shadow, invertedStyle]} />
-        <Animated.View style={[line2, styles.shadow, invertedStyle]} />
+      <Animated.View style={[styles.handle, style, computedStyle, invertedBorderStyle, handleStyle]}>
+        <Animated.View style={[line1, styles.shadow, invertedStyle, innerStyle]} />
+        <Animated.View style={[line2, styles.shadow, invertedStyle, innerStyle]} />
       </Animated.View>
     );
   },
-  TriangleUp: ({ width, height, thumbColor, adaptiveColor, handleStyle, vertical }: ThumbProps) => {
-    const style = {
+  TriangleUp: ({ width, height, thumbColor, adaptiveColor, handleStyle, innerStyle, style, vertical }: ThumbProps) => {
+    const computedStyle = {
       width,
       height,
       ...(vertical
@@ -130,13 +134,13 @@ const Thumbs = {
     };
     const invertedStyle = useAnimatedStyle(() => ({ borderBottomColor: thumbColor || adaptiveColor.value }));
     return (
-      <Animated.View style={[styles.handle, style, handleStyle]}>
-        <Animated.View style={[shapes.triangle, triangleStyle, invertedStyle]} />
+      <Animated.View style={[styles.handle, style, computedStyle, handleStyle]}>
+        <Animated.View style={[shapes.triangle, triangleStyle, invertedStyle, innerStyle]} />
       </Animated.View>
     );
   },
-  TriangleDown: ({ width, height, thumbColor, adaptiveColor, handleStyle, vertical }: ThumbProps) => {
-    const style = {
+  TriangleDown: ({ width, height, thumbColor, adaptiveColor, handleStyle, innerStyle, style, vertical }: ThumbProps) => {
+    const computedStyle = {
       width,
       height,
       ...(vertical
@@ -151,13 +155,13 @@ const Thumbs = {
     };
     const invertedStyle = useAnimatedStyle(() => ({ borderBottomColor: thumbColor || adaptiveColor.value }));
     return (
-      <Animated.View style={[styles.handle, style, handleStyle]}>
-        <Animated.View style={[shapes.triangle, triangleStyle, invertedStyle]} />
+      <Animated.View style={[styles.handle, style, computedStyle, handleStyle]}>
+        <Animated.View style={[shapes.triangle, triangleStyle, invertedStyle, innerStyle]} />
       </Animated.View>
     );
   },
-  DoubleTriangle: ({ width, height, thumbColor, adaptiveColor, handleStyle, vertical }: ThumbProps) => {
-    const style = {
+  DoubleTriangle: ({ width, height, thumbColor, adaptiveColor, handleStyle, innerStyle, style, vertical }: ThumbProps) => {
+    const computedStyle = {
       width,
       height,
       flexDirection: vertical ? (isRtl ? 'row' : 'row-reverse') : 'column',
@@ -176,15 +180,15 @@ const Thumbs = {
     };
     const invertedStyle = useAnimatedStyle(() => ({ borderBottomColor: thumbColor || adaptiveColor.value }));
     return (
-      <Animated.View style={[styles.handle, style, handleStyle]}>
-        <Animated.View style={[shapes.triangle, triangleDownStyle, invertedStyle]} />
+      <Animated.View style={[styles.handle, style, computedStyle, handleStyle]}>
+        <Animated.View style={[shapes.triangle, triangleDownStyle, invertedStyle, innerStyle]} />
         <View style={{ width: '50%', height: '50%' }} />
-        <Animated.View style={[shapes.triangle, triangleUpStyle, invertedStyle]} />
+        <Animated.View style={[shapes.triangle, triangleUpStyle, invertedStyle, innerStyle]} />
       </Animated.View>
     );
   },
-  Rect: ({ width, height, adaptiveColor, handleStyle, vertical, solidColor }: ThumbProps) => {
-    const style = { width, height };
+  Rect: ({ width, height, adaptiveColor, handleStyle, innerStyle, style, vertical, solidColor }: ThumbProps) => {
+    const computedStyle = { width, height };
     const pillStyle = {
       borderWidth: 1,
       width: vertical ? '100%' : 14,
@@ -192,13 +196,13 @@ const Thumbs = {
     };
     const invertedStyle = useAnimatedStyle(() => ({ borderColor: adaptiveColor.value }));
     return (
-      <Animated.View style={[styles.handle, style, handleStyle]}>
-        <Animated.View style={[pillStyle, styles.shadow, invertedStyle, solidColor]} />
+      <Animated.View style={[styles.handle, style, computedStyle, handleStyle]}>
+        <Animated.View style={[pillStyle, styles.shadow, invertedStyle, solidColor, innerStyle]} />
       </Animated.View>
     );
   },
-  Circle: ({ width, height, borderRadius, adaptiveColor, handleStyle, solidColor }: ThumbProps) => {
-    const style = { width, height };
+  Circle: ({ width, height, borderRadius, adaptiveColor, handleStyle, innerStyle, solidColor, style }: ThumbProps) => {
+    const computedStyle = { width, height };
     const pillStyle = {
       borderRadius,
       borderWidth: 1,
@@ -207,28 +211,28 @@ const Thumbs = {
     };
     const invertedStyle = useAnimatedStyle(() => ({ borderColor: adaptiveColor.value }));
     return (
-      <Animated.View style={[styles.handle, style, handleStyle]}>
-        <Animated.View style={[pillStyle, styles.shadow, invertedStyle, solidColor]} />
+      <Animated.View style={[styles.handle, style, computedStyle, handleStyle]}>
+        <Animated.View style={[pillStyle, styles.shadow, invertedStyle, solidColor, innerStyle]} />
       </Animated.View>
     );
   },
 };
 
-type Props = {
+type Props = Omit<ThumbProps, 'borderRadius' | 'height' | 'width' | 'solidColor'> & {
+  adaptSpectrum?: boolean;
+  channel?: 'h' | 's' | 'v' | 'a';
   thumbShape?: thumbShapeType;
   thumbSize: number;
-  thumbColor?: string;
-  handleStyle: {};
-  vertical?: boolean;
-  channel?: 'h' | 's' | 'v' | 'a';
-  adaptSpectrum?: boolean;
 };
 
 export default function Thumb({
+  handleStyle,
+  innerStyle,
+  style,
+  thumbColor,
+  renderThumb,
   thumbShape = 'ring',
   thumbSize,
-  thumbColor,
-  handleStyle,
   vertical = false,
   adaptSpectrum,
   channel,
@@ -285,8 +289,7 @@ export default function Thumb({
     runOnJS(setResultColor)({ h: hueValue.value, s: saturationValue.value, v: brightnessValue.value });
   });
 
-  const thumb_Shape = (thumbShape.toLowerCase().charAt(0).toUpperCase() + thumbShape.slice(1)) as keyof typeof Thumbs;
-  const thumbProps = {
+  const thumbProps: ThumbProps = {
     width,
     height,
     borderRadius,
@@ -294,8 +297,16 @@ export default function Thumb({
     solidColor,
     adaptiveColor,
     handleStyle,
+    innerStyle,
+    style,
     thumbColor,
   };
+
+  if (renderThumb) {
+    return renderThumb(thumbProps);
+  }
+
+  const thumb_Shape = (thumbShape.toLowerCase().charAt(0).toUpperCase() + thumbShape.slice(1)) as keyof typeof Thumbs;
   const Element = () => (Thumbs.hasOwnProperty(thumb_Shape) ? Thumbs[thumb_Shape](thumbProps) : Thumbs.Ring(thumbProps));
 
   return <Element />;

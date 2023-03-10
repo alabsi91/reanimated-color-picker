@@ -75,6 +75,35 @@ All built-in components should be wrapped within the `ColorPicker` component.
 - `default: 'ring'`
 - `values:`<shapes/>
 
+### `thumbStyle`
+
+- A global property to change the style of the thumb's View for all descendant sliders components.
+- `type: ViewStyle`
+
+### `thumbInnerStyle`
+
+- A global property to change the color of the thumb's inner View(s) for all descendant sliders components.
+- `type: ViewStyle`
+
+### `renderThumb`
+
+- A global property for using the same custom thumb for all descendant slider components.
+- Overrides `thumbShape`
+- `type: (props: ThumbProps) => ReactElement`
+- Example Usage:
+
+```jsx
+renderThumb={({ handleStyle, width, height }) => (
+    <Animated.View
+      style={[
+        StyleSheet.absoluteFillObject,
+        handleStyle,
+        { backgroundColor: 'red', width, height },
+      ]}
+    />
+  )}
+```
+
 ### `style`
 
 - The container style of the `ColorPicker`.

@@ -1,6 +1,8 @@
+import { ReactElement } from 'react';
 import { StyleProp, TextStyle, ViewStyle } from 'react-native';
 import { SharedValue } from 'react-native-reanimated';
 import { AnyFormat } from './colorKit';
+import { ThumbProps } from './components/Thumbs';
 
 export interface returnedResults {
   hex: string;
@@ -27,6 +29,10 @@ export type thumbShapeType =
   | 'rect'
   | 'circle';
 
+type thumbStyleType = ViewStyle;
+type thumbInnerStyleType = thumbStyleType;
+type renderThumbType = (props: ThumbProps) => ReactElement;
+
 export interface TCTX {
   /** Color's channels. */
   hueValue: SharedValue<number>;
@@ -37,17 +43,26 @@ export interface TCTX {
   /** apply a color to the color picker. */
   setColor: (color: string) => void;
 
-  /** A global style for all sliders children. */
+  /** A global prop for all sliders children. */
   sliderThickness: number;
 
-  /** A global style for all sliders children. */
+  /** A global prop for all sliders children. */
   thumbSize: number;
 
-  /** A global style for all sliders children. */
+  /** A global prop for all sliders children. */
   thumbShape: thumbShapeType;
 
-  /** A global style for all sliders children. */
+  /** A global prop for all sliders children. */
   thumbColor: string | undefined;
+
+  /** A global prop for all sliders children. */
+  thumbStyle?: thumbStyleType;
+
+  /** A global style for all sliders children. */
+  thumbInnerStyle?: thumbInnerStyleType;
+
+  /** A global prop for all sliders children. */
+  renderThumb?: renderThumbType;
 
   /** The initial color value as a `string` */
   value: string;
@@ -80,6 +95,15 @@ export interface ColorPickerProps {
 
   /** - a global property to change the color of the thumb of all descendant sliders components. */
   thumbColor?: string;
+
+  /** - a global property to change the style of the thumb's View for all descendant sliders components */
+  thumbStyle?: thumbStyleType;
+
+  /** - a global property to change the color of the thumb's inner View(s) for all descendant sliders components. */
+  thumbInnerStyle?: thumbInnerStyleType;
+
+  /** - a global function for rendering a thumb component based on ThumbProps. */
+  renderThumb?: renderThumbType;
 
   /** - color picker wrapper style. */
   style?: StyleProp<ViewStyle>;
@@ -156,6 +180,16 @@ export interface PanelProps {
 
   /** - panel handle (thumb) shape. */
   thumbShape?: thumbShapeType;
+
+  /** - slider's handle (thumb) outer View style. */
+  thumbStyle?: thumbStyleType;
+
+  /** - slider's handle (thumb) inner View style. */
+  thumbInnerStyle?: thumbInnerStyleType;
+
+  /** - function which receives ThumbProps and renders slider's handle (thumb). */
+  renderThumb?: renderThumbType;
+
   /**
    * - panle container style.
    * - **Note** Certain style properties will be overridden.
@@ -177,6 +211,15 @@ export interface SliderProps {
 
   /** - slider's handle (thumb) shape. */
   thumbShape?: thumbShapeType;
+
+  /** - slider's handle (thumb) outer View style. */
+  thumbStyle?: thumbStyleType;
+
+  /** - slider's handle (thumb) inner View style. */
+  thumbInnerStyle?: thumbInnerStyleType;
+
+  /** - function which receives ThumbProps and renders slider's handle (thumb). */
+  renderThumb?: renderThumbType;
 
   /** - reverse slider direction. */
   reverse?: boolean;

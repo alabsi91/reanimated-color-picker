@@ -17,7 +17,7 @@ import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler
 import { CTX } from '../ColorPicker';
 import { styles } from '../styles';
 
-export function Panel3({ thumbShape, thumbSize, thumbColor, style = {} }: PanelProps) {
+export function Panel3({ thumbShape, thumbSize, thumbColor, renderThumb, thumbStyle, thumbInnerStyle, style = {} }: PanelProps) {
   const {
     hueValue,
     saturationValue,
@@ -25,10 +25,16 @@ export function Panel3({ thumbShape, thumbSize, thumbColor, style = {} }: PanelP
     onGestureEnd,
     thumbSize: thumbsSize,
     thumbColor: thumbsColor,
+    renderThumb: renderThumbs,
+    thumbStyle: thumbsStyle,
+    thumbInnerStyle: thumbsInnerStyle,
   } = useContext(CTX);
 
   const thumb_size = thumbSize ?? thumbsSize;
   const thumb_color = thumbColor ?? thumbsColor;
+  const render_thumb = renderThumb ?? renderThumbs;
+  const thumb_style = thumbStyle ?? thumbsStyle ?? {};
+  const thumb_inner_style = thumbInnerStyle ?? thumbsInnerStyle ?? {};
 
   const width = useSharedValue(0);
   const borderRadius = useSharedValue(0);
@@ -92,7 +98,18 @@ export function Panel3({ thumbShape, thumbSize, thumbColor, style = {} }: PanelP
         style={[styles.panel_container, style, { position: 'relative', aspectRatio: 1, borderWidth: 0, padding: 0 }, panelStyle]}
       >
         <ImageBackground source={require('../assets/Panel3.png')} style={styles.panel_image} resizeMode='stretch' />
-        <Thumb {...{ channel: 's', thumbShape, thumbSize: thumb_size, thumbColor: thumb_color, handleStyle }} />
+        <Thumb
+          {...{
+            channel: 's',
+            thumbShape,
+            thumbSize: thumb_size,
+            thumbColor: thumb_color,
+            renderThumb: render_thumb,
+            innerStyle: thumb_inner_style,
+            style: thumb_style,
+            handleStyle,
+          }}
+        />
       </Animated.View>
     </PanGestureHandler>
   );

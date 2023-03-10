@@ -17,7 +17,7 @@ import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler
 import { CTX } from '../ColorPicker';
 import { styles } from '../styles';
 
-export function Panel1({ thumbShape, thumbSize, thumbColor, style = {} }: PanelProps) {
+export function Panel1({ thumbShape, thumbSize, thumbColor, renderThumb, thumbStyle, thumbInnerStyle, style = {} }: PanelProps) {
   const {
     hueValue,
     saturationValue,
@@ -26,10 +26,16 @@ export function Panel1({ thumbShape, thumbSize, thumbColor, style = {} }: PanelP
     onGestureEnd,
     thumbSize: thumbsSize,
     thumbColor: thumbsColor,
+    renderThumb: renderThumbs,
+    thumbStyle: thumbsStyle,
+    thumbInnerStyle: thumbsInnerStyle,
   } = useContext(CTX);
 
   const thumb_size = thumbSize ?? thumbsSize;
   const thumb_color = thumbColor ?? thumbsColor;
+  const render_thumb = renderThumb ?? renderThumbs;
+  const thumb_style = thumbStyle ?? thumbsStyle ?? {};
+  const thumb_inner_style = thumbInnerStyle ?? thumbsInnerStyle ?? {};
   const borderRadius = getStyle(style, 'borderRadius') ?? 5;
   const getHeight = getStyle(style, 'height') ?? 200;
 
@@ -48,7 +54,7 @@ export function Panel1({ thumbShape, thumbSize, thumbColor, style = {} }: PanelP
     };
   }, [thumbSize]);
 
-  const activeHueStyle = useAnimatedStyle(() => ({ backgroundColor: `hsl(${hueValue.value}, 100%, 50%)` }));
+  const activeColorStyle = useAnimatedStyle(() => ({ backgroundColor: `hsl(${hueValue.value}, 100%, 50%)` }));
 
   const setValueFromGestureEvent = (event: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -94,7 +100,7 @@ export function Panel1({ thumbShape, thumbSize, thumbColor, style = {} }: PanelP
           { height: getHeight },
           style,
           { position: 'relative', borderWidth: 0, padding: 0 },
-          activeHueStyle,
+          activeColorStyle,
         ]}
       >
         <ImageBackground
@@ -102,7 +108,17 @@ export function Panel1({ thumbShape, thumbSize, thumbColor, style = {} }: PanelP
           style={[styles.panel_image, { borderRadius }]}
           resizeMode='stretch'
         />
-        <Thumb {...{ thumbShape, thumbSize: thumb_size, thumbColor: thumb_color, handleStyle }} />
+        <Thumb
+          {...{
+            thumbShape,
+            thumbSize: thumb_size,
+            thumbColor: thumb_color,
+            renderThumb: render_thumb,
+            innerStyle: thumb_inner_style,
+            style: thumb_style,
+            handleStyle,
+          }}
+        />
       </Animated.View>
     </PanGestureHandler>
   );
