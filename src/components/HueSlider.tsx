@@ -157,6 +157,7 @@ export function HueSlider({
             innerStyle: thumb_inner_style,
             style: thumb_style,
             vertical,
+            adaptSpectrum,
           }}
         />
       </Animated.View>
