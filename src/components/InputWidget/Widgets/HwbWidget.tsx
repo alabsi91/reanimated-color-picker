@@ -3,7 +3,7 @@ import { runOnJS, useDerivedValue } from 'react-native-reanimated';
 
 import colorKit from '../../../colorKit';
 import { clamp } from '../../../utils';
-import { WidgetProps } from '../types';
+import { WidgetProps } from '../../../types';
 import WidgetTextInput from './WidgetTextInput';
 
 export default function HwbWidget({

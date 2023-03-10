@@ -10,7 +10,7 @@ import HwbWidget from './Widgets/HwbWidget';
 import HsvWidget from './Widgets/HsvWidget';
 import styles from './style';
 
-import type { InputWidgetProps } from './types';
+import type { InputWidgetProps } from '../../types';
 
 const defaultFormats = ['HEX', 'RGB', 'HSL', 'HWB', 'HSV'] as const;
 
@@ -85,7 +85,6 @@ export function InputWidget({
         <View>
           <Pressable onPress={cycle}>
             <Image
-              // @ts-expect-error
               tintColor={iconColor}
               style={[styles.arrowButton, iconStyle]}
               source={require('../../assets/arrow-icon.png')}

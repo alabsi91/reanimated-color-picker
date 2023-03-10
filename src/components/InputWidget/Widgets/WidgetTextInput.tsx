@@ -5,7 +5,7 @@ import { clamp } from '../../../utils';
 import styles from '../style';
 
 import type { StyleProp, TextStyle } from 'react-native';
-import type { InputProps } from '../types';
+import type { InputProps } from '../../../types';
 
 type Props = {
   value: number | string;
