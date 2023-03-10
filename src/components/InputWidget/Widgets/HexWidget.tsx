@@ -14,6 +14,7 @@ export default function HexWidget({
   alphaValue,
   inputStyle,
   inputTitleStyle,
+  inputProps,
 }: WidgetProps) {
   const [hexColor, setHexColorText] = useState(returnedResults().hex);
 
@@ -52,6 +53,7 @@ export default function HexWidget({
       onChange={onTextChange}
       onBlur={onBlur}
       onFocus={onFocus}
+      inputProps={inputProps}
       textKeyboard
     />
   );

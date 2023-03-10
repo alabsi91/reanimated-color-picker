@@ -15,6 +15,7 @@ export default function HwbWidget({
   alphaValue,
   inputStyle,
   inputTitleStyle,
+  inputProps,
 }: WidgetProps) {
   const [hwbValues, setHwbValues] = useState(colorKit.HWB(returnedResults().hwba).object());
 
@@ -72,6 +73,7 @@ export default function HwbWidget({
         onChange={onHueChange}
         onBlur={onBlur}
         onFocus={onFocus}
+        inputProps={inputProps}
       />
       <WidgetTextInput
         inputStyle={inputStyle}
@@ -81,6 +83,7 @@ export default function HwbWidget({
         onChange={onWhiteChange}
         onBlur={onBlur}
         onFocus={onFocus}
+        inputProps={inputProps}
       />
       <WidgetTextInput
         inputStyle={inputStyle}
@@ -90,6 +93,7 @@ export default function HwbWidget({
         onChange={onBlackChange}
         onBlur={onBlur}
         onFocus={onFocus}
+        inputProps={inputProps}
       />
       <WidgetTextInput
         inputStyle={inputStyle}
@@ -99,6 +103,7 @@ export default function HwbWidget({
         onChange={onAlphaChange}
         onBlur={onBlur}
         onFocus={onFocus}
+        inputProps={inputProps}
         decimal
       />
     </>

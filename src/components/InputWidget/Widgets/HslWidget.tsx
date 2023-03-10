@@ -15,6 +15,7 @@ export default function HslWidget({
   alphaValue,
   inputStyle,
   inputTitleStyle,
+  inputProps,
 }: WidgetProps) {
   const [hslValues, setHslValues] = useState(colorKit.HSL(returnedResults().hsla).object());
 
@@ -72,6 +73,7 @@ export default function HslWidget({
         onChange={onHueChange}
         onBlur={onBlur}
         onFocus={onFocus}
+        inputProps={inputProps}
       />
       <WidgetTextInput
         inputStyle={inputStyle}
@@ -81,6 +83,7 @@ export default function HslWidget({
         onChange={onSaturationChange}
         onBlur={onBlur}
         onFocus={onFocus}
+        inputProps={inputProps}
       />
       <WidgetTextInput
         inputStyle={inputStyle}
@@ -90,6 +93,7 @@ export default function HslWidget({
         onChange={onLumChange}
         onBlur={onBlur}
         onFocus={onFocus}
+        inputProps={inputProps}
       />
       <WidgetTextInput
         inputStyle={inputStyle}
@@ -99,6 +103,7 @@ export default function HslWidget({
         onChange={onAlphaChange}
         onBlur={onBlur}
         onFocus={onFocus}
+        inputProps={inputProps}
         decimal
       />
     </>

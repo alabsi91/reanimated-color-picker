@@ -5,6 +5,7 @@ import { clamp } from '../../../utils';
 import styles from '../style';
 
 import type { StyleProp, TextStyle } from 'react-native';
+import type { InputProps } from '../types';
 
 type Props = {
   value: number | string;
@@ -16,6 +17,7 @@ type Props = {
   onBlur: () => void;
   onFocus: () => void;
   onChange: (text: string) => void;
+  inputProps: InputProps;
 };
 
 export default function WidgetTextInput({
@@ -25,6 +27,7 @@ export default function WidgetTextInput({
   title,
   inputStyle,
   textStyle,
+  inputProps,
   onChange,
   onBlur,
   onFocus,
@@ -64,6 +67,7 @@ export default function WidgetTextInput({
         autoComplete='off'
         autoCorrect={false}
         selectTextOnFocus={!textKeyboard}
+        {...inputProps}
       />
       <Text style={[styles.inputTitle, textStyle]}>{title}</Text>
     </View>

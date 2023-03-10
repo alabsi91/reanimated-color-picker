@@ -15,6 +15,7 @@ export default function RgbWidget({
   alphaValue,
   inputStyle,
   inputTitleStyle,
+  inputProps,
 }: WidgetProps) {
   const [rgbValues, setRgbValues] = useState(colorKit.RGB(returnedResults().rgba).object());
 
@@ -72,6 +73,7 @@ export default function RgbWidget({
         onChange={onRedChange}
         onBlur={onBlur}
         onFocus={onFocus}
+        inputProps={inputProps}
       />
       <WidgetTextInput
         inputStyle={inputStyle}
@@ -81,6 +83,7 @@ export default function RgbWidget({
         onChange={onGreenChange}
         onBlur={onBlur}
         onFocus={onFocus}
+        inputProps={inputProps}
       />
       <WidgetTextInput
         inputStyle={inputStyle}
@@ -90,6 +93,7 @@ export default function RgbWidget({
         onChange={onBlueChange}
         onBlur={onBlur}
         onFocus={onFocus}
+        inputProps={inputProps}
       />
       <WidgetTextInput
         inputStyle={inputStyle}
@@ -99,6 +103,7 @@ export default function RgbWidget({
         onChange={onAlphaChange}
         onBlur={onBlur}
         onFocus={onFocus}
+        inputProps={inputProps}
         decimal
       />
     </>

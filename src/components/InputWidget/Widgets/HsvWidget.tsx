@@ -15,6 +15,7 @@ export default function HsvWidget({
   alphaValue,
   inputStyle,
   inputTitleStyle,
+  inputProps,
 }: WidgetProps) {
   const [hsvValues, setHsvValues] = useState(colorKit.HSV(returnedResults().hsva).object());
 
@@ -72,6 +73,7 @@ export default function HsvWidget({
         onChange={onHueChange}
         onBlur={onBlur}
         onFocus={onFocus}
+        inputProps={inputProps}
       />
       <WidgetTextInput
         inputStyle={inputStyle}
@@ -81,6 +83,7 @@ export default function HsvWidget({
         onChange={onSaturationChange}
         onBlur={onBlur}
         onFocus={onFocus}
+        inputProps={inputProps}
       />
       <WidgetTextInput
         inputStyle={inputStyle}
@@ -90,6 +93,7 @@ export default function HsvWidget({
         onChange={onValueChange}
         onBlur={onBlur}
         onFocus={onFocus}
+        inputProps={inputProps}
       />
       <WidgetTextInput
         inputStyle={inputStyle}
@@ -99,6 +103,7 @@ export default function HsvWidget({
         onChange={onAlphaChange}
         onBlur={onBlur}
         onFocus={onFocus}
+        inputProps={inputProps}
         decimal
       />
     </>

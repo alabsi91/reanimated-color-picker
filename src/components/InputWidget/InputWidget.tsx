@@ -22,6 +22,7 @@ export function InputWidget({
   inputStyle = {},
   inputTitleStyle = {},
   iconStyle = {},
+  inputProps = {},
 }: InputWidgetProps) {
   const { setColor, returnedResults, hueValue, saturationValue, brightnessValue, alphaValue, onGestureChange, onGestureEnd } =
     useContext(CTX);
@@ -51,6 +52,7 @@ export function InputWidget({
     alphaValue,
     inputStyle,
     inputTitleStyle,
+    inputProps,
   };
   const Input = () => {
     switch (format) {

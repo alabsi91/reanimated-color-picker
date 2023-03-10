@@ -1,5 +1,21 @@
-import type { StyleProp, TextStyle, ViewStyle, ImageStyle } from 'react-native';
+import type { StyleProp, TextStyle, ViewStyle, ImageStyle, TextInputProps } from 'react-native';
 import type { TCTX } from '../../types';
+
+export type InputProps = Omit<
+  TextInputProps,
+  | 'ref'
+  | 'style'
+  | 'value'
+  | 'maxLength'
+  | 'onChangeText'
+  | 'onBlur'
+  | 'onFocus'
+  | 'keyboardType'
+  | 'autoComplete'
+  | 'autoCorrect'
+  | 'selectTextOnFocus'
+  | 'defaultValue'
+>;
 
 export type WidgetProps = {
   onChange: (color: string) => void;
@@ -10,6 +26,7 @@ export type WidgetProps = {
   alphaValue: TCTX['alphaValue'];
   inputStyle: StyleProp<TextStyle>;
   inputTitleStyle?: StyleProp<TextStyle>;
+  inputProps: InputProps;
 };
 
 type defaultFormats = 'HEX' | 'RGB' | 'HSL' | 'HWB' | 'HSV';
@@ -22,4 +39,5 @@ export type InputWidgetProps = {
   containerStyle?: StyleProp<ViewStyle>;
   iconColor?: string;
   iconStyle?: StyleProp<ImageStyle>;
+  inputProps?: InputProps;
 };
