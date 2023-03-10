@@ -13,7 +13,6 @@ export type InputProps = Omit<
   | 'keyboardType'
   | 'autoComplete'
   | 'autoCorrect'
-  | 'selectTextOnFocus'
   | 'defaultValue'
 >;
 

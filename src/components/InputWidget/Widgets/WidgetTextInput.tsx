@@ -70,8 +70,8 @@ export default function WidgetTextInput({
         keyboardType={decimal ? 'decimal-pad' : textKeyboard ? 'default' : 'number-pad'}
         autoComplete='off'
         autoCorrect={false}
-        selectTextOnFocus={!textKeyboard}
         {...inputProps}
+        selectTextOnFocus={!textKeyboard}
       />
       <Text style={[styles.inputTitle, textStyle]}>{title}</Text>
     </View>
