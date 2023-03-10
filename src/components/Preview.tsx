@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useContext } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground } from 'react-native';
 import Animated, { runOnJS, useAnimatedStyle, useDerivedValue, useSharedValue } from 'react-native-reanimated';
 import { getStyle } from '../utils';
 
@@ -65,7 +65,7 @@ export function Preview({
   });
 
   return (
-    <View style={[styles.previewWrapper, style]}>
+    <ImageBackground source={require('../assets/transparent-texture.png')} style={[styles.previewWrapper, style]}>
       {!hideInitialColor && (
         <View style={[styles.previewContainer, { backgroundColor: value, justifyContent }]}>
           {!hideText && (
@@ -76,7 +76,7 @@ export function Preview({
       <Animated.View style={[styles.previewContainer, { justifyContent }, previewColorStyle]}>
         {!hideText && <ReText text={() => returnedResults()[colorFormat]} hash={colorHash} style={[textStyle, textColorStyle]} />}
       </Animated.View>
-    </View>
+    </ImageBackground>
   );
 }
 
