@@ -60,8 +60,10 @@ export function Preview({
 
   // When the values of channels change
   useDerivedValue(() => {
-    runOnJS(setPreviewColor)({ h: hueValue.value, s: saturationValue.value, v: brightnessValue.value, a: alphaValue.value });
-    runOnJS(setTextColor)({ h: hueValue.value, s: saturationValue.value, v: brightnessValue.value });
+    const currentColor = { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value, a: alphaValue.value };
+    const adaptiveTextColor = alphaValue.value > 0.5 ? currentColor : { h: 0, s: 0, v: 70 };
+    runOnJS(setPreviewColor)(currentColor);
+    runOnJS(setTextColor)(adaptiveTextColor);
   });
 
   return (
