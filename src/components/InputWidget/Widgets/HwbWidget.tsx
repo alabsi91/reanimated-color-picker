@@ -79,7 +79,7 @@ export default function HwbWidget({
         inputStyle={inputStyle}
         textStyle={inputTitleStyle}
         value={hwbValues.w}
-        title='w'
+        title='W'
         onChange={onWhiteChange}
         onBlur={onBlur}
         onFocus={onFocus}
