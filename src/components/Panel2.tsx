@@ -17,7 +17,16 @@ import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler
 import { CTX } from '../ColorPicker';
 import { styles } from '../styles';
 
-export function Panel2({ thumbShape, thumbSize, thumbColor, reverse = false, style = {} }: Panel2Props) {
+export function Panel2({
+  thumbColor,
+  renderThumb,
+  thumbShape,
+  thumbSize,
+  thumbStyle,
+  thumbInnerStyle,
+  reverse = false,
+  style = {},
+}: Panel2Props) {
   const {
     hueValue,
     saturationValue,
@@ -25,10 +34,16 @@ export function Panel2({ thumbShape, thumbSize, thumbColor, reverse = false, sty
     onGestureEnd,
     thumbSize: thumbsSize,
     thumbColor: thumbsColor,
+    renderThumb: renderThumbs,
+    thumbStyle: thumbsStyle,
+    thumbInnerStyle: thumbsInnerStyle,
   } = useContext(CTX);
 
   const thumb_size = thumbSize ?? thumbsSize;
   const thumb_color = thumbColor ?? thumbsColor;
+  const render_thumb = renderThumb ?? renderThumbs;
+  const thumb_style = thumbStyle ?? thumbsStyle ?? {};
+  const thumb_inner_style = thumbInnerStyle ?? thumbsInnerStyle ?? {};
 
   const borderRadius = getStyle(style, 'borderRadius') ?? 5;
   const getHeight = getStyle(style, 'height') ?? 200;
@@ -92,7 +107,18 @@ export function Panel2({ thumbShape, thumbSize, thumbColor, reverse = false, sty
           style={[styles.panel_image, { borderRadius, transform: [{ scaleX: reverse ? -1 : 1 }] }]}
           resizeMode='stretch'
         />
-        <Thumb {...{ channel: 's', thumbShape, thumbSize: thumb_size, thumbColor: thumb_color, handleStyle }} />
+        <Thumb
+          {...{
+            channel: 's',
+            thumbShape,
+            thumbSize: thumb_size,
+            thumbColor: thumb_color,
+            renderThumb: render_thumb,
+            innerStyle: thumb_inner_style,
+            style: thumb_style,
+            handleStyle,
+          }}
+        />
       </Animated.View>
     </PanGestureHandler>
   );

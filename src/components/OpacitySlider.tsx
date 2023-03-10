@@ -23,6 +23,9 @@ export function OpacitySlider({
   thumbShape,
   thumbSize,
   thumbColor,
+  renderThumb,
+  thumbStyle,
+  thumbInnerStyle,
   style = {},
   vertical = false,
   reverse = false,
@@ -38,11 +41,17 @@ export function OpacitySlider({
     thumbSize: thumbsSize,
     thumbShape: thumbsShape,
     thumbColor: thumbsColor,
+    renderThumb: renderThumbs,
+    thumbStyle: thumbsStyle,
+    thumbInnerStyle: thumbsInnerStyle,
   } = useContext(CTX);
 
   thumbShape = thumbShape ?? thumbsShape;
   const thumb_size = thumbSize ?? thumbsSize;
   const thumb_color = thumbColor ?? thumbsColor;
+  const render_thumb = renderThumb ?? renderThumbs;
+  const thumb_style = thumbStyle ?? thumbsStyle ?? {};
+  const thumb_inner_style = thumbInnerStyle ?? thumbsInnerStyle ?? {};
 
   const borderRadius = getStyle(style, 'borderRadius') ?? 5;
   const getWidth = getStyle(style, 'width');
@@ -118,9 +127,7 @@ export function OpacitySlider({
       borderRadius,
       transform: [
         { rotate: imageRotate },
-        {
-          translateX: vertical ? (reverse ? -height.value / 2 + width.value / 2 : height.value / 2 - width.value / 2) : 0,
-        },
+        { translateX: vertical ? (reverse ? -height.value / 2 + width.value / 2 : height.value / 2 - width.value / 2) : 0 },
         { translateY: vertical ? imageTranslateY : 0 },
       ],
     };
@@ -141,7 +148,10 @@ export function OpacitySlider({
             thumbShape,
             thumbSize: thumb_size,
             thumbColor: thumb_color,
+            renderThumb: render_thumb,
             handleStyle,
+            innerStyle: thumb_inner_style,
+            style: thumb_style,
             vertical,
             adaptSpectrum,
           }}

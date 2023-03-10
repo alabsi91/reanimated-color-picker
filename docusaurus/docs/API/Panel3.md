@@ -45,6 +45,35 @@ description: The circle-shaped slider, with its wheel style design, is utilized 
 - `values`: <shapes/>
 - `default: 'ring'`
 
+### `thumbStyle`
+
+- Thumb's containing View's style.
+- `type: ViewStyle`
+
+### `thumbInnerStyle`
+
+- Thumb's inner View(s) style.
+- `type: ViewStyle`
+
+### `renderThumb`
+
+- Function which receives `ThumbProps` and returns a custom thumb component.
+- Overrides `thumbShape`
+- `type: (props: ThumbProps) => ReactElement`
+- Example Usage:
+
+```jsx
+renderThumb={({ handleStyle, width, height }) => (
+    <Animated.View
+      style={[
+        StyleSheet.absoluteFillObject,
+        handleStyle,
+        { backgroundColor: 'red', width, height },
+      ]}
+    />
+  )}
+```
+
 ### `style`
 
 - Panel's container style.
