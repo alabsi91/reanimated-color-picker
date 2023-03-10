@@ -1,11 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { View, TextInput, Text } from 'react-native';
+import React, { useRef, useState } from 'react';
 import { runOnJS, useDerivedValue } from 'react-native-reanimated';
 
 import colorKit from '../../../colorKit';
-import styles from '../style';
 import { clamp } from '../../../utils';
 import { WidgetProps } from '../types';
+import WidgetTextInput from './WidgetTextInput';
 
 export default function HwbWidget({
   onChange,
@@ -20,7 +19,6 @@ export default function HwbWidget({
   const [hwbValues, setHwbValues] = useState(colorKit.HWB(returnedResults().hwba).object());
 
   const isFocesed = useRef(false);
-  const alphaInputRef = useRef<TextInput>(null!);
 
   const updateText = () => {
     const { h, w, b, a } = colorKit.HWB(returnedResults().hwba).object();
@@ -62,72 +60,47 @@ export default function HwbWidget({
   };
   const onBlur = () => {
     isFocesed.current = false;
-    alphaInputRef.current.setNativeProps({ text: clamp(hwbValues.a, 1) + '' });
   };
-
-  useEffect(() => {
-    alphaInputRef.current.setNativeProps({ text: hwbValues.a + '' || '0' });
-  }, [hwbValues.a]);
 
   return (
     <>
-      <View style={styles.inputsContainer}>
-        <TextInput
-          style={[styles.input, inputStyle]}
-          value={hwbValues.h + ''}
-          onChangeText={onHueChange}
-          onBlur={onBlur}
-          onFocus={onFocus}
-          keyboardType='number-pad'
-          autoComplete='off'
-          autoCorrect={false}
-          selectTextOnFocus
-        />
-        <Text style={[styles.inputTitle, inputTitleStyle]}>H</Text>
-      </View>
-      <View style={styles.inputsContainer}>
-        <TextInput
-          style={[styles.input, inputStyle]}
-          value={hwbValues.w + ''}
-          onChangeText={onWhiteChange}
-          onBlur={onBlur}
-          onFocus={onFocus}
-          keyboardType='number-pad'
-          autoComplete='off'
-          autoCorrect={false}
-          selectTextOnFocus
-        />
-        <Text style={[styles.inputTitle, inputTitleStyle]}>W</Text>
-      </View>
-      <View style={styles.inputsContainer}>
-        <TextInput
-          style={[styles.input, inputStyle]}
-          value={hwbValues.b + ''}
-          onChangeText={onBlackChange}
-          onBlur={onBlur}
-          onFocus={onFocus}
-          keyboardType='number-pad'
-          autoComplete='off'
-          autoCorrect={false}
-          selectTextOnFocus
-        />
-        <Text style={[styles.inputTitle, inputTitleStyle]}>B</Text>
-      </View>
-      <View style={styles.inputsContainer}>
-        <TextInput
-          ref={alphaInputRef}
-          style={[styles.input, inputStyle]}
-          defaultValue={hwbValues.a + ''}
-          onChangeText={onAlphaChange}
-          onBlur={onBlur}
-          onFocus={onFocus}
-          keyboardType='decimal-pad'
-          autoComplete='off'
-          autoCorrect={false}
-          selectTextOnFocus
-        />
-        <Text style={[styles.inputTitle, inputTitleStyle]}>A</Text>
-      </View>
+      <WidgetTextInput
+        inputStyle={inputStyle}
+        textStyle={inputTitleStyle}
+        value={hwbValues.h}
+        title='H'
+        onChange={onHueChange}
+        onBlur={onBlur}
+        onFocus={onFocus}
+      />
+      <WidgetTextInput
+        inputStyle={inputStyle}
+        textStyle={inputTitleStyle}
+        value={hwbValues.w}
+        title='w'
+        onChange={onWhiteChange}
+        onBlur={onBlur}
+        onFocus={onFocus}
+      />
+      <WidgetTextInput
+        inputStyle={inputStyle}
+        textStyle={inputTitleStyle}
+        value={hwbValues.b}
+        title='B'
+        onChange={onBlackChange}
+        onBlur={onBlur}
+        onFocus={onFocus}
+      />
+      <WidgetTextInput
+        inputStyle={inputStyle}
+        textStyle={inputTitleStyle}
+        value={hwbValues.a}
+        title='A'
+        onChange={onAlphaChange}
+        onBlur={onBlur}
+        onFocus={onFocus}
+        decimal
+      />
     </>
   );
 }

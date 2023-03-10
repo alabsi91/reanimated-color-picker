@@ -1,11 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { View, TextInput, Text } from 'react-native';
+import React, { useRef, useState } from 'react';
 import { runOnJS, useDerivedValue } from 'react-native-reanimated';
 
 import colorKit from '../../../colorKit';
 import { clamp } from '../../../utils';
 import { WidgetProps } from '../types';
-import styles from '../style';
+import WidgetTextInput from './WidgetTextInput';
 
 export default function HslWidget({
   onChange,
@@ -20,7 +19,6 @@ export default function HslWidget({
   const [hslValues, setHslValues] = useState(colorKit.HSL(returnedResults().hsla).object());
 
   const isFocesed = useRef(false);
-  const alphaInputRef = useRef<TextInput>(null!);
 
   const updateText = () => {
     const { h, s, l, a } = colorKit.HSL(returnedResults().hsla).object();
@@ -62,72 +60,47 @@ export default function HslWidget({
   };
   const onBlur = () => {
     isFocesed.current = false;
-    alphaInputRef.current.setNativeProps({ text: clamp(hslValues.a, 1) + '' });
   };
-
-  useEffect(() => {
-    alphaInputRef.current.setNativeProps({ text: hslValues.a + '' || '0' });
-  }, [hslValues.a]);
 
   return (
     <>
-      <View style={styles.inputsContainer}>
-        <TextInput
-          style={[styles.input, inputStyle]}
-          value={hslValues.h + ''}
-          onChangeText={onHueChange}
-          onBlur={onBlur}
-          onFocus={onFocus}
-          keyboardType='number-pad'
-          autoComplete='off'
-          autoCorrect={false}
-          selectTextOnFocus
-        />
-        <Text style={[styles.inputTitle, inputTitleStyle]}>H</Text>
-      </View>
-      <View style={styles.inputsContainer}>
-        <TextInput
-          style={[styles.input, inputStyle]}
-          value={hslValues.s + ''}
-          onChangeText={onSaturationChange}
-          onBlur={onBlur}
-          onFocus={onFocus}
-          keyboardType='number-pad'
-          autoComplete='off'
-          autoCorrect={false}
-          selectTextOnFocus
-        />
-        <Text style={[styles.inputTitle, inputTitleStyle]}>S</Text>
-      </View>
-      <View style={styles.inputsContainer}>
-        <TextInput
-          style={[styles.input, inputStyle]}
-          keyboardType='number-pad'
-          value={hslValues.l + ''}
-          onChangeText={onLumChange}
-          onBlur={onBlur}
-          onFocus={onFocus}
-          autoComplete='off'
-          autoCorrect={false}
-          selectTextOnFocus
-        />
-        <Text style={[styles.inputTitle, inputTitleStyle]}>L</Text>
-      </View>
-      <View style={styles.inputsContainer}>
-        <TextInput
-          ref={alphaInputRef}
-          style={[styles.input, inputStyle]}
-          defaultValue={hslValues.a + ''}
-          onChangeText={onAlphaChange}
-          onBlur={onBlur}
-          onFocus={onFocus}
-          keyboardType='decimal-pad'
-          autoComplete='off'
-          autoCorrect={false}
-          selectTextOnFocus
-        />
-        <Text style={[styles.inputTitle, inputTitleStyle]}>A</Text>
-      </View>
+      <WidgetTextInput
+        inputStyle={inputStyle}
+        textStyle={inputTitleStyle}
+        value={hslValues.h}
+        title='H'
+        onChange={onHueChange}
+        onBlur={onBlur}
+        onFocus={onFocus}
+      />
+      <WidgetTextInput
+        inputStyle={inputStyle}
+        textStyle={inputTitleStyle}
+        value={hslValues.s}
+        title='S'
+        onChange={onSaturationChange}
+        onBlur={onBlur}
+        onFocus={onFocus}
+      />
+      <WidgetTextInput
+        inputStyle={inputStyle}
+        textStyle={inputTitleStyle}
+        value={hslValues.l}
+        title='L'
+        onChange={onLumChange}
+        onBlur={onBlur}
+        onFocus={onFocus}
+      />
+      <WidgetTextInput
+        inputStyle={inputStyle}
+        textStyle={inputTitleStyle}
+        value={hslValues.a}
+        title='A'
+        onChange={onAlphaChange}
+        onBlur={onBlur}
+        onFocus={onFocus}
+        decimal
+      />
     </>
   );
 }

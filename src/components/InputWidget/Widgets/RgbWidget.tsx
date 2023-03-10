@@ -1,11 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { View, TextInput, Text } from 'react-native';
+import React, { useRef, useState } from 'react';
 import { runOnJS, useDerivedValue } from 'react-native-reanimated';
 
 import colorKit from '../../../colorKit';
 import { clamp } from '../../../utils';
 import { WidgetProps } from '../types';
-import styles from '../style';
+import WidgetTextInput from './WidgetTextInput';
 
 export default function RgbWidget({
   onChange,
@@ -20,7 +19,6 @@ export default function RgbWidget({
   const [rgbValues, setRgbValues] = useState(colorKit.RGB(returnedResults().rgba).object());
 
   const isFocesed = useRef(false);
-  const alphaInputRef = useRef<TextInput>(null!);
 
   const updateText = () => {
     const { r, g, b, a } = colorKit.RGB(returnedResults().rgba).object();
@@ -62,72 +60,47 @@ export default function RgbWidget({
   };
   const onBlur = () => {
     isFocesed.current = false;
-    alphaInputRef.current.setNativeProps({ text: clamp(rgbValues.a, 1) + '' });
   };
-
-  useEffect(() => {
-    alphaInputRef.current.setNativeProps({ text: rgbValues.a + '' || '0' });
-  }, [rgbValues.a]);
 
   return (
     <>
-      <View style={styles.inputsContainer}>
-        <TextInput
-          style={[styles.input, inputStyle]}
-          value={rgbValues.r + ''}
-          onChangeText={onRedChange}
-          onBlur={onBlur}
-          onFocus={onFocus}
-          keyboardType='number-pad'
-          autoComplete='off'
-          autoCorrect={false}
-          selectTextOnFocus
-        />
-        <Text style={[styles.inputTitle, inputTitleStyle]}>R</Text>
-      </View>
-      <View style={styles.inputsContainer}>
-        <TextInput
-          style={[styles.input, inputStyle]}
-          value={rgbValues.g + ''}
-          onChangeText={onGreenChange}
-          onBlur={onBlur}
-          onFocus={onFocus}
-          keyboardType='number-pad'
-          autoComplete='off'
-          autoCorrect={false}
-          selectTextOnFocus
-        />
-        <Text style={[styles.inputTitle, inputTitleStyle]}>G</Text>
-      </View>
-      <View style={styles.inputsContainer}>
-        <TextInput
-          style={[styles.input, inputStyle]}
-          value={rgbValues.b + ''}
-          onChangeText={onBlueChange}
-          onBlur={onBlur}
-          onFocus={onFocus}
-          keyboardType='number-pad'
-          autoComplete='off'
-          autoCorrect={false}
-          selectTextOnFocus
-        />
-        <Text style={[styles.inputTitle, inputTitleStyle]}>B</Text>
-      </View>
-      <View style={styles.inputsContainer}>
-        <TextInput
-          ref={alphaInputRef}
-          style={[styles.input, inputStyle]}
-          defaultValue={rgbValues.a + ''}
-          onChangeText={onAlphaChange}
-          onBlur={onBlur}
-          onFocus={onFocus}
-          keyboardType='decimal-pad'
-          autoComplete='off'
-          autoCorrect={false}
-          selectTextOnFocus
-        />
-        <Text style={[styles.inputTitle, inputTitleStyle]}>A</Text>
-      </View>
+      <WidgetTextInput
+        inputStyle={inputStyle}
+        textStyle={inputTitleStyle}
+        value={rgbValues.r}
+        title='R'
+        onChange={onRedChange}
+        onBlur={onBlur}
+        onFocus={onFocus}
+      />
+      <WidgetTextInput
+        inputStyle={inputStyle}
+        textStyle={inputTitleStyle}
+        value={rgbValues.g}
+        title='G'
+        onChange={onGreenChange}
+        onBlur={onBlur}
+        onFocus={onFocus}
+      />
+      <WidgetTextInput
+        inputStyle={inputStyle}
+        textStyle={inputTitleStyle}
+        value={rgbValues.b}
+        title='B'
+        onChange={onBlueChange}
+        onBlur={onBlur}
+        onFocus={onFocus}
+      />
+      <WidgetTextInput
+        inputStyle={inputStyle}
+        textStyle={inputTitleStyle}
+        value={rgbValues.a}
+        title='A'
+        onChange={onAlphaChange}
+        onBlur={onBlur}
+        onFocus={onFocus}
+        decimal
+      />
     </>
   );
 }

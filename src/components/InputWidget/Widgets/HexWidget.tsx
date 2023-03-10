@@ -1,10 +1,9 @@
 import React, { useRef, useState } from 'react';
-import { View, TextInput, Text } from 'react-native';
 import { runOnJS, useDerivedValue } from 'react-native-reanimated';
 
 import colorKit from '../../../colorKit';
-import styles from '../style';
 import { WidgetProps } from '../types';
+import WidgetTextInput from './WidgetTextInput';
 
 export default function HexWidget({
   onChange,
@@ -16,12 +15,12 @@ export default function HexWidget({
   inputStyle,
   inputTitleStyle,
 }: WidgetProps) {
-  const [colorText, setColorText] = useState(returnedResults().hex);
+  const [hexColor, setHexColorText] = useState(returnedResults().hex);
 
   const isFocesed = useRef(false);
 
   const updateText = () => {
-    if (!isFocesed.current) setColorText(returnedResults().hex);
+    if (!isFocesed.current) setHexColorText(returnedResults().hex);
   };
 
   useDerivedValue(() => {
@@ -30,7 +29,7 @@ export default function HexWidget({
   }, []);
 
   const onTextChange = (text: string) => {
-    setColorText(text);
+    setHexColorText(text);
     const isHex = colorKit.getFormat(text)?.includes('hex');
     if (isHex) onChange(text);
   };
@@ -40,23 +39,20 @@ export default function HexWidget({
   };
   const onBlur = () => {
     isFocesed.current = false;
-    const isHex = colorKit.getFormat(colorText)?.includes('hex');
+    const isHex = colorKit.getFormat(hexColor)?.includes('hex');
     if (isHex) return;
-    setColorText(returnedResults().hex);
+    setHexColorText(returnedResults().hex);
   };
   return (
-    <View style={styles.inputsContainer}>
-      <TextInput
-        style={[styles.input, inputStyle]}
-        value={colorText}
-        onChangeText={onTextChange}
-        onBlur={onBlur}
-        onFocus={onFocus}
-        autoComplete='off'
-        autoCorrect={false}
-        selectTextOnFocus
-      />
-      <Text style={[styles.inputTitle, inputTitleStyle]}>HEX</Text>
-    </View>
+    <WidgetTextInput
+      inputStyle={inputStyle}
+      textStyle={inputTitleStyle}
+      value={hexColor}
+      title='HEX'
+      onChange={onTextChange}
+      onBlur={onBlur}
+      onFocus={onFocus}
+      textKeyboard
+    />
   );
 }
