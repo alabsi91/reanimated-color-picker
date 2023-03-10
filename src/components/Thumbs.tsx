@@ -256,8 +256,11 @@ export default function Thumb({
   const getColorForAdaptiveColor = () => {
     'worklet';
     if (adaptSpectrum) {
-      if (channel === 'a') return { h: hueValue.value, s: alphaValue.value * 100, v: 70 };
-      // To cover the remaining channel cases, which include 'h', 's', 'v', and 'undefined'.
+      if (channel === 'a') {
+        return alphaValue.value > 0.7
+          ? { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value }
+          : { h: 0, s: 0, v: 70 };
+      }
       return { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
     }
 
