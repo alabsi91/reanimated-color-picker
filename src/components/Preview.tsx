@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useContext } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground } from 'react-native';
 import Animated, { runOnJS, useAnimatedStyle, useDerivedValue, useSharedValue } from 'react-native-reanimated';
 import { getStyle } from '../utils';
 
@@ -60,12 +60,14 @@ export function Preview({
 
   // When the values of channels change
   useDerivedValue(() => {
-    runOnJS(setPreviewColor)({ h: hueValue.value, s: saturationValue.value, v: brightnessValue.value, a: alphaValue.value });
-    runOnJS(setTextColor)({ h: hueValue.value, s: saturationValue.value, v: brightnessValue.value });
+    const currentColor = { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value, a: alphaValue.value };
+    const adaptiveTextColor = alphaValue.value > 0.5 ? currentColor : { h: 0, s: 0, v: 70 };
+    runOnJS(setPreviewColor)(currentColor);
+    runOnJS(setTextColor)(adaptiveTextColor);
   });
 
   return (
-    <View style={[styles.previewWrapper, style]}>
+    <ImageBackground source={require('../assets/transparent-texture.png')} style={[styles.previewWrapper, style]}>
       {!hideInitialColor && (
         <View style={[styles.previewContainer, { backgroundColor: value, justifyContent }]}>
           {!hideText && (
@@ -76,7 +78,7 @@ export function Preview({
       <Animated.View style={[styles.previewContainer, { justifyContent }, previewColorStyle]}>
         {!hideText && <ReText text={() => returnedResults()[colorFormat]} hash={colorHash} style={[textStyle, textColorStyle]} />}
       </Animated.View>
-    </View>
+    </ImageBackground>
   );
 }
 
