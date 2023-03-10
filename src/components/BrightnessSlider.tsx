@@ -138,6 +138,7 @@ export function BrightnessSlider({
             thumbColor: thumb_color,
             handleStyle,
             vertical,
+            adaptSpectrum,
           }}
         />
       </Animated.View>

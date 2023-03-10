@@ -221,9 +221,18 @@ type Props = {
   handleStyle: {};
   vertical?: boolean;
   channel?: 'h' | 's' | 'v' | 'a';
+  adaptSpectrum?: boolean;
 };
 
-export default function Thumb({ thumbShape = 'ring', thumbSize, thumbColor, handleStyle, vertical = false, channel }: Props) {
+export default function Thumb({
+  thumbShape = 'ring',
+  thumbSize,
+  thumbColor,
+  handleStyle,
+  vertical = false,
+  adaptSpectrum,
+  channel,
+}: Props) {
   const { width, height, borderRadius } = { width: thumbSize, height: thumbSize, borderRadius: thumbSize / 2 };
   const { hueValue, saturationValue, brightnessValue, alphaValue } = useContext(CTX);
 
@@ -240,20 +249,31 @@ export default function Thumb({ thumbShape = 'ring', thumbSize, thumbColor, hand
     inverted.value = contrast < 4.5 ? color : inverted.value;
   };
 
+  const getValues = () => {
+    'worklet';
+    if (adaptSpectrum) {
+      if (channel === 'a') return { h: hueValue.value, s: alphaValue.value * 100, v: 70 };
+      // To cover the remaining channel cases, which include 'h', 's', 'v', and 'undefined'.
+      return { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
+    }
+
+    switch (channel) {
+      case 'h':
+        return { h: hueValue.value, s: 100, v: 100 };
+      case 'v':
+        return { h: hueValue.value, s: 100, v: brightnessValue.value };
+      case 's':
+        return { h: hueValue.value, s: saturationValue.value, v: 70 };
+      case 'a':
+        return { h: hueValue.value, s: alphaValue.value * 100, v: 70 };
+      default:
+        return { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
+    }
+  };
+
   // When the values of channels change
   useDerivedValue(() => {
-    const values =
-      channel === 'h'
-        ? { h: hueValue.value, s: 100, v: 100 }
-        : channel === 'v'
-        ? { h: hueValue.value, s: 100, v: brightnessValue.value }
-        : channel === 's'
-        ? { h: hueValue.value, s: saturationValue.value, v: 70 }
-        : channel === 'a'
-        ? { h: hueValue.value, s: alphaValue.value * 100, v: 70 }
-        : { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
-
-    runOnJS(setInverted)(values);
+    runOnJS(setInverted)(getValues());
     runOnJS(setResultColor)({ h: hueValue.value, s: saturationValue.value, v: brightnessValue.value });
   });
 
