@@ -31,12 +31,26 @@ export type WidgetProps = {
 type defaultFormats = 'HEX' | 'RGB' | 'HSL' | 'HWB' | 'HSV';
 
 export type InputWidgetProps = {
+  /**
+   * - The initial input widget color format.
+   * - You can select one of the following options: `'HEX'`, `'RGB'`, '`HSL'`, `'HWB'`, or `'HSV'`
+   */
   defaultFormat?: defaultFormats;
+  /**
+   * - What input widgets should be included that can be cycled through.
+   * - Avilable options: `'HEX'`, `'RGB'`, '`HSL'`, `'HWB'`, and `'HSV'`
+   */
   formats?: readonly defaultFormats[];
+  /** - `InputText` components style. */
   inputStyle?: StyleProp<TextStyle>;
-  inputTitleStyle?: StyleProp<TextStyle>;
-  containerStyle?: StyleProp<ViewStyle>;
-  iconColor?: string;
-  iconStyle?: StyleProp<ImageStyle>;
+  /** - The props for the `TextInput` components. */
   inputProps?: InputProps;
+  /** - The style of the `Text` component for the title located below the inputs. */
+  inputTitleStyle?: StyleProp<TextStyle>;
+  /** - The style of the `View` component that wraps around all the widgets. */
+  containerStyle?: StyleProp<ViewStyle>;
+  /** - The color of the cycle button icon (`Image` component). */
+  iconColor?: string;
+  /** - The style of the cycle button (`Image` component). */
+  iconStyle?: StyleProp<ImageStyle>;
 };
