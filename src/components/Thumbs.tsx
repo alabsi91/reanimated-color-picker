@@ -253,7 +253,7 @@ export default function Thumb({
    * Get the current color and calculate its contrast ratio against white or black,
    * depending on the channel and whether 'adaptSpectrum' is enabled
    */
-  const getValues = () => {
+  const getColorForAdaptiveColor = () => {
     'worklet';
     if (adaptSpectrum) {
       if (channel === 'a') return { h: hueValue.value, s: alphaValue.value * 100, v: 70 };
@@ -277,7 +277,7 @@ export default function Thumb({
 
   // When the values of channels change
   useDerivedValue(() => {
-    runOnJS(setAdaptiveColor)(getValues());
+    runOnJS(setAdaptiveColor)(getColorForAdaptiveColor());
     runOnJS(setResultColor)({ h: hueValue.value, s: saturationValue.value, v: brightnessValue.value });
   });
 
