@@ -46,6 +46,10 @@ export default function WidgetTextInput({
   };
 
   useEffect(() => {
+    if (decimal) setTextValue(value + '');
+  }, [value]);
+
+  useEffect(() => {
     const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
       inputRef.current.blur();
     });
