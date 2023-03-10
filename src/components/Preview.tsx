@@ -39,7 +39,8 @@ export function Preview({
   const colorHash = [hueValue, saturationValue, brightnessValue, alphaValue];
 
   const initialColorText = useMemo(() => {
-    const contrast = colorKit.contrastRatio(value, '#fff');
+    const adaptiveTextColor = alphaValue.value > 0.5 ? value : { h: 0, s: 0, v: 70 };
+    const contrast = colorKit.contrastRatio(adaptiveTextColor, '#fff');
     const color = contrast < 4.5 ? '#000' : '#fff';
     return { formated: returnedResults()[colorFormat], color };
   }, [value, colorFormat]);
