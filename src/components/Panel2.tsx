@@ -8,14 +8,15 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+
+import Thumb from './Thumb/Thumb';
 import { clamp, getStyle } from '../utils';
-import Thumb from './Thumbs';
+import { CTX } from '../ColorPicker';
+import { styles } from '../styles';
 
 import type { LayoutChangeEvent } from 'react-native';
 import type { Panel2Props } from '../types';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
-import { CTX } from '../ColorPicker';
-import { styles } from '../styles';
 
 export function Panel2({
   thumbColor,

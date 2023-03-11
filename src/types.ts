@@ -1,8 +1,6 @@
-import { ReactElement } from 'react';
-import { StyleProp, TextStyle, ViewStyle, ImageStyle, TextInputProps } from 'react-native';
-import { SharedValue } from 'react-native-reanimated';
-import { AnyFormat } from './colorKit';
-import { ThumbProps } from './components/Thumbs';
+import type { StyleProp, TextStyle, ViewStyle, ImageStyle, TextInputProps } from 'react-native';
+import type { AnimatedStyleProp, SharedValue } from 'react-native-reanimated';
+import type { AnyFormat } from './colorKit';
 
 export interface returnedResults {
   hex: string;
@@ -29,9 +27,72 @@ export type thumbShapeType =
   | 'rect'
   | 'circle';
 
-type thumbStyleType = ViewStyle;
+type thumbStyleType = StyleProp<ViewStyle>;
 type thumbInnerStyleType = thumbStyleType;
-type renderThumbType = (props: ThumbProps) => ReactElement;
+
+export type RenderThumbProps = {
+  /**
+   * - This style determines the position of the thumb and is a crucial element that should be included.
+   * - It should be tied to an `Reanimated` component, for example, `<Animated.View style={positionStyle} />`.
+   */
+  positionStyle: StyleProp<ViewStyle | ImageStyle | TextStyle>;
+
+  /**
+   * - A `number` that determines the thumb's width in pixels and is important for thumb position calculation.
+   * - It's extracted from the `thumbSize` prop.
+   */
+  width: number;
+
+  /**
+   * - A `number` that determines the thumb's height in pixels and is important for thumb position calculation.
+   * - It's extracted from the `thumbSize` prop.
+   */
+  height: number;
+
+  /**
+   * - The `adaptiveColor` is a type of `SharedValue<string>` that determines the color to be displayed based on the contrast ratio.
+   * - It can either be a `white` or `black` color.
+   */
+  adaptiveColor: SharedValue<string>;
+
+  /**
+   * - A `SharedValue` of type `string` that represents the current color.
+   * - This shared value will update whenever the color changes, but without the alpha channel.
+   */
+  currentColor: SharedValue<string>;
+
+  /** - The initial color value as a `string` */
+  initialColor: string;
+};
+
+export type RenderThumbType = React.FC<RenderThumbProps>;
+
+export type ThumbProps = {
+  thumbColor?: string;
+  handleStyle: {};
+  innerStyle?: {};
+  style?: {};
+  renderThumb?: RenderThumbType;
+  vertical?: boolean;
+  adaptSpectrum?: boolean;
+  channel?: 'h' | 's' | 'v' | 'a';
+  thumbShape?: thumbShapeType;
+  thumbSize: number;
+};
+
+export type BuiltinThumbsProps = {
+  width: number;
+  height: number;
+  borderRadius: number;
+  thumbColor?: string;
+  adaptiveColor: SharedValue<string>;
+  handleStyle: {};
+  innerStyle?: {};
+  style?: {};
+  solidColor: AnimatedStyleProp<ViewStyle>;
+  renderThumb?: RenderThumbType;
+  vertical?: boolean;
+};
 
 export interface TCTX {
   /** Color's channels. */
@@ -62,7 +123,7 @@ export interface TCTX {
   thumbInnerStyle?: thumbInnerStyleType;
 
   /** A global prop for all sliders children. */
-  renderThumb?: renderThumbType;
+  renderThumb?: RenderThumbType;
 
   /** The initial color value as a `string` */
   value: string;
@@ -103,7 +164,7 @@ export interface ColorPickerProps {
   thumbInnerStyle?: thumbInnerStyleType;
 
   /** - a global function for rendering a thumb component based on ThumbProps. */
-  renderThumb?: renderThumbType;
+  renderThumb?: RenderThumbType;
 
   /** - color picker wrapper style. */
   style?: StyleProp<ViewStyle>;
@@ -188,7 +249,7 @@ export interface PanelProps {
   thumbInnerStyle?: thumbInnerStyleType;
 
   /** - function which receives ThumbProps and renders slider's handle (thumb). */
-  renderThumb?: renderThumbType;
+  renderThumb?: RenderThumbType;
 
   /**
    * - panle container style.
@@ -219,7 +280,7 @@ export interface SliderProps {
   thumbInnerStyle?: thumbInnerStyleType;
 
   /** - function which receives ThumbProps and renders slider's handle (thumb). */
-  renderThumb?: renderThumbType;
+  renderThumb?: RenderThumbType;
 
   /** - reverse slider direction. */
   reverse?: boolean;
