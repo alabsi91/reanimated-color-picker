@@ -3,12 +3,12 @@ import { View, Text, Pressable, Image } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 
 import { CTX } from '../../ColorPicker';
+import { styles } from '../../styles';
 import HexWidget from './Widgets/HexWidget';
 import RgbWidget from './Widgets/RgbWidget';
 import HslWidget from './Widgets/HslWidget';
 import HwbWidget from './Widgets/HwbWidget';
 import HsvWidget from './Widgets/HsvWidget';
-import styles from './style';
 
 import type { InputWidgetProps } from '../../types';
 
@@ -85,6 +85,7 @@ export function InputWidget({
         <View>
           <Pressable onPress={cycle}>
             <Image
+              // @ts-expect-error
               tintColor={iconColor}
               style={[styles.arrowButton, iconStyle]}
               source={require('../../assets/arrow-icon.png')}

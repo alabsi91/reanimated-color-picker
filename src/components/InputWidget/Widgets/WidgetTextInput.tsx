@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { View, TextInput, Text, Keyboard } from 'react-native';
 
 import { clamp } from '../../../utils';
-import styles from '../style';
+import { styles } from '../../../styles';
 
 import type { StyleProp, TextStyle } from 'react-native';
 import type { InputProps } from '../../../types';
