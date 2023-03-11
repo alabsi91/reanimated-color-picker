@@ -91,7 +91,7 @@ export function InputWidget({
               source={require('../../assets/arrow-icon.png')}
             />
           </Pressable>
-          <Text style={styles.inputTitle} />
+          <Text style={styles.inputTitle}> </Text>
         </View>
       )}
     </View>
