@@ -50,7 +50,7 @@ export type RenderThumbProps = {
   height: number;
 
   /**
-   * - The adaptiveColor is a type of `SharedValue<string>` that determines the color to be displayed based on the contrast ratio.
+   * - The `adaptiveColor` is a type of `SharedValue<string>` that determines the color to be displayed based on the contrast ratio.
    * - It can either be a `white` or `black` color.
    */
   adaptiveColor: SharedValue<string>;
