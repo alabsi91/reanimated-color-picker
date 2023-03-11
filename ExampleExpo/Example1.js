@@ -1,19 +1,8 @@
 import React, { useState } from 'react';
-import { Button, Modal, StyleSheet, View } from 'react-native';
-import ColorPicker, { Panel1, Swatches, Preview, OpacitySlider, HueSlider } from 'reanimated-color-picker';
+import { Button, KeyboardAvoidingView, Modal, ScrollView, StyleSheet, View } from 'react-native';
+import ColorPicker, { Panel1, Swatches, Preview, OpacitySlider, HueSlider, InputWidget } from 'reanimated-color-picker';
 
-const customSwatches = [
-  '#001219',
-  '#005f73',
-  '#0a9396',
-  '#94d2bd',
-  '#e9d8a6',
-  '#ee9b00',
-  '#ca6702',
-  '#bb3e03',
-  '#ae2012',
-  '#9b2226',
-];
+const customSwatches = ['#001219', '#005f73', '#0a9396', '#94d2bd', '#e9d8a6'];
 
 export default function Example1({ onSelectColor, color }) {
   const [showModal, setShowModal] = useState(false);
@@ -23,30 +12,39 @@ export default function Example1({ onSelectColor, color }) {
       <Button title='Color Picker 1' onPress={() => setShowModal(true)} />
 
       <Modal onRequestClose={() => setShowModal(false)} visible={showModal} animationType='slide'>
-        <View style={styles.container}>
+        <ScrollView style={styles.container} contentContainerStyle={{ flex: 1 }}>
           <ColorPicker
             value={color.value}
             sliderThickness={25}
             thumbSize={30}
-            style={{ width: '75%', justifyContent: 'center' }}
+            style={{ width: '75%', justifyContent: 'space-around' }}
             onComplete={onSelectColor}
           >
-            <Panel1 style={[{ height: 200, marginBottom: 30 }, styles.shadow]} />
+            <View style={{ flex: 1, justifyContent: 'center', gap: 30 }}>
+              <Panel1 style={styles.shadow} />
 
-            <View style={styles.hueOpacityPreviewContainer}>
-              <Preview style={[styles.previewStyle, styles.shadow]} hideInitialColor hideText />
+              <View style={styles.hueOpacityPreviewContainer}>
+                <Preview style={[styles.previewStyle, styles.shadow]} hideInitialColor hideText />
 
-              <View style={{ flexDirection: 'column', justifyContent: 'center', flex: 1 }}>
-                <HueSlider thumbShape='triangleDown' style={[{ marginBottom: 20 }, styles.shadow]} thumbColor='#00121a' />
-                <OpacitySlider thumbShape='triangleUp' style={styles.shadow} thumbColor='#00121a' />
+                <View style={{ flexDirection: 'column', justifyContent: 'center', flex: 1 }}>
+                  <HueSlider thumbShape='triangleDown' style={[{ marginBottom: 20 }, styles.shadow]} thumbColor='#00121a' />
+                  <OpacitySlider thumbShape='triangleUp' style={styles.shadow} thumbColor='#00121a' />
+                </View>
               </View>
+
+              <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={150}>
+                <InputWidget
+                  containerStyle={{ backgroundColor: '#e8e8e8', marginTop: 20 }}
+                  inputStyle={{ marginHorizontal: 5 }}
+                />
+              </KeyboardAvoidingView>
             </View>
 
-            <Swatches swatchStyle={styles.swatchStyle} colors={customSwatches} />
+            <Swatches style={styles.swatchesContainer} swatchStyle={styles.swatchStyle} colors={customSwatches} />
           </ColorPicker>
 
           <Button title='Close' onPress={() => setShowModal(false)} />
-        </View>
+        </ScrollView>
       </Modal>
     </>
   );
@@ -64,7 +62,7 @@ const styles = StyleSheet.create({
     flexWrap: 'nowrap',
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 60,
+    marginVertical: 30,
   },
   previewStyle: {
     width: 55,
@@ -72,12 +70,20 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     marginEnd: 20,
   },
+  swatchesContainer: {
+    flex: 0.25,
+    alignItems: 'center',
+    flexWrap: 'nowrap',
+    gap: 10,
+  },
   swatchStyle: {
     borderRadius: 20,
     height: 40,
     width: 40,
-    marginHorizontal: 10,
-    marginBottom: 15,
+    margin: 0,
+    marginBottom: 0,
+    marginHorizontal: 0,
+    marginVertical: 0,
   },
   shadow: {
     shadowColor: '#000',
