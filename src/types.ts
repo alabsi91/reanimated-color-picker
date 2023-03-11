@@ -27,15 +27,41 @@ export type thumbShapeType =
   | 'rect'
   | 'circle';
 
-type thumbStyleType = ViewStyle;
+type thumbStyleType = StyleProp<ViewStyle>;
 type thumbInnerStyleType = thumbStyleType;
 
 export type RenderThumbProps = {
+  /**
+   * - This style determines the position of the thumb and is a crucial element that should be included.
+   * - It should be tied to an `Reanimated` component, for example, `<Animated.View style={positionStyle} />`.
+   */
   positionStyle: StyleProp<ViewStyle | ImageStyle | TextStyle>;
+
+  /**
+   * - A `number` that determines the thumb's width in pixels and is important for thumb position calculation.
+   * - It's extracted from the `thumbSize` prop.
+   */
   width: number;
+
+  /**
+   * - A `number` that determines the thumb's height in pixels and is important for thumb position calculation.
+   * - It's extracted from the `thumbSize` prop.
+   */
   height: number;
+
+  /**
+   * - The adaptiveColor is a type of `SharedValue<string>` that determines the color to be displayed based on the contrast ratio.
+   * - It can either be a `white` or `black` color.
+   */
   adaptiveColor: SharedValue<string>;
+
+  /**
+   * - A `SharedValue` of type `string` that represents the current color.
+   * - This shared value will update whenever the color changes, but without the alpha channel.
+   */
   currentColor: SharedValue<string>;
+
+  /** - The initial color value as a `string` */
   initialColor: string;
 };
 
