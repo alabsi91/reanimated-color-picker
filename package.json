@@ -1,6 +1,6 @@
 {
   "name": "reanimated-color-picker",
-  "version": "1.3.2",
+  "version": "1.4.0",
   "description": "Pure JavaScript color picker for react-native",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
