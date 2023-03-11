@@ -2,8 +2,9 @@ import React, { useState, useContext } from 'react';
 import { Text, StyleSheet } from 'react-native';
 import { runOnJS, useDerivedValue } from 'react-native-reanimated';
 
-import type { PreviewTextProps } from '../types';
 import { CTX } from '../ColorPicker';
+
+import type { PreviewTextProps } from '../types';
 
 export function PreviewText({ style = {}, colorFormat = 'hex' }: PreviewTextProps) {
   const { returnedResults, hueValue, saturationValue, brightnessValue, alphaValue } = useContext(CTX);

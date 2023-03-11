@@ -1,6 +1,10 @@
 import React, { useContext } from 'react';
 import { View, StyleSheet, Pressable } from 'react-native';
 
+import { CTX } from '../ColorPicker';
+
+import type { SwatchesPorps } from '../types';
+
 const SWATCHES_COLORS = [
   '#f44336',
   '#E91E63',
@@ -22,9 +26,6 @@ const SWATCHES_COLORS = [
   '#9E9E9E',
   '#607D8B',
 ];
-
-import type { SwatchesPorps } from '../types';
-import { CTX } from '../ColorPicker';
 
 export function Swatches({ colors = SWATCHES_COLORS, style = {}, swatchStyle = {} }: SwatchesPorps) {
   const { setColor, onGestureChange, onGestureEnd } = useContext(CTX);

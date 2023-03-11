@@ -38,6 +38,14 @@ export const styles = StyleSheet.create({
 
     elevation: 5,
   },
+  triangle: {
+    width: 0,
+    height: 0,
+    backgroundColor: 'transparent',
+    borderStyle: 'solid',
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+  },
 
   // Input Widgets style
   container: {

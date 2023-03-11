@@ -1,8 +1,6 @@
-import { ReactElement } from 'react';
-import { StyleProp, TextStyle, ViewStyle, ImageStyle, TextInputProps } from 'react-native';
-import { SharedValue } from 'react-native-reanimated';
-import { AnyFormat } from './colorKit';
-import { ThumbProps } from './components/Thumbs';
+import type { StyleProp, TextStyle, ViewStyle, ImageStyle, TextInputProps } from 'react-native';
+import type { AnimatedStyleProp, SharedValue } from 'react-native-reanimated';
+import type { AnyFormat } from './colorKit';
 
 export interface returnedResults {
   hex: string;
@@ -31,7 +29,44 @@ export type thumbShapeType =
 
 type thumbStyleType = ViewStyle;
 type thumbInnerStyleType = thumbStyleType;
-type renderThumbType = (props: ThumbProps) => ReactElement;
+
+export type RenderThumbProps = {
+  positionStyle: StyleProp<ViewStyle | ImageStyle | TextStyle>;
+  width: number;
+  height: number;
+  adaptiveColor: SharedValue<string>;
+  currentColor: SharedValue<string>;
+  initialColor: string;
+};
+
+export type RenderThumbType = React.FC<RenderThumbProps>;
+
+export type ThumbProps = {
+  thumbColor?: string;
+  handleStyle: {};
+  innerStyle?: {};
+  style?: {};
+  renderThumb?: RenderThumbType;
+  vertical?: boolean;
+  adaptSpectrum?: boolean;
+  channel?: 'h' | 's' | 'v' | 'a';
+  thumbShape?: thumbShapeType;
+  thumbSize: number;
+};
+
+export type BuiltinThumbsProps = {
+  width: number;
+  height: number;
+  borderRadius: number;
+  thumbColor?: string;
+  adaptiveColor: SharedValue<string>;
+  handleStyle: {};
+  innerStyle?: {};
+  style?: {};
+  solidColor: AnimatedStyleProp<ViewStyle>;
+  renderThumb?: RenderThumbType;
+  vertical?: boolean;
+};
 
 export interface TCTX {
   /** Color's channels. */
@@ -62,7 +97,7 @@ export interface TCTX {
   thumbInnerStyle?: thumbInnerStyleType;
 
   /** A global prop for all sliders children. */
-  renderThumb?: renderThumbType;
+  renderThumb?: RenderThumbType;
 
   /** The initial color value as a `string` */
   value: string;
@@ -103,7 +138,7 @@ export interface ColorPickerProps {
   thumbInnerStyle?: thumbInnerStyleType;
 
   /** - a global function for rendering a thumb component based on ThumbProps. */
-  renderThumb?: renderThumbType;
+  renderThumb?: RenderThumbType;
 
   /** - color picker wrapper style. */
   style?: StyleProp<ViewStyle>;
@@ -188,7 +223,7 @@ export interface PanelProps {
   thumbInnerStyle?: thumbInnerStyleType;
 
   /** - function which receives ThumbProps and renders slider's handle (thumb). */
-  renderThumb?: renderThumbType;
+  renderThumb?: RenderThumbType;
 
   /**
    * - panle container style.
@@ -219,7 +254,7 @@ export interface SliderProps {
   thumbInnerStyle?: thumbInnerStyleType;
 
   /** - function which receives ThumbProps and renders slider's handle (thumb). */
-  renderThumb?: renderThumbType;
+  renderThumb?: RenderThumbType;
 
   /** - reverse slider direction. */
   reverse?: boolean;

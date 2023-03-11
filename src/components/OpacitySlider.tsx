@@ -8,13 +8,14 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+
+import Thumb from './Thumb/Thumb';
+import { CTX } from '../ColorPicker';
 import { clamp, getStyle, hsva2Hsla } from '../utils';
-import Thumb from './Thumbs';
 
 import type { LayoutChangeEvent } from 'react-native';
 import type { SliderProps } from '../types';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
-import { CTX } from '../ColorPicker';
 
 const isRtl = I18nManager.isRTL;
 
