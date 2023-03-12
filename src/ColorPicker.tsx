@@ -8,6 +8,13 @@ import colorKit from './colorKit';
 import type { AnyFormat } from './colorKit';
 import type { ColorPickerProps, TCTX } from './types';
 
+try {
+  const { enableExperimentalWebImplementation } = require('react-native-gesture-handler');
+  enableExperimentalWebImplementation(true);
+} catch (error) {
+  // ignore
+}
+
 export const CTX = createContext<TCTX>(null!);
 
 export default function ColorPicker({

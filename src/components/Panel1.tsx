@@ -1,13 +1,7 @@
 import React, { useContext, useCallback } from 'react';
 import { ImageBackground } from 'react-native';
-import { PanGestureHandler } from 'react-native-gesture-handler';
-import Animated, {
-  runOnJS,
-  useAnimatedGestureHandler,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
+import { GestureDetector, Gesture } from 'react-native-gesture-handler';
+import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import Thumb from './Thumb/Thumb';
 import { CTX } from '../ColorPicker';
@@ -57,7 +51,7 @@ export function Panel1({ thumbShape, thumbSize, thumbColor, renderThumb, thumbSt
 
   const activeColorStyle = useAnimatedStyle(() => ({ backgroundColor: `hsl(${hueValue.value}, 100%, 50%)` }));
 
-  const setValueFromGestureEvent = (event: PanGestureHandlerEventPayload) => {
+  const onGestureUpdate = (event: PanGestureHandlerEventPayload) => {
     'worklet';
     const posX = clamp(event.x, width.value),
       posY = clamp(event.y, height.value),
@@ -69,23 +63,21 @@ export function Panel1({ thumbShape, thumbSize, thumbColor, renderThumb, thumbSt
 
     runOnJS(onGestureChange)();
   };
+  const onGestureBegin = (event: PanGestureHandlerEventPayload) => {
+    'worklet';
+    handleScale.value = withTiming(1.2, { duration: 100 });
+    onGestureUpdate(event);
+  };
+  const onGestureFinish = () => {
+    'worklet';
+    handleScale.value = withTiming(1, { duration: 100 });
+    runOnJS(onGestureEnd)();
+  };
 
-  const gestureEvent = useAnimatedGestureHandler(
-    {
-      onStart: event => {
-        handleScale.value = withTiming(1.2, { duration: 100 });
-        setValueFromGestureEvent(event);
-      },
-      onActive: event => {
-        setValueFromGestureEvent(event);
-      },
-      onFinish: () => {
-        handleScale.value = withTiming(1, { duration: 100 });
-        runOnJS(onGestureEnd)();
-      },
-    },
-    [width.value, height.value]
-  );
+  const pan = Gesture.Pan().onBegin(onGestureBegin).onUpdate(onGestureUpdate).onEnd(onGestureFinish);
+  const tap = Gesture.Tap().onTouchesUp(onGestureFinish);
+  const longPress = Gesture.LongPress().onTouchesUp(onGestureFinish);
+  const composed = Gesture.Exclusive(pan, tap, longPress);
 
   const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
     width.value = Math.round(layout.width);
@@ -93,7 +85,7 @@ export function Panel1({ thumbShape, thumbSize, thumbColor, renderThumb, thumbSt
   }, []);
 
   return (
-    <PanGestureHandler onGestureEvent={gestureEvent} minDist={0}>
+    <GestureDetector gesture={composed}>
       <Animated.View
         onLayout={onLayout}
         style={[
@@ -121,6 +113,6 @@ export function Panel1({ thumbShape, thumbSize, thumbColor, renderThumb, thumbSt
           }}
         />
       </Animated.View>
-    </PanGestureHandler>
+    </GestureDetector>
   );
 }
