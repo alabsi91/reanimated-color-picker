@@ -44,7 +44,7 @@ export default function Thumb({
     'worklet';
     if (adaptSpectrum) {
       if (channel === 'a') {
-        return alphaValue.value > 0.7
+        return alphaValue.value > 0.5
           ? { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value }
           : { h: 0, s: 0, v: 70 };
       }
