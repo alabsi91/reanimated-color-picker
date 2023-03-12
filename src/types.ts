@@ -27,9 +27,6 @@ export type thumbShapeType =
   | 'rect'
   | 'circle';
 
-type thumbStyleType = StyleProp<ViewStyle>;
-type thumbInnerStyleType = thumbStyleType;
-
 export type RenderThumbProps = {
   /**
    * - This style determines the position of the thumb and is a crucial element that should be included.
@@ -117,10 +114,10 @@ export interface TCTX {
   thumbColor: string | undefined;
 
   /** A global prop for all sliders children. */
-  thumbStyle?: thumbStyleType;
+  thumbStyle?: StyleProp<ViewStyle>;
 
   /** A global style for all sliders children. */
-  thumbInnerStyle?: thumbInnerStyleType;
+  thumbInnerStyle?: StyleProp<ViewStyle>;
 
   /** A global prop for all sliders children. */
   renderThumb?: RenderThumbType;
@@ -158,10 +155,10 @@ export interface ColorPickerProps {
   thumbColor?: string;
 
   /** - a global property to change the style of the thumb's View for all descendant sliders components */
-  thumbStyle?: thumbStyleType;
+  thumbStyle?: StyleProp<ViewStyle>;
 
   /** - a global property to change the color of the thumb's inner View(s) for all descendant sliders components. */
-  thumbInnerStyle?: thumbInnerStyleType;
+  thumbInnerStyle?: StyleProp<ViewStyle>;
 
   /** - a global function for rendering a thumb component based on ThumbProps. */
   renderThumb?: RenderThumbType;
@@ -243,10 +240,10 @@ export interface PanelProps {
   thumbShape?: thumbShapeType;
 
   /** - slider's handle (thumb) outer View style. */
-  thumbStyle?: thumbStyleType;
+  thumbStyle?: StyleProp<ViewStyle>;
 
   /** - slider's handle (thumb) inner View style. */
-  thumbInnerStyle?: thumbInnerStyleType;
+  thumbInnerStyle?: StyleProp<ViewStyle>;
 
   /** - function which receives ThumbProps and renders slider's handle (thumb). */
   renderThumb?: RenderThumbType;
@@ -274,10 +271,10 @@ export interface SliderProps {
   thumbShape?: thumbShapeType;
 
   /** - slider's handle (thumb) outer View style. */
-  thumbStyle?: thumbStyleType;
+  thumbStyle?: StyleProp<ViewStyle>;
 
   /** - slider's handle (thumb) inner View style. */
-  thumbInnerStyle?: thumbInnerStyleType;
+  thumbInnerStyle?: StyleProp<ViewStyle>;
 
   /** - function which receives ThumbProps and renders slider's handle (thumb). */
   renderThumb?: RenderThumbType;
