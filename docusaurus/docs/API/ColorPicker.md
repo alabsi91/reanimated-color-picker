@@ -167,9 +167,3 @@ function MyCustomThumb({
 - The passed color object has the following properties: `hex`, `rgb`, `rgba`, `hsv`, `hsva`, `hwb`, `hwba`, `hsl`, and `hsla`
 - `type: (color: object) => void`
 - `default: null`
-
-:::caution
-
-As of `react-native-gesture-handler@2.9.0` the new web implementation does not support the events which trigger this callback.
-
-:::
