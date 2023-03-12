@@ -1,37 +1,36 @@
 import React, { useContext } from 'react';
-import { I18nManager } from 'react-native';
+import { I18nManager, StyleSheet } from 'react-native';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
-import Thumb from './Thumb/Thumb';
-import { CTX } from '../ColorPicker';
-import { clamp, getStyle, hsva2Hsla } from '../utils';
+import Thumb from '.././Thumb/Thumb';
+import { CTX } from '../../ColorPicker';
+import { clamp, getStyle, hsva2Hsla } from '../../utils';
 
 import type { LayoutChangeEvent } from 'react-native';
-import type { SliderProps } from '../types';
+import type { SliderProps } from '../../types';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
 const isRtl = I18nManager.isRTL;
 
-export function OpacitySlider({
+export function HueSlider({
   adaptSpectrum = false,
   thumbShape,
   thumbSize,
   thumbColor,
   renderThumb,
-  thumbStyle,
   thumbInnerStyle,
+  thumbStyle,
   style = {},
   vertical = false,
   reverse = false,
 }: SliderProps) {
   const {
-    alphaValue,
+    onGestureChange,
+    onGestureEnd,
     brightnessValue,
     hueValue,
     saturationValue,
-    onGestureChange,
-    onGestureEnd,
     sliderThickness,
     thumbSize: thumbsSize,
     thumbShape: thumbsShape,
@@ -59,7 +58,7 @@ export function OpacitySlider({
 
   const handleStyle = useAnimatedStyle(() => {
     const length = vertical ? height.value : width.value,
-      percent = alphaValue.value * length,
+      percent = (hueValue.value / 360) * length,
       pos = (reverse ? length - percent : percent) - thumb_size / 2,
       posY = vertical ? pos : height.value / 2 - thumb_size / 2,
       posX = vertical ? width.value / 2 - thumb_size / 2 : pos;
@@ -68,12 +67,11 @@ export function OpacitySlider({
     };
   }, [thumbSize, vertical, reverse]);
 
-  const activeColorStyle = useAnimatedStyle(() => ({
-    backgroundColor: hsva2Hsla(
-      hueValue.value,
-      adaptSpectrum ? saturationValue.value : 100,
-      adaptSpectrum ? brightnessValue.value : 100
-    ),
+  const activeSaturationStyle = useAnimatedStyle(() => ({
+    backgroundColor: hsva2Hsla(0, 0, brightnessValue.value, 1 - saturationValue.value / 100),
+  }));
+  const activeBrightnessStyle = useAnimatedStyle(() => ({
+    backgroundColor: hsva2Hsla(0, 0, 0, 1 - brightnessValue.value / 100),
   }));
 
   const onGestureUpdate = (event: PanGestureHandlerEventPayload) => {
@@ -82,10 +80,10 @@ export function OpacitySlider({
       posY = clamp(event.y, height.value),
       percentX = posX / width.value,
       percentY = posY / height.value,
-      valX = reverse ? 100 - Math.round(percentX * 100) : Math.round(percentX * 100),
-      valY = reverse ? 100 - Math.round(percentY * 100) : Math.round(percentY * 100);
+      valX = reverse ? 360 - Math.round(percentX * 360) : Math.round(percentX * 360),
+      valY = reverse ? 360 - Math.round(percentY * 360) : Math.round(percentY * 360);
 
-    alphaValue.value = (vertical ? valY : valX) / 100;
+    hueValue.value = vertical ? valY : valX;
 
     runOnJS(onGestureChange)();
   };
@@ -132,12 +130,18 @@ export function OpacitySlider({
     <GestureDetector gesture={composed}>
       <Animated.View
         onLayout={onLayout}
-        style={[{ borderRadius }, style, { position: 'relative', borderWidth: 0, padding: 0 }, thicknessStyle, activeColorStyle]}
+        style={[{ borderRadius }, style, thicknessStyle, { position: 'relative', borderWidth: 0, padding: 0 }]}
       >
-        <Animated.Image source={require('../assets/Opacity.png')} style={imageStyle} />
+        <Animated.Image source={require('../assets/Hue.png')} style={imageStyle} />
+        {adaptSpectrum && (
+          <>
+            <Animated.View style={[{ borderRadius }, activeSaturationStyle, StyleSheet.absoluteFillObject]} />
+            <Animated.View style={[{ borderRadius }, activeBrightnessStyle, StyleSheet.absoluteFillObject]} />
+          </>
+        )}
         <Thumb
           {...{
-            channel: 'a',
+            channel: 'h',
             thumbShape,
             thumbSize: thumb_size,
             thumbColor: thumb_color,

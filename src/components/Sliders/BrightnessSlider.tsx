@@ -3,12 +3,12 @@ import { I18nManager } from 'react-native';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
-import Thumb from './Thumb/Thumb';
-import { CTX } from '../ColorPicker';
-import { clamp, getStyle, hsva2Hsla } from '../utils';
+import Thumb from '.././Thumb/Thumb';
+import { CTX } from '../../ColorPicker';
+import { clamp, getStyle, hsva2Hsla } from '../../utils';
 
 import type { LayoutChangeEvent } from 'react-native';
-import type { SliderProps } from '../types';
+import type { SliderProps } from '../../types';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
 const isRtl = I18nManager.isRTL;
