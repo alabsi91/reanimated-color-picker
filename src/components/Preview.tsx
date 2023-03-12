@@ -3,7 +3,7 @@ import { View, Text, ImageBackground } from 'react-native';
 import Animated, { runOnJS, useAnimatedStyle, useDerivedValue, useSharedValue } from 'react-native-reanimated';
 
 import { CTX } from '../ColorPicker';
-import colorKit from '../colorKit';
+import colorKit from '../colorKit/colorKit';
 import { getStyle } from '../utils';
 
 import type { PreviewPorps } from '../types';

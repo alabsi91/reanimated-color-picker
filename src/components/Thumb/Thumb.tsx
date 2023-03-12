@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { runOnJS, useAnimatedStyle, useDerivedValue, useSharedValue } from 'react-native-reanimated';
 
 import BuiltinThumbs from './BuiltinThumbs/index';
-import colorKit from '../../colorKit';
+import colorKit from '../../colorKit/colorKit';
 import { CTX } from '../../ColorPicker';
 import { styles } from '../../styles';
 

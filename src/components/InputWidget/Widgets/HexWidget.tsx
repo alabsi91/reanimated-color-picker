@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { runOnJS, useDerivedValue } from 'react-native-reanimated';
 
-import colorKit from '../../../colorKit';
+import colorKit from '../../../colorKit/colorKit';
 import { WidgetProps } from '../../../types';
 import WidgetTextInput from './WidgetTextInput';
 

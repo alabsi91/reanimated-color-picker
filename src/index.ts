@@ -1,5 +1,5 @@
 import ColorPicker from './ColorPicker';
-import colorKit from './colorKit';
+import colorKit from './colorKit/colorKit';
 export default ColorPicker;
 
 export { Panel1 } from './components/Panels/Panel1';

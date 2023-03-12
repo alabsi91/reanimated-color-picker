@@ -1,7 +1,7 @@
 import React from 'react';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 
-import colorKit from '../../../colorKit';
+import colorKit from '../../../colorKit/colorKit';
 import { styles } from '../../../styles';
 import { BuiltinThumbsProps } from '../../../types';
 

@@ -3,9 +3,9 @@ import { Text, StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useSharedValue, withTiming } from 'react-native-reanimated';
 
-import colorKit from './colorKit';
+import colorKit from './colorKit/colorKit';
 
-import type { AnyFormat } from './colorKit';
+import type { AnyFormat } from './colorKit/types';
 import type { ColorPickerProps, TCTX } from './types';
 
 try {
