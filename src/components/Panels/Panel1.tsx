@@ -97,7 +97,7 @@ export function Panel1({ thumbShape, thumbSize, thumbColor, renderThumb, thumbSt
         ]}
       >
         <ImageBackground
-          source={require('../assets/Panel1.png')}
+          source={require('../../assets/Panel1.png')}
           style={[styles.panel_image, { borderRadius }]}
           resizeMode='stretch'
         />

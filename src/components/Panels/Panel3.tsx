@@ -90,7 +90,7 @@ export function Panel3({ thumbShape, thumbSize, thumbColor, renderThumb, thumbSt
         onLayout={onLayout}
         style={[styles.panel_container, style, { position: 'relative', aspectRatio: 1, borderWidth: 0, padding: 0 }, panelStyle]}
       >
-        <ImageBackground source={require('../assets/Panel3.png')} style={styles.panel_image} resizeMode='stretch' />
+        <ImageBackground source={require('../../assets/Panel3.png')} style={styles.panel_image} resizeMode='stretch' />
         <Thumb
           {...{
             channel: 's',

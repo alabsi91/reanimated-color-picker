@@ -132,7 +132,7 @@ export function HueSlider({
         onLayout={onLayout}
         style={[{ borderRadius }, style, thicknessStyle, { position: 'relative', borderWidth: 0, padding: 0 }]}
       >
-        <Animated.Image source={require('../assets/Hue.png')} style={imageStyle} />
+        <Animated.Image source={require('../../assets/Hue.png')} style={imageStyle} />
         {adaptSpectrum && (
           <>
             <Animated.View style={[{ borderRadius }, activeSaturationStyle, StyleSheet.absoluteFillObject]} />
