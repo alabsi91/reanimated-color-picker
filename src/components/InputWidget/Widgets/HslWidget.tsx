@@ -3,8 +3,9 @@ import { runOnJS, useDerivedValue } from 'react-native-reanimated';
 
 import colorKit from '../../../colorKit/colorKit';
 import { clamp } from '../../../utils';
-import { WidgetProps } from '../../../types';
 import WidgetTextInput from './WidgetTextInput';
+
+import type { WidgetProps } from '../../../types';
 
 export default function HslWidget({
   onChange,

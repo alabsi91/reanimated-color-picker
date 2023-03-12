@@ -3,7 +3,8 @@ import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 
 import colorKit from '../../../colorKit/colorKit';
 import { styles } from '../../../styles';
-import { BuiltinThumbsProps } from '../../../types';
+
+import type { BuiltinThumbsProps } from '../../../types';
 
 export default function Ring({
   width,
