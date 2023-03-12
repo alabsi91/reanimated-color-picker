@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useRef } from 'react';
-import { Text, StyleSheet } from 'react-native';
+import { Text, StyleSheet, Platform } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useSharedValue, withTiming } from 'react-native-reanimated';
 
@@ -8,11 +8,15 @@ import colorKit from './colorKit/colorKit';
 import type { AnyFormat } from './colorKit/types';
 import type { ColorPickerProps, TCTX } from './types';
 
-try {
-  const { enableExperimentalWebImplementation } = require('react-native-gesture-handler');
-  enableExperimentalWebImplementation(true);
-} catch (error) {
-  // ignore
+if (Platform.OS === 'web') {
+  // @ts-ignore
+  if (!global.setImmediate) global.setImmediate = setTimeout;
+  try {
+    const { enableExperimentalWebImplementation } = require('react-native-gesture-handler');
+    enableExperimentalWebImplementation(true);
+  } catch (error) {
+    // ignore
+  }
 }
 
 export const CTX = createContext<TCTX>(null!);
