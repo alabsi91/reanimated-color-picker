@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useContext } from 'react';
-import { View, Text, StyleSheet, ImageBackground } from 'react-native';
+import { View, Text, ImageBackground } from 'react-native';
 import Animated, { runOnJS, useAnimatedStyle, useDerivedValue, useSharedValue } from 'react-native-reanimated';
 
 import { CTX } from '../ColorPicker';
@@ -9,6 +9,7 @@ import { getStyle } from '../utils';
 import type { PreviewPorps } from '../types';
 import type { StyleProp, TextStyle } from 'react-native';
 import type { SharedValue } from 'react-native-reanimated';
+import { styles } from '../styles';
 
 const ReText = ({ text, style, hash }: { text: () => string; style: StyleProp<TextStyle>[]; hash: SharedValue<number>[] }) => {
   const [color, setColor] = useState(text());
@@ -22,7 +23,7 @@ const ReText = ({ text, style, hash }: { text: () => string; style: StyleProp<Te
     runOnJS(updateText)();
   });
 
-  return <Animated.Text style={[styles.previewText, ...style]}>{color}</Animated.Text>;
+  return <Animated.Text style={[styles.previewInitialText, ...style]}>{color}</Animated.Text>;
 };
 
 export function Preview({
@@ -73,7 +74,9 @@ export function Preview({
       {!hideInitialColor && (
         <View style={[styles.previewContainer, { backgroundColor: value, justifyContent }]}>
           {!hideText && (
-            <Text style={[{ color: initialColorText.color }, styles.previewText, textStyle]}>{initialColorText.formated}</Text>
+            <Text style={[{ color: initialColorText.color }, styles.previewInitialText, textStyle]}>
+              {initialColorText.formated}
+            </Text>
           )}
         </View>
       )}
@@ -83,21 +86,3 @@ export function Preview({
     </ImageBackground>
   );
 }
-
-const styles = StyleSheet.create({
-  previewWrapper: {
-    flexDirection: 'row',
-    height: 25,
-    borderRadius: 5,
-    overflow: 'hidden',
-  },
-  previewContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  previewText: {
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-});

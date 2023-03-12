@@ -110,6 +110,23 @@ export const styles = StyleSheet.create({
     elevation: 5,
   },
 
+  // Preview
+  previewWrapper: {
+    flexDirection: 'row',
+    height: 25,
+    borderRadius: 5,
+    overflow: 'hidden',
+  },
+  previewContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  previewInitialText: {
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+
   // PreviewText
   previewText: {
     fontWeight: 'bold',
