@@ -109,4 +109,11 @@ export const styles = StyleSheet.create({
 
     elevation: 5,
   },
+
+  // PreviewText
+  previewText: {
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: 'black',
+  },
 });
