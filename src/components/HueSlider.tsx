@@ -1,13 +1,7 @@
 import React, { useContext } from 'react';
 import { I18nManager, StyleSheet } from 'react-native';
-import { PanGestureHandler } from 'react-native-gesture-handler';
-import Animated, {
-  runOnJS,
-  useAnimatedGestureHandler,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
+import { GestureDetector, Gesture } from 'react-native-gesture-handler';
+import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import Thumb from './Thumb/Thumb';
 import { CTX } from '../ColorPicker';
@@ -80,7 +74,7 @@ export function HueSlider({
     backgroundColor: hsva2Hsla(0, 0, 0, 1 - brightnessValue.value / 100),
   }));
 
-  const setValueFromGestureEvent = (event: PanGestureHandlerEventPayload) => {
+  const onGestureUpdate = (event: PanGestureHandlerEventPayload) => {
     'worklet';
     const posX = clamp(event.x, width.value),
       posY = clamp(event.y, height.value),
@@ -93,23 +87,21 @@ export function HueSlider({
 
     runOnJS(onGestureChange)();
   };
+  const onGestureBegin = (event: PanGestureHandlerEventPayload) => {
+    'worklet';
+    handleScale.value = withTiming(1.2, { duration: 100 });
+    onGestureUpdate(event);
+  };
+  const onGestureFinish = () => {
+    'worklet';
+    handleScale.value = withTiming(1, { duration: 100 });
+    runOnJS(onGestureEnd)();
+  };
 
-  const gestureEvent = useAnimatedGestureHandler(
-    {
-      onStart: event => {
-        handleScale.value = withTiming(1.2, { duration: 100 });
-        setValueFromGestureEvent(event);
-      },
-      onActive: event => {
-        setValueFromGestureEvent(event);
-      },
-      onFinish: () => {
-        handleScale.value = withTiming(1, { duration: 100 });
-        runOnJS(onGestureEnd)();
-      },
-    },
-    [width.value, height.value, vertical, reverse]
-  );
+  const pan = Gesture.Pan().onBegin(onGestureBegin).onUpdate(onGestureUpdate).onEnd(onGestureFinish);
+  const tap = Gesture.Tap().onTouchesUp(onGestureFinish);
+  const longPress = Gesture.LongPress().onTouchesUp(onGestureFinish);
+  const composed = Gesture.Exclusive(pan, tap, longPress);
 
   const onLayout = ({ nativeEvent: { layout } }: LayoutChangeEvent) => {
     if (!vertical) width.value = withTiming(Math.round(layout.width), { duration: 5 });
@@ -135,7 +127,7 @@ export function HueSlider({
   const thicknessStyle = vertical ? { width: sliderThickness } : { height: sliderThickness };
 
   return (
-    <PanGestureHandler onGestureEvent={gestureEvent} minDist={0}>
+    <GestureDetector gesture={composed}>
       <Animated.View
         onLayout={onLayout}
         style={[{ borderRadius }, style, thicknessStyle, { position: 'relative', borderWidth: 0, padding: 0 }]}
@@ -162,6 +154,6 @@ export function HueSlider({
           }}
         />
       </Animated.View>
-    </PanGestureHandler>
+    </GestureDetector>
   );
 }
