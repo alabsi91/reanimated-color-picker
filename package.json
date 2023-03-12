@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "build": "@powershell rm lib -r && tsc && babel lib -d lib --out-file-extension .web.js --ignore lib/index.js,lib/types.js --source-maps && @powershell Copy-Item -Path src\\assets -Destination lib\\assets -Recurse",
+    "build": "node ./scripts/build.js",
     "prepublishOnly": "npm run build"
   },
   "keywords": [

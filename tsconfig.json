@@ -12,6 +12,6 @@
     "isolatedModules": true,
     "alwaysStrict": true,
     "skipLibCheck": true,
-    "sourceMap": true
+    // "sourceMap": true
   }
 }
