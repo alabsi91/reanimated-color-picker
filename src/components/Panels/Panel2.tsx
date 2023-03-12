@@ -3,13 +3,13 @@ import { ImageBackground } from 'react-native';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
-import Thumb from './Thumb/Thumb';
-import { clamp, getStyle } from '../utils';
-import { CTX } from '../ColorPicker';
-import { styles } from '../styles';
+import Thumb from '../Thumb/Thumb';
+import { clamp, getStyle } from '../../utils';
+import { CTX } from '../../ColorPicker';
+import { styles } from '../../styles';
 
 import type { LayoutChangeEvent } from 'react-native';
-import type { Panel2Props } from '../types';
+import type { Panel2Props } from '../../types';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
 export function Panel2({
