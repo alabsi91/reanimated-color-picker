@@ -1,7 +1,8 @@
 import React, { useContext } from 'react';
-import { View, StyleSheet, Pressable } from 'react-native';
+import { View, Pressable } from 'react-native';
 
 import { CTX } from '../ColorPicker';
+import { styles } from '../styles';
 
 import type { SwatchesPorps } from '../types';
 
@@ -48,29 +49,3 @@ export function Swatches({ colors = SWATCHES_COLORS, style = {}, swatchStyle = {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  swatcheContainer: {
-    alignSelf: 'stretch',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
-  swatch: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    marginHorizontal: 5,
-    marginBottom: 15,
-
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-
-    elevation: 5,
-  },
-});

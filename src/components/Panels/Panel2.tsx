@@ -3,20 +3,28 @@ import { ImageBackground } from 'react-native';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
-import Thumb from './Thumb/Thumb';
-import { CTX } from '../ColorPicker';
-import { clamp, getStyle } from '../utils';
-import { styles } from '../styles';
+import Thumb from '../Thumb/Thumb';
+import { clamp, getStyle } from '../../utils';
+import { CTX } from '../../ColorPicker';
+import { styles } from '../../styles';
 
 import type { LayoutChangeEvent } from 'react-native';
-import type { PanelProps } from '../types';
+import type { Panel2Props } from '../../types';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
-export function Panel1({ thumbShape, thumbSize, thumbColor, renderThumb, thumbStyle, thumbInnerStyle, style = {} }: PanelProps) {
+export function Panel2({
+  thumbColor,
+  renderThumb,
+  thumbShape,
+  thumbSize,
+  thumbStyle,
+  thumbInnerStyle,
+  reverse = false,
+  style = {},
+}: Panel2Props) {
   const {
     hueValue,
     saturationValue,
-    brightnessValue,
     onGestureChange,
     onGestureEnd,
     thumbSize: thumbsSize,
@@ -31,6 +39,7 @@ export function Panel1({ thumbShape, thumbSize, thumbColor, renderThumb, thumbSt
   const render_thumb = renderThumb ?? renderThumbs;
   const thumb_style = thumbStyle ?? thumbsStyle ?? {};
   const thumb_inner_style = thumbInnerStyle ?? thumbsInnerStyle ?? {};
+
   const borderRadius = getStyle(style, 'borderRadius') ?? 5;
   const getHeight = getStyle(style, 'height') ?? 200;
 
@@ -40,16 +49,12 @@ export function Panel1({ thumbShape, thumbSize, thumbColor, renderThumb, thumbSt
   const handleScale = useSharedValue(1);
 
   const handleStyle = useAnimatedStyle(() => {
-    const percentX = (saturationValue.value / 100) * width.value;
-    const posX = percentX - thumb_size / 2;
-    const percentY = (brightnessValue.value / 100) * height.value;
+    const percentX = (hueValue.value / 360) * width.value;
+    const posX = (reverse ? width.value - percentX : percentX) - thumb_size / 2;
+    const percentY = (saturationValue.value / 100) * height.value;
     const posY = height.value - percentY - thumb_size / 2;
-    return {
-      transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }],
-    };
-  }, [thumbSize]);
-
-  const activeColorStyle = useAnimatedStyle(() => ({ backgroundColor: `hsl(${hueValue.value}, 100%, 50%)` }));
+    return { transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }] };
+  }, [thumbSize, reverse]);
 
   const onGestureUpdate = (event: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -58,8 +63,8 @@ export function Panel1({ thumbShape, thumbSize, thumbColor, renderThumb, thumbSt
       percentX = posX / width.value,
       percentY = posY / height.value;
 
-    saturationValue.value = Math.round(percentX * 100);
-    brightnessValue.value = Math.round(100 - percentY * 100);
+    hueValue.value = reverse ? 360 - Math.round(percentX * 360) : Math.round(percentX * 360);
+    saturationValue.value = Math.round(100 - percentY * 100);
 
     runOnJS(onGestureChange)();
   };
@@ -88,21 +93,16 @@ export function Panel1({ thumbShape, thumbSize, thumbColor, renderThumb, thumbSt
     <GestureDetector gesture={composed}>
       <Animated.View
         onLayout={onLayout}
-        style={[
-          styles.panel_container,
-          { height: getHeight },
-          style,
-          { position: 'relative', borderWidth: 0, padding: 0 },
-          activeColorStyle,
-        ]}
+        style={[styles.panel_container, { height: getHeight }, style, { position: 'relative', borderWidth: 0, padding: 0 }]}
       >
         <ImageBackground
-          source={require('../assets/Panel1.png')}
-          style={[styles.panel_image, { borderRadius }]}
+          source={require('../../assets/Panel2.png')}
+          style={[styles.panel_image, { borderRadius, transform: [{ scaleX: reverse ? -1 : 1 }] }]}
           resizeMode='stretch'
         />
         <Thumb
           {...{
+            channel: 's',
             thumbShape,
             thumbSize: thumb_size,
             thumbColor: thumb_color,

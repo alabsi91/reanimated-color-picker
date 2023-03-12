@@ -1,19 +1,19 @@
 import React, { useContext } from 'react';
-import { I18nManager } from 'react-native';
+import { I18nManager, StyleSheet } from 'react-native';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
-import Thumb from './Thumb/Thumb';
-import { CTX } from '../ColorPicker';
-import { clamp, getStyle, hsva2Hsla } from '../utils';
+import Thumb from '.././Thumb/Thumb';
+import { CTX } from '../../ColorPicker';
+import { clamp, getStyle, hsva2Hsla } from '../../utils';
 
 import type { LayoutChangeEvent } from 'react-native';
-import type { SliderProps } from '../types';
+import type { SliderProps } from '../../types';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
 const isRtl = I18nManager.isRTL;
 
-export function OpacitySlider({
+export function SaturationSlider({
   adaptSpectrum = false,
   thumbShape,
   thumbSize,
@@ -26,10 +26,9 @@ export function OpacitySlider({
   reverse = false,
 }: SliderProps) {
   const {
-    alphaValue,
     brightnessValue,
-    hueValue,
     saturationValue,
+    hueValue,
     onGestureChange,
     onGestureEnd,
     sliderThickness,
@@ -59,7 +58,7 @@ export function OpacitySlider({
 
   const handleStyle = useAnimatedStyle(() => {
     const length = vertical ? height.value : width.value,
-      percent = alphaValue.value * length,
+      percent = (saturationValue.value / 100) * length,
       pos = (reverse ? length - percent : percent) - thumb_size / 2,
       posY = vertical ? pos : height.value / 2 - thumb_size / 2,
       posX = vertical ? width.value / 2 - thumb_size / 2 : pos;
@@ -69,11 +68,11 @@ export function OpacitySlider({
   }, [thumbSize, vertical, reverse]);
 
   const activeColorStyle = useAnimatedStyle(() => ({
-    backgroundColor: hsva2Hsla(
-      hueValue.value,
-      adaptSpectrum ? saturationValue.value : 100,
-      adaptSpectrum ? brightnessValue.value : 100
-    ),
+    backgroundColor: hsva2Hsla(hueValue.value, 100, 100),
+  }));
+
+  const activeBrightnessStyle = useAnimatedStyle(() => ({
+    backgroundColor: hsva2Hsla(0, 0, 0, 1 - brightnessValue.value / 100),
   }));
 
   const onGestureUpdate = (event: PanGestureHandlerEventPayload) => {
@@ -85,7 +84,7 @@ export function OpacitySlider({
       valX = reverse ? 100 - Math.round(percentX * 100) : Math.round(percentX * 100),
       valY = reverse ? 100 - Math.round(percentY * 100) : Math.round(percentY * 100);
 
-    alphaValue.value = (vertical ? valY : valX) / 100;
+    saturationValue.value = vertical ? valY : valX;
 
     runOnJS(onGestureChange)();
   };
@@ -124,7 +123,7 @@ export function OpacitySlider({
         { translateY: vertical ? imageTranslateY : 0 },
       ],
     };
-  }, [vertical, reverse, sliderThickness]);
+  }, [reverse, vertical, sliderThickness]);
 
   const thicknessStyle = vertical ? { width: sliderThickness } : { height: sliderThickness };
 
@@ -134,10 +133,11 @@ export function OpacitySlider({
         onLayout={onLayout}
         style={[{ borderRadius }, style, { position: 'relative', borderWidth: 0, padding: 0 }, thicknessStyle, activeColorStyle]}
       >
-        <Animated.Image source={require('../assets/Opacity.png')} style={imageStyle} />
+        <Animated.Image source={require('../../assets/Saturation.png')} style={imageStyle} />
+        {adaptSpectrum && <Animated.View style={[{ borderRadius }, activeBrightnessStyle, StyleSheet.absoluteFillObject]} />}
         <Thumb
           {...{
-            channel: 'a',
+            channel: 's',
             thumbShape,
             thumbSize: thumb_size,
             thumbColor: thumb_color,

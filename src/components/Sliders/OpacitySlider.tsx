@@ -3,17 +3,17 @@ import { I18nManager } from 'react-native';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
-import Thumb from './Thumb/Thumb';
-import { CTX } from '../ColorPicker';
-import { clamp, getStyle, hsva2Hsla } from '../utils';
+import Thumb from '.././Thumb/Thumb';
+import { CTX } from '../../ColorPicker';
+import { clamp, getStyle, hsva2Hsla } from '../../utils';
 
 import type { LayoutChangeEvent } from 'react-native';
-import type { SliderProps } from '../types';
+import type { SliderProps } from '../../types';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
 const isRtl = I18nManager.isRTL;
 
-export function BrightnessSlider({
+export function OpacitySlider({
   adaptSpectrum = false,
   thumbShape,
   thumbSize,
@@ -26,6 +26,7 @@ export function BrightnessSlider({
   reverse = false,
 }: SliderProps) {
   const {
+    alphaValue,
     brightnessValue,
     hueValue,
     saturationValue,
@@ -58,7 +59,7 @@ export function BrightnessSlider({
 
   const handleStyle = useAnimatedStyle(() => {
     const length = vertical ? height.value : width.value,
-      percent = (brightnessValue.value / 100) * length,
+      percent = alphaValue.value * length,
       pos = (reverse ? length - percent : percent) - thumb_size / 2,
       posY = vertical ? pos : height.value / 2 - thumb_size / 2,
       posX = vertical ? width.value / 2 - thumb_size / 2 : pos;
@@ -68,7 +69,11 @@ export function BrightnessSlider({
   }, [thumbSize, vertical, reverse]);
 
   const activeColorStyle = useAnimatedStyle(() => ({
-    backgroundColor: hsva2Hsla(hueValue.value, adaptSpectrum ? saturationValue.value : 100, 100),
+    backgroundColor: hsva2Hsla(
+      hueValue.value,
+      adaptSpectrum ? saturationValue.value : 100,
+      adaptSpectrum ? brightnessValue.value : 100
+    ),
   }));
 
   const onGestureUpdate = (event: PanGestureHandlerEventPayload) => {
@@ -80,7 +85,7 @@ export function BrightnessSlider({
       valX = reverse ? 100 - Math.round(percentX * 100) : Math.round(percentX * 100),
       valY = reverse ? 100 - Math.round(percentY * 100) : Math.round(percentY * 100);
 
-    brightnessValue.value = vertical ? valY : valX;
+    alphaValue.value = (vertical ? valY : valX) / 100;
 
     runOnJS(onGestureChange)();
   };
@@ -129,10 +134,10 @@ export function BrightnessSlider({
         onLayout={onLayout}
         style={[{ borderRadius }, style, { position: 'relative', borderWidth: 0, padding: 0 }, thicknessStyle, activeColorStyle]}
       >
-        <Animated.Image source={require('../assets/Brightness.png')} style={imageStyle} />
+        <Animated.Image source={require('../../assets/Opacity.png')} style={imageStyle} />
         <Thumb
           {...{
-            channel: 'v',
+            channel: 'a',
             thumbShape,
             thumbSize: thumb_size,
             thumbColor: thumb_color,

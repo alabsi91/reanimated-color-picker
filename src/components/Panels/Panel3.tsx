@@ -3,25 +3,16 @@ import { ImageBackground } from 'react-native';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
-import Thumb from './Thumb/Thumb';
-import { clamp, getStyle } from '../utils';
-import { CTX } from '../ColorPicker';
-import { styles } from '../styles';
+import Thumb from '../Thumb/Thumb';
+import { CTX } from '../../ColorPicker';
+import { clamp } from '../../utils';
+import { styles } from '../../styles';
 
 import type { LayoutChangeEvent } from 'react-native';
-import type { Panel2Props } from '../types';
+import type { PanelProps } from '../../types';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
-export function Panel2({
-  thumbColor,
-  renderThumb,
-  thumbShape,
-  thumbSize,
-  thumbStyle,
-  thumbInnerStyle,
-  reverse = false,
-  style = {},
-}: Panel2Props) {
+export function Panel3({ thumbShape, thumbSize, thumbColor, renderThumb, thumbStyle, thumbInnerStyle, style = {} }: PanelProps) {
   const {
     hueValue,
     saturationValue,
@@ -40,31 +31,34 @@ export function Panel2({
   const thumb_style = thumbStyle ?? thumbsStyle ?? {};
   const thumb_inner_style = thumbInnerStyle ?? thumbsInnerStyle ?? {};
 
-  const borderRadius = getStyle(style, 'borderRadius') ?? 5;
-  const getHeight = getStyle(style, 'height') ?? 200;
-
   const width = useSharedValue(0);
-  const height = useSharedValue(0);
+  const borderRadius = useSharedValue(0);
+  const panelStyle = useAnimatedStyle(() => ({ borderRadius: borderRadius.value }), [thumbSize]);
 
   const handleScale = useSharedValue(1);
 
   const handleStyle = useAnimatedStyle(() => {
-    const percentX = (hueValue.value / 360) * width.value;
-    const posX = (reverse ? width.value - percentX : percentX) - thumb_size / 2;
-    const percentY = (saturationValue.value / 100) * height.value;
-    const posY = height.value - percentY - thumb_size / 2;
-    return { transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }] };
-  }, [thumbSize, reverse]);
+    const center = width.value / 2,
+      distance = (saturationValue.value / 100) * (width.value / 2),
+      posY = width.value - Math.round(Math.sin((hueValue.value * Math.PI) / 180) * distance + center) - thumb_size / 2,
+      posX = width.value - Math.round(Math.cos((hueValue.value * Math.PI) / 180) * distance + center) - thumb_size / 2;
+    return {
+      transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }],
+    };
+  }, [thumbSize]);
 
   const onGestureUpdate = (event: PanGestureHandlerEventPayload) => {
     'worklet';
-    const posX = clamp(event.x, width.value),
-      posY = clamp(event.y, height.value),
-      percentX = posX / width.value,
-      percentY = posY / height.value;
+    const center = width.value / 2,
+      dx = center - event.x,
+      dy = center - event.y,
+      radius = clamp(Math.sqrt(dx * dx + dy * dy), width.value / 2), // distance from center
+      theta = Math.atan2(dy, dx) * (180 / Math.PI), // [0 - 180] range
+      angle = theta < 0 ? 360 + theta : theta, // [0 - 360] range
+      radiusPercent = radius / (width.value / 2);
 
-    hueValue.value = reverse ? 360 - Math.round(percentX * 360) : Math.round(percentX * 360);
-    saturationValue.value = Math.round(100 - percentY * 100);
+    hueValue.value = Math.round(angle);
+    saturationValue.value = Math.round(radiusPercent * 100);
 
     runOnJS(onGestureChange)();
   };
@@ -85,21 +79,18 @@ export function Panel2({
   const composed = Gesture.Exclusive(pan, tap, longPress);
 
   const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
-    width.value = Math.round(layout.width);
-    height.value = Math.round(layout.height);
+    const layoutWidth = Math.round(layout.width);
+    width.value = layoutWidth;
+    borderRadius.value = withTiming(layoutWidth / 2, { duration: 5 });
   }, []);
 
   return (
     <GestureDetector gesture={composed}>
       <Animated.View
         onLayout={onLayout}
-        style={[styles.panel_container, { height: getHeight }, style, { position: 'relative', borderWidth: 0, padding: 0 }]}
+        style={[styles.panel_container, style, { position: 'relative', aspectRatio: 1, borderWidth: 0, padding: 0 }, panelStyle]}
       >
-        <ImageBackground
-          source={require('../assets/Panel2.png')}
-          style={[styles.panel_image, { borderRadius, transform: [{ scaleX: reverse ? -1 : 1 }] }]}
-          resizeMode='stretch'
-        />
+        <ImageBackground source={require('../../assets/Panel3.png')} style={styles.panel_image} resizeMode='stretch' />
         <Thumb
           {...{
             channel: 's',

@@ -1,8 +1,9 @@
 import React, { useState, useContext } from 'react';
-import { Text, StyleSheet } from 'react-native';
+import { Text } from 'react-native';
 import { runOnJS, useDerivedValue } from 'react-native-reanimated';
 
 import { CTX } from '../ColorPicker';
+import { styles } from '../styles';
 
 import type { PreviewTextProps } from '../types';
 
@@ -23,11 +24,3 @@ export function PreviewText({ style = {}, colorFormat = 'hex' }: PreviewTextProp
 
   return <Text style={[styles.previewText, style]}>{text}</Text>;
 }
-
-const styles = StyleSheet.create({
-  previewText: {
-    fontWeight: 'bold',
-    textAlign: 'center',
-    color: 'black',
-  },
-});
