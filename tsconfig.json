@@ -1,17 +1,17 @@
 {
   "extends": "@tsconfig/react-native/tsconfig.json",
   "include": ["src/**/*"],
+  "exclude": ["Example", "ExampleExpo", "scripts", "docusaurus", "docs"],
 
   "compilerOptions": {
     "types": ["react-native"],
     "noEmit": false,
-    "outDir": "lib",
     "declaration": true,
     "module": "ESNext",
     "target": "ESNext",
     "isolatedModules": true,
     "alwaysStrict": true,
     "skipLibCheck": true,
-    // "sourceMap": true
+    "importsNotUsedAsValues": "error"
   }
 }

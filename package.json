@@ -2,8 +2,11 @@
   "name": "reanimated-color-picker",
   "version": "1.5.0",
   "description": "A Pure JavaScript Color Picker for React Native",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "lib/commonjs/index",
+  "module": "lib/module/index",
+  "react-native": "src/index",
+  "source": "src/index",
+  "types": "lib/typescript/index.d.ts",
   "scripts": {
     "build": "node ./scripts/build.js",
     "prepublishOnly": "npm run build"
@@ -17,6 +20,7 @@
     "palette"
   ],
   "files": [
+    "src",
     "lib"
   ],
   "repository": "https://github.com/alabsi91/reanimated-color-picker",
@@ -29,12 +33,14 @@
   "devDependencies": {
     "@babel/cli": "^7.18.6",
     "@babel/core": "^7.12.9",
+    "@babel/preset-env": "^7.20.2",
+    "@babel/preset-react": "^7.18.6",
+    "@babel/preset-typescript": "^7.21.0",
     "@react-native-community/eslint-config": "^3.1.0",
     "@tsconfig/react-native": "^2.0.2",
     "@types/react-native": "^0.70.4",
-    "metro-react-native-babel-preset": "^0.67.0",
     "prettier": "2.8.4",
-    "react-native-reanimated": "^2.9.1",
+    "react-native-reanimated": "^2.8.0",
     "typescript": "^4.8.4"
   },
   "peerDependencies": {

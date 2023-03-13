@@ -5,91 +5,81 @@ const { exec } = require('child_process');
 const util = require('util');
 const execPromise = util.promisify(exec);
 
-async function cleanLibFolder() {
-  const isExists = existsSync('lib');
+const outDir = 'lib',
+  sourceDir = 'src',
+  modulePath = path.join(outDir, 'module'),
+  commonjsPath = path.join(outDir, 'commonjs'),
+  typescriptPath = path.join(outDir, 'typescript'),
+  babelModuleConfigPath = path.join('scripts', 'babel-module.json'),
+  babelCommonjsConfigPath = path.join('scripts', 'babel-commonjs.json');
+
+async function cleanOutDirectory() {
+  const isExists = existsSync(outDir);
   if (!isExists) return;
-  await fs.rm('lib', { recursive: true });
-}
-
-async function getNoneJsxFiles() {
-  const files = await recursiveSearch();
-
-  const tsFiles = [];
-  for (let i = 0; i < files.length; i++) {
-    const file = files[i];
-    if (path.extname(file) === '.ts') tsFiles.push(file);
-  }
-
-  const jsFiles = tsFiles.map(file => file.replace(/\.ts$/g, '.js'));
-
-  return jsFiles;
+  await fs.rm(outDir, { recursive: true });
 }
 
 async function buildTypescript() {
-  await execPromise('npx tsc');
+  await execPromise(`npx tsc --declarationDir ${typescriptPath} --emitDeclarationOnly`);
 }
 
-async function buildWithBabelForWeb() {
-  const jsFiles = await getNoneJsxFiles();
-  const ignore = jsFiles.map(e => e.replace(/^src/g, 'lib')).join(',');
-  await execPromise(`npx babel lib -d lib --out-file-extension .web.js --ignore ${ignore}`);
+async function buildModuleJs() {
+  await execPromise(
+    `npx babel --config-file ./${babelModuleConfigPath} --out-dir ${modulePath} ${sourceDir} --extensions ".ts,.tsx" --source-maps --copy-files`
+  );
 }
 
-async function recursiveSearch(dirPath = 'src', fileList = []) {
-  const files = await fs.readdir(dirPath);
-
-  for (let i = 0; i < files.length; i++) {
-    const file = files[i];
-    const filePath = path.join(dirPath, file);
-    const stat = await fs.stat(filePath);
-
-    if (stat.isDirectory()) {
-      await recursiveSearch(filePath, fileList);
-      continue;
-    }
-
-    fileList.push(filePath);
-  }
-
-  return fileList;
+async function buildCommonJs() {
+  await execPromise(
+    `npx babel --config-file ./${babelCommonjsConfigPath} --out-dir ${commonjsPath} ${sourceDir} --extensions ".ts,.tsx" --source-maps --copy-files`
+  );
 }
 
-async function copyAssets() {
-  await fs.cp(path.join('src', 'assets'), path.join('lib', 'assets'), { recursive: true });
+async function prettier() {
+  const buildDir = path.join(outDir, '**/*.js');
+  await execPromise(`npx prettier --write ${buildDir}`);
 }
 
-async function cli() {
+async function build() {
   try {
-    console.log('🧹 Cleaning the "lib" folder ...');
-    await cleanLibFolder();
+    console.log(`🧹 Cleaning the "${outDir}" folder ...\n`);
+    await cleanOutDirectory();
   } catch (error) {
-    console.log(error);
-    return;
+    console.error('⛔', error.stdout);
+    process.exit(1);
   }
 
   try {
-    console.log('📦 Compiling Typescript files ...');
+    console.log('📦 Generating Typescript .d.ts files ...\n');
     await buildTypescript();
   } catch (error) {
-    console.log(error);
-    return;
+    console.error('⛔', error.stdout);
+    process.exit(1);
   }
 
   try {
-    console.log('📦 Compiling JavaScript files for the Web platform ...');
-    await buildWithBabelForWeb();
+    console.log('📦 Compiling JavaScript module files ...\n');
+    await buildModuleJs();
   } catch (error) {
-    console.log(error);
-    return;
+    console.error('⛔', error.stderr);
+    process.exit(1);
   }
 
   try {
-    console.log('📄 Copying assets ...');
-    await copyAssets();
+    console.log('📦 Compiling JavaScript commonjs files ...\n');
+    await buildCommonJs();
   } catch (error) {
-    console.log(error);
-    return;
+    console.error('⛔', error.stderr);
+    process.exit(1);
+  }
+
+  try {
+    console.log('💄 Formating files with Prettier ...\n');
+    await prettier();
+  } catch (error) {
+    console.error(error);
+    process.exit(1);
   }
 }
 
-cli();
+build();
