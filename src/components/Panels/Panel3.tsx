@@ -43,7 +43,12 @@ export function Panel3({ thumbShape, thumbSize, thumbColor, renderThumb, thumbSt
       posY = width.value - Math.round(Math.sin((hueValue.value * Math.PI) / 180) * distance + center) - thumb_size / 2,
       posX = width.value - Math.round(Math.cos((hueValue.value * Math.PI) / 180) * distance + center) - thumb_size / 2;
     return {
-      transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }],
+      transform: [
+        { translateX: posX },
+        { translateY: posY },
+        { scale: handleScale.value },
+        { rotate: hueValue.value + 90 + 'deg' },
+      ],
     };
   }, [thumbSize]);
 
