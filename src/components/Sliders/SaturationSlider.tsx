@@ -21,6 +21,7 @@ export function SaturationSlider({
   renderThumb: localRenderThumb,
   thumbStyle: localThumbStyle,
   thumbInnerStyle: localThumbInnerStyle,
+  sliderThickness: localSliderThickness,
   style = {},
   vertical = false,
   reverse = false,
@@ -31,13 +32,13 @@ export function SaturationSlider({
     hueValue,
     onGestureChange,
     onGestureEnd,
-    sliderThickness,
     thumbSize: globalThumbsSize,
     thumbShape: globalThumbsShape,
     thumbColor: globalThumbsColor,
     renderThumb: globalRenderThumbs,
     thumbStyle: globalThumbsStyle,
     thumbInnerStyle: globalThumbsInnerStyle,
+    sliderThickness: globalSliderThickness,
   } = useContext(CTX);
 
   const thumbShape = localThumbShape ?? globalThumbsShape,
@@ -45,7 +46,8 @@ export function SaturationSlider({
     thumbColor = localThumbColor ?? globalThumbsColor,
     renderThumb = localRenderThumb ?? globalRenderThumbs,
     thumbStyle = localThumbStyle ?? globalThumbsStyle ?? {},
-    thumbInnerStyle = localThumbInnerStyle ?? globalThumbsInnerStyle ?? {};
+    thumbInnerStyle = localThumbInnerStyle ?? globalThumbsInnerStyle ?? {},
+    sliderThickness = localSliderThickness ?? globalSliderThickness;
 
   const borderRadius = getStyle(style, 'borderRadius') ?? 5,
     getWidth = getStyle(style, 'width'),

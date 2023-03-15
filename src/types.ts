@@ -279,6 +279,9 @@ export interface SliderProps {
   /** - function which receives ThumbProps and renders slider's handle (thumb). */
   renderThumb?: RenderThumbType;
 
+  /** - thickness is the width of the slider in vertical mode or the height in horizontal mode. */
+  sliderThickness?: number;
+
   /** - reverse slider direction. */
   reverse?: boolean;
 

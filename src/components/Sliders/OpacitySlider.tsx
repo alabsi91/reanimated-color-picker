@@ -21,6 +21,7 @@ export function OpacitySlider({
   renderThumb: localRenderThumb,
   thumbStyle: localThumbStyle,
   thumbInnerStyle: localThumbInnerStyle,
+  sliderThickness: localSliderThickness,
   style = {},
   vertical = false,
   reverse = false,
@@ -32,13 +33,13 @@ export function OpacitySlider({
     saturationValue,
     onGestureChange,
     onGestureEnd,
-    sliderThickness,
     thumbSize: globalThumbsSize,
     thumbShape: globalThumbsShape,
     thumbColor: globalThumbsColor,
     renderThumb: globalRenderThumbs,
     thumbStyle: globalThumbsStyle,
     thumbInnerStyle: globalThumbsInnerStyle,
+    sliderThickness: globalSliderThickness,
   } = useContext(CTX);
 
   const thumbShape = localThumbShape ?? globalThumbsShape,
@@ -46,7 +47,8 @@ export function OpacitySlider({
     thumbColor = localThumbColor ?? globalThumbsColor,
     renderThumb = localRenderThumb ?? globalRenderThumbs,
     thumbStyle = localThumbStyle ?? globalThumbsStyle ?? {},
-    thumbInnerStyle = localThumbInnerStyle ?? globalThumbsInnerStyle ?? {};
+    thumbInnerStyle = localThumbInnerStyle ?? globalThumbsInnerStyle ?? {},
+    sliderThickness = localSliderThickness ?? globalSliderThickness;
 
   const borderRadius = getStyle(style, 'borderRadius') ?? 5,
     getWidth = getStyle(style, 'width'),

@@ -21,6 +21,7 @@ export function BrightnessSlider({
   renderThumb: localRenderThumb,
   thumbStyle: localThumbStyle,
   thumbInnerStyle: localThumbInnerStyle,
+  sliderThickness: localSliderThickness,
   style = {},
   vertical = false,
   reverse = false,
@@ -31,13 +32,13 @@ export function BrightnessSlider({
     saturationValue,
     onGestureChange,
     onGestureEnd,
-    sliderThickness,
     thumbSize: globalThumbSize,
     thumbShape: globalThumbShape,
     thumbColor: globalThumbColor,
     renderThumb: globalRenderThumb,
     thumbStyle: globalThumbStyle,
     thumbInnerStyle: globalThumbInnerStyle,
+    sliderThickness: globalSliderThickness,
   } = useContext(CTX);
 
   const thumbShape = localThumbShape ?? globalThumbShape,
@@ -45,7 +46,8 @@ export function BrightnessSlider({
     thumbColor = localThumbColor ?? globalThumbColor,
     renderThumb = localRenderThumb ?? globalRenderThumb,
     thumbStyle = localThumbStyle ?? globalThumbStyle ?? {},
-    thumbInnerStyle = localThumbInnerStyle ?? globalThumbInnerStyle ?? {};
+    thumbInnerStyle = localThumbInnerStyle ?? globalThumbInnerStyle ?? {},
+    sliderThickness = localSliderThickness ?? globalSliderThickness;
 
   const borderRadius = getStyle(style, 'borderRadius') ?? 5,
     getWidth = getStyle(style, 'width'),
