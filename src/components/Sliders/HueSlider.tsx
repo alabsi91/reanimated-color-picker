@@ -15,12 +15,12 @@ const isRtl = I18nManager.isRTL;
 
 export function HueSlider({
   adaptSpectrum = false,
-  thumbShape,
-  thumbSize,
-  thumbColor,
-  renderThumb,
-  thumbInnerStyle,
-  thumbStyle,
+  thumbShape: localThumbShape,
+  thumbSize: localThumbSize,
+  thumbColor: localThumbColor,
+  renderThumb: localRenderThumb,
+  thumbInnerStyle: localThumbInnerStyle,
+  thumbStyle: localThumbStyle,
   style = {},
   vertical = false,
   reverse = false,
@@ -32,40 +32,40 @@ export function HueSlider({
     hueValue,
     saturationValue,
     sliderThickness,
-    thumbSize: thumbsSize,
-    thumbShape: thumbsShape,
-    thumbColor: thumbsColor,
-    renderThumb: renderThumbs,
-    thumbStyle: thumbsStyle,
-    thumbInnerStyle: thumbsInnerStyle,
+    thumbSize: globalThumbSize,
+    thumbShape: globalThumbShape,
+    thumbColor: globalThumbColor,
+    renderThumb: globalRenderThumb,
+    thumbStyle: globalThumbStyle,
+    thumbInnerStyle: globalThumbInnerStyle,
   } = useContext(CTX);
 
-  thumbShape = thumbShape ?? thumbsShape;
-  const thumb_size = thumbSize ?? thumbsSize;
-  const thumb_color = thumbColor ?? thumbsColor;
-  const render_thumb = renderThumb ?? renderThumbs;
-  const thumb_style = thumbStyle ?? thumbsStyle ?? {};
-  const thumb_inner_style = thumbInnerStyle ?? thumbsInnerStyle ?? {};
+  const thumbShape = localThumbShape ?? globalThumbShape,
+    thumbSize = localThumbSize ?? globalThumbSize,
+    thumbColor = localThumbColor ?? globalThumbColor,
+    renderThumb = localRenderThumb ?? globalRenderThumb,
+    thumbStyle = localThumbStyle ?? globalThumbStyle ?? {},
+    thumbInnerStyle = localThumbInnerStyle ?? globalThumbInnerStyle ?? {};
 
-  const borderRadius = getStyle(style, 'borderRadius') ?? 5;
-  const getWidth = getStyle(style, 'width');
-  const getHeight = getStyle(style, 'height');
+  const borderRadius = getStyle(style, 'borderRadius') ?? 5,
+    getWidth = getStyle(style, 'width'),
+    getHeight = getStyle(style, 'height');
 
-  const width = useSharedValue(vertical ? sliderThickness : typeof getWidth === 'number' ? getWidth : 0);
-  const height = useSharedValue(!vertical ? sliderThickness : typeof getHeight === 'number' ? getHeight : 0);
+  const width = useSharedValue(vertical ? sliderThickness : typeof getWidth === 'number' ? getWidth : 0),
+    height = useSharedValue(!vertical ? sliderThickness : typeof getHeight === 'number' ? getHeight : 0);
 
   const handleScale = useSharedValue(1);
 
   const handleStyle = useAnimatedStyle(() => {
     const length = vertical ? height.value : width.value,
       percent = (hueValue.value / 360) * length,
-      pos = (reverse ? length - percent : percent) - thumb_size / 2,
-      posY = vertical ? pos : height.value / 2 - thumb_size / 2,
-      posX = vertical ? width.value / 2 - thumb_size / 2 : pos;
+      pos = (reverse ? length - percent : percent) - thumbSize / 2,
+      posY = vertical ? pos : height.value / 2 - thumbSize / 2,
+      posX = vertical ? width.value / 2 - thumbSize / 2 : pos;
     return {
       transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }],
     };
-  }, [thumbSize, vertical, reverse]);
+  }, [localThumbSize, vertical, reverse]);
 
   const activeSaturationStyle = useAnimatedStyle(() => ({
     backgroundColor: hsva2Hsla(0, 0, brightnessValue.value, 1 - saturationValue.value / 100),
@@ -143,12 +143,12 @@ export function HueSlider({
           {...{
             channel: 'h',
             thumbShape,
-            thumbSize: thumb_size,
-            thumbColor: thumb_color,
-            renderThumb: render_thumb,
+            thumbSize,
+            thumbColor,
+            renderThumb,
             handleStyle,
-            innerStyle: thumb_inner_style,
-            style: thumb_style,
+            innerStyle: thumbInnerStyle,
+            style: thumbStyle,
             vertical,
             adaptSpectrum,
           }}

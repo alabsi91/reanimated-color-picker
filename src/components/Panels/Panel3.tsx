@@ -12,36 +12,46 @@ import type { LayoutChangeEvent } from 'react-native';
 import type { PanelProps } from '../../types';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
-export function Panel3({ thumbShape, thumbSize, thumbColor, renderThumb, thumbStyle, thumbInnerStyle, style = {} }: PanelProps) {
+export function Panel3({
+  thumbShape: localThumbShape,
+  thumbSize: localThumbSize,
+  thumbColor: localThumbColor,
+  renderThumb: localRenderThumb,
+  thumbStyle: localThumbStyle,
+  thumbInnerStyle: localThumbInnerStyle,
+  style = {},
+}: PanelProps) {
   const {
     hueValue,
     saturationValue,
     onGestureChange,
     onGestureEnd,
-    thumbSize: thumbsSize,
-    thumbColor: thumbsColor,
-    renderThumb: renderThumbs,
-    thumbStyle: thumbsStyle,
-    thumbInnerStyle: thumbsInnerStyle,
+    thumbSize: globalThumbsSize,
+    thumbShape: globalThumbShape,
+    thumbColor: globalThumbsColor,
+    renderThumb: globalRenderThumbs,
+    thumbStyle: globalThumbsStyle,
+    thumbInnerStyle: globalThumbsInnerStyle,
   } = useContext(CTX);
 
-  const thumb_size = thumbSize ?? thumbsSize;
-  const thumb_color = thumbColor ?? thumbsColor;
-  const render_thumb = renderThumb ?? renderThumbs;
-  const thumb_style = thumbStyle ?? thumbsStyle ?? {};
-  const thumb_inner_style = thumbInnerStyle ?? thumbsInnerStyle ?? {};
+  const thumbShape = localThumbShape ?? globalThumbShape,
+    thumbSize = localThumbSize ?? globalThumbsSize,
+    thumbColor = localThumbColor ?? globalThumbsColor,
+    renderThumb = localRenderThumb ?? globalRenderThumbs,
+    thumbStyle = localThumbStyle ?? globalThumbsStyle ?? {},
+    thumbInnerStyle = localThumbInnerStyle ?? globalThumbsInnerStyle ?? {};
 
   const width = useSharedValue(0);
   const borderRadius = useSharedValue(0);
-  const panelStyle = useAnimatedStyle(() => ({ borderRadius: borderRadius.value }), [thumbSize]);
+  const panelStyle = useAnimatedStyle(() => ({ borderRadius: borderRadius.value }), [localThumbSize]);
 
   const handleScale = useSharedValue(1);
 
   const handleStyle = useAnimatedStyle(() => {
     const center = width.value / 2,
       distance = (saturationValue.value / 100) * (width.value / 2),
-      posY = width.value - Math.round(Math.sin((hueValue.value * Math.PI) / 180) * distance + center) - thumb_size / 2,
-      posX = width.value - Math.round(Math.cos((hueValue.value * Math.PI) / 180) * distance + center) - thumb_size / 2;
+      posY = width.value - Math.round(Math.sin((hueValue.value * Math.PI) / 180) * distance + center) - thumbSize / 2,
+      posX = width.value - Math.round(Math.cos((hueValue.value * Math.PI) / 180) * distance + center) - thumbSize / 2;
     return {
       transform: [
         { translateX: posX },
@@ -50,7 +60,7 @@ export function Panel3({ thumbShape, thumbSize, thumbColor, renderThumb, thumbSt
         { rotate: hueValue.value + 90 + 'deg' },
       ],
     };
-  }, [thumbSize]);
+  }, [localThumbSize]);
 
   const onGestureUpdate = (event: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -100,11 +110,11 @@ export function Panel3({ thumbShape, thumbSize, thumbColor, renderThumb, thumbSt
           {...{
             channel: 's',
             thumbShape,
-            thumbSize: thumb_size,
-            thumbColor: thumb_color,
-            renderThumb: render_thumb,
-            innerStyle: thumb_inner_style,
-            style: thumb_style,
+            thumbSize,
+            thumbColor,
+            renderThumb,
+            innerStyle: thumbInnerStyle,
+            style: thumbStyle,
             handleStyle,
           }}
         />

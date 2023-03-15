@@ -12,42 +12,53 @@ import type { LayoutChangeEvent } from 'react-native';
 import type { PanelProps } from '../../types';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
-export function Panel1({ thumbShape, thumbSize, thumbColor, renderThumb, thumbStyle, thumbInnerStyle, style = {} }: PanelProps) {
+export function Panel1({
+  thumbShape: localThumbShape,
+  thumbSize: localThumbSize,
+  thumbColor: localThumbColor,
+  renderThumb: localRenderThumb,
+  thumbStyle: localThumbStyle,
+  thumbInnerStyle: localThumbInnerStyle,
+  style = {},
+}: PanelProps) {
   const {
     hueValue,
     saturationValue,
     brightnessValue,
     onGestureChange,
     onGestureEnd,
-    thumbSize: thumbsSize,
-    thumbColor: thumbsColor,
-    renderThumb: renderThumbs,
-    thumbStyle: thumbsStyle,
-    thumbInnerStyle: thumbsInnerStyle,
+    thumbSize: globalThumbsSize,
+    thumbShape: globalThumbShape,
+    thumbColor: globalThumbsColor,
+    renderThumb: globalRenderThumbs,
+    thumbStyle: globalThumbsStyle,
+    thumbInnerStyle: globalThumbsInnerStyle,
   } = useContext(CTX);
 
-  const thumb_size = thumbSize ?? thumbsSize;
-  const thumb_color = thumbColor ?? thumbsColor;
-  const render_thumb = renderThumb ?? renderThumbs;
-  const thumb_style = thumbStyle ?? thumbsStyle ?? {};
-  const thumb_inner_style = thumbInnerStyle ?? thumbsInnerStyle ?? {};
-  const borderRadius = getStyle(style, 'borderRadius') ?? 5;
-  const getHeight = getStyle(style, 'height') ?? 200;
+  const thumbShape = localThumbShape ?? globalThumbShape,
+    thumbSize = localThumbSize ?? globalThumbsSize,
+    thumbColor = localThumbColor ?? globalThumbsColor,
+    renderThumb = localRenderThumb ?? globalRenderThumbs,
+    thumbStyle = localThumbStyle ?? globalThumbsStyle ?? {},
+    thumbInnerStyle = localThumbInnerStyle ?? globalThumbsInnerStyle ?? {};
 
-  const width = useSharedValue(0);
-  const height = useSharedValue(0);
+  const borderRadius = getStyle(style, 'borderRadius') ?? 5,
+    getHeight = getStyle(style, 'height') ?? 200;
+
+  const width = useSharedValue(0),
+    height = useSharedValue(0);
 
   const handleScale = useSharedValue(1);
 
   const handleStyle = useAnimatedStyle(() => {
     const percentX = (saturationValue.value / 100) * width.value;
-    const posX = percentX - thumb_size / 2;
+    const posX = percentX - thumbSize / 2;
     const percentY = (brightnessValue.value / 100) * height.value;
-    const posY = height.value - percentY - thumb_size / 2;
+    const posY = height.value - percentY - thumbSize / 2;
     return {
       transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }],
     };
-  }, [thumbSize]);
+  }, [localThumbSize]);
 
   const activeColorStyle = useAnimatedStyle(() => ({ backgroundColor: `hsl(${hueValue.value}, 100%, 50%)` }));
 
@@ -104,11 +115,11 @@ export function Panel1({ thumbShape, thumbSize, thumbColor, renderThumb, thumbSt
         <Thumb
           {...{
             thumbShape,
-            thumbSize: thumb_size,
-            thumbColor: thumb_color,
-            renderThumb: render_thumb,
-            innerStyle: thumb_inner_style,
-            style: thumb_style,
+            thumbSize,
+            thumbColor,
+            renderThumb,
+            innerStyle: thumbInnerStyle,
+            style: thumbStyle,
             handleStyle,
           }}
         />
