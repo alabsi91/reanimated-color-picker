@@ -6,12 +6,12 @@ import ColorPicker, { Swatches, Preview, OpacitySlider, BrightnessSlider, HueSli
 const customSwatches = ['#ffbe0b', '#fb5607', '#ff006e', '#8338ec', '#3a86ff'];
 const isRTL = I18nManager.isRTL;
 
-interface porpsType {
+interface propsType {
   color: SharedValue<string>;
   onSelectColor: (param: { hex: string }) => void;
 }
 
-export default function Example4({ onSelectColor, color }: porpsType) {
+export default function Example4({ onSelectColor, color }: propsType) {
   const [showModal, setShowModal] = useState(false);
 
   return (

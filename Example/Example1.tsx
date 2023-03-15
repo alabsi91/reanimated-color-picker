@@ -5,12 +5,12 @@ import ColorPicker, { Panel1, Swatches, Preview, OpacitySlider, HueSlider, Input
 
 const customSwatches = ['#001219', '#005f73', '#0a9396', '#94d2bd', '#e9d8a6'];
 
-interface porpsType {
+interface propsType {
   color: SharedValue<string>;
   onSelectColor: (param: { hex: string }) => void;
 }
 
-export default function Example1({ onSelectColor, color }: porpsType) {
+export default function Example1({ onSelectColor, color }: propsType) {
   const [showModal, setShowModal] = useState(false);
 
   return (
