@@ -25,19 +25,27 @@ async function buildTypescript() {
 
 async function buildModuleJs() {
   await execPromise(
-    `npx babel --config-file ./${babelModuleConfigPath} --out-dir ${modulePath} ${sourceDir} --extensions ".ts,.tsx" --source-maps --copy-files`
+    `npx babel --config-file ./${babelModuleConfigPath} --out-dir ${modulePath} ${sourceDir} --ignore "${path.join(
+      sourceDir,
+      '/**/*.d.ts'
+    )}" --extensions ".ts,.tsx" --source-maps --copy-files --no-copy-ignored`
   );
 }
 
 async function buildCommonJs() {
   await execPromise(
-    `npx babel --config-file ./${babelCommonjsConfigPath} --out-dir ${commonjsPath} ${sourceDir} --extensions ".ts,.tsx" --source-maps --copy-files`
+    `npx babel --config-file ./${babelCommonjsConfigPath} --out-dir ${commonjsPath} ${sourceDir} --ignore "${path.join(
+      sourceDir,
+      '/**/*.d.ts'
+    )}" --extensions ".ts,.tsx" --source-maps --copy-files --no-copy-ignored`
   );
 }
 
 async function prettier() {
   const buildDir = path.join(outDir, '**/*.js');
+  const typescriptDir = path.join(typescriptPath, '**/*.d.ts');
   await execPromise(`npx prettier --write ${buildDir}`);
+  await execPromise(`npx prettier --write ${typescriptDir}`);
 }
 
 async function build() {
@@ -69,12 +77,12 @@ async function build() {
     console.log('📦 Compiling JavaScript commonjs files ...\n');
     await buildCommonJs();
   } catch (error) {
-    console.error('⛔', error.stderr);
+    console.error('⛔', error);
     process.exit(1);
   }
 
   try {
-    console.log('💄 Formating files with Prettier ...\n');
+    console.log('💄 Formating compiled files with Prettier ...\n');
     await prettier();
   } catch (error) {
     console.error(error);
