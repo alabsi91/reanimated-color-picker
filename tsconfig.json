@@ -7,6 +7,7 @@
     "types": ["react-native"],
     "noEmit": false,
     "declaration": true,
+    "declarationMap": true,
     "module": "ESNext",
     "target": "ESNext",
     "isolatedModules": true,
