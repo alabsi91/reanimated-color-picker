@@ -62,6 +62,7 @@
       "curly": 0,
       "no-shadow": 0,
       "no-bitwise": 0,
+      "object-shorthand": 1,
       "react-hooks/exhaustive-deps": 0,
       "react-native/no-unused-styles": 1,
       "react/no-unstable-nested-components": 0
