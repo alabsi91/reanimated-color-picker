@@ -37,7 +37,7 @@ export default function ColorPicker({
   children = <Text>NO CHILDREN</Text>,
 }: ColorPickerProps) {
   const initialColor = useRef(colorKit.HSV(value).object()).current;
-  // color's channles values.
+  // color's channels values.
   const hueValue = useSharedValue(initialColor.h);
   const saturationValue = useSharedValue(initialColor.s);
   const brightnessValue = useSharedValue(initialColor.v);

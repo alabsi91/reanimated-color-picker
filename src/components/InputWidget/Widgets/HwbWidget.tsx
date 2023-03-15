@@ -20,11 +20,11 @@ export default function HwbWidget({
 }: WidgetProps) {
   const [hwbValues, setHwbValues] = useState(colorKit.HWB(returnedResults().hwba).object());
 
-  const isFocesed = useRef(false);
+  const isFocused = useRef(false);
 
   const updateText = () => {
     const { h, w, b, a } = colorKit.HWB(returnedResults().hwba).object();
-    if (!isFocesed.current) setHwbValues({ h, w, b, a });
+    if (!isFocused.current) setHwbValues({ h, w, b, a });
   };
 
   useDerivedValue(() => {
@@ -39,10 +39,10 @@ export default function HwbWidget({
     onChange(`hwba(${hue}, ${hwbValues.w}%, ${hwbValues.b}%, ${hwbValues.a})`);
   };
   const onWhiteChange = (text: string) => {
-    let whitness = +text;
-    whitness = clamp(isNaN(whitness) ? 0 : whitness, 100);
-    setHwbValues(prev => ({ ...prev, w: whitness }));
-    onChange(`hwba(${hwbValues.h}, ${whitness}%, ${hwbValues.b}%, ${hwbValues.a})`);
+    let whiteness = +text;
+    whiteness = clamp(isNaN(whiteness) ? 0 : whiteness, 100);
+    setHwbValues(prev => ({ ...prev, w: whiteness }));
+    onChange(`hwba(${hwbValues.h}, ${whiteness}%, ${hwbValues.b}%, ${hwbValues.a})`);
   };
   const onBlackChange = (text: string) => {
     let blackness = +text;
@@ -58,10 +58,10 @@ export default function HwbWidget({
   };
 
   const onFocus = () => {
-    isFocesed.current = true;
+    isFocused.current = true;
   };
   const onBlur = () => {
-    isFocesed.current = false;
+    isFocused.current = false;
   };
 
   return (

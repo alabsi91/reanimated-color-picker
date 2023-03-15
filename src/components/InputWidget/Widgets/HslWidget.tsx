@@ -20,11 +20,11 @@ export default function HslWidget({
 }: WidgetProps) {
   const [hslValues, setHslValues] = useState(colorKit.HSL(returnedResults().hsla).object());
 
-  const isFocesed = useRef(false);
+  const isFocused = useRef(false);
 
   const updateText = () => {
     const { h, s, l, a } = colorKit.HSL(returnedResults().hsla).object();
-    if (!isFocesed.current) setHslValues({ h, s, l, a });
+    if (!isFocused.current) setHslValues({ h, s, l, a });
   };
 
   useDerivedValue(() => {
@@ -58,10 +58,10 @@ export default function HslWidget({
   };
 
   const onFocus = () => {
-    isFocesed.current = true;
+    isFocused.current = true;
   };
   const onBlur = () => {
-    isFocesed.current = false;
+    isFocused.current = false;
   };
 
   return (

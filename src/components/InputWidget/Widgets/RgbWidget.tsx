@@ -20,11 +20,11 @@ export default function RgbWidget({
 }: WidgetProps) {
   const [rgbValues, setRgbValues] = useState(colorKit.RGB(returnedResults().rgba).object());
 
-  const isFocesed = useRef(false);
+  const isFocused = useRef(false);
 
   const updateText = () => {
     const { r, g, b, a } = colorKit.RGB(returnedResults().rgba).object();
-    if (!isFocesed.current) setRgbValues({ r, g, b, a });
+    if (!isFocused.current) setRgbValues({ r, g, b, a });
   };
 
   useDerivedValue(() => {
@@ -58,10 +58,10 @@ export default function RgbWidget({
   };
 
   const onFocus = () => {
-    isFocesed.current = true;
+    isFocused.current = true;
   };
   const onBlur = () => {
-    isFocesed.current = false;
+    isFocused.current = false;
   };
 
   return (

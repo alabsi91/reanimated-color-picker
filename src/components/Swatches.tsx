@@ -4,7 +4,7 @@ import { View, Pressable } from 'react-native';
 import { CTX } from '../ColorPicker';
 import { styles } from '../styles';
 
-import type { SwatchesPorps } from '../types';
+import type { SwatchesProps } from '../types';
 
 const SWATCHES_COLORS = [
   '#f44336',
@@ -28,7 +28,7 @@ const SWATCHES_COLORS = [
   '#607D8B',
 ];
 
-export function Swatches({ colors = SWATCHES_COLORS, style = {}, swatchStyle = {} }: SwatchesPorps) {
+export function Swatches({ colors = SWATCHES_COLORS, style = {}, swatchStyle = {} }: SwatchesProps) {
   const { setColor, onGestureChange, onGestureEnd } = useContext(CTX);
 
   const onPress = async (swatch: string) => {
@@ -38,7 +38,7 @@ export function Swatches({ colors = SWATCHES_COLORS, style = {}, swatchStyle = {
   };
 
   return (
-    <View style={[styles.swatcheContainer, style]}>
+    <View style={[styles.swatchesContainer, style]}>
       {colors.map((swatch, i) => (
         <Pressable
           key={swatch + i}

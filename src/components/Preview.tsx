@@ -6,7 +6,7 @@ import { CTX } from '../ColorPicker';
 import colorKit from '../colorKit/colorKit';
 import { getStyle } from '../utils';
 
-import type { PreviewPorps } from '../types';
+import type { PreviewProps } from '../types';
 import type { StyleProp, TextStyle } from 'react-native';
 import type { SharedValue } from 'react-native-reanimated';
 import { styles } from '../styles';
@@ -32,7 +32,7 @@ export function Preview({
   colorFormat = 'hex',
   hideInitialColor = false,
   hideText = false,
-}: PreviewPorps) {
+}: PreviewProps) {
   const { hueValue, saturationValue, brightnessValue, alphaValue, returnedResults, value } = useContext(CTX);
 
   const justifyContent = getStyle(style, 'justifyContent') ?? 'center';
@@ -44,7 +44,7 @@ export function Preview({
     const adaptiveTextColor = alphaValue.value > 0.5 ? value : { h: 0, s: 0, v: 70 };
     const contrast = colorKit.contrastRatio(adaptiveTextColor, '#fff');
     const color = contrast < 4.5 ? '#000' : '#fff';
-    return { formated: returnedResults()[colorFormat], color };
+    return { formatted: returnedResults()[colorFormat], color };
   }, [value, colorFormat]);
 
   const textColor = useSharedValue('#fff');
@@ -75,7 +75,7 @@ export function Preview({
         <View style={[styles.previewContainer, { backgroundColor: value, justifyContent }]}>
           {!hideText && (
             <Text style={[{ color: initialColorText.color }, styles.previewInitialText, textStyle]}>
-              {initialColorText.formated}
+              {initialColorText.formatted}
             </Text>
           )}
         </View>

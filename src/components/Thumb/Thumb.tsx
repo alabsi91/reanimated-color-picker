@@ -98,7 +98,7 @@ export default function Thumb({
       />
     );
 
-  // normalize 'thumbeShape' string to match 'BuiltinThumbs' keys.
+  // normalize 'thumbShape' string to match 'BuiltinThumbs' keys.
   const thumb_Shape = (thumbShape.toLowerCase().charAt(0).toUpperCase() + thumbShape.slice(1)) as keyof typeof BuiltinThumbs;
 
   if (thumb_Shape in BuiltinThumbs) {

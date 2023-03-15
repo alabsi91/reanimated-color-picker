@@ -1064,7 +1064,7 @@ class Colors {
     return this.returnColorObject(invertedColor);
   }
 
-  /** - Completely desaturates a color into greyscale. */
+  /** - Completely desaturate a color into grayscale. */
   grayscale(color: AnyFormat): ConversionMethods {
     const { r, g, b, a } = this.RGB(color).object();
     const gray = Math.round(clamp(r * 0.3 + g * 0.59 + b * 0.11, 0, 255));

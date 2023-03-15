@@ -20,11 +20,11 @@ export default function HsvWidget({
 }: WidgetProps) {
   const [hsvValues, setHsvValues] = useState(colorKit.HSV(returnedResults().hsva).object());
 
-  const isFocesed = useRef(false);
+  const isFocused = useRef(false);
 
   const updateText = () => {
     const { h, s, v, a } = colorKit.HSV(returnedResults().hsva).object();
-    if (!isFocesed.current) setHsvValues({ h, s, v, a });
+    if (!isFocused.current) setHsvValues({ h, s, v, a });
   };
 
   useDerivedValue(() => {
@@ -58,10 +58,10 @@ export default function HsvWidget({
   };
 
   const onFocus = () => {
-    isFocesed.current = true;
+    isFocused.current = true;
   };
   const onBlur = () => {
-    isFocesed.current = false;
+    isFocused.current = false;
   };
 
   return (

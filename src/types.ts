@@ -131,7 +131,7 @@ export interface TCTX {
   /** This function is called when the user lifts the finger from the color picker. */
   onGestureEnd: (color?: AnyFormat) => void;
 
-  /** This function is called everytime the color is changed. */
+  /** This function is called every time the color is changed. */
   onGestureChange: (color?: AnyFormat) => void;
 }
 
@@ -184,7 +184,7 @@ export interface ColorPickerProps {
   children?: React.ReactNode;
 }
 
-export interface SwatchesPorps {
+export interface SwatchesProps {
   /**
    * - swatch style.
    * - **Note** Certain style properties will be overridden.
@@ -198,7 +198,7 @@ export interface SwatchesPorps {
   colors?: string[];
 }
 
-export interface PreviewPorps {
+export interface PreviewProps {
   /** - show color preview in specific format. */
   colorFormat?: 'hex' | 'rgb' | 'rgba' | 'hsl' | 'hsla' | 'hsv' | 'hsva' | 'hwb' | 'hwba';
 
@@ -249,7 +249,7 @@ export interface PanelProps {
   renderThumb?: RenderThumbType;
 
   /**
-   * - panle container style.
+   * - panel container style.
    * - **Note** Certain style properties will be overridden.
    */
   style?: StyleProp<ViewStyle>;
@@ -333,7 +333,7 @@ export interface InputWidgetProps {
 
   /**
    * - What input widgets should be included that can be cycled through.
-   * - Avilable options: `'HEX'`, `'RGB'`, '`HSL'`, `'HWB'`, and `'HSV'`
+   * - Available options: `'HEX'`, `'RGB'`, '`HSL'`, `'HWB'`, and `'HSV'`
    */
   formats?: readonly defaultFormats[];
 

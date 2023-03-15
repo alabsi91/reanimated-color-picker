@@ -86,7 +86,7 @@ export const styles = StyleSheet.create({
   },
 
   // Swatches
-  swatcheContainer: {
+  swatchesContainer: {
     alignSelf: 'stretch',
     flexDirection: 'row',
     flexWrap: 'wrap',

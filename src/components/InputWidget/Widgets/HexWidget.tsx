@@ -19,10 +19,10 @@ export default function HexWidget({
 }: WidgetProps) {
   const [hexColor, setHexColorText] = useState(returnedResults().hex);
 
-  const isFocesed = useRef(false);
+  const isFocused = useRef(false);
 
   const updateText = () => {
-    if (!isFocesed.current) setHexColorText(returnedResults().hex);
+    if (!isFocused.current) setHexColorText(returnedResults().hex);
   };
 
   useDerivedValue(() => {
@@ -37,10 +37,10 @@ export default function HexWidget({
   };
 
   const onFocus = () => {
-    isFocesed.current = true;
+    isFocused.current = true;
   };
   const onBlur = () => {
-    isFocesed.current = false;
+    isFocused.current = false;
     const isHex = colorKit.getFormat(hexColor)?.includes('hex');
     if (isHex) return;
     setHexColorText(returnedResults().hex);
