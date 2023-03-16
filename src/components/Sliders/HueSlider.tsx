@@ -3,13 +3,13 @@ import { I18nManager, StyleSheet } from 'react-native';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
+import { clamp, getStyle, hsva2Hsla } from '@utils';
+import CTX from '@context';
 import Thumb from '.././Thumb/Thumb';
-import { CTX } from '../../ColorPicker';
-import { clamp, getStyle, hsva2Hsla } from '../../utils';
 
 import type { LayoutChangeEvent } from 'react-native';
-import type { SliderProps } from '../../types';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
+import type { SliderProps } from '@types';
 
 const isRtl = I18nManager.isRTL;
 
@@ -134,7 +134,7 @@ export function HueSlider({
         onLayout={onLayout}
         style={[{ borderRadius }, style, thicknessStyle, { position: 'relative', borderWidth: 0, padding: 0 }]}
       >
-        <Animated.Image source={require('../../assets/Hue.png')} style={imageStyle} />
+        <Animated.Image source={require('@assets/Hue.png')} style={imageStyle} />
         {adaptSpectrum && (
           <>
             <Animated.View style={[{ borderRadius }, activeSaturationStyle, StyleSheet.absoluteFillObject]} />

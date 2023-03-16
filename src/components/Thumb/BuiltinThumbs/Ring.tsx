@@ -1,10 +1,10 @@
 import React from 'react';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 
-import colorKit from '../../../colorKit/colorKit';
-import { styles } from '../../../styles';
+import colorKit from '@colorKit';
+import { styles } from '@styles';
 
-import type { BuiltinThumbsProps } from '../../../types';
+import type { BuiltinThumbsProps } from '@types';
 
 export default function Ring({
   width,

@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 import { View, Pressable } from 'react-native';
 
-import { CTX } from '../ColorPicker';
-import { styles } from '../styles';
+import CTX from '@context';
+import { styles } from '@styles';
 
-import type { SwatchesProps } from '../types';
+import type { SwatchesProps } from '@types';
 
 const SWATCHES_COLORS = [
   '#f44336',

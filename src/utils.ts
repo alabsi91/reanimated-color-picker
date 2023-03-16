@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+
 import type { StyleProp, ViewStyle } from 'react-native';
 
 export function getStyle<T extends keyof ViewStyle>(style: StyleProp<ViewStyle>, property: T): ViewStyle[T] | undefined {

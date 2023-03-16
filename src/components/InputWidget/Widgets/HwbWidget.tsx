@@ -1,11 +1,11 @@
 import React, { useRef, useState } from 'react';
 import { runOnJS, useDerivedValue } from 'react-native-reanimated';
 
-import colorKit from '../../../colorKit/colorKit';
-import { clamp } from '../../../utils';
 import WidgetTextInput from './WidgetTextInput';
+import colorKit from '@colorKit';
+import { clamp } from '@utils';
 
-import type { WidgetProps } from '../../../types';
+import type { WidgetProps } from '@types';
 
 export default function HwbWidget({
   onChange,

@@ -2,14 +2,14 @@ import React, { useState, useMemo, useContext } from 'react';
 import { View, Text, ImageBackground } from 'react-native';
 import Animated, { runOnJS, useAnimatedStyle, useDerivedValue, useSharedValue } from 'react-native-reanimated';
 
-import { CTX } from '../ColorPicker';
-import colorKit from '../colorKit/colorKit';
-import { getStyle } from '../utils';
+import { styles } from '@styles';
+import { getStyle } from '@utils';
+import colorKit from '@colorKit';
+import CTX from '@context';
 
-import type { PreviewProps } from '../types';
 import type { StyleProp, TextStyle } from 'react-native';
 import type { SharedValue } from 'react-native-reanimated';
-import { styles } from '../styles';
+import type { PreviewProps } from '@types';
 
 const ReText = ({ text, style, hash }: { text: () => string; style: StyleProp<TextStyle>[]; hash: SharedValue<number>[] }) => {
   const [color, setColor] = useState(text());
@@ -70,7 +70,7 @@ export function Preview({
   });
 
   return (
-    <ImageBackground source={require('../assets/transparent-texture.png')} style={[styles.previewWrapper, style]}>
+    <ImageBackground source={require('@assets/transparent-texture.png')} style={[styles.previewWrapper, style]}>
       {!hideInitialColor && (
         <View style={[styles.previewContainer, { backgroundColor: value, justifyContent }]}>
           {!hideText && (

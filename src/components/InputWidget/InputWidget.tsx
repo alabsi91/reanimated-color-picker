@@ -2,15 +2,15 @@ import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, Pressable, Image } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 
-import { CTX } from '../../ColorPicker';
-import { styles } from '../../styles';
+import { styles } from '@styles';
+import CTX from '@context';
 import HexWidget from './Widgets/HexWidget';
 import RgbWidget from './Widgets/RgbWidget';
 import HslWidget from './Widgets/HslWidget';
 import HwbWidget from './Widgets/HwbWidget';
 import HsvWidget from './Widgets/HsvWidget';
 
-import type { InputWidgetProps } from '../../types';
+import type { InputWidgetProps } from '@types';
 
 const defaultFormats = ['HEX', 'RGB', 'HSL', 'HWB', 'HSV'] as const;
 
@@ -88,7 +88,7 @@ export function InputWidget({
               // @ts-expect-error
               tintColor={iconColor}
               style={[styles.arrowButton, iconStyle]}
-              source={require('../../assets/arrow-icon.png')}
+              source={require('@assets/arrow-icon.png')}
             />
           </Pressable>
           <Text style={styles.inputTitle}> </Text>

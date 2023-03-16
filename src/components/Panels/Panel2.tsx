@@ -3,14 +3,14 @@ import { ImageBackground } from 'react-native';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
+import { styles } from '@styles';
+import CTX from '@context';
+import { clamp, getStyle } from '@utils';
 import Thumb from '../Thumb/Thumb';
-import { clamp, getStyle } from '../../utils';
-import { CTX } from '../../ColorPicker';
-import { styles } from '../../styles';
 
 import type { LayoutChangeEvent } from 'react-native';
-import type { Panel2Props } from '../../types';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
+import type { Panel2Props } from '@types';
 
 export function Panel2({
   thumbColor: localThumbColor,
@@ -98,7 +98,7 @@ export function Panel2({
         style={[styles.panel_container, { height: getHeight }, style, { position: 'relative', borderWidth: 0, padding: 0 }]}
       >
         <ImageBackground
-          source={require('../../assets/Panel2.png')}
+          source={require('@assets/Panel2.png')}
           style={[styles.panel_image, { borderRadius, transform: [{ scaleX: reverse ? -1 : 1 }] }]}
           resizeMode='stretch'
         />

@@ -1,10 +1,10 @@
 import React, { useRef, useState } from 'react';
 import { runOnJS, useDerivedValue } from 'react-native-reanimated';
 
-import colorKit from '../../../colorKit/colorKit';
 import WidgetTextInput from './WidgetTextInput';
+import colorKit from '@colorKit';
 
-import type { WidgetProps } from '../../../types';
+import type { WidgetProps } from '@types';
 
 export default function HexWidget({
   onChange,

@@ -20,7 +20,8 @@ async function cleanOutDirectory() {
 }
 
 async function buildTypescript() {
-  await execPromise(`npx tsc --declarationDir ${typescriptPath} --emitDeclarationOnly`);
+  await execPromise(`npx tsc --declarationDir ${typescriptPath} --emitDeclarationOnly --declaration --declarationMap`);
+  await execPromise(`npx resolve-tspaths --out ${typescriptPath}`);
 }
 
 async function buildModuleJs() {
@@ -30,6 +31,7 @@ async function buildModuleJs() {
       '/**/*.d.ts'
     )}" --extensions ".ts,.tsx" --source-maps --copy-files --no-copy-ignored`
   );
+  await execPromise(`npx resolve-tspaths --out ${modulePath}`);
 }
 
 async function buildCommonJs() {
@@ -39,6 +41,7 @@ async function buildCommonJs() {
       '/**/*.d.ts'
     )}" --extensions ".ts,.tsx" --source-maps --copy-files --no-copy-ignored`
   );
+  await execPromise(`npx resolve-tspaths --out ${commonjsPath}`);
 }
 
 async function prettier() {
@@ -82,7 +85,7 @@ async function build() {
   }
 
   try {
-    console.log('💄 Formating compiled files with Prettier ...\n');
+    console.log('💄 Formatting compiled files with Prettier ...\n');
     await prettier();
   } catch (error) {
     console.error(error);

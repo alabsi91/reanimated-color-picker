@@ -1,12 +1,12 @@
 import React, { useContext } from 'react';
 import { runOnJS, useAnimatedStyle, useDerivedValue, useSharedValue } from 'react-native-reanimated';
 
+import { styles } from '@styles';
+import colorKit from '@colorKit';
+import CTX from '@context';
 import BuiltinThumbs from './BuiltinThumbs/index';
-import colorKit from '../../colorKit/colorKit';
-import { CTX } from '../../ColorPicker';
-import { styles } from '../../styles';
 
-import type { BuiltinThumbsProps, ThumbProps } from '../../types';
+import type { BuiltinThumbsProps, ThumbProps } from '@types';
 
 export default function Thumb({
   handleStyle,

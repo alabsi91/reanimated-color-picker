@@ -2,12 +2,22 @@
   "extends": "@tsconfig/react-native/tsconfig.json",
   "include": ["src/**/*"],
   "exclude": ["Example", "ExampleExpo", "scripts", "docusaurus", "docs"],
-
   "compilerOptions": {
     "types": ["react-native"],
+    "baseUrl": "src",
+    "paths": {
+      "@sliders/*" : ["components/Sliders/*"],
+      "@panels/*" : ["components/Panels/*"],
+      "@assets/*" : ["assets/*"],
+      "@colorKit" : ["colorKit/colorKit"],
+      "@context" : ["AppContext"],
+      "@styles" : ["styles"],
+      "@utils" : ["utils"],
+      "@types" : ["types"]
+    },
+    
     "noEmit": false,
-    "declaration": true,
-    "declarationMap": true,
+    "declaration": false,
     "module": "ESNext",
     "target": "ESNext",
     "isolatedModules": true,

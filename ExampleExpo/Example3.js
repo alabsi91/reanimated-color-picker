@@ -48,7 +48,7 @@ export default function Example3({ onSelectColor, color }) {
             style={{ width: '75%', justifyContent: 'center' }}
           >
             <View style={styles.panelBrightnessContainer}>
-              <Panel2 style={[{ flex: 1, marginEnd: 20 }, styles.shadow]} />
+              <Panel2 style={[{ flex: 1, marginEnd: 20 }, styles.shadow]} thumbShape='ring' />
               <BrightnessSlider style={[{ height: '100%' }, styles.shadow]} vertical reverse />
             </View>
 

@@ -1,19 +1,19 @@
 import ColorPicker from './ColorPicker';
-import colorKit from './colorKit/colorKit';
 export default ColorPicker;
 
-export { Panel1 } from './components/Panels/Panel1';
-export { Panel2 } from './components/Panels/Panel2';
-export { Panel3 } from './components/Panels/Panel3';
+import colorKit from '@colorKit';
+export { colorKit };
+
+export { Panel1 } from '@panels/Panel1';
+export { Panel2 } from '@panels/Panel2';
+export { Panel3 } from '@panels/Panel3';
+export { HueSlider } from '@sliders/HueSlider';
+export { SaturationSlider } from '@sliders/SaturationSlider';
+export { BrightnessSlider } from '@sliders/BrightnessSlider';
 export { Preview } from './components/Preview';
 export { PreviewText } from './components/PreviewText';
-export { HueSlider } from './components/Sliders/HueSlider';
-export { SaturationSlider } from './components/Sliders/SaturationSlider';
-export { BrightnessSlider } from './components/Sliders/BrightnessSlider';
-export { OpacitySlider } from './components/Sliders/OpacitySlider';
+export { OpacitySlider } from '@sliders/OpacitySlider';
 export { Swatches } from './components/Swatches';
 export { InputWidget } from './components/InputWidget/InputWidget';
 
-export { colorKit };
-
-export * from './types';
+export * from '@types';
