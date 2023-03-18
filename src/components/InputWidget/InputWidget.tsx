@@ -3,6 +3,7 @@ import { View, Text, Pressable, Image } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 
 import { styles } from '@styles';
+import { getStyle } from '@utils';
 import CTX from '@context';
 import HexWidget from './Widgets/HexWidget';
 import RgbWidget from './Widgets/RgbWidget';
@@ -11,7 +12,6 @@ import HwbWidget from './Widgets/HwbWidget';
 import HsvWidget from './Widgets/HsvWidget';
 
 import type { InputWidgetProps } from '@types';
-import { getStyle } from '@utils';
 
 const defaultFormats = ['HEX', 'RGB', 'HSL', 'HWB', 'HSV'] as const;
 
