@@ -11,6 +11,7 @@ import HwbWidget from './Widgets/HwbWidget';
 import HsvWidget from './Widgets/HsvWidget';
 
 import type { InputWidgetProps } from '@types';
+import { getStyle } from '@utils';
 
 const defaultFormats = ['HEX', 'RGB', 'HSL', 'HWB', 'HSV'] as const;
 
@@ -76,9 +77,11 @@ export function InputWidget({
     opacity.value = withSequence(withTiming(0, { duration: 0 }), withTiming(1));
   }, [format]);
 
+  const gap = getStyle(containerStyle, 'gap') ?? 5;
+
   return (
     <View style={[styles.container, containerStyle]}>
-      <Animated.View style={[styles.inputsWrapper, fadeStyle]}>
+      <Animated.View style={[styles.inputsWrapper, { gap }, fadeStyle]}>
         <Input />
       </Animated.View>
       {formats.length > 1 && (
