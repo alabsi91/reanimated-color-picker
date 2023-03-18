@@ -6,5 +6,11 @@
   "bracketSpacing": true,
   "bracketSameLine": false,
   "endOfLine": "auto",
-  "singleQuote": true
+  "singleQuote": true,
+  "overrides": [
+    {
+      "files": "*.map",
+      "options": { "parser": "json" }
+    }
+  ]
 }

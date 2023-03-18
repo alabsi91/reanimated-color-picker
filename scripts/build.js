@@ -1,9 +1,9 @@
-const fs = require('fs/promises');
-const { existsSync } = require('fs');
-const path = require('path');
-const { exec } = require('child_process');
-const util = require('util');
-const execPromise = util.promisify(exec);
+const fs = require('fs/promises'),
+  path = require('path'),
+  util = require('util'),
+  { existsSync } = require('fs'),
+  { exec } = require('child_process'),
+  execPromise = util.promisify(exec);
 
 const outDir = 'lib',
   sourceDir = 'src',
@@ -44,10 +44,8 @@ async function buildCommonJs() {
 }
 
 async function prettier() {
-  const buildDir = path.join(outDir, '**/*.js');
-  const typescriptDir = path.join(typescriptPath, '**/*.d.ts');
-  await execPromise(`npx prettier --write ${buildDir}`);
-  await execPromise(`npx prettier --write ${typescriptDir}`);
+  const buildDir = path.join(outDir, '**/*');
+  await execPromise(`npx prettier --write ${buildDir} --ignore-unknown`);
 }
 
 async function build() {

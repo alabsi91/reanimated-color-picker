@@ -6,7 +6,8 @@
   "module": "lib/module/index",
   "types": "lib/typescript/index.d.ts",
   "scripts": {
-    "build": "node ./scripts/build.js",
+    "test": "tsc --noEmit && eslint src --max-warnings=0",
+    "build": "npm run test && node ./scripts/build.js",
     "prepublishOnly": "npm run build"
   },
   "keywords": [
@@ -35,7 +36,7 @@
     "@babel/preset-typescript": "^7.21.0",
     "@react-native-community/eslint-config": "^3.1.0",
     "@tsconfig/react-native": "^2.0.2",
-    "@types/react-native": "^0.70.4",
+    "@types/react-native": "^0.71.3",
     "babel-plugin-module-resolver": "^5.0.0",
     "prettier": "2.8.4",
     "react-native-reanimated": "^2.8.0",
@@ -54,17 +55,26 @@
   },
   "eslintConfig": {
     "extends": "@react-native-community",
+    "ignorePatterns": [
+      "scripts/*",
+      "Example/**/*",
+      "ExampleExpo/**/*",
+      "lib/**/*",
+      "docs/**/*",
+      "docusaurus/**/*"
+    ],
     "rules": {
       "react-native/no-inline-styles": 0,
+      "react-native/no-single-element-style-arrays": 1,
+      "react-native/no-unused-styles": 1,
+      "react-hooks/exhaustive-deps": 0,
+      "react/no-unstable-nested-components": 0,
       "prettier/prettier": 1,
       "jsx-quotes": 0,
       "curly": 0,
       "no-shadow": 0,
       "no-bitwise": 0,
-      "object-shorthand": 1,
-      "react-hooks/exhaustive-deps": 0,
-      "react-native/no-unused-styles": 1,
-      "react/no-unstable-nested-components": 0
+      "object-shorthand": 1
     }
   }
 }
