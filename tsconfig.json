@@ -4,18 +4,17 @@
   "exclude": ["Example", "ExampleExpo", "scripts", "docusaurus", "docs"],
   "compilerOptions": {
     "types": ["react-native"],
-    "baseUrl": "src",
+    "baseUrl": ".",
     "paths": {
-      "@sliders/*" : ["components/Sliders/*"],
-      "@panels/*" : ["components/Panels/*"],
-      "@assets/*" : ["assets/*"],
-      "@colorKit" : ["colorKit/colorKit"],
-      "@context" : ["AppContext"],
-      "@styles" : ["styles"],
-      "@utils" : ["utils"],
-      "@types" : ["types"]
+      "@sliders/*": ["src/components/Sliders/*"],
+      "@panels/*": ["src/components/Panels/*"],
+      "@assets/*": ["src/assets/*"],
+      "@colorKit": ["src/colorKit/colorKit"],
+      "@context": ["src/AppContext"],
+      "@styles": ["src/styles"],
+      "@utils": ["src/utils"],
+      "@types": ["src/types"]
     },
-    
     "noEmit": false,
     "declaration": false,
     "module": "ESNext",
