@@ -16,6 +16,7 @@ export function Panel3({
   thumbShape: localThumbShape,
   thumbSize: localThumbSize,
   thumbColor: localThumbColor,
+  boundedThumb: localBoundedThumb,
   renderThumb: localRenderThumb,
   thumbStyle: localThumbStyle,
   thumbInnerStyle: localThumbInnerStyle,
@@ -29,6 +30,7 @@ export function Panel3({
     thumbSize: globalThumbsSize,
     thumbShape: globalThumbShape,
     thumbColor: globalThumbsColor,
+    boundedThumb: globalBoundedThumb,
     renderThumb: globalRenderThumbs,
     thumbStyle: globalThumbsStyle,
     thumbInnerStyle: globalThumbsInnerStyle,
@@ -37,6 +39,7 @@ export function Panel3({
   const thumbShape = localThumbShape ?? globalThumbShape,
     thumbSize = localThumbSize ?? globalThumbsSize,
     thumbColor = localThumbColor ?? globalThumbsColor,
+    boundedThumb = localBoundedThumb ?? globalBoundedThumb,
     renderThumb = localRenderThumb ?? globalRenderThumbs,
     thumbStyle = localThumbStyle ?? globalThumbsStyle ?? {},
     thumbInnerStyle = localThumbInnerStyle ?? globalThumbsInnerStyle ?? {};
@@ -48,10 +51,16 @@ export function Panel3({
   const handleScale = useSharedValue(1);
 
   const handleStyle = useAnimatedStyle(() => {
-    const center = width.value / 2,
-      distance = (saturationValue.value / 100) * (width.value / 2),
-      posY = width.value - Math.round(Math.sin((hueValue.value * Math.PI) / 180) * distance + center) - thumbSize / 2,
-      posX = width.value - Math.round(Math.cos((hueValue.value * Math.PI) / 180) * distance + center) - thumbSize / 2;
+    const center = width.value / 2 - (boundedThumb ? thumbSize / 2 : 0),
+      distance = (saturationValue.value / 100) * (width.value / 2 - (boundedThumb ? thumbSize / 2 : 0)),
+      posY =
+        width.value -
+        Math.round(Math.sin((hueValue.value * Math.PI) / 180) * distance + center) -
+        (boundedThumb ? thumbSize : thumbSize / 2),
+      posX =
+        width.value -
+        Math.round(Math.cos((hueValue.value * Math.PI) / 180) * distance + center) -
+        (boundedThumb ? thumbSize : thumbSize / 2);
     return {
       transform: [
         { translateX: posX },
