@@ -83,6 +83,7 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'gray',
     paddingVertical: 5,
+    userSelect: 'none',
   },
 
   // Swatches
