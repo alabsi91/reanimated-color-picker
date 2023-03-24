@@ -18,6 +18,7 @@ export function SaturationSlider({
   thumbShape: localThumbShape,
   thumbSize: localThumbSize,
   thumbColor: localThumbColor,
+  boundedThumb: localBoundedThumb,
   renderThumb: localRenderThumb,
   thumbStyle: localThumbStyle,
   thumbInnerStyle: localThumbInnerStyle,
@@ -35,6 +36,7 @@ export function SaturationSlider({
     thumbSize: globalThumbsSize,
     thumbShape: globalThumbsShape,
     thumbColor: globalThumbsColor,
+    boundedThumb: globalBoundedThumb,
     renderThumb: globalRenderThumbs,
     thumbStyle: globalThumbsStyle,
     thumbInnerStyle: globalThumbsInnerStyle,
@@ -44,6 +46,7 @@ export function SaturationSlider({
   const thumbShape = localThumbShape ?? globalThumbsShape,
     thumbSize = localThumbSize ?? globalThumbsSize,
     thumbColor = localThumbColor ?? globalThumbsColor,
+    boundedThumb = localBoundedThumb ?? globalBoundedThumb,
     renderThumb = localRenderThumb ?? globalRenderThumbs,
     thumbStyle = localThumbStyle ?? globalThumbsStyle ?? {},
     thumbInnerStyle = localThumbInnerStyle ?? globalThumbsInnerStyle ?? {},
@@ -59,9 +62,9 @@ export function SaturationSlider({
   const handleScale = useSharedValue(1);
 
   const handleStyle = useAnimatedStyle(() => {
-    const length = vertical ? height.value : width.value,
+    const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0),
       percent = (saturationValue.value / 100) * length,
-      pos = (reverse ? length - percent : percent) - thumbSize / 2,
+      pos = (reverse ? length - percent : percent) - (boundedThumb ? 0 : thumbSize / 2),
       posY = vertical ? pos : height.value / 2 - thumbSize / 2,
       posX = vertical ? width.value / 2 - thumbSize / 2 : pos;
     return {
