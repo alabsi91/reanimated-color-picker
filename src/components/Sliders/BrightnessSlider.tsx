@@ -103,8 +103,8 @@ export function BrightnessSlider({
   const composed = Gesture.Exclusive(pan, tap, longPress);
 
   const onLayout = ({ nativeEvent: { layout } }: LayoutChangeEvent) => {
-    if (!vertical) width.value = withTiming(Math.round(layout.width), { duration: 5 });
-    if (vertical) height.value = withTiming(Math.round(layout.height), { duration: 5 });
+    if (!vertical) width.value = withTiming(layout.width, { duration: 5 });
+    if (vertical) height.value = withTiming(layout.height, { duration: 5 });
   };
 
   const imageStyle = useAnimatedStyle(() => {

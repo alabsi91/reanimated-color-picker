@@ -94,7 +94,7 @@ export function Panel3({
   const composed = Gesture.Exclusive(pan, tap, longPress);
 
   const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
-    const layoutWidth = Math.round(layout.width);
+    const layoutWidth = layout.width;
     width.value = layoutWidth;
     borderRadius.value = withTiming(layoutWidth / 2, { duration: 5 });
   }, []);

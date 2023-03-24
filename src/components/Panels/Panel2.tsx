@@ -87,8 +87,8 @@ export function Panel2({
   const composed = Gesture.Exclusive(pan, tap, longPress);
 
   const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
-    width.value = Math.round(layout.width);
-    height.value = Math.round(layout.height);
+    width.value = layout.width;
+    height.value = layout.height;
   }, []);
 
   return (
