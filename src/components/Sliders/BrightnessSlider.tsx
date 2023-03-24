@@ -18,6 +18,7 @@ export function BrightnessSlider({
   thumbShape: localThumbShape,
   thumbSize: localThumbSize,
   thumbColor: localThumbColor,
+  boundedThumb: localBoundedThumb,
   renderThumb: localRenderThumb,
   thumbStyle: localThumbStyle,
   thumbInnerStyle: localThumbInnerStyle,
@@ -35,6 +36,7 @@ export function BrightnessSlider({
     thumbSize: globalThumbSize,
     thumbShape: globalThumbShape,
     thumbColor: globalThumbColor,
+    boundedThumb: globalBoundedThumb,
     renderThumb: globalRenderThumb,
     thumbStyle: globalThumbStyle,
     thumbInnerStyle: globalThumbInnerStyle,
@@ -44,6 +46,7 @@ export function BrightnessSlider({
   const thumbShape = localThumbShape ?? globalThumbShape,
     thumbSize = localThumbSize ?? globalThumbSize,
     thumbColor = localThumbColor ?? globalThumbColor,
+    boundedThumb = localBoundedThumb ?? globalBoundedThumb,
     renderThumb = localRenderThumb ?? globalRenderThumb,
     thumbStyle = localThumbStyle ?? globalThumbStyle ?? {},
     thumbInnerStyle = localThumbInnerStyle ?? globalThumbInnerStyle ?? {},
@@ -59,9 +62,9 @@ export function BrightnessSlider({
   const handleScale = useSharedValue(1);
 
   const handleStyle = useAnimatedStyle(() => {
-    const length = vertical ? height.value : width.value,
+    const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0),
       percent = (brightnessValue.value / 100) * length,
-      pos = (reverse ? length - percent : percent) - thumbSize / 2,
+      pos = (reverse ? length - percent : percent) - (boundedThumb ? 0 : thumbSize / 2),
       posY = vertical ? pos : height.value / 2 - thumbSize / 2,
       posX = vertical ? width.value / 2 - thumbSize / 2 : pos;
     return {

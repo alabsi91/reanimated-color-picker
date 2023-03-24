@@ -121,7 +121,7 @@ export interface TCTX {
    * - When set to true, the thumb will not be allowed to move beyond the edges of the slider.
    * - When set to false, part of it will be outside of the slider bounds.
    */
-  boundedThumb?: boolean;
+  boundedThumb: boolean;
 
   /** A global style for all sliders children. */
   thumbInnerStyle?: StyleProp<ViewStyle>;
