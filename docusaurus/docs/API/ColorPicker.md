@@ -43,6 +43,17 @@ All built-in components should be wrapped within the `ColorPicker` component.
 - `type: string`
 - `default: '#418181'`
 
+### `boundedThumb`
+
+![boundedThumb](../../../images/boundedThumb.png)
+
+- A global property for all descendant sliders and panels components.
+- Determines whether the slider thumb (or handle) should be constrained to stay within the boundaries of the slider.
+- When set to `true`, the thumb will not be allowed to move beyond the edges of the slider.
+- When set to `false`, part of it will be outside of the slider bounds.
+- `type: boolean`
+- `default: false`
+
 ### `sliderThickness`
 
 - A global property that allows for changing the thickness of all descendant slider components.

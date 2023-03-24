@@ -22,6 +22,14 @@ description: A square-shaped slider, reminiscent of Adobe style, is utilized to 
 
 ## Props
 
+### `boundedThumb`
+
+- Determines whether the panel slider thumb (or handle) should be constrained to stay within the boundaries of the panel.
+- When set to `true`, the thumb will not be allowed to move beyond the edges of the panel.
+- When set to `false`, part of it will be outside of the panel bounds.
+- `type: boolean`
+- `default: false`
+
 ### `thumbSize`
 
 - Panel's handle (thumb) size (height\*width).
