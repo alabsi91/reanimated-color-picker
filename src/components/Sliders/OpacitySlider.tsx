@@ -85,10 +85,12 @@ export function OpacitySlider({
       percentX = posX / width.value,
       percentY = posY / height.value,
       valX = reverse ? 100 - Math.round(percentX * 100) : Math.round(percentX * 100),
-      valY = reverse ? 100 - Math.round(percentY * 100) : Math.round(percentY * 100);
+      valY = reverse ? 100 - Math.round(percentY * 100) : Math.round(percentY * 100),
+      newOpacityValue = (vertical ? valY : valX) / 100;
 
-    alphaValue.value = (vertical ? valY : valX) / 100;
+    if (alphaValue.value === newOpacityValue) return;
 
+    alphaValue.value = newOpacityValue;
     runOnJS(onGestureChange)();
   };
   const onGestureBegin = (event: PanGestureHandlerEventPayload) => {

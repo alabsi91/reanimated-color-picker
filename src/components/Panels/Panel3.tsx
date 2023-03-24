@@ -70,11 +70,14 @@ export function Panel3({
       radius = clamp(Math.sqrt(dx * dx + dy * dy), width.value / 2), // distance from center
       theta = Math.atan2(dy, dx) * (180 / Math.PI), // [0 - 180] range
       angle = theta < 0 ? 360 + theta : theta, // [0 - 360] range
-      radiusPercent = radius / (width.value / 2);
+      radiusPercent = radius / (width.value / 2),
+      newHueValue = Math.round(angle),
+      newSaturationValue = Math.round(radiusPercent * 100);
 
-    hueValue.value = Math.round(angle);
-    saturationValue.value = Math.round(radiusPercent * 100);
+    if (hueValue.value === newHueValue && saturationValue.value === newSaturationValue) return;
 
+    hueValue.value = newHueValue;
+    saturationValue.value = newSaturationValue;
     runOnJS(onGestureChange)();
   };
   const onGestureBegin = (event: PanGestureHandlerEventPayload) => {

@@ -80,10 +80,12 @@ export function BrightnessSlider({
       percentX = posX / width.value,
       percentY = posY / height.value,
       valX = reverse ? 100 - Math.round(percentX * 100) : Math.round(percentX * 100),
-      valY = reverse ? 100 - Math.round(percentY * 100) : Math.round(percentY * 100);
+      valY = reverse ? 100 - Math.round(percentY * 100) : Math.round(percentY * 100),
+      newBrightnessValue = vertical ? valY : valX;
 
-    brightnessValue.value = vertical ? valY : valX;
+    if (brightnessValue.value === newBrightnessValue) return;
 
+    brightnessValue.value = newBrightnessValue;
     runOnJS(onGestureChange)();
   };
   const onGestureBegin = (event: PanGestureHandlerEventPayload) => {

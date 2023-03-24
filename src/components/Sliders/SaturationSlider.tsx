@@ -84,10 +84,12 @@ export function SaturationSlider({
       percentX = posX / width.value,
       percentY = posY / height.value,
       valX = reverse ? 100 - Math.round(percentX * 100) : Math.round(percentX * 100),
-      valY = reverse ? 100 - Math.round(percentY * 100) : Math.round(percentY * 100);
+      valY = reverse ? 100 - Math.round(percentY * 100) : Math.round(percentY * 100),
+      newSaturationValue = vertical ? valY : valX;
 
-    saturationValue.value = vertical ? valY : valX;
+    if (saturationValue.value === newSaturationValue) return;
 
+    saturationValue.value = newSaturationValue;
     runOnJS(onGestureChange)();
   };
   const onGestureBegin = (event: PanGestureHandlerEventPayload) => {

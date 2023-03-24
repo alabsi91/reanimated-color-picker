@@ -67,11 +67,14 @@ export function Panel1({
     const posX = clamp(event.x, width.value),
       posY = clamp(event.y, height.value),
       percentX = posX / width.value,
-      percentY = posY / height.value;
+      percentY = posY / height.value,
+      newSaturationValue = Math.round(percentX * 100),
+      newBrightnessValue = Math.round(100 - percentY * 100);
 
-    saturationValue.value = Math.round(percentX * 100);
-    brightnessValue.value = Math.round(100 - percentY * 100);
+    if (saturationValue.value === newSaturationValue && brightnessValue.value === newBrightnessValue) return;
 
+    saturationValue.value = newSaturationValue;
+    brightnessValue.value = newBrightnessValue;
     runOnJS(onGestureChange)();
   };
   const onGestureBegin = (event: PanGestureHandlerEventPayload) => {

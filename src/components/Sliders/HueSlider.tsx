@@ -83,10 +83,12 @@ export function HueSlider({
       percentX = posX / width.value,
       percentY = posY / height.value,
       valX = reverse ? 360 - Math.round(percentX * 360) : Math.round(percentX * 360),
-      valY = reverse ? 360 - Math.round(percentY * 360) : Math.round(percentY * 360);
+      valY = reverse ? 360 - Math.round(percentY * 360) : Math.round(percentY * 360),
+      newHueValue = vertical ? valY : valX;
 
-    hueValue.value = vertical ? valY : valX;
+    if (hueValue.value === newHueValue) return;
 
+    hueValue.value = newHueValue;
     runOnJS(onGestureChange)();
   };
   const onGestureBegin = (event: PanGestureHandlerEventPayload) => {
