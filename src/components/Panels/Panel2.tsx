@@ -14,6 +14,7 @@ import type { Panel2Props } from '@types';
 
 export function Panel2({
   thumbColor: localThumbColor,
+  boundedThumb: localBoundedThumb,
   renderThumb: localRenderThumb,
   thumbShape: localThumbShape,
   thumbSize: localThumbSize,
@@ -30,6 +31,7 @@ export function Panel2({
     thumbSize: globalThumbsSize,
     thumbShape: globalThumbShape,
     thumbColor: globalThumbsColor,
+    boundedThumb: globalBoundedThumb,
     renderThumb: globalRenderThumbs,
     thumbStyle: globalThumbsStyle,
     thumbInnerStyle: globalThumbsInnerStyle,
@@ -38,6 +40,7 @@ export function Panel2({
   const thumbShape = localThumbShape ?? globalThumbShape,
     thumbSize = localThumbSize ?? globalThumbsSize,
     thumbColor = localThumbColor ?? globalThumbsColor,
+    boundedThumb = localBoundedThumb ?? globalBoundedThumb,
     renderThumb = localRenderThumb ?? globalRenderThumbs,
     thumbStyle = localThumbStyle ?? globalThumbsStyle ?? {},
     thumbInnerStyle = localThumbInnerStyle ?? globalThumbsInnerStyle ?? {};
@@ -51,10 +54,11 @@ export function Panel2({
   const handleScale = useSharedValue(1);
 
   const handleStyle = useAnimatedStyle(() => {
-    const percentX = (hueValue.value / 360) * width.value;
-    const posX = (reverse ? width.value - percentX : percentX) - thumbSize / 2;
-    const percentY = (saturationValue.value / 100) * height.value;
-    const posY = height.value - percentY - thumbSize / 2;
+    const length = { x: width.value - (boundedThumb ? thumbSize : 0), y: height.value - (boundedThumb ? thumbSize : 0) },
+      percentX = (hueValue.value / 360) * length.x,
+      posX = (reverse ? length.x - percentX : percentX) - (boundedThumb ? 0 : thumbSize / 2),
+      percentY = (saturationValue.value / 100) * length.y,
+      posY = length.y - percentY - (boundedThumb ? 0 : thumbSize / 2);
     return { transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }] };
   }, [localThumbSize, reverse]);
 

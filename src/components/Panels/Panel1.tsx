@@ -16,6 +16,7 @@ export function Panel1({
   thumbShape: localThumbShape,
   thumbSize: localThumbSize,
   thumbColor: localThumbColor,
+  boundedThumb: localBoundedThumb,
   renderThumb: localRenderThumb,
   thumbStyle: localThumbStyle,
   thumbInnerStyle: localThumbInnerStyle,
@@ -30,6 +31,7 @@ export function Panel1({
     thumbSize: globalThumbsSize,
     thumbShape: globalThumbShape,
     thumbColor: globalThumbsColor,
+    boundedThumb: globalBoundedThumb,
     renderThumb: globalRenderThumbs,
     thumbStyle: globalThumbsStyle,
     thumbInnerStyle: globalThumbsInnerStyle,
@@ -38,6 +40,7 @@ export function Panel1({
   const thumbShape = localThumbShape ?? globalThumbShape,
     thumbSize = localThumbSize ?? globalThumbsSize,
     thumbColor = localThumbColor ?? globalThumbsColor,
+    boundedThumb = localBoundedThumb ?? globalBoundedThumb,
     renderThumb = localRenderThumb ?? globalRenderThumbs,
     thumbStyle = localThumbStyle ?? globalThumbsStyle ?? {},
     thumbInnerStyle = localThumbInnerStyle ?? globalThumbsInnerStyle ?? {};
@@ -51,10 +54,11 @@ export function Panel1({
   const handleScale = useSharedValue(1);
 
   const handleStyle = useAnimatedStyle(() => {
-    const percentX = (saturationValue.value / 100) * width.value;
-    const posX = percentX - thumbSize / 2;
-    const percentY = (brightnessValue.value / 100) * height.value;
-    const posY = height.value - percentY - thumbSize / 2;
+    const length = { x: width.value - (boundedThumb ? thumbSize : 0), y: height.value - (boundedThumb ? thumbSize : 0) },
+      percentX = (saturationValue.value / 100) * length.x,
+      posX = percentX - (boundedThumb ? 0 : thumbSize / 2),
+      percentY = (brightnessValue.value / 100) * length.y,
+      posY = length.y - percentY - (boundedThumb ? 0 : thumbSize / 2);
     return {
       transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }],
     };
