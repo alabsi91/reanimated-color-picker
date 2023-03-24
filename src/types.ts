@@ -116,6 +116,13 @@ export interface TCTX {
   /** A global prop for all sliders children. */
   thumbStyle?: StyleProp<ViewStyle>;
 
+  /**
+   * - Determines whether the slider thumb (or handle) should be constrained to stay within the boundaries of the slider.
+   * - When set to true, the thumb will not be allowed to move beyond the edges of the slider.
+   * - When set to false, part of it will be outside of the slider bounds.
+   */
+  boundedThumb?: boolean;
+
   /** A global style for all sliders children. */
   thumbInnerStyle?: StyleProp<ViewStyle>;
 
@@ -156,6 +163,14 @@ export interface ColorPickerProps {
 
   /** - a global property to change the style of the thumb's View for all descendant sliders components */
   thumbStyle?: StyleProp<ViewStyle>;
+
+  /**
+   * - a global property for all descendant sliders and panels components
+   * - Determines whether the slider thumb (or handle) should be constrained to stay within the boundaries of the slider.
+   * - When set to true, the thumb will not be allowed to move beyond the edges of the slider.
+   * - When set to false, part of it will be outside of the slider bounds.
+   */
+  boundedThumb?: boolean;
 
   /** - a global property to change the color of the thumb's inner View(s) for all descendant sliders components. */
   thumbInnerStyle?: StyleProp<ViewStyle>;
@@ -239,6 +254,13 @@ export interface PanelProps {
   /** - panel handle (thumb) shape. */
   thumbShape?: thumbShapeType;
 
+  /**
+   * - Determines whether the slider thumb (or handle) should be constrained to stay within the boundaries of the slider.
+   * - When set to true, the thumb will not be allowed to move beyond the edges of the slider.
+   * - When set to false, part of it will be outside of the slider bounds.
+   */
+  boundedThumb?: boolean;
+
   /** - slider's handle (thumb) outer View style. */
   thumbStyle?: StyleProp<ViewStyle>;
 
@@ -269,6 +291,13 @@ export interface SliderProps {
 
   /** - slider's handle (thumb) shape. */
   thumbShape?: thumbShapeType;
+
+  /**
+   * - Determines whether the slider thumb (or handle) should be constrained to stay within the boundaries of the slider.
+   * - When set to true, the thumb will not be allowed to move beyond the edges of the slider.
+   * - When set to false, part of it will be outside of the slider bounds.
+   */
+  boundedThumb?: boolean;
 
   /** - slider's handle (thumb) outer View style. */
   thumbStyle?: StyleProp<ViewStyle>;
