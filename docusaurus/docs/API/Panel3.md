@@ -20,6 +20,13 @@ description: The circle-shaped slider, with its wheel style design, is utilized 
 
 ## Props
 
+### `imageSource`
+
+- Allows for a higher quality image to be provided for the slider background.
+- Check out the `Figma` link for the uncompressed assets here 👉 [color picker assets](https://www.figma.com/file/1NAZsgrXejzzDsakZtQyuP/reanimated-color-picker-assets?node-id=0%3A1&t=CZzURph1MOPimwI2-1).
+- `type: ImageSourcePropType`
+- `default: undefined`
+
 ### `boundedThumb`
 
 - Determines whether the panel slider thumb (or handle) should be constrained to stay within the boundaries of the panel.
