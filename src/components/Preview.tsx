@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useContext } from 'react';
-import { View, Text, ImageBackground } from 'react-native';
+import { View, Text, ImageBackground, Platform } from 'react-native';
 import Animated, { runOnJS, useAnimatedStyle, useDerivedValue, useSharedValue } from 'react-native-reanimated';
 
 import { styles } from '@styles';
@@ -8,6 +8,7 @@ import colorKit from '@colorKit';
 import CTX from '@context';
 
 import type { StyleProp, TextStyle } from 'react-native';
+import type { ReactNode } from 'react';
 import type { SharedValue } from 'react-native-reanimated';
 import type { PreviewProps } from '@types';
 
@@ -70,7 +71,7 @@ export function Preview({
   });
 
   return (
-    <ImageBackground source={require('@assets/transparent-texture.png')} style={[styles.previewWrapper, style]}>
+    <Wrapper style={style}>
       {!hideInitialColor && (
         <View style={[styles.previewContainer, { backgroundColor: value, justifyContent }]}>
           {!hideText && (
@@ -83,6 +84,29 @@ export function Preview({
       <Animated.View style={[styles.previewContainer, { justifyContent }, previewColorStyle]}>
         {!hideText && <ReText text={() => returnedResults()[colorFormat]} hash={colorHash} style={[textStyle, textColorStyle]} />}
       </Animated.View>
+    </Wrapper>
+  );
+}
+
+function Wrapper({ children, style }: { children: ReactNode; style: {} | null }) {
+  if (Platform.OS === 'web') {
+    return <View style={[styles.previewWrapper, previewWrapperWeb, style]}>{children}</View>;
+  }
+
+  return (
+    <ImageBackground
+      source={require('@assets/transparent-texture.png')}
+      resizeMode='repeat'
+      style={[styles.previewWrapper, style]}
+    >
+      {children}
     </ImageBackground>
   );
 }
+
+const previewWrapperWeb = {
+  backgroundImage:
+    'repeating-linear-gradient(45deg, #c1c1c1 25%, transparent 25%, transparent 75%, #c1c1c1 75%, #c1c1c1), repeating-linear-gradient(45deg, #c1c1c1 25%, #fff 25%, #fff 75%, #c1c1c1 75%, #c1c1c1)',
+  backgroundPosition: '0px 0px, 8px 8px',
+  backgroundSize: '16px 16px',
+};
