@@ -108,7 +108,7 @@ export default function ColorPicker({
   };
 
   return (
-    <GestureHandlerRootView style={[styles.wrapper, style]}>
+    <GestureHandlerRootView style={[styles.wrapper, { direction: 'ltr' }, style]}>
       <CTX.Provider value={ctxValue}>{children}</CTX.Provider>
     </GestureHandlerRootView>
   );
