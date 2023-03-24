@@ -21,6 +21,7 @@ export function Panel3({
   thumbStyle: localThumbStyle,
   thumbInnerStyle: localThumbInnerStyle,
   style = {},
+  imageSource,
 }: PanelProps) {
   const {
     hueValue,
@@ -117,7 +118,7 @@ export function Panel3({
         onLayout={onLayout}
         style={[styles.panel_container, style, { position: 'relative', aspectRatio: 1, borderWidth: 0, padding: 0 }, panelStyle]}
       >
-        <ImageBackground source={require('@assets/Panel3.png')} style={styles.panel_image} resizeMode='stretch' />
+        <ImageBackground source={imageSource ?? require('@assets/Panel3.png')} style={styles.panel_image} resizeMode='stretch' />
         <Thumb
           {...{
             channel: 's',

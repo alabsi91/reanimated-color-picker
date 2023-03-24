@@ -26,6 +26,7 @@ export function OpacitySlider({
   style = {},
   vertical = false,
   reverse = false,
+  imageSource,
 }: SliderProps) {
   const {
     alphaValue,
@@ -141,7 +142,7 @@ export function OpacitySlider({
         onLayout={onLayout}
         style={[{ borderRadius }, style, { position: 'relative', borderWidth: 0, padding: 0 }, thicknessStyle, activeColorStyle]}
       >
-        <Animated.Image source={require('@assets/Opacity.png')} style={imageStyle} />
+        <Animated.Image source={imageSource ?? require('@assets/Opacity.png')} style={imageStyle} />
         <Thumb
           {...{
             channel: 'a',
