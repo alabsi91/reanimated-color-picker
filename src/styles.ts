@@ -26,10 +26,6 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  handleInner: {
-    width: '75%',
-    height: '75%',
-  },
   shadow: {
     shadowColor: '#000',
     shadowOffset: {

@@ -32,7 +32,14 @@ export default function Ring({
   }));
   return (
     <Animated.View style={[styles.handle, style, computedStyle, adaptiveColorStyle, handleStyle]}>
-      <Animated.View style={[styles.handleInner, styles.shadow, { borderRadius, zIndex: 100 }, solidColor, innerStyle]} />
+      <Animated.View
+        style={[
+          styles.shadow,
+          { borderRadius, zIndex: 100, width: Math.round(width * 0.75), height: Math.round(width * 0.75) },
+          solidColor,
+          innerStyle,
+        ]}
+      />
     </Animated.View>
   );
 }
