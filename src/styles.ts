@@ -1,4 +1,4 @@
-import { I18nManager, StyleSheet } from 'react-native';
+import { I18nManager, Platform, StyleSheet } from 'react-native';
 
 const isRtl = I18nManager.isRTL;
 
@@ -79,7 +79,7 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'gray',
     paddingVertical: 5,
-    userSelect: 'none',
+    ...Platform.select({ web: { userSelect: 'none' }, default: {} }),
   },
 
   // Swatches
