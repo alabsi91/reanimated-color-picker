@@ -12,10 +12,17 @@
   },
   "keywords": [
     "react-native",
+    "react native",
+    "expo",
+    "android",
+    "ios",
+    "web",
     "reanimated",
     "color",
     "picker",
     "wheel",
+    "slider",
+    "swatches",
     "palette"
   ],
   "files": [
