@@ -34,7 +34,7 @@ export default function Example1({ onSelectColor, color }) {
 
               <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={150}>
                 <InputWidget
-                  containerStyle={{ backgroundColor: '#e8e8e8', marginTop: 20 }}
+                  containerStyle={{ backgroundColor: '#e8e8e8', marginTop: 20, gap: 0 }}
                   inputStyle={{ marginHorizontal: 5 }}
                 />
               </KeyboardAvoidingView>

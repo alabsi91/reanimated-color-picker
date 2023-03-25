@@ -23,8 +23,8 @@ export default function Example4({ onSelectColor, color }: propsType) {
           <ColorPicker
             value={color.value}
             sliderThickness={30}
-            thumbSize={35}
-            thumbShape='pill'
+            thumbSize={28}
+            thumbShape='circle'
             onComplete={onSelectColor}
             style={{ width: '75%', justifyContent: 'center' }}
           >
@@ -36,16 +36,16 @@ export default function Example4({ onSelectColor, color }: propsType) {
             />
 
             <Text style={styles.sliderLabel}>Hue:</Text>
-            <HueSlider style={styles.sliderStyle} adaptSpectrum />
+            <HueSlider style={styles.sliderStyle} adaptSpectrum boundedThumb />
 
             <Text style={styles.sliderLabel}>Brightness:</Text>
-            <BrightnessSlider style={styles.sliderStyle} adaptSpectrum />
+            <BrightnessSlider style={styles.sliderStyle} adaptSpectrum boundedThumb />
 
             <Text style={styles.sliderLabel}>Saturation:</Text>
-            <SaturationSlider style={styles.sliderStyle} adaptSpectrum />
+            <SaturationSlider style={styles.sliderStyle} adaptSpectrum boundedThumb />
 
             <Text style={styles.sliderLabel}>Opacity:</Text>
-            <OpacitySlider style={styles.sliderStyle} adaptSpectrum />
+            <OpacitySlider style={styles.sliderStyle} adaptSpectrum boundedThumb />
 
             <Swatches style={{ marginTop: 30 }} swatchStyle={[styles.swatchStyle, styles.shadow]} colors={customSwatches} />
           </ColorPicker>

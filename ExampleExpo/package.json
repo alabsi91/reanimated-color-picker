@@ -1,5 +1,5 @@
 {
-  "name": "exampleexpo",
+  "name": "example-expo",
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
@@ -19,7 +19,7 @@
     "react-native-gesture-handler": "~2.2.1",
     "react-native-reanimated": "~2.8.0",
     "react-native-web": "0.17.7",
-    "reanimated-color-picker": "^1.5.1"
+    "reanimated-color-picker": "^1.6.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"

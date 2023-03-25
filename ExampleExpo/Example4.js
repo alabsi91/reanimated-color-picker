@@ -24,8 +24,8 @@ export default function Example4({ onSelectColor, color }) {
           <ColorPicker
             value={color.value}
             sliderThickness={30}
-            thumbSize={40}
-            thumbShape='pill'
+            thumbSize={28}
+            thumbShape='circle'
             onComplete={onSelectColor}
             style={{ width: '75%', justifyContent: 'center' }}
           >
@@ -37,16 +37,16 @@ export default function Example4({ onSelectColor, color }) {
             />
 
             <Text style={styles.sliderLabel}>Hue:</Text>
-            <HueSlider style={[{ borderRadius: 15, marginBottom: 25 }, styles.shadow]} adaptSpectrum />
+            <HueSlider style={[{ borderRadius: 15, marginBottom: 25 }, styles.shadow]} adaptSpectrum boundedThumb />
 
             <Text style={styles.sliderLabel}>Brightness:</Text>
-            <BrightnessSlider style={[{ borderRadius: 15, marginBottom: 25 }, styles.shadow]} adaptSpectrum />
+            <BrightnessSlider style={[{ borderRadius: 15, marginBottom: 25 }, styles.shadow]} adaptSpectrum boundedThumb />
 
             <Text style={styles.sliderLabel}>Saturation:</Text>
-            <SaturationSlider style={[{ borderRadius: 15, marginBottom: 25 }, styles.shadow]} adaptSpectrum />
+            <SaturationSlider style={[{ borderRadius: 15, marginBottom: 25 }, styles.shadow]} adaptSpectrum boundedThumb />
 
             <Text style={styles.sliderLabel}>Opacity:</Text>
-            <OpacitySlider style={[{ borderRadius: 15, marginBottom: 25 }, styles.shadow]} adaptSpectrum />
+            <OpacitySlider style={[{ borderRadius: 15, marginBottom: 25 }, styles.shadow]} adaptSpectrum boundedThumb />
 
             <Swatches style={{ marginTop: 30 }} swatchStyle={[styles.swatchStyle, styles.shadow]} colors={customSwatches} />
           </ColorPicker>
