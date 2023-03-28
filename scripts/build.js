@@ -3,6 +3,7 @@ const fs = require('fs/promises'),
   util = require('util'),
   { existsSync } = require('fs'),
   { exec } = require('child_process'),
+  { resolveTsPaths } = require('resolve-tspaths'),
   execPromise = util.promisify(exec);
 
 const outDir = 'lib',
@@ -10,7 +11,8 @@ const outDir = 'lib',
   modulePath = path.join(outDir, 'module'),
   commonjsPath = path.join(outDir, 'commonjs'),
   typescriptPath = path.join(outDir, 'typescript'),
-  babelConfigPath = path.join('scripts', 'babel.config.js');
+  babelConfigPath = path.join('scripts', 'babel.config.js'),
+  babelOptions = `--ignore "${sourceDir}/**/*.d.ts" --extensions ".ts,.tsx" --source-maps --copy-files --no-copy-ignored`;
 
 async function cleanOutDirectory() {
   const isExists = existsSync(outDir);
@@ -20,27 +22,17 @@ async function cleanOutDirectory() {
 
 async function buildTypescript() {
   await execPromise(`npx tsc --declarationDir ${typescriptPath} --emitDeclarationOnly --declaration --declarationMap`);
-  await execPromise(`npx resolve-tspaths --out ${typescriptPath}`);
+  await resolveTsPaths({ out: typescriptPath });
 }
 
 async function buildModuleJs() {
   process.env.MODULES = '';
-  await execPromise(
-    `npx babel --config-file ./${babelConfigPath} --out-dir ${modulePath} ${sourceDir} --ignore "${path.join(
-      sourceDir,
-      '/**/*.d.ts'
-    )}" --extensions ".ts,.tsx" --source-maps --copy-files --no-copy-ignored`
-  );
+  await execPromise(`npx babel --config-file ./${babelConfigPath} --out-dir ${modulePath} ${sourceDir} ${babelOptions}`);
 }
 
 async function buildCommonJs() {
   process.env.MODULES = 'commonjs';
-  await execPromise(
-    `npx babel --config-file ./${babelConfigPath} --out-dir ${commonjsPath} ${sourceDir} --ignore "${path.join(
-      sourceDir,
-      '/**/*.d.ts'
-    )}" --extensions ".ts,.tsx" --source-maps --copy-files --no-copy-ignored`
-  );
+  await execPromise(`npx babel --config-file ./${babelConfigPath} --out-dir ${commonjsPath} ${sourceDir} ${babelOptions}`);
 }
 
 async function prettier() {

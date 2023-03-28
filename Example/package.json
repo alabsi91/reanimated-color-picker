@@ -6,7 +6,6 @@
     "start": "start react-native start",
     "reset-cache": "start react-native start --reset-cache",
     "android": "react-native run-android",
-    "android-emulator": "node scripts/emulator.js",
     "ios": "react-native run-ios"
   },
   "dependencies": {

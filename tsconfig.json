@@ -9,6 +9,7 @@
       "@sliders/*": ["src/components/Sliders/*"],
       "@panels/*": ["src/components/Panels/*"],
       "@assets/*": ["src/assets/*"],
+      "@thumb": ["src/components/Thumb/Thumb"],
       "@colorKit": ["src/colorKit/colorKit"],
       "@context": ["src/AppContext"],
       "@styles": ["src/styles"],

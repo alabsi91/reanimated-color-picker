@@ -7,12 +7,14 @@
   "types": "lib/typescript/index.d.ts",
   "scripts": {
     "test": "tsc --noEmit && eslint src --max-warnings=0",
-    "build": "npm run test && node ./scripts/build.js",
-    "prepublishOnly": "npm run build"
+    "build": "node scripts/build.js",
+    "prepublishOnly": "npm run test && npm run build"
   },
   "keywords": [
     "react-native",
     "react native",
+    "color picker",
+    "react native color picker",
     "expo",
     "android",
     "ios",
@@ -43,7 +45,7 @@
     "@babel/preset-typescript": "^7.21.0",
     "@react-native-community/eslint-config": "^3.1.0",
     "@tsconfig/react-native": "^2.0.2",
-    "@types/react-native": "^0.71.3",
+    "@types/react-native": "^0.71.5",
     "babel-plugin-module-resolver": "^5.0.0",
     "prettier": "2.8.4",
     "react-native-reanimated": "^2.8.0",

@@ -5,7 +5,7 @@ import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 
 
 import { clamp, getStyle, hsva2Hsla } from '@utils';
 import CTX from '@context';
-import Thumb from '.././Thumb/Thumb';
+import Thumb from '@thumb';
 
 import type { SliderProps } from '@types';
 import type { LayoutChangeEvent } from 'react-native';

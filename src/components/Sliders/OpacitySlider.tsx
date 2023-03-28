@@ -5,7 +5,7 @@ import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 
 
 import { clamp, getStyle, hsva2Hsla } from '@utils';
 import CTX from '@context';
-import Thumb from '.././Thumb/Thumb';
+import Thumb from '@thumb';
 
 import type { LayoutChangeEvent } from 'react-native';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
