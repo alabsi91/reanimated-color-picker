@@ -67,14 +67,15 @@ export function Panel1({
 
   const activeColorStyle = useAnimatedStyle(() => ({ backgroundColor: `hsl(${hueValue.value}, 100%, 50%)` }));
 
-  const onGestureUpdate = (event: PanGestureHandlerEventPayload) => {
+  const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
-    const posX = clamp(event.x, width.value),
-      posY = clamp(event.y, height.value),
-      percentX = posX / width.value,
-      percentY = posY / height.value,
-      newSaturationValue = Math.round(percentX * 100),
-      newBrightnessValue = Math.round(100 - percentY * 100);
+
+    const lengthX = width.value - (boundedThumb ? thumbSize : 0),
+      lengthY = height.value - (boundedThumb ? thumbSize : 0),
+      posX = clamp(x - (boundedThumb ? thumbSize / 2 : 0), lengthX),
+      posY = clamp(y - (boundedThumb ? thumbSize / 2 : 0), lengthY),
+      newSaturationValue = Math.round((posX / lengthX) * 100),
+      newBrightnessValue = Math.round(100 - (posY / lengthY) * 100);
 
     if (saturationValue.value === newSaturationValue && brightnessValue.value === newBrightnessValue) return;
 

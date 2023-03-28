@@ -77,15 +77,13 @@ export function BrightnessSlider({
     backgroundColor: hsva2Hsla(hueValue.value, adaptSpectrum ? saturationValue.value : 100, 100),
   }));
 
-  const onGestureUpdate = (event: PanGestureHandlerEventPayload) => {
+  const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
-    const posX = clamp(event.x, width.value),
-      posY = clamp(event.y, height.value),
-      percentX = posX / width.value,
-      percentY = posY / height.value,
-      valX = reverse ? 100 - Math.round(percentX * 100) : Math.round(percentX * 100),
-      valY = reverse ? 100 - Math.round(percentY * 100) : Math.round(percentY * 100),
-      newBrightnessValue = vertical ? valY : valX;
+
+    const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0),
+      pos = clamp((vertical ? y : x) - (boundedThumb ? thumbSize / 2 : 0), length),
+      value = Math.round((pos / length) * 100),
+      newBrightnessValue = reverse ? 100 - value : value;
 
     if (brightnessValue.value === newBrightnessValue) return;
 

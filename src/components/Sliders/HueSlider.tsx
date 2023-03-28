@@ -80,15 +80,13 @@ export function HueSlider({
     backgroundColor: hsva2Hsla(0, 0, 0, 1 - brightnessValue.value / 100),
   }));
 
-  const onGestureUpdate = (event: PanGestureHandlerEventPayload) => {
+  const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
-    const posX = clamp(event.x, width.value),
-      posY = clamp(event.y, height.value),
-      percentX = posX / width.value,
-      percentY = posY / height.value,
-      valX = reverse ? 360 - Math.round(percentX * 360) : Math.round(percentX * 360),
-      valY = reverse ? 360 - Math.round(percentY * 360) : Math.round(percentY * 360),
-      newHueValue = vertical ? valY : valX;
+
+    const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0),
+      pos = clamp((vertical ? y : x) - (boundedThumb ? thumbSize / 2 : 0), length),
+      value = Math.round((pos / length) * 360),
+      newHueValue = reverse ? 360 - value : value;
 
     if (hueValue.value === newHueValue) return;
 

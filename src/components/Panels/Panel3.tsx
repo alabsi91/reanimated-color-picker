@@ -72,15 +72,16 @@ export function Panel3({
     };
   }, [localThumbSize]);
 
-  const onGestureUpdate = (event: PanGestureHandlerEventPayload) => {
+  const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
-    const center = width.value / 2,
-      dx = center - event.x,
-      dy = center - event.y,
-      radius = clamp(Math.sqrt(dx * dx + dy * dy), width.value / 2), // distance from center
+
+    const center = (width.value - (boundedThumb ? thumbSize : 0)) / 2,
+      dx = center - x + (boundedThumb ? thumbSize / 2 : 0),
+      dy = center - y + (boundedThumb ? thumbSize / 2 : 0),
+      radius = clamp(Math.sqrt(dx * dx + dy * dy), center), // distance from center
       theta = Math.atan2(dy, dx) * (180 / Math.PI), // [0 - 180] range
       angle = theta < 0 ? 360 + theta : theta, // [0 - 360] range
-      radiusPercent = radius / (width.value / 2),
+      radiusPercent = radius / center,
       newHueValue = Math.round(angle),
       newSaturationValue = Math.round(radiusPercent * 100);
 

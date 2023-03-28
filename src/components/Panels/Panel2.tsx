@@ -63,14 +63,17 @@ export function Panel2({
     return { transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }] };
   }, [localThumbSize, reverse]);
 
-  const onGestureUpdate = (event: PanGestureHandlerEventPayload) => {
+  const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
-    const posX = clamp(event.x, width.value),
-      posY = clamp(event.y, height.value),
-      percentX = posX / width.value,
-      percentY = posY / height.value,
-      newHueValue = reverse ? 360 - Math.round(percentX * 360) : Math.round(percentX * 360),
-      newSaturationValue = Math.round(100 - percentY * 100);
+
+    const lengthX = width.value - (boundedThumb ? thumbSize : 0),
+      lengthY = height.value - (boundedThumb ? thumbSize : 0),
+      posX = clamp(x - (boundedThumb ? thumbSize / 2 : 0), lengthX),
+      posY = clamp(y - (boundedThumb ? thumbSize / 2 : 0), lengthY),
+      valueX = Math.round((posX / lengthX) * 360),
+      valueY = Math.round((posY / lengthY) * 100),
+      newHueValue = reverse ? 360 - valueX : valueX,
+      newSaturationValue = 100 - valueY;
 
     if (hueValue.value === newHueValue && saturationValue.value === newSaturationValue) return;
 

@@ -82,15 +82,13 @@ export function OpacitySlider({
     ),
   }));
 
-  const onGestureUpdate = (event: PanGestureHandlerEventPayload) => {
+  const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
-    const posX = clamp(event.x, width.value),
-      posY = clamp(event.y, height.value),
-      percentX = posX / width.value,
-      percentY = posY / height.value,
-      valX = reverse ? 100 - Math.round(percentX * 100) : Math.round(percentX * 100),
-      valY = reverse ? 100 - Math.round(percentY * 100) : Math.round(percentY * 100),
-      newOpacityValue = (vertical ? valY : valX) / 100;
+
+    const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0),
+      posX = clamp((vertical ? y : x) - (boundedThumb ? thumbSize / 2 : 0), length),
+      value = posX / length,
+      newOpacityValue = reverse ? 1 - value : value;
 
     if (alphaValue.value === newOpacityValue) return;
 
