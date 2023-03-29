@@ -57,7 +57,7 @@ description: A square-shaped slider (windows style) is utilized to adjust the hu
 
 ### `thumbShape`
 
-- Change thumb's shape and apperance.
+- Change thumb's shape and appearance.
 - `type: string`
 - `values`: <shapes/>
 - `default: 'ring'`
