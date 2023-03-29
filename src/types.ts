@@ -288,6 +288,11 @@ export interface Panel2Props extends PanelProps {
   reverse?: boolean;
 }
 
+export interface Panel4Props extends PanelProps {
+  /** - reverse (flip) hue direction. */
+  reverse?: boolean;
+}
+
 export interface SliderProps {
   /**
    * - Allows for a higher quality image to be provided.
