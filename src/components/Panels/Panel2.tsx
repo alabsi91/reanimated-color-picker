@@ -5,7 +5,7 @@ import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 
 
 import { styles } from '@styles';
 import CTX from '@context';
-import { clamp, getStyle } from '@utils';
+import { clamp, getStyle, isRtl } from '@utils';
 import Thumb from '@thumb';
 
 import type { LayoutChangeEvent } from 'react-native';
@@ -101,6 +101,16 @@ export function Panel2({
     height.value = layout.height;
   }, []);
 
+  const rotatePanelImage = useAnimatedStyle(() => ({
+    width: height.value,
+    height: width.value,
+    transform: [
+      { rotate: '270deg' },
+      { translateX: (width.value - height.value) / 2 },
+      { translateY: ((width.value - height.value) / 2) * (isRtl ? -1 : 1) },
+    ],
+  }));
+
   return (
     <GestureDetector gesture={composed}>
       <Animated.View
@@ -108,10 +118,16 @@ export function Panel2({
         style={[styles.panel_container, { height: getHeight }, style, { position: 'relative', borderWidth: 0, padding: 0 }]}
       >
         <ImageBackground
-          source={require('@assets/Panel2.png')}
-          style={[styles.panel_image, { borderRadius, transform: [{ scaleX: reverse ? -1 : 1 }] }]}
+          source={require('@assets/Hue.png')}
+          style={[styles.panel_image, { position: 'relative', borderRadius, transform: [{ scaleX: reverse ? -1 : 1 }] }]}
           resizeMode='stretch'
-        />
+        >
+          <Animated.Image
+            source={require('@assets/Saturation.png')}
+            style={[styles.panel_image, rotatePanelImage]}
+            resizeMode='stretch'
+          />
+        </ImageBackground>
         <Thumb
           {...{
             channel: 's',
