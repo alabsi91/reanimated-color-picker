@@ -20,12 +20,14 @@ export function Panel2({
   thumbSize: localThumbSize,
   thumbStyle: localThumbStyle,
   thumbInnerStyle: localThumbInnerStyle,
+  verticalChannel = 'brightness',
   reverse = false,
   style = {},
 }: Panel2Props) {
   const {
     hueValue,
     saturationValue,
+    brightnessValue,
     onGestureChange,
     onGestureEnd,
     thumbSize: globalThumbsSize,
@@ -43,7 +45,8 @@ export function Panel2({
     boundedThumb = localBoundedThumb ?? globalBoundedThumb,
     renderThumb = localRenderThumb ?? globalRenderThumbs,
     thumbStyle = localThumbStyle ?? globalThumbsStyle ?? {},
-    thumbInnerStyle = localThumbInnerStyle ?? globalThumbsInnerStyle ?? {};
+    thumbInnerStyle = localThumbInnerStyle ?? globalThumbsInnerStyle ?? {},
+    channelValue = verticalChannel === 'brightness' ? brightnessValue : saturationValue;
 
   const borderRadius = getStyle(style, 'borderRadius') ?? 5,
     getHeight = getStyle(style, 'height') ?? 200;
@@ -57,7 +60,7 @@ export function Panel2({
     const length = { x: width.value - (boundedThumb ? thumbSize : 0), y: height.value - (boundedThumb ? thumbSize : 0) },
       percentX = (hueValue.value / 360) * length.x,
       posX = (reverse ? length.x - percentX : percentX) - (boundedThumb ? 0 : thumbSize / 2),
-      percentY = (saturationValue.value / 100) * length.y,
+      percentY = (channelValue.value / 100) * length.y,
       posY = length.y - percentY - (boundedThumb ? 0 : thumbSize / 2);
     return { transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }] };
   }, [localThumbSize, reverse]);
@@ -72,12 +75,12 @@ export function Panel2({
       valueX = Math.round((posX / lengthX) * 360),
       valueY = Math.round((posY / lengthY) * 100),
       newHueValue = reverse ? 360 - valueX : valueX,
-      newSaturationValue = 100 - valueY;
+      newChannelValue = 100 - valueY;
 
-    if (hueValue.value === newHueValue && saturationValue.value === newSaturationValue) return;
+    if (hueValue.value === newHueValue && channelValue.value === newChannelValue) return;
 
     hueValue.value = newHueValue;
-    saturationValue.value = newSaturationValue;
+    channelValue.value = newChannelValue;
     runOnJS(onGestureChange)();
   };
   const onGestureBegin = (event: PanGestureHandlerEventPayload) => {
@@ -123,14 +126,14 @@ export function Panel2({
           resizeMode='stretch'
         >
           <Animated.Image
-            source={require('@assets/Saturation.png')}
+            source={verticalChannel === 'brightness' ? require('@assets/Brightness.png') : require('@assets/Saturation.png')}
             style={[styles.panel_image, rotatePanelImage]}
             resizeMode='stretch'
           />
         </ImageBackground>
         <Thumb
           {...{
-            channel: 's',
+            channel: verticalChannel === 'brightness' ? 'v' : 's',
             thumbShape,
             thumbSize,
             thumbColor,
