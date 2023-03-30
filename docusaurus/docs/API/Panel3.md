@@ -6,26 +6,27 @@ description: The circle-shaped slider, with its wheel style design, is utilized 
 
 # `<Panel3 />`
 
-![panel2](../../../images/panel3.png)
+![panel3-saturation](../../../images/panel3-saturation.png) < or > ![panel3-brightness](../../../images/panel3-brightness.png)
 
-- The circle-shaped slider, with its wheel style design, is utilized to adjust the hue and saturation of colors.
-- Move the handle around the center to change the color's hue.
-- Move the handle away or toward the center to change the color's saturation.
+- The circle-shaped slider, with its wheel style design, is utilized to adjust the hue and (saturation or brightness) of colors.
+
+- Move thumb (handle) around the center to change the color's hue.
+
+- Move thumb (handle) away or toward the center to change  the saturation or the brightness of the color, depending on the `verticalChannel` prop..
 
 :::tip
 
-- Add [`<BrightnessSlider />`](./BrightnessSlider) component also to gain control over the three color channels.
+If you want to give your users more control over the color selection, you can add another slider next to this one that adjusts the opposite channel. For example, if `centerChannel` is `"saturation"`, you can add a [`<BrightnessSlider />`](./BrightnessSlider) slider, and vice versa.
 
 :::
 
 ## Props
 
-### `imageSource`
+### `centerChannel `
 
-- Allows for a higher quality image to be provided for the slider background.
-- Check out the `Figma` link for the uncompressed assets here 👉 [color picker assets](https://www.figma.com/file/1NAZsgrXejzzDsakZtQyuP/reanimated-color-picker-assets?node-id=0%3A1&t=CZzURph1MOPimwI2-1).
-- `type: ImageSourcePropType`
-- `default: undefined`
+- Determines which color channel to adjust when moving the thumb towards or away from the center of the circular slider.
+- `type: "saturation" | "brightness"`
+- `default: "saturation"`
 
 ### `boundedThumb`
 

@@ -6,28 +6,27 @@ description: A square-shaped slider (windows style) is utilized to adjust the hu
 
 # `<Panel2 />`
 
-![panel2](../../../images/panel2.png)
+![panel2panel2-saturation](../../../images/panel2-saturation.png) < or > ![panel2panel2-brightness](../../../images/panel2-brightness.png)
 
-- A square-shaped slider (windows style) is utilized to adjust the hue and saturation channels.
+- A square-shaped slider (windows style) is utilized to adjust the hue and (saturation or brightness) channels.
 
-- Move the handle horizontally to change the color's saturation.
+- Move the thumb (handle) horizontally to change the color's hue.
 
-- Move the handle vertically to change the color's hue.
+- Drag the thumb (handle) up or down to adjust either the saturation or the brightness of the color, depending on the `verticalChannel` prop.
 
 :::tip
 
-- Add [`<BrightnessSlider />`](./BrightnessSlider) component also to gain control over the three color channels.
+If you want to give your users more control over the color selection, you can add another slider next to `Panel2` that adjusts the opposite channel. For example, if `verticalChannel` is `"saturation"`, you can add a [`<BrightnessSlider />`](./BrightnessSlider), and vice versa.
 
 :::
 
 ## Props
 
-### `imageSource`
+### `verticalChannel`
 
-- Allows for a higher quality image to be provided for the slider background.
-- Check out the `Figma` link for the uncompressed assets here 👉 [color picker assets](https://www.figma.com/file/1NAZsgrXejzzDsakZtQyuP/reanimated-color-picker-assets?node-id=0%3A1&t=CZzURph1MOPimwI2-1).
-- `type: ImageSourcePropType`
-- `default: undefined`
+- Determines which color channel to adjust when moving the thumb vertically on the slider.
+- `type: "saturation" | "brightness"`
+- `default: "saturation"`
 
 ### `boundedThumb`
 
