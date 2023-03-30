@@ -21,7 +21,6 @@ export function Panel1({
   thumbStyle: localThumbStyle,
   thumbInnerStyle: localThumbInnerStyle,
   style = {},
-  imageSource,
 }: PanelProps) {
   const {
     hueValue,
@@ -127,7 +126,7 @@ export function Panel1({
         ]}
       >
         <View style={[styles.panel_image, { borderRadius }]}>
-          <Image source={imageSource ?? require('@assets/Saturation.png')} style={styles.panel_image} resizeMode='stretch' />
+          <Image source={require('@assets/Saturation.png')} style={styles.panel_image} resizeMode='stretch' />
           <Animated.Image
             source={require('@assets/Brightness.png')}
             style={[styles.panel_image, rotateBrightnessImage]}

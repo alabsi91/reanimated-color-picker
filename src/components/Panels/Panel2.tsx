@@ -22,7 +22,6 @@ export function Panel2({
   thumbInnerStyle: localThumbInnerStyle,
   reverse = false,
   style = {},
-  imageSource,
 }: Panel2Props) {
   const {
     hueValue,
@@ -109,7 +108,7 @@ export function Panel2({
         style={[styles.panel_container, { height: getHeight }, style, { position: 'relative', borderWidth: 0, padding: 0 }]}
       >
         <ImageBackground
-          source={imageSource ?? require('@assets/Panel2.png')}
+          source={require('@assets/Panel2.png')}
           style={[styles.panel_image, { borderRadius, transform: [{ scaleX: reverse ? -1 : 1 }] }]}
           resizeMode='stretch'
         />

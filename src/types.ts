@@ -245,12 +245,6 @@ export interface PreviewTextProps {
 }
 
 export interface PanelProps {
-  /**
-   * - Allows for a higher quality image to be provided.
-   * - Check out the `Figma` link for the uncompressed assets here 👉 [color picker assets](https://www.figma.com/file/1NAZsgrXejzzDsakZtQyuP/reanimated-color-picker-assets?node-id=0%3A1&t=CZzURph1MOPimwI2-1).
-   */
-  imageSource?: ImageSourcePropType;
-
   /** - panel handle (thumb) size (height*width). */
   thumbSize?: number;
 
