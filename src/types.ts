@@ -285,6 +285,11 @@ export interface Panel2Props extends PanelProps {
   verticalChannel?: 'saturation' | 'brightness';
 }
 
+export interface Panel3Props extends PanelProps {
+  /** - determines which color channel to adjust when moving the thumb towards or away from the center of the circular slider. */
+  centerChannel?: 'saturation' | 'brightness';
+}
+
 export interface SliderProps {
   /**
    * - Allows for a higher quality image to be provided.
