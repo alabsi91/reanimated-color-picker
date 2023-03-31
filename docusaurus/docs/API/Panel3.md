@@ -121,6 +121,12 @@ function MyCustomThumb({
 }
 ```
 
+### `adaptSpectrum`
+
+- Slider background color spectrum adapts to changes in saturation and brightness.
+- `type: boolean`
+- `default: false`
+
 ### `style`
 
 - Panel's container style.

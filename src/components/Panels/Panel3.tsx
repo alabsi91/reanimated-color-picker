@@ -1,9 +1,9 @@
 import React, { useContext, useCallback } from 'react';
-import { ImageBackground, Image } from 'react-native';
+import { ImageBackground, Image, StyleSheet } from 'react-native';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
-import { clamp } from '@utils';
+import { clamp, hsva2Hsla } from '@utils';
 import { styles } from '@styles';
 import CTX from '@context';
 import Thumb from '@thumb';
@@ -13,6 +13,7 @@ import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler
 import type { Panel3Props } from '@types';
 
 export function Panel3({
+  adaptSpectrum = false,
   thumbShape: localThumbShape,
   thumbSize: localThumbSize,
   thumbColor: localThumbColor,
@@ -49,7 +50,7 @@ export function Panel3({
 
   const width = useSharedValue(0);
   const borderRadius = useSharedValue(0);
-  const panelStyle = useAnimatedStyle(() => ({ borderRadius: borderRadius.value }), [localThumbSize]);
+  const borderRadiusStyle = useAnimatedStyle(() => ({ borderRadius: borderRadius.value }), [localThumbSize]);
 
   const handleScale = useSharedValue(1);
 
@@ -73,6 +74,12 @@ export function Panel3({
       ],
     };
   }, [localThumbSize]);
+
+  const spectrumStyle = useAnimatedStyle(() => {
+    if (!adaptSpectrum) return {};
+    if (centerChannel === 'brightness') return { backgroundColor: hsva2Hsla(0, 0, 100, 1 - saturationValue.value / 100) };
+    return { backgroundColor: hsva2Hsla(0, 0, 0, 1 - brightnessValue.value / 100) };
+  });
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -119,9 +126,17 @@ export function Panel3({
     <GestureDetector gesture={composed}>
       <Animated.View
         onLayout={onLayout}
-        style={[styles.panel_container, style, { position: 'relative', aspectRatio: 1, borderWidth: 0, padding: 0 }, panelStyle]}
+        style={[
+          styles.panel_container,
+          style,
+          { position: 'relative', aspectRatio: 1, borderWidth: 0, padding: 0 },
+          borderRadiusStyle,
+        ]}
       >
         <ImageBackground source={require('@assets/circularHue.png')} style={styles.panel_image} resizeMode='stretch'>
+          {adaptSpectrum && centerChannel === 'brightness' && (
+            <Animated.View style={[borderRadiusStyle, spectrumStyle, StyleSheet.absoluteFillObject]} />
+          )}
           <Image
             source={
               centerChannel === 'brightness'
@@ -131,6 +146,9 @@ export function Panel3({
             style={styles.panel_image}
             resizeMode='stretch'
           />
+          {adaptSpectrum && centerChannel === 'saturation' && (
+            <Animated.View style={[borderRadiusStyle, spectrumStyle, StyleSheet.absoluteFillObject]} />
+          )}
         </ImageBackground>
         <Thumb
           {...{
@@ -142,6 +160,7 @@ export function Panel3({
             innerStyle: thumbInnerStyle,
             style: thumbStyle,
             handleStyle,
+            adaptSpectrum,
           }}
         />
       </Animated.View>
