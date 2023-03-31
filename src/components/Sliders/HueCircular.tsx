@@ -164,6 +164,7 @@ export function HueCircular({
             innerStyle: thumbInnerStyle,
             style: thumbStyle,
             handleStyle,
+            adaptSpectrum,
           }}
         />
       </Animated.View>
