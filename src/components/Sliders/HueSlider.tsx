@@ -73,12 +73,14 @@ export function HueSlider({
     };
   }, [localThumbSize, vertical, reverse]);
 
-  const activeSaturationStyle = useAnimatedStyle(() => ({
-    backgroundColor: hsva2Hsla(0, 0, brightnessValue.value, 1 - saturationValue.value / 100),
-  }));
-  const activeBrightnessStyle = useAnimatedStyle(() => ({
-    backgroundColor: hsva2Hsla(0, 0, 0, 1 - brightnessValue.value / 100),
-  }));
+  const activeSaturationStyle = useAnimatedStyle(() => {
+    if (!adaptSpectrum) return {};
+    return { backgroundColor: hsva2Hsla(0, 0, brightnessValue.value, 1 - saturationValue.value / 100) };
+  });
+  const activeBrightnessStyle = useAnimatedStyle(() => {
+    if (!adaptSpectrum) return {};
+    return { backgroundColor: hsva2Hsla(0, 0, 0, 1 - brightnessValue.value / 100) };
+  });
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -141,8 +143,8 @@ export function HueSlider({
         <Animated.Image source={imageSource ?? require('@assets/Hue.png')} style={imageStyle} />
         {adaptSpectrum && (
           <>
-            <Animated.View style={[{ borderRadius }, activeSaturationStyle, StyleSheet.absoluteFillObject]} />
             <Animated.View style={[{ borderRadius }, activeBrightnessStyle, StyleSheet.absoluteFillObject]} />
+            <Animated.View style={[{ borderRadius }, activeSaturationStyle, StyleSheet.absoluteFillObject]} />
           </>
         )}
         <Thumb
