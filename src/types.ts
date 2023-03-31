@@ -283,6 +283,9 @@ export interface Panel2Props extends PanelProps {
 
   /** - determines which color channel to adjust when moving the thumb vertically on the slider. */
   verticalChannel?: 'saturation' | 'brightness';
+
+  /** - color spectrum adapts to changes in brightness and saturation */
+  adaptSpectrum?: boolean;
 }
 
 export interface Panel3Props extends PanelProps {

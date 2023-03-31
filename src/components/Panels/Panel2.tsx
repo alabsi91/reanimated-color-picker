@@ -1,11 +1,11 @@
 import React, { useContext, useCallback } from 'react';
-import { ImageBackground } from 'react-native';
+import { ImageBackground, StyleSheet } from 'react-native';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import { styles } from '@styles';
 import CTX from '@context';
-import { clamp, getStyle, isRtl } from '@utils';
+import { clamp, getStyle, hsva2Hsla, isRtl } from '@utils';
 import Thumb from '@thumb';
 
 import type { LayoutChangeEvent } from 'react-native';
@@ -13,6 +13,7 @@ import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler
 import type { Panel2Props } from '@types';
 
 export function Panel2({
+  adaptSpectrum = false,
   thumbColor: localThumbColor,
   boundedThumb: localBoundedThumb,
   renderThumb: localRenderThumb,
@@ -64,6 +65,12 @@ export function Panel2({
       posY = length.y - percentY - (boundedThumb ? 0 : thumbSize / 2);
     return { transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }] };
   }, [localThumbSize, reverse]);
+
+  const spectrumStyle = useAnimatedStyle(() => {
+    if (!adaptSpectrum) return {};
+    if (verticalChannel === 'brightness') return { backgroundColor: hsva2Hsla(0, 0, 100, 1 - saturationValue.value / 100) };
+    return { backgroundColor: hsva2Hsla(0, 0, 0, 1 - brightnessValue.value / 100) };
+  });
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -125,11 +132,17 @@ export function Panel2({
           style={[styles.panel_image, { position: 'relative', borderRadius, transform: [{ scaleX: reverse ? -1 : 1 }] }]}
           resizeMode='stretch'
         >
+          {adaptSpectrum && verticalChannel === 'brightness' && (
+            <Animated.View style={[spectrumStyle, StyleSheet.absoluteFillObject]} />
+          )}
           <Animated.Image
             source={verticalChannel === 'brightness' ? require('@assets/Brightness.png') : require('@assets/Saturation.png')}
             style={[styles.panel_image, rotatePanelImage]}
             resizeMode='stretch'
           />
+          {adaptSpectrum && verticalChannel === 'saturation' && (
+            <Animated.View style={[spectrumStyle, StyleSheet.absoluteFillObject]} />
+          )}
         </ImageBackground>
         <Thumb
           {...{
@@ -141,6 +154,7 @@ export function Panel2({
             innerStyle: thumbInnerStyle,
             style: thumbStyle,
             handleStyle,
+            adaptSpectrum,
           }}
         />
       </Animated.View>
