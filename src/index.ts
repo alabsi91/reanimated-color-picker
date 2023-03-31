@@ -10,9 +10,10 @@ export { Panel3 } from '@panels/Panel3';
 export { HueSlider } from '@sliders/HueSlider';
 export { SaturationSlider } from '@sliders/SaturationSlider';
 export { BrightnessSlider } from '@sliders/BrightnessSlider';
+export { OpacitySlider } from '@sliders/OpacitySlider';
+export { HueCircular } from '@sliders/HueCircular';
 export { Preview } from './components/Preview';
 export { PreviewText } from './components/PreviewText';
-export { OpacitySlider } from '@sliders/OpacitySlider';
 export { Swatches } from './components/Swatches';
 export { InputWidget } from './components/InputWidget/InputWidget';
 

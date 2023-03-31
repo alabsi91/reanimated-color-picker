@@ -1,5 +1,5 @@
 ---
-sidebar_position: 11
+sidebar_position: 13
 sidebar_label: InputWidget
 description: The input widget component allows you to input color values in various formats.
 ---

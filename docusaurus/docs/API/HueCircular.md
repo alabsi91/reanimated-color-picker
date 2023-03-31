@@ -1,46 +1,27 @@
 ---
-sidebar_position: 7
-sidebar_label: Panel1
-description: A square-shaped slider, reminiscent of Adobe style, is utilized to adjust the brightness and saturation of colors.
+sidebar_position: 6
+sidebar_label: HueCircular
+description: A slider to change the color's opacity.
 ---
+# `<HueCircular />`
 
-# `<Panel1 />`
+![HueCircular](../../../images/HueCircular.png)
 
-![panel1](../../../images/panel1.png)
-
-- A square-shaped slider, reminiscent of Adobe style, is utilized to adjust the brightness and saturation of colors..
-
-- Move the handle horizontally to change the color's saturation.
-
-- Move the handle vertically to change the color's brightness.
-
-:::tip
-
-- Add [`<HueSlider />`](./HueSlider) component also to gain control over the three color channels.
-
-:::
+- ### A circular slider to change the color's hue.
 
 ## Props
 
-### `boundedThumb`
-
-- Determines whether the panel slider thumb (or handle) should be constrained to stay within the boundaries of the panel.
-- When set to `true`, the thumb will not be allowed to move beyond the edges of the panel.
-- When set to `false`, part of it will be outside of the panel bounds.
-- `type: boolean`
-- `default: false`
-
 ### `thumbSize`
 
-- Panel's handle (thumb) size (height\*width).
+- The size of the slider's thumb.
 - `type: number`
 - `default: 35`
 
 ### `thumbColor`
 
-- Change thumb's color.
+- The color of the slider's thumb.
 - `type: string`
-- `default`: interactive\*
+- `default: interactive*`
 
 :::info **\*interactive**
 
@@ -48,12 +29,18 @@ description: A square-shaped slider, reminiscent of Adobe style, is utilized to 
 
 :::
 
+### `sliderThickness`
+
+- The thickness is the `width` of the slider in `vertical` mode or the `height` in `horizontal` mode.
+- `type: number`
+- `default: 25`
+
 ### `thumbShape`
 
-- Change thumb's shape and appearance.
+- The shape and appearance of the slider's thumb.
 - `type: string`
-- `values`: <shapes/>
 - `default: 'ring'`
+- `values:`<shapes/>
 
 ### `thumbStyle`
 
@@ -115,9 +102,15 @@ function MyCustomThumb({
 }
 ```
 
+### `adaptSpectrum`
+
+- Slider background color spectrum adapts to changes in saturation and brightness.
+- `type: boolean`
+- `default: false`
+
 ### `style`
 
-- Panel's container style.
+- The style of the slider's container.
 - `type: ViewStyle`
 
 :::info note
@@ -125,3 +118,8 @@ function MyCustomThumb({
 - Certain style properties will be overridden.
 
 :::
+
+### `containerStyle`
+
+- The style of the container that wraps the given children.
+- `type: ViewStyle`

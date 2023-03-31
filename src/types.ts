@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import type { StyleProp, TextStyle, ViewStyle, ImageStyle, TextInputProps, ImageSourcePropType } from 'react-native';
 import type { AnimatedStyleProp, SharedValue } from 'react-native-reanimated';
 import type { AnyFormat } from './colorKit/types';
@@ -345,6 +346,13 @@ export interface SliderProps {
    * - **Note** Certain style properties will be overridden.
    */
   style?: StyleProp<ViewStyle>;
+}
+
+export interface HueCircular extends Omit<SliderProps, 'vertical' | 'reverse' | 'boundedThumb'> {
+  children?: ReactNode;
+
+  /** - the style of the container that wraps the given children.*/
+  containerStyle?: StyleProp<ViewStyle>;
 }
 
 export type InputProps = Omit<
