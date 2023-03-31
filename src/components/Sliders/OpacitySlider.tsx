@@ -74,13 +74,15 @@ export function OpacitySlider({
     };
   }, [localThumbSize, vertical, reverse]);
 
-  const activeColorStyle = useAnimatedStyle(() => ({
-    backgroundColor: hsva2Hsla(
-      hueValue.value,
-      adaptSpectrum ? saturationValue.value : 100,
-      adaptSpectrum ? brightnessValue.value : 100
-    ),
-  }));
+  const activeColorStyle = useAnimatedStyle(() => {
+    return {
+      backgroundColor: hsva2Hsla(
+        hueValue.value,
+        adaptSpectrum ? saturationValue.value : 100,
+        adaptSpectrum ? brightnessValue.value : 100
+      ),
+    };
+  });
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';

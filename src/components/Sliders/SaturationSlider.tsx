@@ -73,13 +73,14 @@ export function SaturationSlider({
     };
   }, [localThumbSize, vertical, reverse]);
 
-  const activeColorStyle = useAnimatedStyle(() => ({
-    backgroundColor: hsva2Hsla(hueValue.value, 100, 100),
-  }));
-
-  const activeBrightnessStyle = useAnimatedStyle(() => ({
-    backgroundColor: hsva2Hsla(0, 0, 0, 1 - brightnessValue.value / 100),
-  }));
+  const activeColorStyle = useAnimatedStyle(() => {
+    if (!adaptSpectrum) return {};
+    return { backgroundColor: hsva2Hsla(hueValue.value, 100, 100) };
+  });
+  const activeBrightnessStyle = useAnimatedStyle(() => {
+    if (!adaptSpectrum) return {};
+    return { backgroundColor: hsva2Hsla(0, 0, 0, 1 - brightnessValue.value / 100) };
+  });
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';

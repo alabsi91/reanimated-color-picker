@@ -73,9 +73,10 @@ export function BrightnessSlider({
     };
   }, [localThumbSize, vertical, reverse]);
 
-  const activeColorStyle = useAnimatedStyle(() => ({
-    backgroundColor: hsva2Hsla(hueValue.value, adaptSpectrum ? saturationValue.value : 100, 100),
-  }));
+  const activeColorStyle = useAnimatedStyle(() => {
+    if (!adaptSpectrum) return {};
+    return { backgroundColor: hsva2Hsla(hueValue.value, adaptSpectrum ? saturationValue.value : 100, 100) };
+  });
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
