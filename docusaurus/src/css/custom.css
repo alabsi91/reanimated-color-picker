@@ -39,3 +39,11 @@
 img {
   border-radius: 10px;
 }
+
+.example-images p {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 20px;
+}
