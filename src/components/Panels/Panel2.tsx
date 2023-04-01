@@ -21,7 +21,7 @@ export function Panel2({
   thumbSize: localThumbSize,
   thumbStyle: localThumbStyle,
   thumbInnerStyle: localThumbInnerStyle,
-  verticalChannel = 'brightness',
+  verticalChannel = 'saturation',
   reverseHue = false,
   style = {},
 }: Panel2Props) {
