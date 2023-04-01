@@ -74,7 +74,6 @@ export function SaturationSlider({
   }, [localThumbSize, vertical, reverse]);
 
   const activeColorStyle = useAnimatedStyle(() => {
-    if (!adaptSpectrum) return {};
     return { backgroundColor: hsva2Hsla(hueValue.value, 100, 100) };
   });
   const activeBrightnessStyle = useAnimatedStyle(() => {
