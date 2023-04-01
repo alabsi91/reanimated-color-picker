@@ -13,7 +13,7 @@ import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler
 import type { HueCircular } from '@types';
 
 export function HueCircular({
-  adaptSpectrum = false,
+  adaptSpectrum: localAdaptSpectrum,
   thumbShape: localThumbShape,
   thumbSize: localThumbSize,
   thumbColor: localThumbColor,
@@ -31,6 +31,7 @@ export function HueCircular({
     brightnessValue,
     onGestureChange,
     onGestureEnd,
+    adaptSpectrum: globalAdaptSpectrum,
     thumbSize: globalThumbsSize,
     thumbShape: globalThumbShape,
     thumbColor: globalThumbsColor,
@@ -46,6 +47,7 @@ export function HueCircular({
     renderThumb = localRenderThumb ?? globalRenderThumbs,
     thumbStyle = localThumbStyle ?? globalThumbsStyle ?? {},
     sliderThickness = localSliderThickness ?? globalSliderThickness,
+    adaptSpectrum = localAdaptSpectrum ?? globalAdaptSpectrum,
     thumbInnerStyle = localThumbInnerStyle ?? globalThumbsInnerStyle ?? {};
 
   const isGestureActive = useSharedValue(false);

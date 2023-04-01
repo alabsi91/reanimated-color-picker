@@ -1,9 +1,8 @@
 import React, { useContext } from 'react';
-import { I18nManager } from 'react-native';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
-import { clamp, getStyle, hsva2Hsla } from '@utils';
+import { clamp, getStyle, hsva2Hsla, isRtl } from '@utils';
 import CTX from '@context';
 import Thumb from '@thumb';
 
@@ -11,10 +10,8 @@ import type { LayoutChangeEvent } from 'react-native';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 import type { SliderProps } from '@types';
 
-const isRtl = I18nManager.isRTL;
-
 export function OpacitySlider({
-  adaptSpectrum = false,
+  adaptSpectrum: localAdaptSpectrum,
   thumbShape: localThumbShape,
   thumbSize: localThumbSize,
   thumbColor: localThumbColor,
@@ -29,12 +26,13 @@ export function OpacitySlider({
   imageSource,
 }: SliderProps) {
   const {
-    alphaValue,
-    brightnessValue,
     hueValue,
     saturationValue,
+    brightnessValue,
+    alphaValue,
     onGestureChange,
     onGestureEnd,
+    adaptSpectrum: globalAdaptSpectrum,
     thumbSize: globalThumbsSize,
     thumbShape: globalThumbsShape,
     thumbColor: globalThumbsColor,
@@ -52,6 +50,7 @@ export function OpacitySlider({
     renderThumb = localRenderThumb ?? globalRenderThumbs,
     thumbStyle = localThumbStyle ?? globalThumbsStyle ?? {},
     thumbInnerStyle = localThumbInnerStyle ?? globalThumbsInnerStyle ?? {},
+    adaptSpectrum = localAdaptSpectrum ?? globalAdaptSpectrum,
     sliderThickness = localSliderThickness ?? globalSliderThickness;
 
   const borderRadius = getStyle(style, 'borderRadius') ?? 5,

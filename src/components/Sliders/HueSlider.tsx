@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
-import { I18nManager, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
-import { clamp, getStyle, hsva2Hsla } from '@utils';
+import { clamp, getStyle, hsva2Hsla, isRtl } from '@utils';
 import CTX from '@context';
 import Thumb from '@thumb';
 
@@ -11,10 +11,8 @@ import type { LayoutChangeEvent } from 'react-native';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 import type { SliderProps } from '@types';
 
-const isRtl = I18nManager.isRTL;
-
 export function HueSlider({
-  adaptSpectrum = false,
+  adaptSpectrum: localAdaptSpectrum,
   thumbShape: localThumbShape,
   thumbSize: localThumbSize,
   thumbColor: localThumbColor,
@@ -29,11 +27,12 @@ export function HueSlider({
   imageSource,
 }: SliderProps) {
   const {
-    onGestureChange,
-    onGestureEnd,
-    brightnessValue,
     hueValue,
     saturationValue,
+    brightnessValue,
+    onGestureChange,
+    onGestureEnd,
+    adaptSpectrum: globalAdaptSpectrum,
     thumbSize: globalThumbSize,
     thumbShape: globalThumbShape,
     thumbColor: globalThumbColor,
@@ -51,6 +50,7 @@ export function HueSlider({
     renderThumb = localRenderThumb ?? globalRenderThumb,
     thumbStyle = localThumbStyle ?? globalThumbStyle ?? {},
     thumbInnerStyle = localThumbInnerStyle ?? globalThumbInnerStyle ?? {},
+    adaptSpectrum = localAdaptSpectrum ?? globalAdaptSpectrum,
     sliderThickness = localSliderThickness ?? globalSliderThickness;
 
   const borderRadius = getStyle(style, 'borderRadius') ?? 5,

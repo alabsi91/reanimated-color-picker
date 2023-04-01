@@ -1,12 +1,10 @@
 import React from 'react';
-import { I18nManager } from 'react-native';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 
+import { isRtl } from '@utils';
 import { styles } from '@styles';
 
 import type { BuiltinThumbsProps } from '@types';
-
-const isRtl = I18nManager.isRTL;
 
 export default function ({
   width,

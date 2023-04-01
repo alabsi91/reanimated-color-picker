@@ -21,6 +21,7 @@ if (Platform.OS === 'web') {
 }
 
 export default function ColorPicker({
+  adaptSpectrum = false,
   sliderThickness = 25,
   thumbAnimationDuration = 200,
   thumbSize = 35,
@@ -89,6 +90,8 @@ export default function ColorPicker({
     saturationValue,
     brightnessValue,
     alphaValue,
+
+    adaptSpectrum,
 
     sliderThickness,
     thumbSize,

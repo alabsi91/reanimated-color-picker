@@ -99,7 +99,10 @@ export interface TCTX {
   brightnessValue: SharedValue<number>;
   alphaValue: SharedValue<number>;
 
-  /** apply a color to the color picker. */
+  /** A global property that allows the color spectrum to adapt to changes in brightness and saturation for all descendant slider components. */
+  adaptSpectrum: boolean;
+
+  /** Apply a color to the color picker. */
   setColor: (color: string) => void;
 
   /** A global prop for all sliders children. */
@@ -115,7 +118,7 @@ export interface TCTX {
   thumbColor: string | undefined;
 
   /** A global prop for all sliders children. */
-  thumbStyle?: StyleProp<ViewStyle>;
+  thumbStyle: StyleProp<ViewStyle>;
 
   /**
    * - Determines whether the slider thumb (or handle) should be constrained to stay within the boundaries of the slider.
@@ -125,10 +128,10 @@ export interface TCTX {
   boundedThumb: boolean;
 
   /** A global style for all sliders children. */
-  thumbInnerStyle?: StyleProp<ViewStyle>;
+  thumbInnerStyle: StyleProp<ViewStyle>;
 
   /** A global prop for all sliders children. */
-  renderThumb?: RenderThumbType;
+  renderThumb: RenderThumbType | undefined;
 
   /** The initial color value as a `string` */
   value: string;
@@ -144,6 +147,9 @@ export interface TCTX {
 }
 
 export interface ColorPickerProps {
+  /** - a global property that allows the color spectrum to adapt to changes in brightness and saturation for all descendant slider components.*/
+  adaptSpectrum?: boolean;
+
   /**
    * - a global property to change the thickness of all descendant sliders components.
    * - thickness is the width of the slider in vertical mode or the height in horizontal mode.

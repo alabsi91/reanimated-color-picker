@@ -13,7 +13,7 @@ import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler
 import type { Panel3Props } from '@types';
 
 export function Panel3({
-  adaptSpectrum = false,
+  adaptSpectrum: localAdaptSpectrum,
   thumbShape: localThumbShape,
   thumbSize: localThumbSize,
   thumbColor: localThumbColor,
@@ -30,6 +30,7 @@ export function Panel3({
     brightnessValue,
     onGestureChange,
     onGestureEnd,
+    adaptSpectrum: globalAdaptSpectrum,
     thumbSize: globalThumbsSize,
     thumbShape: globalThumbShape,
     thumbColor: globalThumbsColor,
@@ -46,6 +47,7 @@ export function Panel3({
     renderThumb = localRenderThumb ?? globalRenderThumbs,
     thumbStyle = localThumbStyle ?? globalThumbsStyle ?? {},
     thumbInnerStyle = localThumbInnerStyle ?? globalThumbsInnerStyle ?? {},
+    adaptSpectrum = localAdaptSpectrum ?? globalAdaptSpectrum,
     channelValue = centerChannel === 'brightness' ? brightnessValue : saturationValue;
 
   const width = useSharedValue(0);
