@@ -206,6 +206,11 @@ export interface ColorPickerProps {
   children?: React.ReactNode;
 }
 
+export interface ColorPickerRef {
+  /** Apply a color to the color picker. */
+  setColor: (color: string) => void;
+}
+
 export interface SwatchesProps {
   /**
    * - swatch style.

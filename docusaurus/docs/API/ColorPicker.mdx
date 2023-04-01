@@ -137,3 +137,27 @@ import RenderThumb from './_renderThumb.mdx';
 - The passed color object has the following properties: `hex`, `rgb`, `rgba`, `hsv`, `hsva`, `hwb`, `hwba`, `hsl`, and `hsla`
 - `type: (color: object) => void`
 - `default: null`
+
+## Methods
+
+### `setColor`
+
+- Set the currently displayed color in the color picker to a new one. Note that this won’t trigger any events like `onChange` and `onComplete`.
+- This is useful if you want to update the displayed color without binding a state to the color picker `value` property.
+
+```tsx
+import ColorPicker from 'reanimated-color-picker';
+import type { ColorPickerRef } from 'reanimated-color-picker';
+
+function MyComponent() {
+  const pickerRef = useRef<ColorPickerRef>(null);
+
+  const setNewColorHandle = () => {
+    if (pickerRef.current) {
+      pickerRef.current.setColor('orange');
+    }
+  };
+
+  return <ColorPicker ref={pickerRef}>{/* the rest of your code */}</ColorPicker>;
+}
+```
