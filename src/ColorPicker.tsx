@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
-import { Text, StyleSheet, Platform } from 'react-native';
+import { Text, Platform } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useSharedValue, withTiming } from 'react-native-reanimated';
 
@@ -117,20 +117,11 @@ const ColorPicker = forwardRef<ColorPickerRef, ColorPickerProps>(
     };
 
     return (
-      <GestureHandlerRootView style={[styles.wrapper, { direction: 'ltr' }, style]}>
+      <GestureHandlerRootView style={[{ direction: 'ltr' }, style]}>
         <CTX.Provider value={ctxValue}>{children}</CTX.Provider>
       </GestureHandlerRootView>
     );
   }
 );
-
-const styles = StyleSheet.create({
-  wrapper: {
-    flexDirection: 'column',
-    justifyContent: 'space-evenly',
-    alignSelf: 'center',
-    flex: 1,
-  },
-});
 
 export default ColorPicker;
