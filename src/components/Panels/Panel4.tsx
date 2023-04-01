@@ -147,7 +147,6 @@ export function Panel4({
         </View>
         <Thumb
           {...{
-            channel: 's',
             thumbShape,
             thumbSize,
             thumbColor,
