@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
+import { KeyboardAvoidingView, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 
 import ColorPicker, { Panel2, OpacitySlider, colorKit, InputWidget, SaturationSlider } from 'reanimated-color-picker';
@@ -12,7 +12,7 @@ export default function Example() {
   const selectedColor = useSharedValue(initialColor);
   const backgroundColorStyle = useAnimatedStyle(() => ({ backgroundColor: selectedColor.value }));
 
-  const onColorSelect = (color) => {
+  const onColorSelect = color => {
     selectedColor.value = color.hex;
   };
 
@@ -24,29 +24,31 @@ export default function Example() {
 
       <Modal onRequestClose={() => setShowModal(false)} visible={showModal} animationType='slide'>
         <Animated.View style={[styles.container, backgroundColorStyle]}>
-          <View style={styles.pickerContainer}>
-            <ColorPicker
-              value={initialColor}
-              sliderThickness={25}
-              thumbSize={30}
-              thumbShape='doubleTriangle'
-              onChange={onColorSelect}
-              adaptSpectrum
-            >
-              <Panel2 style={styles.panelStyle} verticalChannel='brightness' thumbShape='ring' />
+          <KeyboardAvoidingView behavior='position'>
+            <View style={styles.pickerContainer}>
+              <ColorPicker
+                value={initialColor}
+                sliderThickness={25}
+                thumbSize={30}
+                thumbShape='doubleTriangle'
+                onChange={onColorSelect}
+                adaptSpectrum
+              >
+                <Panel2 style={styles.panelStyle} verticalChannel='brightness' thumbShape='ring' />
 
-              <SaturationSlider style={styles.sliderStyle} thumbColor='#fff' />
+                <SaturationSlider style={styles.sliderStyle} thumbColor='#fff' />
 
-              <OpacitySlider style={styles.sliderStyle} thumbColor='#fff' />
+                <OpacitySlider style={styles.sliderStyle} thumbColor='#fff' />
 
-              <View style={styles.previewTxtContainer}>
-                <InputWidget
-                  inputStyle={{ color: '#fff', paddingVertical: 2, borderColor: '#707070', fontSize: 12, marginLeft: 5 }}
-                  iconColor='#707070'
-                />
-              </View>
-            </ColorPicker>
-          </View>
+                <View style={styles.previewTxtContainer}>
+                  <InputWidget
+                    inputStyle={{ color: '#fff', paddingVertical: 2, borderColor: '#707070', fontSize: 12, marginLeft: 5 }}
+                    iconColor='#707070'
+                  />
+                </View>
+              </ColorPicker>
+            </View>
+          </KeyboardAvoidingView>
 
           <Pressable style={styles.closeButton} onPress={() => setShowModal(false)}>
             <Text style={{ color: '#707070', fontWeight: 'bold' }}>Close</Text>
