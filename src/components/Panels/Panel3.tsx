@@ -50,9 +50,9 @@ export function Panel3({
     adaptSpectrum = localAdaptSpectrum ?? globalAdaptSpectrum,
     channelValue = centerChannel === 'brightness' ? brightnessValue : saturationValue;
 
+  const borderRadius = 2000;
+
   const width = useSharedValue(0);
-  const borderRadius = useSharedValue(0);
-  const borderRadiusStyle = useAnimatedStyle(() => ({ borderRadius: borderRadius.value }), [localThumbSize]);
 
   const handleScale = useSharedValue(1);
 
@@ -121,7 +121,6 @@ export function Panel3({
   const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
     const layoutWidth = layout.width;
     width.value = layoutWidth;
-    borderRadius.value = withTiming(layoutWidth / 2, { duration: 5 });
   }, []);
 
   return (
@@ -131,13 +130,12 @@ export function Panel3({
         style={[
           styles.panel_container,
           style,
-          { position: 'relative', aspectRatio: 1, borderWidth: 0, padding: 0 },
-          borderRadiusStyle,
+          { position: 'relative', aspectRatio: 1, borderWidth: 0, padding: 0, borderRadius },
         ]}
       >
         <ImageBackground source={require('@assets/circularHue.png')} style={styles.panel_image} resizeMode='stretch'>
           {adaptSpectrum && centerChannel === 'brightness' && (
-            <Animated.View style={[borderRadiusStyle, spectrumStyle, StyleSheet.absoluteFillObject]} />
+            <Animated.View style={[{ borderRadius }, spectrumStyle, StyleSheet.absoluteFillObject]} />
           )}
           <Image
             source={
@@ -149,7 +147,7 @@ export function Panel3({
             resizeMode='stretch'
           />
           {adaptSpectrum && centerChannel === 'saturation' && (
-            <Animated.View style={[borderRadiusStyle, spectrumStyle, StyleSheet.absoluteFillObject]} />
+            <Animated.View style={[{ borderRadius }, spectrumStyle, StyleSheet.absoluteFillObject]} />
           )}
         </ImageBackground>
         <Thumb

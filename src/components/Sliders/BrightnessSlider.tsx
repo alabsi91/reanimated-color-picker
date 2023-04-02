@@ -114,8 +114,8 @@ export function BrightnessSlider({
     const imageRotate = vertical ? (reverse ? '270deg' : '90deg') : reverse ? '180deg' : '0deg';
     const imageTranslateY = ((height.value - width.value) / 2) * ((reverse && isRtl) || (!reverse && !isRtl) ? 1 : -1);
     return {
-      width: vertical ? height.value : width.value,
-      height: vertical ? width.value : height.value,
+      width: vertical ? height.value : '100%',
+      height: vertical ? width.value : '100%',
       borderRadius,
       transform: [
         { rotate: imageRotate },

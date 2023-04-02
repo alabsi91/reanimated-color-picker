@@ -117,7 +117,7 @@ const ColorPicker = forwardRef<ColorPickerRef, ColorPickerProps>(
     };
 
     return (
-      <GestureHandlerRootView style={[{ direction: 'ltr' }, style]}>
+      <GestureHandlerRootView style={[{ direction: Platform.OS === 'web' ? 'ltr' : undefined }, style]}>
         <CTX.Provider value={ctxValue}>{children}</CTX.Provider>
       </GestureHandlerRootView>
     );
