@@ -15,9 +15,16 @@
 
 ### - Supports right-to-left (RTL) layouts.
 
-![Example_1](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/example_1.png?raw=true)
-![Example_2](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/example_2.png?raw=true)
-![Example_3](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/example_3.png?raw=true) ![Example_4](https://github.com/alabsi91/reanimated-color-picker/blob/main/images/example_4.png?raw=true)
+![Example_1](https://raw.githubusercontent.com/alabsi91/reanimated-color-picker/main/images/example_1.png)
+![Example_7](https://raw.githubusercontent.com/alabsi91/reanimated-color-picker/main/images/example_7.png)
+
+![Example_2](https://raw.githubusercontent.com/alabsi91/reanimated-color-picker/main/images/example_2.png)
+![Example_3](https://raw.githubusercontent.com/alabsi91/reanimated-color-picker/main/images/example_3.png)
+
+![Example_4](https://raw.githubusercontent.com/alabsi91/reanimated-color-picker/main/images/example_4.png)
+![Example_5](https://raw.githubusercontent.com/alabsi91/reanimated-color-picker/main/images/example_5.png)
+
+![Example_6](https://raw.githubusercontent.com/alabsi91/reanimated-color-picker/main/images/example_6.png)
 
 # :small_blue_diamond:Prerequisites
 
