@@ -16,7 +16,7 @@ export default function App() {
       <StatusBar backgroundColor='transparent' translucent />
 
       <View style={[styles.container, { paddingTop: 20, backgroundColor: '#202124' }]}>
-        <View style={[styles.container, { width: 200, alignSelf: 'center' }]}>
+        <View style={[styles.container, { width: 240, alignSelf: 'center' }]}>
           <Panel1Example />
           <Panel2Saturation />
           <Panel2Brightness />
