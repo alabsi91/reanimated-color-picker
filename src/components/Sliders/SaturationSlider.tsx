@@ -24,7 +24,6 @@ export function SaturationSlider({
   style = {},
   vertical = false,
   reverse = false,
-  imageSource,
 }: SliderProps) {
   const {
     hueValue,
@@ -138,7 +137,7 @@ export function SaturationSlider({
         onLayout={onLayout}
         style={[{ borderRadius }, style, { position: 'relative', borderWidth: 0, padding: 0 }, thicknessStyle, activeColorStyle]}
       >
-        <Animated.Image source={imageSource ?? require('@assets/Saturation.png')} style={imageStyle} />
+        <Animated.Image source={require('@assets/Saturation.png')} style={imageStyle} />
         {adaptSpectrum && <Animated.View style={[{ borderRadius }, activeBrightnessStyle, StyleSheet.absoluteFillObject]} />}
         <Thumb
           {...{
