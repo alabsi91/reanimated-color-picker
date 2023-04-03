@@ -43,10 +43,10 @@ export default function Example() {
               boundedThumb
             >
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: 300 }}>
-                <HueSlider style={styles.sliderStyle} vertical />
-                <SaturationSlider style={styles.sliderStyle} vertical />
-                <BrightnessSlider style={styles.sliderStyle} vertical />
-                <OpacitySlider style={styles.sliderStyle} vertical />
+                <HueSlider style={styles.sliderStyle} vertical reverse />
+                <SaturationSlider style={styles.sliderStyle} vertical reverse />
+                <BrightnessSlider style={styles.sliderStyle} vertical reverse />
+                <OpacitySlider style={styles.sliderStyle} vertical reverse />
               </View>
 
               <Swatches style={styles.swatchesContainer} swatchStyle={styles.swatchStyle} colors={customSwatches} />

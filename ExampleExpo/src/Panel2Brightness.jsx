@@ -29,12 +29,12 @@ export default function Example() {
               <ColorPicker
                 value={initialColor}
                 sliderThickness={25}
-                thumbSize={30}
+                thumbSize={20}
                 thumbShape='doubleTriangle'
                 onChange={onColorSelect}
                 adaptSpectrum
               >
-                <Panel2 style={styles.panelStyle} verticalChannel='brightness' thumbShape='ring' />
+                <Panel2 style={styles.panelStyle} verticalChannel='brightness' thumbShape='ring' thumbSize={30} />
 
                 <SaturationSlider style={styles.sliderStyle} thumbColor='#fff' />
 
