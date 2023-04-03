@@ -100,13 +100,6 @@ body:
     validations:
       required: true
 
-  - type: markdown
-    attributes:
-      value: |
-        ## Additional information
-
-        Providing as much information as possible greatly helps us with reproducing the issues.
-
   - type: dropdown
     id: runtime
     attributes:
@@ -116,6 +109,8 @@ body:
         - JSC
         - Hermes
         - V8
+    validations:
+      required: true
 
   - type: dropdown
     id: workflow
@@ -126,6 +121,8 @@ body:
         - React Native (without Expo)
         - Expo bare workflow
         - Expo managed workflow
+    validations:
+      required: true
 
   - type: dropdown
     id: architecture
@@ -135,6 +132,8 @@ body:
       options:
         - Paper (Old Architecture)
         - Fabric (New Architecture)
+    validations:
+      required: true
 
   - type: dropdown
     id: build-type
@@ -144,3 +143,5 @@ body:
       options:
         - Debug mode
         - Release mode
+    validations:
+      required: true
