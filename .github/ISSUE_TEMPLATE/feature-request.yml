@@ -1,0 +1,19 @@
+name: Feature request
+description: Please submit feature requests here.
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Request a new feature
+
+        - Please provide a clear, concise and descriptive explanation of what the new feature is. 
+        - Include screenshots or a video if needed. 
+        - Tell us what are the benefits of the new feature.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: description
+      description: Provide a detailed description.
+    validations:
+      required: true
