@@ -70,6 +70,7 @@ export function InputWidget({
   };
 
   const gap = getStyle(containerStyle, 'gap') ?? 5;
+  const iconWidth = getStyle(iconStyle, 'width') ?? 24;
   const buttonIconStyle = StyleSheet.flatten([styles.arrowButton, iconStyle]);
 
   return (
@@ -78,7 +79,7 @@ export function InputWidget({
         <Input />
       </View>
       {formats.length > 1 && (
-        <View style={{ flex: 0.1 }}>
+        <View style={{ width: iconWidth }}>
           <Pressable onPress={cycle}>
             {Platform.select({
               web: (
