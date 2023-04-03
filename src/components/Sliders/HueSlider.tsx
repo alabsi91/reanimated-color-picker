@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
-import { I18nManager, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
-import { clamp, getStyle, hsva2Hsla } from '@utils';
+import { clamp, getStyle, hsva2Hsla, isRtl } from '@utils';
 import CTX from '@context';
 import Thumb from '@thumb';
 
@@ -11,10 +11,8 @@ import type { LayoutChangeEvent } from 'react-native';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 import type { SliderProps } from '@types';
 
-const isRtl = I18nManager.isRTL;
-
 export function HueSlider({
-  adaptSpectrum = false,
+  adaptSpectrum: localAdaptSpectrum,
   thumbShape: localThumbShape,
   thumbSize: localThumbSize,
   thumbColor: localThumbColor,
@@ -29,11 +27,12 @@ export function HueSlider({
   imageSource,
 }: SliderProps) {
   const {
-    onGestureChange,
-    onGestureEnd,
-    brightnessValue,
     hueValue,
     saturationValue,
+    brightnessValue,
+    onGestureChange,
+    onGestureEnd,
+    adaptSpectrum: globalAdaptSpectrum,
     thumbSize: globalThumbSize,
     thumbShape: globalThumbShape,
     thumbColor: globalThumbColor,
@@ -51,6 +50,7 @@ export function HueSlider({
     renderThumb = localRenderThumb ?? globalRenderThumb,
     thumbStyle = localThumbStyle ?? globalThumbStyle ?? {},
     thumbInnerStyle = localThumbInnerStyle ?? globalThumbInnerStyle ?? {},
+    adaptSpectrum = localAdaptSpectrum ?? globalAdaptSpectrum,
     sliderThickness = localSliderThickness ?? globalSliderThickness;
 
   const borderRadius = getStyle(style, 'borderRadius') ?? 5,
@@ -73,12 +73,14 @@ export function HueSlider({
     };
   }, [localThumbSize, vertical, reverse]);
 
-  const activeSaturationStyle = useAnimatedStyle(() => ({
-    backgroundColor: hsva2Hsla(0, 0, brightnessValue.value, 1 - saturationValue.value / 100),
-  }));
-  const activeBrightnessStyle = useAnimatedStyle(() => ({
-    backgroundColor: hsva2Hsla(0, 0, 0, 1 - brightnessValue.value / 100),
-  }));
+  const activeSaturationStyle = useAnimatedStyle(() => {
+    if (!adaptSpectrum) return {};
+    return { backgroundColor: hsva2Hsla(0, 0, brightnessValue.value, 1 - saturationValue.value / 100) };
+  });
+  const activeBrightnessStyle = useAnimatedStyle(() => {
+    if (!adaptSpectrum) return {};
+    return { backgroundColor: hsva2Hsla(0, 0, 0, 1 - brightnessValue.value / 100) };
+  });
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -116,15 +118,14 @@ export function HueSlider({
 
   const imageStyle = useAnimatedStyle(() => {
     const imageRotate = vertical ? (reverse ? '270deg' : '90deg') : reverse ? '180deg' : '0deg';
-    const imageTranslateY =
-      (reverse && isRtl) || (!reverse && !isRtl) ? height.value / 2 - width.value / 2 : -height.value / 2 + width.value / 2;
+    const imageTranslateY = ((height.value - width.value) / 2) * ((reverse && isRtl) || (!reverse && !isRtl) ? 1 : -1);
     return {
-      width: vertical ? height.value : width.value,
-      height: vertical ? width.value : height.value,
+      width: vertical ? height.value : '100%',
+      height: vertical ? width.value : '100%',
       borderRadius,
       transform: [
         { rotate: imageRotate },
-        { translateX: vertical ? (reverse ? -height.value / 2 + width.value / 2 : height.value / 2 - width.value / 2) : 0 },
+        { translateX: vertical ? ((height.value - width.value) / 2) * (reverse ? -1 : 1) : 0 },
         { translateY: vertical ? imageTranslateY : 0 },
       ],
     };
@@ -141,8 +142,8 @@ export function HueSlider({
         <Animated.Image source={imageSource ?? require('@assets/Hue.png')} style={imageStyle} />
         {adaptSpectrum && (
           <>
-            <Animated.View style={[{ borderRadius }, activeSaturationStyle, StyleSheet.absoluteFillObject]} />
             <Animated.View style={[{ borderRadius }, activeBrightnessStyle, StyleSheet.absoluteFillObject]} />
+            <Animated.View style={[{ borderRadius }, activeSaturationStyle, StyleSheet.absoluteFillObject]} />
           </>
         )}
         <Thumb

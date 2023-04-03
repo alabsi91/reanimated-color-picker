@@ -8,9 +8,11 @@ const fs = require('fs/promises'),
 
 const outDir = 'lib',
   sourceDir = 'src',
+  assetsDir = 'assets',
   modulePath = path.join(outDir, 'module'),
   commonjsPath = path.join(outDir, 'commonjs'),
   typescriptPath = path.join(outDir, 'typescript'),
+  outSrc = path.join(outDir, 'src'),
   babelConfigPath = path.join('scripts', 'babel.config.js'),
   babelOptions = `--ignore "${sourceDir}/**/*.d.ts" --extensions ".ts,.tsx" --source-maps --copy-files --no-copy-ignored`;
 
@@ -35,6 +37,12 @@ async function buildCommonJs() {
   await execPromise(`npx babel --config-file ./${babelConfigPath} --out-dir ${commonjsPath} ${sourceDir} ${babelOptions}`);
 }
 
+async function buildSource() {
+  await execPromise(`npx tsc --outDir ${outSrc}`);
+  await resolveTsPaths({ out: outSrc });
+  await fs.cp(path.join(sourceDir, assetsDir), path.join(outSrc, assetsDir), { recursive: true });
+}
+
 async function prettier() {
   const buildDir = path.join(outDir, '**/*');
   await execPromise(`npx prettier --write ${buildDir} --ignore-unknown`);
@@ -52,6 +60,14 @@ async function build() {
   try {
     console.log('📦 Generating Typescript .d.ts files ...\n');
     await buildTypescript();
+  } catch (error) {
+    console.error('⛔', error);
+    process.exit(1);
+  }
+
+  try {
+    console.log('📦 Compiling the source code ...\n');
+    await buildSource();
   } catch (error) {
     console.error('⛔', error);
     process.exit(1);

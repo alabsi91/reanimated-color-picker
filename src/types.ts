@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import type { StyleProp, TextStyle, ViewStyle, ImageStyle, TextInputProps, ImageSourcePropType } from 'react-native';
 import type { AnimatedStyleProp, SharedValue } from 'react-native-reanimated';
 import type { AnyFormat } from './colorKit/types';
@@ -98,7 +99,10 @@ export interface TCTX {
   brightnessValue: SharedValue<number>;
   alphaValue: SharedValue<number>;
 
-  /** apply a color to the color picker. */
+  /** A global property that allows the color spectrum to adapt to changes in brightness and saturation for all descendant slider components. */
+  adaptSpectrum: boolean;
+
+  /** Apply a color to the color picker. */
   setColor: (color: string) => void;
 
   /** A global prop for all sliders children. */
@@ -114,7 +118,7 @@ export interface TCTX {
   thumbColor: string | undefined;
 
   /** A global prop for all sliders children. */
-  thumbStyle?: StyleProp<ViewStyle>;
+  thumbStyle: StyleProp<ViewStyle>;
 
   /**
    * - Determines whether the slider thumb (or handle) should be constrained to stay within the boundaries of the slider.
@@ -124,10 +128,10 @@ export interface TCTX {
   boundedThumb: boolean;
 
   /** A global style for all sliders children. */
-  thumbInnerStyle?: StyleProp<ViewStyle>;
+  thumbInnerStyle: StyleProp<ViewStyle>;
 
   /** A global prop for all sliders children. */
-  renderThumb?: RenderThumbType;
+  renderThumb: RenderThumbType | undefined;
 
   /** The initial color value as a `string` */
   value: string;
@@ -143,6 +147,9 @@ export interface TCTX {
 }
 
 export interface ColorPickerProps {
+  /** - a global property that allows the color spectrum to adapt to changes in brightness and saturation for all descendant slider components.*/
+  adaptSpectrum?: boolean;
+
   /**
    * - a global property to change the thickness of all descendant sliders components.
    * - thickness is the width of the slider in vertical mode or the height in horizontal mode.
@@ -199,6 +206,11 @@ export interface ColorPickerProps {
   children?: React.ReactNode;
 }
 
+export interface ColorPickerRef {
+  /** Apply a color to the color picker. */
+  setColor: (color: string) => void;
+}
+
 export interface SwatchesProps {
   /**
    * - swatch style.
@@ -245,12 +257,6 @@ export interface PreviewTextProps {
 }
 
 export interface PanelProps {
-  /**
-   * - Allows for a higher quality image to be provided.
-   * - Check out the `Figma` link for the uncompressed assets here 👉 [color picker assets](https://www.figma.com/file/1NAZsgrXejzzDsakZtQyuP/reanimated-color-picker-assets?node-id=0%3A1&t=CZzURph1MOPimwI2-1).
-   */
-  imageSource?: ImageSourcePropType;
-
   /** - panel handle (thumb) size (height*width). */
   thumbSize?: number;
 
@@ -285,7 +291,26 @@ export interface PanelProps {
 
 export interface Panel2Props extends PanelProps {
   /** - reverse (flip) hue direction. */
-  reverse?: boolean;
+  reverseHue?: boolean;
+
+  /** - determines which color channel to adjust when moving the thumb vertically on the slider. */
+  verticalChannel?: 'saturation' | 'brightness';
+
+  /** - color spectrum adapts to changes in brightness and saturation */
+  adaptSpectrum?: boolean;
+}
+
+export interface Panel3Props extends PanelProps {
+  /** - determines which color channel to adjust when moving the thumb towards or away from the center of the circular slider. */
+  centerChannel?: 'saturation' | 'brightness';
+
+  /** - color spectrum adapts to changes in brightness and saturation */
+  adaptSpectrum?: boolean;
+}
+
+export interface Panel4Props extends PanelProps {
+  /** - reverse (flip) hue direction. */
+  reverseHue?: boolean;
 }
 
 export interface SliderProps {
@@ -337,6 +362,13 @@ export interface SliderProps {
    * - **Note** Certain style properties will be overridden.
    */
   style?: StyleProp<ViewStyle>;
+}
+
+export interface HueCircular extends Omit<SliderProps, 'vertical' | 'reverse' | 'boundedThumb'> {
+  children?: ReactNode;
+
+  /** - the style of the container that wraps the given children.*/
+  containerStyle?: StyleProp<ViewStyle>;
 }
 
 export type InputProps = Omit<

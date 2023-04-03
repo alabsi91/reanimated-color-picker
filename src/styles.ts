@@ -6,7 +6,6 @@ export const styles = StyleSheet.create({
   // Panels
   panel_container: {
     position: 'relative',
-    alignSelf: 'stretch',
     borderRadius: 5,
   },
   panel_image: {
@@ -84,7 +83,6 @@ export const styles = StyleSheet.create({
 
   // Swatches
   swatchesContainer: {
-    alignSelf: 'stretch',
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',

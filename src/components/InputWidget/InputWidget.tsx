@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text, Pressable, Image, Platform, StyleSheet } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 
 import { styles } from '@styles';
 import { getStyle } from '@utils';
@@ -70,23 +69,17 @@ export function InputWidget({
     }
   };
 
-  const opacity = useSharedValue(0);
-  const fadeStyle = useAnimatedStyle(() => ({ opacity: opacity.value }));
-
-  useEffect(() => {
-    opacity.value = withSequence(withTiming(0, { duration: 0 }), withTiming(1));
-  }, [format]);
-
   const gap = getStyle(containerStyle, 'gap') ?? 5;
+  const iconWidth = getStyle(iconStyle, 'width') ?? 24;
   const buttonIconStyle = StyleSheet.flatten([styles.arrowButton, iconStyle]);
 
   return (
     <View style={[styles.container, containerStyle]}>
-      <Animated.View style={[styles.inputsWrapper, { gap }, fadeStyle]}>
+      <View style={[styles.inputsWrapper, { gap }]}>
         <Input />
-      </Animated.View>
+      </View>
       {formats.length > 1 && (
-        <View>
+        <View style={{ width: iconWidth }}>
           <Pressable onPress={cycle}>
             {Platform.select({
               web: (

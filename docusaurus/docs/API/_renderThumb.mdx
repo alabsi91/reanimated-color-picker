@@ -1,75 +1,3 @@
----
-sidebar_position: 8
-sidebar_label: Panel3
-description: The circle-shaped slider, with its wheel style design, is utilized to adjust the hue and saturation of colors.
----
-
-# `<Panel3 />`
-
-![panel2](../../../images/panel3.png)
-
-- The circle-shaped slider, with its wheel style design, is utilized to adjust the hue and saturation of colors.
-- Move the handle around the center to change the color's hue.
-- Move the handle away or toward the center to change the color's saturation.
-
-:::tip
-
-- Add [`<BrightnessSlider />`](./BrightnessSlider) component also to gain control over the three color channels.
-
-:::
-
-## Props
-
-### `imageSource`
-
-- Allows for a higher quality image to be provided for the slider background.
-- Check out the `Figma` link for the uncompressed assets here 👉 [color picker assets](https://www.figma.com/file/1NAZsgrXejzzDsakZtQyuP/reanimated-color-picker-assets?node-id=0%3A1&t=CZzURph1MOPimwI2-1).
-- `type: ImageSourcePropType`
-- `default: undefined`
-
-### `boundedThumb`
-
-- Determines whether the panel slider thumb (or handle) should be constrained to stay within the boundaries of the panel.
-- When set to `true`, the thumb will not be allowed to move beyond the edges of the panel.
-- When set to `false`, part of it will be outside of the panel bounds.
-- `type: boolean`
-- `default: false`
-
-### `thumbSize`
-
-- Panel's handle (thumb) size (height\*width).
-- `type: number`
-- `default: 35`
-
-### `thumbColor`
-
-- Change thumb's color.
-- `type: string`
-- `default`: interactive\*
-
-:::info **\*interactive**
-
-- The thumb color will be changed depending on the contrast ratio if no color value is passed.
-
-:::
-
-### `thumbShape`
-
-- Change thumb's shape and appearance.
-- `type: string`
-- `values`: <shapes/>
-- `default: 'ring'`
-
-### `thumbStyle`
-
-- Thumb's containing View's style.
-- `type: ViewStyle`
-
-### `thumbInnerStyle`
-
-- Thumb's inner View(s) style.
-- `type: ViewStyle`
-
 ### `renderThumb`
 
 - Function which receives `ThumbProps` and returns a custom thumb component.
@@ -88,7 +16,7 @@ description: The circle-shaped slider, with its wheel style design, is utilized 
 
 - Example Usage:
 
-```jsx
+```tsx
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import type { RenderThumbProps } from 'reanimated-color-picker';
 
@@ -119,14 +47,3 @@ function MyCustomThumb({
   );
 }
 ```
-
-### `style`
-
-- Panel's container style.
-- `type: ViewStyle`
-
-:::info note
-
-- Certain style properties will be overridden.
-
-:::

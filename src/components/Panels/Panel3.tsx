@@ -1,18 +1,19 @@
 import React, { useContext, useCallback } from 'react';
-import { ImageBackground } from 'react-native';
+import { ImageBackground, Image, StyleSheet } from 'react-native';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
-import { clamp } from '@utils';
+import { clamp, hsva2Hsla } from '@utils';
 import { styles } from '@styles';
 import CTX from '@context';
 import Thumb from '@thumb';
 
 import type { LayoutChangeEvent } from 'react-native';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
-import type { PanelProps } from '@types';
+import type { Panel3Props } from '@types';
 
 export function Panel3({
+  adaptSpectrum: localAdaptSpectrum,
   thumbShape: localThumbShape,
   thumbSize: localThumbSize,
   thumbColor: localThumbColor,
@@ -20,14 +21,16 @@ export function Panel3({
   renderThumb: localRenderThumb,
   thumbStyle: localThumbStyle,
   thumbInnerStyle: localThumbInnerStyle,
+  centerChannel = 'saturation',
   style = {},
-  imageSource,
-}: PanelProps) {
+}: Panel3Props) {
   const {
     hueValue,
     saturationValue,
+    brightnessValue,
     onGestureChange,
     onGestureEnd,
+    adaptSpectrum: globalAdaptSpectrum,
     thumbSize: globalThumbsSize,
     thumbShape: globalThumbShape,
     thumbColor: globalThumbsColor,
@@ -43,17 +46,19 @@ export function Panel3({
     boundedThumb = localBoundedThumb ?? globalBoundedThumb,
     renderThumb = localRenderThumb ?? globalRenderThumbs,
     thumbStyle = localThumbStyle ?? globalThumbsStyle ?? {},
-    thumbInnerStyle = localThumbInnerStyle ?? globalThumbsInnerStyle ?? {};
+    thumbInnerStyle = localThumbInnerStyle ?? globalThumbsInnerStyle ?? {},
+    adaptSpectrum = localAdaptSpectrum ?? globalAdaptSpectrum,
+    channelValue = centerChannel === 'brightness' ? brightnessValue : saturationValue;
+
+  const borderRadius = 2000;
 
   const width = useSharedValue(0);
-  const borderRadius = useSharedValue(0);
-  const panelStyle = useAnimatedStyle(() => ({ borderRadius: borderRadius.value }), [localThumbSize]);
 
   const handleScale = useSharedValue(1);
 
   const handleStyle = useAnimatedStyle(() => {
     const center = width.value / 2 - (boundedThumb ? thumbSize / 2 : 0),
-      distance = (saturationValue.value / 100) * (width.value / 2 - (boundedThumb ? thumbSize / 2 : 0)),
+      distance = (channelValue.value / 100) * (width.value / 2 - (boundedThumb ? thumbSize / 2 : 0)),
       posY =
         width.value -
         Math.round(Math.sin((hueValue.value * Math.PI) / 180) * distance + center) -
@@ -72,6 +77,12 @@ export function Panel3({
     };
   }, [localThumbSize]);
 
+  const spectrumStyle = useAnimatedStyle(() => {
+    if (!adaptSpectrum) return {};
+    if (centerChannel === 'brightness') return { backgroundColor: hsva2Hsla(0, 0, 100, 1 - saturationValue.value / 100) };
+    return { backgroundColor: hsva2Hsla(0, 0, 0, 1 - brightnessValue.value / 100) };
+  });
+
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
 
@@ -83,12 +94,12 @@ export function Panel3({
       angle = theta < 0 ? 360 + theta : theta, // [0 - 360] range
       radiusPercent = radius / center,
       newHueValue = Math.round(angle),
-      newSaturationValue = Math.round(radiusPercent * 100);
+      newChannelValue = Math.round(radiusPercent * 100);
 
-    if (hueValue.value === newHueValue && saturationValue.value === newSaturationValue) return;
+    if (hueValue.value === newHueValue && channelValue.value === newChannelValue) return;
 
     hueValue.value = newHueValue;
-    saturationValue.value = newSaturationValue;
+    channelValue.value = newChannelValue;
     runOnJS(onGestureChange)();
   };
   const onGestureBegin = (event: PanGestureHandlerEventPayload) => {
@@ -110,19 +121,38 @@ export function Panel3({
   const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
     const layoutWidth = layout.width;
     width.value = layoutWidth;
-    borderRadius.value = withTiming(layoutWidth / 2, { duration: 5 });
   }, []);
 
   return (
     <GestureDetector gesture={composed}>
       <Animated.View
         onLayout={onLayout}
-        style={[styles.panel_container, style, { position: 'relative', aspectRatio: 1, borderWidth: 0, padding: 0 }, panelStyle]}
+        style={[
+          styles.panel_container,
+          style,
+          { position: 'relative', aspectRatio: 1, borderWidth: 0, padding: 0, borderRadius },
+        ]}
       >
-        <ImageBackground source={imageSource ?? require('@assets/Panel3.png')} style={styles.panel_image} resizeMode='stretch' />
+        <ImageBackground source={require('@assets/circularHue.png')} style={styles.panel_image} resizeMode='stretch'>
+          {adaptSpectrum && centerChannel === 'brightness' && (
+            <Animated.View style={[{ borderRadius }, spectrumStyle, StyleSheet.absoluteFillObject]} />
+          )}
+          <Image
+            source={
+              centerChannel === 'brightness'
+                ? require('@assets/circularBrightness.png')
+                : require('@assets/circularSaturation.png')
+            }
+            style={styles.panel_image}
+            resizeMode='stretch'
+          />
+          {adaptSpectrum && centerChannel === 'saturation' && (
+            <Animated.View style={[{ borderRadius }, spectrumStyle, StyleSheet.absoluteFillObject]} />
+          )}
+        </ImageBackground>
         <Thumb
           {...{
-            channel: 's',
+            channel: centerChannel === 'brightness' ? 'v' : 's',
             thumbShape,
             thumbSize,
             thumbColor,
@@ -130,6 +160,7 @@ export function Panel3({
             innerStyle: thumbInnerStyle,
             style: thumbStyle,
             handleStyle,
+            adaptSpectrum,
           }}
         />
       </Animated.View>

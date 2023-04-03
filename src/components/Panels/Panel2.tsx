@@ -1,11 +1,11 @@
 import React, { useContext, useCallback } from 'react';
-import { ImageBackground } from 'react-native';
+import { ImageBackground, StyleSheet } from 'react-native';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import { styles } from '@styles';
 import CTX from '@context';
-import { clamp, getStyle } from '@utils';
+import { clamp, getStyle, hsva2Hsla, isRtl } from '@utils';
 import Thumb from '@thumb';
 
 import type { LayoutChangeEvent } from 'react-native';
@@ -13,6 +13,7 @@ import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler
 import type { Panel2Props } from '@types';
 
 export function Panel2({
+  adaptSpectrum: localAdaptSpectrum,
   thumbColor: localThumbColor,
   boundedThumb: localBoundedThumb,
   renderThumb: localRenderThumb,
@@ -20,15 +21,17 @@ export function Panel2({
   thumbSize: localThumbSize,
   thumbStyle: localThumbStyle,
   thumbInnerStyle: localThumbInnerStyle,
-  reverse = false,
+  verticalChannel = 'saturation',
+  reverseHue = false,
   style = {},
-  imageSource,
 }: Panel2Props) {
   const {
     hueValue,
     saturationValue,
+    brightnessValue,
     onGestureChange,
     onGestureEnd,
+    adaptSpectrum: globalAdaptSpectrum,
     thumbSize: globalThumbsSize,
     thumbShape: globalThumbShape,
     thumbColor: globalThumbsColor,
@@ -44,7 +47,9 @@ export function Panel2({
     boundedThumb = localBoundedThumb ?? globalBoundedThumb,
     renderThumb = localRenderThumb ?? globalRenderThumbs,
     thumbStyle = localThumbStyle ?? globalThumbsStyle ?? {},
-    thumbInnerStyle = localThumbInnerStyle ?? globalThumbsInnerStyle ?? {};
+    thumbInnerStyle = localThumbInnerStyle ?? globalThumbsInnerStyle ?? {},
+    adaptSpectrum = localAdaptSpectrum ?? globalAdaptSpectrum,
+    channelValue = verticalChannel === 'brightness' ? brightnessValue : saturationValue;
 
   const borderRadius = getStyle(style, 'borderRadius') ?? 5,
     getHeight = getStyle(style, 'height') ?? 200;
@@ -57,11 +62,17 @@ export function Panel2({
   const handleStyle = useAnimatedStyle(() => {
     const length = { x: width.value - (boundedThumb ? thumbSize : 0), y: height.value - (boundedThumb ? thumbSize : 0) },
       percentX = (hueValue.value / 360) * length.x,
-      posX = (reverse ? length.x - percentX : percentX) - (boundedThumb ? 0 : thumbSize / 2),
-      percentY = (saturationValue.value / 100) * length.y,
+      posX = (reverseHue ? length.x - percentX : percentX) - (boundedThumb ? 0 : thumbSize / 2),
+      percentY = (channelValue.value / 100) * length.y,
       posY = length.y - percentY - (boundedThumb ? 0 : thumbSize / 2);
     return { transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }] };
-  }, [localThumbSize, reverse]);
+  }, [localThumbSize, reverseHue]);
+
+  const spectrumStyle = useAnimatedStyle(() => {
+    if (!adaptSpectrum) return {};
+    if (verticalChannel === 'brightness') return { backgroundColor: hsva2Hsla(0, 0, 100, 1 - saturationValue.value / 100) };
+    return { backgroundColor: hsva2Hsla(0, 0, 0, 1 - brightnessValue.value / 100) };
+  });
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -72,13 +83,13 @@ export function Panel2({
       posY = clamp(y - (boundedThumb ? thumbSize / 2 : 0), lengthY),
       valueX = Math.round((posX / lengthX) * 360),
       valueY = Math.round((posY / lengthY) * 100),
-      newHueValue = reverse ? 360 - valueX : valueX,
-      newSaturationValue = 100 - valueY;
+      newHueValue = reverseHue ? 360 - valueX : valueX,
+      newChannelValue = 100 - valueY;
 
-    if (hueValue.value === newHueValue && saturationValue.value === newSaturationValue) return;
+    if (hueValue.value === newHueValue && channelValue.value === newChannelValue) return;
 
     hueValue.value = newHueValue;
-    saturationValue.value = newSaturationValue;
+    channelValue.value = newChannelValue;
     runOnJS(onGestureChange)();
   };
   const onGestureBegin = (event: PanGestureHandlerEventPayload) => {
@@ -102,6 +113,16 @@ export function Panel2({
     height.value = layout.height;
   }, []);
 
+  const rotatePanelImage = useAnimatedStyle(() => ({
+    width: height.value,
+    height: width.value,
+    transform: [
+      { rotate: '270deg' },
+      { translateX: (width.value - height.value) / 2 },
+      { translateY: ((width.value - height.value) / 2) * (isRtl ? -1 : 1) },
+    ],
+  }));
+
   return (
     <GestureDetector gesture={composed}>
       <Animated.View
@@ -109,13 +130,25 @@ export function Panel2({
         style={[styles.panel_container, { height: getHeight }, style, { position: 'relative', borderWidth: 0, padding: 0 }]}
       >
         <ImageBackground
-          source={imageSource ?? require('@assets/Panel2.png')}
-          style={[styles.panel_image, { borderRadius, transform: [{ scaleX: reverse ? -1 : 1 }] }]}
+          source={require('@assets/Hue.png')}
+          style={[styles.panel_image, { position: 'relative', borderRadius, transform: [{ scaleX: reverseHue ? -1 : 1 }] }]}
           resizeMode='stretch'
-        />
+        >
+          {adaptSpectrum && verticalChannel === 'brightness' && (
+            <Animated.View style={[spectrumStyle, StyleSheet.absoluteFillObject]} />
+          )}
+          <Animated.Image
+            source={verticalChannel === 'brightness' ? require('@assets/Brightness.png') : require('@assets/Saturation.png')}
+            style={[styles.panel_image, rotatePanelImage]}
+            resizeMode='stretch'
+          />
+          {adaptSpectrum && verticalChannel === 'saturation' && (
+            <Animated.View style={[spectrumStyle, StyleSheet.absoluteFillObject]} />
+          )}
+        </ImageBackground>
         <Thumb
           {...{
-            channel: 's',
+            channel: verticalChannel === 'brightness' ? 'v' : 's',
             thumbShape,
             thumbSize,
             thumbColor,
@@ -123,6 +156,7 @@ export function Panel2({
             innerStyle: thumbInnerStyle,
             style: thumbStyle,
             handleStyle,
+            adaptSpectrum,
           }}
         />
       </Animated.View>

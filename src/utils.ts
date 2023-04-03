@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, I18nManager } from 'react-native';
 
 import type { StyleProp, ViewStyle } from 'react-native';
 
@@ -24,3 +24,5 @@ export function hsva2Hsla(h: number, s: number, v: number, a = 1) {
 
   return `hsla(${h}, ${sln * 100}%, ${l * 100}%, ${a})`;
 }
+
+export const isRtl = I18nManager.isRTL;

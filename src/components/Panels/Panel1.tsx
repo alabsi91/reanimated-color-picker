@@ -1,9 +1,9 @@
 import React, { useContext, useCallback } from 'react';
-import { ImageBackground } from 'react-native';
+import { Image, View } from 'react-native';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
-import { clamp, getStyle } from '@utils';
+import { clamp, getStyle, isRtl } from '@utils';
 import { styles } from '@styles';
 import CTX from '@context';
 import Thumb from '@thumb';
@@ -21,7 +21,6 @@ export function Panel1({
   thumbStyle: localThumbStyle,
   thumbInnerStyle: localThumbInnerStyle,
   style = {},
-  imageSource,
 }: PanelProps) {
   const {
     hueValue,
@@ -104,6 +103,16 @@ export function Panel1({
     height.value = layout.height;
   }, []);
 
+  const rotateBrightnessImage = useAnimatedStyle(() => ({
+    width: height.value,
+    height: width.value,
+    transform: [
+      { rotate: '270deg' },
+      { translateX: (width.value - height.value) / 2 },
+      { translateY: ((width.value - height.value) / 2) * (isRtl ? -1 : 1) },
+    ],
+  }));
+
   return (
     <GestureDetector gesture={composed}>
       <Animated.View
@@ -116,11 +125,14 @@ export function Panel1({
           activeColorStyle,
         ]}
       >
-        <ImageBackground
-          source={imageSource ?? require('@assets/Panel1.png')}
-          style={[styles.panel_image, { borderRadius }]}
-          resizeMode='stretch'
-        />
+        <View style={[styles.panel_image, { borderRadius }]}>
+          <Image source={require('@assets/Saturation.png')} style={styles.panel_image} resizeMode='stretch' />
+          <Animated.Image
+            source={require('@assets/Brightness.png')}
+            style={[styles.panel_image, rotateBrightnessImage]}
+            resizeMode='stretch'
+          />
+        </View>
         <Thumb
           {...{
             thumbShape,
