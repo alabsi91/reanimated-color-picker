@@ -1,5 +1,5 @@
 ---
-sidebar_position: 11
+sidebar_position: 14
 sidebar_label: Preview
 description: The preview of the selected and the initial color.
 ---

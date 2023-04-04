@@ -27,6 +27,9 @@
 ![Example_8](https://raw.githubusercontent.com/alabsi91/reanimated-color-picker/main/images/example_8.png)
 ![Example_9](https://raw.githubusercontent.com/alabsi91/reanimated-color-picker/main/images/example_9.png)
 
+![Example_10](https://raw.githubusercontent.com/alabsi91/reanimated-color-picker/main/images/example_10.png)
+![Example_11](https://raw.githubusercontent.com/alabsi91/reanimated-color-picker/main/images/example_11.png)
+
 ![Example_6](https://raw.githubusercontent.com/alabsi91/reanimated-color-picker/main/images/example_6.png)
 
 # :small_blue_diamond:Prerequisites
