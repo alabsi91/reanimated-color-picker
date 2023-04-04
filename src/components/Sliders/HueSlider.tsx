@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
-import { clamp, getStyle, hsva2Hsla, isRtl } from '@utils';
+import { clamp, getStyle, HSVA2HSLA, isRtl } from '@utils';
 import CTX from '@context';
 import Thumb from '@thumb';
 
@@ -74,11 +74,11 @@ export function HueSlider({
 
   const activeSaturationStyle = useAnimatedStyle(() => {
     if (!adaptSpectrum) return {};
-    return { backgroundColor: hsva2Hsla(0, 0, brightnessValue.value, 1 - saturationValue.value / 100) };
+    return { backgroundColor: HSVA2HSLA(0, 0, brightnessValue.value, 1 - saturationValue.value / 100) };
   });
   const activeBrightnessStyle = useAnimatedStyle(() => {
     if (!adaptSpectrum) return {};
-    return { backgroundColor: hsva2Hsla(0, 0, 0, 1 - brightnessValue.value / 100) };
+    return { backgroundColor: HSVA2HSLA(0, 0, 0, 1 - brightnessValue.value / 100) };
   });
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
