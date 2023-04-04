@@ -9,6 +9,8 @@ import Panel4Example from './src/Panel4Example';
 import CircularHue from './src/CircularHue';
 import HorizontalSliders from './src/HorizontalSliders';
 import VerticalSliders from './src/VerticalSliders';
+import HorizontalRgbSliders from './src/HorizontalRgbSliders';
+import VerticalRgbSliders from './src/VerticalRgbSliders';
 
 export default function App() {
   return (
@@ -26,6 +28,8 @@ export default function App() {
           <CircularHue />
           <HorizontalSliders />
           <VerticalSliders />
+          <HorizontalRgbSliders />
+          <VerticalRgbSliders />
         </View>
       </View>
     </>
