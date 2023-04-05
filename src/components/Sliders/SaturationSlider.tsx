@@ -137,7 +137,7 @@ export function SaturationSlider({
         onLayout={onLayout}
         style={[{ borderRadius }, style, { position: 'relative', borderWidth: 0, padding: 0 }, thicknessStyle, activeColorStyle]}
       >
-        <Animated.Image source={require('@assets/Saturation.png')} style={imageStyle} />
+        <Animated.Image source={require('@assets/blackGradient.png')} style={[imageStyle, { tintColor: '#fff' }]} />
 
         <ConditionalRendering render={adaptSpectrum}>
           <Animated.View style={[{ borderRadius }, activeBrightnessStyle, StyleSheet.absoluteFillObject]} />

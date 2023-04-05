@@ -139,12 +139,8 @@ export function Panel3({
           </ConditionalRendering>
 
           <Image
-            source={
-              centerChannel === 'brightness'
-                ? require('@assets/circularBrightness.png')
-                : require('@assets/circularSaturation.png')
-            }
-            style={styles.panel_image}
+            source={require('@assets/blackRadial.png')}
+            style={[styles.panel_image, { tintColor: centerChannel === 'saturation' ? '#fff' : undefined }]}
             resizeMode='stretch'
           />
 

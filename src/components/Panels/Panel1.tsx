@@ -126,9 +126,13 @@ export function Panel1({
         ]}
       >
         <View style={[styles.panel_image, { borderRadius }]}>
-          <Image source={require('@assets/Saturation.png')} style={styles.panel_image} resizeMode='stretch' />
+          <Image
+            source={require('@assets/blackGradient.png')}
+            style={[styles.panel_image, { tintColor: '#fff' }]}
+            resizeMode='stretch'
+          />
           <Animated.Image
-            source={require('@assets/Brightness.png')}
+            source={require('@assets/blackGradient.png')}
             style={[styles.panel_image, rotateBrightnessImage]}
             resizeMode='stretch'
           />
