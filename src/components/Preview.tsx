@@ -1,9 +1,9 @@
 import React, { useState, useMemo, useContext } from 'react';
-import { View, Text, ImageBackground, Platform } from 'react-native';
+import { View, Text, ImageBackground } from 'react-native';
 import Animated, { runOnJS, useAnimatedStyle, useDerivedValue, useSharedValue } from 'react-native-reanimated';
 
 import { styles } from '@styles';
-import { getStyle } from '@utils';
+import { ConditionalRendering, getStyle, isWeb } from '@utils';
 import colorKit from '@colorKit';
 import CTX from '@context';
 
@@ -72,24 +72,27 @@ export function Preview({
 
   return (
     <Wrapper style={style}>
-      {!hideInitialColor && (
+      <ConditionalRendering render={!hideInitialColor}>
         <View style={[styles.previewContainer, { backgroundColor: value, justifyContent }]}>
-          {!hideText && (
+          <ConditionalRendering render={!hideText}>
             <Text style={[{ color: initialColorText.color }, styles.previewInitialText, textStyle]}>
               {initialColorText.formatted}
             </Text>
-          )}
+          </ConditionalRendering>
         </View>
-      )}
+      </ConditionalRendering>
+
       <Animated.View style={[styles.previewContainer, { justifyContent }, previewColorStyle]}>
-        {!hideText && <ReText text={() => returnedResults()[colorFormat]} hash={colorHash} style={[textStyle, textColorStyle]} />}
+        <ConditionalRendering render={!hideText}>
+          <ReText text={() => returnedResults()[colorFormat]} hash={colorHash} style={[textStyle, textColorStyle]} />
+        </ConditionalRendering>
       </Animated.View>
     </Wrapper>
   );
 }
 
 function Wrapper({ children, style }: { children: ReactNode; style: {} | null }) {
-  if (Platform.OS === 'web') {
+  if (isWeb) {
     return <View style={[styles.previewWrapper, previewWrapperWeb, style]}>{children}</View>;
   }
 

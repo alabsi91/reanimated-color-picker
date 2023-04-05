@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
-import { clamp, getStyle, hsva2Hsla, isRtl } from '@utils';
+import { clamp, getStyle, HSVA2HSLA, isRtl } from '@utils';
 import CTX from '@context';
 import Thumb from '@thumb';
 
@@ -72,7 +72,7 @@ export function BrightnessSlider({
   }, [localThumbSize, vertical, reverse]);
 
   const activeColorStyle = useAnimatedStyle(() => {
-    return { backgroundColor: hsva2Hsla(hueValue.value, adaptSpectrum ? saturationValue.value : 100, 100) };
+    return { backgroundColor: HSVA2HSLA(hueValue.value, adaptSpectrum ? saturationValue.value : 100, 100) };
   });
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {

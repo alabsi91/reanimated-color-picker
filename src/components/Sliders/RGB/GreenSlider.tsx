@@ -1,18 +1,16 @@
 import React, { useContext } from 'react';
-import { StyleSheet } from 'react-native';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
-import { clamp, ConditionalRendering, getStyle, HSVA2HSLA, isRtl } from '@utils';
+import { clamp, getStyle, HSVA2RGBA, isRtl, isWeb, RenderNativeOnly, RGBA2HSVA } from '@utils';
 import CTX from '@context';
 import Thumb from '@thumb';
 
+import type { RgbSliderProps } from '@types';
 import type { LayoutChangeEvent } from 'react-native';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
-import type { SliderProps } from '@types';
 
-export function SaturationSlider({
-  adaptSpectrum: localAdaptSpectrum,
+export function GreenSlider({
   thumbShape: localThumbShape,
   thumbSize: localThumbSize,
   thumbColor: localThumbColor,
@@ -24,32 +22,30 @@ export function SaturationSlider({
   style = {},
   vertical = false,
   reverse = false,
-}: SliderProps) {
+}: RgbSliderProps) {
   const {
     hueValue,
     saturationValue,
     brightnessValue,
     onGestureChange,
     onGestureEnd,
-    adaptSpectrum: globalAdaptSpectrum,
-    thumbSize: globalThumbsSize,
-    thumbShape: globalThumbsShape,
-    thumbColor: globalThumbsColor,
+    thumbSize: globalThumbSize,
+    thumbShape: globalThumbShape,
+    thumbColor: globalThumbColor,
     boundedThumb: globalBoundedThumb,
-    renderThumb: globalRenderThumbs,
-    thumbStyle: globalThumbsStyle,
-    thumbInnerStyle: globalThumbsInnerStyle,
+    renderThumb: globalRenderThumb,
+    thumbStyle: globalThumbStyle,
+    thumbInnerStyle: globalThumbInnerStyle,
     sliderThickness: globalSliderThickness,
   } = useContext(CTX);
 
-  const thumbShape = localThumbShape ?? globalThumbsShape,
-    thumbSize = localThumbSize ?? globalThumbsSize,
-    thumbColor = localThumbColor ?? globalThumbsColor,
+  const thumbShape = localThumbShape ?? globalThumbShape,
+    thumbSize = localThumbSize ?? globalThumbSize,
+    thumbColor = localThumbColor ?? globalThumbColor,
     boundedThumb = localBoundedThumb ?? globalBoundedThumb,
-    renderThumb = localRenderThumb ?? globalRenderThumbs,
-    thumbStyle = localThumbStyle ?? globalThumbsStyle ?? {},
-    thumbInnerStyle = localThumbInnerStyle ?? globalThumbsInnerStyle ?? {},
-    adaptSpectrum = localAdaptSpectrum ?? globalAdaptSpectrum,
+    renderThumb = localRenderThumb ?? globalRenderThumb,
+    thumbStyle = localThumbStyle ?? globalThumbStyle ?? {},
+    thumbInnerStyle = localThumbInnerStyle ?? globalThumbInnerStyle ?? {},
     sliderThickness = localSliderThickness ?? globalSliderThickness;
 
   const borderRadius = getStyle(style, 'borderRadius') ?? 5,
@@ -62,8 +58,10 @@ export function SaturationSlider({
   const handleScale = useSharedValue(1);
 
   const handleStyle = useAnimatedStyle(() => {
+    const { g } = HSVA2RGBA(hueValue.value, saturationValue.value, brightnessValue.value);
+
     const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0),
-      percent = (saturationValue.value / 100) * length,
+      percent = (g / 255) * length,
       pos = (reverse ? length - percent : percent) - (boundedThumb ? 0 : thumbSize / 2),
       posY = vertical ? pos : height.value / 2 - thumbSize / 2,
       posX = vertical ? width.value / 2 - thumbSize / 2 : pos;
@@ -72,25 +70,24 @@ export function SaturationSlider({
     };
   }, [localThumbSize, vertical, reverse]);
 
-  const activeColorStyle = useAnimatedStyle(() => {
-    return { backgroundColor: HSVA2HSLA(hueValue.value, 100, 100) };
-  });
-  const activeBrightnessStyle = useAnimatedStyle(() => {
-    if (!adaptSpectrum) return {};
-    return { backgroundColor: HSVA2HSLA(0, 0, 0, 1 - brightnessValue.value / 100) };
-  });
-
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
 
+    const { r, g, b } = HSVA2RGBA(hueValue.value, saturationValue.value, brightnessValue.value);
+
     const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0),
       pos = clamp((vertical ? y : x) - (boundedThumb ? thumbSize / 2 : 0), length),
-      value = Math.round((pos / length) * 100),
-      newSaturationValue = reverse ? 100 - value : value;
+      value = Math.round((pos / length) * 255),
+      newGreenValue = reverse ? 255 - value : value;
 
-    if (saturationValue.value === newSaturationValue) return;
+    if (newGreenValue === g) return;
 
-    saturationValue.value = newSaturationValue;
+    const { h, s, v } = RGBA2HSVA(r, newGreenValue, b);
+
+    hueValue.value = h;
+    saturationValue.value = s;
+    brightnessValue.value = v;
+
     runOnJS(onGestureChange)();
   };
   const onGestureBegin = (event: PanGestureHandlerEventPayload) => {
@@ -114,16 +111,30 @@ export function SaturationSlider({
     if (vertical) height.value = withTiming(layout.height, { duration: 5 });
   };
 
+  const redBlue = useAnimatedStyle(() => {
+    const { r, b } = HSVA2RGBA(hueValue.value, saturationValue.value, brightnessValue.value);
+    if (isWeb) {
+      const deg = vertical ? (reverse ? 180 : 0) : reverse ? 90 : 270;
+      return { background: `linear-gradient(${deg}deg, rgb(${r}, 255, ${b}) 0%, rgb(${r}, 0, ${b}) 100%)` };
+    }
+    return { backgroundColor: `rgb(${r}, 0, ${b})` };
+  });
+
   const imageStyle = useAnimatedStyle(() => {
-    const imageRotate = vertical ? (reverse ? '270deg' : '90deg') : reverse ? '180deg' : '0deg';
-    const imageTranslateY = ((height.value - width.value) / 2) * ((reverse && isRtl) || (!reverse && !isRtl) ? 1 : -1);
+    if (isWeb) return {};
+
+    const imageRotate = vertical ? (reverse ? '90deg' : '270deg') : reverse ? '0deg' : '180deg';
+    const imageTranslateY = ((height.value - width.value) / 2) * ((reverse && isRtl) || (!reverse && !isRtl) ? -1 : 1);
+    const { r, b } = HSVA2RGBA(hueValue.value, saturationValue.value, brightnessValue.value);
+
     return {
+      tintColor: `rgb(${r}, 255, ${b})`,
       width: vertical ? height.value : '100%',
       height: vertical ? width.value : '100%',
       borderRadius,
       transform: [
         { rotate: imageRotate },
-        { translateX: vertical ? ((height.value - width.value) / 2) * (reverse ? -1 : 1) : 0 },
+        { translateX: vertical ? ((height.value - width.value) / 2) * (reverse ? 1 : -1) : 0 },
         { translateY: vertical ? imageTranslateY : 0 },
       ],
     };
@@ -135,17 +146,13 @@ export function SaturationSlider({
     <GestureDetector gesture={composed}>
       <Animated.View
         onLayout={onLayout}
-        style={[{ borderRadius }, style, { position: 'relative', borderWidth: 0, padding: 0 }, thicknessStyle, activeColorStyle]}
+        style={[{ borderRadius }, style, { position: 'relative', borderWidth: 0, padding: 0 }, thicknessStyle, redBlue]}
       >
-        <Animated.Image source={require('@assets/Saturation.png')} style={imageStyle} />
-
-        <ConditionalRendering render={adaptSpectrum}>
-          <Animated.View style={[{ borderRadius }, activeBrightnessStyle, StyleSheet.absoluteFillObject]} />
-        </ConditionalRendering>
-
+        <RenderNativeOnly>
+          <Animated.Image source={require('@assets/Brightness.png')} style={imageStyle} />
+        </RenderNativeOnly>
         <Thumb
           {...{
-            channel: 's',
             thumbShape,
             thumbSize,
             thumbColor,
@@ -154,7 +161,6 @@ export function SaturationSlider({
             innerStyle: thumbInnerStyle,
             style: thumbStyle,
             vertical,
-            adaptSpectrum,
           }}
         />
       </Animated.View>

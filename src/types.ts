@@ -358,6 +358,8 @@ export interface SliderProps {
   style?: StyleProp<ViewStyle>;
 }
 
+export interface RgbSliderProps extends Omit<SliderProps, 'adaptSpectrum'> {}
+
 export interface HueCircular extends Omit<SliderProps, 'vertical' | 'reverse' | 'boundedThumb'> {
   children?: ReactNode;
 

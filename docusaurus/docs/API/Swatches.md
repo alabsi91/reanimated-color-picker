@@ -1,5 +1,5 @@
 ---
-sidebar_position: 13
+sidebar_position: 17
 sidebar_label: Swatches
 description: A list of color swatches is utilized for efficient color selection.
 ---

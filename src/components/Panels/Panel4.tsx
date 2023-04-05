@@ -137,6 +137,7 @@ export function Panel4({
           style={[styles.panel_image, { borderRadius }, rotatePanelImage]}
           resizeMode='stretch'
         />
+
         <View style={[styles.panel_image, { borderRadius, flexDirection: isRtl ? 'row-reverse' : 'row' }]}>
           <Image source={require('@assets/Saturation.png')} style={{ flex: 1 }} resizeMode='stretch' />
           <Image
@@ -145,6 +146,7 @@ export function Panel4({
             resizeMode='stretch'
           />
         </View>
+
         <Thumb
           {...{
             thumbShape,

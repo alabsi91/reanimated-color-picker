@@ -4,7 +4,7 @@ import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import { styles } from '@styles';
-import { hsva2Hsla } from '@utils';
+import { ConditionalRendering, HSVA2HSLA } from '@utils';
 import CTX from '@context';
 import Thumb from '@thumb';
 
@@ -74,11 +74,11 @@ export function HueCircular({
 
   const activeSaturationStyle = useAnimatedStyle(() => {
     if (!adaptSpectrum) return {};
-    return { backgroundColor: hsva2Hsla(0, 0, brightnessValue.value, 1 - saturationValue.value / 100) };
+    return { backgroundColor: HSVA2HSLA(0, 0, brightnessValue.value, 1 - saturationValue.value / 100) };
   });
   const activeBrightnessStyle = useAnimatedStyle(() => {
     if (!adaptSpectrum) return {};
-    return { backgroundColor: hsva2Hsla(0, 0, 0, 1 - brightnessValue.value / 100) };
+    return { backgroundColor: HSVA2HSLA(0, 0, 0, 1 - brightnessValue.value / 100) };
   });
   const clipViewStyle = useAnimatedStyle(() => ({
     width: width.value - sliderThickness * 2,
@@ -148,12 +148,11 @@ export function HueCircular({
           style={[styles.panel_image, { justifyContent: 'center', alignItems: 'center' }]}
           resizeMode='stretch'
         >
-          {adaptSpectrum && (
-            <>
-              <Animated.View style={[borderRadiusStyle, activeBrightnessStyle, StyleSheet.absoluteFillObject]} />
-              <Animated.View style={[borderRadiusStyle, activeSaturationStyle, StyleSheet.absoluteFillObject]} />
-            </>
-          )}
+          <ConditionalRendering render={adaptSpectrum}>
+            <Animated.View style={[borderRadiusStyle, activeBrightnessStyle, StyleSheet.absoluteFillObject]} />
+            <Animated.View style={[borderRadiusStyle, activeSaturationStyle, StyleSheet.absoluteFillObject]} />
+          </ConditionalRendering>
+
           <Animated.View style={[clipViewStyle, { backgroundColor: '#fff' }, containerStyle]}>{children}</Animated.View>
         </ImageBackground>
         <Thumb
