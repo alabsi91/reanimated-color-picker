@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
-import { clamp, getStyle, HSVA2HSLA, isRtl } from '@utils';
+import { clamp, ConditionalRendering, getStyle, HSVA2HSLA, isRtl } from '@utils';
 import CTX from '@context';
 import Thumb from '@thumb';
 
@@ -138,7 +138,11 @@ export function SaturationSlider({
         style={[{ borderRadius }, style, { position: 'relative', borderWidth: 0, padding: 0 }, thicknessStyle, activeColorStyle]}
       >
         <Animated.Image source={require('@assets/Saturation.png')} style={imageStyle} />
-        {adaptSpectrum && <Animated.View style={[{ borderRadius }, activeBrightnessStyle, StyleSheet.absoluteFillObject]} />}
+
+        <ConditionalRendering render={adaptSpectrum}>
+          <Animated.View style={[{ borderRadius }, activeBrightnessStyle, StyleSheet.absoluteFillObject]} />
+        </ConditionalRendering>
+
         <Thumb
           {...{
             channel: 's',

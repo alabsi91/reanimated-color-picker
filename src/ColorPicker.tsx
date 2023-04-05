@@ -1,15 +1,16 @@
 import React, { useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
-import { Text, Platform } from 'react-native';
+import { Text } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useSharedValue, withTiming } from 'react-native-reanimated';
 
+import { isWeb } from '@utils';
 import colorKit from '@colorKit';
 import CTX from '@context';
 
 import type { AnyFormat } from './colorKit/types';
 import type { ColorPickerProps, ColorPickerRef, TCTX } from '@types';
 
-if (Platform.OS === 'web') {
+if (isWeb) {
   // @ts-ignore
   if (!global.setImmediate) global.setImmediate = setTimeout;
   try {
@@ -117,7 +118,7 @@ const ColorPicker = forwardRef<ColorPickerRef, ColorPickerProps>(
     };
 
     return (
-      <GestureHandlerRootView style={[{ direction: Platform.OS === 'web' ? 'ltr' : undefined }, style]}>
+      <GestureHandlerRootView style={[{ direction: isWeb ? 'ltr' : undefined }, style]}>
         <CTX.Provider value={ctxValue}>{children}</CTX.Provider>
       </GestureHandlerRootView>
     );

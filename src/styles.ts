@@ -1,6 +1,5 @@
-import { I18nManager, Platform, StyleSheet } from 'react-native';
-
-const isRtl = I18nManager.isRTL;
+import { Platform, StyleSheet } from 'react-native';
+import { isRtl } from '@utils';
 
 export const styles = StyleSheet.create({
   // Panels

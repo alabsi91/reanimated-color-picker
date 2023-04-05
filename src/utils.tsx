@@ -1,18 +1,21 @@
+import React from 'react';
 import { StyleSheet, I18nManager, Platform } from 'react-native';
 
 import type { StyleProp, ViewStyle } from 'react-native';
 
+/** - Get a specific property from a react native style object */
 export function getStyle<T extends keyof ViewStyle>(style: StyleProp<ViewStyle>, property: T): ViewStyle[T] | undefined {
   const flattened = StyleSheet.flatten(style);
   return flattened[property];
 }
 
+/** - Clamp a number value between `0` and a max value */
 export function clamp(v: number, max: number) {
   'worklet';
   return Math.min(Math.max(v, 0), max);
 }
 
-/** - Convert `HSV` color to an `HSLA` object representation */
+/** - Convert `HSV` color to an `HSLA` string representation */
 export function HSVA2HSLA(h: number, s: number, v: number, a = 1) {
   'worklet';
 
@@ -84,8 +87,8 @@ export function HSVA2RGBA(h: number, s: number, v: number, a = 1) {
   };
 }
 
-/** - Convert `RGB` or `RGBA` color to an `HSVA`  object representation */
-export function RGB2HSVA(r: number, g: number, b: number, a = 1) {
+/** - Convert `RGBA` color to an `HSVA`  object representation */
+export function RGBA2HSVA(r: number, g: number, b: number, a = 1) {
   'worklet';
 
   r = r / 255;
@@ -119,6 +122,24 @@ export function RGB2HSVA(r: number, g: number, b: number, a = 1) {
     v: clamp(v * 100, 100),
     a: clamp(a, 1),
   };
+}
+
+/** - Render children only if the `render` property is `true` */
+export function ConditionalRendering({ children, render }: { children: React.ReactNode; render: boolean }) {
+  if (!render) return null;
+  return <>{children}</>;
+}
+
+/** - Render children for native platforms only (Android, IOS) */
+export function RenderNativeOnly({ children }: { children: React.ReactNode }) {
+  if (isWeb) return null;
+  return <>{children}</>;
+}
+
+/** - Render children for Web platform only */
+export function RenderWebOnly({ children }: { children: React.ReactNode }) {
+  if (!isWeb) return null;
+  return <>{children}</>;
 }
 
 export const isRtl = I18nManager.isRTL;

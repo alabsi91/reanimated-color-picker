@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
-import { clamp, getStyle, HSVA2RGBA, isRtl, isWeb, RGB2HSVA } from '@utils';
+import { clamp, getStyle, HSVA2RGBA, isRtl, isWeb, RenderNativeOnly, RGBA2HSVA } from '@utils';
 import CTX from '@context';
 import Thumb from '@thumb';
 
@@ -82,7 +82,7 @@ export function RedSlider({
 
     if (newRedValue === r) return;
 
-    const { h, s, v } = RGB2HSVA(newRedValue, g, b);
+    const { h, s, v } = RGBA2HSVA(newRedValue, g, b);
 
     hueValue.value = h;
     saturationValue.value = s;
@@ -148,7 +148,9 @@ export function RedSlider({
         onLayout={onLayout}
         style={[{ borderRadius }, style, { position: 'relative', borderWidth: 0, padding: 0 }, thicknessStyle, greenBlue]}
       >
-        {!isWeb && <Animated.Image source={require('@assets/Brightness.png')} style={imageStyle} />}
+        <RenderNativeOnly>
+          <Animated.Image source={require('@assets/Brightness.png')} style={imageStyle} />
+        </RenderNativeOnly>
         <Thumb
           {...{
             thumbShape,

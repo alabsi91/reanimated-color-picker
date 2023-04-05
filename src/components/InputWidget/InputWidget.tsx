@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { View, Text, Pressable, Image, StyleSheet } from 'react-native';
 
 import { styles } from '@styles';
-import { getStyle } from '@utils';
+import { ConditionalRendering, getStyle } from '@utils';
 import CTX from '@context';
 import HexWidget from './Widgets/HexWidget';
 import RgbWidget from './Widgets/RgbWidget';
@@ -78,14 +78,15 @@ export function InputWidget({
       <View style={[styles.inputsWrapper, { gap }]}>
         <Input />
       </View>
-      {formats.length > 1 && (
+
+      <ConditionalRendering render={formats.length > 1}>
         <View style={{ width: iconWidth }}>
           <Pressable onPress={cycle}>
             <Image style={[buttonIconStyle, { tintColor: iconColor }]} source={require('@assets/arrow-icon.png')} />
           </Pressable>
           <Text style={styles.inputTitle}> </Text>
         </View>
-      )}
+      </ConditionalRendering>
     </View>
   );
 }

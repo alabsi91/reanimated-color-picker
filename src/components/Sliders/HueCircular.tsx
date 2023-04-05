@@ -4,7 +4,7 @@ import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import { styles } from '@styles';
-import { HSVA2HSLA } from '@utils';
+import { ConditionalRendering, HSVA2HSLA } from '@utils';
 import CTX from '@context';
 import Thumb from '@thumb';
 
@@ -148,12 +148,11 @@ export function HueCircular({
           style={[styles.panel_image, { justifyContent: 'center', alignItems: 'center' }]}
           resizeMode='stretch'
         >
-          {adaptSpectrum && (
-            <>
-              <Animated.View style={[borderRadiusStyle, activeBrightnessStyle, StyleSheet.absoluteFillObject]} />
-              <Animated.View style={[borderRadiusStyle, activeSaturationStyle, StyleSheet.absoluteFillObject]} />
-            </>
-          )}
+          <ConditionalRendering render={adaptSpectrum}>
+            <Animated.View style={[borderRadiusStyle, activeBrightnessStyle, StyleSheet.absoluteFillObject]} />
+            <Animated.View style={[borderRadiusStyle, activeSaturationStyle, StyleSheet.absoluteFillObject]} />
+          </ConditionalRendering>
+
           <Animated.View style={[clipViewStyle, { backgroundColor: '#fff' }, containerStyle]}>{children}</Animated.View>
         </ImageBackground>
         <Thumb

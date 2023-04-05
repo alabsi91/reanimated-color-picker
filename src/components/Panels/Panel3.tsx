@@ -3,7 +3,7 @@ import { ImageBackground, Image, StyleSheet } from 'react-native';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
-import { clamp, HSVA2HSLA } from '@utils';
+import { clamp, ConditionalRendering, HSVA2HSLA } from '@utils';
 import { styles } from '@styles';
 import CTX from '@context';
 import Thumb from '@thumb';
@@ -134,9 +134,10 @@ export function Panel3({
         ]}
       >
         <ImageBackground source={require('@assets/circularHue.png')} style={styles.panel_image} resizeMode='stretch'>
-          {adaptSpectrum && centerChannel === 'brightness' && (
+          <ConditionalRendering render={adaptSpectrum && centerChannel === 'brightness'}>
             <Animated.View style={[{ borderRadius }, spectrumStyle, StyleSheet.absoluteFillObject]} />
-          )}
+          </ConditionalRendering>
+
           <Image
             source={
               centerChannel === 'brightness'
@@ -146,9 +147,10 @@ export function Panel3({
             style={styles.panel_image}
             resizeMode='stretch'
           />
-          {adaptSpectrum && centerChannel === 'saturation' && (
+
+          <ConditionalRendering render={adaptSpectrum && centerChannel === 'saturation'}>
             <Animated.View style={[{ borderRadius }, spectrumStyle, StyleSheet.absoluteFillObject]} />
-          )}
+          </ConditionalRendering>
         </ImageBackground>
         <Thumb
           {...{

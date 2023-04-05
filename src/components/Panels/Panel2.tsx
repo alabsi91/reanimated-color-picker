@@ -5,7 +5,7 @@ import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 
 
 import { styles } from '@styles';
 import CTX from '@context';
-import { clamp, getStyle, HSVA2HSLA, isRtl } from '@utils';
+import { clamp, ConditionalRendering, getStyle, HSVA2HSLA, isRtl } from '@utils';
 import Thumb from '@thumb';
 
 import type { LayoutChangeEvent } from 'react-native';
@@ -134,18 +134,21 @@ export function Panel2({
           style={[styles.panel_image, { position: 'relative', borderRadius, transform: [{ scaleX: reverseHue ? -1 : 1 }] }]}
           resizeMode='stretch'
         >
-          {adaptSpectrum && verticalChannel === 'brightness' && (
+          <ConditionalRendering render={adaptSpectrum && verticalChannel === 'brightness'}>
             <Animated.View style={[spectrumStyle, StyleSheet.absoluteFillObject]} />
-          )}
+          </ConditionalRendering>
+
           <Animated.Image
             source={verticalChannel === 'brightness' ? require('@assets/Brightness.png') : require('@assets/Saturation.png')}
             style={[styles.panel_image, rotatePanelImage]}
             resizeMode='stretch'
           />
-          {adaptSpectrum && verticalChannel === 'saturation' && (
+
+          <ConditionalRendering render={adaptSpectrum && verticalChannel === 'saturation'}>
             <Animated.View style={[spectrumStyle, StyleSheet.absoluteFillObject]} />
-          )}
+          </ConditionalRendering>
         </ImageBackground>
+
         <Thumb
           {...{
             channel: verticalChannel === 'brightness' ? 'v' : 's',
