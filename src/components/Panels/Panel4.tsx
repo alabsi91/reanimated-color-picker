@@ -139,9 +139,9 @@ export function Panel4({
         />
 
         <View style={[styles.panel_image, { borderRadius, flexDirection: isRtl ? 'row-reverse' : 'row' }]}>
-          <Image source={require('@assets/Saturation.png')} style={{ flex: 1 }} resizeMode='stretch' />
+          <Image source={require('@assets/blackGradient.png')} style={{ flex: 1, tintColor: '#fff' }} resizeMode='stretch' />
           <Image
-            source={require('@assets/Brightness.png')}
+            source={require('@assets/blackGradient.png')}
             style={{ flex: 1, transform: [{ scaleX: -1 }] }}
             resizeMode='stretch'
           />

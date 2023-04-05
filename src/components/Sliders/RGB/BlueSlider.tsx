@@ -149,7 +149,7 @@ export function BlueSlider({
         style={[{ borderRadius }, style, { position: 'relative', borderWidth: 0, padding: 0 }, thicknessStyle, redGreen]}
       >
         <RenderNativeOnly>
-          <Animated.Image source={require('@assets/Brightness.png')} style={imageStyle} />
+          <Animated.Image source={require('@assets/blackGradient.png')} style={imageStyle} />
         </RenderNativeOnly>
         <Thumb
           {...{

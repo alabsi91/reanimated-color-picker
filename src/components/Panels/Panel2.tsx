@@ -139,8 +139,8 @@ export function Panel2({
           </ConditionalRendering>
 
           <Animated.Image
-            source={verticalChannel === 'brightness' ? require('@assets/Brightness.png') : require('@assets/Saturation.png')}
-            style={[styles.panel_image, rotatePanelImage]}
+            source={require('@assets/blackGradient.png')}
+            style={[styles.panel_image, rotatePanelImage, { tintColor: verticalChannel === 'saturation' ? '#fff' : undefined }]}
             resizeMode='stretch'
           />
 
