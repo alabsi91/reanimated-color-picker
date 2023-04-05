@@ -31,6 +31,7 @@ export default function HexWidget({
   }, []);
 
   const onTextChange = (text: string) => {
+    text = text.startsWith('#') ? text : '#' + text;
     setHexColorText(text);
     const isHex = colorKit.getFormat(text)?.includes('hex');
     if (isHex) onChange(text);
