@@ -78,10 +78,7 @@ export function Panel5({ style = {} }: Panel5Props) {
 
   return (
     <GestureDetector gesture={tap}>
-      <Animated.View
-        onLayout={onLayout}
-        style={[styles.panel_container, style, { position: 'relative', borderWidth: 0, padding: 0, aspectRatio: 1.2 }]}
-      >
+      <Animated.View onLayout={onLayout} style={[style, { position: 'relative', borderWidth: 0, padding: 0, aspectRatio: 1.2 }]}>
         <Image source={require('@assets/grid.png')} style={[styles.panel_image, { borderRadius }]} resizeMode='stretch' />
         <Animated.View style={[styles.selected, selectedStyle]} />
       </Animated.View>
