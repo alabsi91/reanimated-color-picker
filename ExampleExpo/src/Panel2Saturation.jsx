@@ -26,7 +26,13 @@ export default function Example() {
         <Animated.View style={[styles.container, backgroundColorStyle]}>
           <KeyboardAvoidingView behavior='position'>
             <View style={styles.pickerContainer}>
-              <ColorPicker value={initialColor} sliderThickness={25} thumbSize={30} thumbShape='rect' onChange={onColorSelect}>
+              <ColorPicker
+                value={selectedColor.value}
+                sliderThickness={25}
+                thumbSize={30}
+                thumbShape='rect'
+                onChange={onColorSelect}
+              >
                 <Panel2 style={styles.panelStyle} thumbShape='ring' />
 
                 <BrightnessSlider style={styles.sliderStyle} />

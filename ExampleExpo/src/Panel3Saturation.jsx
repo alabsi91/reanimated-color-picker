@@ -25,7 +25,7 @@ export default function Example() {
       <Modal onRequestClose={() => setShowModal(false)} visible={showModal} animationType='slide'>
         <Animated.View style={[styles.container, backgroundColorStyle]}>
           <View style={styles.pickerContainer}>
-            <ColorPicker value={customSwatches[0]} sliderThickness={25} thumbSize={27} onChange={onColorSelect}>
+            <ColorPicker value={selectedColor.value} sliderThickness={25} thumbSize={27} onChange={onColorSelect}>
               <View style={styles.previewContainer}>
                 <Preview style={styles.previewStyle} />
               </View>
