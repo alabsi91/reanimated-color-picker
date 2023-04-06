@@ -16,6 +16,14 @@ export const styles = StyleSheet.create({
     overflow: 'hidden',
   },
 
+  // grid
+  selected: {
+    position: 'absolute',
+    borderRadius: 2,
+    borderWidth: 2,
+    borderColor: '#fff',
+  },
+
   // Thumb
   handle: {
     position: 'absolute',

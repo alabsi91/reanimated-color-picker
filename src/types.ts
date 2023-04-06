@@ -103,7 +103,7 @@ export interface TCTX {
   adaptSpectrum: boolean;
 
   /** Apply a color to the color picker. */
-  setColor: (color: string) => void;
+  setColor: (color: string, duration?: number) => void;
 
   /** A global prop for all sliders children. */
   sliderThickness: number;
@@ -208,7 +208,7 @@ export interface ColorPickerProps {
 
 export interface ColorPickerRef {
   /** Apply a color to the color picker. */
-  setColor: (color: string) => void;
+  setColor: (color: string, duration?: number) => void;
 }
 
 export interface SwatchesProps {
@@ -311,6 +311,14 @@ export interface Panel3Props extends PanelProps {
 export interface Panel4Props extends PanelProps {
   /** - reverse (flip) hue direction. */
   reverseHue?: boolean;
+}
+
+export interface Panel5Props extends PanelProps {
+  /**
+   * - panel container style.
+   * - **Note** Certain style properties will be overridden.
+   */
+  style?: StyleProp<ViewStyle>;
 }
 
 export interface SliderProps {
