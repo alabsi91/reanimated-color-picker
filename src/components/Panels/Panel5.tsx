@@ -1,7 +1,7 @@
 import React, { useContext, useCallback, useEffect } from 'react';
-import { Image } from 'react-native';
+import { ImageBackground } from 'react-native';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
-import Animated, { Easing, runOnJS, useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
+import Animated, { Easing, runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import { getStyle, isRtl, decimalToHex } from '@utils';
 import { styles } from '@styles';
@@ -19,17 +19,16 @@ export function Panel5({ style = {} }: Panel5Props) {
   const squareSize = useSharedValue(0),
     posX = useSharedValue(0),
     posY = useSharedValue(0),
-    scale = useSharedValue(1),
     adaptiveColor = useSharedValue('#000');
 
   const selectedStyle = useAnimatedStyle(() => {
     return {
-      top: posY.value * squareSize.value,
-      [isRtl ? 'right' : 'left']: posX.value * squareSize.value,
       width: squareSize.value,
       height: squareSize.value,
+      top: posY.value * squareSize.value,
+      left: isRtl ? undefined : posX.value * squareSize.value,
+      right: isRtl ? posX.value * squareSize.value : undefined,
       borderColor: adaptiveColor.value,
-      transform: [{ scale: scale.value }],
     };
   });
 
@@ -39,17 +38,15 @@ export function Panel5({ style = {} }: Panel5Props) {
     adaptiveColor.value = contrast < 4.5 ? color : adaptiveColor.value;
   };
 
-  const tap = Gesture.Tap().onStart(({ x, y }) => {
+  const tap = Gesture.Tap().onBegin(({ x, y }) => {
+    if (!squareSize.value) return;
+
     const row = Math.floor(y / squareSize.value);
     const column = Math.floor(x / squareSize.value);
     const color = gridColors[row][column] + decimalToHex(alphaValue.value);
 
     posX.value = withTiming(column, { duration: 300, easing: Easing.elastic(0.8) });
     posY.value = withTiming(row, { duration: 300, easing: Easing.elastic(0.8) });
-    scale.value = withSequence(
-      withTiming(1.2, { duration: 150, easing: Easing.elastic(2) }),
-      withTiming(1, { duration: 150, easing: Easing.elastic(2) })
-    );
 
     runOnJS(setAdaptiveColor)(color);
     runOnJS(setColor)(color, 50);
@@ -58,7 +55,7 @@ export function Panel5({ style = {} }: Panel5Props) {
   });
 
   const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
-    squareSize.value = layout.width / 12;
+    squareSize.value = withTiming(layout.width / 12 || layout.height / 10, { duration: 100 });
   }, []);
 
   useEffect(() => {
@@ -78,10 +75,15 @@ export function Panel5({ style = {} }: Panel5Props) {
 
   return (
     <GestureDetector gesture={tap}>
-      <Animated.View onLayout={onLayout} style={[style, { position: 'relative', borderWidth: 0, padding: 0, aspectRatio: 1.2 }]}>
-        <Image source={require('@assets/grid.png')} style={[styles.panel_image, { borderRadius }]} resizeMode='stretch' />
+      <ImageBackground
+        source={require('@assets/grid.png')}
+        onLayout={onLayout}
+        style={[style, { position: 'relative', borderWidth: 0, padding: 0, aspectRatio: 1.2 }]}
+        imageStyle={{ borderRadius }}
+        resizeMode='stretch'
+      >
         <Animated.View style={[styles.selected, selectedStyle]} />
-      </Animated.View>
+      </ImageBackground>
     </GestureDetector>
   );
 }

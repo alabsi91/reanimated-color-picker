@@ -19,6 +19,8 @@ export const styles = StyleSheet.create({
   // grid
   selected: {
     position: 'absolute',
+    ...(isRtl ? { right: 0 } : { left: 0 }),
+    aspectRatio: 1,
     borderRadius: 2,
     borderWidth: 2,
     borderColor: '#fff',
