@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react';
+import React, { useContext, useCallback, useEffect } from 'react';
 import { Image } from 'react-native';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, { Easing, runOnJS, useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
@@ -12,7 +12,7 @@ import type { LayoutChangeEvent } from 'react-native';
 import type { Panel5Props } from '@types';
 
 export function Panel5({ style = {} }: Panel5Props) {
-  const { alphaValue, setColor, onGestureChange, onGestureEnd } = useContext(CTX);
+  const { value, alphaValue, setColor, onGestureChange, onGestureEnd } = useContext(CTX);
 
   const borderRadius = getStyle(style, 'borderRadius') ?? 0;
 
@@ -60,6 +60,21 @@ export function Panel5({ style = {} }: Panel5Props) {
   const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
     squareSize.value = layout.width / 12;
   }, []);
+
+  useEffect(() => {
+    const initialColor = colorKit.HEX(value).toUpperCase();
+
+    const row = gridColors.findIndex(e => e.includes(initialColor));
+    if (row === -1) return;
+
+    const column = gridColors[row].indexOf(initialColor);
+    if (column === -1) return;
+
+    posX.value = column;
+    posY.value = row;
+
+    setAdaptiveColor(initialColor);
+  }, [value]);
 
   return (
     <GestureDetector gesture={tap}>
