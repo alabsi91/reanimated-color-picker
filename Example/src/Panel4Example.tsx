@@ -8,8 +8,7 @@ import type { returnedResults } from 'reanimated-color-picker';
 export default function Example() {
   const [showModal, setShowModal] = useState(false);
 
-  const initialColor = colorKit.randomRgbColor().hex();
-
+  const initialColor = colorKit.randomHsvColor({ s: [100, 100], v: [100, 100] }).hex();
   const selectedColor = useSharedValue(initialColor);
   const backgroundColorStyle = useAnimatedStyle(() => ({ backgroundColor: selectedColor.value }));
 
