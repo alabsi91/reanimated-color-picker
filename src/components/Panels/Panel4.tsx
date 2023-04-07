@@ -21,7 +21,7 @@ export function Panel4({
   thumbStyle: localThumbStyle,
   thumbInnerStyle: localThumbInnerStyle,
   reverseHue = false,
-  reverseHorizontalChannels = true,
+  reverseHorizontalChannels = false,
   style = {},
 }: Panel4Props) {
   const {
