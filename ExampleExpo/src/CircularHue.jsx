@@ -25,7 +25,7 @@ export default function Example() {
       <Modal onRequestClose={() => setShowModal(false)} visible={showModal} animationType='slide'>
         <Animated.View style={[styles.container, backgroundColorStyle]}>
           <View style={styles.pickerContainer}>
-            <ColorPicker value={customSwatches[0]} sliderThickness={20} thumbSize={24} onChange={onColorSelect} boundedThumb>
+            <ColorPicker value={selectedColor.value} sliderThickness={20} thumbSize={24} onChange={onColorSelect} boundedThumb>
               <HueCircular containerStyle={styles.hueContainer} thumbShape='pill'>
                 <Panel1 style={styles.panelStyle} />
               </HueCircular>

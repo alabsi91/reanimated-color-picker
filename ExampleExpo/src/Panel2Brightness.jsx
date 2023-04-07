@@ -27,7 +27,7 @@ export default function Example() {
           <KeyboardAvoidingView behavior='position'>
             <View style={styles.pickerContainer}>
               <ColorPicker
-                value={initialColor}
+                value={selectedColor.value}
                 sliderThickness={25}
                 thumbSize={20}
                 thumbShape='doubleTriangle'

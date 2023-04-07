@@ -7,12 +7,11 @@ import ColorPicker, { Panel4, OpacitySlider, colorKit, PreviewText } from 'reani
 export default function Example() {
   const [showModal, setShowModal] = useState(false);
 
-  const initialColor = colorKit.randomRgbColor().hex();
-
+  const initialColor = colorKit.randomHsvColor({ s: [100, 100], v: [100, 100] }).hex();
   const selectedColor = useSharedValue(initialColor);
   const backgroundColorStyle = useAnimatedStyle(() => ({ backgroundColor: selectedColor.value }));
 
-  const onColorSelect = (color) => {
+  const onColorSelect = color => {
     selectedColor.value = color.hex;
   };
 
@@ -25,7 +24,13 @@ export default function Example() {
       <Modal onRequestClose={() => setShowModal(false)} visible={showModal} animationType='slide'>
         <Animated.View style={[styles.container, backgroundColorStyle]}>
           <View style={styles.pickerContainer}>
-            <ColorPicker value={initialColor} sliderThickness={25} thumbSize={24} thumbShape='circle' onChange={onColorSelect}>
+            <ColorPicker
+              value={selectedColor.value}
+              sliderThickness={25}
+              thumbSize={24}
+              thumbShape='circle'
+              onChange={onColorSelect}
+            >
               <Panel4 style={styles.panelStyle} thumbShape='ring' />
 
               <OpacitySlider style={styles.sliderStyle} />

@@ -1,5 +1,5 @@
 ---
-sidebar_position: 15
+sidebar_position: 16
 sidebar_label: PreviewText
 description: A React Native <Text> component that displays the preview color text.
 ---

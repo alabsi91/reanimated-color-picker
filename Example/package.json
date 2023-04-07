@@ -13,7 +13,7 @@
     "react-native": "0.68.2",
     "react-native-gesture-handler": "^2.5.0",
     "react-native-reanimated": "^2.9.1",
-    "reanimated-color-picker": "^2.1.0"
+    "reanimated-color-picker": "^2.2.0-beta.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

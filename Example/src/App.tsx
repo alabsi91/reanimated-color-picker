@@ -6,6 +6,7 @@ import Panel2Brightness from './Panel2Brightness';
 import WheelSaturation from './Panel3Saturation';
 import WheelBrightness from './Panel3Brightness';
 import Panel4Example from './Panel4Example';
+import Panel5Example from './Panel5Example';
 import CircularHue from './CircularHue';
 import HorizontalSliders from './HorizontalSliders';
 import VerticalSliders from './VerticalSliders';
@@ -25,6 +26,7 @@ export default function App() {
           <WheelSaturation />
           <WheelBrightness />
           <Panel4Example />
+          <Panel5Example />
           <CircularHue />
           <HorizontalSliders />
           <VerticalSliders />

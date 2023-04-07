@@ -35,7 +35,7 @@ export default function Example() {
         <Animated.View style={[styles.container, backgroundColorStyle]}>
           <View style={styles.pickerContainer}>
             <ColorPicker
-              value={customSwatches[0]}
+              value={selectedColor.value}
               sliderThickness={30}
               thumbSize={30}
               thumbShape='circle'

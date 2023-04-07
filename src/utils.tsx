@@ -124,6 +124,14 @@ export function RGBA2HSVA(r: number, g: number, b: number, a = 1) {
   };
 }
 
+/** - Convert a decimal number to hexadecimal */
+export function decimalToHex(a: number): string {
+  'worklet';
+  a = clamp(Math.round(a * 255), 255);
+  const hex = a.toString(16);
+  return hex.length === 1 ? '0' + hex : hex;
+}
+
 /** - Render children only if the `render` property is `true` */
 export function ConditionalRendering({ children, render }: { children: React.ReactNode; render: boolean }) {
   if (!render) return null;
