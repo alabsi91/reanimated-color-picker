@@ -21,6 +21,7 @@ export function Panel4({
   thumbStyle: localThumbStyle,
   thumbInnerStyle: localThumbInnerStyle,
   reverseHue = false,
+  reverseHorizontalChannels = true,
   style = {},
 }: Panel4Props) {
   const {
@@ -56,18 +57,26 @@ export function Panel4({
 
   const handleStyle = useAnimatedStyle(() => {
     const length = { x: width.value - (boundedThumb ? thumbSize : 0), y: height.value - (boundedThumb ? thumbSize : 0) },
+      calcThumb = boundedThumb ? 0 : thumbSize / 2,
+      // saturation
       saturationPercentX = (saturationValue.value / 100) * (length.x / 2),
-      saturationPosX = saturationPercentX - (boundedThumb ? 0 : thumbSize / 2),
-      brightnessPercentX = length.x - (brightnessValue.value / 100) * (length.x / 2),
-      brightnessPosX = brightnessPercentX - (boundedThumb ? 0 : thumbSize / 2),
-      posX = saturationPosX < length.x / 2 - (boundedThumb ? 0 : thumbSize / 2) ? saturationPosX : brightnessPosX,
+      saturationPosX = (reverseHorizontalChannels ? length.x - saturationPercentX : saturationPercentX) - calcThumb,
+      // brightness
+      brightnessPercentX = (brightnessValue.value / 100) * (length.x / 2),
+      brightnessPosX = (reverseHorizontalChannels ? brightnessPercentX : length.x - brightnessPercentX) - calcThumb,
+      // both
+      isSaturationActive = reverseHorizontalChannels
+        ? saturationPosX > length.x / 2 - calcThumb
+        : saturationPosX < length.x / 2 - calcThumb,
+      posX = isSaturationActive ? saturationPosX : brightnessPosX,
+      // hue
       percentY = (hueValue.value / 360) * length.y,
-      posY = (reverseHue ? percentY : length.y - percentY) - (boundedThumb ? 0 : thumbSize / 2);
+      posY = (reverseHue ? percentY : length.y - percentY) - calcThumb;
 
     return {
       transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }],
     };
-  }, [localThumbSize, reverseHue]);
+  }, [localThumbSize, reverseHue, reverseHorizontalChannels]);
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -79,9 +88,8 @@ export function Panel4({
       valueX = Math.round((posX / lengthX) * 200),
       valueY = Math.round((posY / lengthY) * 360),
       newHueValue = reverseHue ? valueY : 360 - valueY,
-      newSaturationValue = clamp(valueX, 100),
-      newBrightnessValue = clamp(200 - valueX, 100);
-
+      newSaturationValue = clamp(reverseHorizontalChannels ? 200 - valueX : valueX, 100),
+      newBrightnessValue = clamp(reverseHorizontalChannels ? valueX : 200 - valueX, 100);
     if (
       hueValue.value === newHueValue &&
       saturationValue.value === newSaturationValue &&
@@ -138,7 +146,16 @@ export function Panel4({
           resizeMode='stretch'
         />
 
-        <View style={[styles.panel_image, { borderRadius, flexDirection: isRtl ? 'row-reverse' : 'row' }]}>
+        <View
+          style={[
+            styles.panel_image,
+            {
+              borderRadius,
+              flexDirection: isRtl ? 'row-reverse' : 'row',
+              transform: [{ scaleX: reverseHorizontalChannels ? -1 : 1 }],
+            },
+          ]}
+        >
           <Image source={require('@assets/blackGradient.png')} style={{ flex: 1, tintColor: '#fff' }} resizeMode='stretch' />
           <Image
             source={require('@assets/blackGradient.png')}

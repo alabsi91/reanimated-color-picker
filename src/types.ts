@@ -314,6 +314,9 @@ export interface Panel3Props extends PanelProps {
 export interface Panel4Props extends PanelProps {
   /** - reverse (flip) hue direction. */
   reverseHue?: boolean;
+
+  /** - reverse (flip) the horizontal channels' brightness and saturation. */
+  reverseHorizontalChannels?: boolean;
 }
 
 export interface Panel5Props extends PanelProps {
