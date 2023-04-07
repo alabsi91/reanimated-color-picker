@@ -293,6 +293,9 @@ export interface Panel2Props extends PanelProps {
   /** - reverse (flip) hue direction. */
   reverseHue?: boolean;
 
+  /** - reverse (flip) the direction of the vertical channel's saturation or brightness. */
+  reverseVerticalChannel?: boolean;
+
   /** - determines which color channel to adjust when moving the thumb vertically on the slider. */
   verticalChannel?: 'saturation' | 'brightness';
 
@@ -311,6 +314,9 @@ export interface Panel3Props extends PanelProps {
 export interface Panel4Props extends PanelProps {
   /** - reverse (flip) hue direction. */
   reverseHue?: boolean;
+
+  /** - reverse (flip) the horizontal channel's brightness and saturation. */
+  reverseHorizontalChannels?: boolean;
 }
 
 export interface Panel5Props extends PanelProps {

@@ -34,7 +34,7 @@ export default function Example() {
                 onChange={onColorSelect}
                 adaptSpectrum
               >
-                <Panel2 style={styles.panelStyle} verticalChannel='brightness' thumbShape='ring' thumbSize={30} />
+                <Panel2 style={styles.panelStyle} verticalChannel='brightness' thumbShape='ring' thumbSize={30} reverseVerticalChannel />
 
                 <SaturationSlider style={styles.sliderStyle} thumbColor='#fff' />
 

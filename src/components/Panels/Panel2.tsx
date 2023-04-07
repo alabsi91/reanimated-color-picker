@@ -23,6 +23,7 @@ export function Panel2({
   thumbInnerStyle: localThumbInnerStyle,
   verticalChannel = 'saturation',
   reverseHue = false,
+  reverseVerticalChannel = false,
   style = {},
 }: Panel2Props) {
   const {
@@ -64,9 +65,9 @@ export function Panel2({
       percentX = (hueValue.value / 360) * length.x,
       posX = (reverseHue ? length.x - percentX : percentX) - (boundedThumb ? 0 : thumbSize / 2),
       percentY = (channelValue.value / 100) * length.y,
-      posY = length.y - percentY - (boundedThumb ? 0 : thumbSize / 2);
+      posY = (reverseVerticalChannel ? percentY : length.y - percentY) - (boundedThumb ? 0 : thumbSize / 2);
     return { transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }] };
-  }, [localThumbSize, reverseHue]);
+  }, [localThumbSize, reverseHue, reverseVerticalChannel]);
 
   const spectrumStyle = useAnimatedStyle(() => {
     if (!adaptSpectrum) return {};
@@ -84,7 +85,7 @@ export function Panel2({
       valueX = Math.round((posX / lengthX) * 360),
       valueY = Math.round((posY / lengthY) * 100),
       newHueValue = reverseHue ? 360 - valueX : valueX,
-      newChannelValue = 100 - valueY;
+      newChannelValue = reverseVerticalChannel ? valueY : 100 - valueY;
 
     if (hueValue.value === newHueValue && channelValue.value === newChannelValue) return;
 
@@ -117,9 +118,9 @@ export function Panel2({
     width: height.value,
     height: width.value,
     transform: [
-      { rotate: '270deg' },
-      { translateX: (width.value - height.value) / 2 },
-      { translateY: ((width.value - height.value) / 2) * (isRtl ? -1 : 1) },
+      { rotate: reverseVerticalChannel ? '90deg' : '270deg' },
+      { translateX: ((width.value - height.value) / 2) * (reverseVerticalChannel ? -1 : 1) },
+      { translateY: ((width.value - height.value) / 2) * (isRtl ? -1 : 1) * (reverseVerticalChannel ? -1 : 1) },
     ],
   }));
 

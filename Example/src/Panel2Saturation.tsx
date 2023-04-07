@@ -34,7 +34,7 @@ export default function Example() {
                 thumbShape='rect'
                 onChange={onColorSelect}
               >
-                <Panel2 style={styles.panelStyle} thumbShape='ring' />
+                <Panel2 style={styles.panelStyle} thumbShape='ring' reverseVerticalChannel />
 
                 <BrightnessSlider style={styles.sliderStyle} />
 
