@@ -319,6 +319,11 @@ export interface Panel5Props extends PanelProps {
    * - **Note** Certain style properties will be overridden.
    */
   style?: StyleProp<ViewStyle>;
+  /**
+   * - The style of the square that indicates the selected color.
+   * - **Note** Certain style properties will be overridden.
+   */
+  selectionStyle?: StyleProp<ViewStyle>;
 }
 
 export interface SliderProps {

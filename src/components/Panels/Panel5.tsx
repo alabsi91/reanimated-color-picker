@@ -11,7 +11,7 @@ import CTX from '@context';
 import type { LayoutChangeEvent } from 'react-native';
 import type { Panel5Props } from '@types';
 
-export function Panel5({ style = {} }: Panel5Props) {
+export function Panel5({ style = {}, selectionStyle = {} }: Panel5Props) {
   const { value, alphaValue, setColor, onGestureChange, onGestureEnd } = useContext(CTX);
 
   const borderRadius = getStyle(style, 'borderRadius') ?? 0;
@@ -43,7 +43,7 @@ export function Panel5({ style = {} }: Panel5Props) {
 
     const row = Math.floor(y / squareSize.value);
     const column = Math.floor(x / squareSize.value);
-    const color = gridColors[row][column] + decimalToHex(alphaValue.value);
+    const color = gridColors[row][column] + (alphaValue.value === 1 ? '' : decimalToHex(alphaValue.value));
 
     posX.value = withTiming(column, { duration: 300, easing: Easing.elastic(0.8) });
     posY.value = withTiming(row, { duration: 300, easing: Easing.elastic(0.8) });
@@ -59,7 +59,7 @@ export function Panel5({ style = {} }: Panel5Props) {
   }, []);
 
   useEffect(() => {
-    const initialColor = colorKit.HEX(value).toUpperCase();
+    const initialColor = colorKit.HEX(value.slice(0, 7)).toUpperCase();
 
     const row = gridColors.findIndex(e => e.includes(initialColor));
     if (row === -1) return;
@@ -82,7 +82,7 @@ export function Panel5({ style = {} }: Panel5Props) {
         imageStyle={{ borderRadius }}
         resizeMode='stretch'
       >
-        <Animated.View style={[styles.selected, selectedStyle]} />
+        <Animated.View style={[styles.selected, selectionStyle, selectedStyle]} />
       </ImageBackground>
     </GestureDetector>
   );
