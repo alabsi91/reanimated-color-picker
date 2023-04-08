@@ -1,11 +1,11 @@
 import colorsRegex from './colorsRegex';
 import { clamp100, clampAlpha, clampHue, clampRGB } from './utilities';
 
-import type { AnyFormat, ColorFormats, hslaT, hslT, hsvaT, hsvT, hwbaT, hwbT, rgbaT, rgbT } from './types';
+import type { SupportedColorFormats, ColorFormats, hslaT, hslT, hsvaT, hsvT, hwbaT, hwbT, rgbaT, rgbT } from './types';
 
 export default class PrivateMethods {
   /** - Identify the color format of a given `string` or `object` */
-  detectColorFormat(color: AnyFormat): ColorFormats | null {
+  detectColorFormat(color: SupportedColorFormats): ColorFormats | null {
     // color int
     if (typeof color === 'number') color = '#' + color.toString(16);
 

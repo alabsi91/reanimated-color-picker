@@ -16,7 +16,7 @@ export type hsvT = Omit<hsvaT, 'a'>;
 export type hwbaT = { h: number; w: number; b: number; a: number };
 export type hwbT = Omit<hwbaT, 'a'>;
 
-export type AnyFormat = ColorString | rgbaT | rgbT | hslaT | hslT | hsvaT | hsvT | hwbaT | hwbT | number;
+export type SupportedColorFormats = ColorString | rgbaT | rgbT | hslaT | hslT | hsvaT | hsvT | hwbaT | hwbT | number;
 
 export type colorTypes<T extends {}> = {
   object: () => T;

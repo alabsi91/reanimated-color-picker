@@ -3,16 +3,16 @@ import colorsRegex from './colorsRegex';
 import namedColors from './namedColors';
 import { clamp, clamp100, clampAlpha, clampHue, clampRGB, randomNumber } from './utilities';
 
-import type { AnyFormat, ColorFormats, ConversionMethods, hslaT, hslT, hsvaT, hsvT, hwbaT, hwbT, rgbaT, rgbT } from './types';
+import type { SupportedColorFormats, ColorFormats, ConversionMethods, hslaT, hslT, hsvaT, hsvT, hwbaT, hwbT, rgbaT, rgbT } from './types';
 
 class Colors {
   private _: InstanceType<typeof PrivateMethods>;
-  private returnColorObject: (color: AnyFormat) => ConversionMethods;
+  private returnColorObject: (color: SupportedColorFormats) => ConversionMethods;
 
   constructor() {
     this._ = new PrivateMethods();
 
-    this.returnColorObject = (color: AnyFormat) => {
+    this.returnColorObject = (color: SupportedColorFormats) => {
       return {
         hex: () => this.HEX(color),
         rgb: () => this.RGB(color),
@@ -24,7 +24,7 @@ class Colors {
   }
 
   /** - Identify the color format of a given `string` or `object`, and return `null` for invalid colors. */
-  getFormat(color: AnyFormat): ColorFormats | 'named' | null {
+  getFormat(color: SupportedColorFormats): ColorFormats | 'named' | null {
     // color int
     if (typeof color === 'number') color = '#' + color.toString(16);
 
@@ -84,7 +84,7 @@ class Colors {
 
   // * RGB
   /** - Convert `HSL`, `HSLA`, `HSV`, `HSVA` or `HEX` color to `RGBA` color format. */
-  RGB(color: AnyFormat) {
+  RGB(color: SupportedColorFormats) {
     if (typeof color === 'string') color = color.trim().toLowerCase();
 
     color =
@@ -224,7 +224,7 @@ class Colors {
 
   // * HEX
   /** - Convert `HSL`, `HSLA`, `HSV`, `HSVA`, `RGB` or `RGBA` color to `HEX` color format. */
-  HEX(color: AnyFormat): string {
+  HEX(color: SupportedColorFormats): string {
     if (typeof color === 'string') color = color.trim().toLowerCase();
 
     color =
@@ -262,7 +262,7 @@ class Colors {
 
   // * HSL
   /** - Convert `HEX`, `HSV`, `HSVA`, `RGB` or `RGBA` color to `HSLA` color format. */
-  HSL(color: AnyFormat) {
+  HSL(color: SupportedColorFormats) {
     if (typeof color === 'string') color = color.trim().toLowerCase();
 
     color =
@@ -402,7 +402,7 @@ class Colors {
 
   // * HSV
   /** - Convert `HSL`, `HSLA`, `HEX`, `RGB` or `RGBA` color to `HSVA` color format. */
-  HSV(color: AnyFormat) {
+  HSV(color: SupportedColorFormats) {
     if (typeof color === 'string') color = color.trim().toLowerCase();
 
     color =
@@ -542,7 +542,7 @@ class Colors {
 
   // * HWB
   /** - Convert `HSL`, `HSLA`, `HEX`, `RGB` or `RGBA` color to `HWBA` color format. */
-  HWB(color: AnyFormat) {
+  HWB(color: SupportedColorFormats) {
     if (typeof color === 'string') color = color.trim().toLowerCase();
 
     color =
@@ -682,12 +682,12 @@ class Colors {
 
   // * color's channels
   /** - Get the `red` channel value of a given color. */
-  getRed(color: AnyFormat): number {
+  getRed(color: SupportedColorFormats): number {
     const { r } = this.RGB(color).object();
     return r;
   }
   /** Set the `red` value of a color to a specific amount.*/
-  setRed(color: AnyFormat, amount: number): ConversionMethods {
+  setRed(color: SupportedColorFormats, amount: number): ConversionMethods {
     const { g, b, a } = this.RGB(color).object();
     const newR = Math.round(clamp(amount, 0, 255));
     const newColor = { r: newR, g, b, a };
@@ -699,7 +699,7 @@ class Colors {
    * increaseRed(''rgb(100, 100, 100)', 20).hex();
    * increaseRed('rgb(100, 100, 100)', '20%').rgb().string();
    */
-  increaseRed(color: AnyFormat, amount: number | string): ConversionMethods {
+  increaseRed(color: SupportedColorFormats, amount: number | string): ConversionMethods {
     const { r, g, b, a } = this.RGB(color).object();
     const red = typeof amount === 'string' ? r + r * (parseFloat(amount) / 100) : r + amount;
     const newR = Math.round(clamp(red, 0, 255));
@@ -712,7 +712,7 @@ class Colors {
    * decreaseRed('rgb(100, 100, 100)', 20).hex();
    * decreaseRed('rgb(100, 100, 100)', '20%').rgb().string();
    */
-  decreaseRed(color: AnyFormat, amount: number | string): ConversionMethods {
+  decreaseRed(color: SupportedColorFormats, amount: number | string): ConversionMethods {
     const { r, g, b, a } = this.RGB(color).object();
     const red = typeof amount === 'string' ? r - r * (parseFloat(amount) / 100) : r - amount;
     const newR = Math.round(clamp(red, 0, 255));
@@ -722,12 +722,12 @@ class Colors {
   }
 
   /** - Get the `green` channel value of a given color. */
-  getGreen(color: AnyFormat): number {
+  getGreen(color: SupportedColorFormats): number {
     const { g } = this.RGB(color).object();
     return g;
   }
   /** - Set the `green` value of a color to a specific amount.*/
-  setGreen(color: AnyFormat, amount: number): ConversionMethods {
+  setGreen(color: SupportedColorFormats, amount: number): ConversionMethods {
     const { r, b, a } = this.RGB(color).object();
     const newG = Math.round(clamp(amount, 0, 255));
     const newColor = { r, g: newG, b, a };
@@ -739,7 +739,7 @@ class Colors {
    * increaseGreen('rgb(100, 100, 100)', 20).hex();
    * increaseGreen('rgb(100, 100, 100)', '20%').rgb().string();
    */
-  increaseGreen(color: AnyFormat, amount: number | string): ConversionMethods {
+  increaseGreen(color: SupportedColorFormats, amount: number | string): ConversionMethods {
     const { r, g, b, a } = this.RGB(color).object();
     const green = typeof amount === 'string' ? g + g * (parseFloat(amount) / 100) : g + amount;
     const newG = Math.round(clamp(green, 0, 255));
@@ -752,7 +752,7 @@ class Colors {
    * decreaseGreen('rgb(100, 100, 100)', 20).hex();
    * decreaseGreen('rgb(100, 100, 100)', '20%').rgb().string();
    */
-  decreaseGreen(color: AnyFormat, amount: number | string): ConversionMethods {
+  decreaseGreen(color: SupportedColorFormats, amount: number | string): ConversionMethods {
     const { r, g, b, a } = this.RGB(color).object();
     const green = typeof amount === 'string' ? g - g * (parseFloat(amount) / 100) : g - amount;
     const newG = Math.round(clamp(green, 0, 255));
@@ -762,12 +762,12 @@ class Colors {
   }
 
   /** - Get the `blue` channel value of a given color. */
-  getBlue(color: AnyFormat): number {
+  getBlue(color: SupportedColorFormats): number {
     const { b } = this.RGB(color).object();
     return b;
   }
   /** - Set the `blue` value of a color to a specific amount.*/
-  setBlur(color: AnyFormat, amount: number): ConversionMethods {
+  setBlur(color: SupportedColorFormats, amount: number): ConversionMethods {
     const { r, g, a } = this.RGB(color).object();
     const newB = Math.round(clamp(amount, 0, 255));
     const newColor = { r, g, b: newB, a };
@@ -779,7 +779,7 @@ class Colors {
    * increaseBlue('rgb(100, 100, 100)', 20).hex();
    * increaseBlue('rgb(100, 100, 100)', '20%').rgb().string();
    */
-  increaseBlue(color: AnyFormat, amount: number | string): ConversionMethods {
+  increaseBlue(color: SupportedColorFormats, amount: number | string): ConversionMethods {
     const { r, g, b, a } = this.RGB(color).object();
     const blue = typeof amount === 'string' ? b + b * (parseFloat(amount) / 100) : b + amount;
     const newB = Math.round(clamp(blue, 0, 255));
@@ -792,7 +792,7 @@ class Colors {
    * decreaseBlue('rgb(100, 100, 100)', 20).hex();
    * decreaseBlue('rgb(100, 100, 100)', '20%').rgb().string();
    */
-  decreaseBlue(color: AnyFormat, amount: number | string): ConversionMethods {
+  decreaseBlue(color: SupportedColorFormats, amount: number | string): ConversionMethods {
     const { r, g, b, a } = this.RGB(color).object();
     const blue = typeof amount === 'string' ? b - b * (parseFloat(amount) / 100) : b - amount;
     const newB = Math.round(clamp(blue, 0, 255));
@@ -803,12 +803,12 @@ class Colors {
 
   //* hue
   /** - Get the `hue` channel value of a given color. */
-  getHue(color: AnyFormat): number {
+  getHue(color: SupportedColorFormats): number {
     const { h } = this.HSL(color).object();
     return h;
   }
   /** - Set the `hue` value of a color to a specific amount.*/
-  setHue(color: AnyFormat, amount: number): ConversionMethods {
+  setHue(color: SupportedColorFormats, amount: number): ConversionMethods {
     const { s, l, a } = this.HSL(color).object();
     const newH = Math.round(clamp(amount, 0, 360));
     const newColor = { h: newH, s, l, a };
@@ -820,7 +820,7 @@ class Colors {
    * increaseHue('rgb(100, 100, 100)', 20).hex();
    * increaseHue('rgb(100, 100, 100)', '20%').rgb().string();
    */
-  increaseHue(color: AnyFormat, amount: number | string): ConversionMethods {
+  increaseHue(color: SupportedColorFormats, amount: number | string): ConversionMethods {
     const { h, s, l, a } = this.HSL(color).object();
     const hue = typeof amount === 'string' ? h + h * (parseFloat(amount) / 100) : h + amount;
     const newH = Math.round(clamp(hue, 0, 360));
@@ -833,7 +833,7 @@ class Colors {
    * decreaseHue('rgb(100, 100, 100)', 20).hex();
    * decreaseHue('rgb(100, 100, 100)', '20%').rgb().string();
    */
-  decreaseHue(color: AnyFormat, amount: number | string): ConversionMethods {
+  decreaseHue(color: SupportedColorFormats, amount: number | string): ConversionMethods {
     const { h, s, l, a } = this.HSL(color).object();
     const hue = typeof amount === 'string' ? h - h * (parseFloat(amount) / 100) : h - amount;
     const newH = Math.round(clamp(hue, 0, 360));
@@ -847,7 +847,7 @@ class Colors {
    * spin('red', 20).hex();
    * spin('rgb(255, 0, 0)', '20%').rgb().string();
    */
-  spin(color: AnyFormat, degree: number | string): ConversionMethods {
+  spin(color: SupportedColorFormats, degree: number | string): ConversionMethods {
     const { h, s, l, a } = this.HSL(color).object();
     const spin = typeof degree === 'string' ? s * (parseFloat(degree) / 100) : degree;
     const newColor = { h: Math.round((h + spin) % 360), s, l, a };
@@ -857,12 +857,12 @@ class Colors {
 
   //* saturation
   /** - Get the `saturation` value of a given color. */
-  getSaturation(color: AnyFormat): number {
+  getSaturation(color: SupportedColorFormats): number {
     const { s } = this.HSL(color).object();
     return s;
   }
   /** - Set the `saturation` value of a color to a specific amount.*/
-  setSaturation(color: AnyFormat, amount: number): ConversionMethods {
+  setSaturation(color: SupportedColorFormats, amount: number): ConversionMethods {
     const { h, l, a } = this.HSL(color).object();
     const newS = Math.round(clamp(amount, 0, 100));
     const saturatedColor = { h, s: newS, l, a };
@@ -875,7 +875,7 @@ class Colors {
    * saturate('red', 20).hex();
    * saturate('rgb(255, 0, 0)', '20%').rgb().string();
    */
-  saturate(color: AnyFormat, amount: number | string): ConversionMethods {
+  saturate(color: SupportedColorFormats, amount: number | string): ConversionMethods {
     const { h, s, l, a } = this.HSL(color).object();
     const saturation = typeof amount === 'string' ? s + s * (parseFloat(amount) / 100) : s + amount;
     const newS = Math.round(clamp(saturation, 0, 100));
@@ -889,7 +889,7 @@ class Colors {
    * saturate('red', 20).hex();
    * saturate('rgb(255, 0, 0)', '20%').rgb().string();
    */
-  desaturate(color: AnyFormat, amount: number | string): ConversionMethods {
+  desaturate(color: SupportedColorFormats, amount: number | string): ConversionMethods {
     const { h, s, l, a } = this.HSL(color).object();
     const saturation = typeof amount === 'string' ? s - s * (parseFloat(amount) / 100) : s - amount;
     const newS = Math.round(clamp(saturation, 0, 100));
@@ -902,12 +902,12 @@ class Colors {
   /** - Get color's HSL `luminosity` channel value.
    * - If you want the overall `luminosity` of a color use `getLuminanceWCAG` method.
    */
-  getLuminance(color: AnyFormat): number {
+  getLuminance(color: SupportedColorFormats): number {
     const { l } = this.HSL(color).object();
     return l;
   }
   /** - Set HSL's `luminosity` channel for a given color to a specific amount.*/
-  setLuminance(color: AnyFormat, amount: number): ConversionMethods {
+  setLuminance(color: SupportedColorFormats, amount: number): ConversionMethods {
     const { h, s, a } = this.HSL(color).object();
     const newL = Math.round(clamp(amount, 0, 100));
     const newColor = { h, s, l: newL, a };
@@ -920,7 +920,7 @@ class Colors {
    * brighten('red', 20).hex();
    * brighten('rgb(255, 0, 0)', '20%').rgb().string();
    */
-  brighten(color: AnyFormat, amount: number | string): ConversionMethods {
+  brighten(color: SupportedColorFormats, amount: number | string): ConversionMethods {
     const { h, s, l, a } = this.HSL(color).object();
     const lum = typeof amount === 'string' ? l + l * (parseFloat(amount) / 100) : l + amount;
     const newL = Math.round(clamp(lum, 0, 100));
@@ -934,7 +934,7 @@ class Colors {
    * darken('red', 20).hex();
    * darken('rgb(255, 0, 0)', '20%').rgb().string();
    */
-  darken(color: AnyFormat, amount: number | string): ConversionMethods {
+  darken(color: SupportedColorFormats, amount: number | string): ConversionMethods {
     const { h, s, l, a } = this.HSL(color).object();
     const lum = typeof amount === 'string' ? l - l * (parseFloat(amount) / 100) : l - amount;
     const newL = Math.round(clamp(lum, 0, 100));
@@ -944,12 +944,12 @@ class Colors {
   }
 
   /** - Get the HSV's `value` (brightness) channel value of a given color. */
-  getBrightness(color: AnyFormat): number {
+  getBrightness(color: SupportedColorFormats): number {
     const { v } = this.HSV(color).object();
     return v;
   }
   /** - Set HSV's `value` (brightness) channel for a given color to a specific amount.*/
-  setBrightness(color: AnyFormat, amount: number): ConversionMethods {
+  setBrightness(color: SupportedColorFormats, amount: number): ConversionMethods {
     const { h, s, a } = this.HSV(color).object();
     const newV = Math.round(clamp(amount, 0, 100));
     const newColor = { h, s, v: newV, a };
@@ -957,7 +957,7 @@ class Colors {
     return this.returnColorObject(newColor);
   }
   /** Increase HSV's `value` (brightness) channel value of a color by the given percentage/amount.*/
-  increaseBrightness(color: AnyFormat, amount: number | string): ConversionMethods {
+  increaseBrightness(color: SupportedColorFormats, amount: number | string): ConversionMethods {
     const { h, s, v, a } = this.HSV(color).object();
     const value = typeof amount === 'string' ? v + v * (parseFloat(amount) / 100) : v + amount;
     const newV = Math.round(clamp(value, 0, 100));
@@ -966,7 +966,7 @@ class Colors {
     return this.returnColorObject(newColor);
   }
   /** Decrease HSV's `value` (brightness) channel value of a color by the given percentage/amount.*/
-  decreaseBrightness(color: AnyFormat, amount: number | string): ConversionMethods {
+  decreaseBrightness(color: SupportedColorFormats, amount: number | string): ConversionMethods {
     const { h, s, v, a } = this.HSV(color).object();
     const value = typeof amount === 'string' ? v - v * (parseFloat(amount) / 100) : v - amount;
     const newV = Math.round(clamp(value, 0, 100));
@@ -977,12 +977,12 @@ class Colors {
 
   //* alpha
   /** - Get the `alpha` value of a given color. */
-  getAlpha(color: AnyFormat): number {
+  getAlpha(color: SupportedColorFormats): number {
     const { a } = this.RGB(color).object();
     return a;
   }
   /** - Set the `alpha` value of a color to a specific amount.*/
-  setAlpha(color: AnyFormat, amount: number): ConversionMethods {
+  setAlpha(color: SupportedColorFormats, amount: number): ConversionMethods {
     const { r, g, b } = this.RGB(color).object();
     const newA = Math.round(clamp(amount, 0, 1));
     const newColor = { r, g, b, a: newA };
@@ -990,7 +990,7 @@ class Colors {
     return this.returnColorObject(newColor);
   }
   /** Increase the `alpha` value of a color by the given percentage.*/
-  increaseAlpha(color: AnyFormat, amount: number | string): ConversionMethods {
+  increaseAlpha(color: SupportedColorFormats, amount: number | string): ConversionMethods {
     const { r, g, b, a } = this.RGB(color).object();
     const alpha = typeof amount === 'string' ? a + a * (parseFloat(amount) / 100) : a + amount;
     const newA = Math.round(clamp(alpha, 0, 1));
@@ -999,7 +999,7 @@ class Colors {
     return this.returnColorObject(newColor);
   }
   /** Decrease the `alpha` value of a color by the given percentage.*/
-  decreaseAlpha(color: AnyFormat, amount: number | string): ConversionMethods {
+  decreaseAlpha(color: SupportedColorFormats, amount: number | string): ConversionMethods {
     const { r, g, b, a } = this.RGB(color).object();
     const alpha = typeof amount === 'string' ? a - a * (parseFloat(amount) / 100) : a - amount;
     const newA = Math.round(clamp(alpha, 0, 1));
@@ -1010,14 +1010,14 @@ class Colors {
 
   // * tools
   /** - Returns the perceived `luminance` of a color, from `0-1` as defined by Web Content Accessibility Guidelines (Version 2.0). */
-  getLuminanceWCAG(color: AnyFormat): number {
+  getLuminanceWCAG(color: SupportedColorFormats): number {
     const { r, g, b } = this.RGB(color).object();
     const a = [r, g, b].map(v => (v / 255 <= 0.03928 ? v / 255 / 12.92 : Math.pow((v / 255 + 0.055) / 1.055, 2.4)));
     return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
   }
 
   /** - Calculates the contrast ratio between two colors, useful for ensuring accessibility and readability. */
-  contrastRatio(color1: AnyFormat, color2: AnyFormat): number {
+  contrastRatio(color1: SupportedColorFormats, color2: SupportedColorFormats): number {
     const luminance1 = this.getLuminanceWCAG(color1);
     const luminance2 = this.getLuminanceWCAG(color2);
     const contrast = (Math.max(luminance1, luminance2) + 0.05) / (Math.min(luminance1, luminance2) + 0.05);
@@ -1025,13 +1025,13 @@ class Colors {
   }
 
   /** - Returns a boolean indicating whether the color is considered "dark" or not */
-  isDark(color: AnyFormat): boolean {
+  isDark(color: SupportedColorFormats): boolean {
     const luminance = this.getLuminanceWCAG(color);
     return luminance < 0.5;
   }
 
   /** - Returns a boolean indicating whether the color is considered "light" or not */
-  isLight(color: AnyFormat): boolean {
+  isLight(color: SupportedColorFormats): boolean {
     const luminance = this.getLuminanceWCAG(color);
     return luminance >= 0.5;
   }
@@ -1041,7 +1041,7 @@ class Colors {
    * @example
    * blend('yellow', 'red', 50).hex(); // #ff8000
    */
-  blend(color1: AnyFormat, color2: AnyFormat, percentage: number): ConversionMethods {
+  blend(color1: SupportedColorFormats, color2: SupportedColorFormats, percentage: number): ConversionMethods {
     percentage = percentage / 100;
 
     const rgba1 = this.RGB(color1).object();
@@ -1058,14 +1058,14 @@ class Colors {
   }
 
   /** - Invert (negate) a color, black becomes white, white becomes black, blue becomes orange and so on. */
-  invert(color: AnyFormat): ConversionMethods {
+  invert(color: SupportedColorFormats): ConversionMethods {
     const { r, g, b, a } = this.RGB(color).object();
     const invertedColor = { r: 255 - r, g: 255 - g, b: 255 - b, a };
     return this.returnColorObject(invertedColor);
   }
 
   /** - Completely desaturate a color into grayscale. */
-  grayscale(color: AnyFormat): ConversionMethods {
+  grayscale(color: SupportedColorFormats): ConversionMethods {
     const { r, g, b, a } = this.RGB(color).object();
     const gray = Math.round(clamp(r * 0.3 + g * 0.59 + b * 0.11, 0, 255));
     const grayColor = { r: gray, g: gray, b: gray, a };
@@ -1119,7 +1119,7 @@ class Colors {
   }
 
   /** - Returns the first color with the desired contrast ratio against the second color */
-  adjustContrast(color1: AnyFormat, color2: AnyFormat, ratio = 4.5): ConversionMethods {
+  adjustContrast(color1: SupportedColorFormats, color2: SupportedColorFormats, ratio = 4.5): ConversionMethods {
     const contrast = this.contrastRatio(color1, color2);
     const color1RGB = this.RGB(color1).object();
     const channels = ['r', 'g', 'b'] as const;

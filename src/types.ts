@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import type { StyleProp, TextStyle, ViewStyle, ImageStyle, TextInputProps } from 'react-native';
 import type { AnimatedStyleProp, SharedValue } from 'react-native-reanimated';
-import type { AnyFormat } from './colorKit/types';
+import type { SupportedColorFormats } from './colorKit/types';
 
 export interface returnedResults {
   hex: string;
@@ -137,13 +137,13 @@ export interface TCTX {
   value: string;
 
   /** The returned results of the color picker. */
-  returnedResults: (color?: AnyFormat) => returnedResults;
+  returnedResults: (color?: SupportedColorFormats) => returnedResults;
 
   /** This function is called when the user lifts the finger from the color picker. */
-  onGestureEnd: (color?: AnyFormat) => void;
+  onGestureEnd: (color?: SupportedColorFormats) => void;
 
   /** This function is called every time the color is changed. */
-  onGestureChange: (color?: AnyFormat) => void;
+  onGestureChange: (color?: SupportedColorFormats) => void;
 }
 
 export interface ColorPickerProps {

@@ -7,7 +7,7 @@ import { isWeb } from '@utils';
 import colorKit from '@colorKit';
 import CTX from '@context';
 
-import type { AnyFormat } from './colorKit/types';
+import type { SupportedColorFormats } from './colorKit/types';
 import type { ColorPickerProps, ColorPickerRef, TCTX } from '@types';
 
 if (isWeb) {
@@ -49,7 +49,7 @@ const ColorPicker = forwardRef<ColorPickerRef, ColorPickerProps>(
     const brightnessValue = useSharedValue(initialColor.v);
     const alphaValue = useSharedValue(initialColor.a);
 
-    const returnedResults = (color?: AnyFormat) => {
+    const returnedResults = (color?: SupportedColorFormats) => {
       color = color ?? {
         h: hueValue.value,
         s: saturationValue.value,
@@ -69,21 +69,21 @@ const ColorPicker = forwardRef<ColorPickerRef, ColorPickerProps>(
       };
     };
 
-    const onGestureEnd = (color?: AnyFormat) => {
+    const onGestureEnd = (color?: SupportedColorFormats) => {
       onComplete?.(returnedResults(color));
     };
 
-    const onGestureChange = (color?: AnyFormat) => {
+    const onGestureChange = (color?: SupportedColorFormats) => {
       onChange?.(returnedResults(color));
     };
 
-    const setColor = (color: string) => {
+    const setColor = (color: string, duration = thumbAnimationDuration) => {
       const { h, s, v, a } = colorKit.HSV(color).object();
 
-      hueValue.value = withTiming(h, { duration: thumbAnimationDuration });
-      saturationValue.value = withTiming(s, { duration: thumbAnimationDuration });
-      brightnessValue.value = withTiming(v, { duration: thumbAnimationDuration });
-      alphaValue.value = withTiming(a, { duration: thumbAnimationDuration });
+      hueValue.value = withTiming(h, { duration });
+      saturationValue.value = withTiming(s, { duration });
+      brightnessValue.value = withTiming(v, { duration });
+      alphaValue.value = withTiming(a, { duration });
     };
 
     useEffect(() => {
