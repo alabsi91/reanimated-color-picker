@@ -41,7 +41,7 @@ All built-in components should be wrapped within the `ColorPicker` component.
 - If the `value` property is modified, the `ColorPicker` will automatically update the displayed color.
 - Accepts: `'hex' | 'rgb' | 'rgba' | 'hsl' | 'hsla' | 'hsv' | 'hsva' | 'hwb' | 'hwba' | named colors` formats.
 - `type: string`
-- `default: '#418181'`
+- `default: '#fff'`
 
 ### `adaptSpectrum`
 
@@ -122,7 +122,7 @@ import RenderThumb from './_renderThumb.mdx';
 - Triggers every time the user modifies the color.
 - The passed color object has the following properties: `hex`, `rgb`, `rgba`, `hsv`, `hsva`, `hwb`, `hwba`, `hsl`, and `hsla`
 - `type: (color: object) => void`
-- `default: null`
+- `default: undefined`
 
 :::tip
 
@@ -136,7 +136,7 @@ import RenderThumb from './_renderThumb.mdx';
 - Triggered upon the user releasing the slider handle or clicking on a swatch.
 - The passed color object has the following properties: `hex`, `rgb`, `rgba`, `hsv`, `hsva`, `hwb`, `hwba`, `hsl`, and `hsla`
 - `type: (color: object) => void`
-- `default: null`
+- `default: undefined`
 
 ## Methods
 
