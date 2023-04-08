@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "docusaurus start",
-    "build": "docusaurus build && @powershell Copy-Item -Path build/* -Destination ../docs -Recurse -Force",
+    "build": "node ./scripts/build.js",
     "clear": "docusaurus clear",
     "serve": "docusaurus serve"
   },
