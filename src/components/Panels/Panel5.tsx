@@ -43,15 +43,19 @@ export function Panel5({ style = {}, selectionStyle = {} }: Panel5Props) {
 
     const row = Math.floor(y / squareSize.value);
     const column = Math.floor(x / squareSize.value);
-    const color = gridColors[row][column] + (alphaValue.value === 1 ? '' : decimalToHex(alphaValue.value));
+
+    const color = gridColors?.[row]?.[column];
+    if (!color) return;
+
+    const withOpacity = color + (alphaValue.value === 1 ? '' : decimalToHex(alphaValue.value));
 
     posX.value = withTiming(column, { duration: 300, easing: Easing.elastic(0.8) });
     posY.value = withTiming(row, { duration: 300, easing: Easing.elastic(0.8) });
 
-    runOnJS(setAdaptiveColor)(color);
-    runOnJS(setColor)(color, 50);
-    runOnJS(onGestureChange)(color);
-    runOnJS(onGestureEnd)(color);
+    runOnJS(setAdaptiveColor)(withOpacity);
+    runOnJS(setColor)(withOpacity, 50);
+    runOnJS(onGestureChange)(withOpacity);
+    runOnJS(onGestureEnd)(withOpacity);
   });
 
   const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
