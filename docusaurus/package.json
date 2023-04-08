@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "docusaurus start",
-    "build": "node ./scripts/build.js",
+    "build": "docusaurus build && node ./scripts/copyBuild.js",
     "clear": "docusaurus clear",
     "serve": "docusaurus serve"
   },
