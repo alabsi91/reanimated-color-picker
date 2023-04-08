@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { View, Pressable } from 'react-native';
 
-import CTX from '@context';
+import pickerContext from '@context';
 import { styles } from '@styles';
 
 import type { SwatchesProps } from '@types';
@@ -29,7 +29,7 @@ const SWATCHES_COLORS = [
 ];
 
 export function Swatches({ colors = SWATCHES_COLORS, style = {}, swatchStyle = {} }: SwatchesProps) {
-  const { setColor, onGestureChange, onGestureEnd } = useContext(CTX);
+  const { setColor, onGestureChange, onGestureEnd } = useContext(pickerContext);
 
   const onPress = async (swatch: string) => {
     setColor(swatch);

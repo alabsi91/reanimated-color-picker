@@ -5,10 +5,10 @@ import { useSharedValue, withTiming } from 'react-native-reanimated';
 
 import { isWeb } from '@utils';
 import colorKit from '@colorKit';
-import CTX from '@context';
+import pickerContext from '@context';
 
 import type { SupportedColorFormats } from './colorKit/types';
-import type { ColorPickerProps, ColorPickerRef, TCTX } from '@types';
+import type { ColorPickerProps, ColorPickerRef, ColorPickerContext } from '@types';
 
 if (isWeb) {
   // @ts-ignore
@@ -92,7 +92,7 @@ const ColorPicker = forwardRef<ColorPickerRef, ColorPickerProps>(
 
     useImperativeHandle(ref, () => ({ setColor }));
 
-    const ctxValue: TCTX = {
+    const ctxValue: ColorPickerContext = {
       hueValue,
       saturationValue,
       brightnessValue,
@@ -119,7 +119,7 @@ const ColorPicker = forwardRef<ColorPickerRef, ColorPickerProps>(
 
     return (
       <GestureHandlerRootView style={[{ direction: isWeb ? 'ltr' : undefined }, style]}>
-        <CTX.Provider value={ctxValue}>{children}</CTX.Provider>
+        <pickerContext.Provider value={ctxValue}>{children}</pickerContext.Provider>
       </GestureHandlerRootView>
     );
   }

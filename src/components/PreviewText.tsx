@@ -2,13 +2,13 @@ import React, { useState, useContext } from 'react';
 import { Text } from 'react-native';
 import { runOnJS, useDerivedValue } from 'react-native-reanimated';
 
-import CTX from '@context';
+import pickerContext from '@context';
 import { styles } from '@styles';
 
 import type { PreviewTextProps } from '@types';
 
 export function PreviewText({ style = {}, colorFormat = 'hex' }: PreviewTextProps) {
-  const { returnedResults, hueValue, saturationValue, brightnessValue, alphaValue } = useContext(CTX);
+  const { returnedResults, hueValue, saturationValue, brightnessValue, alphaValue } = useContext(pickerContext);
 
   const [text, setText] = useState(returnedResults()[colorFormat]);
 

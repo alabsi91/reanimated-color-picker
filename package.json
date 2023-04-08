@@ -9,6 +9,7 @@
   "scripts": {
     "test": "tsc --noEmit && eslint src --max-warnings=0",
     "build": "node scripts/build.js",
+    "prettier ": "prettier --ignore-unknown --write src --config-precedence prefer-file",
     "prepublishOnly": "npm run test && npm run build"
   },
   "keywords": [

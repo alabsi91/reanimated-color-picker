@@ -3,7 +3,7 @@ import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import { clamp, getStyle, HSVA2RGBA, isRtl, isWeb, RenderNativeOnly, RGBA2HSVA } from '@utils';
-import CTX from '@context';
+import pickerContext from '@context';
 import Thumb from '@thumb';
 
 import type { RgbSliderProps } from '@types';
@@ -37,7 +37,7 @@ export function GreenSlider({
     thumbStyle: globalThumbStyle,
     thumbInnerStyle: globalThumbInnerStyle,
     sliderThickness: globalSliderThickness,
-  } = useContext(CTX);
+  } = useContext(pickerContext);
 
   const thumbShape = localThumbShape ?? globalThumbShape,
     thumbSize = localThumbSize ?? globalThumbSize,

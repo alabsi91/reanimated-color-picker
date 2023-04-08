@@ -3,7 +3,7 @@ import { View, Text, Pressable, Image, StyleSheet } from 'react-native';
 
 import { styles } from '@styles';
 import { ConditionalRendering, getStyle } from '@utils';
-import CTX from '@context';
+import pickerContext from '@context';
 import HexWidget from './Widgets/HexWidget';
 import RgbWidget from './Widgets/RgbWidget';
 import HslWidget from './Widgets/HslWidget';
@@ -25,7 +25,7 @@ export function InputWidget({
   inputProps = {},
 }: InputWidgetProps) {
   const { setColor, returnedResults, hueValue, saturationValue, brightnessValue, alphaValue, onGestureChange, onGestureEnd } =
-    useContext(CTX);
+    useContext(pickerContext);
 
   const [format, setFormat] = useState<typeof defaultFormat>(
     formats.includes(defaultFormat) ? defaultFormat : formats[0] ?? 'HEX'

@@ -3,7 +3,19 @@ import colorsRegex from './colorsRegex';
 import namedColors from './namedColors';
 import { clamp, clamp100, clampAlpha, clampHue, clampRGB, randomNumber } from './utilities';
 
-import type { SupportedColorFormats, ColorFormats, ConversionMethods, hslaT, hslT, hsvaT, hsvT, hwbaT, hwbT, rgbaT, rgbT } from './types';
+import type {
+  SupportedColorFormats,
+  ColorFormats,
+  ConversionMethods,
+  hslaT,
+  hslT,
+  hsvaT,
+  hsvT,
+  hwbaT,
+  hwbT,
+  rgbaT,
+  rgbT,
+} from './types';
 
 class Colors {
   private _: InstanceType<typeof PrivateMethods>;

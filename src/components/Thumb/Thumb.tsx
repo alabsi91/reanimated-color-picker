@@ -3,7 +3,7 @@ import { runOnJS, useAnimatedStyle, useDerivedValue, useSharedValue } from 'reac
 
 import { styles } from '@styles';
 import colorKit from '@colorKit';
-import CTX from '@context';
+import pickerContext from '@context';
 import BuiltinThumbs from './BuiltinThumbs/index';
 
 import type { BuiltinThumbsProps, ThumbProps } from '@types';
@@ -21,7 +21,7 @@ export default function Thumb({
   channel,
 }: ThumbProps) {
   const { width, height, borderRadius } = { width: thumbSize, height: thumbSize, borderRadius: thumbSize / 2 };
-  const { hueValue, saturationValue, brightnessValue, alphaValue, value } = useContext(CTX);
+  const { hueValue, saturationValue, brightnessValue, alphaValue, value } = useContext(pickerContext);
 
   const resultColor = useSharedValue('#ffffff');
   const solidColor = useAnimatedStyle(() => ({ backgroundColor: resultColor.value }));

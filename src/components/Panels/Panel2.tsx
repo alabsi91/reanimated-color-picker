@@ -4,7 +4,7 @@ import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import { styles } from '@styles';
-import CTX from '@context';
+import pickerContext from '@context';
 import { clamp, ConditionalRendering, getStyle, HSVA2HSLA, isRtl } from '@utils';
 import Thumb from '@thumb';
 
@@ -40,7 +40,7 @@ export function Panel2({
     renderThumb: globalRenderThumbs,
     thumbStyle: globalThumbsStyle,
     thumbInnerStyle: globalThumbsInnerStyle,
-  } = useContext(CTX);
+  } = useContext(pickerContext);
 
   const thumbShape = localThumbShape ?? globalThumbShape,
     thumbSize = localThumbSize ?? globalThumbsSize,

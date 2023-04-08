@@ -6,13 +6,13 @@ import Animated, { Easing, runOnJS, useAnimatedStyle, useSharedValue, withTiming
 import { getStyle, isRtl, decimalToHex } from '@utils';
 import { styles } from '@styles';
 import colorKit from '@colorKit';
-import CTX from '@context';
+import pickerContext from '@context';
 
 import type { LayoutChangeEvent } from 'react-native';
 import type { Panel5Props } from '@types';
 
 export function Panel5({ style = {}, selectionStyle = {} }: Panel5Props) {
-  const { value, alphaValue, setColor, onGestureChange, onGestureEnd } = useContext(CTX);
+  const { value, alphaValue, setColor, onGestureChange, onGestureEnd } = useContext(pickerContext);
 
   const borderRadius = getStyle(style, 'borderRadius') ?? 0;
 

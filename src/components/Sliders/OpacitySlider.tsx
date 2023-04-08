@@ -3,7 +3,7 @@ import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import { clamp, getStyle, HSVA2HSLA, isRtl, isWeb, RenderNativeOnly, RenderWebOnly } from '@utils';
-import CTX from '@context';
+import pickerContext from '@context';
 import Thumb from '@thumb';
 
 import { Image, LayoutChangeEvent, StyleSheet } from 'react-native';
@@ -40,7 +40,7 @@ export function OpacitySlider({
     thumbStyle: globalThumbsStyle,
     thumbInnerStyle: globalThumbsInnerStyle,
     sliderThickness: globalSliderThickness,
-  } = useContext(CTX);
+  } = useContext(pickerContext);
 
   const thumbShape = localThumbShape ?? globalThumbsShape,
     thumbSize = localThumbSize ?? globalThumbsSize,

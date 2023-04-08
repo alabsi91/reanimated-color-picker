@@ -5,7 +5,7 @@ import Animated, { runOnJS, useAnimatedStyle, useDerivedValue, useSharedValue } 
 import { styles } from '@styles';
 import { ConditionalRendering, getStyle, isWeb } from '@utils';
 import colorKit from '@colorKit';
-import CTX from '@context';
+import pickerContext from '@context';
 
 import type { StyleProp, TextStyle } from 'react-native';
 import type { ReactNode } from 'react';
@@ -34,7 +34,7 @@ export function Preview({
   hideInitialColor = false,
   hideText = false,
 }: PreviewProps) {
-  const { hueValue, saturationValue, brightnessValue, alphaValue, returnedResults, value } = useContext(CTX);
+  const { hueValue, saturationValue, brightnessValue, alphaValue, returnedResults, value } = useContext(pickerContext);
 
   const justifyContent = getStyle(style, 'justifyContent') ?? 'center';
 

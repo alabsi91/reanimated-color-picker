@@ -5,7 +5,7 @@ import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 
 
 import { styles } from '@styles';
 import { ConditionalRendering, HSVA2HSLA } from '@utils';
-import CTX from '@context';
+import pickerContext from '@context';
 import Thumb from '@thumb';
 
 import type { LayoutChangeEvent } from 'react-native';
@@ -39,7 +39,7 @@ export function HueCircular({
     thumbStyle: globalThumbsStyle,
     thumbInnerStyle: globalThumbsInnerStyle,
     sliderThickness: globalSliderThickness,
-  } = useContext(CTX);
+  } = useContext(pickerContext);
 
   const thumbShape = localThumbShape ?? globalThumbShape,
     thumbSize = localThumbSize ?? globalThumbsSize,

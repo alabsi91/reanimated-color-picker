@@ -1,6 +1,6 @@
 import { createContext } from 'react';
-import type { TCTX } from '@types';
+import type { ColorPickerContext } from '@types';
 
-const CTX = createContext<TCTX>(null!);
+const pickerContext = createContext<ColorPickerContext>(null!);
 
-export default CTX;
+export default pickerContext;

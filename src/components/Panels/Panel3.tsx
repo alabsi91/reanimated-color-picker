@@ -5,7 +5,7 @@ import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 
 
 import { clamp, ConditionalRendering, HSVA2HSLA } from '@utils';
 import { styles } from '@styles';
-import CTX from '@context';
+import pickerContext from '@context';
 import Thumb from '@thumb';
 
 import type { LayoutChangeEvent } from 'react-native';
@@ -38,7 +38,7 @@ export function Panel3({
     renderThumb: globalRenderThumbs,
     thumbStyle: globalThumbsStyle,
     thumbInnerStyle: globalThumbsInnerStyle,
-  } = useContext(CTX);
+  } = useContext(pickerContext);
 
   const thumbShape = localThumbShape ?? globalThumbShape,
     thumbSize = localThumbSize ?? globalThumbsSize,

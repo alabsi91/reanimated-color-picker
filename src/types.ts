@@ -92,7 +92,7 @@ export type BuiltinThumbsProps = {
   vertical?: boolean;
 };
 
-export interface TCTX {
+export interface ColorPickerContext {
   /** Color's channels. */
   hueValue: SharedValue<number>;
   saturationValue: SharedValue<number>;
@@ -403,11 +403,11 @@ export type InputProps = Omit<
 
 export type WidgetProps = {
   onChange: (color: string) => void;
-  returnedResults: TCTX['returnedResults'];
-  hueValue: TCTX['hueValue'];
-  saturationValue: TCTX['saturationValue'];
-  brightnessValue: TCTX['brightnessValue'];
-  alphaValue: TCTX['alphaValue'];
+  returnedResults: ColorPickerContext['returnedResults'];
+  hueValue: ColorPickerContext['hueValue'];
+  saturationValue: ColorPickerContext['saturationValue'];
+  brightnessValue: ColorPickerContext['brightnessValue'];
+  alphaValue: ColorPickerContext['alphaValue'];
   inputStyle: StyleProp<TextStyle>;
   inputTitleStyle?: StyleProp<TextStyle>;
   inputProps: InputProps;
