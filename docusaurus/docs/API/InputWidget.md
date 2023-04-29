@@ -17,6 +17,12 @@ description: The input widget component allows you to input color values in vari
 - The `defaultFormat` prop determines the initial color format for the input widget component.
 - It accepts one of the following values: `'HEX' | 'RGB' | 'HSL' | 'HWB' | 'HSV'`
 
+### `disableAlphaChannel`
+
+- This prop allows you to disable the alpha channel input. If set to true, the input widget will ignore the alpha channel and prevent users from setting the opacity of the selected color.
+- `type: boolean`
+- `default: false`
+
 ### `formats`
 
 - The `formats` prop determines which color formats are included in the input widget component and the order they appear when cycling through them.
