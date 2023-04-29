@@ -3,7 +3,7 @@ import { runOnJS, useDerivedValue } from 'react-native-reanimated';
 
 import WidgetTextInput from './WidgetTextInput';
 import colorKit from '@colorKit';
-import { clamp } from '@utils';
+import { clamp, ConditionalRendering } from '@utils';
 
 import type { WidgetProps } from '@types';
 
@@ -17,6 +17,7 @@ export default function HsvWidget({
   inputStyle,
   inputTitleStyle,
   inputProps,
+  disableAlphaChannel,
 }: WidgetProps) {
   const [hsvValues, setHsvValues] = useState(colorKit.HSV(returnedResults().hsva).object());
 
@@ -96,17 +97,19 @@ export default function HsvWidget({
         onFocus={onFocus}
         inputProps={inputProps}
       />
-      <WidgetTextInput
-        inputStyle={inputStyle}
-        textStyle={inputTitleStyle}
-        value={hsvValues.a}
-        title='A'
-        onChange={onAlphaChange}
-        onBlur={onBlur}
-        onFocus={onFocus}
-        inputProps={inputProps}
-        decimal
-      />
+      <ConditionalRendering render={!disableAlphaChannel}>
+        <WidgetTextInput
+          inputStyle={inputStyle}
+          textStyle={inputTitleStyle}
+          value={hsvValues.a}
+          title='A'
+          onChange={onAlphaChange}
+          onBlur={onBlur}
+          onFocus={onFocus}
+          inputProps={inputProps}
+          decimal
+        />
+      </ConditionalRendering>
     </>
   );
 }

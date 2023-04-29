@@ -411,6 +411,7 @@ export type WidgetProps = {
   inputStyle: StyleProp<TextStyle>;
   inputTitleStyle?: StyleProp<TextStyle>;
   inputProps: InputProps;
+  disableAlphaChannel: boolean;
 };
 
 type defaultFormats = 'HEX' | 'RGB' | 'HSL' | 'HWB' | 'HSV';
@@ -427,6 +428,9 @@ export interface InputWidgetProps {
    * - Available options: `'HEX'`, `'RGB'`, '`HSL'`, `'HWB'`, and `'HSV'`
    */
   formats?: readonly defaultFormats[];
+
+  /** - Limit the user's ability to modify the alpha channel of the selected color. */
+  disableAlphaChannel?: boolean;
 
   /** - `InputText` components style. */
   inputStyle?: StyleProp<TextStyle>;
