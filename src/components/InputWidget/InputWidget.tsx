@@ -1,9 +1,10 @@
 import React, { useContext, useState } from 'react';
 import { View, Text, Pressable, Image, StyleSheet } from 'react-native';
 
-import { styles } from '@styles';
 import { ConditionalRendering, getStyle } from '@utils';
 import pickerContext from '@context';
+import { styles } from '@styles';
+import colorKit from '@colorKit';
 import HexWidget from './Widgets/HexWidget';
 import RgbWidget from './Widgets/RgbWidget';
 import HslWidget from './Widgets/HslWidget';
@@ -18,6 +19,7 @@ export function InputWidget({
   defaultFormat = 'HEX',
   formats = defaultFormats,
   iconColor = 'black',
+  disableAlphaChannel = false,
   containerStyle = {},
   inputStyle = {},
   inputTitleStyle = {},
@@ -32,6 +34,9 @@ export function InputWidget({
   );
 
   const onChange = (color: string) => {
+    const isHex = colorKit.getFormat(color)?.includes('hex');
+    if (disableAlphaChannel && isHex) color = colorKit.setAlpha(color, 1).hex();
+
     setColor(color);
     onGestureChange(color);
     onGestureEnd(color);
@@ -53,6 +58,7 @@ export function InputWidget({
     inputStyle,
     inputTitleStyle,
     inputProps,
+    disableAlphaChannel,
   };
   const Input = () => {
     switch (format) {
