@@ -63,7 +63,7 @@ export function Panel5({ style = {}, selectionStyle = {} }: Panel5Props) {
   }, []);
 
   useEffect(() => {
-    const initialColor = colorKit.HEX(value).toUpperCase();
+    const initialColor = colorKit.HEX(value).slice(0, 7).toUpperCase();
 
     const row = gridColors.findIndex(e => e.includes(initialColor));
     if (row === -1) return;
