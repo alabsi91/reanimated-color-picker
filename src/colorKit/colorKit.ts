@@ -996,7 +996,7 @@ class Colors {
   /** - Set the `alpha` value of a color to a specific amount.*/
   setAlpha(color: SupportedColorFormats, amount: number): ConversionMethods {
     const { r, g, b } = this.RGB(color).object();
-    const newA = Math.round(clamp(amount, 0, 1));
+    const newA = clampAlpha(amount);
     const newColor = { r, g, b, a: newA };
 
     return this.returnColorObject(newColor);
@@ -1005,7 +1005,7 @@ class Colors {
   increaseAlpha(color: SupportedColorFormats, amount: number | string): ConversionMethods {
     const { r, g, b, a } = this.RGB(color).object();
     const alpha = typeof amount === 'string' ? a + a * (parseFloat(amount) / 100) : a + amount;
-    const newA = Math.round(clamp(alpha, 0, 1));
+    const newA = clampAlpha(alpha);
     const newColor = { r, g, b, a: newA };
 
     return this.returnColorObject(newColor);
@@ -1014,7 +1014,7 @@ class Colors {
   decreaseAlpha(color: SupportedColorFormats, amount: number | string): ConversionMethods {
     const { r, g, b, a } = this.RGB(color).object();
     const alpha = typeof amount === 'string' ? a - a * (parseFloat(amount) / 100) : a - amount;
-    const newA = Math.round(clamp(alpha, 0, 1));
+    const newA = clampAlpha(alpha);
     const newColor = { r, g, b, a: newA };
 
     return this.returnColorObject(newColor);
