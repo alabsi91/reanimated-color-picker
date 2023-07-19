@@ -1,7 +1,7 @@
 import PrivateMethods from './PrivateMethods';
 import colorsRegex from './colorsRegex';
 import namedColors from './namedColors';
-import { clamp, clamp100, clampAlpha, clampHue, clampRGB, randomNumber } from './utilities';
+import { clamp100, clampAlpha, clampHue, clampRGB, randomNumber } from './utilities';
 
 import type {
   SupportedColorFormats,
@@ -701,7 +701,7 @@ class Colors {
   /** Set the `red` value of a color to a specific amount.*/
   setRed(color: SupportedColorFormats, amount: number): ConversionMethods {
     const { g, b, a } = this.RGB(color).object();
-    const newR = Math.round(clamp(amount, 0, 255));
+    const newR = clampRGB(amount);
     const newColor = { r: newR, g, b, a };
 
     return this.returnColorObject(newColor);
@@ -714,7 +714,7 @@ class Colors {
   increaseRed(color: SupportedColorFormats, amount: number | string): ConversionMethods {
     const { r, g, b, a } = this.RGB(color).object();
     const red = typeof amount === 'string' ? r + r * (parseFloat(amount) / 100) : r + amount;
-    const newR = Math.round(clamp(red, 0, 255));
+    const newR = clampRGB(red);
     const newColor = { r: newR, g, b, a };
 
     return this.returnColorObject(newColor);
@@ -727,7 +727,7 @@ class Colors {
   decreaseRed(color: SupportedColorFormats, amount: number | string): ConversionMethods {
     const { r, g, b, a } = this.RGB(color).object();
     const red = typeof amount === 'string' ? r - r * (parseFloat(amount) / 100) : r - amount;
-    const newR = Math.round(clamp(red, 0, 255));
+    const newR = clampRGB(red);
     const newColor = { r: newR, g, b, a };
 
     return this.returnColorObject(newColor);
@@ -741,7 +741,7 @@ class Colors {
   /** - Set the `green` value of a color to a specific amount.*/
   setGreen(color: SupportedColorFormats, amount: number): ConversionMethods {
     const { r, b, a } = this.RGB(color).object();
-    const newG = Math.round(clamp(amount, 0, 255));
+    const newG = clampRGB(amount);
     const newColor = { r, g: newG, b, a };
 
     return this.returnColorObject(newColor);
@@ -754,7 +754,7 @@ class Colors {
   increaseGreen(color: SupportedColorFormats, amount: number | string): ConversionMethods {
     const { r, g, b, a } = this.RGB(color).object();
     const green = typeof amount === 'string' ? g + g * (parseFloat(amount) / 100) : g + amount;
-    const newG = Math.round(clamp(green, 0, 255));
+    const newG = clampRGB(green);
     const newColor = { r, g: newG, b, a };
 
     return this.returnColorObject(newColor);
@@ -767,7 +767,7 @@ class Colors {
   decreaseGreen(color: SupportedColorFormats, amount: number | string): ConversionMethods {
     const { r, g, b, a } = this.RGB(color).object();
     const green = typeof amount === 'string' ? g - g * (parseFloat(amount) / 100) : g - amount;
-    const newG = Math.round(clamp(green, 0, 255));
+    const newG = clampRGB(green);
     const newColor = { r, g: newG, b, a };
 
     return this.returnColorObject(newColor);
@@ -781,7 +781,7 @@ class Colors {
   /** - Set the `blue` value of a color to a specific amount.*/
   setBlur(color: SupportedColorFormats, amount: number): ConversionMethods {
     const { r, g, a } = this.RGB(color).object();
-    const newB = Math.round(clamp(amount, 0, 255));
+    const newB = clampRGB(amount);
     const newColor = { r, g, b: newB, a };
 
     return this.returnColorObject(newColor);
@@ -794,7 +794,7 @@ class Colors {
   increaseBlue(color: SupportedColorFormats, amount: number | string): ConversionMethods {
     const { r, g, b, a } = this.RGB(color).object();
     const blue = typeof amount === 'string' ? b + b * (parseFloat(amount) / 100) : b + amount;
-    const newB = Math.round(clamp(blue, 0, 255));
+    const newB = clampRGB(blue);
     const newColor = { r, g, b: newB, a };
 
     return this.returnColorObject(newColor);
@@ -807,7 +807,7 @@ class Colors {
   decreaseBlue(color: SupportedColorFormats, amount: number | string): ConversionMethods {
     const { r, g, b, a } = this.RGB(color).object();
     const blue = typeof amount === 'string' ? b - b * (parseFloat(amount) / 100) : b - amount;
-    const newB = Math.round(clamp(blue, 0, 255));
+    const newB = clampRGB(blue);
     const newColor = { r, g, b: newB, a };
 
     return this.returnColorObject(newColor);
@@ -822,7 +822,7 @@ class Colors {
   /** - Set the `hue` value of a color to a specific amount.*/
   setHue(color: SupportedColorFormats, amount: number): ConversionMethods {
     const { s, l, a } = this.HSL(color).object();
-    const newH = Math.round(clamp(amount, 0, 360));
+    const newH = clampHue(amount);
     const newColor = { h: newH, s, l, a };
 
     return this.returnColorObject(newColor);
@@ -835,7 +835,7 @@ class Colors {
   increaseHue(color: SupportedColorFormats, amount: number | string): ConversionMethods {
     const { h, s, l, a } = this.HSL(color).object();
     const hue = typeof amount === 'string' ? h + h * (parseFloat(amount) / 100) : h + amount;
-    const newH = Math.round(clamp(hue, 0, 360));
+    const newH = clampHue(hue);
     const newColor = { h: newH, s, l, a };
 
     return this.returnColorObject(newColor);
@@ -848,7 +848,7 @@ class Colors {
   decreaseHue(color: SupportedColorFormats, amount: number | string): ConversionMethods {
     const { h, s, l, a } = this.HSL(color).object();
     const hue = typeof amount === 'string' ? h - h * (parseFloat(amount) / 100) : h - amount;
-    const newH = Math.round(clamp(hue, 0, 360));
+    const newH = clampHue(hue);
     const newColor = { h: newH, s, l, a };
 
     return this.returnColorObject(newColor);
@@ -876,7 +876,7 @@ class Colors {
   /** - Set the `saturation` value of a color to a specific amount.*/
   setSaturation(color: SupportedColorFormats, amount: number): ConversionMethods {
     const { h, l, a } = this.HSL(color).object();
-    const newS = Math.round(clamp(amount, 0, 100));
+    const newS = clamp100(amount);
     const saturatedColor = { h, s: newS, l, a };
 
     return this.returnColorObject(saturatedColor);
@@ -890,7 +890,7 @@ class Colors {
   saturate(color: SupportedColorFormats, amount: number | string): ConversionMethods {
     const { h, s, l, a } = this.HSL(color).object();
     const saturation = typeof amount === 'string' ? s + s * (parseFloat(amount) / 100) : s + amount;
-    const newS = Math.round(clamp(saturation, 0, 100));
+    const newS = clamp100(saturation);
     const saturatedColor = { h, s: newS, l, a };
 
     return this.returnColorObject(saturatedColor);
@@ -904,7 +904,7 @@ class Colors {
   desaturate(color: SupportedColorFormats, amount: number | string): ConversionMethods {
     const { h, s, l, a } = this.HSL(color).object();
     const saturation = typeof amount === 'string' ? s - s * (parseFloat(amount) / 100) : s - amount;
-    const newS = Math.round(clamp(saturation, 0, 100));
+    const newS = clamp100(saturation);
     const desaturatedColor = { h, s: newS, l, a };
 
     return this.returnColorObject(desaturatedColor);
@@ -921,7 +921,7 @@ class Colors {
   /** - Set HSL's `luminosity` channel for a given color to a specific amount.*/
   setLuminance(color: SupportedColorFormats, amount: number): ConversionMethods {
     const { h, s, a } = this.HSL(color).object();
-    const newL = Math.round(clamp(amount, 0, 100));
+    const newL = clamp100(amount);
     const newColor = { h, s, l: newL, a };
 
     return this.returnColorObject(newColor);
@@ -935,7 +935,7 @@ class Colors {
   brighten(color: SupportedColorFormats, amount: number | string): ConversionMethods {
     const { h, s, l, a } = this.HSL(color).object();
     const lum = typeof amount === 'string' ? l + l * (parseFloat(amount) / 100) : l + amount;
-    const newL = Math.round(clamp(lum, 0, 100));
+    const newL = clamp100(lum);
     const brightenedColor = { h, s, l: newL, a };
 
     return this.returnColorObject(brightenedColor);
@@ -949,7 +949,7 @@ class Colors {
   darken(color: SupportedColorFormats, amount: number | string): ConversionMethods {
     const { h, s, l, a } = this.HSL(color).object();
     const lum = typeof amount === 'string' ? l - l * (parseFloat(amount) / 100) : l - amount;
-    const newL = Math.round(clamp(lum, 0, 100));
+    const newL = clamp100(lum);
     const darkenedColor = { h, s, l: newL, a };
 
     return this.returnColorObject(darkenedColor);
@@ -963,7 +963,7 @@ class Colors {
   /** - Set HSV's `value` (brightness) channel for a given color to a specific amount.*/
   setBrightness(color: SupportedColorFormats, amount: number): ConversionMethods {
     const { h, s, a } = this.HSV(color).object();
-    const newV = Math.round(clamp(amount, 0, 100));
+    const newV = clamp100(amount);
     const newColor = { h, s, v: newV, a };
 
     return this.returnColorObject(newColor);
@@ -972,7 +972,7 @@ class Colors {
   increaseBrightness(color: SupportedColorFormats, amount: number | string): ConversionMethods {
     const { h, s, v, a } = this.HSV(color).object();
     const value = typeof amount === 'string' ? v + v * (parseFloat(amount) / 100) : v + amount;
-    const newV = Math.round(clamp(value, 0, 100));
+    const newV = clamp100(value);
     const newColor = { h, s, v: newV, a };
 
     return this.returnColorObject(newColor);
@@ -981,7 +981,7 @@ class Colors {
   decreaseBrightness(color: SupportedColorFormats, amount: number | string): ConversionMethods {
     const { h, s, v, a } = this.HSV(color).object();
     const value = typeof amount === 'string' ? v - v * (parseFloat(amount) / 100) : v - amount;
-    const newV = Math.round(clamp(value, 0, 100));
+    const newV = clamp100(value);
     const newColor = { h, s, v: newV, a };
 
     return this.returnColorObject(newColor);
@@ -1059,10 +1059,10 @@ class Colors {
     const rgba1 = this.RGB(color1).object();
     const rgba2 = this.RGB(color2).object();
 
-    const r = Math.round(clamp(rgba1.r * (1 - percentage) + rgba2.r * percentage, 0, 255)),
-      g = Math.round(clamp(rgba1.g * (1 - percentage) + rgba2.g * percentage, 0, 255)),
-      b = Math.round(clamp(rgba1.b * (1 - percentage) + rgba2.b * percentage, 0, 255)),
-      a = Math.round(clamp(rgba1.a * (1 - percentage) + rgba2.a * percentage, 0, 1));
+    const r = clampRGB(rgba1.r * (1 - percentage) + rgba2.r * percentage),
+      g = clampRGB(rgba1.g * (1 - percentage) + rgba2.g * percentage),
+      b = clampRGB(rgba1.b * (1 - percentage) + rgba2.b * percentage),
+      a = clampAlpha(rgba1.a * (1 - percentage) + rgba2.a * percentage);
 
     const blendedColor = { r, g, b, a };
 
@@ -1079,7 +1079,7 @@ class Colors {
   /** - Completely desaturate a color into grayscale. */
   grayscale(color: SupportedColorFormats): ConversionMethods {
     const { r, g, b, a } = this.RGB(color).object();
-    const gray = Math.round(clamp(r * 0.3 + g * 0.59 + b * 0.11, 0, 255));
+    const gray = clampRGB(r * 0.3 + g * 0.59 + b * 0.11);
     const grayColor = { r: gray, g: gray, b: gray, a };
 
     return this.returnColorObject(grayColor);
@@ -1088,10 +1088,10 @@ class Colors {
   /** - Generate a random color from `HSL` values. */
   randomHslColor({ h = [0, 360], s = [0, 100], l = [0, 100], a = [1, 1] } = {}): ConversionMethods {
     const random = {
-      h: Math.round(clamp(randomNumber(h[0], h[1]), 0, 360)),
-      s: Math.round(clamp(randomNumber(s[0], s[1]), 0, 100)),
-      l: Math.round(clamp(randomNumber(l[0], l[1]), 0, 100)),
-      a: +clamp(randomNumber(a[0], a[1]), 0, 1).toFixed(2),
+      h: clampHue(randomNumber(h[0], h[1])),
+      s: clamp100(randomNumber(s[0], s[1])),
+      l: clamp100(randomNumber(l[0], l[1])),
+      a: clampAlpha(randomNumber(a[0], a[1])),
     };
 
     return this.returnColorObject(random);
@@ -1099,10 +1099,10 @@ class Colors {
   /** - Generate a random color from `HSV` values. */
   randomHsvColor({ h = [0, 360], s = [0, 100], v = [0, 100], a = [1, 1] } = {}): ConversionMethods {
     const random = {
-      h: Math.round(clamp(randomNumber(h[0], h[1]), 0, 360)),
-      s: Math.round(clamp(randomNumber(s[0], s[1]), 0, 100)),
-      v: Math.round(clamp(randomNumber(v[0], v[1]), 0, 100)),
-      a: +clamp(randomNumber(a[0], a[1]), 0, 1).toFixed(2),
+      h: clampHue(randomNumber(h[0], h[1])),
+      s: clamp100(randomNumber(s[0], s[1])),
+      v: clamp100(randomNumber(v[0], v[1])),
+      a: clampAlpha(randomNumber(a[0], a[1])),
     };
 
     return this.returnColorObject(random);
@@ -1110,10 +1110,10 @@ class Colors {
   /** - Generate a random color from `RGB` values. */
   randomRgbColor({ r = [0, 255], g = [0, 255], b = [0, 255], a = [1, 1] } = {}): ConversionMethods {
     const random = {
-      r: Math.round(clamp(randomNumber(r[0], r[1]), 0, 255)),
-      g: Math.round(clamp(randomNumber(g[0], g[1]), 0, 255)),
-      b: Math.round(clamp(randomNumber(b[0], b[1]), 0, 255)),
-      a: +clamp(randomNumber(a[0], a[1]), 0, 1).toFixed(2),
+      r: clampRGB(randomNumber(r[0], r[1])),
+      g: clampRGB(randomNumber(g[0], g[1])),
+      b: clampRGB(randomNumber(b[0], b[1])),
+      a: clampAlpha(randomNumber(a[0], a[1])),
     };
 
     return this.returnColorObject(random);
@@ -1121,10 +1121,10 @@ class Colors {
   /** - Generate a random color from `HWB` values. */
   randomHwbColor({ h = [0, 360], w = [0, 100], b = [0, 100], a = [1, 1] } = {}): ConversionMethods {
     const random = {
-      h: Math.round(clamp(randomNumber(h[0], h[1]), 0, 360)),
-      w: Math.round(clamp(randomNumber(w[0], w[1]), 0, 100)),
-      b: Math.round(clamp(randomNumber(b[0], b[1]), 0, 100)),
-      a: +clamp(randomNumber(a[0], a[1]), 0, 1).toFixed(2),
+      h: clampHue(randomNumber(h[0], h[1])),
+      w: clamp100(randomNumber(w[0], w[1])),
+      b: clamp100(randomNumber(b[0], b[1])),
+      a: clampAlpha(randomNumber(a[0], a[1])),
     };
 
     return this.returnColorObject(random);
@@ -1137,9 +1137,9 @@ class Colors {
     const channels = ['r', 'g', 'b'] as const;
 
     const adjustLuminance = (colorRGB: rgbaT, by: number) => {
-      const r = clamp(colorRGB.r + by, 0, 255);
-      const g = clamp(colorRGB.g + by, 0, 255);
-      const b = clamp(colorRGB.b + by, 0, 255);
+      const r = clampRGB(colorRGB.r + by);
+      const g = clampRGB(colorRGB.g + by);
+      const b = clampRGB(colorRGB.b + by);
       return { r, g, b, a: colorRGB.a };
     };
 
