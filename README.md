@@ -66,3 +66,11 @@ npm i reanimated-color-picker
 # :small_blue_diamond:License
 
 - Reanimated Color Picker library is licensed under [**The MIT License.**](https://github.com/alabsi91/reanimated-color-picker/blob/main/LICENSE)
+
+# :small_blue_diamond: Sponsoring
+
+<a href="https://github.com/sponsors/alabsi91">
+  <img align="right" width="160" alt="This library helped you? Consider sponsoring!" src=".github/funding-octocat.svg">
+</a>
+
+If you're integrating Reanimated Color Picker in a production app, consider [funding this project](https://github.com/sponsors/alabsi91) and <a href="mailto:alabsi91@gmail.com">contact me</a> .
