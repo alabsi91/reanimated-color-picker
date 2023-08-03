@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
 import { Text } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { useSharedValue, withTiming } from 'react-native-reanimated';
+import { runOnUI, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import { isWeb } from '@utils';
 import colorKit from '@colorKit';
@@ -69,12 +69,22 @@ const ColorPicker = forwardRef<ColorPickerRef, ColorPickerProps>(
       };
     };
 
-    const onGestureEnd = (color?: SupportedColorFormats) => {
+    const onCompleteWorklet = (color?: SupportedColorFormats) => {
+      'worklet';
       onComplete?.(returnedResults(color));
     };
 
-    const onGestureChange = (color?: SupportedColorFormats) => {
+    const onGestureEnd = (color?: SupportedColorFormats) => {
+      runOnUI(onCompleteWorklet)(color);
+    };
+
+    const onChangeWorklet = (color?: SupportedColorFormats) => {
+      'worklet';
       onChange?.(returnedResults(color));
+    };
+
+    const onGestureChange = (color?: SupportedColorFormats) => {
+      runOnUI(onChangeWorklet)(color);
     };
 
     const setColor = (color: string, duration = thumbAnimationDuration) => {
