@@ -8,7 +8,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 const config = {
   title: 'Reanimated Color Picker',
   tagline: 'A Pure JavaScript Color Picker for React Native',
-  url: 'https://github.com',
+  url: 'https://alabsi91.github.io',
   baseUrl: '/reanimated-color-picker/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',

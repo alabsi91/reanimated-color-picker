@@ -1,4 +1,4 @@
-/*! For license information please see main.4ace8eab.js.LICENSE.txt */
+/*! For license information please see main.fecc0d6d.js.LICENSE.txt */
 (self.webpackChunkmy_docs = self.webpackChunkmy_docs || []).push([
   [179],
   {
@@ -16163,7 +16163,7 @@
       const r = {
         title: 'Reanimated Color Picker',
         tagline: 'A Pure JavaScript Color Picker for React Native',
-        url: 'https://github.com',
+        url: 'https://alabsi91.github.io',
         baseUrl: '/reanimated-color-picker/',
         onBrokenLinks: 'throw',
         onBrokenMarkdownLinks: 'warn',
