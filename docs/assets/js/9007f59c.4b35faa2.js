@@ -1,6 +1,6 @@
 'use strict';
 (self.webpackChunkmy_docs = self.webpackChunkmy_docs || []).push([
-  [446],
+  [257],
   {
     3905: (e, t, n) => {
       n.d(t, { Zo: () => u, kt: () => c });
@@ -101,7 +101,7 @@
       }
       h.displayName = 'MDXCreateElement';
     },
-    830: (e, t, n) => {
+    4108: (e, t, n) => {
       n.r(t),
         n.d(t, {
           assets: () => p,
@@ -115,46 +115,44 @@
         r = (n(7294), n(3905)),
         l = n(6862);
       const i = {
-          sidebar_position: 11,
-          sidebar_label: 'Panel2',
-          description: 'A square-shaped slider (windows style) is utilized to adjust the hue and saturation channels.',
+          sidebar_position: 13,
+          sidebar_label: 'Panel4',
+          description: 'A slider with a square shape is used to adjust the channels of hue, saturation, and brightness.',
         },
-        o = '<Panel2 />',
+        o = '<Panel4 />',
         d = {
-          unversionedId: 'API/Panel2',
-          id: 'API/Panel2',
-          title: '<Panel2 />',
-          description: 'A square-shaped slider (windows style) is utilized to adjust the hue and saturation channels.',
-          source: '@site/docs/API/Panel2.mdx',
+          unversionedId: 'API/Panel4',
+          id: 'API/Panel4',
+          title: '<Panel4 />',
+          description: 'A slider with a square shape is used to adjust the channels of hue, saturation, and brightness.',
+          source: '@site/docs/API/Panel4.mdx',
           sourceDirName: 'API',
-          slug: '/API/Panel2',
-          permalink: '/reanimated-color-picker/docs/API/Panel2',
+          slug: '/API/Panel4',
+          permalink: '/reanimated-color-picker/docs/API/Panel4',
           draft: !1,
           tags: [],
           version: 'current',
-          sidebarPosition: 11,
+          sidebarPosition: 13,
           frontMatter: {
-            sidebar_position: 11,
-            sidebar_label: 'Panel2',
-            description: 'A square-shaped slider (windows style) is utilized to adjust the hue and saturation channels.',
+            sidebar_position: 13,
+            sidebar_label: 'Panel4',
+            description: 'A slider with a square shape is used to adjust the channels of hue, saturation, and brightness.',
           },
           sidebar: 'tutorialSidebar',
-          previous: { title: 'Panel1', permalink: '/reanimated-color-picker/docs/API/Panel1' },
-          next: { title: 'Panel3', permalink: '/reanimated-color-picker/docs/API/Panel3' },
+          previous: { title: 'Panel3', permalink: '/reanimated-color-picker/docs/API/Panel3' },
+          next: { title: 'Panel5', permalink: '/reanimated-color-picker/docs/API/Panel5' },
         },
         p = {},
         u = [
           { value: 'Props', id: 'props', level: 2 },
-          { value: '<code>verticalChannel</code>', id: 'verticalchannel', level: 3 },
           { value: '<code>boundedThumb</code>', id: 'boundedthumb', level: 3 },
           { value: '<code>thumbSize</code>', id: 'thumbsize', level: 3 },
           { value: '<code>thumbColor</code>', id: 'thumbcolor', level: 3 },
           { value: '<code>thumbShape</code>', id: 'thumbshape', level: 3 },
           { value: '<code>thumbStyle</code>', id: 'thumbstyle', level: 3 },
           { value: '<code>thumbInnerStyle</code>', id: 'thumbinnerstyle', level: 3 },
-          { value: '<code>adaptSpectrum</code>', id: 'adaptspectrum', level: 3 },
           { value: '<code>reverseHue</code>', id: 'reversehue', level: 3 },
-          { value: '<code>reverseVerticalChannel</code>', id: 'reverseverticalchannel', level: 3 },
+          { value: '<code>reverseHorizontalChannels</code>', id: 'reversehorizontalchannels', level: 3 },
           { value: '<code>style</code>', id: 'style', level: 3 },
         ],
         m = { toc: u };
@@ -163,14 +161,8 @@
         return (0, r.kt)(
           'wrapper',
           (0, a.Z)({}, m, i, { components: t, mdxType: 'MDXLayout' }),
-          (0, r.kt)('h1', { id: 'panel2-' }, (0, r.kt)('inlineCode', { parentName: 'h1' }, '<Panel2 />')),
-          (0, r.kt)(
-            'p',
-            null,
-            (0, r.kt)('img', { alt: 'panel2panel2-saturation', src: n(1513).Z, width: '200', height: '200' }),
-            ' < or > ',
-            (0, r.kt)('img', { alt: 'panel2panel2-brightness', src: n(5580).Z, width: '200', height: '200' })
-          ),
+          (0, r.kt)('h1', { id: 'panel4-' }, (0, r.kt)('inlineCode', { parentName: 'h1' }, '<Panel4 />')),
+          (0, r.kt)('p', null, (0, r.kt)('img', { alt: 'panel4', src: n(9073).Z, width: '200', height: '200' })),
           (0, r.kt)(
             'ul',
             null,
@@ -180,13 +172,8 @@
               (0, r.kt)(
                 'p',
                 { parentName: 'li' },
-                'A square-shaped slider (windows style) is utilized to adjust the hue and (saturation or brightness) channels.'
+                'A slider with a square shape is used to adjust the channels of hue, saturation, and brightness.'
               )
-            ),
-            (0, r.kt)(
-              'li',
-              { parentName: 'ul' },
-              (0, r.kt)('p', { parentName: 'li' }, "Move the thumb (handle) horizontally to change the color's hue.")
             ),
             (0, r.kt)(
               'li',
@@ -194,50 +181,25 @@
               (0, r.kt)(
                 'p',
                 { parentName: 'li' },
-                'Drag the thumb (handle) up or down to adjust either the saturation or the brightness of the color, depending on the ',
-                (0, r.kt)('inlineCode', { parentName: 'p' }, 'verticalChannel'),
-                ' prop.'
+                "To adjust the color's saturation and brightness, move the handle horizontally.."
               )
+            ),
+            (0, r.kt)(
+              'li',
+              { parentName: 'ul' },
+              (0, r.kt)('p', { parentName: 'li' }, "Move the handle vertically to change the color's hue.")
             )
           ),
           (0, r.kt)(
             'admonition',
-            { type: 'tip' },
+            { type: 'danger' },
             (0, r.kt)(
               'p',
               { parentName: 'admonition' },
-              'If you want to give your users more control over the color selection, you can add another slider next to ',
-              (0, r.kt)('inlineCode', { parentName: 'p' }, 'Panel2'),
-              ' that adjusts the opposite channel. For example, if ',
-              (0, r.kt)('inlineCode', { parentName: 'p' }, 'verticalChannel'),
-              ' is ',
-              (0, r.kt)('inlineCode', { parentName: 'p' }, '"saturation"'),
-              ', you can add a ',
-              (0, r.kt)(
-                'a',
-                { parentName: 'p', href: './BrightnessSlider' },
-                (0, r.kt)('inlineCode', { parentName: 'a' }, '<BrightnessSlider />')
-              ),
-              ', and vice versa.'
+              'This panel cannot show all colors because it has a limited range of colors it can display. For example, if the input color has 50% saturation and 50% brightness, the panel thumb (handle) location won\u2019t be accurate because it cannot show that color. This means that the color you select may not be exactly what you see in the panel.'
             )
           ),
           (0, r.kt)('h2', { id: 'props' }, 'Props'),
-          (0, r.kt)('h3', { id: 'verticalchannel' }, (0, r.kt)('inlineCode', { parentName: 'h3' }, 'verticalChannel')),
-          (0, r.kt)(
-            'ul',
-            null,
-            (0, r.kt)(
-              'li',
-              { parentName: 'ul' },
-              'Determines which color channel to adjust when moving the thumb vertically on the slider.'
-            ),
-            (0, r.kt)(
-              'li',
-              { parentName: 'ul' },
-              (0, r.kt)('inlineCode', { parentName: 'li' }, 'type: "saturation" | "brightness"')
-            ),
-            (0, r.kt)('li', { parentName: 'ul' }, (0, r.kt)('inlineCode', { parentName: 'li' }, 'default: "saturation"'))
-          ),
           (0, r.kt)('h3', { id: 'boundedthumb' }, (0, r.kt)('inlineCode', { parentName: 'h3' }, 'boundedThumb')),
           (0, r.kt)(
             'ul',
@@ -328,18 +290,6 @@
             (0, r.kt)('li', { parentName: 'ul' }, (0, r.kt)('inlineCode', { parentName: 'li' }, 'type: ViewStyle'))
           ),
           (0, r.kt)(l.ZP, { mdxType: 'RenderThumb' }),
-          (0, r.kt)('h3', { id: 'adaptspectrum' }, (0, r.kt)('inlineCode', { parentName: 'h3' }, 'adaptSpectrum')),
-          (0, r.kt)(
-            'ul',
-            null,
-            (0, r.kt)(
-              'li',
-              { parentName: 'ul' },
-              'Slider background color spectrum adapts to changes in saturation and brightness.'
-            ),
-            (0, r.kt)('li', { parentName: 'ul' }, (0, r.kt)('inlineCode', { parentName: 'li' }, 'type: boolean')),
-            (0, r.kt)('li', { parentName: 'ul' }, (0, r.kt)('inlineCode', { parentName: 'li' }, 'default: false'))
-          ),
           (0, r.kt)('h3', { id: 'reversehue' }, (0, r.kt)('inlineCode', { parentName: 'h3' }, 'reverseHue')),
           (0, r.kt)(
             'ul',
@@ -350,8 +300,8 @@
           ),
           (0, r.kt)(
             'h3',
-            { id: 'reverseverticalchannel' },
-            (0, r.kt)('inlineCode', { parentName: 'h3' }, 'reverseVerticalChannel')
+            { id: 'reversehorizontalchannels' },
+            (0, r.kt)('inlineCode', { parentName: 'h3' }, 'reverseHorizontalChannels')
           ),
           (0, r.kt)(
             'ul',
@@ -359,7 +309,7 @@
             (0, r.kt)(
               'li',
               { parentName: 'ul' },
-              "Reverse (flip) the direction of the vertical channel's saturation or brightness."
+              "Reverse (flip) the direction of the horizontal channel's brightness and saturation.."
             ),
             (0, r.kt)('li', { parentName: 'ul' }, (0, r.kt)('inlineCode', { parentName: 'li' }, 'type: boolean')),
             (0, r.kt)('li', { parentName: 'ul' }, (0, r.kt)('inlineCode', { parentName: 'li' }, 'default: false'))
@@ -538,13 +488,9 @@
       }
       i.isMDXComponent = !0;
     },
-    5580: (e, t, n) => {
+    9073: (e, t, n) => {
       n.d(t, { Z: () => a });
-      const a = n.p + 'assets/images/panel2-brightness-389d07bf3f673e64e02a6b9d52f36e59.png';
-    },
-    1513: (e, t, n) => {
-      n.d(t, { Z: () => a });
-      const a = n.p + 'assets/images/panel2-saturation-bc20014dcc48696ed58273d705b447c4.png';
+      const a = n.p + 'assets/images/panel4-fdad34ed193f56d62d7c09ca309bedf6.png';
     },
   },
 ]);

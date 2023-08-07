@@ -3,7 +3,7 @@
   [514, 972],
   {
     9963: (e, t, n) => {
-      n.r(t), n.d(t, { default: () => Ce });
+      n.r(t), n.d(t, { default: () => Se });
       var a = n(7294),
         l = n(6010),
         o = n(1944),
@@ -54,15 +54,16 @@
           onClick: t,
         });
       }
-      var g = n(6775),
-        v = n(7524),
-        _ = n(6668),
-        k = n(1327),
-        C = n(7462);
-      function S(e) {
+      var g = n(1442),
+        v = n(6775),
+        _ = n(7524),
+        k = n(6668),
+        C = n(1327),
+        S = n(7462);
+      function I(e) {
         return a.createElement(
           'svg',
-          (0, C.Z)({ width: '20', height: '20', 'aria-hidden': 'true' }, e),
+          (0, S.Z)({ width: '20', height: '20', 'aria-hidden': 'true' }, e),
           a.createElement(
             'g',
             { fill: '#7a7a7a' },
@@ -75,9 +76,9 @@
           )
         );
       }
-      const I = 'collapseSidebarButton_PEFL',
-        N = 'collapseSidebarButtonIcon_kv0_';
-      function Z(e) {
+      const N = 'collapseSidebarButton_PEFL',
+        Z = 'collapseSidebarButtonIcon_kv0_';
+      function y(e) {
         let { onClick: t } = e;
         return a.createElement(
           'button',
@@ -93,27 +94,27 @@
               message: 'Collapse sidebar',
               description: 'The title attribute for collapse button of doc sidebar',
             }),
-            className: (0, l.Z)('button button--secondary button--outline', I),
+            className: (0, l.Z)('button button--secondary button--outline', N),
             onClick: t,
           },
-          a.createElement(S, { className: N })
+          a.createElement(I, { className: Z })
         );
       }
-      var y = n(9689),
-        T = n(902);
-      const x = Symbol('EmptyContext'),
-        w = a.createContext(x);
-      function L(e) {
+      var T = n(9689),
+        x = n(902);
+      const w = Symbol('EmptyContext'),
+        L = a.createContext(w);
+      function A(e) {
         let { children: t } = e;
         const [n, l] = (0, a.useState)(null),
           o = (0, a.useMemo)(() => ({ expandedItem: n, setExpandedItem: l }), [n]);
-        return a.createElement(w.Provider, { value: o }, t);
+        return a.createElement(L.Provider, { value: o }, t);
       }
-      var A = n(6043),
-        M = n(8596),
-        B = n(9960),
-        F = n(2389);
-      function H(e) {
+      var M = n(6043),
+        B = n(8596),
+        F = n(9960),
+        H = n(2389);
+      function P(e) {
         let { categoryLabel: t, onClick: n } = e;
         return a.createElement('button', {
           'aria-label': (0, u.I)(
@@ -129,40 +130,40 @@
           onClick: n,
         });
       }
-      function P(e) {
+      function W(e) {
         let { item: t, onItemClick: n, activePath: o, level: c, index: s, ...d } = e;
         const { items: m, label: u, collapsible: b, className: p, href: h } = t,
           {
             docs: {
               sidebar: { autoCollapseCategories: E },
             },
-          } = (0, _.L)(),
+          } = (0, k.L)(),
           f = (function (e) {
-            const t = (0, F.Z)();
+            const t = (0, H.Z)();
             return (0, a.useMemo)(() => (e.href ? e.href : !t && e.collapsible ? (0, i.Wl)(e) : void 0), [e, t]);
           })(t),
           g = (0, i._F)(t, o),
-          v = (0, M.Mg)(h, o),
-          { collapsed: k, setCollapsed: S } = (0, A.u)({ initialState: () => !!b && !g && t.collapsed }),
+          v = (0, B.Mg)(h, o),
+          { collapsed: _, setCollapsed: C } = (0, M.u)({ initialState: () => !!b && !g && t.collapsed }),
           { expandedItem: I, setExpandedItem: N } = (function () {
-            const e = (0, a.useContext)(w);
-            if (e === x) throw new T.i6('DocSidebarItemsExpandedStateProvider');
+            const e = (0, a.useContext)(L);
+            if (e === w) throw new x.i6('DocSidebarItemsExpandedStateProvider');
             return e;
           })(),
           Z = function (e) {
-            void 0 === e && (e = !k), N(e ? null : s), S(e);
+            void 0 === e && (e = !_), N(e ? null : s), C(e);
           };
         return (
           (function (e) {
             let { isActive: t, collapsed: n, updateCollapsed: l } = e;
-            const o = (0, T.D9)(t);
+            const o = (0, x.D9)(t);
             (0, a.useEffect)(() => {
               t && !o && n && l(!1);
             }, [t, o, n, l]);
-          })({ isActive: g, collapsed: k, updateCollapsed: Z }),
+          })({ isActive: g, collapsed: _, updateCollapsed: Z }),
           (0, a.useEffect)(() => {
-            b && null != I && I !== s && E && S(!0);
-          }, [b, I, s, S, E]),
+            b && null != I && I !== s && E && C(!0);
+          }, [b, I, s, C, E]),
           a.createElement(
             'li',
             {
@@ -170,7 +171,7 @@
                 r.k.docs.docSidebarItemCategory,
                 r.k.docs.docSidebarItemCategoryLevel(c),
                 'menu__list-item',
-                { 'menu__list-item--collapsed': k },
+                { 'menu__list-item--collapsed': _ },
                 p
               ),
             },
@@ -178,8 +179,8 @@
               'div',
               { className: (0, l.Z)('menu__list-item-collapsible', { 'menu__list-item-collapsible--active': v }) },
               a.createElement(
-                B.Z,
-                (0, C.Z)(
+                F.Z,
+                (0, S.Z)(
                   {
                     className: (0, l.Z)('menu__link', {
                       'menu__link--sublist': b,
@@ -194,7 +195,7 @@
                           null == n || n(t);
                         },
                     'aria-current': v ? 'page' : void 0,
-                    'aria-expanded': b ? !k : void 0,
+                    'aria-expanded': b ? !_ : void 0,
                     href: b ? f ?? '#' : f,
                   },
                   d
@@ -203,7 +204,7 @@
               ),
               h &&
                 b &&
-                a.createElement(H, {
+                a.createElement(P, {
                   categoryLabel: u,
                   onClick: e => {
                     e.preventDefault(), Z();
@@ -211,29 +212,29 @@
                 })
             ),
             a.createElement(
-              A.z,
-              { lazy: !0, as: 'ul', className: 'menu__list', collapsed: k },
-              a.createElement(G, { items: m, tabIndex: k ? -1 : 0, onItemClick: n, activePath: o, level: c + 1 })
+              M.z,
+              { lazy: !0, as: 'ul', className: 'menu__list', collapsed: _ },
+              a.createElement(Y, { items: m, tabIndex: _ ? -1 : 0, onItemClick: n, activePath: o, level: c + 1 })
             )
           )
         );
       }
-      var W = n(3919),
-        D = n(9471);
-      const R = 'menuExternalLink_NmtK';
-      function V(e) {
+      var D = n(3919),
+        R = n(9471);
+      const V = 'menuExternalLink_NmtK';
+      function z(e) {
         let { item: t, onItemClick: n, activePath: o, level: c, index: s, ...d } = e;
         const { href: m, label: u, className: b, autoAddBaseUrl: p } = t,
           h = (0, i._F)(t, o),
-          E = (0, W.Z)(m);
+          E = (0, D.Z)(m);
         return a.createElement(
           'li',
           { className: (0, l.Z)(r.k.docs.docSidebarItemLink, r.k.docs.docSidebarItemLinkLevel(c), 'menu__list-item', b), key: u },
           a.createElement(
-            B.Z,
-            (0, C.Z)(
+            F.Z,
+            (0, S.Z)(
               {
-                className: (0, l.Z)('menu__link', !E && R, { 'menu__link--active': h }),
+                className: (0, l.Z)('menu__link', !E && V, { 'menu__link--active': h }),
                 autoAddBaseUrl: p,
                 'aria-current': h ? 'page' : void 0,
                 to: m,
@@ -242,46 +243,46 @@
               d
             ),
             u,
-            !E && a.createElement(D.Z, null)
+            !E && a.createElement(R.Z, null)
           )
         );
       }
-      const z = 'menuHtmlItem_M9Kj';
-      function U(e) {
+      const U = 'menuHtmlItem_M9Kj';
+      function K(e) {
         let { item: t, level: n, index: o } = e;
         const { value: c, defaultStyle: i, className: s } = t;
         return a.createElement('li', {
-          className: (0, l.Z)(r.k.docs.docSidebarItemLink, r.k.docs.docSidebarItemLinkLevel(n), i && [z, 'menu__list-item'], s),
+          className: (0, l.Z)(r.k.docs.docSidebarItemLink, r.k.docs.docSidebarItemLinkLevel(n), i && [U, 'menu__list-item'], s),
           key: o,
           dangerouslySetInnerHTML: { __html: c },
         });
       }
-      function K(e) {
+      function j(e) {
         let { item: t, ...n } = e;
         switch (t.type) {
           case 'category':
-            return a.createElement(P, (0, C.Z)({ item: t }, n));
+            return a.createElement(W, (0, S.Z)({ item: t }, n));
           case 'html':
-            return a.createElement(U, (0, C.Z)({ item: t }, n));
+            return a.createElement(K, (0, S.Z)({ item: t }, n));
           default:
-            return a.createElement(V, (0, C.Z)({ item: t }, n));
+            return a.createElement(z, (0, S.Z)({ item: t }, n));
         }
       }
-      function j(e) {
+      function G(e) {
         let { items: t, ...n } = e;
         return a.createElement(
-          L,
+          A,
           null,
-          t.map((e, t) => a.createElement(K, (0, C.Z)({ key: t, item: e, index: t }, n)))
+          t.map((e, t) => a.createElement(j, (0, S.Z)({ key: t, item: e, index: t }, n)))
         );
       }
-      const G = (0, a.memo)(j),
-        Y = 'menu_SIkG',
-        q = 'menuWithAnnouncementBar_GW3s';
-      function O(e) {
+      const Y = (0, a.memo)(G),
+        q = 'menu_SIkG',
+        O = 'menuWithAnnouncementBar_GW3s';
+      function X(e) {
         let { path: t, sidebar: n, className: o } = e;
         const c = (function () {
-          const { isActive: e } = (0, y.nT)(),
+          const { isActive: e } = (0, T.nT)(),
             [t, n] = (0, a.useState)(e);
           return (
             (0, b.RF)(
@@ -302,45 +303,45 @@
               message: 'Docs sidebar',
               description: 'The ARIA label for the sidebar navigation',
             }),
-            className: (0, l.Z)('menu thin-scrollbar', Y, c && q, o),
+            className: (0, l.Z)('menu thin-scrollbar', q, c && O, o),
           },
           a.createElement(
             'ul',
             { className: (0, l.Z)(r.k.docs.docSidebarMenu, 'menu__list') },
-            a.createElement(G, { items: n, activePath: t, level: 1 })
+            a.createElement(Y, { items: n, activePath: t, level: 1 })
           )
         );
       }
-      const X = 'sidebar_njMd',
-        J = 'sidebarWithHideableNavbar_wUlq',
-        Q = 'sidebarHidden_VK0M',
-        $ = 'sidebarLogo_isFc';
-      function ee(e) {
+      const J = 'sidebar_njMd',
+        Q = 'sidebarWithHideableNavbar_wUlq',
+        $ = 'sidebarHidden_VK0M',
+        ee = 'sidebarLogo_isFc';
+      function te(e) {
         let { path: t, sidebar: n, onCollapse: o, isHidden: r } = e;
         const {
           navbar: { hideOnScroll: c },
           docs: {
             sidebar: { hideable: i },
           },
-        } = (0, _.L)();
+        } = (0, k.L)();
         return a.createElement(
           'div',
-          { className: (0, l.Z)(X, c && J, r && Q) },
-          c && a.createElement(k.Z, { tabIndex: -1, className: $ }),
-          a.createElement(O, { path: t, sidebar: n }),
-          i && a.createElement(Z, { onClick: o })
+          { className: (0, l.Z)(J, c && Q, r && $) },
+          c && a.createElement(C.Z, { tabIndex: -1, className: ee }),
+          a.createElement(X, { path: t, sidebar: n }),
+          i && a.createElement(y, { onClick: o })
         );
       }
-      const te = a.memo(ee);
-      var ne = n(3102),
-        ae = n(3163);
-      const le = e => {
+      const ne = a.memo(te);
+      var ae = n(3102),
+        le = n(3163);
+      const oe = e => {
         let { sidebar: t, path: n } = e;
-        const o = (0, ae.e)();
+        const o = (0, le.e)();
         return a.createElement(
           'ul',
           { className: (0, l.Z)(r.k.docs.docSidebarMenu, 'menu__list') },
-          a.createElement(G, {
+          a.createElement(Y, {
             items: t,
             activePath: n,
             onItemClick: e => {
@@ -350,24 +351,24 @@
           })
         );
       };
-      function oe(e) {
-        return a.createElement(ne.Zo, { component: le, props: e });
+      function re(e) {
+        return a.createElement(ae.Zo, { component: oe, props: e });
       }
-      const re = a.memo(oe);
-      function ce(e) {
-        const t = (0, v.i)(),
+      const ce = a.memo(re);
+      function ie(e) {
+        const t = (0, _.i)(),
           n = 'desktop' === t || 'ssr' === t,
           l = 'mobile' === t;
-        return a.createElement(a.Fragment, null, n && a.createElement(te, e), l && a.createElement(re, e));
+        return a.createElement(a.Fragment, null, n && a.createElement(ne, e), l && a.createElement(ce, e));
       }
-      const ie = 'expandButton_m80_',
-        se = 'expandButtonIcon_BlDH';
-      function de(e) {
+      const se = 'expandButton_m80_',
+        de = 'expandButtonIcon_BlDH';
+      function me(e) {
         let { toggleSidebar: t } = e;
         return a.createElement(
           'div',
           {
-            className: ie,
+            className: se,
             title: (0, u.I)({
               id: 'theme.docs.sidebar.expandButtonTitle',
               message: 'Expand sidebar',
@@ -383,112 +384,112 @@
             onKeyDown: t,
             onClick: t,
           },
-          a.createElement(S, { className: se })
+          a.createElement(I, { className: de })
         );
       }
-      const me = {
+      const ue = {
         docSidebarContainer: 'docSidebarContainer_b6E3',
         docSidebarContainerHidden: 'docSidebarContainerHidden_b3ry',
         sidebarViewport: 'sidebarViewport_Xe31',
       };
-      function ue(e) {
+      function be(e) {
         let { children: t } = e;
         const n = (0, d.V)();
         return a.createElement(a.Fragment, { key: (null == n ? void 0 : n.name) ?? 'noSidebar' }, t);
       }
-      function be(e) {
+      function pe(e) {
         let { sidebar: t, hiddenSidebarContainer: n, setHiddenSidebarContainer: o } = e;
-        const { pathname: c } = (0, g.TH)(),
+        const { pathname: c } = (0, v.TH)(),
           [i, s] = (0, a.useState)(!1),
           d = (0, a.useCallback)(() => {
-            i && s(!1), o(e => !e);
+            i && s(!1), !i && (0, g.n)() && s(!0), o(e => !e);
           }, [o, i]);
         return a.createElement(
           'aside',
           {
-            className: (0, l.Z)(r.k.docs.docSidebarContainer, me.docSidebarContainer, n && me.docSidebarContainerHidden),
+            className: (0, l.Z)(r.k.docs.docSidebarContainer, ue.docSidebarContainer, n && ue.docSidebarContainerHidden),
             onTransitionEnd: e => {
-              e.currentTarget.classList.contains(me.docSidebarContainer) && n && s(!0);
+              e.currentTarget.classList.contains(ue.docSidebarContainer) && n && s(!0);
             },
           },
           a.createElement(
-            ue,
+            be,
             null,
             a.createElement(
               'div',
-              { className: (0, l.Z)(me.sidebarViewport, i && me.sidebarViewportHidden) },
-              a.createElement(ce, { sidebar: t, path: c, onCollapse: d, isHidden: i }),
-              i && a.createElement(de, { toggleSidebar: d })
+              { className: (0, l.Z)(ue.sidebarViewport, i && ue.sidebarViewportHidden) },
+              a.createElement(ie, { sidebar: t, path: c, onCollapse: d, isHidden: i }),
+              i && a.createElement(me, { toggleSidebar: d })
             )
           )
         );
       }
-      const pe = {
+      const he = {
         docMainContainer: 'docMainContainer_gTbr',
         docMainContainerEnhanced: 'docMainContainerEnhanced_Uz_u',
         docItemWrapperEnhanced: 'docItemWrapperEnhanced_czyv',
       };
-      function he(e) {
+      function Ee(e) {
         let { hiddenSidebarContainer: t, children: n } = e;
         const o = (0, d.V)();
         return a.createElement(
           'main',
-          { className: (0, l.Z)(pe.docMainContainer, (t || !o) && pe.docMainContainerEnhanced) },
+          { className: (0, l.Z)(he.docMainContainer, (t || !o) && he.docMainContainerEnhanced) },
           a.createElement(
             'div',
             {
               className: (0, l.Z)(
                 'container padding-top--md padding-bottom--lg',
-                pe.docItemWrapper,
-                t && pe.docItemWrapperEnhanced
+                he.docItemWrapper,
+                t && he.docItemWrapperEnhanced
               ),
             },
             n
           )
         );
       }
-      const Ee = 'docPage__5DB',
-        fe = 'docsWrapper_BCFX';
-      function ge(e) {
+      const fe = 'docPage__5DB',
+        ge = 'docsWrapper_BCFX';
+      function ve(e) {
         let { children: t } = e;
         const n = (0, d.V)(),
           [l, o] = (0, a.useState)(!1);
         return a.createElement(
           m.Z,
-          { wrapperClassName: fe },
+          { wrapperClassName: ge },
           a.createElement(f, null),
           a.createElement(
             'div',
-            { className: Ee },
-            n && a.createElement(be, { sidebar: n.items, hiddenSidebarContainer: l, setHiddenSidebarContainer: o }),
-            a.createElement(he, { hiddenSidebarContainer: l }, t)
+            { className: fe },
+            n && a.createElement(pe, { sidebar: n.items, hiddenSidebarContainer: l, setHiddenSidebarContainer: o }),
+            a.createElement(Ee, { hiddenSidebarContainer: l }, t)
           )
         );
       }
-      var ve = n(4972),
-        _e = n(197);
-      function ke(e) {
+      var _e = n(4972),
+        ke = n(197);
+      function Ce(e) {
         const { versionMetadata: t } = e;
         return a.createElement(
           a.Fragment,
           null,
-          a.createElement(_e.Z, { version: t.version, tag: (0, c.os)(t.pluginId, t.version) }),
+          a.createElement(ke.Z, { version: t.version, tag: (0, c.os)(t.pluginId, t.version) }),
           a.createElement(o.d, null, t.noIndex && a.createElement('meta', { name: 'robots', content: 'noindex, nofollow' }))
         );
       }
-      function Ce(e) {
+      function Se(e) {
         const { versionMetadata: t } = e,
           n = (0, i.hI)(e);
-        if (!n) return a.createElement(ve.default, null);
+        if (!n) return a.createElement(_e.default, null);
         const { docElement: c, sidebarName: m, sidebarItems: u } = n;
         return a.createElement(
           a.Fragment,
           null,
-          a.createElement(ke, e),
+          a.createElement(Ce, e),
           a.createElement(
             o.FG,
             { className: (0, l.Z)(r.k.wrapper.docsPages, r.k.page.docsDocPage, e.versionMetadata.className) },
-            a.createElement(s.q, { version: t }, a.createElement(d.b, { name: m, items: u }, a.createElement(ge, null, c)))
+            a.createElement(s.q, { version: t }, a.createElement(d.b, { name: m, items: u }, a.createElement(ve, null, c)))
           )
         );
       }

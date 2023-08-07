@@ -1,14 +1,14 @@
 'use strict';
 (self.webpackChunkmy_docs = self.webpackChunkmy_docs || []).push([
-  [257],
+  [983],
   {
     3905: (e, t, n) => {
-      n.d(t, { Zo: () => u, kt: () => c });
+      n.d(t, { Zo: () => m, kt: () => c });
       var a = n(7294);
       function r(e, t, n) {
         return t in e ? Object.defineProperty(e, t, { value: n, enumerable: !0, configurable: !0, writable: !0 }) : (e[t] = n), e;
       }
-      function l(e, t) {
+      function i(e, t) {
         var n = Object.keys(e);
         if (Object.getOwnPropertySymbols) {
           var a = Object.getOwnPropertySymbols(e);
@@ -20,16 +20,16 @@
         }
         return n;
       }
-      function i(e) {
+      function l(e) {
         for (var t = 1; t < arguments.length; t++) {
           var n = null != arguments[t] ? arguments[t] : {};
           t % 2
-            ? l(Object(n), !0).forEach(function (t) {
+            ? i(Object(n), !0).forEach(function (t) {
                 r(e, t, n[t]);
               })
             : Object.getOwnPropertyDescriptors
             ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(n))
-            : l(Object(n)).forEach(function (t) {
+            : i(Object(n)).forEach(function (t) {
                 Object.defineProperty(e, t, Object.getOwnPropertyDescriptor(n, t));
               });
         }
@@ -44,14 +44,14 @@
             var n,
               a,
               r = {},
-              l = Object.keys(e);
-            for (a = 0; a < l.length; a++) (n = l[a]), t.indexOf(n) >= 0 || (r[n] = e[n]);
+              i = Object.keys(e);
+            for (a = 0; a < i.length; a++) (n = i[a]), t.indexOf(n) >= 0 || (r[n] = e[n]);
             return r;
           })(e, t);
         if (Object.getOwnPropertySymbols) {
-          var l = Object.getOwnPropertySymbols(e);
-          for (a = 0; a < l.length; a++)
-            (n = l[a]), t.indexOf(n) >= 0 || (Object.prototype.propertyIsEnumerable.call(e, n) && (r[n] = e[n]));
+          var i = Object.getOwnPropertySymbols(e);
+          for (a = 0; a < i.length; a++)
+            (n = i[a]), t.indexOf(n) >= 0 || (Object.prototype.propertyIsEnumerable.call(e, n) && (r[n] = e[n]));
         }
         return r;
       }
@@ -59,13 +59,13 @@
         p = function (e) {
           var t = a.useContext(d),
             n = t;
-          return e && (n = 'function' == typeof e ? e(t) : i(i({}, t), e)), n;
+          return e && (n = 'function' == typeof e ? e(t) : l(l({}, t), e)), n;
         },
-        u = function (e) {
+        m = function (e) {
           var t = p(e.components);
           return a.createElement(d.Provider, { value: t }, e.children);
         },
-        m = 'mdxType',
+        u = 'mdxType',
         s = {
           inlineCode: 'code',
           wrapper: function (e) {
@@ -76,93 +76,102 @@
         h = a.forwardRef(function (e, t) {
           var n = e.components,
             r = e.mdxType,
-            l = e.originalType,
+            i = e.originalType,
             d = e.parentName,
-            u = o(e, ['components', 'mdxType', 'originalType', 'parentName']),
-            m = p(n),
+            m = o(e, ['components', 'mdxType', 'originalType', 'parentName']),
+            u = p(n),
             h = r,
-            c = m[''.concat(d, '.').concat(h)] || m[h] || s[h] || l;
-          return n ? a.createElement(c, i(i({ ref: t }, u), {}, { components: n })) : a.createElement(c, i({ ref: t }, u));
+            c = u[''.concat(d, '.').concat(h)] || u[h] || s[h] || i;
+          return n ? a.createElement(c, l(l({ ref: t }, m), {}, { components: n })) : a.createElement(c, l({ ref: t }, m));
         });
       function c(e, t) {
         var n = arguments,
           r = t && t.mdxType;
         if ('string' == typeof e || r) {
-          var l = n.length,
-            i = new Array(l);
-          i[0] = h;
+          var i = n.length,
+            l = new Array(i);
+          l[0] = h;
           var o = {};
           for (var d in t) hasOwnProperty.call(t, d) && (o[d] = t[d]);
-          (o.originalType = e), (o[m] = 'string' == typeof e ? e : r), (i[1] = o);
-          for (var p = 2; p < l; p++) i[p] = n[p];
-          return a.createElement.apply(null, i);
+          (o.originalType = e), (o[u] = 'string' == typeof e ? e : r), (l[1] = o);
+          for (var p = 2; p < i; p++) l[p] = n[p];
+          return a.createElement.apply(null, l);
         }
         return a.createElement.apply(null, n);
       }
       h.displayName = 'MDXCreateElement';
     },
-    4108: (e, t, n) => {
+    1302: (e, t, n) => {
       n.r(t),
         n.d(t, {
           assets: () => p,
           contentTitle: () => o,
           default: () => s,
-          frontMatter: () => i,
+          frontMatter: () => l,
           metadata: () => d,
-          toc: () => u,
+          toc: () => m,
         });
       var a = n(7462),
         r = (n(7294), n(3905)),
-        l = n(6862);
-      const i = {
-          sidebar_position: 13,
-          sidebar_label: 'Panel4',
-          description: 'A slider with a square shape is used to adjust the channels of hue, saturation, and brightness.',
+        i = n(6862);
+      const l = {
+          sidebar_position: 12,
+          sidebar_label: 'Panel3',
+          description:
+            'The circle-shaped slider, with its wheel style design, is utilized to adjust the hue and saturation of colors.',
         },
-        o = '<Panel4 />',
+        o = '<Panel3 />',
         d = {
-          unversionedId: 'API/Panel4',
-          id: 'API/Panel4',
-          title: '<Panel4 />',
-          description: 'A slider with a square shape is used to adjust the channels of hue, saturation, and brightness.',
-          source: '@site/docs/API/Panel4.mdx',
+          unversionedId: 'API/Panel3',
+          id: 'API/Panel3',
+          title: '<Panel3 />',
+          description:
+            'The circle-shaped slider, with its wheel style design, is utilized to adjust the hue and saturation of colors.',
+          source: '@site/docs/API/Panel3.mdx',
           sourceDirName: 'API',
-          slug: '/API/Panel4',
-          permalink: '/reanimated-color-picker/docs/API/Panel4',
+          slug: '/API/Panel3',
+          permalink: '/reanimated-color-picker/docs/API/Panel3',
           draft: !1,
           tags: [],
           version: 'current',
-          sidebarPosition: 13,
+          sidebarPosition: 12,
           frontMatter: {
-            sidebar_position: 13,
-            sidebar_label: 'Panel4',
-            description: 'A slider with a square shape is used to adjust the channels of hue, saturation, and brightness.',
+            sidebar_position: 12,
+            sidebar_label: 'Panel3',
+            description:
+              'The circle-shaped slider, with its wheel style design, is utilized to adjust the hue and saturation of colors.',
           },
           sidebar: 'tutorialSidebar',
-          previous: { title: 'Panel3', permalink: '/reanimated-color-picker/docs/API/Panel3' },
-          next: { title: 'Panel5', permalink: '/reanimated-color-picker/docs/API/Panel5' },
+          previous: { title: 'Panel2', permalink: '/reanimated-color-picker/docs/API/Panel2' },
+          next: { title: 'Panel4', permalink: '/reanimated-color-picker/docs/API/Panel4' },
         },
         p = {},
-        u = [
+        m = [
           { value: 'Props', id: 'props', level: 2 },
+          { value: '<code>centerChannel </code>', id: 'centerchannel-', level: 3 },
           { value: '<code>boundedThumb</code>', id: 'boundedthumb', level: 3 },
           { value: '<code>thumbSize</code>', id: 'thumbsize', level: 3 },
           { value: '<code>thumbColor</code>', id: 'thumbcolor', level: 3 },
           { value: '<code>thumbShape</code>', id: 'thumbshape', level: 3 },
           { value: '<code>thumbStyle</code>', id: 'thumbstyle', level: 3 },
           { value: '<code>thumbInnerStyle</code>', id: 'thumbinnerstyle', level: 3 },
-          { value: '<code>reverseHue</code>', id: 'reversehue', level: 3 },
-          { value: '<code>reverseHorizontalChannels</code>', id: 'reversehorizontalchannels', level: 3 },
+          { value: '<code>adaptSpectrum</code>', id: 'adaptspectrum', level: 3 },
           { value: '<code>style</code>', id: 'style', level: 3 },
         ],
-        m = { toc: u };
+        u = { toc: m };
       function s(e) {
-        let { components: t, ...i } = e;
+        let { components: t, ...l } = e;
         return (0, r.kt)(
           'wrapper',
-          (0, a.Z)({}, m, i, { components: t, mdxType: 'MDXLayout' }),
-          (0, r.kt)('h1', { id: 'panel4-' }, (0, r.kt)('inlineCode', { parentName: 'h1' }, '<Panel4 />')),
-          (0, r.kt)('p', null, (0, r.kt)('img', { alt: 'panel4', src: n(575).Z, width: '200', height: '200' })),
+          (0, a.Z)({}, u, l, { components: t, mdxType: 'MDXLayout' }),
+          (0, r.kt)('h1', { id: 'panel3-' }, (0, r.kt)('inlineCode', { parentName: 'h1' }, '<Panel3 />')),
+          (0, r.kt)(
+            'p',
+            null,
+            (0, r.kt)('img', { alt: 'panel3-saturation', src: n(3672).Z, width: '200', height: '200' }),
+            ' < or > ',
+            (0, r.kt)('img', { alt: 'panel3-brightness', src: n(8931).Z, width: '200', height: '200' })
+          ),
           (0, r.kt)(
             'ul',
             null,
@@ -172,8 +181,13 @@
               (0, r.kt)(
                 'p',
                 { parentName: 'li' },
-                'A slider with a square shape is used to adjust the channels of hue, saturation, and brightness.'
+                'The circle-shaped slider, with its wheel style design, is utilized to adjust the hue and (saturation or brightness) of colors.'
               )
+            ),
+            (0, r.kt)(
+              'li',
+              { parentName: 'ul' },
+              (0, r.kt)('p', { parentName: 'li' }, "Move thumb (handle) around the center to change the color's hue.")
             ),
             (0, r.kt)(
               'li',
@@ -181,25 +195,48 @@
               (0, r.kt)(
                 'p',
                 { parentName: 'li' },
-                "To adjust the color's saturation and brightness, move the handle horizontally.."
+                'Move thumb (handle) away or toward the center to change  the saturation or the brightness of the color, depending on the ',
+                (0, r.kt)('inlineCode', { parentName: 'p' }, 'verticalChannel'),
+                ' prop..'
               )
-            ),
-            (0, r.kt)(
-              'li',
-              { parentName: 'ul' },
-              (0, r.kt)('p', { parentName: 'li' }, "Move the handle vertically to change the color's hue.")
             )
           ),
           (0, r.kt)(
             'admonition',
-            { type: 'danger' },
+            { type: 'tip' },
             (0, r.kt)(
               'p',
               { parentName: 'admonition' },
-              'This panel cannot show all colors because it has a limited range of colors it can display. For example, if the input color has 50% saturation and 50% brightness, the panel thumb (handle) location won\u2019t be accurate because it cannot show that color. This means that the color you select may not be exactly what you see in the panel.'
+              'If you want to give your users more control over the color selection, you can add another slider next to this one that adjusts the opposite channel. For example, if ',
+              (0, r.kt)('inlineCode', { parentName: 'p' }, 'centerChannel'),
+              ' is ',
+              (0, r.kt)('inlineCode', { parentName: 'p' }, '"saturation"'),
+              ', you can add a ',
+              (0, r.kt)(
+                'a',
+                { parentName: 'p', href: './BrightnessSlider' },
+                (0, r.kt)('inlineCode', { parentName: 'a' }, '<BrightnessSlider />')
+              ),
+              ' slider, and vice versa.'
             )
           ),
           (0, r.kt)('h2', { id: 'props' }, 'Props'),
+          (0, r.kt)('h3', { id: 'centerchannel-' }, (0, r.kt)('inlineCode', { parentName: 'h3' }, 'centerChannel ')),
+          (0, r.kt)(
+            'ul',
+            null,
+            (0, r.kt)(
+              'li',
+              { parentName: 'ul' },
+              'Determines which color channel to adjust when moving the thumb towards or away from the center of the circular slider.'
+            ),
+            (0, r.kt)(
+              'li',
+              { parentName: 'ul' },
+              (0, r.kt)('inlineCode', { parentName: 'li' }, 'type: "saturation" | "brightness"')
+            ),
+            (0, r.kt)('li', { parentName: 'ul' }, (0, r.kt)('inlineCode', { parentName: 'li' }, 'default: "saturation"'))
+          ),
           (0, r.kt)('h3', { id: 'boundedthumb' }, (0, r.kt)('inlineCode', { parentName: 'h3' }, 'boundedThumb')),
           (0, r.kt)(
             'ul',
@@ -289,27 +326,15 @@
             (0, r.kt)('li', { parentName: 'ul' }, "Thumb's inner View(s) style."),
             (0, r.kt)('li', { parentName: 'ul' }, (0, r.kt)('inlineCode', { parentName: 'li' }, 'type: ViewStyle'))
           ),
-          (0, r.kt)(l.ZP, { mdxType: 'RenderThumb' }),
-          (0, r.kt)('h3', { id: 'reversehue' }, (0, r.kt)('inlineCode', { parentName: 'h3' }, 'reverseHue')),
-          (0, r.kt)(
-            'ul',
-            null,
-            (0, r.kt)('li', { parentName: 'ul' }, 'Reverse (flip) hue direction.'),
-            (0, r.kt)('li', { parentName: 'ul' }, (0, r.kt)('inlineCode', { parentName: 'li' }, 'type: boolean')),
-            (0, r.kt)('li', { parentName: 'ul' }, (0, r.kt)('inlineCode', { parentName: 'li' }, 'default: false'))
-          ),
-          (0, r.kt)(
-            'h3',
-            { id: 'reversehorizontalchannels' },
-            (0, r.kt)('inlineCode', { parentName: 'h3' }, 'reverseHorizontalChannels')
-          ),
+          (0, r.kt)(i.ZP, { mdxType: 'RenderThumb' }),
+          (0, r.kt)('h3', { id: 'adaptspectrum' }, (0, r.kt)('inlineCode', { parentName: 'h3' }, 'adaptSpectrum')),
           (0, r.kt)(
             'ul',
             null,
             (0, r.kt)(
               'li',
               { parentName: 'ul' },
-              "Reverse (flip) the direction of the horizontal channel's brightness and saturation.."
+              'Slider background color spectrum adapts to changes in saturation and brightness.'
             ),
             (0, r.kt)('li', { parentName: 'ul' }, (0, r.kt)('inlineCode', { parentName: 'li' }, 'type: boolean')),
             (0, r.kt)('li', { parentName: 'ul' }, (0, r.kt)('inlineCode', { parentName: 'li' }, 'default: false'))
@@ -335,20 +360,20 @@
       s.isMDXComponent = !0;
     },
     6862: (e, t, n) => {
-      n.d(t, { ZP: () => i });
+      n.d(t, { ZP: () => l });
       var a = n(7462),
         r = (n(7294), n(3905));
-      const l = {
+      const i = {
         toc: [
           { value: '<code>renderThumb</code>', id: 'renderthumb', level: 3 },
           { value: '<code>ThumbProps</code>', id: 'thumbprops', level: 4 },
         ],
       };
-      function i(e) {
+      function l(e) {
         let { components: t, ...n } = e;
         return (0, r.kt)(
           'wrapper',
-          (0, a.Z)({}, l, n, { components: t, mdxType: 'MDXLayout' }),
+          (0, a.Z)({}, i, n, { components: t, mdxType: 'MDXLayout' }),
           (0, r.kt)('h3', { id: 'renderthumb' }, (0, r.kt)('inlineCode', { parentName: 'h3' }, 'renderThumb')),
           (0, r.kt)(
             'ul',
@@ -486,11 +511,15 @@
           )
         );
       }
-      i.isMDXComponent = !0;
+      l.isMDXComponent = !0;
     },
-    575: (e, t, n) => {
+    8931: (e, t, n) => {
       n.d(t, { Z: () => a });
-      const a = n.p + 'assets/images/panel4-fdad34ed193f56d62d7c09ca309bedf6.png';
+      const a = n.p + 'assets/images/panel3-brightness-968159b4b60646446d28a458e40cf53b.png';
+    },
+    3672: (e, t, n) => {
+      n.d(t, { Z: () => a });
+      const a = n.p + 'assets/images/panel3-saturation-dafb918fc53688c9bceef0165d7e545c.png';
     },
   },
 ]);

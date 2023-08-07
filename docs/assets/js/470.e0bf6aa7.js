@@ -1,9 +1,9 @@
 (self.webpackChunkmy_docs = self.webpackChunkmy_docs || []).push([
-  [139],
+  [470],
   {
     3905: (e, t, n) => {
       'use strict';
-      n.d(t, { Zo: () => d, kt: () => f });
+      n.d(t, { Zo: () => m, kt: () => f });
       var a = n(7294);
       function r(e, t, n) {
         return t in e ? Object.defineProperty(e, t, { value: n, enumerable: !0, configurable: !0, writable: !0 }) : (e[t] = n), e;
@@ -61,11 +61,11 @@
             n = t;
           return e && (n = 'function' == typeof e ? e(t) : l(l({}, t), e)), n;
         },
-        d = function (e) {
+        m = function (e) {
           var t = i(e.components);
           return a.createElement(s.Provider, { value: t }, e.children);
         },
-        m = 'mdxType',
+        d = 'mdxType',
         u = {
           inlineCode: 'code',
           wrapper: function (e) {
@@ -78,11 +78,11 @@
             r = e.mdxType,
             o = e.originalType,
             s = e.parentName,
-            d = c(e, ['components', 'mdxType', 'originalType', 'parentName']),
-            m = i(n),
+            m = c(e, ['components', 'mdxType', 'originalType', 'parentName']),
+            d = i(n),
             p = r,
-            f = m[''.concat(s, '.').concat(p)] || m[p] || u[p] || o;
-          return n ? a.createElement(f, l(l({ ref: t }, d), {}, { components: n })) : a.createElement(f, l({ ref: t }, d));
+            f = d[''.concat(s, '.').concat(p)] || d[p] || u[p] || o;
+          return n ? a.createElement(f, l(l({ ref: t }, m), {}, { components: n })) : a.createElement(f, l({ ref: t }, m));
         });
       function f(e, t) {
         var n = arguments,
@@ -93,7 +93,7 @@
           l[0] = p;
           var c = {};
           for (var s in t) hasOwnProperty.call(t, s) && (c[s] = t[s]);
-          (c.originalType = e), (c[m] = 'string' == typeof e ? e : r), (l[1] = c);
+          (c.originalType = e), (c[d] = 'string' == typeof e ? e : r), (l[1] = c);
           for (var i = 2; i < o; i++) l[i] = n[i];
           return a.createElement.apply(null, l);
         }
@@ -111,8 +111,8 @@
         c = n(3438),
         s = n(8596),
         i = n(9960),
-        d = n(5999),
-        m = n(4996);
+        m = n(5999),
+        d = n(4996);
       function u(e) {
         return r.createElement(
           'svg',
@@ -125,14 +125,14 @@
       }
       const p = 'breadcrumbHomeIcon_YNFT';
       function f() {
-        const e = (0, m.Z)('/');
+        const e = (0, d.Z)('/');
         return r.createElement(
           'li',
           { className: 'breadcrumbs__item' },
           r.createElement(
             i.Z,
             {
-              'aria-label': (0, d.I)({
+              'aria-label': (0, m.I)({
                 id: 'theme.docs.breadcrumbs.home',
                 message: 'Home page',
                 description: 'The ARIA label for the home page in the breadcrumbs',
@@ -173,7 +173,7 @@
               'nav',
               {
                 className: (0, o.Z)(l.k.docs.docBreadcrumbs, h),
-                'aria-label': (0, d.I)({
+                'aria-label': (0, m.I)({
                   id: 'theme.docs.breadcrumbs.navAriaLabel',
                   message: 'Breadcrumbs',
                   description: 'The ARIA label for the breadcrumbs',
@@ -233,8 +233,8 @@
           image: n.image ?? t.image,
         });
       }
-      var d = n(6010),
-        m = n(7524),
+      var m = n(6010),
+        d = n(7524),
         u = n(4966);
       function p() {
         const { metadata: e } = s();
@@ -302,7 +302,7 @@
               height: '20',
               width: '20',
               viewBox: '0 0 40 40',
-              className: (0, d.Z)(N, t),
+              className: (0, m.Z)(N, t),
               'aria-hidden': 'true',
             },
             n
@@ -335,7 +335,7 @@
         w = 'tagWithCount_h2kH';
       function x(e) {
         let { permalink: t, label: n, count: r } = e;
-        return a.createElement(Z.Z, { href: t, className: (0, d.Z)(T, r ? w : _) }, n, r && a.createElement('span', null, r));
+        return a.createElement(Z.Z, { href: t, className: (0, m.Z)(T, r ? w : _) }, n, r && a.createElement('span', null, r));
       }
       const B = 'tags_jXut',
         O = 'tag_QGVx';
@@ -351,7 +351,7 @@
           ),
           a.createElement(
             'ul',
-            { className: (0, d.Z)(B, 'padding--none', 'margin-left--sm') },
+            { className: (0, m.Z)(B, 'padding--none', 'margin-left--sm') },
             t.map(e => {
               let { label: t, permalink: n } = e;
               return a.createElement('li', { key: n, className: O }, a.createElement(x, { label: t, permalink: n }));
@@ -363,7 +363,7 @@
       function H(e) {
         return a.createElement(
           'div',
-          { className: (0, d.Z)(g.k.docs.docFooterTagsRow, 'row margin-bottom--sm') },
+          { className: (0, m.Z)(g.k.docs.docFooterTagsRow, 'row margin-bottom--sm') },
           a.createElement('div', { className: 'col' }, a.createElement(A, e))
         );
       }
@@ -371,11 +371,11 @@
         let { editUrl: t, lastUpdatedAt: n, lastUpdatedBy: r, formattedLastUpdatedAt: o } = e;
         return a.createElement(
           'div',
-          { className: (0, d.Z)(g.k.docs.docFooterEditMetaRow, 'row') },
+          { className: (0, m.Z)(g.k.docs.docFooterEditMetaRow, 'row') },
           a.createElement('div', { className: 'col' }, t && a.createElement(C, { editUrl: t })),
           a.createElement(
             'div',
-            { className: (0, d.Z)('col', j) },
+            { className: (0, m.Z)('col', j) },
             (n || r) && a.createElement(y, { lastUpdatedAt: n, formattedLastUpdatedAt: o, lastUpdatedBy: r })
           )
         );
@@ -388,7 +388,7 @@
         return c || i
           ? a.createElement(
               'footer',
-              { className: (0, d.Z)(g.k.docs.docFooter, 'docusaurus-mt-lg') },
+              { className: (0, m.Z)(g.k.docs.docFooter, 'docusaurus-mt-lg') },
               c && a.createElement(H, { tags: l }),
               i && a.createElement(S, { editUrl: t, lastUpdatedAt: n, lastUpdatedBy: o, formattedLastUpdatedAt: r })
             )
@@ -527,17 +527,17 @@
           ...s
         } = e;
         const i = (0, P.L)(),
-          d = l ?? i.tableOfContents.minHeadingLevel,
-          m = c ?? i.tableOfContents.maxHeadingLevel,
+          m = l ?? i.tableOfContents.minHeadingLevel,
+          d = c ?? i.tableOfContents.maxHeadingLevel,
           u = (function (e) {
             let { toc: t, minHeadingLevel: n, maxHeadingLevel: r } = e;
             return (0, a.useMemo)(() => z({ toc: U(t), minHeadingLevel: n, maxHeadingLevel: r }), [t, n, r]);
-          })({ toc: t, minHeadingLevel: d, maxHeadingLevel: m });
+          })({ toc: t, minHeadingLevel: m, maxHeadingLevel: d });
         return (
           $(
             (0, a.useMemo)(() => {
-              if (r && o) return { linkClassName: r, linkActiveClassName: o, minHeadingLevel: d, maxHeadingLevel: m };
-            }, [r, o, d, m])
+              if (r && o) return { linkClassName: r, linkActiveClassName: o, minHeadingLevel: m, maxHeadingLevel: d };
+            }, [r, o, m, d])
           ),
           a.createElement(F, (0, k.Z)({ toc: u, className: n, linkClassName: r }, s))
         );
@@ -548,7 +548,7 @@
         let { collapsed: t, ...n } = e;
         return a.createElement(
           'button',
-          (0, k.Z)({ type: 'button' }, n, { className: (0, d.Z)('clean-btn', G, !t && Y, n.className) }),
+          (0, k.Z)({ type: 'button' }, n, { className: (0, m.Z)('clean-btn', G, !t && Y, n.className) }),
           a.createElement(
             v.Z,
             {
@@ -567,7 +567,7 @@
         const { collapsed: l, toggleCollapsed: c } = (0, I.u)({ initialState: !0 });
         return a.createElement(
           'div',
-          { className: (0, d.Z)(Q, !l && K, n) },
+          { className: (0, m.Z)(Q, !l && K, n) },
           a.createElement(J, { collapsed: l, onClick: c }),
           a.createElement(
             I.z,
@@ -583,7 +583,7 @@
           toc: e,
           minHeadingLevel: t.toc_min_heading_level,
           maxHeadingLevel: t.toc_max_heading_level,
-          className: (0, d.Z)(g.k.docs.docTocMobile, te),
+          className: (0, m.Z)(g.k.docs.docTocMobile, te),
         });
       }
       const ae = 'tableOfContents_bqdL';
@@ -591,7 +591,7 @@
         let { className: t, ...n } = e;
         return a.createElement(
           'div',
-          { className: (0, d.Z)(ae, 'thin-scrollbar', t) },
+          { className: (0, m.Z)(ae, 'thin-scrollbar', t) },
           a.createElement(
             q,
             (0, k.Z)({}, n, {
@@ -617,7 +617,7 @@
         let { children: t } = e;
         return a.createElement(ce.Zo, { components: se.Z }, t);
       }
-      function de(e) {
+      function me(e) {
         let { children: t } = e;
         const n = (function () {
           const { metadata: e, frontMatter: t, contentTitle: n } = s();
@@ -625,19 +625,19 @@
         })();
         return a.createElement(
           'div',
-          { className: (0, d.Z)(g.k.docs.docMarkdown, 'markdown') },
+          { className: (0, m.Z)(g.k.docs.docMarkdown, 'markdown') },
           n && a.createElement('header', null, a.createElement(le.Z, { as: 'h1' }, n)),
           a.createElement(ie, null, t)
         );
       }
-      var me = n(1310);
+      var de = n(1310);
       const ue = 'docItemContainer_Djhp',
         pe = 'docItemCol_VOVn';
       function fe(e) {
         let { children: t } = e;
         const n = (function () {
           const { frontMatter: e, toc: t } = s(),
-            n = (0, m.i)(),
+            n = (0, d.i)(),
             r = e.hide_table_of_contents,
             o = !r && t.length > 0;
           return {
@@ -651,7 +651,7 @@
           { className: 'row' },
           a.createElement(
             'div',
-            { className: (0, d.Z)('col', !n.hidden && pe) },
+            { className: (0, m.Z)('col', !n.hidden && pe) },
             a.createElement(f.Z, null),
             a.createElement(
               'div',
@@ -659,10 +659,10 @@
               a.createElement(
                 'article',
                 null,
-                a.createElement(me.Z, null),
+                a.createElement(de.Z, null),
                 a.createElement(h.Z, null),
                 n.mobile,
-                a.createElement(de, null, t),
+                a.createElement(me, null, t),
                 a.createElement(M, null)
               ),
               a.createElement(p, null)
@@ -706,7 +706,7 @@
             className: 'pagination-nav docusaurus-mt-lg',
             'aria-label': (0, o.I)({
               id: 'theme.docs.paginator.navAriaLabel',
-              message: 'Docs pages navigation',
+              message: 'Docs pages',
               description: 'The ARIA label for the docs pagination',
             }),
           },
@@ -770,8 +770,8 @@
         c = n(5999),
         s = n(143),
         i = n(5281),
-        d = n(373),
-        m = n(4477);
+        m = n(373),
+        d = n(4477);
       const u = {
         unreleased: function (e) {
           let { siteTitle: t, versionMetadata: n } = e;
@@ -838,7 +838,7 @@
             siteConfig: { title: l },
           } = (0, o.Z)(),
           { pluginId: c } = (0, s.gA)({ failfast: !0 }),
-          { savePreferredVersionName: m } = (0, d.J)(c),
+          { savePreferredVersionName: d } = (0, m.J)(c),
           { latestDocSuggestion: u, latestVersionSuggestion: h } = (0, s.Jo)(c),
           g = u ?? (v = h).docs.find(e => e.id === v.mainDocId);
         var v;
@@ -849,19 +849,19 @@
           a.createElement(
             'div',
             { className: 'margin-top--md' },
-            a.createElement(f, { versionLabel: h.label, to: g.path, onClick: () => m(h.name) })
+            a.createElement(f, { versionLabel: h.label, to: g.path, onClick: () => d(h.name) })
           )
         );
       }
       function g(e) {
         let { className: t } = e;
-        const n = (0, m.E)();
+        const n = (0, d.E)();
         return n.banner ? a.createElement(h, { className: t, versionMetadata: n }) : null;
       }
     },
     2503: (e, t, n) => {
       'use strict';
-      n.d(t, { Z: () => m });
+      n.d(t, { Z: () => d });
       var a = n(7462),
         r = n(7294),
         o = n(6010),
@@ -869,28 +869,28 @@
         c = n(6668),
         s = n(9960);
       const i = 'anchorWithStickyNavbar_LWe7',
-        d = 'anchorWithHideOnScrollNavbar_WYt5';
-      function m(e) {
-        let { as: t, id: n, ...m } = e;
+        m = 'anchorWithHideOnScrollNavbar_WYt5';
+      function d(e) {
+        let { as: t, id: n, ...d } = e;
         const {
           navbar: { hideOnScroll: u },
         } = (0, c.L)();
-        if ('h1' === t || !n) return r.createElement(t, (0, a.Z)({}, m, { id: void 0 }));
+        if ('h1' === t || !n) return r.createElement(t, (0, a.Z)({}, d, { id: void 0 }));
         const p = (0, l.I)(
           { id: 'theme.common.headingLinkTitle', message: 'Direct link to {heading}', description: 'Title for link to heading' },
-          { heading: 'string' == typeof m.children ? m.children : n }
+          { heading: 'string' == typeof d.children ? d.children : n }
         );
         return r.createElement(
           t,
-          (0, a.Z)({}, m, { className: (0, o.Z)('anchor', u ? d : i, m.className), id: n }),
-          m.children,
+          (0, a.Z)({}, d, { className: (0, o.Z)('anchor', u ? m : i, d.className), id: n }),
+          d.children,
           r.createElement(s.Z, { className: 'hash-link', to: `#${n}`, 'aria-label': p, title: p }, '\u200b')
         );
       }
     },
-    617: (e, t, n) => {
+    3686: (e, t, n) => {
       'use strict';
-      n.d(t, { Z: () => he });
+      n.d(t, { Z: () => be });
       var a = n(7462),
         r = n(7294),
         o = n(5742);
@@ -898,14 +898,14 @@
         c = n(6010),
         s = n(2949),
         i = n(6668);
-      function d() {
+      function m() {
         const { prism: e } = (0, i.L)(),
           { colorMode: t } = (0, s.I)(),
           n = e.theme,
           a = e.darkTheme || n;
         return 'dark' === t ? a : n;
       }
-      var m = n(5281),
+      var d = n(5281),
         u = n(7594),
         p = n.n(u);
       const f = /title=(?<quote>["'])(?<title>.*?)\1/,
@@ -980,7 +980,7 @@
                 return [n, t];
               })
           ),
-          d = Object.fromEntries(
+          m = Object.fromEntries(
             r
               .filter(e => e.block)
               .map(e => {
@@ -988,7 +988,7 @@
                 return [n.start, t];
               })
           ),
-          m = Object.fromEntries(
+          d = Object.fromEntries(
             r
               .filter(e => e.block)
               .map(e => {
@@ -1005,9 +1005,9 @@
           const t = e.slice(1).find(e => void 0 !== e);
           i[t]
             ? (s[i[t]].range += `${p},`)
-            : d[t]
-            ? (s[d[t]].start = p)
-            : m[t] && (s[m[t]].range += `${s[m[t]].start}-${p - 1},`),
+            : m[t]
+            ? (s[m[t]].start = p)
+            : d[t] && (s[d[t]].range += `${s[d[t]].start}-${p - 1},`),
             c.splice(p, 1);
         }
         n = c.join('\n');
@@ -1036,8 +1036,8 @@
             }),
             n
           );
-        })(d());
-        return r.createElement(t, (0, a.Z)({}, n, { style: o, className: (0, c.Z)(n.className, E, m.k.common.codeBlock) }));
+        })(m());
+        return r.createElement(t, (0, a.Z)({}, n, { style: o, className: (0, c.Z)(n.className, E, d.k.common.codeBlock) }));
       }
       const k = {
         codeBlockContent: 'codeBlockContent_biex',
@@ -1251,19 +1251,19 @@
                   for (var t = [[]], n = [e], a = [0], r = [e.length], o = 0, l = 0, c = [], s = [c]; l > -1; ) {
                     for (; (o = a[l]++) < r[l]; ) {
                       var i = void 0,
-                        d = t[l],
-                        m = n[l][o];
+                        m = t[l],
+                        d = n[l][o];
                       if (
-                        ('string' == typeof m
-                          ? ((d = l > 0 ? d : ['plain']), (i = m))
-                          : ((d = A(d, m.type)), m.alias && (d = A(d, m.alias)), (i = m.content)),
+                        ('string' == typeof d
+                          ? ((m = l > 0 ? m : ['plain']), (i = d))
+                          : ((m = A(m, d.type)), d.alias && (m = A(m, d.alias)), (i = d.content)),
                         'string' == typeof i)
                       ) {
                         var u = i.split(B),
                           p = u.length;
-                        c.push({ types: d, content: u[0] });
-                        for (var f = 1; f < p; f++) O(c), s.push((c = [])), c.push({ types: d, content: u[f] });
-                      } else l++, t.push(d), n.push(i), a.push(0), r.push(i.length);
+                        c.push({ types: m, content: u[0] });
+                        for (var f = 1; f < p; f++) O(c), s.push((c = [])), c.push({ types: m, content: u[f] });
+                      } else l++, t.push(m), n.push(i), a.push(0), r.push(i.length);
                     }
                     l--, t.pop(), n.pop(), a.pop(), r.pop();
                   }
@@ -1285,7 +1285,7 @@
         let { line: t, classNames: n, showLineNumbers: o, getLineProps: l, getTokenProps: s } = e;
         1 === t.length && '\n' === t[0].content && (t[0].content = '');
         const i = l({ line: t, className: (0, c.Z)(n, o && M) }),
-          d = t.map((e, t) => r.createElement('span', (0, a.Z)({ key: t }, s({ token: e, key: t }))));
+          m = t.map((e, t) => r.createElement('span', (0, a.Z)({ key: t }, s({ token: e, key: t }))));
         return r.createElement(
           'span',
           i,
@@ -1294,20 +1294,37 @@
                 r.Fragment,
                 null,
                 r.createElement('span', { className: I }),
-                r.createElement('span', { className: P }, d)
+                r.createElement('span', { className: P }, m)
               )
-            : d,
+            : m,
           r.createElement('br', null)
         );
       }
       var z = n(5999);
-      const V = {
+      function V(e) {
+        return r.createElement(
+          'svg',
+          (0, a.Z)({ viewBox: '0 0 24 24' }, e),
+          r.createElement('path', {
+            fill: 'currentColor',
+            d: 'M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z',
+          })
+        );
+      }
+      function D(e) {
+        return r.createElement(
+          'svg',
+          (0, a.Z)({ viewBox: '0 0 24 24' }, e),
+          r.createElement('path', { fill: 'currentColor', d: 'M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z' })
+        );
+      }
+      const R = {
         copyButtonCopied: 'copyButtonCopied_obH4',
         copyButtonIcons: 'copyButtonIcons_eSgA',
         copyButtonIcon: 'copyButtonIcon_y97N',
         copyButtonSuccessIcon: 'copyButtonSuccessIcon_LjdS',
       };
-      function D(e) {
+      function $(e) {
         let { code: t, className: n } = e;
         const [a, o] = (0, r.useState)(!1),
           l = (0, r.useRef)(void 0),
@@ -1359,31 +1376,31 @@
                 message: 'Copy',
                 description: 'The copy button label on code blocks',
               }),
-              className: (0, c.Z)('clean-btn', n, V.copyButton, a && V.copyButtonCopied),
+              className: (0, c.Z)('clean-btn', n, R.copyButton, a && R.copyButtonCopied),
               onClick: s,
             },
             r.createElement(
               'span',
-              { className: V.copyButtonIcons, 'aria-hidden': 'true' },
-              r.createElement(
-                'svg',
-                { className: V.copyButtonIcon, viewBox: '0 0 24 24' },
-                r.createElement('path', {
-                  d: 'M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z',
-                })
-              ),
-              r.createElement(
-                'svg',
-                { className: V.copyButtonSuccessIcon, viewBox: '0 0 24 24' },
-                r.createElement('path', { d: 'M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z' })
-              )
+              { className: R.copyButtonIcons, 'aria-hidden': 'true' },
+              r.createElement(V, { className: R.copyButtonIcon }),
+              r.createElement(D, { className: R.copyButtonSuccessIcon })
             )
           )
         );
       }
-      const R = 'wordWrapButtonIcon_Bwma',
-        $ = 'wordWrapButtonEnabled_EoeP';
       function W(e) {
+        return r.createElement(
+          'svg',
+          (0, a.Z)({ viewBox: '0 0 24 24' }, e),
+          r.createElement('path', {
+            fill: 'currentColor',
+            d: 'M4 19h6v-2H4v2zM20 5H4v2h16V5zm-3 6H4v2h13.25c1.1 0 2 .9 2 2s-.9 2-2 2H15v-2l-3 3l3 3v-2h2c2.21 0 4-1.79 4-4s-1.79-4-4-4z',
+          })
+        );
+      }
+      const F = 'wordWrapButtonIcon_Bwma',
+        q = 'wordWrapButtonEnabled_EoeP';
+      function G(e) {
         let { className: t, onClick: n, isEnabled: a } = e;
         const o = (0, z.I)({
           id: 'theme.CodeBlock.wordWrapToggle',
@@ -1392,30 +1409,23 @@
         });
         return r.createElement(
           'button',
-          { type: 'button', onClick: n, className: (0, c.Z)('clean-btn', t, a && $), 'aria-label': o, title: o },
-          r.createElement(
-            'svg',
-            { className: R, viewBox: '0 0 24 24', 'aria-hidden': 'true' },
-            r.createElement('path', {
-              fill: 'currentColor',
-              d: 'M4 19h6v-2H4v2zM20 5H4v2h16V5zm-3 6H4v2h13.25c1.1 0 2 .9 2 2s-.9 2-2 2H15v-2l-3 3l3 3v-2h2c2.21 0 4-1.79 4-4s-1.79-4-4-4z',
-            })
-          )
+          { type: 'button', onClick: n, className: (0, c.Z)('clean-btn', t, a && q), 'aria-label': o, title: o },
+          r.createElement(W, { className: F, 'aria-hidden': 'true' })
         );
       }
-      function F(e) {
-        let { children: t, className: n = '', metastring: o, title: l, showLineNumbers: s, language: m } = e;
+      function Y(e) {
+        let { children: t, className: n = '', metastring: o, title: l, showLineNumbers: s, language: d } = e;
         const {
             prism: { defaultLanguage: u, magicComments: p },
           } = (0, i.L)(),
           h =
-            m ??
+            d ??
             (function (e) {
               const t = e.split(' ').find(e => e.startsWith('language-'));
               return null == t ? void 0 : t.replace(/language-/, '');
             })(n) ??
             u,
-          g = d(),
+          g = m(),
           v = (function () {
             const [e, t] = (0, r.useState)(!1),
               [n, a] = (0, r.useState)(!1),
@@ -1490,37 +1500,37 @@
               'div',
               { className: k.buttonGroup },
               (v.isEnabled || v.isCodeScrollable) &&
-                r.createElement(W, { className: k.codeButton, onClick: () => v.toggle(), isEnabled: v.isEnabled }),
-              r.createElement(D, { className: k.codeButton, code: L })
+                r.createElement(G, { className: k.codeButton, onClick: () => v.toggle(), isEnabled: v.isEnabled }),
+              r.createElement($, { className: k.codeButton, code: L })
             )
           )
         );
       }
-      function q(e) {
+      function J(e) {
         let { children: t, ...n } = e;
         const o = (0, l.Z)(),
           c = (function (e) {
             return r.Children.toArray(e).some(e => (0, r.isValidElement)(e)) ? e : Array.isArray(e) ? e.join('') : e;
           })(t),
-          s = 'string' == typeof c ? F : N;
+          s = 'string' == typeof c ? Y : N;
         return r.createElement(s, (0, a.Z)({ key: String(o) }, n), c);
       }
-      var G = n(9960);
-      var Y = n(6043);
-      const J = 'details_lb9f',
-        Q = 'isBrowser_bmU9',
-        X = 'collapsibleContent_i85q';
-      function K(e) {
-        return !!e && ('SUMMARY' === e.tagName || K(e.parentElement));
+      var Q = n(9960);
+      var X = n(6043);
+      const K = 'details_lb9f',
+        ee = 'isBrowser_bmU9',
+        te = 'collapsibleContent_i85q';
+      function ne(e) {
+        return !!e && ('SUMMARY' === e.tagName || ne(e.parentElement));
       }
-      function ee(e, t) {
-        return !!e && (e === t || ee(e.parentElement, t));
+      function ae(e, t) {
+        return !!e && (e === t || ae(e.parentElement, t));
       }
-      function te(e) {
+      function re(e) {
         let { summary: t, children: n, ...o } = e;
         const s = (0, l.Z)(),
           i = (0, r.useRef)(null),
-          { collapsed: d, setCollapsed: m } = (0, Y.u)({ initialState: !o.open }),
+          { collapsed: m, setCollapsed: d } = (0, X.u)({ initialState: !o.open }),
           [u, p] = (0, r.useState)(o.open),
           f = r.isValidElement(t) ? t : r.createElement('summary', null, t ?? 'Details');
         return r.createElement(
@@ -1528,48 +1538,48 @@
           (0, a.Z)({}, o, {
             ref: i,
             open: u,
-            'data-collapsed': d,
-            className: (0, c.Z)(J, s && Q, o.className),
+            'data-collapsed': m,
+            className: (0, c.Z)(K, s && ee, o.className),
             onMouseDown: e => {
-              K(e.target) && e.detail > 1 && e.preventDefault();
+              ne(e.target) && e.detail > 1 && e.preventDefault();
             },
             onClick: e => {
               e.stopPropagation();
               const t = e.target;
-              K(t) && ee(t, i.current) && (e.preventDefault(), d ? (m(!1), p(!0)) : m(!0));
+              ne(t) && ae(t, i.current) && (e.preventDefault(), m ? (d(!1), p(!0)) : d(!0));
             },
           }),
           f,
           r.createElement(
-            Y.z,
+            X.z,
             {
               lazy: !1,
-              collapsed: d,
+              collapsed: m,
               disableSSRStyle: !0,
               onCollapseTransitionEnd: e => {
-                m(e), p(!e);
+                d(e), p(!e);
               },
             },
-            r.createElement('div', { className: X }, n)
+            r.createElement('div', { className: te }, n)
           )
         );
       }
-      const ne = 'details_b_Ee';
-      function ae(e) {
+      const oe = 'details_b_Ee';
+      function le(e) {
         let { ...t } = e;
-        return r.createElement(te, (0, a.Z)({}, t, { className: (0, c.Z)('alert alert--info', ne, t.className) }));
+        return r.createElement(re, (0, a.Z)({}, t, { className: (0, c.Z)('alert alert--info', oe, t.className) }));
       }
-      var re = n(2503);
-      function oe(e) {
-        return r.createElement(re.Z, e);
+      var ce = n(2503);
+      function se(e) {
+        return r.createElement(ce.Z, e);
       }
-      const le = 'containsTaskList_mC6p';
-      const ce = 'img_ev3q';
-      const se = 'admonition_LlT9',
-        ie = 'admonitionHeading_tbUL',
-        de = 'admonitionIcon_kALy',
-        me = 'admonitionContent_S0QG';
-      const ue = {
+      const ie = 'containsTaskList_mC6p';
+      const me = 'img_ev3q';
+      const de = 'admonition_LlT9',
+        ue = 'admonitionHeading_tbUL',
+        pe = 'admonitionIcon_kALy',
+        fe = 'admonitionContent_S0QG';
+      const he = {
           note: {
             infimaClassName: 'secondary',
             iconComponent: function () {
@@ -1661,8 +1671,8 @@
             ),
           },
         },
-        pe = { secondary: 'note', important: 'info', success: 'tip', warning: 'danger' };
-      function fe(e) {
+        ge = { secondary: 'note', important: 'info', success: 'tip', warning: 'danger' };
+      function ve(e) {
         const { mdxAdmonitionTitle: t, rest: n } = (function (e) {
           const t = r.Children.toArray(e),
             n = t.find(e => {
@@ -1678,7 +1688,7 @@
         })(e.children);
         return { ...e, title: e.title ?? t, children: n };
       }
-      const he = {
+      const be = {
         head: function (e) {
           const t = r.Children.map(e.children, e =>
             r.isValidElement(e)
@@ -1735,15 +1745,15 @@
             );
           })
             ? r.createElement('code', e)
-            : r.createElement(q, e);
+            : r.createElement(J, e);
         },
         a: function (e) {
-          return r.createElement(G.Z, e);
+          return r.createElement(Q.Z, e);
         },
         pre: function (e) {
           var t;
           return r.createElement(
-            q,
+            J,
             (0, r.isValidElement)(e.children) && 'code' === (null == (t = e.children.props) ? void 0 : t.originalType)
               ? e.children.props
               : { ...e }
@@ -1760,52 +1770,52 @@
               null,
               t.filter(e => e !== n)
             );
-          return r.createElement(ae, (0, a.Z)({}, e, { summary: n }), o);
+          return r.createElement(le, (0, a.Z)({}, e, { summary: n }), o);
         },
         ul: function (e) {
           return r.createElement(
             'ul',
             (0, a.Z)({}, e, {
-              className: ((t = e.className), (0, c.Z)(t, (null == t ? void 0 : t.includes('contains-task-list')) && le)),
+              className: ((t = e.className), (0, c.Z)(t, (null == t ? void 0 : t.includes('contains-task-list')) && ie)),
             })
           );
           var t;
         },
         img: function (e) {
-          return r.createElement('img', (0, a.Z)({ loading: 'lazy' }, e, { className: ((t = e.className), (0, c.Z)(t, ce)) }));
+          return r.createElement('img', (0, a.Z)({ loading: 'lazy' }, e, { className: ((t = e.className), (0, c.Z)(t, me)) }));
           var t;
         },
-        h1: e => r.createElement(oe, (0, a.Z)({ as: 'h1' }, e)),
-        h2: e => r.createElement(oe, (0, a.Z)({ as: 'h2' }, e)),
-        h3: e => r.createElement(oe, (0, a.Z)({ as: 'h3' }, e)),
-        h4: e => r.createElement(oe, (0, a.Z)({ as: 'h4' }, e)),
-        h5: e => r.createElement(oe, (0, a.Z)({ as: 'h5' }, e)),
-        h6: e => r.createElement(oe, (0, a.Z)({ as: 'h6' }, e)),
+        h1: e => r.createElement(se, (0, a.Z)({ as: 'h1' }, e)),
+        h2: e => r.createElement(se, (0, a.Z)({ as: 'h2' }, e)),
+        h3: e => r.createElement(se, (0, a.Z)({ as: 'h3' }, e)),
+        h4: e => r.createElement(se, (0, a.Z)({ as: 'h4' }, e)),
+        h5: e => r.createElement(se, (0, a.Z)({ as: 'h5' }, e)),
+        h6: e => r.createElement(se, (0, a.Z)({ as: 'h6' }, e)),
         admonition: function (e) {
-          const { children: t, type: n, title: a, icon: o } = fe(e),
+          const { children: t, type: n, title: a, icon: o } = ve(e),
             l = (function (e) {
-              const t = pe[e] ?? e,
-                n = ue[t];
+              const t = ge[e] ?? e,
+                n = he[t];
               return (
-                n || (console.warn(`No admonition config found for admonition type "${t}". Using Info as fallback.`), ue.info)
+                n || (console.warn(`No admonition config found for admonition type "${t}". Using Info as fallback.`), he.info)
               );
             })(n),
             s = a ?? l.label,
             { iconComponent: i } = l,
-            d = o ?? r.createElement(i, null);
+            m = o ?? r.createElement(i, null);
           return r.createElement(
             'div',
             {
               className: (0, c.Z)(
-                m.k.common.admonition,
-                m.k.common.admonitionType(e.type),
+                d.k.common.admonition,
+                d.k.common.admonitionType(e.type),
                 'alert',
                 `alert--${l.infimaClassName}`,
-                se
+                de
               ),
             },
-            r.createElement('div', { className: ie }, r.createElement('span', { className: de }, d), s),
-            r.createElement('div', { className: me }, t)
+            r.createElement('div', { className: ue }, r.createElement('span', { className: pe }, m), s),
+            r.createElement('div', { className: fe }, t)
           );
         },
         mermaid: n(1875).Z,

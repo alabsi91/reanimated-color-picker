@@ -161,7 +161,7 @@
           'wrapper',
           (0, i.Z)({}, u, o, { components: t, mdxType: 'MDXLayout' }),
           (0, l.kt)('h1', { id: 'inputwidget-' }, (0, l.kt)('inlineCode', { parentName: 'h1' }, '<InputWidget />')),
-          (0, l.kt)('p', null, (0, l.kt)('img', { alt: 'InputWidget', src: n(1118).Z, width: '300', height: '455' })),
+          (0, l.kt)('p', null, (0, l.kt)('img', { alt: 'InputWidget', src: n(6334).Z, width: '300', height: '455' })),
           (0, l.kt)(
             'ul',
             null,
@@ -351,7 +351,7 @@
       }
       s.isMDXComponent = !0;
     },
-    1118: (e, t, n) => {
+    6334: (e, t, n) => {
       n.d(t, { Z: () => i });
       const i = n.p + 'assets/images/InputWidgets-01952ad7ad083d25cd90fcba19bfc4ad.png';
     },

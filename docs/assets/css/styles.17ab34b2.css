@@ -2126,7 +2126,7 @@ img {
 body:not(.navigation-with-keyboard) :not(input):focus {
   outline: 0;
 }
-#docusaurus-base-url-issue-banner-container,
+#__docusaurus-base-url-issue-banner-container,
 .docSidebarContainer_b6E3,
 .sidebarLogo_isFc,
 .themedImage_ToTc,

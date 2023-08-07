@@ -45,6 +45,14 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      metadata: [
+        {
+          name: 'keywords',
+          content:
+            'react native, react-native, color picker, Android, IOS, WEB, Expo, color, picker, slider, wheel, swatches, palette',
+        },
+      ],
+
       colorMode: {
         defaultMode: 'dark',
         disableSwitch: true,

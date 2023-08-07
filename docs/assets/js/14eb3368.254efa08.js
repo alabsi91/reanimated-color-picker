@@ -45,7 +45,7 @@
         );
       }
       const v = 'breadcrumbsContainer_Z_bl';
-      function g(e) {
+      function p(e) {
         let { children: t, href: n, isLast: a } = e;
         const i = 'breadcrumbs__link';
         return a
@@ -54,7 +54,7 @@
           ? r.createElement(o.Z, { className: i, href: n, itemProp: 'item' }, r.createElement('span', { itemProp: 'name' }, t))
           : r.createElement('span', { className: i }, t);
       }
-      function p(e) {
+      function g(e) {
         let { children: t, active: n, index: l, addMicrodata: s } = e;
         return r.createElement(
           'li',
@@ -86,9 +86,9 @@
                 e.map((t, n) => {
                   const a = n === e.length - 1;
                   return r.createElement(
-                    p,
+                    g,
                     { key: n, active: a, index: n, addMicrodata: !!t.href },
-                    r.createElement(g, { href: t.href, isLast: a }, t.label)
+                    r.createElement(p, { href: t.href, isLast: a }, t.label)
                   );
                 })
               )
@@ -122,7 +122,7 @@
           i && a.createElement('p', { className: (0, s.Z)('text--truncate', h), title: i }, i)
         );
       }
-      function g(e) {
+      function p(e) {
         let { item: t } = e;
         const n = (0, i.Wl)(t);
         return n
@@ -144,7 +144,7 @@
             })
           : null;
       }
-      function p(e) {
+      function g(e) {
         let { item: t } = e;
         const n = (0, o.Z)(t.href) ? '\ud83d\udcc4\ufe0f' : '\ud83d\udd17',
           r = (0, i.xz)(t.docId ?? void 0);
@@ -159,9 +159,9 @@
         let { item: t } = e;
         switch (t.type) {
           case 'link':
-            return a.createElement(p, { item: t });
-          case 'category':
             return a.createElement(g, { item: t });
+          case 'category':
+            return a.createElement(p, { item: t });
           default:
             throw new Error(`unknown item type ${JSON.stringify(t)}`);
         }
@@ -251,7 +251,7 @@
             className: 'pagination-nav docusaurus-mt-lg',
             'aria-label': (0, i.I)({
               id: 'theme.docs.paginator.navAriaLabel',
-              message: 'Docs pages navigation',
+              message: 'Docs pages',
               description: 'The ARIA label for the docs pagination',
             }),
           },
@@ -305,7 +305,7 @@
       }
     },
     3120: (e, t, n) => {
-      n.d(t, { Z: () => g });
+      n.d(t, { Z: () => p });
       var a = n(7294),
         r = n(6010),
         i = n(2263),
@@ -383,8 +383,8 @@
           { pluginId: s } = (0, c.gA)({ failfast: !0 }),
           { savePreferredVersionName: d } = (0, m.J)(s),
           { latestDocSuggestion: u, latestVersionSuggestion: v } = (0, c.Jo)(s),
-          g = u ?? (p = v).docs.find(e => e.id === p.mainDocId);
-        var p;
+          p = u ?? (g = v).docs.find(e => e.id === g.mainDocId);
+        var g;
         return a.createElement(
           'div',
           { className: (0, r.Z)(t, o.k.docs.docVersionBanner, 'alert alert--warning margin-bottom--md'), role: 'alert' },
@@ -392,11 +392,11 @@
           a.createElement(
             'div',
             { className: 'margin-top--md' },
-            a.createElement(b, { versionLabel: v.label, to: g.path, onClick: () => d(v.name) })
+            a.createElement(b, { versionLabel: v.label, to: p.path, onClick: () => d(v.name) })
           )
         );
       }
-      function g(e) {
+      function p(e) {
         let { className: t } = e;
         const n = (0, d.E)();
         return n.banner ? a.createElement(v, { className: t, versionMetadata: n }) : null;
