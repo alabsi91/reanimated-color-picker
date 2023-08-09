@@ -10,7 +10,6 @@ const config = {
   tagline: 'A Pure JavaScript Color Picker for React Native',
   url: 'https://alabsi91.github.io',
   baseUrl: '/reanimated-color-picker/',
-  trailingSlash: false,
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
