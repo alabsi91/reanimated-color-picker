@@ -1,10 +1,9 @@
-import PrivateMethods from './PrivateMethods';
 import colorsRegex from './colorsRegex';
 import namedColors from './namedColors';
+import PrivateMethods from './PrivateMethods';
 import { clamp100, clampAlpha, clampHue, clampRGB, randomNumber } from './utilities';
 
 import type {
-  SupportedColorFormats,
   ColorFormats,
   ConversionMethods,
   hslaT,
@@ -15,6 +14,7 @@ import type {
   hwbT,
   rgbaT,
   rgbT,
+  SupportedColorFormats,
 } from './types';
 
 class Colors {

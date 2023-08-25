@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, I18nManager, Platform } from 'react-native';
+import { I18nManager, Platform, StyleSheet } from 'react-native';
 
 import type { StyleProp, ViewStyle } from 'react-native';
 
@@ -16,7 +16,7 @@ export function clamp(v: number, max: number) {
 }
 
 /** - Convert `HSV` color to an `HSLA` string representation */
-export function HSVA2HSLA(h: number, s: number, v: number, a = 1) {
+export function HSVA2HSLA_string(h: number, s: number, v: number, a = 1) {
   'worklet';
 
   s = s / 100;
@@ -27,6 +27,20 @@ export function HSVA2HSLA(h: number, s: number, v: number, a = 1) {
     sln = l !== 0 && l !== 1 ? sl / (l < 0.5 ? l * 2 : 2 - l * 2) : sl;
 
   return `hsla(${h}, ${sln * 100}%, ${l * 100}%, ${a})`;
+}
+
+/** - Convert `HSV` color to an `HSLA` object representation */
+export function HSVA2HSLA_object(h: number, s: number, v: number) {
+  'worklet';
+
+  s = s / 100;
+  v = v / 100;
+
+  const l = ((2 - s) * v) / 2,
+    sl = s * v,
+    sln = l !== 0 && l !== 1 ? sl / (l < 0.5 ? l * 2 : 2 - l * 2) : sl;
+
+  return { h, s: sln * 100, l: l * 100 };
 }
 
 /** - Convert `HSV` color to an `RGBA` object representation */

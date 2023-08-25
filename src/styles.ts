@@ -1,5 +1,5 @@
-import { Platform, StyleSheet } from 'react-native';
 import { isRtl } from '@utils';
+import { Platform, StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   // Panels

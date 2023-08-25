@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
-import { GestureDetector, Gesture } from 'react-native-gesture-handler';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
-import { clamp, getStyle, HSVA2RGBA, isRtl, isWeb, RenderNativeOnly, RGBA2HSVA } from '@utils';
 import pickerContext from '@context';
 import Thumb from '@thumb';
+import { clamp, getStyle, HSVA2RGBA, isRtl, isWeb, RenderNativeOnly, RGBA2HSVA } from '@utils';
 
 import type { RgbSliderProps } from '@types';
 import type { LayoutChangeEvent } from 'react-native';

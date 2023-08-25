@@ -2,8 +2,8 @@ import React from 'react';
 import { View } from 'react-native';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 
-import { isRtl } from '@utils';
 import { styles } from '@styles';
+import { isRtl } from '@utils';
 
 import type { BuiltinThumbsProps } from '@types';
 

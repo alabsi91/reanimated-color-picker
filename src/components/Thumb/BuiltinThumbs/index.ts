@@ -1,14 +1,14 @@
-import Ring from './Ring';
-import Solid from './Solid';
+import Circle from './Circle';
+import DoubleTriangle from './DoubleTriangle';
 import Hollow from './Hollow';
 import Line from './Line';
 import Pill from './Pill';
 import Plus from './Plus';
-import TriangleUp from './TriangleUp';
-import TriangleDown from './TriangleDown';
-import DoubleTriangle from './DoubleTriangle';
 import Rect from './Rect';
-import Circle from './Circle';
+import Ring from './Ring';
+import Solid from './Solid';
+import TriangleDown from './TriangleDown';
+import TriangleUp from './TriangleUp';
 
 const BuiltinThumbs = {
   Ring,

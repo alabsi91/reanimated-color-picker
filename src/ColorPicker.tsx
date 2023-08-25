@@ -1,14 +1,14 @@
-import React, { useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
+import React, { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 import { Text } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useSharedValue, withTiming } from 'react-native-reanimated';
 
-import { isWeb } from '@utils';
 import colorKit from '@colorKit';
 import pickerContext from '@context';
+import { isWeb } from '@utils';
 
+import type { ColorPickerContext, ColorPickerProps, ColorPickerRef } from '@types';
 import type { SupportedColorFormats } from './colorKit/types';
-import type { ColorPickerProps, ColorPickerRef, ColorPickerContext } from '@types';
 
 if (isWeb) {
   // @ts-ignore

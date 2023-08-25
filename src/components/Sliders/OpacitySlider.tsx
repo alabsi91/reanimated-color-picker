@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
-import { clamp, getStyle, HSVA2HSLA, isRtl, isWeb, RenderNativeOnly, RenderWebOnly } from '@utils';
+import { clamp, getStyle, HSVA2HSLA_string, isRtl, isWeb, RenderNativeOnly, RenderWebOnly } from '@utils';
 import pickerContext from '@context';
 import Thumb from '@thumb';
 
@@ -76,7 +76,7 @@ export function OpacitySlider({
     if (!isWeb) return { backgroundColor: '#0000' };
 
     const deg = vertical ? (reverse ? 1 : 180) : reverse ? 270 : 90;
-    const color = HSVA2HSLA(
+    const color = HSVA2HSLA_string(
       hueValue.value,
       adaptSpectrum ? saturationValue.value : 100,
       adaptSpectrum ? brightnessValue.value : 100
@@ -127,7 +127,7 @@ export function OpacitySlider({
     return {
       width: vertical ? height.value : '100%',
       height: vertical ? width.value : '100%',
-      tintColor: HSVA2HSLA(
+      tintColor: HSVA2HSLA_string(
         hueValue.value,
         adaptSpectrum ? saturationValue.value : 100,
         adaptSpectrum ? brightnessValue.value : 100

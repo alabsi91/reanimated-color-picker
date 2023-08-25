@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import { runOnJS, useAnimatedStyle, useDerivedValue, useSharedValue } from 'react-native-reanimated';
 
-import { styles } from '@styles';
 import colorKit from '@colorKit';
 import pickerContext from '@context';
+import { styles } from '@styles';
 import BuiltinThumbs from './BuiltinThumbs/index';
 
 import type { BuiltinThumbsProps, ThumbProps } from '@types';

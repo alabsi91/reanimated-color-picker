@@ -1,16 +1,16 @@
-import React, { useContext, useCallback } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { Image, View } from 'react-native';
-import { GestureDetector, Gesture } from 'react-native-gesture-handler';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
-import { clamp, getStyle, isRtl } from '@utils';
-import { styles } from '@styles';
 import pickerContext from '@context';
+import { styles } from '@styles';
 import Thumb from '@thumb';
+import { clamp, getStyle, isRtl } from '@utils';
 
+import type { PanelProps } from '@types';
 import type { LayoutChangeEvent } from 'react-native';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
-import type { PanelProps } from '@types';
 
 export function Panel1({
   thumbShape: localThumbShape,

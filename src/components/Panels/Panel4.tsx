@@ -1,16 +1,16 @@
-import React, { useContext, useCallback } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { Image, View } from 'react-native';
-import { GestureDetector, Gesture } from 'react-native-gesture-handler';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
-import { styles } from '@styles';
 import pickerContext from '@context';
-import { clamp, getStyle, isRtl } from '@utils';
+import { styles } from '@styles';
 import Thumb from '@thumb';
+import { clamp, getStyle, HSVA2HSLA_object, isRtl } from '@utils';
 
+import type { Panel4Props } from '@types';
 import type { LayoutChangeEvent } from 'react-native';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
-import type { Panel4Props } from '@types';
 
 export function Panel4({
   thumbColor: localThumbColor,
@@ -56,16 +56,13 @@ export function Panel4({
   const handleScale = useSharedValue(1);
 
   const handleStyle = useAnimatedStyle(() => {
+    const { l } = HSVA2HSLA_object(hueValue.value, saturationValue.value, brightnessValue.value);
+
     const length = { x: width.value - (boundedThumb ? thumbSize : 0), y: height.value - (boundedThumb ? thumbSize : 0) },
       calcThumb = boundedThumb ? 0 : thumbSize / 2,
-      // saturation
-      saturationPercentX = (saturationValue.value / 100) * (length.x / 2),
-      saturationPosX = (reverseHorizontalChannels ? length.x - saturationPercentX : saturationPercentX) - calcThumb,
-      // brightness
-      brightnessPercentX = (brightnessValue.value / 100) * (length.x / 2),
-      brightnessPosX = (reverseHorizontalChannels ? brightnessPercentX : length.x - brightnessPercentX) - calcThumb,
-      // both
-      posX = brightnessValue.value === 100 ? saturationPosX : brightnessPosX,
+      // luminance
+      poxPercentX = (l / 100) * length.x,
+      posX = (reverseHorizontalChannels ? poxPercentX : length.x - poxPercentX) - calcThumb,
       // hue
       percentY = (hueValue.value / 360) * length.y,
       posY = (reverseHue ? percentY : length.y - percentY) - calcThumb;

@@ -1,16 +1,16 @@
-import React, { useState, useMemo, useContext } from 'react';
-import { View, Text, ImageBackground } from 'react-native';
+import React, { useContext, useMemo, useState } from 'react';
+import { ImageBackground, Text, View } from 'react-native';
 import Animated, { runOnJS, useAnimatedStyle, useDerivedValue, useSharedValue } from 'react-native-reanimated';
 
-import { styles } from '@styles';
-import { ConditionalRendering, getStyle, isWeb } from '@utils';
 import colorKit from '@colorKit';
 import pickerContext from '@context';
+import { styles } from '@styles';
+import { ConditionalRendering, getStyle, isWeb } from '@utils';
 
-import type { StyleProp, TextStyle } from 'react-native';
-import type { ReactNode } from 'react';
-import type { SharedValue } from 'react-native-reanimated';
 import type { PreviewProps } from '@types';
+import type { ReactNode } from 'react';
+import type { StyleProp, TextStyle } from 'react-native';
+import type { SharedValue } from 'react-native-reanimated';
 
 const ReText = ({ text, style, hash }: { text: () => string; style: StyleProp<TextStyle>[]; hash: SharedValue<number>[] }) => {
   const [color, setColor] = useState(text());

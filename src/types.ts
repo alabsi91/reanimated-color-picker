@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import type { StyleProp, TextStyle, ViewStyle, ImageStyle, TextInputProps } from 'react-native';
+import type { ImageStyle, StyleProp, TextInputProps, TextStyle, ViewStyle } from 'react-native';
 import type { AnimatedStyleProp, SharedValue } from 'react-native-reanimated';
 import type { SupportedColorFormats } from './colorKit/types';
 

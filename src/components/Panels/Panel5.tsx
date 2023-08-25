@@ -1,15 +1,15 @@
-import React, { useContext, useCallback, useEffect } from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 import { ImageBackground } from 'react-native';
-import { GestureDetector, Gesture } from 'react-native-gesture-handler';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { Easing, runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
-import { getStyle, isRtl, decimalToHex } from '@utils';
-import { styles } from '@styles';
 import colorKit from '@colorKit';
 import pickerContext from '@context';
+import { styles } from '@styles';
+import { decimalToHex, getStyle, isRtl } from '@utils';
 
-import type { LayoutChangeEvent } from 'react-native';
 import type { Panel5Props } from '@types';
+import type { LayoutChangeEvent } from 'react-native';
 
 export function Panel5({ style = {}, selectionStyle = {} }: Panel5Props) {
   const { value, alphaValue, setColor, onGestureChange, onGestureEnd } = useContext(pickerContext);

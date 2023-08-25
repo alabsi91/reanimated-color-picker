@@ -1,16 +1,16 @@
-import React, { useContext, useCallback } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { ImageBackground, StyleSheet } from 'react-native';
-import { GestureDetector, Gesture } from 'react-native-gesture-handler';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
-import { styles } from '@styles';
 import pickerContext from '@context';
-import { clamp, ConditionalRendering, getStyle, HSVA2HSLA, isRtl } from '@utils';
+import { styles } from '@styles';
 import Thumb from '@thumb';
+import { clamp, ConditionalRendering, getStyle, HSVA2HSLA_string, isRtl } from '@utils';
 
+import type { Panel2Props } from '@types';
 import type { LayoutChangeEvent } from 'react-native';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
-import type { Panel2Props } from '@types';
 
 export function Panel2({
   adaptSpectrum: localAdaptSpectrum,
@@ -71,8 +71,9 @@ export function Panel2({
 
   const spectrumStyle = useAnimatedStyle(() => {
     if (!adaptSpectrum) return {};
-    if (verticalChannel === 'brightness') return { backgroundColor: HSVA2HSLA(0, 0, 100, 1 - saturationValue.value / 100) };
-    return { backgroundColor: HSVA2HSLA(0, 0, 0, 1 - brightnessValue.value / 100) };
+    if (verticalChannel === 'brightness')
+      return { backgroundColor: HSVA2HSLA_string(0, 0, 100, 1 - saturationValue.value / 100) };
+    return { backgroundColor: HSVA2HSLA_string(0, 0, 0, 1 - brightnessValue.value / 100) };
   });
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {

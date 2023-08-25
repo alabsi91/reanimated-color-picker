@@ -1,15 +1,15 @@
 import React, { useContext, useState } from 'react';
-import { View, Text, Pressable, Image, StyleSheet } from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { ConditionalRendering, getStyle } from '@utils';
+import colorKit from '@colorKit';
 import pickerContext from '@context';
 import { styles } from '@styles';
-import colorKit from '@colorKit';
+import { ConditionalRendering, getStyle } from '@utils';
 import HexWidget from './Widgets/HexWidget';
-import RgbWidget from './Widgets/RgbWidget';
 import HslWidget from './Widgets/HslWidget';
-import HwbWidget from './Widgets/HwbWidget';
 import HsvWidget from './Widgets/HsvWidget';
+import HwbWidget from './Widgets/HwbWidget';
+import RgbWidget from './Widgets/RgbWidget';
 
 import type { InputWidgetProps } from '@types';
 

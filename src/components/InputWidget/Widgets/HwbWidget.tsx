@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react';
 import { runOnJS, useDerivedValue } from 'react-native-reanimated';
 
-import WidgetTextInput from './WidgetTextInput';
 import colorKit from '@colorKit';
 import { clamp, ConditionalRendering } from '@utils';
+import WidgetTextInput from './WidgetTextInput';
 
 import type { WidgetProps } from '@types';
 

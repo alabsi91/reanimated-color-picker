@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { View, Pressable } from 'react-native';
+import { Pressable, View } from 'react-native';
 
 import pickerContext from '@context';
 import { styles } from '@styles';
