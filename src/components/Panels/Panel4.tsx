@@ -65,10 +65,7 @@ export function Panel4({
       brightnessPercentX = (brightnessValue.value / 100) * (length.x / 2),
       brightnessPosX = (reverseHorizontalChannels ? brightnessPercentX : length.x - brightnessPercentX) - calcThumb,
       // both
-      isSaturationActive = reverseHorizontalChannels
-        ? saturationPosX > length.x / 2 - calcThumb
-        : saturationPosX < length.x / 2 - calcThumb,
-      posX = isSaturationActive ? saturationPosX : brightnessPosX,
+      posX = brightnessValue.value === 100 ? saturationPosX : brightnessPosX,
       // hue
       percentY = (hueValue.value / 360) * length.y,
       posY = (reverseHue ? percentY : length.y - percentY) - calcThumb;
