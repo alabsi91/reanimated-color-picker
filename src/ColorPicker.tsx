@@ -90,6 +90,15 @@ const ColorPicker = forwardRef<ColorPickerRef, ColorPickerProps>(
       setColor(value);
     }, [value]);
 
+    // Addressing a sporadic problem where the shared value for color channels fails to update upon component mounting.
+    // This issue appears to manifest randomly and might be correlated with the Reanimated library.
+    useEffect(() => {
+      hueValue.value += 1;
+      saturationValue.value += 1;
+      brightnessValue.value += 1;
+      setColor(value, 100);
+    }, []);
+
     useImperativeHandle(ref, () => ({ setColor }));
 
     const ctxValue: ColorPickerContext = {
