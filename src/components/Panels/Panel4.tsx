@@ -6,7 +6,7 @@ import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 
 import pickerContext from '@context';
 import { styles } from '@styles';
 import Thumb from '@thumb';
-import { clamp, getStyle, HSVA2HSLA_object, isRtl } from '@utils';
+import { clamp, getStyle, isRtl } from '@utils';
 
 import type { Panel4Props } from '@types';
 import type { LayoutChangeEvent } from 'react-native';
@@ -56,12 +56,11 @@ export function Panel4({
   const handleScale = useSharedValue(1);
 
   const handleStyle = useAnimatedStyle(() => {
-    const { l } = HSVA2HSLA_object(hueValue.value, saturationValue.value, brightnessValue.value);
-
     const length = { x: width.value - (boundedThumb ? thumbSize : 0), y: height.value - (boundedThumb ? thumbSize : 0) },
       calcThumb = boundedThumb ? 0 : thumbSize / 2,
       // luminance
-      poxPercentX = (l / 100) * length.x,
+      lum = (((2 - saturationValue.value / 100) * (brightnessValue.value / 100)) / 2) * 100,
+      poxPercentX = (lum / 100) * length.x,
       posX = (reverseHorizontalChannels ? poxPercentX : length.x - poxPercentX) - calcThumb,
       // hue
       percentY = (hueValue.value / 360) * length.y,

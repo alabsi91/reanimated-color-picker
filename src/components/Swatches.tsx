@@ -31,7 +31,7 @@ const SWATCHES_COLORS = [
 export function Swatches({ colors = SWATCHES_COLORS, style = {}, swatchStyle = {} }: SwatchesProps) {
   const { setColor, onGestureChange, onGestureEnd } = useContext(pickerContext);
 
-  const onPress = async (swatch: string) => {
+  const onPress = (swatch: string) => {
     setColor(swatch);
     onGestureChange(swatch);
     onGestureEnd(swatch);
