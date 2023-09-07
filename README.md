@@ -63,6 +63,8 @@ npm i reanimated-color-picker
 
 ### [📖 View the documentation site 📖](https://alabsi91.github.io/reanimated-color-picker/)
 
+> Please check out my other library, [React Native Material You Colors](https://github.com/alabsi91/react-native-material-you-colors).
+
 # :small_blue_diamond:License
 
 - Reanimated Color Picker library is licensed under [**The MIT License.**](https://github.com/alabsi91/reanimated-color-picker/blob/main/LICENSE)
