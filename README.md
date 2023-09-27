@@ -2,10 +2,11 @@
 
 # Reanimated Color Picker
 
-![npm](https://img.shields.io/npm/v/reanimated-color-picker?style=for-the-badge)
-![GitHub](https://img.shields.io/github/license/alabsi91/reanimated-color-picker?style=for-the-badge)
-![GitHub issues](https://img.shields.io/github/issues/alabsi91/reanimated-color-picker?style=for-the-badge)
+[![npm](https://img.shields.io/npm/v/reanimated-color-picker?style=for-the-badge)](https://www.npmjs.com/package/reanimated-color-picker)
+[![GitHub](https://img.shields.io/github/license/alabsi91/reanimated-color-picker?style=for-the-badge)](https://github.com/alabsi91/reanimated-color-picker/blob/main/LICENSE)
+[![GitHub issues](https://img.shields.io/github/issues/alabsi91/reanimated-color-picker?style=for-the-badge)](https://github.com/alabsi91/reanimated-color-picker/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc)
 ![Platform](https://img.shields.io/badge/Platform-IOS%20%7C%20Android%20%7C%20Expo%20%7C%20Web-informational?style=for-the-badge)
+![Arch](https://img.shields.io/badge/React%20Native-Paper%20%7C%20New%20Architecture-informational?style=for-the-badge)
 
 ### - A Pure JavaScript Color Picker for React Native.
 
