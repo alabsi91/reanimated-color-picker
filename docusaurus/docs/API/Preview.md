@@ -37,6 +37,12 @@ description: The preview of the selected and the initial color.
 - `type: boolean`
 - `default: false`
 
+### `disableOpacityTexture`
+
+- Hide the preview background texture image that appears when the color has an opacity less than 1.
+- `type: boolean`
+- `default: false`
+
 ### `style`
 
 - Preview container style.
