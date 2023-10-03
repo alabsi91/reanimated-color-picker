@@ -87,6 +87,27 @@ const ColorPicker = forwardRef<ColorPickerRef, ColorPickerProps>(
     };
 
     useEffect(() => {
+      // Ignore value changes if the current color already matches the new color from the value props.
+      const newColorFormat = colorKit.getFormat(value);
+      const currentColors = returnedResults();
+
+      // null or named color E.g "red"
+      if (!newColorFormat || newColorFormat === 'named') {
+        setColor(value);
+        return;
+      }
+
+      // hex color
+      if (newColorFormat === 'hex3' || newColorFormat === 'hex4' || newColorFormat === 'hex6' || newColorFormat === 'hex8') {
+        if (value !== currentColors.hex) setColor(value);
+        return;
+      }
+
+      // hsl | hsla | rgb | rgba | hsva | hsv | hwba | hwb
+      if (newColorFormat in currentColors) {
+        if (value !== currentColors[newColorFormat]) setColor(value);
+        return;
+      }
       setColor(value);
     }, [value]);
 
