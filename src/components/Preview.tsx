@@ -33,6 +33,7 @@ export function Preview({
   colorFormat = 'hex',
   hideInitialColor = false,
   hideText = false,
+  disableOpacityTexture = false,
 }: PreviewProps) {
   const { hueValue, saturationValue, brightnessValue, alphaValue, returnedResults, value } = useContext(pickerContext);
 
@@ -71,7 +72,7 @@ export function Preview({
   });
 
   return (
-    <Wrapper style={style}>
+    <Wrapper disableTexture={disableOpacityTexture} style={style}>
       <ConditionalRendering render={!hideInitialColor}>
         <View style={[styles.previewContainer, { backgroundColor: value, justifyContent }]}>
           <ConditionalRendering render={!hideText}>
@@ -91,7 +92,11 @@ export function Preview({
   );
 }
 
-function Wrapper({ children, style }: { children: ReactNode; style: {} | null }) {
+function Wrapper({ children, disableTexture, style }: { children: ReactNode; disableTexture: boolean; style: {} | null }) {
+  if (disableTexture) {
+    return <View style={[styles.previewWrapper, style]}>{children}</View>;
+  }
+
   if (isWeb) {
     return <View style={[styles.previewWrapper, previewWrapperWeb, style]}>{children}</View>;
   }

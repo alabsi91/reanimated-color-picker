@@ -235,6 +235,9 @@ export interface PreviewProps {
   /** - hide color preview text. */
   hideText?: boolean;
 
+  /** - hide the preview background texture image that appears when the color has an opacity less than 1. */
+  disableOpacityTexture?: boolean;
+
   /**
    * - preview container style.
    * - **Note** Certain style properties will be overridden.
