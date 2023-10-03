@@ -99,6 +99,7 @@ function Wrapper({ children, style }: { children: ReactNode; style: {} | null })
   return (
     <ImageBackground
       source={require('@assets/transparent-texture.png')}
+      imageStyle={{ width: '100%', height: '100%' }}
       resizeMode='repeat'
       style={[styles.previewWrapper, style]}
     >
