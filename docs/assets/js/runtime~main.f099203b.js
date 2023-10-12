@@ -5,25 +5,25 @@
     r,
     a,
     f,
-    o = {},
-    c = {};
-  function n(e) {
-    var t = c[e];
+    c = {},
+    o = {};
+  function d(e) {
+    var t = o[e];
     if (void 0 !== t) return t.exports;
-    var r = (c[e] = { id: e, loaded: !1, exports: {} });
-    return o[e].call(r.exports, r, r.exports, n), (r.loaded = !0), r.exports;
+    var r = (o[e] = { id: e, loaded: !1, exports: {} });
+    return c[e].call(r.exports, r, r.exports, d), (r.loaded = !0), r.exports;
   }
-  (n.m = o),
-    (n.c = c),
+  (d.m = c),
+    (d.c = o),
     (e = []),
-    (n.O = (t, r, a, f) => {
+    (d.O = (t, r, a, f) => {
       if (!r) {
-        var o = 1 / 0;
+        var c = 1 / 0;
         for (i = 0; i < e.length; i++) {
           (r = e[i][0]), (a = e[i][1]), (f = e[i][2]);
-          for (var c = !0, d = 0; d < r.length; d++)
-            (!1 & f || o >= f) && Object.keys(n.O).every(e => n.O[e](r[d])) ? r.splice(d--, 1) : ((c = !1), f < o && (o = f));
-          if (c) {
+          for (var o = !0, n = 0; n < r.length; n++)
+            (!1 & f || c >= f) && Object.keys(d.O).every(e => d.O[e](r[n])) ? r.splice(n--, 1) : ((o = !1), f < c && (c = f));
+          if (o) {
             e.splice(i--, 1);
             var b = a();
             void 0 !== b && (t = b);
@@ -35,31 +35,31 @@
       for (var i = e.length; i > 0 && e[i - 1][2] > f; i--) e[i] = e[i - 1];
       e[i] = [r, a, f];
     }),
-    (n.n = e => {
+    (d.n = e => {
       var t = e && e.__esModule ? () => e.default : () => e;
-      return n.d(t, { a: t }), t;
+      return d.d(t, { a: t }), t;
     }),
     (r = Object.getPrototypeOf ? e => Object.getPrototypeOf(e) : e => e.__proto__),
-    (n.t = function (e, a) {
+    (d.t = function (e, a) {
       if ((1 & a && (e = this(e)), 8 & a)) return e;
       if ('object' == typeof e && e) {
         if (4 & a && e.__esModule) return e;
         if (16 & a && 'function' == typeof e.then) return e;
       }
       var f = Object.create(null);
-      n.r(f);
-      var o = {};
+      d.r(f);
+      var c = {};
       t = t || [null, r({}), r([]), r(r)];
-      for (var c = 2 & a && e; 'object' == typeof c && !~t.indexOf(c); c = r(c))
-        Object.getOwnPropertyNames(c).forEach(t => (o[t] = () => e[t]));
-      return (o.default = () => e), n.d(f, o), f;
+      for (var o = 2 & a && e; 'object' == typeof o && !~t.indexOf(o); o = r(o))
+        Object.getOwnPropertyNames(o).forEach(t => (c[t] = () => e[t]));
+      return (c.default = () => e), d.d(f, c), f;
     }),
-    (n.d = (e, t) => {
-      for (var r in t) n.o(t, r) && !n.o(e, r) && Object.defineProperty(e, r, { enumerable: !0, get: t[r] });
+    (d.d = (e, t) => {
+      for (var r in t) d.o(t, r) && !d.o(e, r) && Object.defineProperty(e, r, { enumerable: !0, get: t[r] });
     }),
-    (n.f = {}),
-    (n.e = e => Promise.all(Object.keys(n.f).reduce((t, r) => (n.f[r](e, t), t), []))),
-    (n.u = e =>
+    (d.f = {}),
+    (d.e = e => Promise.all(Object.keys(d.f).reduce((t, r) => (d.f[r](e, t), t), []))),
+    (d.u = e =>
       'assets/js/' +
       ({
         41: 'b2a58bb7',
@@ -116,7 +116,7 @@
         491: '2e40908e',
         514: '4a639eee',
         617: '2cff92c2',
-        639: '00a11971',
+        639: '0125b130',
         656: 'aa71bfd8',
         753: '498fd52e',
         756: '050574b1',
@@ -131,8 +131,8 @@
         993: '98bc31c0',
       }[e] +
       '.js'),
-    (n.miniCssF = e => {}),
-    (n.g = (function () {
+    (d.miniCssF = e => {}),
+    (d.g = (function () {
       if ('object' == typeof globalThis) return globalThis;
       try {
         return this || new Function('return this')();
@@ -140,44 +140,44 @@
         if ('object' == typeof window) return window;
       }
     })()),
-    (n.o = (e, t) => Object.prototype.hasOwnProperty.call(e, t)),
+    (d.o = (e, t) => Object.prototype.hasOwnProperty.call(e, t)),
     (a = {}),
     (f = 'my-docs:'),
-    (n.l = (e, t, r, o) => {
+    (d.l = (e, t, r, c) => {
       if (a[e]) a[e].push(t);
       else {
-        var c, d;
+        var o, n;
         if (void 0 !== r)
           for (var b = document.getElementsByTagName('script'), i = 0; i < b.length; i++) {
             var u = b[i];
             if (u.getAttribute('src') == e || u.getAttribute('data-webpack') == f + r) {
-              c = u;
+              o = u;
               break;
             }
           }
-        c ||
-          ((d = !0),
-          ((c = document.createElement('script')).charset = 'utf-8'),
-          (c.timeout = 120),
-          n.nc && c.setAttribute('nonce', n.nc),
-          c.setAttribute('data-webpack', f + r),
-          (c.src = e)),
+        o ||
+          ((n = !0),
+          ((o = document.createElement('script')).charset = 'utf-8'),
+          (o.timeout = 120),
+          d.nc && o.setAttribute('nonce', d.nc),
+          o.setAttribute('data-webpack', f + r),
+          (o.src = e)),
           (a[e] = [t]);
         var l = (t, r) => {
-            (c.onerror = c.onload = null), clearTimeout(s);
+            (o.onerror = o.onload = null), clearTimeout(s);
             var f = a[e];
-            if ((delete a[e], c.parentNode && c.parentNode.removeChild(c), f && f.forEach(e => e(r)), t)) return t(r);
+            if ((delete a[e], o.parentNode && o.parentNode.removeChild(o), f && f.forEach(e => e(r)), t)) return t(r);
           },
-          s = setTimeout(l.bind(null, void 0, { type: 'timeout', target: c }), 12e4);
-        (c.onerror = l.bind(null, c.onerror)), (c.onload = l.bind(null, c.onload)), d && document.head.appendChild(c);
+          s = setTimeout(l.bind(null, void 0, { type: 'timeout', target: o }), 12e4);
+        (o.onerror = l.bind(null, o.onerror)), (o.onload = l.bind(null, o.onload)), n && document.head.appendChild(o);
       }
     }),
-    (n.r = e => {
+    (d.r = e => {
       'undefined' != typeof Symbol && Symbol.toStringTag && Object.defineProperty(e, Symbol.toStringTag, { value: 'Module' }),
         Object.defineProperty(e, '__esModule', { value: !0 });
     }),
-    (n.p = '/reanimated-color-picker/'),
-    (n.gca = function (e) {
+    (d.p = '/reanimated-color-picker/'),
+    (d.gca = function (e) {
       return (
         (e =
           {
@@ -213,32 +213,32 @@
             caa5d514: '983',
             '2e77a3bf': '993',
           }[e] || e),
-        n.p + n.u(e)
+        d.p + d.u(e)
       );
     }),
     (() => {
       var e = { 303: 0, 532: 0 };
-      (n.f.j = (t, r) => {
-        var a = n.o(e, t) ? e[t] : void 0;
+      (d.f.j = (t, r) => {
+        var a = d.o(e, t) ? e[t] : void 0;
         if (0 !== a)
           if (a) r.push(a[2]);
           else if (/^(303|532)$/.test(t)) e[t] = 0;
           else {
             var f = new Promise((r, f) => (a = e[t] = [r, f]));
             r.push((a[2] = f));
-            var o = n.p + n.u(t),
-              c = new Error();
-            n.l(
-              o,
+            var c = d.p + d.u(t),
+              o = new Error();
+            d.l(
+              c,
               r => {
-                if (n.o(e, t) && (0 !== (a = e[t]) && (e[t] = void 0), a)) {
+                if (d.o(e, t) && (0 !== (a = e[t]) && (e[t] = void 0), a)) {
                   var f = r && ('load' === r.type ? 'missing' : r.type),
-                    o = r && r.target && r.target.src;
-                  (c.message = 'Loading chunk ' + t + ' failed.\n(' + f + ': ' + o + ')'),
-                    (c.name = 'ChunkLoadError'),
-                    (c.type = f),
-                    (c.request = o),
-                    a[1](c);
+                    c = r && r.target && r.target.src;
+                  (o.message = 'Loading chunk ' + t + ' failed.\n(' + f + ': ' + c + ')'),
+                    (o.name = 'ChunkLoadError'),
+                    (o.type = f),
+                    (o.request = c),
+                    a[1](o);
                 }
               },
               'chunk-' + t,
@@ -246,20 +246,20 @@
             );
           }
       }),
-        (n.O.j = t => 0 === e[t]);
+        (d.O.j = t => 0 === e[t]);
       var t = (t, r) => {
           var a,
             f,
-            o = r[0],
-            c = r[1],
-            d = r[2],
+            c = r[0],
+            o = r[1],
+            n = r[2],
             b = 0;
-          if (o.some(t => 0 !== e[t])) {
-            for (a in c) n.o(c, a) && (n.m[a] = c[a]);
-            if (d) var i = d(n);
+          if (c.some(t => 0 !== e[t])) {
+            for (a in o) d.o(o, a) && (d.m[a] = o[a]);
+            if (n) var i = n(d);
           }
-          for (t && t(r); b < o.length; b++) (f = o[b]), n.o(e, f) && e[f] && e[f][0](), (e[f] = 0);
-          return n.O(i);
+          for (t && t(r); b < c.length; b++) (f = c[b]), d.o(e, f) && e[f] && e[f][0](), (e[f] = 0);
+          return d.O(i);
         },
         r = (self.webpackChunkmy_docs = self.webpackChunkmy_docs || []);
       r.forEach(t.bind(null, 0)), (r.push = t.bind(null, r.push.bind(r)));
