@@ -1,18 +1,18 @@
 import React, { useCallback, useContext, useEffect } from 'react';
 import { ImageBackground } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, { Easing, runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import colorKit from '@colorKit';
 import pickerContext from '@context';
 import { styles } from '@styles';
-import { decimalToHex, getStyle, isRtl } from '@utils';
+import { findIndexIn2DArray, getStyle, isRtl } from '@utils';
 
 import type { Panel5Props } from '@types';
 import type { LayoutChangeEvent } from 'react-native';
 
 export function Panel5({ style = {}, selectionStyle = {} }: Panel5Props) {
-  const { value, alphaValue, setColor, onGestureChange, onGestureEnd } = useContext(pickerContext);
+  const { value, hueValue, saturationValue, brightnessValue, onGestureChange, onGestureEnd } = useContext(pickerContext);
 
   const borderRadius = getStyle(style, 'borderRadius') ?? 0;
 
@@ -38,43 +38,48 @@ export function Panel5({ style = {}, selectionStyle = {} }: Panel5Props) {
     adaptiveColor.value = contrast < 4.5 ? color : adaptiveColor.value;
   };
 
-  const tap = Gesture.Tap().onBegin(({ x, y }) => {
-    if (!squareSize.value) return;
+  const tap = Gesture.Tap()
+    .runOnJS(true)
+    .onBegin(({ x, y }) => {
+      if (!squareSize.value) return;
 
-    const row = Math.floor(y / squareSize.value);
-    const column = Math.floor(x / squareSize.value);
+      const row = Math.floor(y / squareSize.value);
+      const column = Math.floor(x / squareSize.value);
 
-    const color = gridColors?.[row]?.[column];
-    if (!color) return;
+      const color = gridColors?.[row]?.[column];
+      if (!color) return;
 
-    const withOpacity = color + (alphaValue.value === 1 ? '' : decimalToHex(alphaValue.value));
+      const { h, s, v } = colorKit.HSV(color).object();
+      hueValue.value = h;
+      saturationValue.value = s;
+      brightnessValue.value = v;
 
-    posX.value = withTiming(column, { duration: 300, easing: Easing.elastic(0.8) });
-    posY.value = withTiming(row, { duration: 300, easing: Easing.elastic(0.8) });
+      posX.value = withTiming(column, { duration: 300, easing: Easing.elastic(0.8) });
+      posY.value = withTiming(row, { duration: 300, easing: Easing.elastic(0.8) });
 
-    runOnJS(setAdaptiveColor)(withOpacity);
-    runOnJS(setColor)(withOpacity, 50);
-    runOnJS(onGestureChange)(withOpacity);
-    runOnJS(onGestureEnd)(withOpacity);
-  });
+      setAdaptiveColor(color);
+      onGestureChange();
+      onGestureEnd();
+    });
 
   const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
     squareSize.value = withTiming(layout.width / 12 || layout.height / 10, { duration: 100 });
   }, []);
 
   useEffect(() => {
-    const initialColor = colorKit.HEX(value).slice(0, 7).toUpperCase();
+    const [row, column] = findIndexIn2DArray(gridColors, c => colorKit.areColorsEqual(c, value, 6));
 
-    const row = gridColors.findIndex(e => e.includes(initialColor));
-    if (row === -1) return;
-
-    const column = gridColors[row].indexOf(initialColor);
-    if (column === -1) return;
+    if (column === null || row === null) {
+      console.warn(
+        `[ColorPicker]: The color '${value}' specified in the 'value' prop cannot be displayed in 'Panel5' as it falls outside the limited range of available colors.`
+      );
+      return;
+    }
 
     posX.value = column;
     posY.value = row;
 
-    setAdaptiveColor(initialColor);
+    setAdaptiveColor(value);
   }, [value]);
 
   return (
