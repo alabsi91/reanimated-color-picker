@@ -1049,6 +1049,24 @@ class Colors {
   }
 
   /**
+   * - Check if two colors are similar within a specified tolerance.
+   * @example
+   * const tolerance = 0;
+   * const isEqual = colorKit.areColorsEqual("#F00", "red", tolerance); // true
+   */
+  areColorsEqual(color1: SupportedColorFormats, color2: SupportedColorFormats, tolerance = 0): boolean {
+    const rgb1 = this.RGB(color1).object();
+    const rgb2 = this.RGB(color2).object();
+
+    const deltaR = rgb1.r - rgb2.r;
+    const deltaG = rgb1.g - rgb2.g;
+    const deltaB = rgb1.b - rgb2.b;
+    const difference = Math.sqrt(deltaR * deltaR + deltaG * deltaG + deltaB * deltaB);
+
+    return difference <= tolerance;
+  }
+
+  /**
    * - Blends two colors by a certain amount.
    * @example
    * blend('yellow', 'red', 50).hex(); // #ff8000
