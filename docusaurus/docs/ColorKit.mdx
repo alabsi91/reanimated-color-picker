@@ -248,6 +248,15 @@ Returns the perceived `luminance` of the given color, from `0-1` as defined by [
 colorKit.getLuminanceWCAG('rgba(176, 7, 120, 1)'); // 0.10738130030129947
 ```
 
+### `areColorsEqual`
+
+Check if two colors are similar within a specified tolerance.
+
+```js
+const tolerance = 0;
+const isEqual = colorKit.areColorsEqual('#F00', 'red', tolerance); // true
+```
+
 ### `contrastRatio`
 
 Calculates the contrast ratio between two colors, useful for ensuring accessibility and readability.
