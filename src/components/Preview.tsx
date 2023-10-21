@@ -1,9 +1,9 @@
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { ImageBackground, Text, View } from 'react-native';
 import Animated, { runOnJS, useAnimatedStyle, useDerivedValue, useSharedValue } from 'react-native-reanimated';
 
 import colorKit from '@colorKit';
-import pickerContext from '@context';
+import usePickerContext from '@context';
 import { styles } from '@styles';
 import { ConditionalRendering, getStyle, isWeb } from '@utils';
 
@@ -35,7 +35,7 @@ export function Preview({
   hideText = false,
   disableOpacityTexture = false,
 }: PreviewProps) {
-  const { hueValue, saturationValue, brightnessValue, alphaValue, returnedResults, value } = useContext(pickerContext);
+  const { hueValue, saturationValue, brightnessValue, alphaValue, returnedResults, value } = usePickerContext();
 
   const justifyContent = getStyle(style, 'justifyContent') ?? 'center';
 
@@ -73,9 +73,9 @@ export function Preview({
 
   return (
     <Wrapper disableTexture={disableOpacityTexture} style={style}>
-      <ConditionalRendering render={!hideInitialColor}>
+      <ConditionalRendering if={!hideInitialColor}>
         <View style={[styles.previewContainer, { backgroundColor: value, justifyContent }]}>
-          <ConditionalRendering render={!hideText}>
+          <ConditionalRendering if={!hideText}>
             <Text style={[{ color: initialColorText.color }, styles.previewInitialText, textStyle]}>
               {initialColorText.formatted}
             </Text>
@@ -84,7 +84,7 @@ export function Preview({
       </ConditionalRendering>
 
       <Animated.View style={[styles.previewContainer, { justifyContent }, previewColorStyle]}>
-        <ConditionalRendering render={!hideText}>
+        <ConditionalRendering if={!hideText}>
           <ReText text={() => returnedResults()[colorFormat]} hash={colorHash} style={[textStyle, textColorStyle]} />
         </ConditionalRendering>
       </Animated.View>

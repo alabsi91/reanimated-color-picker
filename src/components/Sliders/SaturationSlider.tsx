@@ -1,15 +1,15 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { StyleSheet } from 'react-native';
-import { GestureDetector, Gesture } from 'react-native-gesture-handler';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
-import { clamp, ConditionalRendering, getStyle, HSVA2HSLA_string, isRtl } from '@utils';
-import pickerContext from '@context';
+import usePickerContext from '@context';
 import Thumb from '@thumb';
+import { clamp, ConditionalRendering, getStyle, HSVA2HSLA_string, isRtl } from '@utils';
 
+import type { SliderProps } from '@types';
 import type { LayoutChangeEvent } from 'react-native';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
-import type { SliderProps } from '@types';
 
 export function SaturationSlider({
   adaptSpectrum: localAdaptSpectrum,
@@ -40,7 +40,7 @@ export function SaturationSlider({
     thumbStyle: globalThumbsStyle,
     thumbInnerStyle: globalThumbsInnerStyle,
     sliderThickness: globalSliderThickness,
-  } = useContext(pickerContext);
+  } = usePickerContext();
 
   const thumbShape = localThumbShape ?? globalThumbsShape,
     thumbSize = localThumbSize ?? globalThumbsSize,
@@ -139,7 +139,7 @@ export function SaturationSlider({
       >
         <Animated.Image source={require('@assets/blackGradient.png')} style={[imageStyle, { tintColor: '#fff' }]} />
 
-        <ConditionalRendering render={adaptSpectrum}>
+        <ConditionalRendering if={adaptSpectrum}>
           <Animated.View style={[{ borderRadius }, activeBrightnessStyle, StyleSheet.absoluteFillObject]} />
         </ConditionalRendering>
 

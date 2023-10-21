@@ -1,10 +1,10 @@
-import React, { useContext } from 'react';
-import { GestureDetector, Gesture } from 'react-native-gesture-handler';
+import React from 'react';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
-import { clamp, getStyle, HSVA2HSLA_string, isRtl } from '@utils';
-import pickerContext from '@context';
+import usePickerContext from '@context';
 import Thumb from '@thumb';
+import { clamp, getStyle, HSVA2HSLA_string, isRtl } from '@utils';
 
 import type { SliderProps } from '@types';
 import type { LayoutChangeEvent } from 'react-native';
@@ -39,7 +39,7 @@ export function BrightnessSlider({
     thumbStyle: globalThumbStyle,
     thumbInnerStyle: globalThumbInnerStyle,
     sliderThickness: globalSliderThickness,
-  } = useContext(pickerContext);
+  } = usePickerContext();
 
   const thumbShape = localThumbShape ?? globalThumbShape,
     thumbSize = localThumbSize ?? globalThumbSize,

@@ -1,9 +1,9 @@
-import React, { useCallback, useContext } from 'react';
+import React, { useCallback } from 'react';
 import { ImageBackground, StyleSheet } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
-import pickerContext from '@context';
+import usePickerContext from '@context';
 import { styles } from '@styles';
 import Thumb from '@thumb';
 import { clamp, ConditionalRendering, getStyle, HSVA2HSLA_string, isRtl } from '@utils';
@@ -40,7 +40,7 @@ export function Panel2({
     renderThumb: globalRenderThumbs,
     thumbStyle: globalThumbsStyle,
     thumbInnerStyle: globalThumbsInnerStyle,
-  } = useContext(pickerContext);
+  } = usePickerContext();
 
   const thumbShape = localThumbShape ?? globalThumbShape,
     thumbSize = localThumbSize ?? globalThumbsSize,
@@ -136,7 +136,7 @@ export function Panel2({
           style={[styles.panel_image, { position: 'relative', borderRadius, transform: [{ scaleX: reverseHue ? -1 : 1 }] }]}
           resizeMode='stretch'
         >
-          <ConditionalRendering render={adaptSpectrum && verticalChannel === 'brightness'}>
+          <ConditionalRendering if={adaptSpectrum && verticalChannel === 'brightness'}>
             <Animated.View style={[spectrumStyle, StyleSheet.absoluteFillObject]} />
           </ConditionalRendering>
 
@@ -146,7 +146,7 @@ export function Panel2({
             resizeMode='stretch'
           />
 
-          <ConditionalRendering render={adaptSpectrum && verticalChannel === 'saturation'}>
+          <ConditionalRendering if={adaptSpectrum && verticalChannel === 'saturation'}>
             <Animated.View style={[spectrumStyle, StyleSheet.absoluteFillObject]} />
           </ConditionalRendering>
         </ImageBackground>

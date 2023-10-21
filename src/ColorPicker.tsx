@@ -4,7 +4,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useSharedValue, withTiming } from 'react-native-reanimated';
 
 import colorKit from '@colorKit';
-import pickerContext from '@context';
+import { PickerContextProvider } from '@context';
 import { isWeb } from '@utils';
 
 import type { ColorPickerContext, ColorPickerProps, ColorPickerRef } from '@types';
@@ -149,7 +149,7 @@ const ColorPicker = forwardRef<ColorPickerRef, ColorPickerProps>(
 
     return (
       <GestureHandlerRootView style={[{ direction: isWeb ? 'ltr' : undefined }, style]}>
-        <pickerContext.Provider value={ctxValue}>{children}</pickerContext.Provider>
+        <PickerContextProvider value={ctxValue}>{children}</PickerContextProvider>
       </GestureHandlerRootView>
     );
   }

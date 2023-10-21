@@ -1,16 +1,16 @@
-import React, { useContext, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { ImageBackground, StyleSheet } from 'react-native';
-import { GestureDetector, Gesture } from 'react-native-gesture-handler';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
+import usePickerContext from '@context';
 import { styles } from '@styles';
-import { ConditionalRendering, HSVA2HSLA_string } from '@utils';
-import pickerContext from '@context';
 import Thumb from '@thumb';
+import { ConditionalRendering, HSVA2HSLA_string } from '@utils';
 
+import type { HueCircular } from '@types';
 import type { LayoutChangeEvent } from 'react-native';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
-import type { HueCircular } from '@types';
 
 export function HueCircular({
   adaptSpectrum: localAdaptSpectrum,
@@ -39,7 +39,7 @@ export function HueCircular({
     thumbStyle: globalThumbsStyle,
     thumbInnerStyle: globalThumbsInnerStyle,
     sliderThickness: globalSliderThickness,
-  } = useContext(pickerContext);
+  } = usePickerContext();
 
   const thumbShape = localThumbShape ?? globalThumbShape,
     thumbSize = localThumbSize ?? globalThumbsSize,
@@ -148,7 +148,7 @@ export function HueCircular({
           style={[styles.panel_image, { justifyContent: 'center', alignItems: 'center' }]}
           resizeMode='stretch'
         >
-          <ConditionalRendering render={adaptSpectrum}>
+          <ConditionalRendering if={adaptSpectrum}>
             <Animated.View style={[borderRadiusStyle, activeBrightnessStyle, StyleSheet.absoluteFillObject]} />
             <Animated.View style={[borderRadiusStyle, activeSaturationStyle, StyleSheet.absoluteFillObject]} />
           </ConditionalRendering>

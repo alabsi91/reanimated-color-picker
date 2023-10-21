@@ -1,8 +1,8 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
-import pickerContext from '@context';
+import usePickerContext from '@context';
 import Thumb from '@thumb';
 import { clamp, getStyle, HSVA2RGBA, isRtl, isWeb, RenderNativeOnly, RGBA2HSVA } from '@utils';
 
@@ -37,7 +37,7 @@ export function BlueSlider({
     thumbStyle: globalThumbStyle,
     thumbInnerStyle: globalThumbInnerStyle,
     sliderThickness: globalSliderThickness,
-  } = useContext(pickerContext);
+  } = usePickerContext();
 
   const thumbShape = localThumbShape ?? globalThumbShape,
     thumbSize = localThumbSize ?? globalThumbSize,

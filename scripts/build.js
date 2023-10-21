@@ -6,43 +6,51 @@ const fs = require('fs/promises'),
   { resolveTsPaths } = require('resolve-tspaths'),
   execPromise = util.promisify(exec);
 
-const outDir = 'lib',
-  sourceDir = 'src',
-  assetsDir = 'assets',
-  modulePath = path.join(outDir, 'module'),
-  commonjsPath = path.join(outDir, 'commonjs'),
-  typescriptPath = path.join(outDir, 'typescript'),
-  outSrc = path.join(outDir, 'src'),
-  babelConfigPath = path.join('scripts', 'babel.config.js'),
-  babelOptions = `--ignore "${sourceDir}/**/*.d.ts" --extensions ".ts,.tsx" --source-maps --copy-files --no-copy-ignored`;
+const sourceDir = 'src',
+  assetsDir = 'assets';
 
+const outDir = 'lib',
+  moduleOutDir = path.join(outDir, 'module'),
+  commonjsOutDir = path.join(outDir, 'commonjs'),
+  declarationOutDir = path.join(outDir, 'typescript'),
+  srcOutDir = path.join(outDir, 'src');
+
+const babelConfigFilePath = path.join('scripts', 'babel.config.js'),
+  babelArgs = `--ignore "${sourceDir}/**/*.d.ts" --extensions ".ts,.tsx" --source-maps --copy-files --no-copy-ignored`;
+
+/** Delete and clean up the output directory if it exists. */
 async function cleanOutDirectory() {
   const isExists = existsSync(outDir);
   if (!isExists) return;
   await fs.rm(outDir, { recursive: true });
 }
 
+/** Build TypeScript declaration files. */
 async function buildTypescript() {
-  await execPromise(`npx tsc --declarationDir ${typescriptPath} --emitDeclarationOnly --declaration --declarationMap`);
-  await resolveTsPaths({ out: typescriptPath });
+  await execPromise(`npx tsc --declarationDir ${declarationOutDir} --emitDeclarationOnly --declaration --declarationMap`);
+  await resolveTsPaths({ out: declarationOutDir }); // Resolve import aliases to their corresponding actual paths.
 }
 
+/** Build JavaScript ESM (ECMAScript Modules) files. */
 async function buildModuleJs() {
   process.env.MODULES = '';
-  await execPromise(`npx babel --config-file ./${babelConfigPath} --out-dir ${modulePath} ${sourceDir} ${babelOptions}`);
+  await execPromise(`npx babel --config-file ./${babelConfigFilePath} --out-dir ${moduleOutDir} ${sourceDir} ${babelArgs}`);
 }
 
+/** Build JavaScript CommonJS module files. */
 async function buildCommonJs() {
   process.env.MODULES = 'commonjs';
-  await execPromise(`npx babel --config-file ./${babelConfigPath} --out-dir ${commonjsPath} ${sourceDir} ${babelOptions}`);
+  await execPromise(`npx babel --config-file ./${babelConfigFilePath} --out-dir ${commonjsOutDir} ${sourceDir} ${babelArgs}`);
 }
 
+/** Compile the source file using the TypeScript compiler. */
 async function buildSource() {
-  await execPromise(`npx tsc --outDir ${outSrc}`);
-  await resolveTsPaths({ out: outSrc });
-  await fs.cp(path.join(sourceDir, assetsDir), path.join(outSrc, assetsDir), { recursive: true });
+  await execPromise(`npx tsc --outDir ${srcOutDir}`);
+  await resolveTsPaths({ out: srcOutDir }); // Resolve import aliases to their corresponding actual paths.
+  await fs.cp(path.join(sourceDir, assetsDir), path.join(srcOutDir, assetsDir), { recursive: true });
 }
 
+/** Format output files using Prettier. */
 async function prettier() {
   const buildDir = path.join(outDir, '**/*');
   await execPromise(`npx prettier --write ${buildDir} --ignore-unknown`);

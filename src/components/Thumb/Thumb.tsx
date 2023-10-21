@@ -1,8 +1,8 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { runOnJS, useAnimatedStyle, useDerivedValue, useSharedValue } from 'react-native-reanimated';
 
 import colorKit from '@colorKit';
-import pickerContext from '@context';
+import usePickerContext from '@context';
 import { styles } from '@styles';
 import BuiltinThumbs from './BuiltinThumbs/index';
 
@@ -21,7 +21,7 @@ export default function Thumb({
   channel,
 }: ThumbProps) {
   const { width, height, borderRadius } = { width: thumbSize, height: thumbSize, borderRadius: thumbSize / 2 };
-  const { hueValue, saturationValue, brightnessValue, alphaValue, value } = useContext(pickerContext);
+  const { hueValue, saturationValue, brightnessValue, alphaValue, value } = usePickerContext();
 
   const resultColor = useSharedValue('#ffffff');
   const solidColor = useAnimatedStyle(() => ({ backgroundColor: resultColor.value }));

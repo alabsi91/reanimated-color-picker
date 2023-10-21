@@ -1,14 +1,14 @@
-import React, { useContext } from 'react';
-import { GestureDetector, Gesture } from 'react-native-gesture-handler';
+import React from 'react';
+import { Image, LayoutChangeEvent, StyleSheet } from 'react-native';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
-import { clamp, getStyle, HSVA2HSLA_string, isRtl, isWeb, RenderNativeOnly, RenderWebOnly } from '@utils';
-import pickerContext from '@context';
+import usePickerContext from '@context';
 import Thumb from '@thumb';
+import { clamp, getStyle, HSVA2HSLA_string, isRtl, isWeb, RenderNativeOnly, RenderWebOnly } from '@utils';
 
-import { Image, LayoutChangeEvent, StyleSheet } from 'react-native';
-import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 import type { SliderProps } from '@types';
+import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
 export function OpacitySlider({
   adaptSpectrum: localAdaptSpectrum,
@@ -40,7 +40,7 @@ export function OpacitySlider({
     thumbStyle: globalThumbsStyle,
     thumbInnerStyle: globalThumbsInnerStyle,
     sliderThickness: globalSliderThickness,
-  } = useContext(pickerContext);
+  } = usePickerContext();
 
   const thumbShape = localThumbShape ?? globalThumbsShape,
     thumbSize = localThumbSize ?? globalThumbsSize,

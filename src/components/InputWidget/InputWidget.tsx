@@ -1,8 +1,8 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import colorKit from '@colorKit';
-import pickerContext from '@context';
+import usePickerContext from '@context';
 import { styles } from '@styles';
 import { ConditionalRendering, getStyle } from '@utils';
 import HexWidget from './Widgets/HexWidget';
@@ -27,7 +27,7 @@ export function InputWidget({
   inputProps = {},
 }: InputWidgetProps) {
   const { setColor, returnedResults, hueValue, saturationValue, brightnessValue, alphaValue, onGestureChange, onGestureEnd } =
-    useContext(pickerContext);
+    usePickerContext();
 
   const [format, setFormat] = useState<typeof defaultFormat>(
     formats.includes(defaultFormat) ? defaultFormat : formats[0] ?? 'HEX'
@@ -85,7 +85,7 @@ export function InputWidget({
         <Input />
       </View>
 
-      <ConditionalRendering render={formats.length > 1}>
+      <ConditionalRendering if={formats.length > 1}>
         <View style={{ width: iconWidth }}>
           <Pressable onPress={cycle}>
             <Image style={[buttonIconStyle, { tintColor: iconColor }]} source={require('@assets/arrow-icon.png')} />

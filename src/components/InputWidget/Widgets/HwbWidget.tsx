@@ -97,7 +97,7 @@ export default function HwbWidget({
         onFocus={onFocus}
         inputProps={inputProps}
       />
-      <ConditionalRendering render={!disableAlphaChannel}>
+      <ConditionalRendering if={!disableAlphaChannel}>
         <WidgetTextInput
           inputStyle={inputStyle}
           textStyle={inputTitleStyle}

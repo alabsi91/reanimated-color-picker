@@ -3,8 +3,11 @@ import { I18nManager, Platform, StyleSheet } from 'react-native';
 
 import type { StyleProp, ViewStyle } from 'react-native';
 
+export const isRtl = I18nManager.isRTL;
+export const isWeb = Platform.OS === 'web';
+
 /** - To find the index of an element in a two-dimensional array. */
-export function findIndexIn2DArray<T>(array: T[][], evaluate: (target: T) => boolean) {
+export function findIndexIn2DArray<T>(array: T[][], evaluate: (target: T) => boolean): [number, number] | [null, null] {
   for (let i = 0; i < array.length; i++) {
     for (let j = 0; j < array[i].length; j++) {
       if (evaluate(array[i][j])) return [i, j];
@@ -134,18 +137,10 @@ export function RGBA2HSVA(r: number, g: number, b: number, a = 1) {
   };
 }
 
-/** - Convert a decimal number to hexadecimal */
-export function decimalToHex(a: number): string {
-  'worklet';
-  a = clamp(Math.round(a * 255), 255);
-  const hex = a.toString(16);
-  return hex.length === 1 ? '0' + hex : hex;
-}
-
 /** - Render children only if the `render` property is `true` */
-export function ConditionalRendering({ children, render }: { children: React.ReactNode; render: boolean }) {
-  if (!render) return null;
-  return <>{children}</>;
+export function ConditionalRendering(props: { children: React.ReactNode; if: boolean }) {
+  if (!props.if) return null;
+  return <>{props.children}</>;
 }
 
 /** - Render children for native platforms only (Android, IOS) */
@@ -159,6 +154,3 @@ export function RenderWebOnly({ children }: { children: React.ReactNode }) {
   if (!isWeb) return null;
   return <>{children}</>;
 }
-
-export const isRtl = I18nManager.isRTL;
-export const isWeb = Platform.OS === 'web';

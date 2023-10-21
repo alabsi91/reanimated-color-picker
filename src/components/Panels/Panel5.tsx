@@ -1,10 +1,10 @@
-import React, { useCallback, useContext, useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { ImageBackground } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import colorKit from '@colorKit';
-import pickerContext from '@context';
+import usePickerContext from '@context';
 import { styles } from '@styles';
 import { findIndexIn2DArray, getStyle, isRtl } from '@utils';
 
@@ -12,7 +12,7 @@ import type { Panel5Props } from '@types';
 import type { LayoutChangeEvent } from 'react-native';
 
 export function Panel5({ style = {}, selectionStyle = {} }: Panel5Props) {
-  const { value, hueValue, saturationValue, brightnessValue, onGestureChange, onGestureEnd } = useContext(pickerContext);
+  const { value, hueValue, saturationValue, brightnessValue, onGestureChange, onGestureEnd } = usePickerContext();
 
   const borderRadius = getStyle(style, 'borderRadius') ?? 0;
 
