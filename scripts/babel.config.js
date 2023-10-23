@@ -8,9 +8,9 @@ module.exports = function (api) {
 
   const alias = {};
   for (const key in paths) {
-    const aliasName = key.replace(/\/\*$/, '');
-    const aliasPath = paths[key][0].replace(/\/\*$/, '/');
-    alias[aliasName] = (aliasPath.startsWith('./') ? aliasPath : './' + aliasPath) + '.js';
+    const aliasName = key.replace(/\/\*$/, ''); // replace '/*' with '' at the end
+    const aliasPath = paths[key][0].replace(/\/\*$/, '/'); // replace '/*' with '/' at the end
+    alias[aliasName] = aliasPath.startsWith('./') ? aliasPath : './' + aliasPath;
   }
 
   const browsers = [
