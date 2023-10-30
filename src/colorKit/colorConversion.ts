@@ -7,7 +7,10 @@ import type { ColorFormats, hslaT, hslT, hsvaT, hsvT, hwbaT, hwbT, rgbaT, rgbT, 
 /** - Identify the color format of a given `string` or `object` */
 function detectColorFormat(color: SupportedColorFormats): ColorFormats | null {
   // color int
-  if (typeof color === 'number') color = '#' + color.toString(16);
+  if (typeof color === 'number') {
+    if (color >>> 0 === color && color >= 0 && color <= 0xffffffff) return 'hex8';
+    return null;
+  }
 
   // color string
   if (typeof color === 'string') {
@@ -295,7 +298,9 @@ export function RGB(color: SupportedColorFormats) {
 // * HEX
 /** - Convert any `HEX` color to 8-digit `HEX` color (#rrggbbaa) */
 function normalizeHexColor(color: string | number): string {
-  if (typeof color === 'number') color = '#' + color.toString(16); // color int
+  if (typeof color === 'number') {
+    return '#' + color.toString(16).padStart(8, '0');
+  }
 
   const colorType = detectColorFormat(color.trim().toLowerCase());
 
@@ -316,7 +321,7 @@ function normalizeHexColor(color: string | number): string {
 }
 /** - Convert any `HEX` color to an `RGBA` object representation */
 function HEX_RGBA(color: string | number): rgbaT {
-  if (typeof color === 'number') color = '#' + color.toString(16); // color int
+  if (typeof color === 'number') color = '#' + color.toString(16).padStart(8, '0'); // color int
 
   const hex = normalizeHexColor(color.trim().toLowerCase());
 
@@ -398,7 +403,7 @@ export function HEX(color: SupportedColorFormats): string {
   }
 
   // HEX
-  if (colorType?.includes('hex')) return color as string;
+  if (colorType?.includes('hex')) return normalizeHexColor(color as string | number);
 
   // ! error
   console.error(

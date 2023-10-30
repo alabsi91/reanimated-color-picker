@@ -7,7 +7,10 @@ import type { ColorFormats, hslaT, hslT, hsvaT, hsvT, hwbaT, hwbT, rgbaT, rgbT, 
 /** - Identify the color format of a given `string` or `object`, and return `null` for invalid colors. */
 export function getFormat(color: SupportedColorFormats): ColorFormats | 'named' | null {
   // color int
-  if (typeof color === 'number') color = '#' + color.toString(16);
+  if (typeof color === 'number') {
+    if (color >>> 0 === color && color >= 0 && color <= 0xffffffff) return 'hex8';
+    return null;
+  }
 
   // color string
   if (typeof color === 'string') {
