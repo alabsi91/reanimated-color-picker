@@ -67,9 +67,9 @@ export type RenderThumbType = React.FC<RenderThumbProps>;
 
 export type ThumbProps = {
   thumbColor?: string;
-  handleStyle: {};
-  innerStyle?: {};
-  style?: {};
+  handleStyle: StyleProp<ViewStyle>;
+  innerStyle?: StyleProp<ViewStyle>;
+  style?: StyleProp<ViewStyle>;
   renderThumb?: RenderThumbType;
   vertical?: boolean;
   adaptSpectrum?: boolean;
@@ -84,9 +84,9 @@ export type BuiltinThumbsProps = {
   borderRadius: number;
   thumbColor?: string;
   adaptiveColor: SharedValue<string>;
-  handleStyle: {};
-  innerStyle?: {};
-  style?: {};
+  handleStyle: StyleProp<ViewStyle>;
+  innerStyle?: StyleProp<ViewStyle>;
+  style?: StyleProp<ViewStyle>;
   solidColor: AnimatedStyleProp<ViewStyle>;
   renderThumb?: RenderThumbType;
   vertical?: boolean;
@@ -380,7 +380,7 @@ export interface SliderProps {
   style?: StyleProp<ViewStyle>;
 }
 
-export interface RgbSliderProps extends Omit<SliderProps, 'adaptSpectrum'> {}
+export type RgbSliderProps = Omit<SliderProps, 'adaptSpectrum'>;
 
 export interface HueCircular extends Omit<SliderProps, 'vertical' | 'reverse' | 'boundedThumb'> {
   children?: ReactNode;

@@ -110,11 +110,11 @@ export function RGBA2HSVA(r: number, g: number, b: number, a = 1) {
 
   const max = Math.max(r, g, b),
     min = Math.min(r, g, b),
-    d = max - min;
-
-  let v = max,
-    h = 0,
+    d = max - min,
+    v = max,
     s = max === 0 ? 0 : d / max;
+
+  let h = 0;
 
   if (max === min) {
     h = 0;

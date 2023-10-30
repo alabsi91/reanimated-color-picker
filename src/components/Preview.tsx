@@ -9,7 +9,7 @@ import { ConditionalRendering, getStyle, isWeb } from '@utils';
 
 import type { PreviewProps } from '@types';
 import type { ReactNode } from 'react';
-import type { StyleProp, TextStyle } from 'react-native';
+import type { StyleProp, TextStyle, ViewStyle } from 'react-native';
 import type { SharedValue } from 'react-native-reanimated';
 
 const ReText = ({ text, style, hash }: { text: () => string; style: StyleProp<TextStyle>[]; hash: SharedValue<number>[] }) => {
@@ -92,7 +92,15 @@ export function Preview({
   );
 }
 
-function Wrapper({ children, disableTexture, style }: { children: ReactNode; disableTexture: boolean; style: {} | null }) {
+function Wrapper({
+  children,
+  disableTexture,
+  style,
+}: {
+  children: ReactNode;
+  disableTexture: boolean;
+  style: StyleProp<ViewStyle>;
+}) {
   if (disableTexture) {
     return <View style={[styles.previewWrapper, style]}>{children}</View>;
   }
@@ -118,4 +126,4 @@ const previewWrapperWeb = {
     'repeating-linear-gradient(45deg, #c1c1c1 25%, transparent 25%, transparent 75%, #c1c1c1 75%, #c1c1c1), repeating-linear-gradient(45deg, #c1c1c1 25%, #fff 25%, #fff 75%, #c1c1c1 75%, #c1c1c1)',
   backgroundPosition: '0px 0px, 8px 8px',
   backgroundSize: '16px 16px',
-};
+} as StyleProp<ViewStyle>;
