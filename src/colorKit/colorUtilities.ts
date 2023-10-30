@@ -5,12 +5,28 @@ import { clamp100, clampAlpha, clampHue, clampRGB, randomNumber } from './utilit
 import type { ConversionMethods, rgbaT, SupportedColorFormats } from './types';
 
 function returnColorObject(color: SupportedColorFormats) {
+  'worklet';
   return {
-    hex: () => HEX(color),
-    rgb: () => RGB(color),
-    hsl: () => HSL(color),
-    hsv: () => HSV(color),
-    hwb: () => HWB(color),
+    hex: () => {
+      'worklet';
+      return HEX(color);
+    },
+    rgb: () => {
+      'worklet';
+      return RGB(color);
+    },
+    hsl: () => {
+      'worklet';
+      return HSL(color);
+    },
+    hsv: () => {
+      'worklet';
+      return HSV(color);
+    },
+    hwb: () => {
+      'worklet';
+      return HWB(color);
+    },
   };
 }
 
@@ -20,6 +36,7 @@ function returnColorObject(color: SupportedColorFormats) {
  * blend('yellow', 'red', 50).hex(); // #ff8000
  */
 export function blend(color1: SupportedColorFormats, color2: SupportedColorFormats, percentage: number): ConversionMethods {
+  'worklet';
   percentage = percentage / 100;
 
   const rgba1 = RGB(color1).object();
@@ -37,6 +54,7 @@ export function blend(color1: SupportedColorFormats, color2: SupportedColorForma
 
 /** - Invert (negate) a color, black becomes white, white becomes black, blue becomes orange and so on. */
 export function invert(color: SupportedColorFormats): ConversionMethods {
+  'worklet';
   const { r, g, b, a } = RGB(color).object();
   const invertedColor = { r: 255 - r, g: 255 - g, b: 255 - b, a };
   return returnColorObject(invertedColor);
@@ -44,6 +62,7 @@ export function invert(color: SupportedColorFormats): ConversionMethods {
 
 /** - Completely desaturate a color into grayscale. */
 export function grayscale(color: SupportedColorFormats): ConversionMethods {
+  'worklet';
   const { r, g, b, a } = RGB(color).object();
   const gray = clampRGB(r * 0.3 + g * 0.59 + b * 0.11);
   const grayColor = { r: gray, g: gray, b: gray, a };
@@ -53,6 +72,7 @@ export function grayscale(color: SupportedColorFormats): ConversionMethods {
 
 /** - Generate a random color from `HSL` values. */
 export function randomHslColor({ h = [0, 360], s = [0, 100], l = [0, 100], a = [1, 1] } = {}): ConversionMethods {
+  'worklet';
   const random = {
     h: clampHue(randomNumber(h[0], h[1])),
     s: clamp100(randomNumber(s[0], s[1])),
@@ -64,6 +84,7 @@ export function randomHslColor({ h = [0, 360], s = [0, 100], l = [0, 100], a = [
 }
 /** - Generate a random color from `HSV` values. */
 export function randomHsvColor({ h = [0, 360], s = [0, 100], v = [0, 100], a = [1, 1] } = {}): ConversionMethods {
+  'worklet';
   const random = {
     h: clampHue(randomNumber(h[0], h[1])),
     s: clamp100(randomNumber(s[0], s[1])),
@@ -75,6 +96,7 @@ export function randomHsvColor({ h = [0, 360], s = [0, 100], v = [0, 100], a = [
 }
 /** - Generate a random color from `RGB` values. */
 export function randomRgbColor({ r = [0, 255], g = [0, 255], b = [0, 255], a = [1, 1] } = {}): ConversionMethods {
+  'worklet';
   const random = {
     r: clampRGB(randomNumber(r[0], r[1])),
     g: clampRGB(randomNumber(g[0], g[1])),
@@ -86,6 +108,7 @@ export function randomRgbColor({ r = [0, 255], g = [0, 255], b = [0, 255], a = [
 }
 /** - Generate a random color from `HWB` values. */
 export function randomHwbColor({ h = [0, 360], w = [0, 100], b = [0, 100], a = [1, 1] } = {}): ConversionMethods {
+  'worklet';
   const random = {
     h: clampHue(randomNumber(h[0], h[1])),
     w: clamp100(randomNumber(w[0], w[1])),
@@ -98,16 +121,18 @@ export function randomHwbColor({ h = [0, 360], w = [0, 100], b = [0, 100], a = [
 
 /** - Returns the first color with the desired contrast ratio against the second color */
 export function adjustContrast(color1: SupportedColorFormats, color2: SupportedColorFormats, ratio = 4.5): ConversionMethods {
+  'worklet';
   const contrast = contrastRatio(color1, color2);
   const color1RGB = RGB(color1).object();
   const channels = ['r', 'g', 'b'] as const;
 
-  const adjustLuminance = (colorRGB: rgbaT, by: number) => {
+  function adjustLuminance(colorRGB: rgbaT, by: number) {
+    'worklet';
     const r = clampRGB(colorRGB.r + by);
     const g = clampRGB(colorRGB.g + by);
     const b = clampRGB(colorRGB.b + by);
     return { r, g, b, a: colorRGB.a };
-  };
+  }
 
   let newColor = color1RGB;
 
