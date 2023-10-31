@@ -11,9 +11,10 @@ import type { ColorPickerContext, ColorPickerProps, ColorPickerRef } from '@type
 import type { SupportedColorFormats } from './colorKit/types';
 
 if (isWeb) {
-  // @ts-ignore
+  // @ts-expect-error no global
   if (!global.setImmediate) global.setImmediate = setTimeout;
   try {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { enableExperimentalWebImplementation } = require('react-native-gesture-handler');
     enableExperimentalWebImplementation(true);
   } catch (error) {

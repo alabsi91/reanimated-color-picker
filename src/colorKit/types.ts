@@ -18,7 +18,7 @@ export type hwbT = Omit<hwbaT, 'a'>;
 
 export type SupportedColorFormats = ColorString | rgbaT | rgbT | hslaT | hslT | hsvaT | hsvT | hwbaT | hwbT | number;
 
-export type colorTypes<T extends {}> = {
+export type colorTypes<T extends object> = {
   object: () => T;
   string: (alpha?: boolean) => string;
   array: () => number[];

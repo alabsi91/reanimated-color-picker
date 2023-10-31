@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, LayoutChangeEvent, StyleSheet } from 'react-native';
+import { Image, StyleSheet } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
@@ -8,6 +8,7 @@ import Thumb from '@thumb';
 import { clamp, getStyle, HSVA2HSLA_string, isRtl, isWeb, RenderNativeOnly, RenderWebOnly } from '@utils';
 
 import type { SliderProps } from '@types';
+import type { LayoutChangeEvent } from 'react-native';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
 export function OpacitySlider({

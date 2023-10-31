@@ -1,10 +1,11 @@
 import React from 'react';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 
-import { isRtl } from '@utils';
 import { styles } from '@styles';
+import { isRtl } from '@utils';
 
 import type { BuiltinThumbsProps } from '@types';
+import type { StyleProp, ViewStyle } from 'react-native';
 
 export default function ({
   width,
@@ -16,7 +17,7 @@ export default function ({
   style,
   vertical,
 }: BuiltinThumbsProps) {
-  const computedStyle = {
+  const computedStyle: StyleProp<ViewStyle> = {
     width,
     height,
     ...(vertical

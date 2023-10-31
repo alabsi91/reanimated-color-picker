@@ -6,6 +6,7 @@ import { styles } from '@styles';
 import { isRtl } from '@utils';
 
 import type { BuiltinThumbsProps } from '@types';
+import type { StyleProp, ViewStyle } from 'react-native';
 
 export default function DoubleTriangle({
   width,
@@ -17,7 +18,7 @@ export default function DoubleTriangle({
   style,
   vertical,
 }: BuiltinThumbsProps) {
-  const computedStyle = {
+  const computedStyle: StyleProp<ViewStyle> = {
     width,
     height,
     flexDirection: vertical ? (isRtl ? 'row' : 'row-reverse') : 'column',
