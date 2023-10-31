@@ -31,8 +31,8 @@ export function randomNumber(min: number, max: number) {
 export function numberToHexString(c: number): string {
   'worklet';
   c = clampRGB(c);
-  const hex = c.toString(16);
-  return hex.length === 1 ? '0' + hex : hex;
+  const hex = c.toString(16).padStart(2, '0');
+  return hex;
 }
 
 export function calculateHueValue(p: number, q: number, t: number): number {

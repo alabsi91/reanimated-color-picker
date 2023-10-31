@@ -102,7 +102,8 @@ export function getSaturation(color: SupportedColorFormats): number {
   return s;
 }
 
-/** - Get color's HSL `luminosity` channel value.
+/**
+ * - Get color's HSL `luminosity` channel value.
  * - If you want the overall `luminosity` of a color use `getLuminanceWCAG` method.
  */
 export function getLuminance(color: SupportedColorFormats): number {
@@ -144,7 +145,7 @@ export function isLight(color: SupportedColorFormats): boolean {
  * - Check if two colors are similar within a specified tolerance.
  * @example
  * const tolerance = 0;
- * const isEqual = colorKit.areColorsEqual("#F00", "red", tolerance); // true
+ * const isEqual = colorKit.areColorsEqual("#f00", "red", tolerance); // true
  */
 export function areColorsEqual(color1: SupportedColorFormats, color2: SupportedColorFormats, tolerance = 0): boolean {
   'worklet';

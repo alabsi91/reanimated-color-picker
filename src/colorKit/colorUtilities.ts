@@ -82,6 +82,7 @@ export function randomHslColor({ h = [0, 360], s = [0, 100], l = [0, 100], a = [
 
   return returnColorObject(random);
 }
+
 /** - Generate a random color from `HSV` values. */
 export function randomHsvColor({ h = [0, 360], s = [0, 100], v = [0, 100], a = [1, 1] } = {}): ConversionMethods {
   'worklet';
@@ -94,6 +95,7 @@ export function randomHsvColor({ h = [0, 360], s = [0, 100], v = [0, 100], a = [
 
   return returnColorObject(random);
 }
+
 /** - Generate a random color from `RGB` values. */
 export function randomRgbColor({ r = [0, 255], g = [0, 255], b = [0, 255], a = [1, 1] } = {}): ConversionMethods {
   'worklet';
@@ -106,6 +108,7 @@ export function randomRgbColor({ r = [0, 255], g = [0, 255], b = [0, 255], a = [
 
   return returnColorObject(random);
 }
+
 /** - Generate a random color from `HWB` values. */
 export function randomHwbColor({ h = [0, 360], w = [0, 100], b = [0, 100], a = [1, 1] } = {}): ConversionMethods {
   'worklet';
@@ -139,8 +142,8 @@ export function adjustContrast(color1: SupportedColorFormats, color2: SupportedC
   //* increase contrast
   if (ratio && contrast < ratio) {
     while (contrastRatio(newColor, color2) < ratio) {
-      const increase = isDark(color2); // if the background color is dark
-      newColor = adjustLuminance(newColor, increase ? 1 : -1);
+      const adjustBy = isDark(color2) ? 1 : -1; // increase or decrease relative to the background color
+      newColor = adjustLuminance(newColor, adjustBy);
 
       // break if the color reached the limit
       if (channels.every(e => newColor[e] === 0)) break;
@@ -149,8 +152,8 @@ export function adjustContrast(color1: SupportedColorFormats, color2: SupportedC
     //* decrease contrast
   } else if (ratio && contrast > ratio) {
     while (contrastRatio(newColor, color2) > ratio) {
-      const increase = !isDark(color2); // if the background color is light
-      newColor = adjustLuminance(newColor, increase ? 1 : -1);
+      const adjustBy = !isDark(color2) ? 1 : -1; // increase or decrease relative to the background color
+      newColor = adjustLuminance(newColor, adjustBy);
 
       // break if the color reached the limit
       if (channels.every(e => newColor[e] === 0)) break;

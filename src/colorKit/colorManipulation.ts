@@ -29,6 +29,7 @@ function returnColorObject(color: SupportedColorFormats) {
   };
 }
 
+// * Red channel
 /** Set the `red` value of a color to a specific amount.*/
 export function setRed(color: SupportedColorFormats, amount: number): ConversionMethods {
   'worklet';
@@ -41,7 +42,7 @@ export function setRed(color: SupportedColorFormats, amount: number): Conversion
 
 /** Increase the `red` value of a color by the given percentage/amount.
  * @example
- * increaseRed(''rgb(100, 100, 100)', 20).hex();
+ * increaseRed('rgb(100, 100, 100)', 20).hex();
  * increaseRed('rgb(100, 100, 100)', '20%').rgb().string();
  */
 export function increaseRed(color: SupportedColorFormats, amount: number | string): ConversionMethods {
@@ -69,6 +70,7 @@ export function decreaseRed(color: SupportedColorFormats, amount: number | strin
   return returnColorObject(newColor);
 }
 
+// * Green channel
 /** - Set the `green` value of a color to a specific amount.*/
 export function setGreen(color: SupportedColorFormats, amount: number): ConversionMethods {
   'worklet';
@@ -109,8 +111,9 @@ export function decreaseGreen(color: SupportedColorFormats, amount: number | str
   return returnColorObject(newColor);
 }
 
+// * Blue channel
 /** - Set the `blue` value of a color to a specific amount.*/
-export function setBlur(color: SupportedColorFormats, amount: number): ConversionMethods {
+export function setBlue(color: SupportedColorFormats, amount: number): ConversionMethods {
   'worklet';
   const { r, g, a } = RGB(color).object();
   const newB = clampRGB(amount);
@@ -149,7 +152,47 @@ export function decreaseBlue(color: SupportedColorFormats, amount: number | stri
   return returnColorObject(newColor);
 }
 
-//* hue
+//* Alpha channel
+/** - Get the `alpha` value of a given color. */
+export function getAlpha(color: SupportedColorFormats): number {
+  'worklet';
+  const { a } = RGB(color).object();
+  return a;
+}
+
+/** - Set the `alpha` value of a color to a specific amount.*/
+export function setAlpha(color: SupportedColorFormats, amount: number): ConversionMethods {
+  'worklet';
+  const { r, g, b } = RGB(color).object();
+  const newA = clampAlpha(amount);
+  const newColor = { r, g, b, a: newA };
+
+  return returnColorObject(newColor);
+}
+
+/** Increase the `alpha` value of a color by the given percentage.*/
+export function increaseAlpha(color: SupportedColorFormats, amount: number | string): ConversionMethods {
+  'worklet';
+  const { r, g, b, a } = RGB(color).object();
+  const alpha = typeof amount === 'string' ? a + a * (parseFloat(amount) / 100) : a + amount;
+  const newA = clampAlpha(alpha);
+  const newColor = { r, g, b, a: newA };
+
+  return returnColorObject(newColor);
+}
+
+/** Decrease the `alpha` value of a color by the given percentage.*/
+export function decreaseAlpha(color: SupportedColorFormats, amount: number | string): ConversionMethods {
+  'worklet';
+  const { r, g, b, a } = RGB(color).object();
+  const alpha = typeof amount === 'string' ? a - a * (parseFloat(amount) / 100) : a - amount;
+  const newA = clampAlpha(alpha);
+  const newColor = { r, g, b, a: newA };
+
+  return returnColorObject(newColor);
+}
+
+//* Hue
 /** - Set the `hue` value of a color to a specific amount.*/
 export function setHue(color: SupportedColorFormats, amount: number): ConversionMethods {
   'worklet';
@@ -205,8 +248,7 @@ export function spin(color: SupportedColorFormats, degree: number | string): Con
   return returnColorObject(newColor);
 }
 
-//* saturation
-
+//* Saturation
 /** - Set the `saturation` value of a color to a specific amount.*/
 export function setSaturation(color: SupportedColorFormats, amount: number): ConversionMethods {
   'worklet';
@@ -249,8 +291,7 @@ export function desaturate(color: SupportedColorFormats, amount: number | string
   return returnColorObject(desaturatedColor);
 }
 
-//* brightness
-
+//* Brightness
 /** - Set HSL's `luminosity` channel for a given color to a specific amount.*/
 export function setLuminance(color: SupportedColorFormats, amount: number): ConversionMethods {
   'worklet';
@@ -321,46 +362,6 @@ export function decreaseBrightness(color: SupportedColorFormats, amount: number 
   const value = typeof amount === 'string' ? v - v * (parseFloat(amount) / 100) : v - amount;
   const newV = clamp100(value);
   const newColor = { h, s, v: newV, a };
-
-  return returnColorObject(newColor);
-}
-
-//* alpha
-/** - Get the `alpha` value of a given color. */
-export function getAlpha(color: SupportedColorFormats): number {
-  'worklet';
-  const { a } = RGB(color).object();
-  return a;
-}
-
-/** - Set the `alpha` value of a color to a specific amount.*/
-export function setAlpha(color: SupportedColorFormats, amount: number): ConversionMethods {
-  'worklet';
-  const { r, g, b } = RGB(color).object();
-  const newA = clampAlpha(amount);
-  const newColor = { r, g, b, a: newA };
-
-  return returnColorObject(newColor);
-}
-
-/** Increase the `alpha` value of a color by the given percentage.*/
-export function increaseAlpha(color: SupportedColorFormats, amount: number | string): ConversionMethods {
-  'worklet';
-  const { r, g, b, a } = RGB(color).object();
-  const alpha = typeof amount === 'string' ? a + a * (parseFloat(amount) / 100) : a + amount;
-  const newA = clampAlpha(alpha);
-  const newColor = { r, g, b, a: newA };
-
-  return returnColorObject(newColor);
-}
-
-/** Decrease the `alpha` value of a color by the given percentage.*/
-export function decreaseAlpha(color: SupportedColorFormats, amount: number | string): ConversionMethods {
-  'worklet';
-  const { r, g, b, a } = RGB(color).object();
-  const alpha = typeof amount === 'string' ? a - a * (parseFloat(amount) / 100) : a - amount;
-  const newA = clampAlpha(alpha);
-  const newColor = { r, g, b, a: newA };
 
   return returnColorObject(newColor);
 }
