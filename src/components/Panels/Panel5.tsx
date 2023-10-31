@@ -30,7 +30,7 @@ export function Panel5({ style = {}, selectionStyle = {} }: Panel5Props) {
       right: isRtl ? posX.value * squareSize.value : undefined,
       borderColor: adaptiveColor.value,
     };
-  });
+  }, [squareSize, posX, posY, adaptiveColor]);
 
   const setAdaptiveColor = (color1: string) => {
     const color = adaptiveColor.value === '#ffffff' ? '#000000' : '#ffffff';

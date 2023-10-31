@@ -24,7 +24,7 @@ export default function Thumb({
   const { hueValue, saturationValue, brightnessValue, alphaValue, value } = usePickerContext();
 
   const resultColor = useSharedValue('#ffffff');
-  const solidColor = useAnimatedStyle(() => ({ backgroundColor: resultColor.value }));
+  const solidColor = useAnimatedStyle(() => ({ backgroundColor: resultColor.value }), [resultColor]);
   const setResultColor = (color: { h: number; s: number; v: number; a?: number }) => {
     resultColor.value = colorKit.HEX(color);
   };

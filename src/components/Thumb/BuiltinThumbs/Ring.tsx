@@ -26,10 +26,14 @@ export default function Ring({
     borderColor: thumbColor,
     borderWidth: 1,
   };
-  const adaptiveColorStyle = useAnimatedStyle(() => ({
-    backgroundColor: (thumbColor && thumbColor + '50') || (adaptiveColor.value === '#ffffff' ? '#ffffff50' : '#00000050'),
-    borderColor: thumbColor || adaptiveColor.value,
-  }));
+
+  const adaptiveColorStyle = useAnimatedStyle(() => {
+    return {
+      backgroundColor: (thumbColor && thumbColor + '50') || (adaptiveColor.value === '#ffffff' ? '#ffffff50' : '#00000050'),
+      borderColor: thumbColor || adaptiveColor.value,
+    };
+  }, [thumbColor, adaptiveColor]);
+
   return (
     <Animated.View style={[styles.handle, style, computedStyle, adaptiveColorStyle, handleStyle]}>
       <Animated.View

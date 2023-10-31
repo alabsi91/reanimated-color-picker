@@ -22,7 +22,7 @@ export default function Circle({
     width: '100%',
     height: '100%',
   };
-  const adaptiveColorStyle = useAnimatedStyle(() => ({ borderColor: adaptiveColor.value }));
+  const adaptiveColorStyle = useAnimatedStyle(() => ({ borderColor: adaptiveColor.value }), [adaptiveColor]);
 
   return (
     <Animated.View style={[styles.handle, style, computedStyle, handleStyle]}>

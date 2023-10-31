@@ -35,7 +35,11 @@ export default function DoubleTriangle({
     borderRightWidth: 5,
     transform: [{ rotate: vertical ? '270deg' : '180deg' }],
   };
-  const adaptiveColorStyle = useAnimatedStyle(() => ({ borderBottomColor: thumbColor || adaptiveColor.value }));
+  const adaptiveColorStyle = useAnimatedStyle(() => {
+    return {
+      borderBottomColor: thumbColor || adaptiveColor.value,
+    };
+  }, [thumbColor, adaptiveColor]);
 
   return (
     <Animated.View style={[styles.handle, style, computedStyle, handleStyle]}>

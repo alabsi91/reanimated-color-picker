@@ -16,8 +16,19 @@ export default function Hollow({
   style,
 }: BuiltinThumbsProps) {
   const computedStyle = { width, height, borderRadius, borderWidth: 2 };
-  const adaptiveColorStyle = useAnimatedStyle(() => ({ borderColor: thumbColor || adaptiveColor.value }));
-  const adaptiveColorBgStyle = useAnimatedStyle(() => ({ backgroundColor: thumbColor || adaptiveColor.value }));
+
+  const adaptiveColorStyle = useAnimatedStyle(() => {
+    return {
+      borderColor: thumbColor || adaptiveColor.value,
+    };
+  }, [thumbColor, adaptiveColor]);
+
+  const adaptiveColorBgStyle = useAnimatedStyle(() => {
+    return {
+      backgroundColor: thumbColor || adaptiveColor.value,
+    };
+  }, [thumbColor, adaptiveColor]);
+
   return (
     <Animated.View style={[styles.handle, style, computedStyle, adaptiveColorStyle, handleStyle]}>
       <Animated.View style={[{ width: 4, height: 4, borderRadius: 2 }, adaptiveColorBgStyle, styles.shadow, innerStyle]} />

@@ -28,7 +28,12 @@ export default function TriangleUp({
     borderRightWidth: width / 4,
     transform: [{ rotate: vertical ? '90deg' : '0deg' }],
   };
-  const adaptiveColorStyle = useAnimatedStyle(() => ({ borderBottomColor: thumbColor || adaptiveColor.value }));
+
+  const adaptiveColorStyle = useAnimatedStyle(() => {
+    return {
+      borderBottomColor: thumbColor || adaptiveColor.value,
+    };
+  }, [thumbColor, adaptiveColor]);
 
   return (
     <Animated.View style={[styles.handle, style, computedStyle, handleStyle]}>

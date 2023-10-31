@@ -69,11 +69,11 @@ export function BrightnessSlider({
     return {
       transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }],
     };
-  }, [localThumbSize, vertical, reverse]);
+  }, [vertical, reverse, boundedThumb, thumbSize, height, width, brightnessValue, handleScale]);
 
   const activeColorStyle = useAnimatedStyle(() => {
     return { backgroundColor: HSVA2HSLA_string(hueValue.value, adaptSpectrum ? saturationValue.value : 100, 100) };
-  });
+  }, [adaptSpectrum, hueValue, saturationValue]);
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -122,7 +122,7 @@ export function BrightnessSlider({
         { translateY: vertical ? imageTranslateY : 0 },
       ],
     };
-  }, [vertical, reverse, sliderThickness]);
+  }, [vertical, reverse, height, width]);
 
   const thicknessStyle = vertical ? { width: sliderThickness } : { height: sliderThickness };
 

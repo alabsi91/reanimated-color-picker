@@ -68,7 +68,7 @@ export function BlueSlider({
     return {
       transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }],
     };
-  }, [localThumbSize, vertical, reverse]);
+  }, [thumbSize, boundedThumb, vertical, reverse, width, height, hueValue, saturationValue, brightnessValue, handleScale]);
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -118,7 +118,7 @@ export function BlueSlider({
       return { background: `linear-gradient(${deg}deg, rgb(${r}, ${g}, 255) 0%, rgb(${r}, ${g}, 0) 100%)` };
     }
     return { backgroundColor: `rgb(${r}, ${g}, 0)` };
-  });
+  }, [vertical, reverse, hueValue, saturationValue, brightnessValue]);
 
   const imageStyle = useAnimatedStyle(() => {
     if (isWeb) return {};
@@ -138,7 +138,7 @@ export function BlueSlider({
         { translateY: vertical ? imageTranslateY : 0 },
       ],
     };
-  }, [vertical, reverse, sliderThickness]);
+  }, [vertical, reverse, width, height, hueValue, saturationValue, brightnessValue]);
 
   const thicknessStyle = vertical ? { width: sliderThickness } : { height: sliderThickness };
 

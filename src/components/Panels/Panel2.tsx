@@ -67,14 +67,14 @@ export function Panel2({
       percentY = (channelValue.value / 100) * length.y,
       posY = (reverseVerticalChannel ? percentY : length.y - percentY) - (boundedThumb ? 0 : thumbSize / 2);
     return { transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }] };
-  }, [localThumbSize, reverseHue, reverseVerticalChannel]);
+  }, [localThumbSize, reverseHue, reverseVerticalChannel, width, height, hueValue, channelValue, handleScale]);
 
   const spectrumStyle = useAnimatedStyle(() => {
     if (!adaptSpectrum) return {};
     if (verticalChannel === 'brightness')
       return { backgroundColor: HSVA2HSLA_string(0, 0, 100, 1 - saturationValue.value / 100) };
     return { backgroundColor: HSVA2HSLA_string(0, 0, 0, 1 - brightnessValue.value / 100) };
-  });
+  }, [saturationValue, brightnessValue]);
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -115,15 +115,18 @@ export function Panel2({
     height.value = layout.height;
   }, []);
 
-  const rotatePanelImage = useAnimatedStyle(() => ({
-    width: height.value,
-    height: width.value,
-    transform: [
-      { rotate: reverseVerticalChannel ? '90deg' : '270deg' },
-      { translateX: ((width.value - height.value) / 2) * (reverseVerticalChannel ? -1 : 1) },
-      { translateY: ((width.value - height.value) / 2) * (isRtl ? -1 : 1) * (reverseVerticalChannel ? -1 : 1) },
-    ],
-  }));
+  const rotatePanelImage = useAnimatedStyle(
+    () => ({
+      width: height.value,
+      height: width.value,
+      transform: [
+        { rotate: reverseVerticalChannel ? '90deg' : '270deg' },
+        { translateX: ((width.value - height.value) / 2) * (reverseVerticalChannel ? -1 : 1) },
+        { translateY: ((width.value - height.value) / 2) * (isRtl ? -1 : 1) * (reverseVerticalChannel ? -1 : 1) },
+      ],
+    }),
+    [reverseVerticalChannel, width, height]
+  );
 
   return (
     <GestureDetector gesture={composed}>

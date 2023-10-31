@@ -75,13 +75,13 @@ export function Panel3({
         { rotate: hueValue.value + 90 + 'deg' },
       ],
     };
-  }, [localThumbSize]);
+  }, [thumbSize, boundedThumb, width, channelValue, hueValue, handleScale]);
 
   const spectrumStyle = useAnimatedStyle(() => {
     if (!adaptSpectrum) return {};
     if (centerChannel === 'brightness') return { backgroundColor: HSVA2HSLA_string(0, 0, 100, 1 - saturationValue.value / 100) };
     return { backgroundColor: HSVA2HSLA_string(0, 0, 0, 1 - brightnessValue.value / 100) };
-  });
+  }, [adaptSpectrum, centerChannel, saturationValue, brightnessValue]);
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';

@@ -50,7 +50,7 @@ export function Preview({
   }, [value, colorFormat]);
 
   const textColor = useSharedValue('#fff');
-  const textColorStyle = useAnimatedStyle(() => ({ color: textColor.value }));
+  const textColorStyle = useAnimatedStyle(() => ({ color: textColor.value }), [textColor]);
   const setTextColor = (color1: { h: number; s: number; v: number; a?: number }) => {
     const color = textColor.value === '#ffffff' ? '#000000' : '#ffffff';
     const contrast = colorKit.contrastRatio(color1, textColor.value);
@@ -58,7 +58,7 @@ export function Preview({
   };
 
   const previewColor = useSharedValue('#fff');
-  const previewColorStyle = useAnimatedStyle(() => ({ backgroundColor: previewColor.value }));
+  const previewColorStyle = useAnimatedStyle(() => ({ backgroundColor: previewColor.value }), [previewColor]);
   const setPreviewColor = (color: { h: number; s: number; v: number; a: number }) => {
     previewColor.value = colorKit.HEX(color);
   };
