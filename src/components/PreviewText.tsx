@@ -17,10 +17,8 @@ export function PreviewText({ style = {}, colorFormat = 'hex' }: PreviewTextProp
   };
 
   useDerivedValue(() => {
-    // To track changes in the color channel values of the ReText component.
-    [hueValue.value, saturationValue.value, brightnessValue.value, alphaValue.value];
     runOnJS(updateText)();
-  }, [colorFormat]);
+  }, [colorFormat, hueValue.value, saturationValue.value, brightnessValue.value, alphaValue.value]);
 
   return <Text style={[styles.previewText, style]}>{text}</Text>;
 }

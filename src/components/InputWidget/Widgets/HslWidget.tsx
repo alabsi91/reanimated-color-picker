@@ -29,9 +29,8 @@ export default function HslWidget({
   };
 
   useDerivedValue(() => {
-    [hueValue.value, saturationValue.value, brightnessValue.value, alphaValue.value]; // To track changes
     runOnJS(updateText)();
-  }, []);
+  }, [hueValue.value, saturationValue.value, brightnessValue.value, alphaValue.value]);
 
   const onHueChange = (text: string) => {
     let hue = +text;

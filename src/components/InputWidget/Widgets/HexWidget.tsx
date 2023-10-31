@@ -26,9 +26,8 @@ export default function HexWidget({
   };
 
   useDerivedValue(() => {
-    [hueValue.value, saturationValue.value, brightnessValue.value, alphaValue.value]; // To track changes
     runOnJS(updateText)();
-  }, []);
+  }, [hueValue.value, saturationValue.value, brightnessValue.value, alphaValue.value]);
 
   const onTextChange = (text: string) => {
     text = text.startsWith('#') ? text : '#' + text;

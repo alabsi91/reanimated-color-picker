@@ -67,10 +67,9 @@ export default function Thumb({
 
   // When the values of channels change
   useDerivedValue(() => {
-    alphaValue.value; // to keep track with `alphaValue` changes
     runOnJS(setAdaptiveColor)(getColorForAdaptiveColor());
     runOnJS(setResultColor)({ h: hueValue.value, s: saturationValue.value, v: brightnessValue.value });
-  });
+  }, [alphaValue, hueValue, saturationValue, brightnessValue]);
 
   const thumbProps: BuiltinThumbsProps = {
     width,
