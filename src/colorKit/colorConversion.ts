@@ -854,7 +854,7 @@ export function HEX(color: SupportedColorFormats): string {
 
 /** - Convert `HSL`, `HSV`, `HWB`, or `HEX` color to the `RGB` color format. */
 export function RGB(color: SupportedColorFormats) {
-  ('worklet');
+  'worklet';
   // named color
   if (typeof color === 'string') {
     color = color.trim().toLowerCase();
