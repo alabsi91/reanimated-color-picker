@@ -29,8 +29,9 @@ export default function HwbWidget({
   };
 
   useDerivedValue(() => {
+    [hueValue, saturationValue, brightnessValue, alphaValue];
     runOnJS(updateText)();
-  }, [hueValue.value, saturationValue.value, brightnessValue.value, alphaValue.value]);
+  }, [hueValue, saturationValue, brightnessValue, alphaValue]);
 
   const onHueChange = (text: string) => {
     let hue = +text;

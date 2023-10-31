@@ -29,8 +29,9 @@ export default function RgbWidget({
   };
 
   useDerivedValue(() => {
+    [hueValue, saturationValue, brightnessValue, alphaValue];
     runOnJS(updateText)();
-  }, [hueValue.value, saturationValue.value, brightnessValue.value, alphaValue.value]);
+  }, [hueValue, saturationValue, brightnessValue, alphaValue]);
 
   const onRedChange = (text: string) => {
     let red = +text;

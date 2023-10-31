@@ -20,8 +20,9 @@ const ReText = ({ text, style, hash }: { text: () => string; style: StyleProp<Te
   };
 
   useDerivedValue(() => {
+    [hash[0], hash[1], hash[2], hash[3]];
     runOnJS(updateText)();
-  }, hash);
+  }, [hash[0], hash[1], hash[2], hash[3]]);
 
   return <Animated.Text style={[styles.previewInitialText, ...style]}>{color}</Animated.Text>;
 };
