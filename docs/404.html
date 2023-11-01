@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr" class="plugin-native plugin-id-default">
+<html lang="en" dir="ltr" class="plugin-native plugin-id-default" data-has-hydrated="false">
   <head>
     <meta charset="UTF-8" />
-    <meta name="generator" content="Docusaurus v2.4.1" />
+    <meta name="generator" content="Docusaurus v3.0.0" />
     <title data-rh="true">Page Not Found | Reanimated Color Picker</title>
     <meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1" />
     <meta data-rh="true" name="twitter:card" content="summary_large_image" />
     <meta data-rh="true" property="og:url" content="https://alabsi91.github.io/reanimated-color-picker/404.html" />
+    <meta data-rh="true" property="og:locale" content="en" />
     <meta data-rh="true" name="docusaurus_locale" content="en" />
     <meta data-rh="true" name="docusaurus_tag" content="default" />
     <meta data-rh="true" name="docsearch:language" content="en" />
@@ -27,9 +28,9 @@
       hreflang="x-default"
     />
     <script src="https://snack.expo.dev/embed.js" async></script>
-    <link rel="stylesheet" href="/reanimated-color-picker/assets/css/styles.17ab34b2.css" />
-    <link rel="preload" href="/reanimated-color-picker/assets/js/runtime~main.f099203b.js" as="script" />
-    <link rel="preload" href="/reanimated-color-picker/assets/js/main.fecc0d6d.js" as="script" />
+    <link rel="stylesheet" href="/reanimated-color-picker/assets/css/styles.3d301ff4.css" />
+    <script src="/reanimated-color-picker/assets/js/runtime~main.87a03c6c.js" defer="defer"></script>
+    <script src="/reanimated-color-picker/assets/js/main.b954dad8.js" defer="defer"></script>
   </head>
   <body class="navigation-with-keyboard">
     <script>
@@ -39,21 +40,27 @@
         }
         var e =
           (function () {
-            var t = null;
             try {
-              t = new URLSearchParams(window.location.search).get('docusaurus-theme');
+              return new URLSearchParams(window.location.search).get('docusaurus-theme');
             } catch (t) {}
-            return t;
           })() ||
           (function () {
-            var t = null;
             try {
-              t = localStorage.getItem('theme');
+              return localStorage.getItem('theme');
             } catch (t) {}
-            return t;
           })();
         t(null !== e ? e : 'dark');
-      })();
+      })(),
+        (function () {
+          try {
+            const c = new URLSearchParams(window.location.search).entries();
+            for (var [t, e] of c)
+              if (t.startsWith('docusaurus-data-')) {
+                var a = t.replace('docusaurus-data-', 'data-');
+                document.documentElement.setAttribute(a, e);
+              }
+          } catch (t) {}
+        })();
     </script>
     <div id="__docusaurus">
       <div role="region" aria-label="Skip to main content">
@@ -87,7 +94,7 @@
                   d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"
                 ></path></svg
             ></a>
-            <div class="searchBox_ZlJk"></div>
+            <div class="navbarSearchContainer_Bca1"></div>
           </div>
         </div>
         <div role="presentation" class="navbar-sidebar__backdrop"></div>
@@ -111,7 +118,5 @@
         </div>
       </footer>
     </div>
-    <script src="/reanimated-color-picker/assets/js/runtime~main.f099203b.js"></script>
-    <script src="/reanimated-color-picker/assets/js/main.fecc0d6d.js"></script>
   </body>
 </html>
