@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { ImageBackground } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import Animated, { Easing, runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import colorKit from '@colorKit';
 import usePickerContext from '@context';
@@ -38,29 +38,31 @@ export function Panel5({ style = {}, selectionStyle = {} }: Panel5Props) {
     adaptiveColor.value = contrast < 4.5 ? color : adaptiveColor.value;
   };
 
-  const tap = Gesture.Tap()
-    .runOnJS(true)
-    .onBegin(({ x, y }) => {
-      if (!squareSize.value) return;
+  const onTap = (x: number, y: number) => {
+    if (!squareSize.value) return;
 
-      const row = Math.floor(y / squareSize.value);
-      const column = Math.floor(x / squareSize.value);
+    const row = Math.floor(y / squareSize.value);
+    const column = Math.floor(x / squareSize.value);
 
-      const color = gridColors?.[row]?.[column];
-      if (!color) return;
+    const color = gridColors?.[row]?.[column];
+    if (!color) return;
 
-      const { h, s, v } = colorKit.HSV(color).object();
-      hueValue.value = h;
-      saturationValue.value = s;
-      brightnessValue.value = v;
+    const { h, s, v } = colorKit.HSV(color).object();
+    hueValue.value = h;
+    saturationValue.value = s;
+    brightnessValue.value = v;
 
-      posX.value = withTiming(column, { duration: 300, easing: Easing.elastic(0.8) });
-      posY.value = withTiming(row, { duration: 300, easing: Easing.elastic(0.8) });
+    posX.value = withTiming(column, { duration: 300, easing: Easing.elastic(0.8) });
+    posY.value = withTiming(row, { duration: 300, easing: Easing.elastic(0.8) });
 
-      setAdaptiveColor(color);
-      onGestureChange();
-      onGestureEnd();
-    });
+    setAdaptiveColor(color);
+    onGestureChange();
+    onGestureEnd();
+  };
+
+  const tap = Gesture.Tap().onBegin(({ x, y }) => {
+    runOnJS(onTap)(x, y);
+  });
 
   const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
     squareSize.value = withTiming(layout.width / 12 || layout.height / 10, { duration: 100 });
