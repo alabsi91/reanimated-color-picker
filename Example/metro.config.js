@@ -1,13 +1,48 @@
-/**
- * Metro configuration for React Native
- * https://github.com/facebook/react-native
- *
- * @format
- */
+const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
+const path = require('path');
+const escape = require('escape-string-regexp');
+const exclusionList = require('metro-config/src/defaults/exclusionList');
+const pak = require('../package.json');
 
-module.exports = {
+const root = path.resolve(__dirname, '..');
+const modules = Object.keys({...pak.peerDependencies});
+
+/**
+ * Metro configuration
+ * https://facebook.github.io/metro/docs/configuration
+ *
+ * @type {import('metro-config').MetroConfig}
+ */
+const config = {
+  watchFolders: [root],
+
+  // We need to make sure that only one version is loaded for peerDependencies
+  // So we block them at the root, and alias them to the versions in example's node_modules
+  resolver: {
+    blacklistRE: exclusionList(
+      modules.map(
+        m => new RegExp(`^${escape(path.join(root, 'node_modules', m))}\\/.*$`),
+      ),
+    ),
+
+    extraNodeModules: {
+      'react-native-reanimated': path.join(
+        __dirname,
+        'node_modules',
+        'react-native-reanimated',
+      ),
+      'react-native-gesture-handler': path.join(
+        __dirname,
+        'node_modules',
+        'react-native-gesture-handler',
+      ),
+      'react-native': path.join(__dirname, 'node_modules', 'react-native'),
+      react: path.join(__dirname, 'node_modules', 'react'),
+    },
+  },
+
   transformer: {
-    getTransformOptions: async () => ({
+    getTransformOptions: () => ({
       transform: {
         experimentalImportSupport: false,
         inlineRequires: true,
@@ -15,3 +50,5 @@ module.exports = {
     }),
   },
 };
+
+module.exports = mergeConfig(getDefaultConfig(__dirname), config);
