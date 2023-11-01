@@ -10,7 +10,7 @@
       "@panels/*": ["src/components/Panels/*"],
       "@assets/*": ["src/assets/*"],
       "@thumb": ["src/components/Thumb/Thumb"],
-      "@colorKit": ["src/colorKit/index.js"],
+      "@colorKit": ["src/colorKit/index"],
       "@context": ["src/AppContext"],
       "@styles": ["src/styles"],
       "@utils": ["src/utils"],
