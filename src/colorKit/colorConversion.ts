@@ -4,13 +4,8 @@ import { calculateHueValue, clamp100, clampAlpha, clampHue, clampRGB, numberToHe
 
 import type { ColorFormats, hslaT, hslT, hsvaT, hsvT, hwbaT, hwbT, rgbaT, rgbT, SupportedColorFormats } from './types';
 
-// ! Caution: The order of functions is crucial,
-// ! as the react-native-reanimated Babel plugin will transform worklet functions
-// ! and store them in a constant variables.
-
 /** - Identify the color format of a given `string` or `object` */
 function detectColorFormat(color: SupportedColorFormats): ColorFormats | null {
-  'worklet';
   // color int
   if (typeof color === 'number') {
     if (color >>> 0 === color && color >= 0 && color <= 0xffffffff) return 'hex8';
@@ -74,7 +69,6 @@ function detectColorFormat(color: SupportedColorFormats): ColorFormats | null {
 // * RGB
 /** - Parse `RGB` or `RGBA` color string to an `object` */
 function RGB_Parse_String(color: string): rgbaT {
-  'worklet';
   color = color.trim().toLowerCase();
   const colorType = detectColorFormat(color);
 
@@ -116,7 +110,6 @@ function RGB_Parse_String(color: string): rgbaT {
 }
 /** - Ensure that the `RGB` object values are within the correct range and that it has the alpha channel */
 function RGB_Normalize_Object(color: rgbaT | rgbT): rgbaT {
-  'worklet';
   return {
     r: clampRGB(color.r),
     g: clampRGB(color.g),
@@ -126,7 +119,6 @@ function RGB_Normalize_Object(color: rgbaT | rgbT): rgbaT {
 }
 /** - Convert an `RGB` or `RGBA` color to its corresponding `Hex` color */
 function RGB_HEX(color: string | rgbaT | rgbT): string {
-  'worklet';
   const { r, g, b, a } = typeof color === 'string' ? RGB_Parse_String(color) : RGB_Normalize_Object(color);
 
   const red = numberToHexString(r),
@@ -138,7 +130,6 @@ function RGB_HEX(color: string | rgbaT | rgbT): string {
 }
 /** - Convert an `RGB` or `RGBA` color to an `HSLA` object representation */
 function RGB_HSLA(color: string | rgbaT | rgbT): hslaT {
-  'worklet';
   const rgb = typeof color === 'string' ? RGB_Parse_String(color) : RGB_Normalize_Object(color),
     r = rgb.r / 255,
     g = rgb.g / 255,
@@ -177,7 +168,6 @@ function RGB_HSLA(color: string | rgbaT | rgbT): hslaT {
 }
 /** - Convert `RGB` or `RGBA` color to an `HSVA` object representation */
 function RGB_HSVA(color: string | rgbaT | rgbT): hsvaT {
-  'worklet';
   const rgb = typeof color === 'string' ? RGB_Parse_String(color) : RGB_Normalize_Object(color),
     r = rgb.r / 255,
     g = rgb.g / 255,
@@ -215,7 +205,6 @@ function RGB_HSVA(color: string | rgbaT | rgbT): hsvaT {
 }
 /** - Convert `RGB` or `RGBA` color to an `HWBA` object representation */
 function RGB_HWBA(color: string | rgbaT | rgbT): hwbaT {
-  'worklet';
   const rgb = typeof color === 'string' ? RGB_Parse_String(color) : RGB_Normalize_Object(color),
     red = rgb.r / 255,
     green = rgb.g / 255,
@@ -236,10 +225,8 @@ function RGB_HWBA(color: string | rgbaT | rgbT): hwbaT {
 }
 /** - Return the `RGB` color as a string, an array, or an object */
 function RGB_Return_Types({ r, g, b, a }: rgbaT) {
-  'worklet';
   return {
     string: (forceAlpha?: boolean) => {
-      'worklet';
       // auto
       if (typeof forceAlpha === 'undefined') {
         if (typeof a === 'number' && a !== 1) return `rgba(${r}, ${g}, ${b}, ${a})`;
@@ -251,11 +238,9 @@ function RGB_Return_Types({ r, g, b, a }: rgbaT) {
       return `rgb(${r}, ${g}, ${b})`;
     },
     array: () => {
-      'worklet';
       return [r, g, b, a];
     },
     object: () => {
-      'worklet';
       return { r, g, b, a };
     },
   };
@@ -264,7 +249,6 @@ function RGB_Return_Types({ r, g, b, a }: rgbaT) {
 // * HEX
 /** - Convert any `HEX` color to 8-digit `HEX` color (#rrggbbaa) */
 function HEX_Normalize(color: string | number): string {
-  'worklet';
   if (typeof color === 'number') {
     return '#' + color.toString(16).padStart(8, '0');
   }
@@ -289,8 +273,6 @@ function HEX_Normalize(color: string | number): string {
 }
 /** - Convert any `HEX` color to an `RGBA` object representation */
 function HEX_RGBA(color: string | number): rgbaT {
-  'worklet';
-
   const hex = HEX_Normalize(color);
 
   let matches: RegExpMatchArray | null = null;
@@ -324,20 +306,17 @@ function HEX_RGBA(color: string | number): rgbaT {
 }
 /** - Convert any `HEX` color to an `HSVA` object representation */
 function HEX_HSVA(color: string | number): hsvaT {
-  'worklet';
   const rgb = HEX_RGBA(color);
   const hsva = RGB_HSVA(rgb);
   return hsva;
 }
 /** - Convert any `HEX` color to an `HSLA` object representation */
 function HEX_HSLA(color: string): hslaT {
-  'worklet';
   const rgb = HEX_RGBA(color);
   return RGB_HSLA(rgb);
 }
 /** - Convert any `HEX` color to an `HWBA` object representation */
 function HEX_HWBA(color: string): hwbaT {
-  'worklet';
   const rgba = HEX_RGBA(color);
   return RGB_HWBA(rgba);
 }
@@ -345,7 +324,6 @@ function HEX_HWBA(color: string): hwbaT {
 // * HSV
 /** - Parse `HSV` or `HSVA` color string to an `object` */
 function HSV_Parse_String(color: string): hsvaT {
-  'worklet';
   color = color.trim().toLowerCase();
   const colorType = detectColorFormat(color);
 
@@ -387,7 +365,6 @@ function HSV_Parse_String(color: string): hsvaT {
 }
 /** - Ensure that the `HSV` object values are within the correct range and that it has the alpha channel */
 function HSV_Normalize_Object(color: hsvaT | hsvT): hsvaT {
-  'worklet';
   return {
     h: clampHue(color.h),
     s: clamp100(color.s),
@@ -397,7 +374,6 @@ function HSV_Normalize_Object(color: hsvaT | hsvT): hsvaT {
 }
 /** - Convert `HSV` color to an `RGBA` object representation */
 function HSV_RGBA(color: hsvaT | hsvT | string): rgbaT {
-  'worklet';
   const hsva = typeof color === 'string' ? HSV_Parse_String(color) : HSV_Normalize_Object(color);
 
   const h = hsva.h / 360,
@@ -450,7 +426,6 @@ function HSV_RGBA(color: hsvaT | hsvT | string): rgbaT {
 }
 /** - Convert `HSV` color to an `HSLA` object representation */
 function HSV_HSLA(color: hsvaT | hsvT | string): hslaT {
-  'worklet';
   const hsva = typeof color === 'string' ? HSV_Parse_String(color) : HSV_Normalize_Object(color);
 
   const h = hsva.h,
@@ -471,14 +446,12 @@ function HSV_HSLA(color: hsvaT | hsvT | string): hslaT {
 }
 /** - Convert `HSV` color to an `Hex` color */
 function HSV_HEX(color: hsvaT | hsvT | string): string {
-  'worklet';
   const rgba = HSV_RGBA(color);
   const hex = RGB_HEX(rgba);
   return hex;
 }
 /** - Convert `HSV` color to an `HWBA` object representation */
 function HSV_HWBA(color: hsvaT | hsvT | string): hwbaT {
-  'worklet';
   const { h, s, v, a } = typeof color === 'string' ? HSV_Parse_String(color) : HSV_Normalize_Object(color);
 
   const w = (1 - s / 100) * v,
@@ -493,10 +466,8 @@ function HSV_HWBA(color: hsvaT | hsvT | string): hwbaT {
 }
 /** - Return the `HSV` color as a string, an array, or an object */
 function HSV_Return_Types({ h, s, v, a }: hsvaT) {
-  'worklet';
   return {
     string: (forceAlpha?: boolean) => {
-      'worklet';
       // auto
       if (typeof forceAlpha === 'undefined') {
         if (typeof a === 'number' && a !== 1) return `hsva(${h}, ${s}%, ${v}%, ${a})`;
@@ -508,11 +479,9 @@ function HSV_Return_Types({ h, s, v, a }: hsvaT) {
       return `hsv(${h}, ${s}%, ${v}%)`;
     },
     array: () => {
-      'worklet';
       return [h, s, v, a];
     },
     object: () => {
-      'worklet';
       return { h, s, v, a };
     },
   };
@@ -521,7 +490,6 @@ function HSV_Return_Types({ h, s, v, a }: hsvaT) {
 // * HWB
 /** - Parse `HWB` or `HWBA` color strong to an `object` */
 function HWB_Parse_String(color: string): hwbaT {
-  'worklet';
   color = color.trim().toLowerCase();
   const colorType = detectColorFormat(color);
 
@@ -563,7 +531,6 @@ function HWB_Parse_String(color: string): hwbaT {
 }
 /** - Ensure that the `HWB` object values are within the correct range and that it has the alpha channel */
 function HWB_Normalize_Object(color: hwbaT | hwbT): hwbaT {
-  'worklet';
   return {
     h: clampHue(color.h),
     w: clamp100(color.w),
@@ -573,7 +540,6 @@ function HWB_Normalize_Object(color: hwbaT | hwbT): hwbaT {
 }
 /** - Convert `HWB` or `HWBA` color to an `RGBA` object representation */
 function HWB_RGBA(color: hwbaT | hwbT | string): rgbaT {
-  'worklet';
   const hwba = typeof color === 'string' ? HWB_Parse_String(color) : HWB_Normalize_Object(color);
 
   const h = hwba.h / 360,
@@ -604,13 +570,11 @@ function HWB_RGBA(color: hwbaT | hwbT | string): rgbaT {
 }
 /** - Convert `HWB` or `HWBA` color to an `Hex` color */
 function HWB_HEX(color: hwbaT | hwbT | string): string {
-  'worklet';
   const rgba = HWB_RGBA(color);
   return RGB_HEX(rgba);
 }
 /** - Convert `HWB` or `HWBA` color to an `HSVA` object representation */
 function HWB_HSVA(color: hwbaT | hwbT | string): hsvaT {
-  'worklet';
   const hwba = typeof color === 'string' ? HWB_Parse_String(color) : HWB_Normalize_Object(color);
 
   const h = hwba.h % 360,
@@ -631,16 +595,13 @@ function HWB_HSVA(color: hwbaT | hwbT | string): hsvaT {
 }
 /** - Convert `HWB` or `HWBA` color to an `HSLA` object representation */
 function HWB_HSLA(color: hwbaT | hwbT | string): hslaT {
-  'worklet';
   const hsva = HWB_HSVA(color);
   return HSV_HSLA(hsva);
 }
 /** - Return the `HWB` color as a string, an array, or an object */
 function HWB_Return_Types({ h, w, b, a }: hwbaT) {
-  'worklet';
   return {
     string: (forceAlpha?: boolean) => {
-      'worklet';
       // auto
       if (typeof forceAlpha === 'undefined') {
         if (typeof a === 'number' && a !== 1) return `hwba(${h}, ${w}%, ${b}%, ${a})`;
@@ -652,11 +613,9 @@ function HWB_Return_Types({ h, w, b, a }: hwbaT) {
       return `hwb(${h}, ${w}%, ${b}%)`;
     },
     array: () => {
-      'worklet';
       return [h, w, b, a];
     },
     object: () => {
-      'worklet';
       return { h, w, b, a };
     },
   };
@@ -665,7 +624,6 @@ function HWB_Return_Types({ h, w, b, a }: hwbaT) {
 // * HSL
 /** - Parse `HSL` or `HSLA` color string to an `object` */
 function HSL_Parse_String(color: string): hslaT {
-  'worklet';
   color = color.trim().toLowerCase();
   const colorType = detectColorFormat(color);
 
@@ -707,7 +665,6 @@ function HSL_Parse_String(color: string): hslaT {
 }
 /** - Ensure that the `HSL` object values are within the correct range and that it has the alpha channel */
 function HSL_Normalize_Object(color: hslaT | hslT): hslaT {
-  'worklet';
   return {
     h: clampHue(color.h),
     s: clamp100(color.s),
@@ -717,7 +674,6 @@ function HSL_Normalize_Object(color: hslaT | hslT): hslaT {
 }
 /** - Convert `HSL` or `HSLA` color to an `RGBA` object representation */
 function HSL_RGBA(color: string | hslaT | hslT): rgbaT {
-  'worklet';
   const hsla = typeof color === 'string' ? HSL_Parse_String(color) : HSL_Normalize_Object(color);
 
   const h = hsla.h / 360,
@@ -741,8 +697,6 @@ function HSL_RGBA(color: string | hslaT | hslT): rgbaT {
 }
 /** - Convert `HSL` or `HSLA` color to `HEX` color */
 function HSL_HEX(color: string | hslaT | hslT): string {
-  'worklet';
-
   const hsla = typeof color === 'string' ? HSL_Parse_String(color) : HSL_Normalize_Object(color);
   const rgb = HSL_RGBA(hsla);
 
@@ -755,7 +709,6 @@ function HSL_HEX(color: string | hslaT | hslT): string {
 }
 /** - Convert `HSL` or `HSLA` color to an `HSVA` object representation */
 function HSL_HSVA(color: string | hslaT | hslT): hsvaT {
-  'worklet';
   const hsla = typeof color === 'string' ? HSL_Parse_String(color) : HSL_Normalize_Object(color);
   const h = hsla.h;
 
@@ -774,16 +727,13 @@ function HSL_HSVA(color: string | hslaT | hslT): hsvaT {
 }
 /** - Convert `HSL` or `HSLA` color to an `HWBA` object representation */
 function HSL_HWBA(color: string | hslaT | hslT): hwbaT {
-  'worklet';
   const hsva = HSL_HSVA(color);
   return HSV_HWBA(hsva);
 }
 /** - Return the `HSL` color as a string, an array, or an object */
 function HSL_Return_Types({ h, s, l, a }: hslaT) {
-  'worklet';
   return {
     string: (forceAlpha?: boolean) => {
-      'worklet';
       // auto
       if (typeof forceAlpha === 'undefined') {
         if (typeof a === 'number' && a !== 1) return `hsla(${h}, ${s}%, ${l}%, ${a})`;
@@ -795,11 +745,9 @@ function HSL_Return_Types({ h, s, l, a }: hslaT) {
       return `hsl(${h}, ${s}%, ${l}%)`;
     },
     array: () => {
-      'worklet';
       return [h, s, l, a];
     },
     object: () => {
-      'worklet';
       return { h, s, l, a };
     },
   };
@@ -807,7 +755,6 @@ function HSL_Return_Types({ h, s, l, a }: hslaT) {
 
 /** - Convert `HSL`, `HSV`, `HWB`, or `RGB` color to the `HEX` color format. */
 export function HEX(color: SupportedColorFormats): string {
-  'worklet';
   // named color
   if (typeof color === 'string') {
     color = color.trim().toLowerCase();
@@ -854,7 +801,6 @@ export function HEX(color: SupportedColorFormats): string {
 
 /** - Convert `HSL`, `HSV`, `HWB`, or `HEX` color to the `RGB` color format. */
 export function RGB(color: SupportedColorFormats) {
-  'worklet';
   // named color
   if (typeof color === 'string') {
     color = color.trim().toLowerCase();
@@ -906,7 +852,6 @@ export function RGB(color: SupportedColorFormats) {
 
 /** - Convert `HEX`, `HSV`, `HWB`, or `RGB` color to the `HSL` color format. */
 export function HSL(color: SupportedColorFormats) {
-  'worklet';
   // named color
   if (typeof color === 'string') {
     color = color.trim().toLowerCase();
@@ -958,7 +903,6 @@ export function HSL(color: SupportedColorFormats) {
 
 /** - Convert `HSL`, `HEX`, `HSV`, or `RGB` color to the `HWB` color format. */
 export function HWB(color: SupportedColorFormats) {
-  'worklet';
   // named color
   if (typeof color === 'string') {
     color = color.trim().toLowerCase();
@@ -1010,7 +954,6 @@ export function HWB(color: SupportedColorFormats) {
 
 /** - Convert `HSL`, `HEX`, `HWB`, or `RGB` color to the `HSV` color format. */
 export function HSV(color: SupportedColorFormats) {
-  'worklet';
   // named color
   if (typeof color === 'string') {
     color = color.trim().toLowerCase();
