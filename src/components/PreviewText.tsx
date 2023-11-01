@@ -17,9 +17,9 @@ export function PreviewText({ style = {}, colorFormat = 'hex' }: PreviewTextProp
   };
 
   useDerivedValue(() => {
-    [colorFormat, hueValue, saturationValue, brightnessValue, alphaValue];
+    [colorFormat, hueValue, saturationValue, brightnessValue, alphaValue]; // track changes on Native
     runOnJS(updateText)();
-  }, [colorFormat, hueValue, saturationValue, brightnessValue, alphaValue]);
+  }, [colorFormat, hueValue, saturationValue, brightnessValue, alphaValue]); // track changes on WEB
 
   return <Text style={[styles.previewText, style]}>{text}</Text>;
 }

@@ -26,9 +26,9 @@ export default function HexWidget({
   };
 
   useDerivedValue(() => {
-    [hueValue, saturationValue, brightnessValue, alphaValue];
+    [hueValue, saturationValue, brightnessValue, alphaValue]; // track changes on Native
     runOnJS(updateText)();
-  }, [hueValue, saturationValue, brightnessValue, alphaValue]);
+  }, [hueValue, saturationValue, brightnessValue, alphaValue]); // track changes on WEB
 
   const onTextChange = (text: string) => {
     text = text.startsWith('#') ? text : '#' + text;

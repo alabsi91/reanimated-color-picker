@@ -1,9 +1,9 @@
 import React from 'react';
-import { runOnJS, useAnimatedStyle, useDerivedValue, useSharedValue } from 'react-native-reanimated';
+import { useAnimatedStyle, useDerivedValue, useSharedValue } from 'react-native-reanimated';
 
-import colorKit from '@colorKit';
 import usePickerContext from '@context';
 import { styles } from '@styles';
+import { contrastRatio, HSVA2HEX } from '@utils';
 import BuiltinThumbs from './BuiltinThumbs/index';
 
 import type { BuiltinThumbsProps, ThumbProps } from '@types';
@@ -25,16 +25,7 @@ export default function Thumb({
 
   const resultColor = useSharedValue('#ffffff');
   const solidColor = useAnimatedStyle(() => ({ backgroundColor: resultColor.value }), [resultColor]);
-  const setResultColor = (color: { h: number; s: number; v: number; a?: number }) => {
-    resultColor.value = colorKit.HEX(color);
-  };
-
-  const adaptiveColor = useSharedValue('#ffffff');
-  const setAdaptiveColor = (color1: { h: number; s: number; v: number; a?: number }) => {
-    const color = adaptiveColor.value === '#ffffff' ? '#000000' : '#ffffff';
-    const contrast = colorKit.contrastRatio(color1, adaptiveColor.value);
-    adaptiveColor.value = contrast < 4.5 ? color : adaptiveColor.value;
-  };
+  const adaptiveColor = useSharedValue<'#000000' | '#ffffff'>('#ffffff');
 
   /**
    * Get the current color and calculate its contrast ratio against white or black,
@@ -44,32 +35,30 @@ export default function Thumb({
     'worklet';
     if (adaptSpectrum) {
       if (channel === 'a') {
-        return alphaValue.value > 0.5
-          ? { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value }
-          : { h: 0, s: 0, v: 70 };
+        if (alphaValue.value > 0.5) return { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
+        return { h: 0, s: 0, v: 70 };
       }
       return { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
     }
 
-    switch (channel) {
-      case 'h':
-        return { h: hueValue.value, s: 100, v: 100 };
-      case 'v':
-        return { h: hueValue.value, s: 100, v: brightnessValue.value };
-      case 's':
-        return { h: hueValue.value, s: saturationValue.value, v: 70 };
-      case 'a':
-        return { h: hueValue.value, s: alphaValue.value * 100, v: 70 };
-      default:
-        return { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
-    }
+    if (channel === 'h') return { h: hueValue.value, s: 100, v: 100 };
+    if (channel === 'v') return { h: hueValue.value, s: 100, v: brightnessValue.value };
+    if (channel === 's') return { h: hueValue.value, s: saturationValue.value, v: 70 };
+    if (channel === 'a') return { h: hueValue.value, s: alphaValue.value * 100, v: 70 };
+    return { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
   };
 
   // When the values of channels change
   useDerivedValue(() => {
-    alphaValue;
-    runOnJS(setAdaptiveColor)(getColorForAdaptiveColor());
-    runOnJS(setResultColor)({ h: hueValue.value, s: saturationValue.value, v: brightnessValue.value });
+    alphaValue.value; // to track alpha changes too;
+    resultColor.value = HSVA2HEX(hueValue.value, saturationValue.value, brightnessValue.value);
+
+    // calculate the contrast ratio
+    const compareColor1 = getColorForAdaptiveColor();
+    const compareColor2 = adaptiveColor.value === '#000000' ? { h: 0, s: 0, v: 0 } : { h: 0, s: 0, v: 100 };
+    const contrast = contrastRatio(compareColor1, compareColor2);
+    const reversedColor = adaptiveColor.value === '#ffffff' ? '#000000' : '#ffffff';
+    adaptiveColor.value = contrast < 4.5 ? reversedColor : adaptiveColor.value;
   }, [alphaValue, hueValue, saturationValue, brightnessValue]);
 
   const thumbProps: BuiltinThumbsProps = {

@@ -137,6 +137,43 @@ export function RGBA2HSVA(r: number, g: number, b: number, a = 1) {
   };
 }
 
+/** - Convert an `RGB` color to its corresponding `Hex` color */
+export function RGB_HEX(r: number, g: number, b: number, a = 1): string {
+  'worklet';
+  const red = Math.round(r).toString(16).padStart(2, '0');
+  const green = Math.round(g).toString(16).padStart(2, '0');
+  const blue = Math.round(b).toString(16).padStart(2, '0');
+  const alpha = Math.round(clamp(a * 255, 255))
+    .toString(16)
+    .padStart(2, '0');
+
+  return `#${red + green + blue + alpha}`;
+}
+
+/** - Convert an `HSV` color to its corresponding `Hex` color */
+export function HSVA2HEX(h: number, s: number, v: number, a = 1) {
+  'worklet';
+  const { r, g, b, a: alpha } = HSVA2RGBA(h, s, v, a);
+  return RGB_HEX(r, g, b, alpha);
+}
+
+/** - Returns the perceived `luminance` of a color, from `0-1` as defined by Web Content Accessibility Guidelines (Version 2.0). */
+export function getLuminanceWCAG(h: number, s: number, v: number): number {
+  'worklet';
+  const { r, g, b } = HSVA2RGBA(h, s, v);
+  const a = [r, g, b].map(val => (val / 255 <= 0.03928 ? val / 255 / 12.92 : Math.pow((val / 255 + 0.055) / 1.055, 2.4)));
+  return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
+}
+
+/** - Calculates the contrast ratio between two colors, useful for ensuring accessibility and readability. */
+export function contrastRatio(color1: { h: number; s: number; v: number }, color2: { h: number; s: number; v: number }): number {
+  'worklet';
+  const luminance1 = getLuminanceWCAG(color1.h, color1.s, color1.v);
+  const luminance2 = getLuminanceWCAG(color2.h, color2.s, color2.v);
+  const contrast = (Math.max(luminance1, luminance2) + 0.05) / (Math.min(luminance1, luminance2) + 0.05);
+  return Math.round(contrast * 100) / 100;
+}
+
 /** - Render children only if the `render` property is `true` */
 export function ConditionalRendering(props: { children: React.ReactNode; if: boolean }) {
   if (!props.if) return null;

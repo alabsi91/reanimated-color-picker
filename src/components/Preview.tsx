@@ -5,7 +5,7 @@ import Animated, { runOnJS, useAnimatedStyle, useDerivedValue, useSharedValue } 
 import colorKit from '@colorKit';
 import usePickerContext from '@context';
 import { styles } from '@styles';
-import { ConditionalRendering, getStyle, isWeb } from '@utils';
+import { ConditionalRendering, contrastRatio, getStyle, HSVA2HEX, isWeb } from '@utils';
 
 import type { PreviewProps } from '@types';
 import type { ReactNode } from 'react';
@@ -20,9 +20,9 @@ const ReText = ({ text, style, hash }: { text: () => string; style: StyleProp<Te
   };
 
   useDerivedValue(() => {
-    [hash[0], hash[1], hash[2], hash[3]];
+    [hash[0], hash[1], hash[2], hash[3]]; // track changes on Native
     runOnJS(updateText)();
-  }, [hash[0], hash[1], hash[2], hash[3]]);
+  }, [hash[0], hash[1], hash[2], hash[3]]); // track changes on WEB
 
   return <Animated.Text style={[styles.previewInitialText, ...style]}>{color}</Animated.Text>;
 };
@@ -44,31 +44,29 @@ export function Preview({
 
   const initialColorText = useMemo(() => {
     const adaptiveTextColor = alphaValue.value > 0.5 ? value : { h: 0, s: 0, v: 70 };
-    const contrast = colorKit.contrastRatio(adaptiveTextColor, '#fff');
-    const color = contrast < 4.5 ? '#000' : '#fff';
+    const contrast = colorKit.contrastRatio(adaptiveTextColor, '#ffffff');
+    const color = contrast < 4.5 ? '#000000' : '#ffffff';
     return { formatted: returnedResults()[colorFormat], color };
   }, [value, colorFormat]);
 
-  const textColor = useSharedValue('#fff');
+  const textColor = useSharedValue<'#000000' | '#ffffff'>('#ffffff');
   const textColorStyle = useAnimatedStyle(() => ({ color: textColor.value }), [textColor]);
-  const setTextColor = (color1: { h: number; s: number; v: number; a?: number }) => {
-    const color = textColor.value === '#ffffff' ? '#000000' : '#ffffff';
-    const contrast = colorKit.contrastRatio(color1, textColor.value);
-    textColor.value = contrast < 4.5 ? color : textColor.value;
-  };
 
-  const previewColor = useSharedValue('#fff');
+  const previewColor = useSharedValue('#ffffff');
   const previewColorStyle = useAnimatedStyle(() => ({ backgroundColor: previewColor.value }), [previewColor]);
-  const setPreviewColor = (color: { h: number; s: number; v: number; a: number }) => {
-    previewColor.value = colorKit.HEX(color);
-  };
 
   // When the values of channels change
   useDerivedValue(() => {
     const currentColor = { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value, a: alphaValue.value };
-    const adaptiveTextColor = alphaValue.value > 0.5 ? currentColor : { h: 0, s: 0, v: 70 };
-    runOnJS(setPreviewColor)(currentColor);
-    runOnJS(setTextColor)(adaptiveTextColor);
+
+    previewColor.value = HSVA2HEX(hueValue.value, saturationValue.value, brightnessValue.value, alphaValue.value);
+
+    // calculate the contrast ratio
+    const compareColor1 = alphaValue.value > 0.5 ? currentColor : { h: 0, s: 0, v: 70 };
+    const compareColor2 = textColor.value === '#000000' ? { h: 0, s: 0, v: 0 } : { h: 0, s: 0, v: 100 };
+    const contrast = contrastRatio(compareColor1, compareColor2);
+    const reversedColor = textColor.value === '#ffffff' ? '#000000' : '#ffffff';
+    textColor.value = contrast < 4.5 ? reversedColor : textColor.value;
   }, [hueValue, saturationValue, brightnessValue, alphaValue]);
 
   return (
