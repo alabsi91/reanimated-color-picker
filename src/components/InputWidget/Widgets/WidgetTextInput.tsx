@@ -68,6 +68,7 @@ export default function WidgetTextInput({
         onBlur={onBlur}
         onFocus={onFocus}
         keyboardType={decimal ? 'decimal-pad' : textKeyboard ? 'default' : 'number-pad'}
+        inputMode={decimal ? 'decimal' : textKeyboard ? 'text' : 'numeric'}
         autoComplete='off'
         autoCorrect={false}
         {...inputProps}

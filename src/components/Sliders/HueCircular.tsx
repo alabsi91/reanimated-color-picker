@@ -53,7 +53,7 @@ export function HueCircular({
   const isGestureActive = useSharedValue(false);
   const width = useSharedValue(0);
   const borderRadius = useSharedValue(0);
-  const borderRadiusStyle = useAnimatedStyle(() => ({ borderRadius: borderRadius.value }), [localThumbSize]);
+  const borderRadiusStyle = useAnimatedStyle(() => ({ borderRadius: borderRadius.value }), [borderRadius]);
 
   const handleScale = useSharedValue(1);
 
@@ -70,21 +70,25 @@ export function HueCircular({
         { rotate: hueValue.value + 90 + 'deg' },
       ],
     };
-  }, [localThumbSize]);
+  }, [sliderThickness, thumbSize, width, hueValue, handleScale]);
 
   const activeSaturationStyle = useAnimatedStyle(() => {
     if (!adaptSpectrum) return {};
     return { backgroundColor: HSVA2HSLA_string(0, 0, brightnessValue.value, 1 - saturationValue.value / 100) };
-  });
+  }, [adaptSpectrum, brightnessValue, saturationValue]);
+
   const activeBrightnessStyle = useAnimatedStyle(() => {
     if (!adaptSpectrum) return {};
     return { backgroundColor: HSVA2HSLA_string(0, 0, 0, 1 - brightnessValue.value / 100) };
-  });
-  const clipViewStyle = useAnimatedStyle(() => ({
-    width: width.value - sliderThickness * 2,
-    height: width.value - sliderThickness * 2,
-    borderRadius: width.value / 2,
-  }));
+  }, [adaptSpectrum, brightnessValue]);
+
+  const clipViewStyle = useAnimatedStyle(() => {
+    return {
+      width: width.value - sliderThickness * 2,
+      height: width.value - sliderThickness * 2,
+      borderRadius: width.value / 2,
+    };
+  }, [sliderThickness, width]);
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';

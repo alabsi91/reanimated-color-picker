@@ -70,16 +70,17 @@ export function HueSlider({
     return {
       transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }],
     };
-  }, [localThumbSize, vertical, reverse]);
+  }, [thumbSize, boundedThumb, vertical, reverse, width, height, hueValue, handleScale]);
 
   const activeSaturationStyle = useAnimatedStyle(() => {
     if (!adaptSpectrum) return {};
     return { backgroundColor: HSVA2HSLA_string(0, 0, brightnessValue.value, 1 - saturationValue.value / 100) };
-  });
+  }, [adaptSpectrum, brightnessValue, saturationValue]);
+
   const activeBrightnessStyle = useAnimatedStyle(() => {
     if (!adaptSpectrum) return {};
     return { backgroundColor: HSVA2HSLA_string(0, 0, 0, 1 - brightnessValue.value / 100) };
-  });
+  }, [adaptSpectrum, brightnessValue]);
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -128,7 +129,7 @@ export function HueSlider({
         { translateY: vertical ? imageTranslateY : 0 },
       ],
     };
-  }, [vertical, reverse, sliderThickness]);
+  }, [vertical, reverse, width, height]);
 
   const thicknessStyle = vertical ? { width: sliderThickness } : { height: sliderThickness };
 

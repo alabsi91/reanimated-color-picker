@@ -24,7 +24,7 @@ export default function Thumb({
   const { hueValue, saturationValue, brightnessValue, alphaValue, value } = usePickerContext();
 
   const resultColor = useSharedValue('#ffffff');
-  const solidColor = useAnimatedStyle(() => ({ backgroundColor: resultColor.value }));
+  const solidColor = useAnimatedStyle(() => ({ backgroundColor: resultColor.value }), [resultColor]);
   const setResultColor = (color: { h: number; s: number; v: number; a?: number }) => {
     resultColor.value = colorKit.HEX(color);
   };
@@ -67,10 +67,10 @@ export default function Thumb({
 
   // When the values of channels change
   useDerivedValue(() => {
-    alphaValue.value; // to keep track with `alphaValue` changes
+    alphaValue;
     runOnJS(setAdaptiveColor)(getColorForAdaptiveColor());
     runOnJS(setResultColor)({ h: hueValue.value, s: saturationValue.value, v: brightnessValue.value });
-  });
+  }, [alphaValue, hueValue, saturationValue, brightnessValue]);
 
   const thumbProps: BuiltinThumbsProps = {
     width,

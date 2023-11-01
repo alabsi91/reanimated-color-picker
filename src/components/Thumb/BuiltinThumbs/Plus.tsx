@@ -29,8 +29,18 @@ export default function Plus({
     width: vertical ? thickness : '100%',
     height: vertical ? '100%' : thickness,
   };
-  const adaptiveColorStyle = useAnimatedStyle(() => ({ backgroundColor: thumbColor || adaptiveColor.value }));
-  const adaptiveBorderColorStyle = useAnimatedStyle(() => ({ borderColor: thumbColor || adaptiveColor.value }));
+
+  const adaptiveColorStyle = useAnimatedStyle(() => {
+    return {
+      backgroundColor: thumbColor || adaptiveColor.value,
+    };
+  }, [thumbColor, adaptiveColor]);
+
+  const adaptiveBorderColorStyle = useAnimatedStyle(() => {
+    return {
+      borderColor: thumbColor || adaptiveColor.value,
+    };
+  }, [thumbColor, adaptiveColor]);
 
   return (
     <Animated.View style={[styles.handle, style, computedStyle, adaptiveBorderColorStyle, handleStyle]}>

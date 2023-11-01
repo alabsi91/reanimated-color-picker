@@ -24,7 +24,11 @@ export default function Pill({
     width: vertical ? '100%' : 10,
     height: vertical ? 10 : '100%',
   };
-  const adaptiveColorStyle = useAnimatedStyle(() => ({ borderColor: thumbColor || adaptiveColor.value }));
+  const adaptiveColorStyle = useAnimatedStyle(() => {
+    return {
+      borderColor: thumbColor || adaptiveColor.value,
+    };
+  }, [thumbColor, adaptiveColor]);
 
   return (
     <Animated.View style={[styles.handle, computedStyle, style, handleStyle]}>

@@ -71,7 +71,7 @@ export function OpacitySlider({
     return {
       transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }],
     };
-  }, [localThumbSize, vertical, reverse]);
+  }, [thumbSize, boundedThumb, vertical, reverse, width, height, alphaValue, handleScale]);
 
   const activeColorStyle = useAnimatedStyle(() => {
     if (!isWeb) return { backgroundColor: '#0000' };
@@ -84,7 +84,7 @@ export function OpacitySlider({
     );
 
     return { background: `linear-gradient(${deg}deg, transparent 0%, ${color} 100%)` };
-  });
+  }, [vertical, reverse, adaptSpectrum, hueValue, saturationValue, brightnessValue]);
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -140,7 +140,7 @@ export function OpacitySlider({
         { translateY: vertical ? imageTranslateY : 0 },
       ],
     };
-  }, [vertical, reverse, sliderThickness]);
+  }, [vertical, reverse, adaptSpectrum, width, height, hueValue, saturationValue, brightnessValue]);
 
   const thicknessStyle = vertical ? { width: sliderThickness } : { height: sliderThickness };
 

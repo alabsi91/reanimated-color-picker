@@ -30,7 +30,7 @@ module.exports = function (api) {
     '@babel/preset-react',
     '@babel/preset-typescript',
   ];
-  const plugins = [[require.resolve('babel-plugin-module-resolver'), { alias }], 'react-native-reanimated/plugin'];
+  const plugins = [[require.resolve('babel-plugin-module-resolver'), { alias }]];
 
   return {
     presets,

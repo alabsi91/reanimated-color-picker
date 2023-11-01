@@ -20,9 +20,9 @@ const ReText = ({ text, style, hash }: { text: () => string; style: StyleProp<Te
   };
 
   useDerivedValue(() => {
-    hash.forEach(e => e.value);
+    [hash[0], hash[1], hash[2], hash[3]];
     runOnJS(updateText)();
-  });
+  }, [hash[0], hash[1], hash[2], hash[3]]);
 
   return <Animated.Text style={[styles.previewInitialText, ...style]}>{color}</Animated.Text>;
 };
@@ -50,7 +50,7 @@ export function Preview({
   }, [value, colorFormat]);
 
   const textColor = useSharedValue('#fff');
-  const textColorStyle = useAnimatedStyle(() => ({ color: textColor.value }));
+  const textColorStyle = useAnimatedStyle(() => ({ color: textColor.value }), [textColor]);
   const setTextColor = (color1: { h: number; s: number; v: number; a?: number }) => {
     const color = textColor.value === '#ffffff' ? '#000000' : '#ffffff';
     const contrast = colorKit.contrastRatio(color1, textColor.value);
@@ -58,7 +58,7 @@ export function Preview({
   };
 
   const previewColor = useSharedValue('#fff');
-  const previewColorStyle = useAnimatedStyle(() => ({ backgroundColor: previewColor.value }));
+  const previewColorStyle = useAnimatedStyle(() => ({ backgroundColor: previewColor.value }), [previewColor]);
   const setPreviewColor = (color: { h: number; s: number; v: number; a: number }) => {
     previewColor.value = colorKit.HEX(color);
   };
@@ -69,7 +69,7 @@ export function Preview({
     const adaptiveTextColor = alphaValue.value > 0.5 ? currentColor : { h: 0, s: 0, v: 70 };
     runOnJS(setPreviewColor)(currentColor);
     runOnJS(setTextColor)(adaptiveTextColor);
-  });
+  }, [hueValue, saturationValue, brightnessValue, alphaValue]);
 
   return (
     <Wrapper disableTexture={disableOpacityTexture} style={style}>

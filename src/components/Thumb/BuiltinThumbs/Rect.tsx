@@ -21,7 +21,7 @@ export default function Rect({
     width: vertical ? '100%' : 14,
     height: vertical ? 14 : '100%',
   };
-  const adaptiveColorStyle = useAnimatedStyle(() => ({ borderColor: adaptiveColor.value }));
+  const adaptiveColorStyle = useAnimatedStyle(() => ({ borderColor: adaptiveColor.value }), [adaptiveColor]);
 
   return (
     <Animated.View style={[styles.handle, style, computedStyle, handleStyle]}>

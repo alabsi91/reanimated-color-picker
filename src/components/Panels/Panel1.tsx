@@ -62,9 +62,9 @@ export function Panel1({
     return {
       transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }],
     };
-  }, [localThumbSize]);
+  }, [localThumbSize, handleScale, saturationValue, brightnessValue, width, height]);
 
-  const activeColorStyle = useAnimatedStyle(() => ({ backgroundColor: `hsl(${hueValue.value}, 100%, 50%)` }));
+  const activeColorStyle = useAnimatedStyle(() => ({ backgroundColor: `hsl(${hueValue.value}, 100%, 50%)` }), [hueValue]);
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -103,15 +103,18 @@ export function Panel1({
     height.value = layout.height;
   }, []);
 
-  const rotateBrightnessImage = useAnimatedStyle(() => ({
-    width: height.value,
-    height: width.value,
-    transform: [
-      { rotate: '270deg' },
-      { translateX: (width.value - height.value) / 2 },
-      { translateY: ((width.value - height.value) / 2) * (isRtl ? -1 : 1) },
-    ],
-  }));
+  const rotateBrightnessImage = useAnimatedStyle(
+    () => ({
+      width: height.value,
+      height: width.value,
+      transform: [
+        { rotate: '270deg' },
+        { translateX: (width.value - height.value) / 2 },
+        { translateY: ((width.value - height.value) / 2) * (isRtl ? -1 : 1) },
+      ],
+    }),
+    [width, height]
+  );
 
   return (
     <GestureDetector gesture={composed}>

@@ -70,15 +70,16 @@ export function SaturationSlider({
     return {
       transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }],
     };
-  }, [localThumbSize, vertical, reverse]);
+  }, [thumbSize, boundedThumb, vertical, reverse, width, height, saturationValue, handleScale]);
 
   const activeColorStyle = useAnimatedStyle(() => {
     return { backgroundColor: HSVA2HSLA_string(hueValue.value, 100, 100) };
-  });
+  }, [hueValue]);
+
   const activeBrightnessStyle = useAnimatedStyle(() => {
     if (!adaptSpectrum) return {};
     return { backgroundColor: HSVA2HSLA_string(0, 0, 0, 1 - brightnessValue.value / 100) };
-  });
+  }, [adaptSpectrum, brightnessValue]);
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -127,7 +128,7 @@ export function SaturationSlider({
         { translateY: vertical ? imageTranslateY : 0 },
       ],
     };
-  }, [vertical, reverse, sliderThickness]);
+  }, [vertical, reverse, width, height]);
 
   const thicknessStyle = vertical ? { width: sliderThickness } : { height: sliderThickness };
 
