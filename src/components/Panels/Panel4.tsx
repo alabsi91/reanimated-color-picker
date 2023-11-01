@@ -127,8 +127,8 @@ export function Panel4({
     height.value = layout.height;
   }, []);
 
-  const rotatePanelImage = useAnimatedStyle(
-    () => ({
+  const rotatePanelImage = useAnimatedStyle(() => {
+    return {
       width: height.value,
       height: width.value,
       transform: [
@@ -137,9 +137,8 @@ export function Panel4({
         { translateX: ((width.value - height.value) / 2) * (reverseHue ? -1 : 1) },
         { translateY: ((width.value - height.value) / 2) * (isRtl ? -1 : 1) },
       ],
-    }),
-    [reverseHue, height, width]
-  );
+    };
+  }, [reverseHue, height, width]);
 
   return (
     <GestureDetector gesture={composed}>

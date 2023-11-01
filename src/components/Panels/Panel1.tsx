@@ -62,7 +62,7 @@ export function Panel1({
     return {
       transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }],
     };
-  }, [localThumbSize, handleScale, saturationValue, brightnessValue, width, height]);
+  }, [boundedThumb, thumbSize, handleScale, saturationValue, brightnessValue, width, height]);
 
   const activeColorStyle = useAnimatedStyle(() => ({ backgroundColor: `hsl(${hueValue.value}, 100%, 50%)` }), [hueValue]);
 
@@ -103,18 +103,18 @@ export function Panel1({
     height.value = layout.height;
   }, []);
 
-  const rotateBrightnessImage = useAnimatedStyle(
-    () => ({
+  const rotateBrightnessImage = useAnimatedStyle(() => {
+    return {
       width: height.value,
       height: width.value,
+
       transform: [
         { rotate: '270deg' },
         { translateX: (width.value - height.value) / 2 },
         { translateY: ((width.value - height.value) / 2) * (isRtl ? -1 : 1) },
       ],
-    }),
-    [width, height]
-  );
+    };
+  }, [width, height]);
 
   return (
     <GestureDetector gesture={composed}>

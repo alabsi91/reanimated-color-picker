@@ -122,7 +122,6 @@ export function OpacitySlider({
 
   const imageStyle = useAnimatedStyle(() => {
     if (isWeb) return {};
-
     const imageRotate = vertical ? (reverse ? '90deg' : '270deg') : reverse ? '0deg' : '180deg';
     const imageTranslateY = ((height.value - width.value) / 2) * ((reverse && isRtl) || (!reverse && !isRtl) ? -1 : 1);
     return {
