@@ -60,8 +60,8 @@ export function Panel4({
       calcThumb = boundedThumb ? 0 : thumbSize / 2,
       // luminance
       lum = (((2 - saturationValue.value / 100) * (brightnessValue.value / 100)) / 2) * 100,
-      poxPercentX = (lum / 100) * length.x,
-      posX = (reverseHorizontalChannels ? poxPercentX : length.x - poxPercentX) - calcThumb,
+      posPercentX = (lum / 100) * length.x,
+      posX = (reverseHorizontalChannels ? posPercentX : length.x - posPercentX) - calcThumb,
       // hue
       percentY = (hueValue.value / 360) * length.y,
       posY = (reverseHue ? percentY : length.y - percentY) - calcThumb;

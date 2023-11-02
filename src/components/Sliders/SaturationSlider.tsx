@@ -128,7 +128,7 @@ export function SaturationSlider({
         { translateY: vertical ? imageTranslateY : 0 },
       ],
     };
-  }, [vertical, reverse, width, height]);
+  }, [vertical, reverse, borderRadius, width, height]);
 
   const thicknessStyle = vertical ? { width: sliderThickness } : { height: sliderThickness };
 

@@ -138,7 +138,7 @@ export function RedSlider({
         { translateY: vertical ? imageTranslateY : 0 },
       ],
     };
-  }, [vertical, reverse, width, height, hueValue, saturationValue, brightnessValue]);
+  }, [vertical, reverse, borderRadius, width, height, hueValue, saturationValue, brightnessValue]);
 
   const thicknessStyle = vertical ? { width: sliderThickness } : { height: sliderThickness };
 

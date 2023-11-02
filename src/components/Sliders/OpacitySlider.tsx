@@ -139,7 +139,7 @@ export function OpacitySlider({
         { translateY: vertical ? imageTranslateY : 0 },
       ],
     };
-  }, [vertical, reverse, adaptSpectrum, width, height, hueValue, saturationValue, brightnessValue]);
+  }, [vertical, reverse, borderRadius, adaptSpectrum, width, height, hueValue, saturationValue, brightnessValue]);
 
   const thicknessStyle = vertical ? { width: sliderThickness } : { height: sliderThickness };
 

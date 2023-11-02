@@ -122,7 +122,7 @@ export function BrightnessSlider({
         { translateY: vertical ? imageTranslateY : 0 },
       ],
     };
-  }, [vertical, reverse, height, width]);
+  }, [vertical, reverse, borderRadius, height, width]);
 
   const thicknessStyle = vertical ? { width: sliderThickness } : { height: sliderThickness };
 
