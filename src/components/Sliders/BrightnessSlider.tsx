@@ -134,18 +134,16 @@ export function BrightnessSlider({
       >
         <Animated.Image source={require('@assets/blackGradient.png')} style={imageStyle} />
         <Thumb
-          {...{
-            channel: 'v',
-            thumbShape,
-            thumbSize,
-            thumbColor,
-            renderThumb,
-            handleStyle,
-            innerStyle: thumbInnerStyle,
-            style: thumbStyle,
-            vertical,
-            adaptSpectrum,
-          }}
+          channel='v'
+          thumbShape={thumbShape}
+          thumbSize={thumbSize}
+          thumbColor={thumbColor}
+          renderThumb={renderThumb}
+          innerStyle={thumbInnerStyle}
+          handleStyle={handleStyle}
+          style={thumbStyle}
+          adaptSpectrum={adaptSpectrum}
+          vertical={vertical}
         />
       </Animated.View>
     </GestureDetector>

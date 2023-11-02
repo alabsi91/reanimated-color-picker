@@ -152,16 +152,14 @@ export function GreenSlider({
           <Animated.Image source={require('@assets/blackGradient.png')} style={imageStyle} />
         </RenderNativeOnly>
         <Thumb
-          {...{
-            thumbShape,
-            thumbSize,
-            thumbColor,
-            renderThumb,
-            handleStyle,
-            innerStyle: thumbInnerStyle,
-            style: thumbStyle,
-            vertical,
-          }}
+          thumbShape={thumbShape}
+          thumbSize={thumbSize}
+          thumbColor={thumbColor}
+          renderThumb={renderThumb}
+          innerStyle={thumbInnerStyle}
+          handleStyle={handleStyle}
+          style={thumbStyle}
+          vertical={vertical}
         />
       </Animated.View>
     </GestureDetector>

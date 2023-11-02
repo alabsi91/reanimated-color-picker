@@ -171,15 +171,13 @@ export function Panel4({
         </View>
 
         <Thumb
-          {...{
-            thumbShape,
-            thumbSize,
-            thumbColor,
-            renderThumb,
-            innerStyle: thumbInnerStyle,
-            style: thumbStyle,
-            handleStyle,
-          }}
+          thumbShape={thumbShape}
+          thumbSize={thumbSize}
+          thumbColor={thumbColor}
+          renderThumb={renderThumb}
+          innerStyle={thumbInnerStyle}
+          handleStyle={handleStyle}
+          style={thumbStyle}
         />
       </Animated.View>
     </GestureDetector>

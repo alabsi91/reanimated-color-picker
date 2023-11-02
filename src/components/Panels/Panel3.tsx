@@ -149,17 +149,15 @@ export function Panel3({
           </ConditionalRendering>
         </ImageBackground>
         <Thumb
-          {...{
-            channel: centerChannel === 'brightness' ? 'v' : 's',
-            thumbShape,
-            thumbSize,
-            thumbColor,
-            renderThumb,
-            innerStyle: thumbInnerStyle,
-            style: thumbStyle,
-            handleStyle,
-            adaptSpectrum,
-          }}
+          channel={centerChannel === 'brightness' ? 'v' : 's'}
+          thumbShape={thumbShape}
+          thumbSize={thumbSize}
+          thumbColor={thumbColor}
+          renderThumb={renderThumb}
+          innerStyle={thumbInnerStyle}
+          handleStyle={handleStyle}
+          style={thumbStyle}
+          adaptSpectrum={adaptSpectrum}
         />
       </Animated.View>
     </GestureDetector>

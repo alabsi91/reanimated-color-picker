@@ -160,17 +160,15 @@ export function HueCircular({
           <Animated.View style={[clipViewStyle, { backgroundColor: '#fff' }, containerStyle]}>{children}</Animated.View>
         </ImageBackground>
         <Thumb
-          {...{
-            channel: 'h',
-            thumbShape,
-            thumbSize,
-            thumbColor,
-            renderThumb,
-            innerStyle: thumbInnerStyle,
-            style: thumbStyle,
-            handleStyle,
-            adaptSpectrum,
-          }}
+          channel='h'
+          thumbShape={thumbShape}
+          thumbSize={thumbSize}
+          thumbColor={thumbColor}
+          renderThumb={renderThumb}
+          innerStyle={thumbInnerStyle}
+          handleStyle={handleStyle}
+          style={thumbStyle}
+          adaptSpectrum={adaptSpectrum}
         />
       </Animated.View>
     </GestureDetector>

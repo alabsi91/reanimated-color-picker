@@ -145,18 +145,16 @@ export function SaturationSlider({
         </ConditionalRendering>
 
         <Thumb
-          {...{
-            channel: 's',
-            thumbShape,
-            thumbSize,
-            thumbColor,
-            renderThumb,
-            handleStyle,
-            innerStyle: thumbInnerStyle,
-            style: thumbStyle,
-            vertical,
-            adaptSpectrum,
-          }}
+          channel='s'
+          thumbShape={thumbShape}
+          thumbSize={thumbSize}
+          thumbColor={thumbColor}
+          renderThumb={renderThumb}
+          innerStyle={thumbInnerStyle}
+          handleStyle={handleStyle}
+          style={thumbStyle}
+          adaptSpectrum={adaptSpectrum}
+          vertical={vertical}
         />
       </Animated.View>
     </GestureDetector>

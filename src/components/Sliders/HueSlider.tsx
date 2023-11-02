@@ -147,18 +147,16 @@ export function HueSlider({
         </ConditionalRendering>
 
         <Thumb
-          {...{
-            channel: 'h',
-            thumbShape,
-            thumbSize,
-            thumbColor,
-            renderThumb,
-            handleStyle,
-            innerStyle: thumbInnerStyle,
-            style: thumbStyle,
-            vertical,
-            adaptSpectrum,
-          }}
+          channel='h'
+          thumbShape={thumbShape}
+          thumbSize={thumbSize}
+          thumbColor={thumbColor}
+          renderThumb={renderThumb}
+          innerStyle={thumbInnerStyle}
+          handleStyle={handleStyle}
+          style={thumbStyle}
+          adaptSpectrum={adaptSpectrum}
+          vertical={vertical}
         />
       </Animated.View>
     </GestureDetector>
