@@ -2,10 +2,18 @@ const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
 const path = require('path');
 const escape = require('escape-string-regexp');
 const exclusionList = require('metro-config/src/defaults/exclusionList');
-const pak = require('../package.json');
 
 const root = path.resolve(__dirname, '..');
-const modules = Object.keys({...pak.peerDependencies});
+
+function createRegExp(pkg) {
+  return new RegExp(`^${escape(path.join(root, 'node_modules', pkg))}\\/.*$`);
+}
+
+function createPkgEntry(pkg) {
+  return {
+    [pkg]: path.join(__dirname, 'node_modules', pkg),
+  };
+}
 
 /**
  * Metro configuration
@@ -16,28 +24,19 @@ const modules = Object.keys({...pak.peerDependencies});
 const config = {
   watchFolders: [root],
 
-  // We need to make sure that only one version is loaded for peerDependencies
-  // So we block them at the root, and alias them to the versions in example's node_modules
   resolver: {
-    blacklistRE: exclusionList(
-      modules.map(
-        m => new RegExp(`^${escape(path.join(root, 'node_modules', m))}\\/.*$`),
-      ),
-    ),
+    blacklistRE: exclusionList([
+      createRegExp('react-native-reanimated'),
+      createRegExp('react-native-gesture-handler'),
+      createRegExp('react-native'),
+      createRegExp('react'),
+    ]),
 
     extraNodeModules: {
-      'react-native-reanimated': path.join(
-        __dirname,
-        'node_modules',
-        'react-native-reanimated',
-      ),
-      'react-native-gesture-handler': path.join(
-        __dirname,
-        'node_modules',
-        'react-native-gesture-handler',
-      ),
-      'react-native': path.join(__dirname, 'node_modules', 'react-native'),
-      react: path.join(__dirname, 'node_modules', 'react'),
+      ...createPkgEntry('react-native-reanimated'),
+      ...createPkgEntry('react-native-gesture-handler'),
+      ...createPkgEntry('react-native'),
+      ...createPkgEntry('react'),
     },
   },
 
