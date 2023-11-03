@@ -17,7 +17,8 @@
       "@types": ["src/types"]
     },
     "noEmit": false,
-    "declaration": false,
+    "composite": true,
+    "declaration": true,
     "module": "ESNext",
     "target": "ESNext",
     "isolatedModules": true,

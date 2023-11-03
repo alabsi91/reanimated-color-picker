@@ -27,7 +27,9 @@ async function cleanOutDirectory() {
 
 /** Build TypeScript declaration files. */
 async function buildTypescript() {
-  await execPromise(`npx tsc --declarationDir ${declarationOutDir} --emitDeclarationOnly --declaration --declarationMap`);
+  await execPromise(
+    `npx tsc --declarationDir ${declarationOutDir} --composite false --emitDeclarationOnly --declaration --declarationMap`
+  );
   await resolveTsPaths({ out: declarationOutDir }); // Resolve import aliases to their corresponding actual paths.
 }
 
@@ -45,7 +47,7 @@ async function buildCommonJs() {
 
 /** Compile the source file using the TypeScript compiler. */
 async function buildSource() {
-  await execPromise(`npx tsc --outDir ${srcOutDir}`);
+  await execPromise(`npx tsc --outDir ${srcOutDir} --composite false --declaration false`);
   await resolveTsPaths({ out: srcOutDir }); // Resolve import aliases to their corresponding actual paths.
   await fs.cp(path.join(sourceDir, assetsDir), path.join(srcOutDir, assetsDir), { recursive: true });
 }
