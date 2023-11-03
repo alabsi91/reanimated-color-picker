@@ -3,7 +3,7 @@
   "include": ["src/**/*"],
   "exclude": ["Example", "ExampleExpo", "scripts", "docusaurus", "docs"],
   "compilerOptions": {
-    "types": ["react-native"],
+    "types": ["react-native", "react-native-reanimated", "react-native-gesture-handler"],
     "baseUrl": ".",
     "paths": {
       "@sliders/*": ["src/components/Sliders/*"],
