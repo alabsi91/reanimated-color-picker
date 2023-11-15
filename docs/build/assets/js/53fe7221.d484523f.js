@@ -78,7 +78,7 @@
           children: [
             (0, i.jsx)(n.h1, { id: 'panel1-', children: (0, i.jsx)(n.code, { children: '<Panel1 />' }) }),
             '\n',
-            (0, i.jsx)(n.p, { children: (0, i.jsx)(n.img, { alt: 'panel1', src: t(6046).Z + '', width: '200', height: '200' }) }),
+            (0, i.jsx)(n.p, { children: (0, i.jsx)(n.img, { alt: 'panel1', src: t(8902).Z + '', width: '200', height: '200' }) }),
             '\n',
             (0, i.jsxs)(n.ul, {
               children: [
@@ -450,7 +450,7 @@
               children: (0, i.jsx)(n.code, {
                 className: 'language-tsx',
                 children:
-                  "import Animated, { useAnimatedStyle } from 'react-native-reanimated';\r\nimport type { RenderThumbProps } from 'reanimated-color-picker';\r\n\r\nfunction MyCustomThumb({\r\n  width,\r\n  height,\r\n  positionStyle,\r\n  adaptiveColor,\r\n  currentColor,\r\n  initialColor,\r\n}: RenderThumbProps) {\r\n\r\n  const animatedStyle = useAnimatedStyle(() => ({\r\n    borderColor: adaptiveColor.value,\r\n    backgroundColor: currentColor.value,\r\n  }));\r\n\r\n  return (\r\n    <Animated.View\r\n      style={[\r\n        { width, height, borderWidth: 1, borderRadius: width / 2, overflow: 'hidden' },\r\n        animatedStyle,\r\n        positionStyle,\r\n        ]}\r\n    >\r\n      <View style={{ backgroundColor: initialColor, width: '50%', height, alignSelf: 'flex-end' }} />\r\n    </Animated.View>\r\n  );\r\n}\n",
+                  "import Animated, { useAnimatedStyle } from 'react-native-reanimated';\r\nimport type { RenderThumbProps } from 'reanimated-color-picker';\r\n\r\nfunction MyCustomThumb({ width, height, positionStyle, adaptiveColor, currentColor, initialColor }: RenderThumbProps) {\r\n  const animatedStyle = useAnimatedStyle(() => ({\r\n    borderColor: adaptiveColor.value,\r\n    backgroundColor: currentColor.value,\r\n  }));\r\n\r\n  return (\r\n    <Animated.View\r\n      style={[{ width, height, borderWidth: 1, borderRadius: width / 2, overflow: 'hidden' }, animatedStyle, positionStyle]}\r\n    >\r\n      <View style={{ backgroundColor: initialColor, width: '50%', height, alignSelf: 'flex-end' }} />\r\n    </Animated.View>\r\n  );\r\n}\n",
               }),
             }),
           ],
@@ -461,7 +461,7 @@
         return n ? (0, i.jsx)(n, { ...e, children: (0, i.jsx)(r, { ...e }) }) : r(e);
       }
     },
-    6046: (e, n, t) => {
+    8902: (e, n, t) => {
       t.d(n, { Z: () => i });
       const i = t.p + 'assets/images/panel1-467da7d5cafc669fd31a29110ad12315.png';
     },

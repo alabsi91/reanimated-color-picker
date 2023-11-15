@@ -82,9 +82,9 @@
             '\n',
             (0, i.jsxs)(n.p, {
               children: [
-                (0, i.jsx)(n.img, { alt: 'panel3-saturation', src: t(8362).Z + '', width: '200', height: '200' }),
+                (0, i.jsx)(n.img, { alt: 'panel3-saturation', src: t(1576).Z + '', width: '200', height: '200' }),
                 ' < or > ',
-                (0, i.jsx)(n.img, { alt: 'panel3-brightness', src: t(8931).Z + '', width: '200', height: '200' }),
+                (0, i.jsx)(n.img, { alt: 'panel3-brightness', src: t(2661).Z + '', width: '200', height: '200' }),
               ],
             }),
             '\n',
@@ -115,7 +115,7 @@
                     '\n',
                     (0, i.jsxs)(n.p, {
                       children: [
-                        'Move thumb (handle) away or toward the center to change  the saturation or the brightness of the color, depending on the ',
+                        'Move thumb (handle) away or toward the center to change the saturation or the brightness of the color, depending on the ',
                         (0, i.jsx)(n.code, { children: 'verticalChannel' }),
                         ' prop..',
                       ],
@@ -497,7 +497,7 @@
               children: (0, i.jsx)(n.code, {
                 className: 'language-tsx',
                 children:
-                  "import Animated, { useAnimatedStyle } from 'react-native-reanimated';\r\nimport type { RenderThumbProps } from 'reanimated-color-picker';\r\n\r\nfunction MyCustomThumb({\r\n  width,\r\n  height,\r\n  positionStyle,\r\n  adaptiveColor,\r\n  currentColor,\r\n  initialColor,\r\n}: RenderThumbProps) {\r\n\r\n  const animatedStyle = useAnimatedStyle(() => ({\r\n    borderColor: adaptiveColor.value,\r\n    backgroundColor: currentColor.value,\r\n  }));\r\n\r\n  return (\r\n    <Animated.View\r\n      style={[\r\n        { width, height, borderWidth: 1, borderRadius: width / 2, overflow: 'hidden' },\r\n        animatedStyle,\r\n        positionStyle,\r\n        ]}\r\n    >\r\n      <View style={{ backgroundColor: initialColor, width: '50%', height, alignSelf: 'flex-end' }} />\r\n    </Animated.View>\r\n  );\r\n}\n",
+                  "import Animated, { useAnimatedStyle } from 'react-native-reanimated';\r\nimport type { RenderThumbProps } from 'reanimated-color-picker';\r\n\r\nfunction MyCustomThumb({ width, height, positionStyle, adaptiveColor, currentColor, initialColor }: RenderThumbProps) {\r\n  const animatedStyle = useAnimatedStyle(() => ({\r\n    borderColor: adaptiveColor.value,\r\n    backgroundColor: currentColor.value,\r\n  }));\r\n\r\n  return (\r\n    <Animated.View\r\n      style={[{ width, height, borderWidth: 1, borderRadius: width / 2, overflow: 'hidden' }, animatedStyle, positionStyle]}\r\n    >\r\n      <View style={{ backgroundColor: initialColor, width: '50%', height, alignSelf: 'flex-end' }} />\r\n    </Animated.View>\r\n  );\r\n}\n",
               }),
             }),
           ],
@@ -508,11 +508,11 @@
         return n ? (0, i.jsx)(n, { ...e, children: (0, i.jsx)(r, { ...e }) }) : r(e);
       }
     },
-    8931: (e, n, t) => {
+    2661: (e, n, t) => {
       t.d(n, { Z: () => i });
       const i = t.p + 'assets/images/panel3-brightness-968159b4b60646446d28a458e40cf53b.png';
     },
-    8362: (e, n, t) => {
+    1576: (e, n, t) => {
       t.d(n, { Z: () => i });
       const i = t.p + 'assets/images/panel3-saturation-dafb918fc53688c9bceef0165d7e545c.png';
     },

@@ -81,9 +81,9 @@
             '\n',
             (0, t.jsxs)(n.p, {
               children: [
-                (0, t.jsx)(n.img, { alt: 'panel2panel2-saturation', src: l(9265).Z + '', width: '200', height: '200' }),
+                (0, t.jsx)(n.img, { alt: 'panel2panel2-saturation', src: l(6452).Z + '', width: '200', height: '200' }),
                 ' < or > ',
-                (0, t.jsx)(n.img, { alt: 'panel2panel2-brightness', src: l(6205).Z + '', width: '200', height: '200' }),
+                (0, t.jsx)(n.img, { alt: 'panel2panel2-brightness', src: l(9161).Z + '', width: '200', height: '200' }),
               ],
             }),
             '\n',
@@ -530,7 +530,7 @@
               children: (0, t.jsx)(n.code, {
                 className: 'language-tsx',
                 children:
-                  "import Animated, { useAnimatedStyle } from 'react-native-reanimated';\r\nimport type { RenderThumbProps } from 'reanimated-color-picker';\r\n\r\nfunction MyCustomThumb({\r\n  width,\r\n  height,\r\n  positionStyle,\r\n  adaptiveColor,\r\n  currentColor,\r\n  initialColor,\r\n}: RenderThumbProps) {\r\n\r\n  const animatedStyle = useAnimatedStyle(() => ({\r\n    borderColor: adaptiveColor.value,\r\n    backgroundColor: currentColor.value,\r\n  }));\r\n\r\n  return (\r\n    <Animated.View\r\n      style={[\r\n        { width, height, borderWidth: 1, borderRadius: width / 2, overflow: 'hidden' },\r\n        animatedStyle,\r\n        positionStyle,\r\n        ]}\r\n    >\r\n      <View style={{ backgroundColor: initialColor, width: '50%', height, alignSelf: 'flex-end' }} />\r\n    </Animated.View>\r\n  );\r\n}\n",
+                  "import Animated, { useAnimatedStyle } from 'react-native-reanimated';\r\nimport type { RenderThumbProps } from 'reanimated-color-picker';\r\n\r\nfunction MyCustomThumb({ width, height, positionStyle, adaptiveColor, currentColor, initialColor }: RenderThumbProps) {\r\n  const animatedStyle = useAnimatedStyle(() => ({\r\n    borderColor: adaptiveColor.value,\r\n    backgroundColor: currentColor.value,\r\n  }));\r\n\r\n  return (\r\n    <Animated.View\r\n      style={[{ width, height, borderWidth: 1, borderRadius: width / 2, overflow: 'hidden' }, animatedStyle, positionStyle]}\r\n    >\r\n      <View style={{ backgroundColor: initialColor, width: '50%', height, alignSelf: 'flex-end' }} />\r\n    </Animated.View>\r\n  );\r\n}\n",
               }),
             }),
           ],
@@ -541,11 +541,11 @@
         return n ? (0, t.jsx)(n, { ...e, children: (0, t.jsx)(r, { ...e }) }) : r(e);
       }
     },
-    6205: (e, n, l) => {
+    9161: (e, n, l) => {
       l.d(n, { Z: () => t });
       const t = l.p + 'assets/images/panel2-brightness-389d07bf3f673e64e02a6b9d52f36e59.png';
     },
-    9265: (e, n, l) => {
+    6452: (e, n, l) => {
       l.d(n, { Z: () => t });
       const t = l.p + 'assets/images/panel2-saturation-bc20014dcc48696ed58273d705b447c4.png';
     },

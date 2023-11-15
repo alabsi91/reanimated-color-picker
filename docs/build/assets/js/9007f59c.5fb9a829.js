@@ -8,14 +8,14 @@
           assets: () => c,
           contentTitle: () => d,
           default: () => x,
-          frontMatter: () => s,
+          frontMatter: () => r,
           metadata: () => h,
           toc: () => o,
         });
       var l = t(5893),
         i = t(1151),
-        r = t(435);
-      const s = {
+        s = t(435);
+      const r = {
           sidebar_position: 13,
           sidebar_label: 'Panel4',
           description: 'A slider with a square shape is used to adjust the channels of hue, saturation, and brightness.',
@@ -76,7 +76,7 @@
           children: [
             (0, l.jsx)(n.h1, { id: 'panel4-', children: (0, l.jsx)(n.code, { children: '<Panel4 />' }) }),
             '\n',
-            (0, l.jsx)(n.p, { children: (0, l.jsx)(n.img, { alt: 'panel4', src: t(9073).Z + '', width: '200', height: '200' }) }),
+            (0, l.jsx)(n.p, { children: (0, l.jsx)(n.img, { alt: 'panel4', src: t(1923).Z + '', width: '200', height: '200' }) }),
             '\n',
             (0, l.jsxs)(n.ul, {
               children: [
@@ -237,7 +237,7 @@
             '\n',
             '\n',
             '\n',
-            (0, l.jsx)(r.ZP, {}),
+            (0, l.jsx)(s.ZP, {}),
             '\n',
             (0, l.jsx)(n.h3, { id: 'reversehue', children: (0, l.jsx)(n.code, { children: 'reverseHue' }) }),
             '\n',
@@ -300,10 +300,10 @@
       }
     },
     435: (e, n, t) => {
-      t.d(n, { ZP: () => s });
+      t.d(n, { ZP: () => r });
       var l = t(5893),
         i = t(1151);
-      function r(e) {
+      function s(e) {
         const n = {
           code: 'code',
           h3: 'h3',
@@ -468,28 +468,28 @@
               children: (0, l.jsx)(n.code, {
                 className: 'language-tsx',
                 children:
-                  "import Animated, { useAnimatedStyle } from 'react-native-reanimated';\r\nimport type { RenderThumbProps } from 'reanimated-color-picker';\r\n\r\nfunction MyCustomThumb({\r\n  width,\r\n  height,\r\n  positionStyle,\r\n  adaptiveColor,\r\n  currentColor,\r\n  initialColor,\r\n}: RenderThumbProps) {\r\n\r\n  const animatedStyle = useAnimatedStyle(() => ({\r\n    borderColor: adaptiveColor.value,\r\n    backgroundColor: currentColor.value,\r\n  }));\r\n\r\n  return (\r\n    <Animated.View\r\n      style={[\r\n        { width, height, borderWidth: 1, borderRadius: width / 2, overflow: 'hidden' },\r\n        animatedStyle,\r\n        positionStyle,\r\n        ]}\r\n    >\r\n      <View style={{ backgroundColor: initialColor, width: '50%', height, alignSelf: 'flex-end' }} />\r\n    </Animated.View>\r\n  );\r\n}\n",
+                  "import Animated, { useAnimatedStyle } from 'react-native-reanimated';\r\nimport type { RenderThumbProps } from 'reanimated-color-picker';\r\n\r\nfunction MyCustomThumb({ width, height, positionStyle, adaptiveColor, currentColor, initialColor }: RenderThumbProps) {\r\n  const animatedStyle = useAnimatedStyle(() => ({\r\n    borderColor: adaptiveColor.value,\r\n    backgroundColor: currentColor.value,\r\n  }));\r\n\r\n  return (\r\n    <Animated.View\r\n      style={[{ width, height, borderWidth: 1, borderRadius: width / 2, overflow: 'hidden' }, animatedStyle, positionStyle]}\r\n    >\r\n      <View style={{ backgroundColor: initialColor, width: '50%', height, alignSelf: 'flex-end' }} />\r\n    </Animated.View>\r\n  );\r\n}\n",
               }),
             }),
           ],
         });
       }
-      function s(e = {}) {
+      function r(e = {}) {
         const { wrapper: n } = { ...(0, i.a)(), ...e.components };
-        return n ? (0, l.jsx)(n, { ...e, children: (0, l.jsx)(r, { ...e }) }) : r(e);
+        return n ? (0, l.jsx)(n, { ...e, children: (0, l.jsx)(s, { ...e }) }) : s(e);
       }
     },
-    9073: (e, n, t) => {
+    1923: (e, n, t) => {
       t.d(n, { Z: () => l });
       const l = t.p + 'assets/images/panel4-fdad34ed193f56d62d7c09ca309bedf6.png';
     },
     1151: (e, n, t) => {
-      t.d(n, { Z: () => d, a: () => s });
+      t.d(n, { Z: () => d, a: () => r });
       var l = t(7294);
       const i = {},
-        r = l.createContext(i);
-      function s(e) {
-        const n = l.useContext(r);
+        s = l.createContext(i);
+      function r(e) {
+        const n = l.useContext(s);
         return l.useMemo(
           function () {
             return 'function' == typeof e ? e(n) : { ...n, ...e };
@@ -504,8 +504,8 @@
             ? 'function' == typeof e.components
               ? e.components(i)
               : e.components || i
-            : s(e.components)),
-          l.createElement(r.Provider, { value: n }, e.children)
+            : r(e.components)),
+          l.createElement(s.Provider, { value: n }, e.children)
         );
       }
     },
