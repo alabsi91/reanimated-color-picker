@@ -1,0 +1,93 @@
+---
+sidebar_position: 12
+sidebar_label: Panel3
+description: The circle-shaped slider, with its wheel style design, is utilized to adjust the hue and saturation of colors.
+---
+
+# `<Panel3 />`
+
+![panel3-saturation](../../../images/panel3-saturation.png) < or > ![panel3-brightness](../../../images/panel3-brightness.png)
+
+- The circle-shaped slider, with its wheel style design, is utilized to adjust the hue and (saturation or brightness) of colors.
+
+- Move thumb (handle) around the center to change the color's hue.
+
+- Move thumb (handle) away or toward the center to change the saturation or the brightness of the color, depending on the `verticalChannel` prop..
+
+:::tip
+
+If you want to give your users more control over the color selection, you can add another slider next to this one that adjusts the opposite channel. For example, if `centerChannel` is `"saturation"`, you can add a [`<BrightnessSlider />`](./BrightnessSlider) slider, and vice versa.
+
+:::
+
+## Props
+
+### `centerChannel `
+
+- Determines which color channel to adjust when moving the thumb towards or away from the center of the circular slider.
+- `type: "saturation" | "brightness"`
+- `default: "saturation"`
+
+### `boundedThumb`
+
+- Determines whether the panel slider thumb (or handle) should be constrained to stay within the boundaries of the panel.
+- When set to `true`, the thumb will not be allowed to move beyond the edges of the panel.
+- When set to `false`, part of it will be outside of the panel bounds.
+- `type: boolean`
+- `default: false`
+
+### `thumbSize`
+
+- Panel's handle (thumb) size (height\*width).
+- `type: number`
+- `default: 35`
+
+### `thumbColor`
+
+- Change thumb's color.
+- `type: string`
+- `default`: interactive\*
+
+:::info **\*interactive**
+
+- The thumb color will be changed depending on the contrast ratio if no color value is passed.
+
+:::
+
+### `thumbShape`
+
+- Change thumb's shape and appearance.
+- `type: string`
+- `values`: <shapes/>
+- `default: 'ring'`
+
+### `thumbStyle`
+
+- Thumb's containing View's style.
+- `type: ViewStyle`
+
+### `thumbInnerStyle`
+
+- Thumb's inner View(s) style.
+- `type: ViewStyle`
+
+import RenderThumb from './_renderThumb.mdx';
+
+<RenderThumb />
+
+### `adaptSpectrum`
+
+- Slider background color spectrum adapts to changes in saturation and brightness.
+- `type: boolean`
+- `default: false`
+
+### `style`
+
+- Panel's container style.
+- `type: ViewStyle`
+
+:::info note
+
+- Certain style properties will be overridden.
+
+:::

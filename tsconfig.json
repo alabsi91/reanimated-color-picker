@@ -1,7 +1,7 @@
 {
   "extends": "@tsconfig/react-native/tsconfig.json",
   "include": ["src/**/*"],
-  "exclude": ["Example", "ExampleExpo", "scripts", "docusaurus", "docs"],
+  "exclude": ["Example", "ExampleExpo", "scripts", "docs", "docs"],
   "compilerOptions": {
     "types": ["react-native", "react-native-reanimated", "react-native-gesture-handler"],
     "baseUrl": ".",
