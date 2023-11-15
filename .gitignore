@@ -60,3 +60,4 @@ buck-out/
 /vendor/bundle/
 
 lib
+tsconfig.tsbuildinfo
