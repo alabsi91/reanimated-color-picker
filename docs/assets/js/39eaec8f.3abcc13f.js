@@ -310,7 +310,7 @@
                       id: 'react-native-reanimated-version-200-or-higher',
                       children: [
                         (0, t.jsx)(r.a, {
-                          href: 'https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/installation',
+                          href: 'https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/getting-started/#installation',
                           children: 'react-native-reanimated',
                         }),
                         ' version ',
