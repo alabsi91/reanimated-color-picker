@@ -1,9 +1,9 @@
-import colorsRegex from '../colorsRegex';
+import COLORS_REGEX from '../colorsRegex';
 import { calculateHueValue, clamp100, clampAlpha, clampHue, clampRGB, detectColorFormat } from '../utilities';
-import { to_HSLA as from_HSV_to_HSLA } from './HSV';
-import { to_HEX as from_RGB_to_HEX } from './RGB';
+import { to_HSLA as HSV_to_HSLA } from './HSV';
+import { to_HEX as RGB_to_HEX } from './RGB';
 
-import type { hslaT, hsvaT, hwbaT, hwbT, rgbaT } from '../types';
+import type { ColorTypes, hslaT, hsvaT, hwbaT, hwbT, rgbaT } from '../types';
 
 // * HWB
 
@@ -20,7 +20,7 @@ export function string_to_object(color: string): hwbaT {
   }
 
   let matches: RegExpMatchArray | null = null;
-  const entry = colorsRegex[colorType as 'hwb' | 'hwba'];
+  const entry = COLORS_REGEX[colorType as 'hwb' | 'hwba'];
   if (Array.isArray(entry)) {
     for (let i = 0; i < entry.length; i++) {
       if (entry[i].test(color)) matches = color.match(entry[i]);
@@ -93,7 +93,7 @@ export function to_RGBA(color: hwbaT | hwbT | string): rgbaT {
 /** - Convert `HWB` or `HWBA` color to an `Hex` color */
 export function to_HEX(color: hwbaT | hwbT | string): string {
   const rgba = to_RGBA(color);
-  return from_RGB_to_HEX(rgba);
+  return RGB_to_HEX(rgba);
 }
 
 /** - Convert `HWB` or `HWBA` color to an `HSVA` object representation */
@@ -120,11 +120,16 @@ export function to_HSVA(color: hwbaT | hwbT | string): hsvaT {
 /** - Convert `HWB` or `HWBA` color to an `HSLA` object representation */
 export function to_HSLA(color: hwbaT | hwbT | string): hslaT {
   const hsva = to_HSVA(color);
-  return from_HSV_to_HSLA(hsva);
+  return HSV_to_HSLA(hsva);
+}
+
+/** - Convert `HWB` or `HWBA` color to an `HWBA` object representation */
+export function to_HWBA(color: hwbaT | hwbT | string): hwbaT {
+  return typeof color === 'string' ? string_to_object(color) : to_normalized_object(color);
 }
 
 /** - Return the `HWB` color as a string, an array, or an object */
-export function to_types({ h, w, b, a }: hwbaT) {
+export function to_types({ h, w, b, a }: hwbaT): ColorTypes<hwbaT> {
   return {
     string: (forceAlpha?: boolean) => {
       // auto

@@ -1,6 +1,6 @@
 import { HSL, HSV, RGB } from './colorConversion';
-import colorsRegex from './colorsRegex';
-import namedColors from './namedColors';
+import COLORS_REGEX from './colorsRegex';
+import NAMED_COLORS from './namedColors';
 
 import type { ColorFormats, hslaT, hslT, hsvaT, hsvT, hwbaT, hwbT, rgbaT, rgbT, SupportedColorFormats } from './types';
 
@@ -15,11 +15,11 @@ export function getFormat(color: SupportedColorFormats): ColorFormats | 'named' 
   // color string
   if (typeof color === 'string') {
     color = color.trim().toLowerCase();
-    if (namedColors.hasOwnProperty(color)) return 'named';
+    if (NAMED_COLORS.hasOwnProperty(color)) return 'named';
 
-    for (const key in colorsRegex) {
+    for (const key in COLORS_REGEX) {
       const format = key as ColorFormats;
-      const entry = colorsRegex[format];
+      const entry = COLORS_REGEX[format];
       if (Array.isArray(entry)) {
         for (let i = 0; i < entry.length; i++) if (entry[i].test(color)) return format;
         continue;

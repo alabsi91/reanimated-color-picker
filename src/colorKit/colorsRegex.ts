@@ -1,6 +1,6 @@
 import type { ColorFormats } from './types';
 
-const colorsRegex: Record<ColorFormats, RegExp | RegExp[]> = {
+const COLORS_REGEX: Record<ColorFormats, RegExp | RegExp[]> = {
   hex3: /^#([A-Fa-f0-9]{3})$/, // #rgb
   hex4: /^#([A-Fa-f0-9]{3}[A-Fa-f0-9]{1})$/, // #rgba
   hex6: /^#([A-Fa-f0-9]{6})$/, // #rrggbb
@@ -40,4 +40,4 @@ const colorsRegex: Record<ColorFormats, RegExp | RegExp[]> = {
   ],
 };
 
-export default colorsRegex;
+export default COLORS_REGEX;

@@ -1,8 +1,8 @@
-import colorsRegex from '../colorsRegex';
+import COLORS_REGEX from '../colorsRegex';
 import { calculateHueValue, clamp100, clampAlpha, clampHue, clampRGB, detectColorFormat, numberToHexString } from '../utilities';
-import { to_HWBA as from_HSV_to_HWBA } from './HSV';
+import { to_HWBA as HSV_to_HWBA } from './HSV';
 
-import type { hslaT, hslT, hsvaT, hwbaT, rgbaT } from '../types';
+import type { ColorTypes, hslaT, hslT, hsvaT, hwbaT, rgbaT } from '../types';
 
 // * HSL
 
@@ -19,7 +19,7 @@ export function string_to_object(color: string): hslaT {
   }
 
   let matches: RegExpMatchArray | null = null;
-  const entry = colorsRegex[colorType as 'hsl' | 'hsla'];
+  const entry = COLORS_REGEX[colorType as 'hsl' | 'hsla'];
   if (Array.isArray(entry)) {
     for (let i = 0; i < entry.length; i++) {
       if (entry[i].test(color)) matches = color.match(entry[i]);
@@ -117,11 +117,16 @@ export function to_HSVA(color: string | hslaT | hslT): hsvaT {
 /** - Convert `HSL` or `HSLA` color to an `HWBA` object representation */
 export function to_HWBA(color: string | hslaT | hslT): hwbaT {
   const hsva = to_HSVA(color);
-  return from_HSV_to_HWBA(hsva);
+  return HSV_to_HWBA(hsva);
+}
+
+/** - Convert `HSL` or `HSLA` color to an `HSLA` object representation */
+export function to_HSLA(color: string | hslaT | hslT): hslaT {
+  return typeof color === 'string' ? string_to_object(color) : to_normalized_object(color);
 }
 
 /** - Return the `HSL` color as a string, an array, or an object */
-export function to_types({ h, s, l, a }: hslaT) {
+export function to_types({ h, s, l, a }: hslaT): ColorTypes<hslaT> {
   return {
     string: (forceAlpha?: boolean) => {
       // auto

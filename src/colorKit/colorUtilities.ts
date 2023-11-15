@@ -6,19 +6,19 @@ import type { ConversionMethods, rgbaT, SupportedColorFormats } from './types';
 
 function returnColorObject(color: SupportedColorFormats) {
   return {
-    hex: () => {
+    hex() {
       return HEX(color);
     },
-    rgb: () => {
+    rgb() {
       return RGB(color);
     },
-    hsl: () => {
+    hsl() {
       return HSL(color);
     },
-    hsv: () => {
+    hsv() {
       return HSV(color);
     },
-    hwb: () => {
+    hwb() {
       return HWB(color);
     },
   };

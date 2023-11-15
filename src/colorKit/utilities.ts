@@ -1,4 +1,4 @@
-import colorsRegex from './colorsRegex';
+import COLORS_REGEX from './colorsRegex';
 
 import type { ColorFormats, hslaT, hslT, hsvaT, hsvT, hwbaT, hwbT, rgbaT, rgbT, SupportedColorFormats } from './types';
 
@@ -52,9 +52,9 @@ export function detectColorFormat(color: SupportedColorFormats): ColorFormats | 
   // color string
   if (typeof color === 'string') {
     color = color.trim().toLowerCase();
-    for (const key in colorsRegex) {
+    for (const key in COLORS_REGEX) {
       const format = key as ColorFormats;
-      const entry = colorsRegex[format];
+      const entry = COLORS_REGEX[format];
       if (Array.isArray(entry)) {
         for (let i = 0; i < entry.length; i++) {
           if (entry[i].test(color)) return format;

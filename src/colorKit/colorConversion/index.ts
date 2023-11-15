@@ -1,4 +1,4 @@
-import namedColors from '../namedColors';
+import NAMED_COLORS from '../namedColors';
 import { detectColorFormat } from '../utilities';
 import * as from_HEX from './HEX';
 import * as from_HSL from './HSL';
@@ -6,7 +6,7 @@ import * as from_HSV from './HSV';
 import * as from_HWB from './HWB';
 import * as from_RGB from './RGB';
 
-import type { hslaT, hslT, hsvaT, hsvT, hwbaT, hwbT, rgbaT, rgbT, SupportedColorFormats } from '../types';
+import type { ColorTypes, hslaT, hslT, hsvaT, hsvT, hwbaT, hwbT, rgbaT, rgbT, SupportedColorFormats } from '../types';
 
 /** - Convert `HSL`, `HSV`, `HWB`, or `RGB` color to the `HEX` color format. */
 export function HEX(color: SupportedColorFormats): string {
@@ -14,8 +14,8 @@ export function HEX(color: SupportedColorFormats): string {
   if (typeof color === 'string') {
     color = color.trim().toLowerCase();
 
-    if (namedColors.hasOwnProperty(color)) {
-      color = namedColors[color as keyof typeof namedColors] as string;
+    if (NAMED_COLORS.hasOwnProperty(color)) {
+      color = NAMED_COLORS[color as keyof typeof NAMED_COLORS] as string;
     }
   }
 
@@ -55,13 +55,13 @@ export function HEX(color: SupportedColorFormats): string {
 }
 
 /** - Convert `HSL`, `HSV`, `HWB`, or `HEX` color to the `RGB` color format. */
-export function RGB(color: SupportedColorFormats) {
+export function RGB(color: SupportedColorFormats): ColorTypes<rgbaT> {
   // named color
   if (typeof color === 'string') {
     color = color.trim().toLowerCase();
 
-    if (namedColors.hasOwnProperty(color)) {
-      color = namedColors[color as keyof typeof namedColors] as string;
+    if (NAMED_COLORS.hasOwnProperty(color)) {
+      color = NAMED_COLORS[color as keyof typeof NAMED_COLORS] as string;
     }
   }
 
@@ -93,8 +93,7 @@ export function RGB(color: SupportedColorFormats) {
 
   // RGB to normalized RGB
   if (colorType === 'rgb' || colorType === 'rgba') {
-    const rgba =
-      typeof color === 'string' ? from_RGB.string_to_object(color) : from_RGB.to_normalized_object(color as rgbaT | rgbT);
+    const rgba = from_RGB.to_RGBA(color as string | rgbaT | rgbT);
     return from_RGB.to_types(rgba);
   }
 
@@ -107,13 +106,13 @@ export function RGB(color: SupportedColorFormats) {
 }
 
 /** - Convert `HEX`, `HSV`, `HWB`, or `RGB` color to the `HSL` color format. */
-export function HSL(color: SupportedColorFormats) {
+export function HSL(color: SupportedColorFormats): ColorTypes<hslaT> {
   // named color
   if (typeof color === 'string') {
     color = color.trim().toLowerCase();
 
-    if (namedColors.hasOwnProperty(color)) {
-      color = namedColors[color as keyof typeof namedColors] as string;
+    if (NAMED_COLORS.hasOwnProperty(color)) {
+      color = NAMED_COLORS[color as keyof typeof NAMED_COLORS] as string;
     }
   }
 
@@ -145,8 +144,7 @@ export function HSL(color: SupportedColorFormats) {
 
   // HSL to normalized HSL
   if (colorType === 'hsl' || colorType === 'hsla') {
-    const hsla =
-      typeof color === 'string' ? from_HSL.string_to_object(color) : from_HSL.to_normalized_object(color as hslaT | hslT);
+    const hsla = from_HSL.to_HSLA(color as string | hslaT | hslT);
     return from_HSL.to_types(hsla);
   }
 
@@ -159,13 +157,13 @@ export function HSL(color: SupportedColorFormats) {
 }
 
 /** - Convert `HSL`, `HEX`, `HSV`, or `RGB` color to the `HWB` color format. */
-export function HWB(color: SupportedColorFormats) {
+export function HWB(color: SupportedColorFormats): ColorTypes<hwbaT> {
   // named color
   if (typeof color === 'string') {
     color = color.trim().toLowerCase();
 
-    if (namedColors.hasOwnProperty(color)) {
-      color = namedColors[color as keyof typeof namedColors] as string;
+    if (NAMED_COLORS.hasOwnProperty(color)) {
+      color = NAMED_COLORS[color as keyof typeof NAMED_COLORS] as string;
     }
   }
 
@@ -197,8 +195,7 @@ export function HWB(color: SupportedColorFormats) {
 
   // HWB to normalized HWB
   if (colorType === 'hwb' || colorType === 'hwba') {
-    const hwba =
-      typeof color === 'string' ? from_HWB.string_to_object(color) : from_HWB.to_normalized_object(color as hwbaT | hwbT);
+    const hwba = from_HWB.to_HWBA(color as string | hwbaT | hwbT);
     return from_HWB.to_types(hwba);
   }
 
@@ -211,13 +208,13 @@ export function HWB(color: SupportedColorFormats) {
 }
 
 /** - Convert `HSL`, `HEX`, `HWB`, or `RGB` color to the `HSV` color format. */
-export function HSV(color: SupportedColorFormats) {
+export function HSV(color: SupportedColorFormats): ColorTypes<hsvaT> {
   // named color
   if (typeof color === 'string') {
     color = color.trim().toLowerCase();
 
-    if (namedColors.hasOwnProperty(color)) {
-      color = namedColors[color as keyof typeof namedColors] as string;
+    if (NAMED_COLORS.hasOwnProperty(color)) {
+      color = NAMED_COLORS[color as keyof typeof NAMED_COLORS] as string;
     }
   }
 
@@ -249,8 +246,7 @@ export function HSV(color: SupportedColorFormats) {
 
   // HSV to normalized HSV
   if (colorType === 'hsv' || colorType === 'hsva') {
-    const hsva =
-      typeof color === 'string' ? from_HSV.string_to_object(color) : from_HSV.to_normalized_object(color as hsvaT | hsvT);
+    const hsva = from_HSV.to_HSVA(color as string | hsvaT | hsvT);
     return from_HSV.to_types(hsva);
   }
 

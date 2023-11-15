@@ -1,4 +1,4 @@
-const namedColors = {
+const NAMED_COLORS = {
   aliceblue: '#f0f8ff',
   antiquewhite: '#faebd7',
   aqua: '#00ffff',
@@ -146,4 +146,4 @@ const namedColors = {
   yellowgreen: '#9acd32',
 } as const;
 
-export default namedColors;
+export default NAMED_COLORS;

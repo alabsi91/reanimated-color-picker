@@ -1,7 +1,7 @@
-import colorsRegex from '../colorsRegex';
+import COLORS_REGEX from '../colorsRegex';
 import { clamp100, clampAlpha, clampHue, clampRGB, detectColorFormat, numberToHexString } from '../utilities';
 
-import type { hslaT, hsvaT, hwbaT, rgbaT, rgbT } from '../types';
+import type { ColorTypes, hslaT, hsvaT, hwbaT, rgbaT, rgbT } from '../types';
 
 // * RGB
 
@@ -18,7 +18,7 @@ export function string_to_object(color: string): rgbaT {
   }
 
   let matches: RegExpMatchArray | null = null;
-  const entry = colorsRegex[colorType];
+  const entry = COLORS_REGEX[colorType];
   if (Array.isArray(entry)) {
     for (let i = 0; i < entry.length; i++) {
       if (entry[i].test(color)) matches = color.match(entry[i]);
@@ -167,8 +167,13 @@ export function to_HWBA(color: string | rgbaT | rgbT): hwbaT {
   };
 }
 
+/** - Convert `RGB` or `RGBA` color to an `RGBA` object representation */
+export function to_RGBA(color: string | rgbaT | rgbT): rgbaT {
+  return typeof color === 'string' ? string_to_object(color) : to_normalized_object(color);
+}
+
 /** - Return the `RGB` color as a string, an array, or an object */
-export function to_types({ r, g, b, a }: rgbaT) {
+export function to_types({ r, g, b, a }: rgbaT): ColorTypes<rgbaT> {
   return {
     string: (forceAlpha?: boolean) => {
       // auto

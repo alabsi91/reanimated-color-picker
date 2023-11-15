@@ -1,8 +1,8 @@
-import colorsRegex from '../colorsRegex';
+import COLORS_REGEX from '../colorsRegex';
 import { clamp100, clampAlpha, clampHue, clampRGB, detectColorFormat } from '../utilities';
-import { to_HEX as from_RGB_to_HEX } from './RGB';
+import { to_HEX as RGB_to_HEX } from './RGB';
 
-import type { hslaT, hsvaT, hsvT, hwbaT, rgbaT } from '../types';
+import type { ColorTypes, hslaT, hsvaT, hsvT, hwbaT, rgbaT } from '../types';
 
 // * HSV
 
@@ -19,7 +19,7 @@ export function string_to_object(color: string): hsvaT {
   }
 
   let matches: RegExpMatchArray | null = null;
-  const entry = colorsRegex[colorType as 'hsv' | 'hsva'];
+  const entry = COLORS_REGEX[colorType as 'hsv' | 'hsva'];
   if (Array.isArray(entry)) {
     for (let i = 0; i < entry.length; i++) {
       if (entry[i].test(color)) matches = color.match(entry[i]);
@@ -135,11 +135,11 @@ export function to_HSLA(color: hsvaT | hsvT | string): hslaT {
 /** - Convert `HSV` color to an `Hex` color */
 export function to_HEX(color: hsvaT | hsvT | string): string {
   const rgba = to_RGBA(color);
-  const hex = from_RGB_to_HEX(rgba);
+  const hex = RGB_to_HEX(rgba);
   return hex;
 }
-/**
- *  - Convert `HSV` color to an `HWBA` object representation */
+
+/**  - Convert `HSV` color to an `HWBA` object representation */
 export function to_HWBA(color: hsvaT | hsvT | string): hwbaT {
   const { h, s, v, a } = typeof color === 'string' ? string_to_object(color) : to_normalized_object(color);
 
@@ -154,8 +154,13 @@ export function to_HWBA(color: hsvaT | hsvT | string): hwbaT {
   };
 }
 
+/**  - Convert `HSV` color to an `HSVA` object representation */
+export function to_HSVA(color: hsvaT | hsvT | string): hsvaT {
+  return typeof color === 'string' ? string_to_object(color) : to_normalized_object(color);
+}
+
 /** - Return the `HSV` color as a string, an array, or an object */
-export function to_types({ h, s, v, a }: hsvaT) {
+export function to_types({ h, s, v, a }: hsvaT): ColorTypes<hsvaT> {
   return {
     string: (forceAlpha?: boolean) => {
       // auto

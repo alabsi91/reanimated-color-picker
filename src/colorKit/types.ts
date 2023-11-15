@@ -1,8 +1,8 @@
-import type namedColors from './namedColors';
+import type NAMED_COLORS from './namedColors';
 
 export type ColorFormats = 'hex3' | 'hex4' | 'hex6' | 'hex8' | 'hsl' | 'hsla' | 'rgb' | 'rgba' | 'hsva' | 'hsv' | 'hwba' | 'hwb';
 
-export type ColorString = keyof typeof namedColors | string;
+export type ColorString = keyof typeof NAMED_COLORS | (string & NonNullable<unknown>);
 
 export type rgbaT = { r: number; g: number; b: number; a: number };
 export type rgbT = Omit<rgbaT, 'a'>;
@@ -18,7 +18,7 @@ export type hwbT = Omit<hwbaT, 'a'>;
 
 export type SupportedColorFormats = ColorString | rgbaT | rgbT | hslaT | hslT | hsvaT | hsvT | hwbaT | hwbT | number;
 
-export type colorTypes<T extends object> = {
+export type ColorTypes<T extends object> = {
   object: () => T;
   string: (alpha?: boolean) => string;
   array: () => number[];
@@ -26,8 +26,8 @@ export type colorTypes<T extends object> = {
 
 export type ConversionMethods = {
   hex: () => string;
-  rgb: () => colorTypes<rgbaT>;
-  hsl: () => colorTypes<hslaT>;
-  hsv: () => colorTypes<hsvaT>;
-  hwb: () => colorTypes<hwbaT>;
+  rgb: () => ColorTypes<rgbaT>;
+  hsl: () => ColorTypes<hslaT>;
+  hsv: () => ColorTypes<hsvaT>;
+  hwb: () => ColorTypes<hwbaT>;
 };
