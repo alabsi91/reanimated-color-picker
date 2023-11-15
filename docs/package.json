@@ -5,7 +5,6 @@
   "scripts": {
     "start": "docusaurus start",
     "build": "docusaurus build",
-    "deploy": "git subtree push --prefix docusaurus/build origin gh-pages",
     "clear": "docusaurus clear",
     "serve": "docusaurus serve"
   },
