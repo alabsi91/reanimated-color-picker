@@ -73,7 +73,7 @@
             (0, i.jsx)(t.h1, { id: 'inputwidget-', children: (0, i.jsx)(t.code, { children: '<InputWidget />' }) }),
             '\n',
             (0, i.jsx)(t.p, {
-              children: (0, i.jsx)(t.img, { alt: 'InputWidget', src: n(6334).Z + '', width: '300', height: '455' }),
+              children: (0, i.jsx)(t.img, { alt: 'InputWidget', src: n(1807).Z + '', width: '300', height: '455' }),
             }),
             '\n',
             (0, i.jsxs)(t.ul, {
@@ -290,7 +290,7 @@
         return t ? (0, i.jsx)(t, { ...e, children: (0, i.jsx)(a, { ...e }) }) : a(e);
       }
     },
-    6334: (e, t, n) => {
+    1807: (e, t, n) => {
       n.d(t, { Z: () => i });
       const i = n.p + 'assets/images/InputWidgets-01952ad7ad083d25cd90fcba19bfc4ad.png';
     },

@@ -1,4 +1,4 @@
-/*! For license information please see main.b954dad8.js.LICENSE.txt */
+/*! For license information please see main.ce2bc3c4.js.LICENSE.txt */
 (self.webpackChunkmy_docs = self.webpackChunkmy_docs || []).push([
   [179],
   {
@@ -48,14 +48,14 @@
       const i = {
         '14eb3368': [() => Promise.all([n.e(532), n.e(817)]).then(n.bind(n, 4228)), '@theme/DocCategoryGeneratedIndexPage', 4228],
         17896441: [() => Promise.all([n.e(532), n.e(360), n.e(918)]).then(n.bind(n, 7629)), '@theme/DocItem', 7629],
-        '1fc573fc': [
-          () => n.e(276).then(n.t.bind(n, 3769, 19)),
-          'F:\\ReactNative\\reanimated-color-picker\\docusaurus\\.docusaurus\\docusaurus-plugin-content-docs\\default\\plugin-route-context-module-100.json',
-          3769,
-        ],
         '22b4083f': [() => n.e(491).then(n.bind(n, 1185)), '@site/docs/API/InputWidget.md', 1185],
         '2e77a3bf': [() => n.e(993).then(n.bind(n, 5587)), '@site/docs/API/HueSlider.mdx', 5587],
         '2fc6c5ee': [() => n.e(639).then(n.bind(n, 7570)), '@site/docs/ColorKit.mdx', 7570],
+        '359ca393': [
+          () => n.e(241).then(n.t.bind(n, 5745, 19)),
+          'F:\\ReactNative\\reanimated-color-picker\\docs\\.docusaurus\\docusaurus-plugin-content-pages\\default\\plugin-route-context-module-100.json',
+          5745,
+        ],
         '39eaec8f': [() => Promise.all([n.e(532), n.e(873)]).then(n.bind(n, 2783)), '@site/docs/Installation.mdx', 2783],
         '3c825fde': [() => n.e(174).then(n.bind(n, 1982)), '@site/docs/API/BlueSlider.mdx', 1982],
         '539eac5c': [() => n.e(841).then(n.bind(n, 9076)), '@site/docs/API/Swatches.md', 9076],
@@ -82,14 +82,14 @@
         c4f5d8e4: [() => Promise.all([n.e(532), n.e(195)]).then(n.bind(n, 9294)), '@site/src/pages/index.js', 9294],
         caa5d514: [() => n.e(983).then(n.bind(n, 8221)), '@site/docs/API/Panel3.mdx', 8221],
         ce9bcb5a: [() => n.e(617).then(n.bind(n, 1136)), '@site/docs/API/HueCircular.mdx', 1136],
-        d79f08f9: [
-          () => n.e(346).then(n.t.bind(n, 5745, 19)),
-          'F:\\ReactNative\\reanimated-color-picker\\docusaurus\\.docusaurus\\docusaurus-plugin-content-pages\\default\\plugin-route-context-module-100.json',
-          5745,
-        ],
         dd6fa4f9: [() => n.e(933).then(n.bind(n, 4906)), '@site/docs/API/PreviewText.md', 4906],
         dff23ebc: [() => n.e(110).then(n.bind(n, 9615)), '@site/docs/API/OpacitySlider.mdx', 9615],
         e1479464: [() => n.e(835).then(n.bind(n, 1388)), '@site/docs/API/Preview.md', 1388],
+        ef3214ef: [
+          () => n.e(782).then(n.t.bind(n, 3769, 19)),
+          'F:\\ReactNative\\reanimated-color-picker\\docs\\.docusaurus\\docusaurus-plugin-content-docs\\default\\plugin-route-context-module-100.json',
+          3769,
+        ],
         efeb2804: [() => n.e(753).then(n.bind(n, 2097)), '@site/docs/API/ColorPicker.mdx', 2097],
         f8409a7e: [() => n.e(206).then(n.bind(n, 9325)), '@site/docs/intro.mdx', 9325],
       };
@@ -282,7 +282,7 @@
       const p = [
         {
           path: '/reanimated-color-picker/docs',
-          component: d('/reanimated-color-picker/docs', '455'),
+          component: d('/reanimated-color-picker/docs', '81a'),
           routes: [
             {
               path: '/reanimated-color-picker/docs',
@@ -442,7 +442,7 @@
             },
           ],
         },
-        { path: '/reanimated-color-picker/', component: d('/reanimated-color-picker/', 'a31'), exact: !0 },
+        { path: '/reanimated-color-picker/', component: d('/reanimated-color-picker/', 'ee5'), exact: !0 },
         { path: '*', component: d('*') },
       ];
     },
@@ -14817,9 +14817,9 @@
           [
             'classic',
             {
-              docs: { sidebarPath: 'F:\\ReactNative\\reanimated-color-picker\\docusaurus\\sidebars.js' },
+              docs: { sidebarPath: 'F:\\ReactNative\\reanimated-color-picker\\docs\\sidebars.js' },
               blog: !1,
-              theme: { customCss: 'F:\\ReactNative\\reanimated-color-picker\\docusaurus\\src\\css\\custom.css' },
+              theme: { customCss: 'F:\\ReactNative\\reanimated-color-picker\\docs\\src\\css\\custom.css' },
             },
           ],
         ],
@@ -17510,7 +17510,7 @@
     6887: e => {
       'use strict';
       e.exports = JSON.parse(
-        '{"/reanimated-color-picker/docs-455":{"__comp":"5e95c892","__context":{"plugin":"1fc573fc"}},"/reanimated-color-picker/docs-78f":{"__comp":"a7bd4aaa","version":"935f2afb"},"/reanimated-color-picker/docs-33e":{"__comp":"a94703ab"},"/reanimated-color-picker/docs/API/BlueSlider-302":{"__comp":"17896441","content":"3c825fde"},"/reanimated-color-picker/docs/API/BrightnessSlider-4b0":{"__comp":"17896441","content":"ae3a9a65"},"/reanimated-color-picker/docs/API/ColorPicker-3ec":{"__comp":"17896441","content":"efeb2804"},"/reanimated-color-picker/docs/API/GreenSlider-ca9":{"__comp":"17896441","content":"a534dad7"},"/reanimated-color-picker/docs/API/HueCircular-0d8":{"__comp":"17896441","content":"ce9bcb5a"},"/reanimated-color-picker/docs/API/HueSlider-d57":{"__comp":"17896441","content":"2e77a3bf"},"/reanimated-color-picker/docs/API/InputWidget-580":{"__comp":"17896441","content":"22b4083f"},"/reanimated-color-picker/docs/API/OpacitySlider-6fd":{"__comp":"17896441","content":"dff23ebc"},"/reanimated-color-picker/docs/API/Panel1-6e2":{"__comp":"17896441","content":"53fe7221"},"/reanimated-color-picker/docs/API/Panel2-2f1":{"__comp":"17896441","content":"764f93b7"},"/reanimated-color-picker/docs/API/Panel3-008":{"__comp":"17896441","content":"caa5d514"},"/reanimated-color-picker/docs/API/Panel4-175":{"__comp":"17896441","content":"9007f59c"},"/reanimated-color-picker/docs/API/Panel5-6c8":{"__comp":"17896441","content":"96009a1d"},"/reanimated-color-picker/docs/API/Preview-02e":{"__comp":"17896441","content":"e1479464"},"/reanimated-color-picker/docs/API/PreviewText-265":{"__comp":"17896441","content":"dd6fa4f9"},"/reanimated-color-picker/docs/API/RedSlider-014":{"__comp":"17896441","content":"94251bf3"},"/reanimated-color-picker/docs/API/SaturationSlider-38c":{"__comp":"17896441","content":"b2a58bb7"},"/reanimated-color-picker/docs/API/Swatches-97a":{"__comp":"17896441","content":"539eac5c"},"/reanimated-color-picker/docs/category/api-c69":{"__comp":"14eb3368","categoryGeneratedIndex":"702bc698"},"/reanimated-color-picker/docs/ColorKit-e87":{"__comp":"17896441","content":"2fc6c5ee"},"/reanimated-color-picker/docs/Examples-e49":{"__comp":"17896441","content":"8bf99691"},"/reanimated-color-picker/docs/Installation-aff":{"__comp":"17896441","content":"39eaec8f"},"/reanimated-color-picker/docs/intro-3bf":{"__comp":"17896441","content":"f8409a7e"},"/reanimated-color-picker/docs/Usage-8c3":{"__comp":"17896441","content":"bf417703"},"/reanimated-color-picker/-a31":{"__comp":"c4f5d8e4","__context":{"plugin":"d79f08f9"},"config":"5e9f5e1a"}}'
+        '{"/reanimated-color-picker/docs-81a":{"__comp":"5e95c892","__context":{"plugin":"ef3214ef"}},"/reanimated-color-picker/docs-78f":{"__comp":"a7bd4aaa","version":"935f2afb"},"/reanimated-color-picker/docs-33e":{"__comp":"a94703ab"},"/reanimated-color-picker/docs/API/BlueSlider-302":{"__comp":"17896441","content":"3c825fde"},"/reanimated-color-picker/docs/API/BrightnessSlider-4b0":{"__comp":"17896441","content":"ae3a9a65"},"/reanimated-color-picker/docs/API/ColorPicker-3ec":{"__comp":"17896441","content":"efeb2804"},"/reanimated-color-picker/docs/API/GreenSlider-ca9":{"__comp":"17896441","content":"a534dad7"},"/reanimated-color-picker/docs/API/HueCircular-0d8":{"__comp":"17896441","content":"ce9bcb5a"},"/reanimated-color-picker/docs/API/HueSlider-d57":{"__comp":"17896441","content":"2e77a3bf"},"/reanimated-color-picker/docs/API/InputWidget-580":{"__comp":"17896441","content":"22b4083f"},"/reanimated-color-picker/docs/API/OpacitySlider-6fd":{"__comp":"17896441","content":"dff23ebc"},"/reanimated-color-picker/docs/API/Panel1-6e2":{"__comp":"17896441","content":"53fe7221"},"/reanimated-color-picker/docs/API/Panel2-2f1":{"__comp":"17896441","content":"764f93b7"},"/reanimated-color-picker/docs/API/Panel3-008":{"__comp":"17896441","content":"caa5d514"},"/reanimated-color-picker/docs/API/Panel4-175":{"__comp":"17896441","content":"9007f59c"},"/reanimated-color-picker/docs/API/Panel5-6c8":{"__comp":"17896441","content":"96009a1d"},"/reanimated-color-picker/docs/API/Preview-02e":{"__comp":"17896441","content":"e1479464"},"/reanimated-color-picker/docs/API/PreviewText-265":{"__comp":"17896441","content":"dd6fa4f9"},"/reanimated-color-picker/docs/API/RedSlider-014":{"__comp":"17896441","content":"94251bf3"},"/reanimated-color-picker/docs/API/SaturationSlider-38c":{"__comp":"17896441","content":"b2a58bb7"},"/reanimated-color-picker/docs/API/Swatches-97a":{"__comp":"17896441","content":"539eac5c"},"/reanimated-color-picker/docs/category/api-c69":{"__comp":"14eb3368","categoryGeneratedIndex":"702bc698"},"/reanimated-color-picker/docs/ColorKit-e87":{"__comp":"17896441","content":"2fc6c5ee"},"/reanimated-color-picker/docs/Examples-e49":{"__comp":"17896441","content":"8bf99691"},"/reanimated-color-picker/docs/Installation-aff":{"__comp":"17896441","content":"39eaec8f"},"/reanimated-color-picker/docs/intro-3bf":{"__comp":"17896441","content":"f8409a7e"},"/reanimated-color-picker/docs/Usage-8c3":{"__comp":"17896441","content":"bf417703"},"/reanimated-color-picker/-ee5":{"__comp":"c4f5d8e4","__context":{"plugin":"359ca393"},"config":"5e9f5e1a"}}'
       );
     },
   },
