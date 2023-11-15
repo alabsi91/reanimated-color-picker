@@ -23,7 +23,6 @@
     "target": "ESNext",
     "isolatedModules": true,
     "alwaysStrict": true,
-    "skipLibCheck": true,
-    "importsNotUsedAsValues": "error"
+    "skipLibCheck": true
   }
 }
