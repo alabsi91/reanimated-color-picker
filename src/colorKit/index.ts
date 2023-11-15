@@ -1,4 +1,4 @@
-import * as colorConversion from './colorConversion';
+import * as colorConversion from './colorConversion/index';
 import * as colorInformation from './colorInformation';
 import * as colorManipulation from './colorManipulation';
 import * as colorUtilities from './colorUtilities';
