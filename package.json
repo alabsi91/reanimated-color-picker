@@ -11,8 +11,7 @@
     "build": "node scripts/build.js",
     "deploy-docs": "git push origin :gh-pages && git subtree push --prefix docs/build origin gh-pages",
     "prettier ": "prettier --ignore-unknown --write src --config-precedence prefer-file",
-    "prepare": " npm run build",
-    "prepublishOnly": "npm run test"
+    "prepare": "npm run test && npm run build"
   },
   "keywords": [
     "react-native",
@@ -55,7 +54,6 @@
     "@babel/preset-react": "^7.18.6",
     "@babel/preset-typescript": "^7.21.0",
     "@react-native-community/eslint-config": "3.1.0",
-    "@tsconfig/react-native": "^2.0.2",
     "@types/react-native": "^0.71.5",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "babel-jest": "^29.7.0",
@@ -70,11 +68,15 @@
     "expo": ">=44.0.0",
     "react": "*",
     "react-native": "*",
-    "react-native-gesture-handler": ">=2.0.0",
-    "react-native-reanimated": "^2.0.0 || ^3.0.0"
+    "@tsconfig/react-native": "*",
+    "react-native-reanimated": "^2.0.0 || ^3.0.0",
+    "react-native-gesture-handler": ">=2.0.0"
   },
   "peerDependenciesMeta": {
     "expo": {
+      "optional": true
+    },
+    "@tsconfig/react-native": {
       "optional": true
     }
   },
