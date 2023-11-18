@@ -23,12 +23,12 @@ export default function Plus({
     position: 'absolute' as const,
     width: vertical ? '100%' : thickness,
     height: vertical ? thickness : '100%',
-  };
+  } as const;
   const line2 = {
     borderRadius,
     width: vertical ? thickness : '100%',
     height: vertical ? '100%' : thickness,
-  };
+  } as const;
 
   const adaptiveColorStyle = useAnimatedStyle(() => {
     return {

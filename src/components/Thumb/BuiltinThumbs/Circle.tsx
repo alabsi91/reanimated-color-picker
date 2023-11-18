@@ -21,7 +21,7 @@ export default function Circle({
     borderWidth: 1,
     width: '100%',
     height: '100%',
-  };
+  } as const;
   const adaptiveColorStyle = useAnimatedStyle(() => ({ borderColor: adaptiveColor.value }), [adaptiveColor]);
 
   return (

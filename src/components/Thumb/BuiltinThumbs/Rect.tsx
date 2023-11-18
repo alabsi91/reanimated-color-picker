@@ -20,7 +20,7 @@ export default function Rect({
     borderWidth: 1,
     width: vertical ? '100%' : 14,
     height: vertical ? 14 : '100%',
-  };
+  } as const;
   const adaptiveColorStyle = useAnimatedStyle(() => ({ borderColor: adaptiveColor.value }), [adaptiveColor]);
 
   return (

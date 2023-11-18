@@ -23,7 +23,7 @@ export default function Line({
     backgroundColor: thumbColor,
     width: vertical ? '100%' : thickness,
     height: vertical ? thickness : '100%',
-  };
+  } as const;
   const adaptiveColorStyle = useAnimatedStyle(() => {
     return {
       backgroundColor: thumbColor || adaptiveColor.value,

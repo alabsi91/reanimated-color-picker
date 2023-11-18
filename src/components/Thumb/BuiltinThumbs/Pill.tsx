@@ -23,7 +23,7 @@ export default function Pill({
     borderWidth: 2,
     width: vertical ? '100%' : 10,
     height: vertical ? 10 : '100%',
-  };
+  } as const;
   const adaptiveColorStyle = useAnimatedStyle(() => {
     return {
       borderColor: thumbColor || adaptiveColor.value,
