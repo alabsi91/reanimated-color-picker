@@ -1,7 +1,6 @@
 {
-  "extends": "@tsconfig/react-native/tsconfig.json",
   "include": ["src/**/*"],
-  "exclude": ["Example", "ExampleExpo", "scripts", "docs", "docs"],
+  "exclude": ["Example", "ExampleExpo", "scripts", "docs"],
   "compilerOptions": {
     "types": ["react-native", "react-native-reanimated", "react-native-gesture-handler"],
     "baseUrl": ".",
@@ -20,9 +19,17 @@
     "composite": true,
     "declaration": true,
     "module": "ESNext",
-    "target": "ESNext",
-    "isolatedModules": true,
+    "target": "es6",
+    "moduleResolution": "node",
+    "lib": ["es6"],
+    "esModuleInterop": true,
     "alwaysStrict": true,
+    "strict": true,
+    "jsx": "react-native",
+    "isolatedModules": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "preserveSymlinks": true,
     "skipLibCheck": true
   }
 }
