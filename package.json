@@ -11,7 +11,8 @@
     "build": "node scripts/build.js",
     "deploy-docs": "git push origin :gh-pages && git subtree push --prefix docs/build origin gh-pages",
     "prettier ": "prettier --ignore-unknown --write src --config-precedence prefer-file",
-    "prepare": "npm run test && npm run build"
+    "prepare": " npm run build",
+    "prepublishOnly": "npm run test"
   },
   "keywords": [
     "react-native",
