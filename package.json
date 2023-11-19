@@ -11,7 +11,7 @@
     "build": "node scripts/build.js",
     "deploy-docs": "git push origin :gh-pages && git subtree push --prefix docs/build origin gh-pages",
     "prettier ": "prettier --ignore-unknown --write src --config-precedence prefer-file",
-    "prepare": "npm run test && npm run build"
+    "prepare": "patch-package && npm run test && npm run build"
   },
   "keywords": [
     "react-native",
@@ -59,6 +59,7 @@
     "babel-jest": "^29.7.0",
     "babel-plugin-module-resolver": "^5.0.0",
     "jest": "^29.7.0",
+    "patch-package": "^8.0.0",
     "prettier": "2.8.4",
     "resolve-tspaths": "^0.8.17",
     "ts-node": "^10.9.1",
