@@ -47,9 +47,8 @@ async function buildCommonJs() {
 
 /** Compile the source file using the TypeScript compiler. */
 async function buildSource() {
-  await execPromise(`npx tsc --outDir ${srcOutDir} --composite false --declaration false`);
-  await resolveTsPaths({ out: srcOutDir }); // Resolve import aliases to their corresponding actual paths.
-  await fs.cp(path.join(sourceDir, assetsDir), path.join(srcOutDir, assetsDir), { recursive: true });
+  await fs.cp(sourceDir, srcOutDir, { recursive: true });
+  await resolveTsPaths({ out: srcOutDir, ext: ['ts', 'tsx'] }); // Resolve import aliases to their corresponding actual paths.
 }
 
 /** Format output files using Prettier. */
