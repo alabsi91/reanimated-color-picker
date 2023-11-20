@@ -6,8 +6,7 @@ const fs = require('fs/promises'),
   { resolveTsPaths } = require('resolve-tspaths'),
   execPromise = util.promisify(exec);
 
-const sourceDir = 'src',
-  assetsDir = 'assets';
+const sourceDir = 'src';
 
 const outDir = 'lib',
   moduleOutDir = path.join(outDir, 'module'),
@@ -53,8 +52,7 @@ async function buildSource() {
 
 /** Format output files using Prettier. */
 async function prettier() {
-  const buildDir = path.join(outDir, '**/*');
-  await execPromise(`npx prettier --write ${buildDir} --ignore-unknown`);
+  await execPromise(`npx prettier --write ${outDir} --ignore-unknown`);
 }
 
 async function build() {
