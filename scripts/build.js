@@ -28,7 +28,7 @@ async function cleanOutDirectory() {
 /** Build TypeScript declaration files. */
 async function buildTypescript() {
   await execPromise(
-    `npx tsc --declarationDir ${declarationOutDir} --composite false --emitDeclarationOnly --declaration --declarationMap`
+    `npx tsc --declarationDir ${declarationOutDir} --composite false --emitDeclarationOnly --declaration --declarationMap --sourceMap --sourceRoot "../src"`
   );
   await resolveTsPaths({ out: declarationOutDir }); // Resolve import aliases to their corresponding actual paths.
 }
@@ -36,13 +36,13 @@ async function buildTypescript() {
 /** Build JavaScript ESM (ECMAScript Modules) files. */
 async function buildModuleJs() {
   process.env.MODULES = '';
-  await execPromise(`npx babel --config-file ./${babelConfigFilePath} --out-dir ${moduleOutDir} ${sourceDir} ${babelArgs}`);
+  await execPromise(`npx babel --config-file ./${babelConfigFilePath} --out-dir ${moduleOutDir} ${srcOutDir} ${babelArgs}`);
 }
 
 /** Build JavaScript CommonJS module files. */
 async function buildCommonJs() {
   process.env.MODULES = 'commonjs';
-  await execPromise(`npx babel --config-file ./${babelConfigFilePath} --out-dir ${commonjsOutDir} ${sourceDir} ${babelArgs}`);
+  await execPromise(`npx babel --config-file ./${babelConfigFilePath} --out-dir ${commonjsOutDir} ${srcOutDir} ${babelArgs}`);
 }
 
 /** Compile the source file using the TypeScript compiler. */
@@ -67,16 +67,16 @@ async function build() {
   }
 
   try {
-    console.log('📦 Generating Typescript .d.ts files ...\n');
-    await buildTypescript();
+    console.log('📦 Compiling the source code ...\n');
+    await buildSource();
   } catch (error) {
     console.error('⛔', error);
     process.exit(1);
   }
 
   try {
-    console.log('📦 Compiling the source code ...\n');
-    await buildSource();
+    console.log('📦 Generating Typescript .d.ts files ...\n');
+    await buildTypescript();
   } catch (error) {
     console.error('⛔', error);
     process.exit(1);
