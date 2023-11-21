@@ -10,9 +10,9 @@ export { Panel3 } from '@panels/Panel3';
 export { Panel4 } from '@panels/Panel4';
 export { Panel5 } from '@panels/Panel5';
 
-export { HueSlider } from '@sliders/HueSlider';
-export { SaturationSlider } from '@sliders/SaturationSlider';
-export { BrightnessSlider } from '@sliders/BrightnessSlider';
+export { HueSlider } from '@sliders/HSB/HueSlider';
+export { SaturationSlider } from '@sliders/HSB/SaturationSlider';
+export { BrightnessSlider } from '@sliders/HSB/BrightnessSlider';
 export { OpacitySlider } from '@sliders/OpacitySlider';
 
 export { RedSlider } from '@sliders/RGB/RedSlider';
