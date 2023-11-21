@@ -12,6 +12,9 @@ import type { Panel3Props } from '@types';
 import type { LayoutChangeEvent } from 'react-native';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
+/**
+ * - The circle-shaped slider, with its wheel style design, is utilized to adjust the hue and (saturation or brightness) of colors.
+ */
 export function Panel3({
   adaptSpectrum: localAdaptSpectrum,
   thumbShape: localThumbShape,

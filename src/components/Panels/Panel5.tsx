@@ -11,6 +11,9 @@ import { findIndexIn2DArray, getStyle, isRtl } from '@utils';
 import type { Panel5Props } from '@types';
 import type { LayoutChangeEvent } from 'react-native';
 
+/**
+ * - This is a grid of 120 colors, arranged in 12 columns and 10 rows of squares.
+ */
 export function Panel5({ style = {}, selectionStyle = {} }: Panel5Props) {
   const { value, hueValue, saturationValue, brightnessValue, onGestureChange, onGestureEnd } = usePickerContext();
 
