@@ -13,13 +13,13 @@ export { Panel5 } from '@panels/Panel5';
 export { HueSlider } from '@sliders/HSB/HueSlider';
 export { SaturationSlider } from '@sliders/HSB/SaturationSlider';
 export { BrightnessSlider } from '@sliders/HSB/BrightnessSlider';
+
 export { OpacitySlider } from '@sliders/OpacitySlider';
+export { HueCircular } from '@sliders/HueCircular';
 
 export { RedSlider } from '@sliders/RGB/RedSlider';
 export { GreenSlider } from '@sliders/RGB/GreenSlider';
 export { BlueSlider } from '@sliders/RGB/BlueSlider';
-
-export { HueCircular } from '@sliders/HueCircular';
 
 export { Preview } from './components/Preview';
 export { PreviewText } from './components/PreviewText';
