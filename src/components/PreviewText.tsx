@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Text } from 'react-native';
-import { runOnJS, useDerivedValue } from 'react-native-reanimated';
+import Animated, { runOnJS, useDerivedValue } from 'react-native-reanimated';
 
 import usePickerContext from '@context';
 import { styles } from '@styles';
@@ -21,5 +20,5 @@ export function PreviewText({ style = {}, colorFormat = 'hex' }: PreviewTextProp
     runOnJS(updateText)();
   }, [colorFormat, hueValue, saturationValue, brightnessValue, alphaValue]); // track changes on WEB
 
-  return <Text style={[styles.previewText, style]}>{text}</Text>;
+  return <Animated.Text style={[styles.previewText, style]}>{text}</Animated.Text>;
 }

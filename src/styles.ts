@@ -126,10 +126,6 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  previewInitialText: {
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
 
   // PreviewText
   previewText: {

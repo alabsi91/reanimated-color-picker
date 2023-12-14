@@ -1,31 +1,16 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { ImageBackground, Text, View } from 'react-native';
-import Animated, { runOnJS, useAnimatedStyle, useDerivedValue, useSharedValue } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useDerivedValue, useSharedValue } from 'react-native-reanimated';
 
 import colorKit from '@colorKit';
 import usePickerContext from '@context';
 import { styles } from '@styles';
 import { ConditionalRendering, contrastRatio, getStyle, HSVA2HEX, isWeb } from '@utils';
+import { PreviewText } from './PreviewText';
 
 import type { PreviewProps } from '@types';
 import type { ReactNode } from 'react';
-import type { StyleProp, TextStyle, ViewStyle } from 'react-native';
-import type { SharedValue } from 'react-native-reanimated';
-
-const ReText = ({ text, style, hash }: { text: () => string; style: StyleProp<TextStyle>[]; hash: SharedValue<number>[] }) => {
-  const [color, setColor] = useState(text());
-
-  const updateText = () => {
-    setColor(text());
-  };
-
-  useDerivedValue(() => {
-    [hash[0], hash[1], hash[2], hash[3]]; // track changes on Native
-    runOnJS(updateText)();
-  }, [hash[0], hash[1], hash[2], hash[3]]); // track changes on WEB
-
-  return <Animated.Text style={[styles.previewInitialText, ...style]}>{color}</Animated.Text>;
-};
+import type { StyleProp, ViewStyle } from 'react-native';
 
 export function Preview({
   style = {},
@@ -38,9 +23,6 @@ export function Preview({
   const { hueValue, saturationValue, brightnessValue, alphaValue, returnedResults, value } = usePickerContext();
 
   const justifyContent = getStyle(style, 'justifyContent') ?? 'center';
-
-  // To track changes in the color channel values of the ReText component.
-  const colorHash = [hueValue, saturationValue, brightnessValue, alphaValue];
 
   const initialColorText = useMemo(() => {
     const adaptiveTextColor = alphaValue.value > 0.5 ? value : { h: 0, s: 0, v: 70 };
@@ -74,37 +56,33 @@ export function Preview({
       <ConditionalRendering if={!hideInitialColor}>
         <View style={[styles.previewContainer, { backgroundColor: value, justifyContent }]}>
           <ConditionalRendering if={!hideText}>
-            <Text style={[{ color: initialColorText.color }, styles.previewInitialText, textStyle]}>
-              {initialColorText.formatted}
-            </Text>
+            <Text style={[styles.previewText, { color: initialColorText.color }, textStyle]}>{initialColorText.formatted}</Text>
           </ConditionalRendering>
         </View>
       </ConditionalRendering>
 
       <Animated.View style={[styles.previewContainer, { justifyContent }, previewColorStyle]}>
         <ConditionalRendering if={!hideText}>
-          <ReText text={() => returnedResults()[colorFormat]} hash={colorHash} style={[textStyle, textColorStyle]} />
+          <PreviewText colorFormat={colorFormat} style={[textStyle, textColorStyle]} />
         </ConditionalRendering>
       </Animated.View>
     </Wrapper>
   );
 }
 
-function Wrapper({
-  children,
-  disableTexture,
-  style,
-}: {
+type WrapperProps = {
   children: ReactNode;
   disableTexture: boolean;
   style: StyleProp<ViewStyle>;
-}) {
+};
+
+function Wrapper({ children, disableTexture, style }: WrapperProps) {
   if (disableTexture) {
     return <View style={[styles.previewWrapper, style]}>{children}</View>;
   }
 
   if (isWeb) {
-    return <View style={[styles.previewWrapper, previewWrapperWeb, style]}>{children}</View>;
+    return <View style={[styles.previewWrapper, previewWrapperWebStyle, style]}>{children}</View>;
   }
 
   return (
@@ -119,7 +97,7 @@ function Wrapper({
   );
 }
 
-const previewWrapperWeb = {
+const previewWrapperWebStyle = {
   backgroundImage:
     'repeating-linear-gradient(45deg, #c1c1c1 25%, transparent 25%, transparent 75%, #c1c1c1 75%, #c1c1c1), repeating-linear-gradient(45deg, #c1c1c1 25%, #fff 25%, #fff 75%, #c1c1c1 75%, #c1c1c1)',
   backgroundPosition: '0px 0px, 8px 8px',
