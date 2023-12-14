@@ -2,6 +2,7 @@ import React from 'react';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 
 import { styles } from '@styles';
+import { enableAndroidHardwareTextures } from '@utils';
 
 import type { BuiltinThumbsProps } from '@types';
 
@@ -45,7 +46,7 @@ export default function Plus({
   return (
     <Animated.View
       style={[styles.handle, style, computedStyle, adaptiveBorderColorStyle, handleStyle]}
-      renderToHardwareTextureAndroid
+      renderToHardwareTextureAndroid={enableAndroidHardwareTextures}
     >
       <Animated.View style={[line1, styles.shadow, adaptiveColorStyle, innerStyle]} />
       <Animated.View style={[line2, styles.shadow, adaptiveColorStyle, innerStyle]} />

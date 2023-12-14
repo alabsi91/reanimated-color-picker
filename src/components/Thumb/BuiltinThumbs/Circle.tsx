@@ -2,6 +2,7 @@ import React from 'react';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 
 import { styles } from '@styles';
+import { enableAndroidHardwareTextures } from '@utils';
 
 import type { BuiltinThumbsProps } from '@types';
 
@@ -25,7 +26,10 @@ export default function Circle({
   const adaptiveColorStyle = useAnimatedStyle(() => ({ borderColor: adaptiveColor.value }), [adaptiveColor]);
 
   return (
-    <Animated.View style={[styles.handle, style, computedStyle, handleStyle]} renderToHardwareTextureAndroid>
+    <Animated.View
+      style={[styles.handle, style, computedStyle, handleStyle]}
+      renderToHardwareTextureAndroid={enableAndroidHardwareTextures}
+    >
       <Animated.View style={[circleStyle, styles.shadow, adaptiveColorStyle, solidColor, innerStyle]} />
     </Animated.View>
   );

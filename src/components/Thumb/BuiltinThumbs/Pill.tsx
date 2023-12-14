@@ -2,6 +2,7 @@ import React from 'react';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 
 import { styles } from '@styles';
+import { enableAndroidHardwareTextures } from '@utils';
 
 import type { BuiltinThumbsProps } from '@types';
 
@@ -31,7 +32,10 @@ export default function Pill({
   }, [thumbColor, adaptiveColor]);
 
   return (
-    <Animated.View style={[styles.handle, computedStyle, style, handleStyle]} renderToHardwareTextureAndroid>
+    <Animated.View
+      style={[styles.handle, computedStyle, style, handleStyle]}
+      renderToHardwareTextureAndroid={enableAndroidHardwareTextures}
+    >
       <Animated.View style={[pillStyle, styles.shadow, adaptiveColorStyle, innerStyle]} />
     </Animated.View>
   );

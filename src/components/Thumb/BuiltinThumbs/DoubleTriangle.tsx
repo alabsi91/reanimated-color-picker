@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 
 import { styles } from '@styles';
-import { isRtl } from '@utils';
+import { enableAndroidHardwareTextures, isRtl } from '@utils';
 
 import type { BuiltinThumbsProps } from '@types';
 import type { StyleProp, ViewStyle } from 'react-native';
@@ -42,7 +42,10 @@ export default function DoubleTriangle({
   }, [thumbColor, adaptiveColor]);
 
   return (
-    <Animated.View style={[styles.handle, style, computedStyle, handleStyle]} renderToHardwareTextureAndroid>
+    <Animated.View
+      style={[styles.handle, style, computedStyle, handleStyle]}
+      renderToHardwareTextureAndroid={enableAndroidHardwareTextures}
+    >
       <Animated.View style={[styles.triangle, triangleDownStyle, adaptiveColorStyle, innerStyle]} />
       <View style={{ width: '50%', height: '50%' }} />
       <Animated.View style={[styles.triangle, triangleUpStyle, adaptiveColorStyle, innerStyle]} />
