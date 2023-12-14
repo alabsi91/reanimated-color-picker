@@ -40,7 +40,10 @@
   "files": [
     "lib"
   ],
-  "repository": "https://github.com/alabsi91/reanimated-color-picker",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alabsi91/reanimated-color-picker.git"
+  },
   "author": "Ahmed AlAbsi <alabsi91@gmail.com> (https://github.com/alabsi91)",
   "license": "MIT",
   "bugs": {
