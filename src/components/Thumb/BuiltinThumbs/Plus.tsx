@@ -43,7 +43,10 @@ export default function Plus({
   }, [thumbColor, adaptiveColor]);
 
   return (
-    <Animated.View style={[styles.handle, style, computedStyle, adaptiveBorderColorStyle, handleStyle]}>
+    <Animated.View
+      style={[styles.handle, style, computedStyle, adaptiveBorderColorStyle, handleStyle]}
+      renderToHardwareTextureAndroid
+    >
       <Animated.View style={[line1, styles.shadow, adaptiveColorStyle, innerStyle]} />
       <Animated.View style={[line2, styles.shadow, adaptiveColorStyle, innerStyle]} />
     </Animated.View>

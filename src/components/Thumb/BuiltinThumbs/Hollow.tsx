@@ -30,7 +30,7 @@ export default function Hollow({
   }, [thumbColor, adaptiveColor]);
 
   return (
-    <Animated.View style={[styles.handle, style, computedStyle, adaptiveColorStyle, handleStyle]}>
+    <Animated.View style={[styles.handle, style, computedStyle, adaptiveColorStyle, handleStyle]} renderToHardwareTextureAndroid>
       <Animated.View style={[{ width: 4, height: 4, borderRadius: 2 }, adaptiveColorBgStyle, styles.shadow, innerStyle]} />
     </Animated.View>
   );

@@ -31,7 +31,7 @@ export default function Line({
   }, [thumbColor, adaptiveColor]);
 
   return (
-    <Animated.View style={[styles.handle, style, computedStyle, handleStyle]}>
+    <Animated.View style={[styles.handle, style, computedStyle, handleStyle]} renderToHardwareTextureAndroid>
       <Animated.View style={[lineStyle, styles.shadow, adaptiveColorStyle, innerStyle]} />
     </Animated.View>
   );

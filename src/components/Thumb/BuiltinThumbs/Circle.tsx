@@ -25,7 +25,7 @@ export default function Circle({
   const adaptiveColorStyle = useAnimatedStyle(() => ({ borderColor: adaptiveColor.value }), [adaptiveColor]);
 
   return (
-    <Animated.View style={[styles.handle, style, computedStyle, handleStyle]}>
+    <Animated.View style={[styles.handle, style, computedStyle, handleStyle]} renderToHardwareTextureAndroid>
       <Animated.View style={[circleStyle, styles.shadow, adaptiveColorStyle, solidColor, innerStyle]} />
     </Animated.View>
   );

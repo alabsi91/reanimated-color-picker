@@ -35,7 +35,7 @@ export default function Ring({
   }, [thumbColor, adaptiveColor]);
 
   return (
-    <Animated.View style={[styles.handle, style, computedStyle, adaptiveColorStyle, handleStyle]}>
+    <Animated.View style={[styles.handle, style, computedStyle, adaptiveColorStyle, handleStyle]} renderToHardwareTextureAndroid>
       <Animated.View
         style={[
           styles.shadow,

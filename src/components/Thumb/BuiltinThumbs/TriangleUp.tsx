@@ -36,7 +36,7 @@ export default function TriangleUp({
   }, [thumbColor, adaptiveColor]);
 
   return (
-    <Animated.View style={[styles.handle, style, computedStyle, handleStyle]}>
+    <Animated.View style={[styles.handle, style, computedStyle, handleStyle]} renderToHardwareTextureAndroid>
       <Animated.View style={[styles.triangle, triangleStyle, adaptiveColorStyle, innerStyle]} />
     </Animated.View>
   );

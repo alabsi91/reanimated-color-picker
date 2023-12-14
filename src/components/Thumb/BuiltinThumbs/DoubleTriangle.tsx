@@ -42,7 +42,7 @@ export default function DoubleTriangle({
   }, [thumbColor, adaptiveColor]);
 
   return (
-    <Animated.View style={[styles.handle, style, computedStyle, handleStyle]}>
+    <Animated.View style={[styles.handle, style, computedStyle, handleStyle]} renderToHardwareTextureAndroid>
       <Animated.View style={[styles.triangle, triangleDownStyle, adaptiveColorStyle, innerStyle]} />
       <View style={{ width: '50%', height: '50%' }} />
       <Animated.View style={[styles.triangle, triangleUpStyle, adaptiveColorStyle, innerStyle]} />
