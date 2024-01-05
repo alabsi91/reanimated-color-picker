@@ -33,15 +33,15 @@ export function colorKitUI() {
   };
 
   const clampRGB = (value: number) => {
-    return clamp(Math.round(value), 0, 255);
+    return clamp(value, 0, 255);
   };
 
   const clampHue = (value: number) => {
-    return clamp(Math.round(value), 0, 360);
+    return clamp(value, 0, 360);
   };
 
   const clamp100 = (value: number) => {
-    return clamp(Math.round(value), 0, 100);
+    return clamp(value, 0, 100);
   };
 
   const clampAlpha = (value: number) => {
@@ -53,7 +53,7 @@ export function colorKitUI() {
   };
 
   const numberToHexString = (c: number): string => {
-    c = clampRGB(c);
+    c = clampRGB(Math.round(c));
     const hex = c.toString(16).padStart(2, '0');
     return hex;
   };
@@ -302,6 +302,10 @@ export function colorKitUI() {
   const RGB_types = ({ r, g, b, a }: rgbaT): ColorTypes<rgbaT> => {
     return {
       string: (forceAlpha?: boolean) => {
+        r = Math.round(r);
+        g = Math.round(g);
+        b = Math.round(b);
+
         // auto
         if (typeof forceAlpha === 'undefined') {
           if (typeof a === 'number' && a !== 1) return `rgba(${r}, ${g}, ${b}, ${a})`;
@@ -312,10 +316,20 @@ export function colorKitUI() {
 
         return `rgb(${r}, ${g}, ${b})`;
       },
-      array: () => {
+      array: (roundValues = true) => {
+        if (roundValues) {
+          r = Math.round(r);
+          g = Math.round(g);
+          b = Math.round(b);
+        }
         return [r, g, b, a];
       },
-      object: () => {
+      object: (roundValues = true) => {
+        if (roundValues) {
+          r = Math.round(r);
+          g = Math.round(g);
+          b = Math.round(b);
+        }
         return { r, g, b, a };
       },
     };
@@ -446,6 +460,10 @@ export function colorKitUI() {
   const HSL_types = ({ h, s, l, a }: hslaT): ColorTypes<hslaT> => {
     return {
       string: (forceAlpha?: boolean) => {
+        h = Math.round(h);
+        s = Math.round(s);
+        l = Math.round(l);
+
         // auto
         if (typeof forceAlpha === 'undefined') {
           if (typeof a === 'number' && a !== 1) return `hsla(${h}, ${s}%, ${l}%, ${a})`;
@@ -456,10 +474,20 @@ export function colorKitUI() {
 
         return `hsl(${h}, ${s}%, ${l}%)`;
       },
-      array: () => {
+      array: (roundValues = true) => {
+        if (roundValues) {
+          h = Math.round(h);
+          s = Math.round(s);
+          l = Math.round(l);
+        }
         return [h, s, l, a];
       },
-      object: () => {
+      object: (roundValues = true) => {
+        if (roundValues) {
+          h = Math.round(h);
+          s = Math.round(s);
+          l = Math.round(l);
+        }
         return { h, s, l, a };
       },
     };
@@ -592,6 +620,10 @@ export function colorKitUI() {
   const HWB_types = ({ h, w, b, a }: hwbaT): ColorTypes<hwbaT> => {
     return {
       string: (forceAlpha?: boolean) => {
+        h = Math.round(h);
+        w = Math.round(w);
+        b = Math.round(b);
+
         // auto
         if (typeof forceAlpha === 'undefined') {
           if (typeof a === 'number' && a !== 1) return `hwba(${h}, ${w}%, ${b}%, ${a})`;
@@ -602,10 +634,20 @@ export function colorKitUI() {
 
         return `hwb(${h}, ${w}%, ${b}%)`;
       },
-      array: () => {
+      array: (roundValues = true) => {
+        if (roundValues) {
+          h = Math.round(h);
+          w = Math.round(w);
+          b = Math.round(b);
+        }
         return [h, w, b, a];
       },
-      object: () => {
+      object: (roundValues = true) => {
+        if (roundValues) {
+          h = Math.round(h);
+          w = Math.round(w);
+          b = Math.round(b);
+        }
         return { h, w, b, a };
       },
     };
@@ -770,6 +812,10 @@ export function colorKitUI() {
   const HSV_types = ({ h, s, v, a }: hsvaT): ColorTypes<hsvaT> => {
     return {
       string: (forceAlpha?: boolean) => {
+        h = Math.round(h);
+        s = Math.round(s);
+        v = Math.round(v);
+
         // auto
         if (typeof forceAlpha === 'undefined') {
           if (typeof a === 'number' && a !== 1) return `hsva(${h}, ${s}%, ${v}%, ${a})`;
@@ -780,10 +826,20 @@ export function colorKitUI() {
 
         return `hsv(${h}, ${s}%, ${v}%)`;
       },
-      array: () => {
+      array: (roundValues = true) => {
+        if (roundValues) {
+          h = Math.round(h);
+          s = Math.round(s);
+          v = Math.round(v);
+        }
         return [h, s, v, a];
       },
-      object: () => {
+      object: (roundValues = true) => {
+        if (roundValues) {
+          h = Math.round(h);
+          s = Math.round(s);
+          v = Math.round(v);
+        }
         return { h, s, v, a };
       },
     };
