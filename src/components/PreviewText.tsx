@@ -38,6 +38,7 @@ export function PreviewText({ style = {}, colorFormat = 'hex' }: PreviewTextProp
       defaultValue={colorString.value}
       style={[styles.previewText, style]}
       animatedProps={animatedProps}
+      pointerEvents='none'
     />
   );
 }
