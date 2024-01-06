@@ -1,9 +1,9 @@
 import React from 'react';
 import { useAnimatedStyle, useDerivedValue, useSharedValue } from 'react-native-reanimated';
 
+import colorKit from '@colorKit';
 import usePickerContext from '@context';
 import { styles } from '@styles';
-import { contrastRatio, HSVA2HEX } from '@utils';
 import BuiltinThumbs from './BuiltinThumbs/index';
 
 import type { BuiltinThumbsProps, ThumbProps } from '@types';
@@ -51,12 +51,12 @@ export default function Thumb({
   // When the values of channels change
   useDerivedValue(() => {
     alphaValue.value; // to track alpha changes too;
-    resultColor.value = HSVA2HEX(hueValue.value, saturationValue.value, brightnessValue.value);
+    resultColor.value = colorKit.runOnUI().HEX({ h: hueValue.value, s: saturationValue.value, v: brightnessValue.value });
 
     // calculate the contrast ratio
     const compareColor1 = getColorForAdaptiveColor();
     const compareColor2 = adaptiveColor.value === '#000000' ? { h: 0, s: 0, v: 0 } : { h: 0, s: 0, v: 100 };
-    const contrast = contrastRatio(compareColor1, compareColor2);
+    const contrast = colorKit.runOnUI().contrastRatio(compareColor1, compareColor2);
     const reversedColor = adaptiveColor.value === '#ffffff' ? '#000000' : '#ffffff';
     adaptiveColor.value = contrast < 4.5 ? reversedColor : adaptiveColor.value;
   }, [alphaValue, hueValue, saturationValue, brightnessValue]);

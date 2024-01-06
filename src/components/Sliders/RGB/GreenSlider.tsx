@@ -1,10 +1,11 @@
 import React from 'react';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
+import colorKit from '@colorKit';
 import usePickerContext from '@context';
 import Thumb from '@thumb';
-import { clamp, getStyle, HSVA2RGBA, isRtl, isWeb, RenderNativeOnly, RGBA2HSVA } from '@utils';
+import { clamp, getStyle, isRtl, isWeb, RenderNativeOnly } from '@utils';
 
 import type { RgbSliderProps } from '@types';
 import type { LayoutChangeEvent } from 'react-native';
@@ -58,7 +59,7 @@ export function GreenSlider({
   const handleScale = useSharedValue(1);
 
   const handleStyle = useAnimatedStyle(() => {
-    const { g } = HSVA2RGBA(hueValue.value, saturationValue.value, brightnessValue.value);
+    const { g } = colorKit.runOnUI().RGB({ h: hueValue.value, s: saturationValue.value, v: brightnessValue.value }).object(false);
 
     const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0),
       percent = (g / 255) * length,
@@ -73,7 +74,10 @@ export function GreenSlider({
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
 
-    const { r, g, b } = HSVA2RGBA(hueValue.value, saturationValue.value, brightnessValue.value);
+    const { r, g, b } = colorKit
+      .runOnUI()
+      .RGB({ h: hueValue.value, s: saturationValue.value, v: brightnessValue.value })
+      .object(false);
 
     const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0),
       pos = clamp((vertical ? y : x) - (boundedThumb ? thumbSize / 2 : 0), length),
@@ -82,13 +86,13 @@ export function GreenSlider({
 
     if (newGreenValue === g) return;
 
-    const { h, s, v } = RGBA2HSVA(r, newGreenValue, b);
+    const { h, s, v } = colorKit.runOnUI().HSV({ r, g: newGreenValue, b }).object(false);
 
     hueValue.value = h;
     saturationValue.value = s;
     brightnessValue.value = v;
 
-    runOnJS(onGestureChange)();
+    onGestureChange();
   };
   const onGestureBegin = (event: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -98,7 +102,7 @@ export function GreenSlider({
   const onGestureFinish = () => {
     'worklet';
     handleScale.value = withTiming(1, { duration: 100 });
-    runOnJS(onGestureEnd)();
+    onGestureEnd();
   };
 
   const pan = Gesture.Pan().onBegin(onGestureBegin).onUpdate(onGestureUpdate).onEnd(onGestureFinish);
@@ -112,7 +116,7 @@ export function GreenSlider({
   };
 
   const redBlue = useAnimatedStyle(() => {
-    const { r, b } = HSVA2RGBA(hueValue.value, saturationValue.value, brightnessValue.value);
+    const { r, b } = colorKit.runOnUI().RGB({ h: hueValue.value, s: saturationValue.value, v: brightnessValue.value }).object();
     if (isWeb) {
       const deg = vertical ? (reverse ? 180 : 0) : reverse ? 90 : 270;
       return { background: `linear-gradient(${deg}deg, rgb(${r}, 255, ${b}) 0%, rgb(${r}, 0, ${b}) 100%)` };
@@ -125,7 +129,7 @@ export function GreenSlider({
 
     const imageRotate = vertical ? (reverse ? '90deg' : '270deg') : reverse ? '0deg' : '180deg';
     const imageTranslateY = ((height.value - width.value) / 2) * ((reverse && isRtl) || (!reverse && !isRtl) ? -1 : 1);
-    const { r, b } = HSVA2RGBA(hueValue.value, saturationValue.value, brightnessValue.value);
+    const { r, b } = colorKit.runOnUI().RGB({ h: hueValue.value, s: saturationValue.value, v: brightnessValue.value }).object();
 
     return {
       tintColor: `rgb(${r}, 255, ${b})`,

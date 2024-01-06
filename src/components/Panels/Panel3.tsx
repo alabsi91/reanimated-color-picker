@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { Image, ImageBackground, StyleSheet } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import usePickerContext from '@context';
 import { styles } from '@styles';
@@ -103,7 +103,7 @@ export function Panel3({
 
     hueValue.value = newHueValue;
     channelValue.value = newChannelValue;
-    runOnJS(onGestureChange)();
+    onGestureChange();
   };
   const onGestureBegin = (event: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -113,7 +113,7 @@ export function Panel3({
   const onGestureFinish = () => {
     'worklet';
     handleScale.value = withTiming(1, { duration: 100 });
-    runOnJS(onGestureEnd)();
+    onGestureEnd();
   };
 
   const pan = Gesture.Pan().onBegin(onGestureBegin).onUpdate(onGestureUpdate).onEnd(onGestureFinish);
