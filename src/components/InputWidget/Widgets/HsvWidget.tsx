@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { runOnJS, useDerivedValue } from 'react-native-reanimated';
+import React, { useRef } from 'react';
+import { useDerivedValue, useSharedValue } from 'react-native-reanimated';
 
 import colorKit from '@colorKit';
 import { clamp, ConditionalRendering } from '@utils';
@@ -19,50 +19,44 @@ export default function HsvWidget({
   inputProps,
   disableAlphaChannel,
 }: WidgetProps) {
-  const [hsvValues, setHsvValues] = useState(colorKit.HSV(returnedResults().hsva).object());
+  const hsv = useRef(colorKit.HSV(returnedResults().hsva).object(false));
 
-  const isFocused = useRef(false);
-
-  const updateText = () => {
-    const { h, s, v, a } = colorKit.HSV(returnedResults().hsva).object();
-    if (!isFocused.current) setHsvValues({ h, s, v, a });
-  };
+  const h = useSharedValue(hsv.current.h.toString());
+  const s = useSharedValue(hsv.current.s.toString());
+  const v = useSharedValue(hsv.current.v.toString());
+  const a = useSharedValue(hsv.current.a.toString());
 
   useDerivedValue(() => {
     [hueValue, saturationValue, brightnessValue, alphaValue]; // track changes on Native
-    runOnJS(updateText)();
-  }, [hueValue, saturationValue, brightnessValue, alphaValue]); // track changes on WEB
+    hsv.current = colorKit.runOnUI().HSV(returnedResults().hsva).object(false);
+    h.value = hsv.current.h.toString();
+    s.value = hsv.current.s.toString();
+    v.value = hsv.current.v.toString();
+    a.value = hsv.current.a.toString();
+  }, [hueValue, saturationValue, brightnessValue, alphaValue, h, s, v, a]); // track changes on WEB
 
-  const onHueChange = (text: string) => {
-    let hue = +text;
-    hue = clamp(isNaN(hue) ? 0 : hue, 360);
-    setHsvValues(prev => ({ ...prev, h: hue }));
-    onChange(`hsva(${hue}, ${hsvValues.s}%, ${hsvValues.v}%, ${hsvValues.a})`);
-  };
-  const onSaturationChange = (text: string) => {
-    let saturation = +text;
-    saturation = clamp(isNaN(saturation) ? 0 : saturation, 100);
-    setHsvValues(prev => ({ ...prev, s: saturation }));
-    onChange(`hsva(${hsvValues.h}, ${saturation}%, ${hsvValues.v}%, ${hsvValues.a})`);
-  };
-  const onValueChange = (text: string) => {
-    let value = +text;
-    value = clamp(isNaN(value) ? 0 : value, 100);
-    setHsvValues(prev => ({ ...prev, v: value }));
-    onChange(`hsva(${hsvValues.h}, ${hsvValues.s}%, ${value}%, ${hsvValues.a})`);
-  };
-  const onAlphaChange = (text: string) => {
-    let alpha = parseFloat(text);
-    alpha = clamp(isNaN(alpha) ? 0 : alpha, 1);
-    setHsvValues(prev => ({ ...prev, a: alpha }));
-    onChange(`hsva(${hsvValues.h}, ${hsvValues.s}%, ${hsvValues.v}%, ${alpha})`);
+  const onHueEndEditing = (text: string) => {
+    const hue = clamp(+text, 360);
+    h.value = ''; // force update in case the value of `h` didn't change
+    onChange({ h: hue, s: +s.value, v: +v.value, a: +a.value });
   };
 
-  const onFocus = () => {
-    isFocused.current = true;
+  const onSaturationEndEditing = (text: string) => {
+    const saturation = clamp(+text, 100);
+    s.value = ''; // force update in case the value of `s` didn't change
+    onChange({ h: +h.value, s: saturation, v: +v.value, a: +a.value });
   };
-  const onBlur = () => {
-    isFocused.current = false;
+
+  const onValueEndEditing = (text: string) => {
+    const value = clamp(+text, 100);
+    v.value = ''; // force update in case the value of `v` didn't change
+    onChange({ h: +h.value, s: +s.value, v: value, a: +a.value });
+  };
+
+  const onAlphaEndEditing = (text: string) => {
+    const alpha = clamp(+text, 1);
+    a.value = ''; // force update in case the value of `a` didn't change
+    onChange({ h: +h.value, s: +s.value, v: +v.value, a: alpha });
   };
 
   return (
@@ -70,42 +64,34 @@ export default function HsvWidget({
       <WidgetTextInput
         inputStyle={inputStyle}
         textStyle={inputTitleStyle}
-        value={hsvValues.h}
+        textValue={h}
         title='H'
-        onChange={onHueChange}
-        onBlur={onBlur}
-        onFocus={onFocus}
+        onEndEditing={onHueEndEditing}
         inputProps={inputProps}
       />
       <WidgetTextInput
         inputStyle={inputStyle}
         textStyle={inputTitleStyle}
-        value={hsvValues.s}
+        textValue={s}
         title='S'
-        onChange={onSaturationChange}
-        onBlur={onBlur}
-        onFocus={onFocus}
+        onEndEditing={onSaturationEndEditing}
         inputProps={inputProps}
       />
       <WidgetTextInput
         inputStyle={inputStyle}
         textStyle={inputTitleStyle}
-        value={hsvValues.v}
+        textValue={v}
         title='V'
-        onChange={onValueChange}
-        onBlur={onBlur}
-        onFocus={onFocus}
+        onEndEditing={onValueEndEditing}
         inputProps={inputProps}
       />
       <ConditionalRendering if={!disableAlphaChannel}>
         <WidgetTextInput
           inputStyle={inputStyle}
           textStyle={inputTitleStyle}
-          value={hsvValues.a}
+          textValue={a}
           title='A'
-          onChange={onAlphaChange}
-          onBlur={onBlur}
-          onFocus={onFocus}
+          onEndEditing={onAlphaEndEditing}
           inputProps={inputProps}
           decimal
         />

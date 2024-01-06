@@ -1,53 +1,62 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Keyboard, Text, TextInput, View } from 'react-native';
+import Animated, { useAnimatedProps, useDerivedValue } from 'react-native-reanimated';
 
 import { styles } from '@styles';
-import { clamp } from '@utils';
+import { isWeb } from '@utils';
 
 import type { InputProps } from '@types';
-import type { StyleProp, TextStyle } from 'react-native';
+import type { NativeSyntheticEvent, StyleProp, TextInputSubmitEditingEventData, TextStyle } from 'react-native';
+import type { SharedValue } from 'react-native-reanimated';
 
 type Props = {
-  value: number | string;
+  textValue: SharedValue<string>;
   textKeyboard?: boolean;
   decimal?: boolean;
   title: string;
   inputStyle: StyleProp<TextStyle>;
   textStyle: StyleProp<TextStyle>;
-  onBlur: () => void;
-  onFocus: () => void;
-  onChange: (text: string) => void;
+  onEndEditing: (text: string) => void;
   inputProps: InputProps;
 };
 
+Animated.addWhitelistedNativeProps({ text: true });
+const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
+
 export default function WidgetTextInput({
-  value,
+  textValue,
   decimal = false,
   textKeyboard = false,
   title,
   inputStyle,
   textStyle,
   inputProps,
-  onChange,
-  onBlur,
-  onFocus,
+  onEndEditing,
 }: Props) {
-  const [textValue, setTextValue] = useState(value + '');
   const inputRef = useRef<TextInput>(null!);
 
-  const onTextValueChange = (text: string) => {
-    const regex = /^(\d*\.?\d{0,2}|\.\d{1,2})$/;
-    const numberValue = parseFloat(text);
-    if (isNaN(numberValue) || !regex.test(text)) text = '0';
-    if (numberValue < 0 || numberValue > 1) text = clamp(numberValue, 1).toString();
-    if (!text.includes('.') && text.length > 1) text = text[1];
-    setTextValue(text);
-    onChange(text);
-  };
+  useDerivedValue(() => {
+    if (isWeb && inputRef.current) {
+      // @ts-expect-error value doesn't exist
+      inputRef.current.value = textValue.value;
+    }
+  }, [textValue]);
 
-  useEffect(() => {
-    if (decimal) setTextValue(value + '');
-  }, [value]);
+  const animatedProps = useAnimatedProps(() => ({ text: textValue.value } as never), [textValue]);
+
+  const submit = (e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
+    const text = e.nativeEvent.text;
+
+    // number input mode
+    if (decimal || !textKeyboard) {
+      const num = parseFloat(text);
+      if (typeof num !== 'number' || isNaN(num) || !isFinite(num)) {
+        textValue.value = ''; // reset input
+        return;
+      }
+    }
+    onEndEditing(text);
+  };
 
   useEffect(() => {
     const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
@@ -59,20 +68,25 @@ export default function WidgetTextInput({
 
   return (
     <View style={styles.inputsContainer}>
-      <TextInput
+      <AnimatedTextInput
         ref={inputRef}
         style={[styles.input, inputStyle]}
-        value={decimal ? textValue : value + ''}
+        defaultValue={textValue.value}
         maxLength={decimal ? 4 : textKeyboard ? 9 : 3}
-        onChangeText={decimal ? onTextValueChange : onChange}
-        onBlur={onBlur}
-        onFocus={onFocus}
+        onEndEditing={submit}
+        onBlur={e => {
+          if (isWeb) submit(e);
+        }}
+        enterKeyHint='enter'
+        returnKeyType='done'
         keyboardType={decimal ? 'decimal-pad' : textKeyboard ? 'default' : 'number-pad'}
         inputMode={decimal ? 'decimal' : textKeyboard ? 'text' : 'numeric'}
         autoComplete='off'
         autoCorrect={false}
+        autoFocus={false}
         {...inputProps}
         selectTextOnFocus={!textKeyboard}
+        animatedProps={animatedProps}
       />
       <Text style={[styles.inputTitle, textStyle]}>{title}</Text>
     </View>

@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { runOnJS, useDerivedValue } from 'react-native-reanimated';
+import React, { useRef } from 'react';
+import { useDerivedValue, useSharedValue } from 'react-native-reanimated';
 
 import colorKit from '@colorKit';
 import { clamp, ConditionalRendering } from '@utils';
@@ -19,50 +19,44 @@ export default function RgbWidget({
   inputProps,
   disableAlphaChannel,
 }: WidgetProps) {
-  const [rgbValues, setRgbValues] = useState(colorKit.RGB(returnedResults().rgba).object());
+  const rgb = useRef(colorKit.RGB(returnedResults().rgba).object(false));
 
-  const isFocused = useRef(false);
-
-  const updateText = () => {
-    const { r, g, b, a } = colorKit.RGB(returnedResults().rgba).object();
-    if (!isFocused.current) setRgbValues({ r, g, b, a });
-  };
+  const r = useSharedValue(rgb.current.r.toString());
+  const g = useSharedValue(rgb.current.g.toString());
+  const b = useSharedValue(rgb.current.b.toString());
+  const a = useSharedValue(rgb.current.a.toString());
 
   useDerivedValue(() => {
     [hueValue, saturationValue, brightnessValue, alphaValue]; // track changes on Native
-    runOnJS(updateText)();
+    rgb.current = colorKit.runOnUI().RGB(returnedResults().rgba).object(false);
+    r.value = rgb.current.r.toString();
+    g.value = rgb.current.g.toString();
+    b.value = rgb.current.b.toString();
+    a.value = rgb.current.a.toString();
   }, [hueValue, saturationValue, brightnessValue, alphaValue]); // track changes on WEB
 
-  const onRedChange = (text: string) => {
-    let red = +text;
-    red = clamp(isNaN(red) ? 0 : red, 255);
-    setRgbValues(prev => ({ ...prev, r: red }));
-    onChange(`rgba(${red}, ${rgbValues.g}, ${rgbValues.b}, ${rgbValues.a})`);
-  };
-  const onGreenChange = (text: string) => {
-    let green = +text;
-    green = clamp(isNaN(green) ? 0 : green, 255);
-    setRgbValues(prev => ({ ...prev, g: green }));
-    onChange(`rgba(${rgbValues.r}, ${green}, ${rgbValues.b}, ${rgbValues.a})`);
-  };
-  const onBlueChange = (text: string) => {
-    let blue = +text;
-    blue = clamp(isNaN(blue) ? 0 : blue, 255);
-    setRgbValues(prev => ({ ...prev, b: blue }));
-    onChange(`rgba(${rgbValues.r}, ${rgbValues.g}, ${blue}, ${rgbValues.a})`);
-  };
-  const onAlphaChange = (text: string) => {
-    let alpha = parseFloat(text);
-    alpha = clamp(isNaN(alpha) ? 0 : alpha, 1);
-    setRgbValues(prev => ({ ...prev, a: alpha }));
-    onChange(`rgba(${rgbValues.r}, ${rgbValues.g}, ${rgbValues.b}, ${alpha})`);
+  const onRedEndEditing = (text: string) => {
+    const red = clamp(+text, 255);
+    r.value = ''; // force update in case the value of `r` didn't change
+    onChange({ r: red, g: +g.value, b: +b.value, a: +a.value });
   };
 
-  const onFocus = () => {
-    isFocused.current = true;
+  const onGreenEndEditing = (text: string) => {
+    const green = clamp(+text, 255);
+    g.value = ''; // force update in case the value of `g` didn't change
+    onChange({ r: +r.value, g: green, b: +b.value, a: +a.value });
   };
-  const onBlur = () => {
-    isFocused.current = false;
+
+  const onBlueEndEditing = (text: string) => {
+    const blue = clamp(+text, 255);
+    b.value = ''; // force update in case the value of `b` didn't change
+    onChange({ r: +r.value, g: +g.value, b: blue, a: +a.value });
+  };
+
+  const onAlphaEndEditing = (text: string) => {
+    const alpha = clamp(parseFloat(text), 1);
+    a.value = ''; // force update in case the value of `a` didn't change
+    onChange({ r: +r.value, g: +g.value, b: +b.value, a: alpha });
   };
 
   return (
@@ -70,42 +64,34 @@ export default function RgbWidget({
       <WidgetTextInput
         inputStyle={inputStyle}
         textStyle={inputTitleStyle}
-        value={rgbValues.r}
+        textValue={r}
         title='R'
-        onChange={onRedChange}
-        onBlur={onBlur}
-        onFocus={onFocus}
+        onEndEditing={onRedEndEditing}
         inputProps={inputProps}
       />
       <WidgetTextInput
         inputStyle={inputStyle}
         textStyle={inputTitleStyle}
-        value={rgbValues.g}
+        textValue={g}
         title='G'
-        onChange={onGreenChange}
-        onBlur={onBlur}
-        onFocus={onFocus}
+        onEndEditing={onGreenEndEditing}
         inputProps={inputProps}
       />
       <WidgetTextInput
         inputStyle={inputStyle}
         textStyle={inputTitleStyle}
-        value={rgbValues.b}
+        textValue={b}
         title='B'
-        onChange={onBlueChange}
-        onBlur={onBlur}
-        onFocus={onFocus}
+        onEndEditing={onBlueEndEditing}
         inputProps={inputProps}
       />
       <ConditionalRendering if={!disableAlphaChannel}>
         <WidgetTextInput
           inputStyle={inputStyle}
           textStyle={inputTitleStyle}
-          value={rgbValues.a}
+          textValue={a}
           title='A'
-          onChange={onAlphaChange}
-          onBlur={onBlur}
-          onFocus={onFocus}
+          onEndEditing={onAlphaEndEditing}
           inputProps={inputProps}
           decimal
         />
