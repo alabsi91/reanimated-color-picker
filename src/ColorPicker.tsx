@@ -121,8 +121,8 @@ const ColorPicker = forwardRef<ColorPickerRef, ColorPickerProps>(
       }
     };
 
-    const setColor = (color: string, duration = thumbAnimationDuration) => {
-      const { h, s, v, a } = colorKit.HSV(color).object();
+    const setColor = (color: SupportedColorFormats, duration = thumbAnimationDuration) => {
+      const { h, s, v, a } = colorKit.HSV(color).object(false);
 
       hueValue.value = withTiming(h, { duration });
       saturationValue.value = withTiming(s, { duration });

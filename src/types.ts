@@ -103,7 +103,7 @@ export interface ColorPickerContext {
   adaptSpectrum: boolean;
 
   /** Apply a color to the color picker. */
-  setColor: (color: string, duration?: number) => void;
+  setColor: (color: SupportedColorFormats, duration?: number) => void;
 
   /** A global prop for all sliders children. */
   sliderThickness: number;
@@ -405,7 +405,7 @@ export type InputProps = Omit<
 >;
 
 export type WidgetProps = {
-  onChange: (color: string) => void;
+  onChange: (color: SupportedColorFormats) => void;
   returnedResults: ColorPickerContext['returnedResults'];
   hueValue: ColorPickerContext['hueValue'];
   saturationValue: ColorPickerContext['saturationValue'];
