@@ -76,6 +76,19 @@ Named colors implementation follows the [CSS3/SVG specification](https://www.w3.
 - azure (`#f0ffff`)
 - and more ...
 
+:::info HOW TO RUN ON THE UI THREAD
+
+- To execute any of the `colorKit` methods, you can use `runOnUI`. For example:
+
+```js
+function workletFunction() {
+  'worklet';
+  const rgb = colorKit.runOnUI().RGB('#f0ff').object();
+}
+```
+
+:::
+
 ## Color Conversion
 
 ### RGB

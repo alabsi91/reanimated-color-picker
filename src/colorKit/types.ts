@@ -19,9 +19,9 @@ export type hwbT = Omit<hwbaT, 'a'>;
 export type SupportedColorFormats = ColorString | rgbaT | rgbT | hslaT | hslT | hsvaT | hsvT | hwbaT | hwbT | number;
 
 export type ColorTypes<T extends object> = {
-  object: () => T;
+  object: (roundValues?: boolean) => T;
   string: (alpha?: boolean) => string;
-  array: () => number[];
+  array: (roundValues?: boolean) => number[];
 };
 
 export type ConversionMethods = {
