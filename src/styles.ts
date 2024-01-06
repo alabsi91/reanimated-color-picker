@@ -132,5 +132,6 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     color: 'black',
+    padding: 0,
   },
 });
