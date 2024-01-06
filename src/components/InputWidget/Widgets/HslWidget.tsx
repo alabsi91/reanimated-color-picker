@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { runOnJS, useDerivedValue } from 'react-native-reanimated';
+import React, { useRef } from 'react';
+import { useDerivedValue, useSharedValue } from 'react-native-reanimated';
 
 import colorKit from '@colorKit';
 import { clamp, ConditionalRendering } from '@utils';
@@ -19,50 +19,44 @@ export default function HslWidget({
   inputProps,
   disableAlphaChannel,
 }: WidgetProps) {
-  const [hslValues, setHslValues] = useState(colorKit.HSL(returnedResults().hsla).object());
+  const hsl = useRef(colorKit.HSL(returnedResults().hsla).object(false));
 
-  const isFocused = useRef(false);
-
-  const updateText = () => {
-    const { h, s, l, a } = colorKit.HSL(returnedResults().hsla).object();
-    if (!isFocused.current) setHslValues({ h, s, l, a });
-  };
+  const h = useSharedValue(hsl.current.h.toString());
+  const s = useSharedValue(hsl.current.s.toString());
+  const l = useSharedValue(hsl.current.l.toString());
+  const a = useSharedValue(hsl.current.a.toString());
 
   useDerivedValue(() => {
     [hueValue, saturationValue, brightnessValue, alphaValue]; // track changes on Native
-    runOnJS(updateText)();
-  }, [hueValue, saturationValue, brightnessValue, alphaValue]); // track changes on WEB
+    hsl.current = colorKit.runOnUI().HSL(returnedResults().hsla).object(false);
+    h.value = hsl.current.h.toString();
+    s.value = hsl.current.s.toString();
+    l.value = hsl.current.l.toString();
+    a.value = hsl.current.a.toString();
+  }, [hueValue, saturationValue, brightnessValue, alphaValue, h, s, l, a]); // track changes on WEB
 
-  const onHueChange = (text: string) => {
-    let hue = +text;
-    hue = clamp(isNaN(hue) ? 0 : hue, 360);
-    setHslValues(prev => ({ ...prev, h: hue }));
-    onChange(`hsla(${hue}, ${hslValues.s}%, ${hslValues.l}%, ${hslValues.a})`);
-  };
-  const onSaturationChange = (text: string) => {
-    let saturation = +text;
-    saturation = clamp(isNaN(saturation) ? 0 : saturation, 100);
-    setHslValues(prev => ({ ...prev, s: saturation }));
-    onChange(`hsla(${hslValues.h}, ${saturation}%, ${hslValues.l}%, ${hslValues.a})`);
-  };
-  const onLumChange = (text: string) => {
-    let lum = +text;
-    lum = clamp(isNaN(lum) ? 0 : lum, 100);
-    setHslValues(prev => ({ ...prev, l: lum }));
-    onChange(`hsla(${hslValues.h}, ${hslValues.s}%, ${lum}%, ${hslValues.a})`);
-  };
-  const onAlphaChange = (text: string) => {
-    let alpha = parseFloat(text);
-    alpha = clamp(isNaN(alpha) ? 0 : alpha, 1);
-    setHslValues(prev => ({ ...prev, a: alpha }));
-    onChange(`hsla(${hslValues.h}, ${hslValues.s}%, ${hslValues.l}%, ${alpha})`);
+  const onHueEndEditing = (text: string) => {
+    const hue = clamp(+text, 360);
+    h.value = ''; // force update in case the value of h didn't change
+    onChange({ h: hue, s: +s.value, l: +l.value, a: +a.value });
   };
 
-  const onFocus = () => {
-    isFocused.current = true;
+  const onSaturationEndEditing = (text: string) => {
+    const saturation = clamp(+text, 100);
+    s.value = ''; // force update in case the value of `s` didn't change
+    onChange({ h: +h.value, s: saturation, l: +l.value, a: +a.value });
   };
-  const onBlur = () => {
-    isFocused.current = false;
+
+  const onLumEndEditing = (text: string) => {
+    const lum = clamp(+text, 100);
+    l.value = ''; // force update in case the value of `l` didn't change
+    onChange({ h: +h.value, s: +s.value, l: lum, a: +a.value });
+  };
+
+  const onAlphaEndEditing = (text: string) => {
+    const alpha = clamp(+text, 1);
+    a.value = ''; // force update in case the value of `a` didn't change
+    onChange({ h: +h.value, s: +s.value, l: +l.value, a: alpha });
   };
 
   return (
@@ -70,42 +64,34 @@ export default function HslWidget({
       <WidgetTextInput
         inputStyle={inputStyle}
         textStyle={inputTitleStyle}
-        value={hslValues.h}
+        textValue={h}
         title='H'
-        onChange={onHueChange}
-        onBlur={onBlur}
-        onFocus={onFocus}
+        onEndEditing={onHueEndEditing}
         inputProps={inputProps}
       />
       <WidgetTextInput
         inputStyle={inputStyle}
         textStyle={inputTitleStyle}
-        value={hslValues.s}
+        textValue={s}
         title='S'
-        onChange={onSaturationChange}
-        onBlur={onBlur}
-        onFocus={onFocus}
+        onEndEditing={onSaturationEndEditing}
         inputProps={inputProps}
       />
       <WidgetTextInput
         inputStyle={inputStyle}
         textStyle={inputTitleStyle}
-        value={hslValues.l}
+        textValue={l}
         title='L'
-        onChange={onLumChange}
-        onBlur={onBlur}
-        onFocus={onFocus}
+        onEndEditing={onLumEndEditing}
         inputProps={inputProps}
       />
       <ConditionalRendering if={!disableAlphaChannel}>
         <WidgetTextInput
           inputStyle={inputStyle}
           textStyle={inputTitleStyle}
-          value={hslValues.a}
+          textValue={a}
           title='A'
-          onChange={onAlphaChange}
-          onBlur={onBlur}
-          onFocus={onFocus}
+          onEndEditing={onAlphaEndEditing}
           inputProps={inputProps}
           decimal
         />

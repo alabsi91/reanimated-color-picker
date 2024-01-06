@@ -12,6 +12,7 @@ import HwbWidget from './Widgets/HwbWidget';
 import RgbWidget from './Widgets/RgbWidget';
 
 import type { InputWidgetProps } from '@types';
+import type { SupportedColorFormats } from '../../colorKit/types';
 
 const defaultFormats = ['HEX', 'RGB', 'HSL', 'HWB', 'HSV'] as const;
 
@@ -33,11 +34,11 @@ export function InputWidget({
     formats.includes(defaultFormat) ? defaultFormat : formats[0] ?? 'HEX'
   );
 
-  const onChange = (color: string) => {
+  const onChange = (color: SupportedColorFormats) => {
     const isHex = colorKit.getFormat(color)?.includes('hex');
-    if (disableAlphaChannel && isHex) color = colorKit.setAlpha(color, 1).hex();
+    if (disableAlphaChannel && isHex) color = colorKit.setAlpha(color, 1).hsv().object(false);
 
-    setColor(color);
+    setColor(color, 0);
     onGestureChange(color);
     onGestureEnd(color);
   };

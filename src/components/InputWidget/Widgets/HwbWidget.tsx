@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { runOnJS, useDerivedValue } from 'react-native-reanimated';
+import React, { useRef } from 'react';
+import { useDerivedValue, useSharedValue } from 'react-native-reanimated';
 
 import colorKit from '@colorKit';
 import { clamp, ConditionalRendering } from '@utils';
@@ -19,50 +19,44 @@ export default function HwbWidget({
   inputProps,
   disableAlphaChannel,
 }: WidgetProps) {
-  const [hwbValues, setHwbValues] = useState(colorKit.HWB(returnedResults().hwba).object());
+  const hwb = useRef(colorKit.HWB(returnedResults().hwba).object(false));
 
-  const isFocused = useRef(false);
-
-  const updateText = () => {
-    const { h, w, b, a } = colorKit.HWB(returnedResults().hwba).object();
-    if (!isFocused.current) setHwbValues({ h, w, b, a });
-  };
+  const h = useSharedValue(hwb.current.h.toString());
+  const w = useSharedValue(hwb.current.w.toString());
+  const b = useSharedValue(hwb.current.b.toString());
+  const a = useSharedValue(hwb.current.a.toString());
 
   useDerivedValue(() => {
     [hueValue, saturationValue, brightnessValue, alphaValue]; // track changes on Native
-    runOnJS(updateText)();
-  }, [hueValue, saturationValue, brightnessValue, alphaValue]); // track changes on WEB
+    hwb.current = colorKit.runOnUI().HWB(returnedResults().hwba).object(false);
+    h.value = hwb.current.h.toString();
+    w.value = hwb.current.w.toString();
+    b.value = hwb.current.b.toString();
+    a.value = hwb.current.a.toString();
+  }, [hueValue, saturationValue, brightnessValue, alphaValue, h, w, b, a]); // track changes on WEB
 
-  const onHueChange = (text: string) => {
-    let hue = +text;
-    hue = clamp(isNaN(hue) ? 0 : hue, 360);
-    setHwbValues(prev => ({ ...prev, h: hue }));
-    onChange(`hwba(${hue}, ${hwbValues.w}%, ${hwbValues.b}%, ${hwbValues.a})`);
-  };
-  const onWhiteChange = (text: string) => {
-    let whiteness = +text;
-    whiteness = clamp(isNaN(whiteness) ? 0 : whiteness, 100);
-    setHwbValues(prev => ({ ...prev, w: whiteness }));
-    onChange(`hwba(${hwbValues.h}, ${whiteness}%, ${hwbValues.b}%, ${hwbValues.a})`);
-  };
-  const onBlackChange = (text: string) => {
-    let blackness = +text;
-    blackness = clamp(isNaN(blackness) ? 0 : blackness, 100);
-    setHwbValues(prev => ({ ...prev, b: blackness }));
-    onChange(`hwba(${hwbValues.h}, ${hwbValues.w}%, ${blackness}%, ${hwbValues.a})`);
-  };
-  const onAlphaChange = (text: string) => {
-    let alpha = parseFloat(text);
-    alpha = clamp(isNaN(alpha) ? 0 : alpha, 1);
-    setHwbValues(prev => ({ ...prev, a: alpha }));
-    onChange(`hwba(${hwbValues.h}, ${hwbValues.w}%, ${hwbValues.b}%, ${alpha})`);
+  const onHueEndEditing = (text: string) => {
+    const hue = clamp(+text, 360);
+    h.value = ''; // force update in case the value of `h` didn't change
+    onChange({ h: hue, w: +w.value, b: +b.value, a: +a.value });
   };
 
-  const onFocus = () => {
-    isFocused.current = true;
+  const onWhiteEndEditing = (text: string) => {
+    const whiteness = clamp(+text, 100);
+    w.value = ''; // force update in case the value of `w` didn't change
+    onChange({ h: +h.value, w: whiteness, b: +b.value, a: +a.value });
   };
-  const onBlur = () => {
-    isFocused.current = false;
+
+  const onBlackEndEditing = (text: string) => {
+    const blackness = clamp(+text, 100);
+    b.value = ''; // force update in case the value of `b` didn't change
+    onChange({ h: +h.value, w: +w.value, b: blackness, a: +a.value });
+  };
+
+  const onAlphaEndEditing = (text: string) => {
+    const alpha = clamp(+text, 1);
+    a.value = ''; // force update in case the value of `a` didn't change
+    onChange({ h: +h.value, w: +w.value, b: +b.value, a: alpha });
   };
 
   return (
@@ -70,42 +64,34 @@ export default function HwbWidget({
       <WidgetTextInput
         inputStyle={inputStyle}
         textStyle={inputTitleStyle}
-        value={hwbValues.h}
+        textValue={h}
         title='H'
-        onChange={onHueChange}
-        onBlur={onBlur}
-        onFocus={onFocus}
+        onEndEditing={onHueEndEditing}
         inputProps={inputProps}
       />
       <WidgetTextInput
         inputStyle={inputStyle}
         textStyle={inputTitleStyle}
-        value={hwbValues.w}
+        textValue={w}
         title='W'
-        onChange={onWhiteChange}
-        onBlur={onBlur}
-        onFocus={onFocus}
+        onEndEditing={onWhiteEndEditing}
         inputProps={inputProps}
       />
       <WidgetTextInput
         inputStyle={inputStyle}
         textStyle={inputTitleStyle}
-        value={hwbValues.b}
+        textValue={b}
         title='B'
-        onChange={onBlackChange}
-        onBlur={onBlur}
-        onFocus={onFocus}
+        onEndEditing={onBlackEndEditing}
         inputProps={inputProps}
       />
       <ConditionalRendering if={!disableAlphaChannel}>
         <WidgetTextInput
           inputStyle={inputStyle}
           textStyle={inputTitleStyle}
-          value={hwbValues.a}
+          textValue={a}
           title='A'
-          onChange={onAlphaChange}
-          onBlur={onBlur}
-          onFocus={onFocus}
+          onEndEditing={onAlphaEndEditing}
           inputProps={inputProps}
           decimal
         />

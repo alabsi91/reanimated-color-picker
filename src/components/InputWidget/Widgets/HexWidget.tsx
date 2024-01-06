@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { runOnJS, useDerivedValue } from 'react-native-reanimated';
+import React from 'react';
+import { useDerivedValue, useSharedValue } from 'react-native-reanimated';
 
 import colorKit from '@colorKit';
 import WidgetTextInput from './WidgetTextInput';
@@ -17,44 +17,30 @@ export default function HexWidget({
   inputTitleStyle,
   inputProps,
 }: WidgetProps) {
-  const [hexColor, setHexColorText] = useState(returnedResults().hex);
-
-  const isFocused = useRef(false);
-
-  const updateText = () => {
-    if (!isFocused.current) setHexColorText(returnedResults().hex);
-  };
+  const hexColor = useSharedValue(returnedResults().hex);
 
   useDerivedValue(() => {
     [hueValue, saturationValue, brightnessValue, alphaValue]; // track changes on Native
-    runOnJS(updateText)();
+    hexColor.value = returnedResults().hex;
   }, [hueValue, saturationValue, brightnessValue, alphaValue]); // track changes on WEB
 
-  const onTextChange = (text: string) => {
+  const onEndEditing = (text: string) => {
     text = text.startsWith('#') ? text : '#' + text;
-    setHexColorText(text);
     const isHex = colorKit.getFormat(text)?.includes('hex');
-    if (isHex) onChange(text);
+    hexColor.value = ''; // force update in case the value of `hexColor` didn't change
+    if (isHex) {
+      onChange(text);
+      return;
+    }
   };
 
-  const onFocus = () => {
-    isFocused.current = true;
-  };
-  const onBlur = () => {
-    isFocused.current = false;
-    const isHex = colorKit.getFormat(hexColor)?.includes('hex');
-    if (isHex) return;
-    setHexColorText(returnedResults().hex);
-  };
   return (
     <WidgetTextInput
       inputStyle={inputStyle}
       textStyle={inputTitleStyle}
-      value={hexColor}
+      textValue={hexColor}
       title='HEX'
-      onChange={onTextChange}
-      onBlur={onBlur}
-      onFocus={onFocus}
+      onEndEditing={onEndEditing}
       inputProps={inputProps}
       textKeyboard
     />
