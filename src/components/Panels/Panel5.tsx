@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { ImageBackground } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, { Easing, runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import colorKit from '@colorKit';
 import usePickerContext from '@context';
@@ -36,12 +36,13 @@ export function Panel5({ style = {}, selectionStyle = {} }: Panel5Props) {
   }, [squareSize, posX, posY, adaptiveColor]);
 
   const setAdaptiveColor = (color1: string) => {
+    'worklet';
     const color = adaptiveColor.value === '#ffffff' ? '#000000' : '#ffffff';
-    const contrast = colorKit.contrastRatio(color1, adaptiveColor.value);
+    const contrast = colorKit.runOnUI().contrastRatio(color1, adaptiveColor.value);
     adaptiveColor.value = contrast < 4.5 ? color : adaptiveColor.value;
   };
 
-  const onTap = (x: number, y: number) => {
+  const tap = Gesture.Tap().onBegin(({ x, y }) => {
     if (!squareSize.value) return;
 
     const row = Math.floor(y / squareSize.value);
@@ -50,7 +51,7 @@ export function Panel5({ style = {}, selectionStyle = {} }: Panel5Props) {
     const color = gridColors?.[row]?.[column];
     if (!color) return;
 
-    const { h, s, v } = colorKit.HSV(color).object();
+    const { h, s, v } = colorKit.runOnUI().HSV(color).object(false);
     hueValue.value = h;
     saturationValue.value = s;
     brightnessValue.value = v;
@@ -61,10 +62,6 @@ export function Panel5({ style = {}, selectionStyle = {} }: Panel5Props) {
     setAdaptiveColor(color);
     onGestureChange();
     onGestureEnd();
-  };
-
-  const tap = Gesture.Tap().onBegin(({ x, y }) => {
-    runOnJS(onTap)(x, y);
   });
 
   const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
