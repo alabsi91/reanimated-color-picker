@@ -33,16 +33,9 @@ export default function WidgetTextInput({
   inputProps,
   onEndEditing,
 }: Props) {
-  const inputRef = useRef<TextInput>(null!);
+  const inputRef = useRef<TextInput | null>(null);
 
-  useDerivedValue(() => {
-    if (isWeb && inputRef.current) {
-      // @ts-expect-error value doesn't exist
-      inputRef.current.value = textValue.value;
-    }
-  }, [textValue]);
-
-  const animatedProps = useAnimatedProps(() => ({ text: textValue.value } as never), [textValue]);
+  const animatedProps = useAnimatedProps(() => ({ text: textValue.value } as never));
 
   const submit = (e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
     const text = e.nativeEvent.text;
@@ -55,16 +48,26 @@ export default function WidgetTextInput({
         return;
       }
     }
+
     onEndEditing(text);
   };
 
   useEffect(() => {
     const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
+      if (!inputRef.current) return;
       inputRef.current.blur();
     });
 
     return () => hideSubscription.remove();
   }, []);
+
+  // for web platform only
+  useDerivedValue(() => {
+    if (!isWeb || !inputRef.current) return;
+
+    // @ts-expect-error value doesn't exist
+    inputRef.current.value = textValue.value;
+  }, [textValue]);
 
   return (
     <View style={styles.inputsContainer}>
