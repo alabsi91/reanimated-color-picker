@@ -1,7 +1,7 @@
 import React, { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 import { Text } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { useSharedValue, withTiming } from 'react-native-reanimated';
+import { runOnJS, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import colorKit from '@colorKit';
 import { PickerContextProvider } from '@context';
@@ -50,36 +50,79 @@ const ColorPicker = forwardRef<ColorPickerRef, ColorPickerProps>(
     const brightnessValue = useSharedValue(initialColor.v);
     const alphaValue = useSharedValue(initialColor.a);
 
-    const returnedResults = (color?: SupportedColorFormats) => {
-      color = color ?? {
+    const returnedResults = (inputColor?: SupportedColorFormats) => {
+      'worklet';
+
+      const color = inputColor ?? {
         h: hueValue.value,
         s: saturationValue.value,
         v: brightnessValue.value,
         a: alphaValue.value,
       };
+
       return {
-        hex: colorKit.HEX(color),
-        rgb: colorKit.RGB(color).string(false),
-        rgba: colorKit.RGB(color).string(true),
-        hsl: colorKit.HSL(color).string(false),
-        hsla: colorKit.HSL(color).string(true),
-        hsv: colorKit.HSV(color).string(false),
-        hsva: colorKit.HSV(color).string(true),
-        hwb: colorKit.HWB(color).string(false),
-        hwba: colorKit.HWB(color).string(true),
+        get hex() {
+          return colorKit.runOnUI().HEX(color);
+        },
+        get rgb() {
+          return colorKit.runOnUI().RGB(color).string(false);
+        },
+        get rgba() {
+          return colorKit.runOnUI().RGB(color).string(true);
+        },
+        get hsl() {
+          return colorKit.runOnUI().HSL(color).string(false);
+        },
+        get hsla() {
+          return colorKit.runOnUI().HSL(color).string(true);
+        },
+        get hsv() {
+          return colorKit.runOnUI().HSV(color).string(false);
+        },
+        get hsva() {
+          return colorKit.runOnUI().HSV(color).string(true);
+        },
+        get hwb() {
+          return colorKit.runOnUI().HWB(color).string(false);
+        },
+        get hwba() {
+          return colorKit.runOnUI().HWB(color).string(true);
+        },
       };
     };
 
     const onGestureEnd = (color?: SupportedColorFormats) => {
-      onComplete?.(returnedResults(color));
+      'worklet';
+
+      if (!onComplete) return;
+      const colorObject = returnedResults(color);
+
+      try {
+        // run on the UI thread
+        onComplete(colorObject);
+      } catch (error) {
+        // run on the JS thread
+        runOnJS(onComplete)(colorObject);
+      }
     };
 
     const onGestureChange = (color?: SupportedColorFormats) => {
-      onChange?.(returnedResults(color));
+      'worklet';
+
+      if (!onChange) return;
+      const colorObject = returnedResults(color);
+
+      try {
+        // run on the UI thread
+        onChange(colorObject);
+      } catch (error) {
+        // run on the JS thread
+        runOnJS(onChange)(colorObject);
+      }
     };
 
-    const setColor = (color: string, duration = thumbAnimationDuration) => {
-      const { h, s, v, a } = colorKit.HSV(color).object();
+    const setColor = (color: SupportedColorFormats, duration = thumbAnimationDuration) => {
+      const { h, s, v, a } = colorKit.HSV(color).object(false);
 
       hueValue.value = withTiming(h, { duration });
       saturationValue.value = withTiming(s, { duration });

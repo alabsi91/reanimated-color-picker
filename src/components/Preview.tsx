@@ -5,7 +5,7 @@ import Animated, { useAnimatedStyle, useDerivedValue, useSharedValue } from 'rea
 import colorKit from '@colorKit';
 import usePickerContext from '@context';
 import { styles } from '@styles';
-import { ConditionalRendering, contrastRatio, getStyle, HSVA2HEX, isWeb } from '@utils';
+import { ConditionalRendering, getStyle, isWeb } from '@utils';
 import { PreviewText } from './PreviewText';
 
 import type { PreviewProps } from '@types';
@@ -41,12 +41,14 @@ export function Preview({
   useDerivedValue(() => {
     const currentColor = { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value, a: alphaValue.value };
 
-    previewColor.value = HSVA2HEX(hueValue.value, saturationValue.value, brightnessValue.value, alphaValue.value);
+    previewColor.value = colorKit
+      .runOnUI()
+      .HEX({ h: hueValue.value, s: saturationValue.value, v: brightnessValue.value, a: alphaValue.value });
 
     // calculate the contrast ratio
     const compareColor1 = alphaValue.value > 0.5 ? currentColor : { h: 0, s: 0, v: 70 };
     const compareColor2 = textColor.value === '#000000' ? { h: 0, s: 0, v: 0 } : { h: 0, s: 0, v: 100 };
-    const contrast = contrastRatio(compareColor1, compareColor2);
+    const contrast = colorKit.runOnUI().contrastRatio(compareColor1, compareColor2);
     const reversedColor = textColor.value === '#ffffff' ? '#000000' : '#ffffff';
     textColor.value = contrast < 4.5 ? reversedColor : textColor.value;
   }, [hueValue, saturationValue, brightnessValue, alphaValue]);
