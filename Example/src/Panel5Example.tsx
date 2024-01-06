@@ -14,6 +14,7 @@ export default function Example() {
   const backgroundColorStyle = useAnimatedStyle(() => ({ backgroundColor: selectedColor.value }));
 
   const onColorSelect = (color: returnedResults) => {
+    'worklet';
     selectedColor.value = color.hex;
   };
 
@@ -26,7 +27,13 @@ export default function Example() {
       <Modal onRequestClose={() => setShowModal(false)} visible={showModal} animationType='slide'>
         <Animated.View style={[styles.container, backgroundColorStyle]}>
           <View style={styles.pickerContainer}>
-            <ColorPicker value={selectedColor.value} sliderThickness={25} thumbSize={24} thumbShape='circle' onChange={onColorSelect}>
+            <ColorPicker
+              value={selectedColor.value}
+              sliderThickness={25}
+              thumbSize={24}
+              thumbShape='circle'
+              onChange={onColorSelect}
+            >
               <Panel5 style={styles.panelStyle} />
 
               <OpacitySlider style={styles.sliderStyle} adaptSpectrum />

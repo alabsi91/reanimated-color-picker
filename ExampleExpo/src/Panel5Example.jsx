@@ -12,7 +12,8 @@ export default function Example() {
   const selectedColor = useSharedValue(initialColor);
   const backgroundColorStyle = useAnimatedStyle(() => ({ backgroundColor: selectedColor.value }));
 
-  const onColorSelect = (color) => {
+  const onColorSelect = color => {
+    'worklet';
     selectedColor.value = color.hex;
   };
 

@@ -13,6 +13,7 @@ export default function Example() {
   const backgroundColorStyle = useAnimatedStyle(() => ({ backgroundColor: selectedColor.value }));
 
   const onColorSelect = color => {
+    'worklet';
     selectedColor.value = color.hex;
   };
 
@@ -34,7 +35,13 @@ export default function Example() {
                 onChange={onColorSelect}
                 adaptSpectrum
               >
-                <Panel2 style={styles.panelStyle} verticalChannel='brightness' thumbShape='ring' thumbSize={30} reverseVerticalChannel />
+                <Panel2
+                  style={styles.panelStyle}
+                  verticalChannel='brightness'
+                  thumbShape='ring'
+                  thumbSize={30}
+                  reverseVerticalChannel
+                />
 
                 <SaturationSlider style={styles.sliderStyle} thumbColor='#fff' />
 
