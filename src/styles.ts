@@ -124,7 +124,6 @@ export const styles = StyleSheet.create({
   previewContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
   },
 
   // PreviewText
@@ -133,5 +132,6 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'black',
     padding: 0,
+    pointerEvents: 'none', // use along side the prop to be compatible with web platform
   },
 });
