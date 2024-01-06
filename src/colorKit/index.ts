@@ -1288,7 +1288,7 @@ export function colorKitUI() {
 
   /** - Returns the perceived `luminance` of a color, from `0-1` as defined by Web Content Accessibility Guidelines (Version 2.0). */
   const getLuminanceWCAG = (color: SupportedColorFormats): number => {
-    const { r, g, b } = RGB(color).object();
+    const { r, g, b } = RGB(color).object(false);
     const a = [r, g, b].map(v => (v / 255 <= 0.03928 ? v / 255 / 12.92 : Math.pow((v / 255 + 0.055) / 1.055, 2.4)));
     return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
   };
