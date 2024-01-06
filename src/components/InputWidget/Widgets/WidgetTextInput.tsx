@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { Keyboard, Text, TextInput, View } from 'react-native';
-import Animated, { useAnimatedProps, useDerivedValue } from 'react-native-reanimated';
+import Animated, { useAnimatedProps, useAnimatedRef, useDerivedValue } from 'react-native-reanimated';
 
 import { styles } from '@styles';
 import { isWeb } from '@utils';
@@ -33,7 +33,7 @@ export default function WidgetTextInput({
   inputProps,
   onEndEditing,
 }: Props) {
-  const inputRef = useRef<TextInput | null>(null);
+  const inputRef = useAnimatedRef<TextInput>();
 
   const animatedProps = useAnimatedProps(() => ({ text: textValue.value } as never), [textValue]);
 

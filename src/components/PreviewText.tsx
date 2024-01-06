@@ -1,6 +1,6 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { TextInput } from 'react-native';
-import Animated, { useAnimatedProps, useDerivedValue } from 'react-native-reanimated';
+import Animated, { useAnimatedProps, useAnimatedRef, useDerivedValue } from 'react-native-reanimated';
 
 import usePickerContext from '@context';
 import { styles } from '@styles';
@@ -14,7 +14,7 @@ const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
 export function PreviewText({ style = {}, colorFormat = 'hex' }: PreviewTextProps) {
   const { returnedResults, hueValue, saturationValue, brightnessValue, alphaValue } = usePickerContext();
 
-  const inputRef = useRef<TextInput>(null);
+  const inputRef = useAnimatedRef<TextInput>();
 
   const colorString = useDerivedValue(() => {
     [colorFormat, hueValue, saturationValue, brightnessValue, alphaValue]; // track changes on Native
