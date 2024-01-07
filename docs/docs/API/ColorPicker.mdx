@@ -120,6 +120,7 @@ import RenderThumb from './_renderThumb.mdx';
 ### `onChange`
 
 - Triggers every time the user modifies the color.
+- The function passed can be a `worklet` function.
 - The passed color object has the following properties: `hex`, `rgb`, `rgba`, `hsv`, `hsva`, `hwb`, `hwba`, `hsl`, and `hsla`
 - `type: (color: object) => void`
 - `default: undefined`
@@ -134,6 +135,7 @@ import RenderThumb from './_renderThumb.mdx';
 ### `onComplete`
 
 - Triggered upon the user releasing the slider handle or clicking on a swatch.
+- The function passed can be a `worklet` function.
 - The passed color object has the following properties: `hex`, `rgb`, `rgba`, `hsv`, `hsva`, `hwb`, `hwba`, `hsl`, and `hsla`
 - `type: (color: object) => void`
 - `default: undefined`
