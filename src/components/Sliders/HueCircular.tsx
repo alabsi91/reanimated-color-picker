@@ -109,18 +109,32 @@ export function HueCircular({
   };
   const onGestureBegin = (event: PanGestureHandlerEventPayload) => {
     'worklet';
-    const center = width.value / 2;
-    const r = width.value / 2 - sliderThickness;
-    const distance = Math.sqrt(Math.pow(event.x - center, 2) + Math.pow(event.y - center, 2));
-    if (distance > r) isGestureActive.value = true;
-    else return;
+
+    const R = width.value / 2,
+      dx = R - event.x,
+      dy = R - event.y,
+      clickR = Math.sqrt(dx * dx + dy * dy);
+
+    // Check if the press is outside the circle
+    if (clickR > R) {
+      isGestureActive.value = false;
+      return;
+    }
+
+    // check if the press inside the circle (not on the actual slider)
+    const innerR = width.value / 2 - sliderThickness;
+    if (clickR < innerR) {
+      isGestureActive.value = false;
+      return;
+    }
+
+    isGestureActive.value = true;
     handleScale.value = withTiming(1.2, { duration: 100 });
     onGestureUpdate(event);
   };
   const onGestureFinish = () => {
     'worklet';
     isGestureActive.value = false;
-
     handleScale.value = withTiming(1, { duration: 100 });
     onGestureEnd();
   };

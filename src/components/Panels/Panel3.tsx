@@ -56,8 +56,8 @@ export function Panel3({
 
   const borderRadius = 2000;
 
+  const isGestureActive = useSharedValue(false);
   const width = useSharedValue(0);
-
   const handleScale = useSharedValue(1);
 
   const handleStyle = useAnimatedStyle(() => {
@@ -107,6 +107,8 @@ export function Panel3({
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
 
+    if (!isGestureActive.value) return;
+
     const center = (width.value - (boundedThumb ? thumbSize : 0)) / 2,
       dx = center - x + (boundedThumb ? thumbSize / 2 : 0),
       dy = center - y + (boundedThumb ? thumbSize / 2 : 0),
@@ -125,11 +127,25 @@ export function Panel3({
   };
   const onGestureBegin = (event: PanGestureHandlerEventPayload) => {
     'worklet';
+    const R = width.value / 2,
+      dx = R - event.x,
+      dy = R - event.y,
+      clickR = Math.sqrt(dx * dx + dy * dy);
+
+    // Check if the press is outside the circle
+    if (clickR > R) {
+      isGestureActive.value = false;
+      return;
+    }
+
+    isGestureActive.value = true;
+
     handleScale.value = withTiming(1.2, { duration: 100 });
     onGestureUpdate(event);
   };
   const onGestureFinish = () => {
     'worklet';
+    isGestureActive.value = false;
     handleScale.value = withTiming(1, { duration: 100 });
     onGestureEnd();
   };
