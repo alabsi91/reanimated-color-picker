@@ -61,7 +61,7 @@ export default function WidgetTextInput({
     return () => hideSubscription.remove();
   }, []);
 
-  // for web platform only
+  // For web platform only
   useDerivedValue(() => {
     if (!isWeb || !inputRef.current) return;
 
@@ -75,11 +75,9 @@ export default function WidgetTextInput({
         ref={inputRef}
         style={[styles.input, inputStyle]}
         defaultValue={textValue.value}
-        maxLength={decimal ? 4 : textKeyboard ? 9 : 3}
+        maxLength={decimal ? 4 : textKeyboard ? 9 : 3} // length example: Alpha (1.55), RGB (255), Hue (360), Brightness (100), hex (#00000000)
         onEndEditing={submit}
-        onBlur={e => {
-          if (isWeb) submit(e);
-        }}
+        onBlur={isWeb ? submit : undefined}
         enterKeyHint='enter'
         returnKeyType='done'
         keyboardType={decimal ? 'decimal-pad' : textKeyboard ? 'default' : 'number-pad'}
