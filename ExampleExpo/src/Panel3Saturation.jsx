@@ -31,7 +31,7 @@ export default function Example() {
                 <Preview style={styles.previewStyle} />
               </View>
 
-              <Panel3 style={styles.panelStyle} />
+              <Panel3 style={styles.panelStyle} renderCenterLine />
 
               <BrightnessSlider style={styles.sliderStyle} />
 
