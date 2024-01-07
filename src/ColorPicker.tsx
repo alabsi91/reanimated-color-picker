@@ -43,7 +43,7 @@ const ColorPicker = forwardRef<ColorPickerRef, ColorPickerProps>(
     },
     ref
   ) => {
-    const initialColor = useRef(colorKit.HSV(value).object()).current;
+    const initialColor = useRef(colorKit.HSV(value).object(false)).current;
     // color's channels values.
     const hueValue = useSharedValue(initialColor.h);
     const saturationValue = useSharedValue(initialColor.s);
@@ -152,17 +152,9 @@ const ColorPicker = forwardRef<ColorPickerRef, ColorPickerProps>(
         if (value !== currentColors[newColorFormat]) setColor(value);
         return;
       }
+
       setColor(value);
     }, [value]);
-
-    // Addressing a sporadic problem where the shared value for color channels fails to update upon component mounting.
-    // This issue appears to manifest randomly and might be correlated with the Reanimated library.
-    useEffect(() => {
-      hueValue.value += 1;
-      saturationValue.value += 1;
-      brightnessValue.value += 1;
-      setColor(value, 100);
-    }, []);
 
     useImperativeHandle(ref, () => ({ setColor }));
 
