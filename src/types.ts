@@ -312,6 +312,9 @@ export interface Panel3Props extends PanelProps {
 
   /** - color spectrum adapts to changes in brightness and saturation */
   adaptSpectrum?: boolean;
+
+  /** - render a line from the center of the Panel to the thumb (handle). */
+  renderCenterLine?: boolean;
 }
 
 export interface Panel4Props extends PanelProps {

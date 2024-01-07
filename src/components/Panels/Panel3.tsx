@@ -24,6 +24,7 @@ export function Panel3({
   renderThumb: localRenderThumb,
   thumbStyle: localThumbStyle,
   thumbInnerStyle: localThumbInnerStyle,
+  renderCenterLine = false,
   centerChannel = 'saturation',
   style = {},
 }: Panel3Props) {
@@ -85,6 +86,23 @@ export function Panel3({
     if (centerChannel === 'brightness') return { backgroundColor: HSVA2HSLA_string(0, 0, 100, 1 - saturationValue.value / 100) };
     return { backgroundColor: HSVA2HSLA_string(0, 0, 0, 1 - brightnessValue.value / 100) };
   }, [adaptSpectrum, centerChannel, saturationValue, brightnessValue]);
+
+  const centerLineStyle = useAnimatedStyle(() => {
+    if (!renderCenterLine) return {};
+
+    const lineThickness = 1,
+      center = width.value / 2 - (boundedThumb ? thumbSize / 2 : 0),
+      distance = (channelValue.value / 100) * center,
+      angle = ((hueValue.value * Math.PI) / Math.PI + 180) % 360; // reversed angle
+
+    return {
+      top: (width.value - lineThickness) / 2,
+      left: (width.value - distance) / 2,
+      height: lineThickness,
+      width: distance,
+      transform: [{ rotate: angle + 'deg' }, { translateX: distance / 2 }, { translateY: 0 }],
+    };
+  }, [renderCenterLine, boundedThumb, thumbSize, width, hueValue, channelValue]);
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -151,6 +169,11 @@ export function Panel3({
             <Animated.View style={[{ borderRadius }, spectrumStyle, StyleSheet.absoluteFillObject]} />
           </ConditionalRendering>
         </ImageBackground>
+
+        <ConditionalRendering if={renderCenterLine}>
+          <Animated.View style={[styles.panel3Line, centerLineStyle]} />
+        </ConditionalRendering>
+
         <Thumb
           channel={centerChannel === 'brightness' ? 'v' : 's'}
           thumbShape={thumbShape}
