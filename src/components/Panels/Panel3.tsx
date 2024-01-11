@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { forwardRef, useCallback, useImperativeHandle, useRef } from 'react';
 import { Image, ImageBackground, StyleSheet } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
@@ -15,7 +15,7 @@ import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler
 /**
  * - The circle-shaped slider, with its wheel style design, is utilized to adjust the hue and (saturation or brightness) of colors.
  */
-export function Panel3({
+export const Panel3 = forwardRef<React.RefObject<any>, Panel3Props>(({
   adaptSpectrum: localAdaptSpectrum,
   thumbShape: localThumbShape,
   thumbSize: localThumbSize,
@@ -27,7 +27,7 @@ export function Panel3({
   renderCenterLine = false,
   centerChannel = 'saturation',
   style = {},
-}: Panel3Props) {
+}, ref) => {
   const {
     hueValue,
     saturationValue,
@@ -43,6 +43,10 @@ export function Panel3({
     thumbStyle: globalThumbsStyle,
     thumbInnerStyle: globalThumbsInnerStyle,
   } = usePickerContext();
+
+  const gestureRef = useRef(null);
+
+  useImperativeHandle(ref, () => gestureRef.current as unknown as React.RefObject<any>);
 
   const thumbShape = localThumbShape ?? globalThumbShape,
     thumbSize = localThumbSize ?? globalThumbsSize,
@@ -150,9 +154,9 @@ export function Panel3({
     onGestureEnd();
   };
 
-  const pan = Gesture.Pan().onBegin(onGestureBegin).onUpdate(onGestureUpdate).onEnd(onGestureFinish);
-  const tap = Gesture.Tap().onTouchesUp(onGestureFinish);
-  const longPress = Gesture.LongPress().onTouchesUp(onGestureFinish);
+  const pan = Gesture.Pan().simultaneousWithExternalGesture(gestureRef).onBegin(onGestureBegin).onUpdate(onGestureUpdate).onEnd(onGestureFinish);
+  const tap = Gesture.Tap().simultaneousWithExternalGesture(gestureRef).onTouchesUp(onGestureFinish);
+  const longPress = Gesture.LongPress().simultaneousWithExternalGesture(gestureRef).onTouchesUp(onGestureFinish);
   const composed = Gesture.Exclusive(pan, tap, longPress);
 
   const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
@@ -204,4 +208,4 @@ export function Panel3({
       </Animated.View>
     </GestureDetector>
   );
-}
+})
