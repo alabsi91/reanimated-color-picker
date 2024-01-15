@@ -14,7 +14,7 @@ import type { LayoutChangeEvent } from 'react-native';
 /**
  * - This is a grid of 120 colors, arranged in 12 columns and 10 rows of squares.
  */
-export function Panel5({ style = {}, selectionStyle = {} }: Panel5Props) {
+export function Panel5({ gestures = [], style = {}, selectionStyle = {} }: Panel5Props) {
   const { value, hueValue, saturationValue, brightnessValue, onGestureChange, onGestureEnd } = usePickerContext();
 
   const borderRadius = getStyle(style, 'borderRadius') ?? 0;
@@ -64,6 +64,8 @@ export function Panel5({ style = {}, selectionStyle = {} }: Panel5Props) {
     onGestureEnd();
   });
 
+  const composed = Gesture.Simultaneous(tap, ...gestures);
+
   const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
     squareSize.value = withTiming(layout.width / 12 || layout.height / 10, { duration: 100 });
   }, []);
@@ -85,7 +87,7 @@ export function Panel5({ style = {}, selectionStyle = {} }: Panel5Props) {
   }, [value]);
 
   return (
-    <GestureDetector gesture={tap}>
+    <GestureDetector gesture={composed}>
       <ImageBackground
         source={require('@assets/grid.png')}
         onLayout={onLayout}
