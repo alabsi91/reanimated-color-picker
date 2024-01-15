@@ -22,6 +22,7 @@ export function HueCircular({
   thumbInnerStyle: localThumbInnerStyle,
   sliderThickness: localSliderThickness,
   children,
+  gestures = [],
   style = {},
   containerStyle = {},
 }: HueCircular) {
@@ -142,7 +143,7 @@ export function HueCircular({
   const pan = Gesture.Pan().onBegin(onGestureBegin).onUpdate(onGestureUpdate).onEnd(onGestureFinish);
   const tap = Gesture.Tap().onTouchesUp(onGestureFinish);
   const longPress = Gesture.LongPress().onTouchesUp(onGestureFinish);
-  const composed = Gesture.Exclusive(pan, tap, longPress);
+  const composed = Gesture.Simultaneous(Gesture.Exclusive(pan, tap, longPress), ...gestures);
 
   const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
     const layoutWidth = layout.width;
