@@ -8,6 +8,19 @@ sidebar_position: 4
 
 - Please take a look at the functioning examples: [Examples](./Examples)
 
+:::info
+Using inside a `ScrollView`
+
+- If you experience gesture conflicts when using the color picker inside a `ScrollView`, simply import the `ScrollView` from `react-native-gesture-handler` instead of from `react-native`.
+
+```ts
+import { ScrollView } from 'react-native-gesture-handler';
+```
+
+:::
+
+<br/>
+
 ```jsx
 import React, { useState } from 'react';
 import { Button, Modal, StyleSheet, View } from 'react-native';
