@@ -27,6 +27,7 @@ export function Panel2({
   verticalChannel = 'saturation',
   reverseHue = false,
   reverseVerticalChannel = false,
+  gestures = [],
   style = {},
 }: Panel2Props) {
   const {
@@ -111,7 +112,7 @@ export function Panel2({
   const pan = Gesture.Pan().onBegin(onGestureBegin).onUpdate(onGestureUpdate).onEnd(onGestureFinish);
   const tap = Gesture.Tap().onTouchesUp(onGestureFinish);
   const longPress = Gesture.LongPress().onTouchesUp(onGestureFinish);
-  const composed = Gesture.Exclusive(pan, tap, longPress);
+  const composed = Gesture.Simultaneous(Gesture.Exclusive(pan, tap, longPress), ...gestures);
 
   const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
     width.value = layout.width;
