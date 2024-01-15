@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import type { ImageStyle, StyleProp, TextInputProps, TextStyle, ViewStyle } from 'react-native';
 import type { AnimatedStyleProp, SharedValue } from 'react-native-reanimated';
 import type { SupportedColorFormats } from './colorKit/types';
+import type { Gesture } from 'react-native-gesture-handler/lib/typescript/handlers/gestures/gesture';
 
 export interface returnedResults {
   hex: string;
@@ -286,6 +287,12 @@ export interface PanelProps {
   renderThumb?: RenderThumbType;
 
   /**
+   * - Array of gestures or composed gestures from `react-native-gesture-handler`.
+   * - Will run simultaneously with the color picker gestures.
+   */
+  gestures?: Gesture[];
+
+  /**
    * - panel container style.
    * - **Note** Certain style properties will be overridden.
    */
@@ -375,6 +382,12 @@ export interface SliderProps {
 
   /** - color spectrum adapts to changes in brightness and saturation */
   adaptSpectrum?: boolean;
+
+  /**
+   * - Array of gestures or composed gestures from `react-native-gesture-handler`.
+   * - Will run simultaneously with the color picker gestures.
+   */
+  gestures?: Gesture[];
 
   /**
    * - slider's container style.
