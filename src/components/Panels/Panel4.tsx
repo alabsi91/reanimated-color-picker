@@ -93,8 +93,8 @@ export function Panel4({
       lengthY = height.value - (boundedThumb ? thumbSize : 0),
       posX = clamp(x - (boundedThumb ? thumbSize / 2 : 0), lengthX),
       posY = clamp(y - (boundedThumb ? thumbSize / 2 : 0), lengthY),
-      valueX = Math.round((posX / lengthX) * 200),
-      valueY = Math.round((posY / lengthY) * 360),
+      valueX = (posX / lengthX) * 200,
+      valueY = (posY / lengthY) * 360,
       newHueValue = reverseHue ? valueY : 360 - valueY,
       newSaturationValue = clamp(reverseHorizontalChannels ? 200 - valueX : valueX, 100),
       newBrightnessValue = clamp(reverseHorizontalChannels ? valueX : 200 - valueX, 100);

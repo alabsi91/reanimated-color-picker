@@ -82,16 +82,12 @@ export function ExtraThumb({
   const channelValue = centerChannel === 'brightness' ? brightness : saturation;
 
   const handleStyle = useAnimatedStyle(() => {
-    const center = width.value / 2 - (boundedThumb ? thumbSize / 2 : 0),
-      distance = (channelValue.value / 100) * (width.value / 2 - (boundedThumb ? thumbSize / 2 : 0)),
-      posY =
-        width.value -
-        Math.round(Math.sin((hue.value * Math.PI) / 180) * distance + center) -
-        (boundedThumb ? thumbSize : thumbSize / 2),
-      posX =
-        width.value -
-        Math.round(Math.cos((hue.value * Math.PI) / 180) * distance + center) -
-        (boundedThumb ? thumbSize : thumbSize / 2);
+    const center = width.value / 2 - (boundedThumb ? thumbSize / 2 : 0);
+    const distance = (channelValue.value / 100) * (width.value / 2 - (boundedThumb ? thumbSize / 2 : 0));
+    const posY =
+      width.value - (Math.sin((hue.value * Math.PI) / 180) * distance + center) - (boundedThumb ? thumbSize : thumbSize / 2);
+    const posX =
+      width.value - (Math.cos((hue.value * Math.PI) / 180) * distance + center) - (boundedThumb ? thumbSize : thumbSize / 2);
     return {
       transform: [{ translateX: posX }, { translateY: posY }, { rotate: hue.value + 90 + 'deg' }],
     };

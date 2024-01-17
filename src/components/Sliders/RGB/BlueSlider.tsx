@@ -82,7 +82,7 @@ export function BlueSlider({
 
     const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0),
       pos = clamp((vertical ? y : x) - (boundedThumb ? thumbSize / 2 : 0), length),
-      value = Math.round((pos / length) * 255),
+      value = (pos / length) * 255,
       newBlueValue = reverse ? 255 - value : value;
 
     if (newBlueValue === b) return;

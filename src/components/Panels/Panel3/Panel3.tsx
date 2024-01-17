@@ -64,16 +64,12 @@ export function Panel3({
   const handleScale = useSharedValue(1);
 
   const handleStyle = useAnimatedStyle(() => {
-    const center = width.value / 2 - (boundedThumb ? thumbSize / 2 : 0),
-      distance = (channelValue.value / 100) * (width.value / 2 - (boundedThumb ? thumbSize / 2 : 0)),
-      posY =
-        width.value -
-        Math.round(Math.sin((hueValue.value * Math.PI) / 180) * distance + center) -
-        (boundedThumb ? thumbSize : thumbSize / 2),
-      posX =
-        width.value -
-        Math.round(Math.cos((hueValue.value * Math.PI) / 180) * distance + center) -
-        (boundedThumb ? thumbSize : thumbSize / 2);
+    const center = width.value / 2 - (boundedThumb ? thumbSize / 2 : 0);
+    const distance = (channelValue.value / 100) * (width.value / 2 - (boundedThumb ? thumbSize / 2 : 0));
+    const posY =
+      width.value - (Math.sin((hueValue.value * Math.PI) / 180) * distance + center) - (boundedThumb ? thumbSize : thumbSize / 2);
+    const posX =
+      width.value - (Math.cos((hueValue.value * Math.PI) / 180) * distance + center) - (boundedThumb ? thumbSize : thumbSize / 2);
     return {
       transform: [
         { translateX: posX },
@@ -119,8 +115,8 @@ export function Panel3({
       theta = Math.atan2(dy, dx) * (180 / Math.PI), // [0 - 180] range
       angle = theta < 0 ? 360 + theta : theta, // [0 - 360] range
       radiusPercent = radius / center,
-      newHueValue = Math.round(angle),
-      newChannelValue = Math.round(radiusPercent * 100);
+      newHueValue = angle,
+      newChannelValue = radiusPercent * 100;
 
     if (hueValue.value === newHueValue && channelValue.value === newChannelValue) return;
 

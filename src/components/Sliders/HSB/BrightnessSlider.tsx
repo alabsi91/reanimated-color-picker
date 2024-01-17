@@ -81,7 +81,7 @@ export function BrightnessSlider({
 
     const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0),
       pos = clamp((vertical ? y : x) - (boundedThumb ? thumbSize / 2 : 0), length),
-      value = Math.round((pos / length) * 100),
+      value = (pos / length) * 100,
       newBrightnessValue = reverse ? 100 - value : value;
 
     if (brightnessValue.value === newBrightnessValue) return;
