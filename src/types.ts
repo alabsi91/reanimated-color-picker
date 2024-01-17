@@ -351,6 +351,8 @@ export interface Panel3Props extends PanelProps {
 
   /** - render a line from the center of the Panel to the thumb (handle). */
   renderCenterLine?: boolean;
+
+  children?: ReactNode;
 }
 
 export interface Panel4Props extends PanelProps {
