@@ -21,6 +21,7 @@ export function HueSlider({
   thumbInnerStyle: localThumbInnerStyle,
   thumbStyle: localThumbStyle,
   sliderThickness: localSliderThickness,
+  gestures = [],
   style = {},
   vertical = false,
   reverse = false,
@@ -109,7 +110,7 @@ export function HueSlider({
   const pan = Gesture.Pan().onBegin(onGestureBegin).onUpdate(onGestureUpdate).onEnd(onGestureFinish);
   const tap = Gesture.Tap().onTouchesUp(onGestureFinish);
   const longPress = Gesture.LongPress().onTouchesUp(onGestureFinish);
-  const composed = Gesture.Exclusive(pan, tap, longPress);
+  const composed = Gesture.Simultaneous(Gesture.Exclusive(pan, tap, longPress), ...gestures);
 
   const onLayout = ({ nativeEvent: { layout } }: LayoutChangeEvent) => {
     if (!vertical) width.value = withTiming(layout.width, { duration: 5 });

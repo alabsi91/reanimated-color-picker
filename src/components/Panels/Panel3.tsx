@@ -26,6 +26,7 @@ export function Panel3({
   thumbInnerStyle: localThumbInnerStyle,
   renderCenterLine = false,
   centerChannel = 'saturation',
+  gestures = [],
   style = {},
 }: Panel3Props) {
   const {
@@ -153,7 +154,7 @@ export function Panel3({
   const pan = Gesture.Pan().onBegin(onGestureBegin).onUpdate(onGestureUpdate).onEnd(onGestureFinish);
   const tap = Gesture.Tap().onTouchesUp(onGestureFinish);
   const longPress = Gesture.LongPress().onTouchesUp(onGestureFinish);
-  const composed = Gesture.Exclusive(pan, tap, longPress);
+  const composed = Gesture.Simultaneous(Gesture.Exclusive(pan, tap, longPress), ...gestures);
 
   const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
     const layoutWidth = layout.width;
