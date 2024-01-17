@@ -94,6 +94,61 @@ export type ThumbProps = {
   overrideHSV?: Partial<HSVObjectSharedValue>;
 };
 
+export interface ExtraThumbProps {
+  /** - panel handle (thumb) size (height*width). */
+  thumbSize?: number;
+
+  /** - panel handle (thumb) color. */
+  thumbColor?: string;
+
+  /** - panel handle (thumb) shape. */
+  thumbShape?: thumbShapeType;
+
+  /** - render a line from the center of the Panel to the thumb (handle). */
+  renderCenterLine?: boolean;
+
+  /** - slider's handle (thumb) outer View style. */
+  thumbStyle?: StyleProp<ViewStyle>;
+
+  /** - slider's handle (thumb) inner View style. */
+  thumbInnerStyle?: StyleProp<ViewStyle>;
+
+  /** - function which receives ThumbProps and renders slider's handle (thumb). */
+  renderThumb?: RenderThumbType;
+
+  /** - called when the user moves the sliders. */
+  onChange?: (colors: returnedResults) => void;
+
+  /**
+   * - The transform amount for the hue channel.
+   * - Can be a `number` or a `string`.
+   * - Negative values can be used.
+   * - Example: '50%' or `130`
+   */
+  hueTransform?: string | number;
+  /**
+   * - The transform amount for the saturation channel.
+   * - Can be a `number` or a `string`.
+   * - Negative values can be used.
+   * - Example: '50%' or `50`
+   */
+  saturationTransform?: string | number;
+  /**
+   * - The transform amount for the brightness channel.
+   * - Can be a `number` or a `string`.
+   * - Negative values can be used.
+   * - Example: '50%' or `50`
+   */
+  brightnessTransform?: string | number;
+
+  /**
+   - Worklet function to transform or modify the color in the HSV (Hue, Saturation, Value) color space.
+   - The function takes an HSVA color object and returns a new HSVA color object.
+   - The returned object will determine the thumb's position inside the panel.
+  */
+  colorTransform?: (color: HSVObject) => HSVObject;
+}
+
 export type BuiltinThumbsProps = {
   width: number;
   height: number;
