@@ -29,6 +29,13 @@ export type thumbShapeType =
   | 'rect'
   | 'circle';
 
+export type HSVObject = {
+  h: number;
+  s: number;
+  v: number;
+  a: number;
+};
+
 type HSVObjectSharedValue = {
   hue: SharedValue<number>;
   saturation: SharedValue<number>;
@@ -153,6 +160,20 @@ export interface ColorPickerContext {
 
   /** This function is called every time the color is changed. */
   onGestureChange: (color?: SupportedColorFormats) => void;
+}
+
+export interface Panel3Context {
+  width: SharedValue<number>;
+  adaptSpectrum: boolean;
+  centerChannel: 'saturation' | 'brightness';
+  thumbShape: thumbShapeType;
+  thumbSize: number;
+  thumbColor?: string;
+  thumbStyle: StyleProp<ViewStyle>;
+  thumbInnerStyle: StyleProp<ViewStyle>;
+  renderThumb?: RenderThumbType;
+  boundedThumb: boolean;
+  renderCenterLine: boolean;
 }
 
 export interface ColorPickerProps {
