@@ -29,6 +29,13 @@ export type thumbShapeType =
   | 'rect'
   | 'circle';
 
+type HSVObjectSharedValue = {
+  hue: SharedValue<number>;
+  saturation: SharedValue<number>;
+  brightness: SharedValue<number>;
+  alpha: SharedValue<number>;
+};
+
 export type RenderThumbProps = {
   /**
    * - This style determines the position of the thumb and is a crucial element that should be included.
@@ -77,6 +84,7 @@ export type ThumbProps = {
   channel?: 'h' | 's' | 'v' | 'a';
   thumbShape?: thumbShapeType;
   thumbSize: number;
+  overrideHSV?: Partial<HSVObjectSharedValue>;
 };
 
 export type BuiltinThumbsProps = {
