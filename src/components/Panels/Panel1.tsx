@@ -15,46 +15,22 @@ import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler
 /**
  * - A square-shaped slider, reminiscent of Adobe style, is utilized to adjust the brightness and saturation of colors.
  */
-export function Panel1({
-  thumbShape: localThumbShape,
-  thumbSize: localThumbSize,
-  thumbColor: localThumbColor,
-  boundedThumb: localBoundedThumb,
-  renderThumb: localRenderThumb,
-  thumbStyle: localThumbStyle,
-  thumbInnerStyle: localThumbInnerStyle,
-  gestures = [],
-  style = {},
-}: PanelProps) {
-  const {
-    hueValue,
-    saturationValue,
-    brightnessValue,
-    onGestureChange,
-    onGestureEnd,
-    thumbSize: globalThumbsSize,
-    thumbShape: globalThumbShape,
-    thumbColor: globalThumbsColor,
-    boundedThumb: globalBoundedThumb,
-    renderThumb: globalRenderThumbs,
-    thumbStyle: globalThumbsStyle,
-    thumbInnerStyle: globalThumbsInnerStyle,
-  } = usePickerContext();
+export function Panel1({ gestures = [], style = {}, ...props }: PanelProps) {
+  const { hueValue, saturationValue, brightnessValue, onGestureChange, onGestureEnd, ...ctx } = usePickerContext();
 
-  const thumbShape = localThumbShape ?? globalThumbShape,
-    thumbSize = localThumbSize ?? globalThumbsSize,
-    thumbColor = localThumbColor ?? globalThumbsColor,
-    boundedThumb = localBoundedThumb ?? globalBoundedThumb,
-    renderThumb = localRenderThumb ?? globalRenderThumbs,
-    thumbStyle = localThumbStyle ?? globalThumbsStyle ?? {},
-    thumbInnerStyle = localThumbInnerStyle ?? globalThumbsInnerStyle ?? {};
+  const thumbShape = props.thumbShape ?? ctx.thumbShape,
+    thumbSize = props.thumbSize ?? ctx.thumbSize,
+    thumbColor = props.thumbColor ?? ctx.thumbColor,
+    boundedThumb = props.boundedThumb ?? ctx.boundedThumb,
+    renderThumb = props.renderThumb ?? ctx.renderThumb,
+    thumbStyle = props.thumbStyle ?? ctx.thumbStyle ?? {},
+    thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle ?? {};
 
-  const borderRadius = getStyle(style, 'borderRadius') ?? 5,
-    getHeight = getStyle(style, 'height') ?? 200;
+  const borderRadius = getStyle(style, 'borderRadius') ?? 5;
+  const getHeight = getStyle(style, 'height') ?? 200;
 
-  const width = useSharedValue(0),
-    height = useSharedValue(0);
-
+  const width = useSharedValue(0);
+  const height = useSharedValue(0);
   const handleScale = useSharedValue(1);
 
   const handleStyle = useAnimatedStyle(() => {
@@ -63,12 +39,24 @@ export function Panel1({
       posX = percentX - (boundedThumb ? 0 : thumbSize / 2),
       percentY = (brightnessValue.value / 100) * length.y,
       posY = length.y - percentY - (boundedThumb ? 0 : thumbSize / 2);
-    return {
-      transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }],
-    };
-  }, [boundedThumb, thumbSize, handleScale, saturationValue, brightnessValue, width, height]);
+
+    return { transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }] };
+  }, [handleScale, saturationValue, brightnessValue, width, height]);
 
   const activeColorStyle = useAnimatedStyle(() => ({ backgroundColor: `hsl(${hueValue.value}, 100%, 50%)` }), [hueValue]);
+
+  const brightnessImageStyle = useAnimatedStyle(() => {
+    return {
+      width: height.value,
+      height: width.value,
+
+      transform: [
+        { rotate: '270deg' },
+        { translateX: (width.value - height.value) / 2 },
+        { translateY: ((width.value - height.value) / 2) * (isRtl ? -1 : 1) },
+      ],
+    };
+  }, [width, height]);
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -84,13 +72,16 @@ export function Panel1({
 
     saturationValue.value = newSaturationValue;
     brightnessValue.value = newBrightnessValue;
+
     onGestureChange();
   };
+
   const onGestureBegin = (event: PanGestureHandlerEventPayload) => {
     'worklet';
     handleScale.value = withTiming(1.2, { duration: 100 });
     onGestureUpdate(event);
   };
+
   const onGestureFinish = () => {
     'worklet';
     handleScale.value = withTiming(1, { duration: 100 });
@@ -106,19 +97,6 @@ export function Panel1({
     width.value = layout.width;
     height.value = layout.height;
   }, []);
-
-  const rotateBrightnessImage = useAnimatedStyle(() => {
-    return {
-      width: height.value,
-      height: width.value,
-
-      transform: [
-        { rotate: '270deg' },
-        { translateX: (width.value - height.value) / 2 },
-        { translateY: ((width.value - height.value) / 2) * (isRtl ? -1 : 1) },
-      ],
-    };
-  }, [width, height]);
 
   return (
     <GestureDetector gesture={composed}>
@@ -140,10 +118,11 @@ export function Panel1({
           />
           <Animated.Image
             source={require('@assets/blackGradient.png')}
-            style={[styles.panel_image, rotateBrightnessImage]}
+            style={[styles.panel_image, brightnessImageStyle]}
             resizeMode='stretch'
           />
         </View>
+
         <Thumb
           thumbShape={thumbShape}
           thumbSize={thumbSize}

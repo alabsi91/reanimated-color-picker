@@ -12,44 +12,17 @@ import type { HueCircular } from '@types';
 import type { LayoutChangeEvent } from 'react-native';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
-export function HueCircular({
-  adaptSpectrum: localAdaptSpectrum,
-  thumbShape: localThumbShape,
-  thumbSize: localThumbSize,
-  thumbColor: localThumbColor,
-  renderThumb: localRenderThumb,
-  thumbStyle: localThumbStyle,
-  thumbInnerStyle: localThumbInnerStyle,
-  sliderThickness: localSliderThickness,
-  children,
-  gestures = [],
-  style = {},
-  containerStyle = {},
-}: HueCircular) {
-  const {
-    hueValue,
-    saturationValue,
-    brightnessValue,
-    onGestureChange,
-    onGestureEnd,
-    adaptSpectrum: globalAdaptSpectrum,
-    thumbSize: globalThumbsSize,
-    thumbShape: globalThumbShape,
-    thumbColor: globalThumbsColor,
-    renderThumb: globalRenderThumbs,
-    thumbStyle: globalThumbsStyle,
-    thumbInnerStyle: globalThumbsInnerStyle,
-    sliderThickness: globalSliderThickness,
-  } = usePickerContext();
+export function HueCircular({ children, gestures = [], style = {}, containerStyle = {}, ...props }: HueCircular) {
+  const { hueValue, saturationValue, brightnessValue, onGestureChange, onGestureEnd, ...ctx } = usePickerContext();
 
-  const thumbShape = localThumbShape ?? globalThumbShape,
-    thumbSize = localThumbSize ?? globalThumbsSize,
-    thumbColor = localThumbColor ?? globalThumbsColor,
-    renderThumb = localRenderThumb ?? globalRenderThumbs,
-    thumbStyle = localThumbStyle ?? globalThumbsStyle ?? {},
-    sliderThickness = localSliderThickness ?? globalSliderThickness,
-    adaptSpectrum = localAdaptSpectrum ?? globalAdaptSpectrum,
-    thumbInnerStyle = localThumbInnerStyle ?? globalThumbsInnerStyle ?? {};
+  const thumbShape = props.thumbShape ?? ctx.thumbShape,
+    thumbSize = props.thumbSize ?? ctx.thumbSize,
+    thumbColor = props.thumbColor ?? ctx.thumbColor,
+    renderThumb = props.renderThumb ?? ctx.renderThumb,
+    thumbStyle = props.thumbStyle ?? ctx.thumbStyle ?? {},
+    sliderThickness = props.sliderThickness ?? ctx.sliderThickness,
+    adaptSpectrum = props.adaptSpectrum ?? ctx.adaptSpectrum,
+    thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle ?? {};
 
   const isGestureActive = useSharedValue(false);
   const width = useSharedValue(0);
@@ -63,6 +36,7 @@ export function HueCircular({
       distance = (width.value - sliderThickness) / 2,
       posY = width.value - (Math.sin((hueValue.value * Math.PI) / 180) * distance + center) - thumbSize / 2,
       posX = width.value - (Math.cos((hueValue.value * Math.PI) / 180) * distance + center) - thumbSize / 2;
+
     return {
       transform: [
         { translateX: posX },
@@ -71,17 +45,19 @@ export function HueCircular({
         { rotate: hueValue.value + 90 + 'deg' },
       ],
     };
-  }, [sliderThickness, thumbSize, width, hueValue, handleScale]);
+  }, [width, hueValue, handleScale]);
 
   const activeSaturationStyle = useAnimatedStyle(() => {
     if (!adaptSpectrum) return {};
+
     return { backgroundColor: HSVA2HSLA_string(0, 0, brightnessValue.value, 1 - saturationValue.value / 100) };
-  }, [adaptSpectrum, brightnessValue, saturationValue]);
+  }, [brightnessValue, saturationValue]);
 
   const activeBrightnessStyle = useAnimatedStyle(() => {
     if (!adaptSpectrum) return {};
+
     return { backgroundColor: HSVA2HSLA_string(0, 0, 0, 1 - brightnessValue.value / 100) };
-  }, [adaptSpectrum, brightnessValue]);
+  }, [brightnessValue]);
 
   const clipViewStyle = useAnimatedStyle(() => {
     return {
@@ -89,7 +65,7 @@ export function HueCircular({
       height: width.value - sliderThickness * 2,
       borderRadius: width.value / 2,
     };
-  }, [sliderThickness, width]);
+  }, [width]);
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -106,8 +82,10 @@ export function HueCircular({
     if (hueValue.value === newHueValue) return;
 
     hueValue.value = newHueValue;
+
     onGestureChange();
   };
+
   const onGestureBegin = (event: PanGestureHandlerEventPayload) => {
     'worklet';
 
@@ -133,6 +111,7 @@ export function HueCircular({
     handleScale.value = withTiming(1.2, { duration: 100 });
     onGestureUpdate(event);
   };
+
   const onGestureFinish = () => {
     'worklet';
     isGestureActive.value = false;

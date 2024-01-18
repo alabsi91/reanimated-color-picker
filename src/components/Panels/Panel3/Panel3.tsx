@@ -17,44 +17,23 @@ import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler
  * - The circle-shaped slider, with its wheel style design, is utilized to adjust the hue and (saturation or brightness) of colors.
  */
 export function Panel3({
-  adaptSpectrum: localAdaptSpectrum,
-  thumbShape: localThumbShape,
-  thumbSize: localThumbSize,
-  thumbColor: localThumbColor,
-  boundedThumb: localBoundedThumb,
-  renderThumb: localRenderThumb,
-  thumbStyle: localThumbStyle,
-  thumbInnerStyle: localThumbInnerStyle,
   renderCenterLine = false,
   centerChannel = 'saturation',
   gestures = [],
   style = {},
   children,
+  ...props
 }: Panel3Props) {
-  const {
-    hueValue,
-    saturationValue,
-    brightnessValue,
-    onGestureChange,
-    onGestureEnd,
-    adaptSpectrum: globalAdaptSpectrum,
-    thumbSize: globalThumbsSize,
-    thumbShape: globalThumbShape,
-    thumbColor: globalThumbsColor,
-    boundedThumb: globalBoundedThumb,
-    renderThumb: globalRenderThumbs,
-    thumbStyle: globalThumbsStyle,
-    thumbInnerStyle: globalThumbsInnerStyle,
-  } = usePickerContext();
+  const { hueValue, saturationValue, brightnessValue, onGestureChange, onGestureEnd, ...ctx } = usePickerContext();
 
-  const thumbShape = localThumbShape ?? globalThumbShape,
-    thumbSize = localThumbSize ?? globalThumbsSize,
-    thumbColor = localThumbColor ?? globalThumbsColor,
-    boundedThumb = localBoundedThumb ?? globalBoundedThumb,
-    renderThumb = localRenderThumb ?? globalRenderThumbs,
-    thumbStyle = localThumbStyle ?? globalThumbsStyle ?? {},
-    thumbInnerStyle = localThumbInnerStyle ?? globalThumbsInnerStyle ?? {},
-    adaptSpectrum = localAdaptSpectrum ?? globalAdaptSpectrum,
+  const thumbShape = props.thumbShape ?? ctx.thumbShape,
+    thumbSize = props.thumbSize ?? ctx.thumbSize,
+    thumbColor = props.thumbColor ?? ctx.thumbColor,
+    boundedThumb = props.boundedThumb ?? ctx.boundedThumb,
+    renderThumb = props.renderThumb ?? ctx.renderThumb,
+    thumbStyle = props.thumbStyle ?? ctx.thumbStyle ?? {},
+    thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle ?? {},
+    adaptSpectrum = props.adaptSpectrum ?? ctx.adaptSpectrum,
     channelValue = centerChannel === 'brightness' ? brightnessValue : saturationValue;
 
   const borderRadius = 2000;
@@ -64,12 +43,17 @@ export function Panel3({
   const handleScale = useSharedValue(1);
 
   const handleStyle = useAnimatedStyle(() => {
-    const center = width.value / 2 - (boundedThumb ? thumbSize / 2 : 0);
-    const distance = (channelValue.value / 100) * (width.value / 2 - (boundedThumb ? thumbSize / 2 : 0));
-    const posY =
-      width.value - (Math.sin((hueValue.value * Math.PI) / 180) * distance + center) - (boundedThumb ? thumbSize : thumbSize / 2);
-    const posX =
-      width.value - (Math.cos((hueValue.value * Math.PI) / 180) * distance + center) - (boundedThumb ? thumbSize : thumbSize / 2);
+    const center = width.value / 2 - (boundedThumb ? thumbSize / 2 : 0),
+      distance = (channelValue.value / 100) * (width.value / 2 - (boundedThumb ? thumbSize / 2 : 0)),
+      posY =
+        width.value -
+        (Math.sin((hueValue.value * Math.PI) / 180) * distance + center) -
+        (boundedThumb ? thumbSize : thumbSize / 2),
+      posX =
+        width.value -
+        (Math.cos((hueValue.value * Math.PI) / 180) * distance + center) -
+        (boundedThumb ? thumbSize : thumbSize / 2);
+
     return {
       transform: [
         { translateX: posX },
@@ -78,13 +62,15 @@ export function Panel3({
         { rotate: hueValue.value + 90 + 'deg' },
       ],
     };
-  }, [thumbSize, boundedThumb, width, channelValue, hueValue, handleScale]);
+  }, [width, channelValue, hueValue, handleScale]);
 
   const spectrumStyle = useAnimatedStyle(() => {
     if (!adaptSpectrum) return {};
+
     if (centerChannel === 'brightness') return { backgroundColor: HSVA2HSLA_string(0, 0, 100, 1 - saturationValue.value / 100) };
+
     return { backgroundColor: HSVA2HSLA_string(0, 0, 0, 1 - brightnessValue.value / 100) };
-  }, [adaptSpectrum, centerChannel, saturationValue, brightnessValue]);
+  }, [saturationValue, brightnessValue]);
 
   const centerLineStyle = useAnimatedStyle(() => {
     if (!renderCenterLine) return {};
@@ -101,7 +87,7 @@ export function Panel3({
       width: distance,
       transform: [{ rotate: angle + 'deg' }, { translateX: distance / 2 }, { translateY: 0 }],
     };
-  }, [renderCenterLine, boundedThumb, thumbSize, width, hueValue, channelValue]);
+  }, [width, hueValue, channelValue]);
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -122,8 +108,10 @@ export function Panel3({
 
     hueValue.value = newHueValue;
     channelValue.value = newChannelValue;
+
     onGestureChange();
   };
+
   const onGestureBegin = (event: PanGestureHandlerEventPayload) => {
     'worklet';
     const R = width.value / 2,
@@ -142,6 +130,7 @@ export function Panel3({
     handleScale.value = withTiming(1.2, { duration: 100 });
     onGestureUpdate(event);
   };
+
   const onGestureFinish = () => {
     'worklet';
     isGestureActive.value = false;

@@ -66,10 +66,6 @@ export function Panel5({ gestures = [], style = {}, selectionStyle = {} }: Panel
 
   const composed = Gesture.Simultaneous(tap, ...gestures);
 
-  const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
-    squareSize.value = withTiming(layout.width / 12 || layout.height / 10, { duration: 100 });
-  }, []);
-
   useEffect(() => {
     const [row, column] = findIndexIn2DArray(gridColors, c => colorKit.areColorsEqual(c, value, 6));
 
@@ -85,6 +81,10 @@ export function Panel5({ gestures = [], style = {}, selectionStyle = {} }: Panel
 
     setAdaptiveColor(value);
   }, [value]);
+
+  const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
+    squareSize.value = withTiming(layout.width / 12 || layout.height / 10, { duration: 100 });
+  }, []);
 
   return (
     <GestureDetector gesture={composed}>

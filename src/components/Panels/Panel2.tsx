@@ -16,52 +16,30 @@ import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler
  * - A square-shaped slider (windows style) is utilized to adjust the hue and (saturation or brightness) channels.
  */
 export function Panel2({
-  adaptSpectrum: localAdaptSpectrum,
-  thumbColor: localThumbColor,
-  boundedThumb: localBoundedThumb,
-  renderThumb: localRenderThumb,
-  thumbShape: localThumbShape,
-  thumbSize: localThumbSize,
-  thumbStyle: localThumbStyle,
-  thumbInnerStyle: localThumbInnerStyle,
   verticalChannel = 'saturation',
   reverseHue = false,
   reverseVerticalChannel = false,
   gestures = [],
   style = {},
+  ...props
 }: Panel2Props) {
-  const {
-    hueValue,
-    saturationValue,
-    brightnessValue,
-    onGestureChange,
-    onGestureEnd,
-    adaptSpectrum: globalAdaptSpectrum,
-    thumbSize: globalThumbsSize,
-    thumbShape: globalThumbShape,
-    thumbColor: globalThumbsColor,
-    boundedThumb: globalBoundedThumb,
-    renderThumb: globalRenderThumbs,
-    thumbStyle: globalThumbsStyle,
-    thumbInnerStyle: globalThumbsInnerStyle,
-  } = usePickerContext();
+  const { hueValue, saturationValue, brightnessValue, onGestureChange, onGestureEnd, ...ctx } = usePickerContext();
 
-  const thumbShape = localThumbShape ?? globalThumbShape,
-    thumbSize = localThumbSize ?? globalThumbsSize,
-    thumbColor = localThumbColor ?? globalThumbsColor,
-    boundedThumb = localBoundedThumb ?? globalBoundedThumb,
-    renderThumb = localRenderThumb ?? globalRenderThumbs,
-    thumbStyle = localThumbStyle ?? globalThumbsStyle ?? {},
-    thumbInnerStyle = localThumbInnerStyle ?? globalThumbsInnerStyle ?? {},
-    adaptSpectrum = localAdaptSpectrum ?? globalAdaptSpectrum,
+  const thumbShape = props.thumbShape ?? ctx.thumbShape,
+    thumbSize = props.thumbSize ?? ctx.thumbSize,
+    thumbColor = props.thumbColor ?? ctx.thumbColor,
+    boundedThumb = props.boundedThumb ?? ctx.boundedThumb,
+    renderThumb = props.renderThumb ?? ctx.renderThumb,
+    thumbStyle = props.thumbStyle ?? ctx.thumbStyle ?? {},
+    thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle ?? {},
+    adaptSpectrum = props.adaptSpectrum ?? ctx.adaptSpectrum,
     channelValue = verticalChannel === 'brightness' ? brightnessValue : saturationValue;
 
-  const borderRadius = getStyle(style, 'borderRadius') ?? 5,
-    getHeight = getStyle(style, 'height') ?? 200;
+  const borderRadius = getStyle(style, 'borderRadius') ?? 5;
+  const getHeight = getStyle(style, 'height') ?? 200;
 
-  const width = useSharedValue(0),
-    height = useSharedValue(0);
-
+  const width = useSharedValue(0);
+  const height = useSharedValue(0);
   const handleScale = useSharedValue(1);
 
   const handleStyle = useAnimatedStyle(() => {
@@ -70,15 +48,31 @@ export function Panel2({
       posX = (reverseHue ? length.x - percentX : percentX) - (boundedThumb ? 0 : thumbSize / 2),
       percentY = (channelValue.value / 100) * length.y,
       posY = (reverseVerticalChannel ? percentY : length.y - percentY) - (boundedThumb ? 0 : thumbSize / 2);
+
     return { transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }] };
-  }, [thumbSize, boundedThumb, reverseHue, reverseVerticalChannel, width, height, hueValue, channelValue, handleScale]);
+  }, [width, height, hueValue, channelValue, handleScale]);
 
   const spectrumStyle = useAnimatedStyle(() => {
     if (!adaptSpectrum) return {};
-    if (verticalChannel === 'brightness')
+
+    if (verticalChannel === 'brightness') {
       return { backgroundColor: HSVA2HSLA_string(0, 0, 100, 1 - saturationValue.value / 100) };
+    }
+
     return { backgroundColor: HSVA2HSLA_string(0, 0, 0, 1 - brightnessValue.value / 100) };
-  }, [adaptSpectrum, verticalChannel, saturationValue, brightnessValue]);
+  }, [saturationValue, brightnessValue]);
+
+  const panelImageStyle = useAnimatedStyle(() => {
+    return {
+      width: height.value,
+      height: width.value,
+      transform: [
+        { rotate: reverseVerticalChannel ? '90deg' : '270deg' },
+        { translateX: ((width.value - height.value) / 2) * (reverseVerticalChannel ? -1 : 1) },
+        { translateY: ((width.value - height.value) / 2) * (isRtl ? -1 : 1) * (reverseVerticalChannel ? -1 : 1) },
+      ],
+    };
+  }, [width, height]);
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -96,13 +90,16 @@ export function Panel2({
 
     hueValue.value = newHueValue;
     channelValue.value = newChannelValue;
+
     onGestureChange();
   };
+
   const onGestureBegin = (event: PanGestureHandlerEventPayload) => {
     'worklet';
     handleScale.value = withTiming(1.2, { duration: 100 });
     onGestureUpdate(event);
   };
+
   const onGestureFinish = () => {
     'worklet';
     handleScale.value = withTiming(1, { duration: 100 });
@@ -118,18 +115,6 @@ export function Panel2({
     width.value = layout.width;
     height.value = layout.height;
   }, []);
-
-  const rotatePanelImage = useAnimatedStyle(() => {
-    return {
-      width: height.value,
-      height: width.value,
-      transform: [
-        { rotate: reverseVerticalChannel ? '90deg' : '270deg' },
-        { translateX: ((width.value - height.value) / 2) * (reverseVerticalChannel ? -1 : 1) },
-        { translateY: ((width.value - height.value) / 2) * (isRtl ? -1 : 1) * (reverseVerticalChannel ? -1 : 1) },
-      ],
-    };
-  }, [reverseVerticalChannel, width, height]);
 
   return (
     <GestureDetector gesture={composed}>
@@ -148,7 +133,7 @@ export function Panel2({
 
           <Animated.Image
             source={require('@assets/blackGradient.png')}
-            style={[styles.panel_image, rotatePanelImage, { tintColor: verticalChannel === 'saturation' ? '#fff' : undefined }]}
+            style={[styles.panel_image, panelImageStyle, { tintColor: verticalChannel === 'saturation' ? '#fff' : undefined }]}
             resizeMode='stretch'
           />
 

@@ -11,47 +11,18 @@ import type { SliderProps } from '@types';
 import type { LayoutChangeEvent } from 'react-native';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
-export function SaturationSlider({
-  adaptSpectrum: localAdaptSpectrum,
-  thumbShape: localThumbShape,
-  thumbSize: localThumbSize,
-  thumbColor: localThumbColor,
-  boundedThumb: localBoundedThumb,
-  renderThumb: localRenderThumb,
-  thumbStyle: localThumbStyle,
-  thumbInnerStyle: localThumbInnerStyle,
-  sliderThickness: localSliderThickness,
-  gestures = [],
-  style = {},
-  vertical = false,
-  reverse = false,
-}: SliderProps) {
-  const {
-    hueValue,
-    saturationValue,
-    brightnessValue,
-    onGestureChange,
-    onGestureEnd,
-    adaptSpectrum: globalAdaptSpectrum,
-    thumbSize: globalThumbsSize,
-    thumbShape: globalThumbsShape,
-    thumbColor: globalThumbsColor,
-    boundedThumb: globalBoundedThumb,
-    renderThumb: globalRenderThumbs,
-    thumbStyle: globalThumbsStyle,
-    thumbInnerStyle: globalThumbsInnerStyle,
-    sliderThickness: globalSliderThickness,
-  } = usePickerContext();
+export function SaturationSlider({ gestures = [], style = {}, vertical = false, reverse = false, ...props }: SliderProps) {
+  const { hueValue, saturationValue, brightnessValue, onGestureChange, onGestureEnd, ...ctx } = usePickerContext();
 
-  const thumbShape = localThumbShape ?? globalThumbsShape,
-    thumbSize = localThumbSize ?? globalThumbsSize,
-    thumbColor = localThumbColor ?? globalThumbsColor,
-    boundedThumb = localBoundedThumb ?? globalBoundedThumb,
-    renderThumb = localRenderThumb ?? globalRenderThumbs,
-    thumbStyle = localThumbStyle ?? globalThumbsStyle ?? {},
-    thumbInnerStyle = localThumbInnerStyle ?? globalThumbsInnerStyle ?? {},
-    adaptSpectrum = localAdaptSpectrum ?? globalAdaptSpectrum,
-    sliderThickness = localSliderThickness ?? globalSliderThickness;
+  const thumbShape = props.thumbShape ?? ctx.thumbShape,
+    thumbSize = props.thumbSize ?? ctx.thumbSize,
+    thumbColor = props.thumbColor ?? ctx.thumbColor,
+    boundedThumb = props.boundedThumb ?? ctx.boundedThumb,
+    renderThumb = props.renderThumb ?? ctx.renderThumb,
+    thumbStyle = props.thumbStyle ?? ctx.thumbStyle ?? {},
+    thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle ?? {},
+    adaptSpectrum = props.adaptSpectrum ?? ctx.adaptSpectrum,
+    sliderThickness = props.sliderThickness ?? ctx.sliderThickness;
 
   const borderRadius = getStyle(style, 'borderRadius') ?? 5,
     getWidth = getStyle(style, 'width'),
@@ -68,10 +39,9 @@ export function SaturationSlider({
       pos = (reverse ? length - percent : percent) - (boundedThumb ? 0 : thumbSize / 2),
       posY = vertical ? pos : height.value / 2 - thumbSize / 2,
       posX = vertical ? width.value / 2 - thumbSize / 2 : pos;
-    return {
-      transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }],
-    };
-  }, [thumbSize, boundedThumb, vertical, reverse, width, height, saturationValue, handleScale]);
+
+    return { transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }] };
+  }, [width, height, saturationValue, handleScale]);
 
   const activeColorStyle = useAnimatedStyle(() => {
     return { backgroundColor: HSVA2HSLA_string(hueValue.value, 100, 100) };
@@ -79,8 +49,24 @@ export function SaturationSlider({
 
   const activeBrightnessStyle = useAnimatedStyle(() => {
     if (!adaptSpectrum) return {};
+
     return { backgroundColor: HSVA2HSLA_string(0, 0, 0, 1 - brightnessValue.value / 100) };
   }, [adaptSpectrum, brightnessValue]);
+
+  const imageStyle = useAnimatedStyle(() => {
+    const imageRotate = vertical ? (reverse ? '270deg' : '90deg') : reverse ? '180deg' : '0deg';
+    const imageTranslateY = ((height.value - width.value) / 2) * ((reverse && isRtl) || (!reverse && !isRtl) ? 1 : -1);
+    return {
+      width: vertical ? height.value : '100%',
+      height: vertical ? width.value : '100%',
+      borderRadius,
+      transform: [
+        { rotate: imageRotate },
+        { translateX: vertical ? ((height.value - width.value) / 2) * (reverse ? -1 : 1) : 0 },
+        { translateY: vertical ? imageTranslateY : 0 },
+      ],
+    };
+  }, [width, height]);
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -93,13 +79,16 @@ export function SaturationSlider({
     if (saturationValue.value === newSaturationValue) return;
 
     saturationValue.value = newSaturationValue;
+
     onGestureChange();
   };
+
   const onGestureBegin = (event: PanGestureHandlerEventPayload) => {
     'worklet';
     handleScale.value = withTiming(1.2, { duration: 100 });
     onGestureUpdate(event);
   };
+
   const onGestureFinish = () => {
     'worklet';
     handleScale.value = withTiming(1, { duration: 100 });
@@ -115,21 +104,6 @@ export function SaturationSlider({
     if (!vertical) width.value = withTiming(layout.width, { duration: 5 });
     if (vertical) height.value = withTiming(layout.height, { duration: 5 });
   };
-
-  const imageStyle = useAnimatedStyle(() => {
-    const imageRotate = vertical ? (reverse ? '270deg' : '90deg') : reverse ? '180deg' : '0deg';
-    const imageTranslateY = ((height.value - width.value) / 2) * ((reverse && isRtl) || (!reverse && !isRtl) ? 1 : -1);
-    return {
-      width: vertical ? height.value : '100%',
-      height: vertical ? width.value : '100%',
-      borderRadius,
-      transform: [
-        { rotate: imageRotate },
-        { translateX: vertical ? ((height.value - width.value) / 2) * (reverse ? -1 : 1) : 0 },
-        { translateY: vertical ? imageTranslateY : 0 },
-      ],
-    };
-  }, [vertical, reverse, borderRadius, width, height]);
 
   const thicknessStyle = vertical ? { width: sliderThickness } : { height: sliderThickness };
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useDerivedValue, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import colorKit from '@colorKit';
 import usePickerContext from '@context';
@@ -11,83 +11,82 @@ import type { RgbSliderProps } from '@types';
 import type { LayoutChangeEvent } from 'react-native';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
-export function BlueSlider({
-  thumbShape: localThumbShape,
-  thumbSize: localThumbSize,
-  thumbColor: localThumbColor,
-  boundedThumb: localBoundedThumb,
-  renderThumb: localRenderThumb,
-  thumbStyle: localThumbStyle,
-  thumbInnerStyle: localThumbInnerStyle,
-  sliderThickness: localSliderThickness,
-  gestures = [],
-  style = {},
-  vertical = false,
-  reverse = false,
-}: RgbSliderProps) {
-  const {
-    hueValue,
-    saturationValue,
-    brightnessValue,
-    onGestureChange,
-    onGestureEnd,
-    thumbSize: globalThumbSize,
-    thumbShape: globalThumbShape,
-    thumbColor: globalThumbColor,
-    boundedThumb: globalBoundedThumb,
-    renderThumb: globalRenderThumb,
-    thumbStyle: globalThumbStyle,
-    thumbInnerStyle: globalThumbInnerStyle,
-    sliderThickness: globalSliderThickness,
-  } = usePickerContext();
+export function BlueSlider({ gestures = [], style = {}, vertical = false, reverse = false, ...props }: RgbSliderProps) {
+  const { hueValue, saturationValue, brightnessValue, onGestureChange, onGestureEnd, ...ctx } = usePickerContext();
 
-  const thumbShape = localThumbShape ?? globalThumbShape,
-    thumbSize = localThumbSize ?? globalThumbSize,
-    thumbColor = localThumbColor ?? globalThumbColor,
-    boundedThumb = localBoundedThumb ?? globalBoundedThumb,
-    renderThumb = localRenderThumb ?? globalRenderThumb,
-    thumbStyle = localThumbStyle ?? globalThumbStyle ?? {},
-    thumbInnerStyle = localThumbInnerStyle ?? globalThumbInnerStyle ?? {},
-    sliderThickness = localSliderThickness ?? globalSliderThickness;
+  const thumbShape = props.thumbShape ?? ctx.thumbShape,
+    thumbSize = props.thumbSize ?? ctx.thumbSize,
+    thumbColor = props.thumbColor ?? ctx.thumbColor,
+    boundedThumb = props.boundedThumb ?? ctx.boundedThumb,
+    renderThumb = props.renderThumb ?? ctx.renderThumb,
+    thumbStyle = props.thumbStyle ?? ctx.thumbStyle ?? {},
+    thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle ?? {},
+    sliderThickness = props.sliderThickness ?? ctx.sliderThickness;
 
   const borderRadius = getStyle(style, 'borderRadius') ?? 5,
     getWidth = getStyle(style, 'width'),
     getHeight = getStyle(style, 'height');
 
-  const width = useSharedValue(vertical ? sliderThickness : typeof getWidth === 'number' ? getWidth : 0),
-    height = useSharedValue(!vertical ? sliderThickness : typeof getHeight === 'number' ? getHeight : 0);
-
+  const width = useSharedValue(vertical ? sliderThickness : typeof getWidth === 'number' ? getWidth : 0);
+  const height = useSharedValue(!vertical ? sliderThickness : typeof getHeight === 'number' ? getHeight : 0);
   const handleScale = useSharedValue(1);
 
-  const handleStyle = useAnimatedStyle(() => {
-    const { b } = colorKit.runOnUI().RGB({ h: hueValue.value, s: saturationValue.value, v: brightnessValue.value }).object(false);
+  const rgb = useDerivedValue(() => {
+    return colorKit.runOnUI().RGB({ h: hueValue.value, s: saturationValue.value, v: brightnessValue.value }).object(false);
+  }, [hueValue, saturationValue, brightnessValue]);
 
+  const handleStyle = useAnimatedStyle(() => {
     const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0),
-      percent = (b / 255) * length,
+      percent = (rgb.value.b / 255) * length,
       pos = (reverse ? length - percent : percent) - (boundedThumb ? 0 : thumbSize / 2),
       posY = vertical ? pos : height.value / 2 - thumbSize / 2,
       posX = vertical ? width.value / 2 - thumbSize / 2 : pos;
+
+    return { transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }] };
+  }, [rgb, width, height, handleScale]);
+
+  const imageStyle = useAnimatedStyle(() => {
+    if (isWeb) return {};
+
+    const imageRotate = vertical ? (reverse ? '90deg' : '270deg') : reverse ? '0deg' : '180deg';
+    const imageTranslateY = ((height.value - width.value) / 2) * ((reverse && isRtl) || (!reverse && !isRtl) ? -1 : 1);
+
     return {
-      transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }],
+      tintColor: `rgb(${Math.round(rgb.value.r)}, ${Math.round(rgb.value.g)}, 255)`,
+      width: vertical ? height.value : '100%',
+      height: vertical ? width.value : '100%',
+      borderRadius,
+      transform: [
+        { rotate: imageRotate },
+        { translateX: vertical ? ((height.value - width.value) / 2) * (reverse ? 1 : -1) : 0 },
+        { translateY: vertical ? imageTranslateY : 0 },
+      ],
     };
-  }, [thumbSize, boundedThumb, vertical, reverse, width, height, hueValue, saturationValue, brightnessValue, handleScale]);
+  }, [rgb, width, height]);
+
+  const redGreen = useAnimatedStyle(() => {
+    const r = Math.round(rgb.value.r);
+    const g = Math.round(rgb.value.g);
+
+    if (isWeb) {
+      const deg = vertical ? (reverse ? 180 : 0) : reverse ? 90 : 270;
+      return { background: `linear-gradient(${deg}deg, rgb(${r}, ${g}, 255) 0%, rgb(${r}, ${g}, 0) 100%)` };
+    }
+
+    return { backgroundColor: `rgb(${r}, ${g}, 0)` };
+  }, [rgb]);
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
-
-    const { r, g, b } = colorKit
-      .runOnUI()
-      .RGB({ h: hueValue.value, s: saturationValue.value, v: brightnessValue.value })
-      .object(false);
 
     const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0),
       pos = clamp((vertical ? y : x) - (boundedThumb ? thumbSize / 2 : 0), length),
       value = (pos / length) * 255,
       newBlueValue = reverse ? 255 - value : value;
 
-    if (newBlueValue === b) return;
+    if (newBlueValue === rgb.value.b) return;
 
-    const { h, s, v } = colorKit.runOnUI().HSV({ r, g, b: newBlueValue }).object(false);
+    const { h, s, v } = colorKit.runOnUI().HSV({ r: rgb.value.r, g: rgb.value.g, b: newBlueValue }).object(false);
 
     hueValue.value = h;
     saturationValue.value = s;
@@ -95,11 +94,13 @@ export function BlueSlider({
 
     onGestureChange();
   };
+
   const onGestureBegin = (event: PanGestureHandlerEventPayload) => {
     'worklet';
     handleScale.value = withTiming(1.2, { duration: 100 });
     onGestureUpdate(event);
   };
+
   const onGestureFinish = () => {
     'worklet';
     handleScale.value = withTiming(1, { duration: 100 });
@@ -115,36 +116,6 @@ export function BlueSlider({
     if (!vertical) width.value = withTiming(layout.width, { duration: 5 });
     if (vertical) height.value = withTiming(layout.height, { duration: 5 });
   };
-
-  const redGreen = useAnimatedStyle(() => {
-    const { r, g } = colorKit.runOnUI().RGB({ h: hueValue.value, s: saturationValue.value, v: brightnessValue.value }).object();
-
-    if (isWeb) {
-      const deg = vertical ? (reverse ? 180 : 0) : reverse ? 90 : 270;
-      return { background: `linear-gradient(${deg}deg, rgb(${r}, ${g}, 255) 0%, rgb(${r}, ${g}, 0) 100%)` };
-    }
-    return { backgroundColor: `rgb(${r}, ${g}, 0)` };
-  }, [vertical, reverse, hueValue, saturationValue, brightnessValue]);
-
-  const imageStyle = useAnimatedStyle(() => {
-    if (isWeb) return {};
-
-    const imageRotate = vertical ? (reverse ? '90deg' : '270deg') : reverse ? '0deg' : '180deg';
-    const imageTranslateY = ((height.value - width.value) / 2) * ((reverse && isRtl) || (!reverse && !isRtl) ? -1 : 1);
-    const { r, g } = colorKit.runOnUI().RGB({ h: hueValue.value, s: saturationValue.value, v: brightnessValue.value }).object();
-
-    return {
-      tintColor: `rgb(${r}, ${g}, 255)`,
-      width: vertical ? height.value : '100%',
-      height: vertical ? width.value : '100%',
-      borderRadius,
-      transform: [
-        { rotate: imageRotate },
-        { translateX: vertical ? ((height.value - width.value) / 2) * (reverse ? 1 : -1) : 0 },
-        { translateY: vertical ? imageTranslateY : 0 },
-      ],
-    };
-  }, [vertical, reverse, borderRadius, width, height, hueValue, saturationValue, brightnessValue]);
 
   const thicknessStyle = vertical ? { width: sliderThickness } : { height: sliderThickness };
 
