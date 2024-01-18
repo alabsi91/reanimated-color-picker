@@ -1,4 +1,5 @@
 {
+  "plugins": ["./node_modules/prettier-plugin-jsdoc/dist/index.js"],
   "arrowParens": "avoid",
   "printWidth": 130,
   "jsxSingleQuote": true,
