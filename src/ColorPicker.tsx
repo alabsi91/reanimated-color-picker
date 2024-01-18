@@ -41,7 +41,7 @@ const ColorPicker = forwardRef<ColorPickerRef, ColorPickerProps>(
       style = {},
       children = <Text>NO CHILDREN</Text>,
     },
-    ref
+    ref,
   ) => {
     const initialColor = useRef(colorKit.HSV(value).object(false)).current;
     // color's channels values.
@@ -188,7 +188,7 @@ const ColorPicker = forwardRef<ColorPickerRef, ColorPickerProps>(
         <PickerContextProvider value={ctxValue}>{children}</PickerContextProvider>
       </GestureHandlerRootView>
     );
-  }
+  },
 );
 
 export default ColorPicker;

@@ -35,7 +35,7 @@ export default function WidgetTextInput({
 }: Props) {
   const inputRef = useAnimatedRef<TextInput>();
 
-  const animatedProps = useAnimatedProps(() => ({ text: textValue.value } as never), [textValue]);
+  const animatedProps = useAnimatedProps(() => ({ text: textValue.value }) as never, [textValue]);
 
   const submit = (e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
     const text = e.nativeEvent.text;

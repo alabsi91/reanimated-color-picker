@@ -12,9 +12,7 @@ import type { Panel2Props } from '@types';
 import type { LayoutChangeEvent } from 'react-native';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
-/**
- * - A square-shaped slider (windows style) is utilized to adjust the hue and (saturation or brightness) channels.
- */
+/** - A square-shaped slider (windows style) is utilized to adjust the hue and (saturation or brightness) channels. */
 export function Panel2({
   verticalChannel = 'saturation',
   reverseHue = false,

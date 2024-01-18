@@ -31,7 +31,7 @@ export function InputWidget({
     usePickerContext();
 
   const [format, setFormat] = useState<typeof defaultFormat>(
-    formats.includes(defaultFormat) ? defaultFormat : formats[0] ?? 'HEX'
+    formats.includes(defaultFormat) ? defaultFormat : formats[0] ?? 'HEX',
   );
 
   const onChange = (color: SupportedColorFormats) => {

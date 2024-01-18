@@ -324,7 +324,7 @@ export function colorKitUI() {
 
     if (!colorType || !colorType.includes('rgb')) {
       console.error(
-        '[colorKit.getRgbObject] is unable to parse the string into an `RGB` object. As a result, the color "black" will be returned instead.'
+        '[colorKit.getRgbObject] is unable to parse the string into an `RGB` object. As a result, the color "black" will be returned instead.',
       );
       return { r: 0, g: 0, b: 0, a: 1 };
     }
@@ -341,7 +341,7 @@ export function colorKitUI() {
 
     if (!matches || matches.length < 4) {
       console.error(
-        '[colorKit.getRgbObject] An error occurred while attempting to destructuring `RGB` values from the given string. As a result, the color "black" will be returned instead.'
+        '[colorKit.getRgbObject] An error occurred while attempting to destructuring `RGB` values from the given string. As a result, the color "black" will be returned instead.',
       );
       return { r: 0, g: 0, b: 0, a: 1 };
     }
@@ -530,7 +530,7 @@ export function colorKitUI() {
 
     if (!colorType || !colorType.includes('hsl')) {
       console.error(
-        '[colorKit.getHslObject] is unable to parse the string into an `HSL` object. As a result, the color "black" will be returned instead.'
+        '[colorKit.getHslObject] is unable to parse the string into an `HSL` object. As a result, the color "black" will be returned instead.',
       );
       return { h: 0, s: 0, l: 0, a: 1 };
     }
@@ -547,7 +547,7 @@ export function colorKitUI() {
 
     if (!matches || matches.length < 3) {
       console.error(
-        '[colorKit.getHslObject] An error occurred while attempting to destructuring `HSL` values from the given string. As a result, the color "black" will be returned instead.'
+        '[colorKit.getHslObject] An error occurred while attempting to destructuring `HSL` values from the given string. As a result, the color "black" will be returned instead.',
       );
       return { h: 0, s: 0, l: 0, a: 1 };
     }
@@ -688,7 +688,7 @@ export function colorKitUI() {
 
     if (!colorType || !colorType.includes('hwb')) {
       console.error(
-        '[colorKit.getHwbObject] is unable to parse the string into an `HWB` object. As a result, the color "black" will be returned instead.'
+        '[colorKit.getHwbObject] is unable to parse the string into an `HWB` object. As a result, the color "black" will be returned instead.',
       );
       return { h: 0, w: 0, b: 0, a: 1 };
     }
@@ -705,7 +705,7 @@ export function colorKitUI() {
 
     if (!matches || matches.length < 4) {
       console.error(
-        '[colorKit.getHwbObject] An error occurred while attempting to destructuring `HWB` values from the given string. As a result, the color "black" will be returned instead.'
+        '[colorKit.getHwbObject] An error occurred while attempting to destructuring `HWB` values from the given string. As a result, the color "black" will be returned instead.',
       );
       return { h: 0, w: 0, b: 0, a: 1 };
     }
@@ -848,7 +848,7 @@ export function colorKitUI() {
 
     if (!colorType || !colorType.includes('hsv')) {
       console.error(
-        '[colorKit.getHsvObject] is unable to parse the string into an `HSV` object. As a result, the color "black" will be returned instead.'
+        '[colorKit.getHsvObject] is unable to parse the string into an `HSV` object. As a result, the color "black" will be returned instead.',
       );
       return { h: 0, s: 0, v: 0, a: 1 };
     }
@@ -865,7 +865,7 @@ export function colorKitUI() {
 
     if (!matches || matches.length < 4) {
       console.error(
-        '[colorKit.getHsvObject] An error occurred while attempting to destructuring `HSV` values from the given string. As a result, the color "black" will be returned instead.'
+        '[colorKit.getHsvObject] An error occurred while attempting to destructuring `HSV` values from the given string. As a result, the color "black" will be returned instead.',
       );
       return { h: 0, s: 0, v: 0, a: 1 };
     }
@@ -974,7 +974,7 @@ export function colorKitUI() {
     return hex;
   };
 
-  /**  - Convert `HSV` color to an `HWBA` object representation */
+  /** - Convert `HSV` color to an `HWBA` object representation */
   const HSV_to_HWBA = (color: hsvaT | hsvT | string): hwbaT => {
     const { h, s, v, a } = typeof color === 'string' ? HSV_string_to_object(color) : normalize_HSV_object(color);
 
@@ -989,7 +989,7 @@ export function colorKitUI() {
     };
   };
 
-  /**  - Convert `HSV` color to an `HSVA` object representation */
+  /** - Convert `HSV` color to an `HSVA` object representation */
   const HSV_to_HSV = (color: hsvaT | hsvT | string): hsvaT => {
     return typeof color === 'string' ? HSV_string_to_object(color) : normalize_HSV_object(color);
   };
@@ -1044,7 +1044,7 @@ export function colorKitUI() {
 
     if (!colorType || !colorType.includes('hex')) {
       console.error(
-        '[colorKit.normalizeHexColor] is unable to normalize the `HEX` string provided. As a result, the color "black" will be returned instead.'
+        '[colorKit.normalizeHexColor] is unable to normalize the `HEX` string provided. As a result, the color "black" will be returned instead.',
       );
       return '#000000ff';
     }
@@ -1074,7 +1074,7 @@ export function colorKitUI() {
 
     if (!matches || matches.length < 4) {
       console.error(
-        '[colorKit.HEX_RGBA] An error occurred while attempting to destructuring `HEX` values from the given string. As a result, the color "black" will be returned instead.'
+        '[colorKit.HEX_RGBA] An error occurred while attempting to destructuring `HEX` values from the given string. As a result, the color "black" will be returned instead.',
       );
       return { r: 0, g: 0, b: 0, a: 1 };
     }
@@ -1153,7 +1153,7 @@ export function colorKitUI() {
 
     // ! error
     console.error(
-      '[colorKit.HEX] An error occurred while attempting to convert the provided parameter into an `HEX` color. As a result, the default color "black" will be used instead.'
+      '[colorKit.HEX] An error occurred while attempting to convert the provided parameter into an `HEX` color. As a result, the default color "black" will be used instead.',
     );
 
     return '#000000';
@@ -1204,7 +1204,7 @@ export function colorKitUI() {
 
     // ! error
     console.error(
-      '[colorKit.RGB] An error occurred while attempting to convert the provided parameter into an `RGB` color. As a result, the default color "black" will be used instead.'
+      '[colorKit.RGB] An error occurred while attempting to convert the provided parameter into an `RGB` color. As a result, the default color "black" will be used instead.',
     );
 
     return RGB_types({ r: 0, g: 0, b: 0, a: 1 });
@@ -1255,7 +1255,7 @@ export function colorKitUI() {
 
     // ! error
     console.error(
-      '[colorKit.HSL] An error occurred while attempting to convert the provided parameter into an `HSL` color. As a result, the default color "black" will be used instead.'
+      '[colorKit.HSL] An error occurred while attempting to convert the provided parameter into an `HSL` color. As a result, the default color "black" will be used instead.',
     );
 
     return HSL_types({ h: 0, s: 0, l: 0, a: 1 });
@@ -1306,7 +1306,7 @@ export function colorKitUI() {
 
     // ! error
     console.error(
-      '[colorKit.HWB] An error occurred while attempting to convert the provided parameter into an `HWB` color. As a result, the default color "black" will be used instead.'
+      '[colorKit.HWB] An error occurred while attempting to convert the provided parameter into an `HWB` color. As a result, the default color "black" will be used instead.',
     );
 
     return HWB_types({ h: 0, w: 0, b: 100, a: 1 });
@@ -1357,7 +1357,7 @@ export function colorKitUI() {
 
     // ! error
     console.error(
-      '[colorKit.HSV] An error occurred while attempting to convert the provided parameter into an `HSV` color. As a result, the default color "black" will be used instead.'
+      '[colorKit.HSV] An error occurred while attempting to convert the provided parameter into an `HSV` color. As a result, the default color "black" will be used instead.',
     );
 
     return HSV_types({ h: 0, s: 0, v: 0, a: 1 });
@@ -1493,9 +1493,10 @@ export function colorKitUI() {
 
   /**
    * - Check if two colors are similar within a specified tolerance.
+   *
    * @example
-   * const tolerance = 0;
-   * const isEqual = colorKit.areColorsEqual("#f00", "red", tolerance); // true
+   *   const tolerance = 0;
+   *   const isEqual = colorKit.areColorsEqual('#f00', 'red', tolerance); // true
    */
   const areColorsEqual = (color1: SupportedColorFormats, color2: SupportedColorFormats, tolerance = 0): boolean => {
     const rgb1 = RGB(color1).object();
@@ -1540,7 +1541,7 @@ export function colorKitUI() {
   };
 
   // * Red channel
-  /** Set the `red` value of a color to a specific amount.*/
+  /** Set the `red` value of a color to a specific amount. */
   const setRed = (color: SupportedColorFormats, amount: number): ConversionMethods => {
     const { g, b, a } = RGB(color).object();
     const newR = clampRGB(amount);
@@ -1549,10 +1550,12 @@ export function colorKitUI() {
     return returnColorObject(newColor);
   };
 
-  /** Increase the `red` value of a color by the given percentage/amount.
+  /**
+   * Increase the `red` value of a color by the given percentage/amount.
+   *
    * @example
-   * increaseRed('rgb(100, 100, 100)', 20).hex();
-   * increaseRed('rgb(100, 100, 100)', '20%').rgb().string();
+   *   increaseRed('rgb(100, 100, 100)', 20).hex();
+   *   increaseRed('rgb(100, 100, 100)', '20%').rgb().string();
    */
   const increaseRed = (color: SupportedColorFormats, amount: number | string): ConversionMethods => {
     const { r, g, b, a } = RGB(color).object();
@@ -1563,10 +1566,12 @@ export function colorKitUI() {
     return returnColorObject(newColor);
   };
 
-  /** Decrease the `red` value of a color by the given percentage/amount
+  /**
+   * Decrease the `red` value of a color by the given percentage/amount
+   *
    * @example
-   * decreaseRed('rgb(100, 100, 100)', 20).hex();
-   * decreaseRed('rgb(100, 100, 100)', '20%').rgb().string();
+   *   decreaseRed('rgb(100, 100, 100)', 20).hex();
+   *   decreaseRed('rgb(100, 100, 100)', '20%').rgb().string();
    */
   const decreaseRed = (color: SupportedColorFormats, amount: number | string): ConversionMethods => {
     const { r, g, b, a } = RGB(color).object();
@@ -1578,7 +1583,7 @@ export function colorKitUI() {
   };
 
   // * Green channel
-  /** - Set the `green` value of a color to a specific amount.*/
+  /** - Set the `green` value of a color to a specific amount. */
   const setGreen = (color: SupportedColorFormats, amount: number): ConversionMethods => {
     const { r, b, a } = RGB(color).object();
     const newG = clampRGB(amount);
@@ -1587,10 +1592,12 @@ export function colorKitUI() {
     return returnColorObject(newColor);
   };
 
-  /** Increase the `green` value of a color by the given percentage.
+  /**
+   * Increase the `green` value of a color by the given percentage.
+   *
    * @example
-   * increaseGreen('rgb(100, 100, 100)', 20).hex();
-   * increaseGreen('rgb(100, 100, 100)', '20%').rgb().string();
+   *   increaseGreen('rgb(100, 100, 100)', 20).hex();
+   *   increaseGreen('rgb(100, 100, 100)', '20%').rgb().string();
    */
   const increaseGreen = (color: SupportedColorFormats, amount: number | string): ConversionMethods => {
     const { r, g, b, a } = RGB(color).object();
@@ -1601,10 +1608,12 @@ export function colorKitUI() {
     return returnColorObject(newColor);
   };
 
-  /** Decrease the `green` value of a color by the given percentage.
+  /**
+   * Decrease the `green` value of a color by the given percentage.
+   *
    * @example
-   * decreaseGreen('rgb(100, 100, 100)', 20).hex();
-   * decreaseGreen('rgb(100, 100, 100)', '20%').rgb().string();
+   *   decreaseGreen('rgb(100, 100, 100)', 20).hex();
+   *   decreaseGreen('rgb(100, 100, 100)', '20%').rgb().string();
    */
   const decreaseGreen = (color: SupportedColorFormats, amount: number | string): ConversionMethods => {
     const { r, g, b, a } = RGB(color).object();
@@ -1616,7 +1625,7 @@ export function colorKitUI() {
   };
 
   // * Blue channel
-  /** - Set the `blue` value of a color to a specific amount.*/
+  /** - Set the `blue` value of a color to a specific amount. */
   const setBlue = (color: SupportedColorFormats, amount: number): ConversionMethods => {
     const { r, g, a } = RGB(color).object();
     const newB = clampRGB(amount);
@@ -1625,10 +1634,12 @@ export function colorKitUI() {
     return returnColorObject(newColor);
   };
 
-  /** Increase the `blue` value of a color by the given percentage.
+  /**
+   * Increase the `blue` value of a color by the given percentage.
+   *
    * @example
-   * increaseBlue('rgb(100, 100, 100)', 20).hex();
-   * increaseBlue('rgb(100, 100, 100)', '20%').rgb().string();
+   *   increaseBlue('rgb(100, 100, 100)', 20).hex();
+   *   increaseBlue('rgb(100, 100, 100)', '20%').rgb().string();
    */
   const increaseBlue = (color: SupportedColorFormats, amount: number | string): ConversionMethods => {
     const { r, g, b, a } = RGB(color).object();
@@ -1639,10 +1650,12 @@ export function colorKitUI() {
     return returnColorObject(newColor);
   };
 
-  /** Decrease the `blue` value of a color by the given percentage.
+  /**
+   * Decrease the `blue` value of a color by the given percentage.
+   *
    * @example
-   * decreaseBlue('rgb(100, 100, 100)', 20).hex();
-   * decreaseBlue('rgb(100, 100, 100)', '20%').rgb().string();
+   *   decreaseBlue('rgb(100, 100, 100)', 20).hex();
+   *   decreaseBlue('rgb(100, 100, 100)', '20%').rgb().string();
    */
   const decreaseBlue = (color: SupportedColorFormats, amount: number | string): ConversionMethods => {
     const { r, g, b, a } = RGB(color).object();
@@ -1660,7 +1673,7 @@ export function colorKitUI() {
     return a;
   };
 
-  /** - Set the `alpha` value of a color to a specific amount.*/
+  /** - Set the `alpha` value of a color to a specific amount. */
   const setAlpha = (color: SupportedColorFormats, amount: number): ConversionMethods => {
     const { r, g, b } = RGB(color).object();
     const newA = clampAlpha(amount);
@@ -1669,7 +1682,7 @@ export function colorKitUI() {
     return returnColorObject(newColor);
   };
 
-  /** Increase the `alpha` value of a color by the given percentage.*/
+  /** Increase the `alpha` value of a color by the given percentage. */
   const increaseAlpha = (color: SupportedColorFormats, amount: number | string): ConversionMethods => {
     const { r, g, b, a } = RGB(color).object();
     const alpha = typeof amount === 'string' ? a + a * (parseFloat(amount) / 100) : a + amount;
@@ -1679,7 +1692,7 @@ export function colorKitUI() {
     return returnColorObject(newColor);
   };
 
-  /** Decrease the `alpha` value of a color by the given percentage.*/
+  /** Decrease the `alpha` value of a color by the given percentage. */
   const decreaseAlpha = (color: SupportedColorFormats, amount: number | string): ConversionMethods => {
     const { r, g, b, a } = RGB(color).object();
     const alpha = typeof amount === 'string' ? a - a * (parseFloat(amount) / 100) : a - amount;
@@ -1690,7 +1703,7 @@ export function colorKitUI() {
   };
 
   //* Hue
-  /** - Set the `hue` value of a color to a specific amount.*/
+  /** - Set the `hue` value of a color to a specific amount. */
   const setHue = (color: SupportedColorFormats, amount: number): ConversionMethods => {
     const { s, l, a } = HSL(color).object();
     const newH = clampHue(amount);
@@ -1699,10 +1712,12 @@ export function colorKitUI() {
     return returnColorObject(newColor);
   };
 
-  /** Increase the `hue` value of a color by the given percentage/amount.
+  /**
+   * Increase the `hue` value of a color by the given percentage/amount.
+   *
    * @example
-   * increaseHue('rgb(100, 100, 100)', 20).hex();
-   * increaseHue('rgb(100, 100, 100)', '20%').rgb().string();
+   *   increaseHue('rgb(100, 100, 100)', 20).hex();
+   *   increaseHue('rgb(100, 100, 100)', '20%').rgb().string();
    */
   const increaseHue = (color: SupportedColorFormats, amount: number | string): ConversionMethods => {
     const { h, s, l, a } = HSL(color).object();
@@ -1713,10 +1728,12 @@ export function colorKitUI() {
     return returnColorObject(newColor);
   };
 
-  /** Decrease the `hue` value of a color by the given percentage/amount.
+  /**
+   * Decrease the `hue` value of a color by the given percentage/amount.
+   *
    * @example
-   * decreaseHue('rgb(100, 100, 100)', 20).hex();
-   * decreaseHue('rgb(100, 100, 100)', '20%').rgb().string();
+   *   decreaseHue('rgb(100, 100, 100)', 20).hex();
+   *   decreaseHue('rgb(100, 100, 100)', '20%').rgb().string();
    */
   const decreaseHue = (color: SupportedColorFormats, amount: number | string): ConversionMethods => {
     const { h, s, l, a } = HSL(color).object();
@@ -1729,9 +1746,10 @@ export function colorKitUI() {
 
   /**
    * - Spin the `hue` channel by a certain percentage/amount.
+   *
    * @example
-   * spin('red', 20).hex();
-   * spin('rgb(255, 0, 0)', '20%').rgb().string();
+   *   spin('red', 20).hex();
+   *   spin('rgb(255, 0, 0)', '20%').rgb().string();
    */
   const spin = (color: SupportedColorFormats, degree: number | string): ConversionMethods => {
     const { h, s, l, a } = HSL(color).object();
@@ -1742,7 +1760,7 @@ export function colorKitUI() {
   };
 
   //* Saturation
-  /** - Set the `saturation` value of a color to a specific amount.*/
+  /** - Set the `saturation` value of a color to a specific amount. */
   const setSaturation = (color: SupportedColorFormats, amount: number): ConversionMethods => {
     const { h, l, a } = HSL(color).object();
     const newS = clamp100(amount);
@@ -1753,9 +1771,10 @@ export function colorKitUI() {
 
   /**
    * - Increase the saturation of the given color by a certain percentage/amount.
+   *
    * @example
-   * saturate('red', 20).hex();
-   * saturate('rgb(255, 0, 0)', '20%').rgb().string();
+   *   saturate('red', 20).hex();
+   *   saturate('rgb(255, 0, 0)', '20%').rgb().string();
    */
   const saturate = (color: SupportedColorFormats, amount: number | string): ConversionMethods => {
     const { h, s, l, a } = HSL(color).object();
@@ -1768,9 +1787,10 @@ export function colorKitUI() {
 
   /**
    * - Decrease the saturation of the given color by a certain percentage/amount.
+   *
    * @example
-   * saturate('red', 20).hex();
-   * saturate('rgb(255, 0, 0)', '20%').rgb().string();
+   *   saturate('red', 20).hex();
+   *   saturate('rgb(255, 0, 0)', '20%').rgb().string();
    */
   const desaturate = (color: SupportedColorFormats, amount: number | string): ConversionMethods => {
     const { h, s, l, a } = HSL(color).object();
@@ -1782,7 +1802,7 @@ export function colorKitUI() {
   };
 
   //* Brightness
-  /** - Set HSL's `luminosity` channel for a given color to a specific amount.*/
+  /** - Set HSL's `luminosity` channel for a given color to a specific amount. */
   const setLuminance = (color: SupportedColorFormats, amount: number): ConversionMethods => {
     const { h, s, a } = HSL(color).object();
     const newL = clamp100(amount);
@@ -1793,9 +1813,10 @@ export function colorKitUI() {
 
   /**
    * - Increase the brightness of the given color by a certain percentage/amount.
+   *
    * @example
-   * brighten('red', 20).hex();
-   * brighten('rgb(255, 0, 0)', '20%').rgb().string();
+   *   brighten('red', 20).hex();
+   *   brighten('rgb(255, 0, 0)', '20%').rgb().string();
    */
   const brighten = (color: SupportedColorFormats, amount: number | string): ConversionMethods => {
     const { h, s, l, a } = HSL(color).object();
@@ -1808,9 +1829,10 @@ export function colorKitUI() {
 
   /**
    * - Decrease the brightness of the given color by a certain percentage/amount.
+   *
    * @example
-   * darken('red', 20).hex();
-   * darken('rgb(255, 0, 0)', '20%').rgb().string();
+   *   darken('red', 20).hex();
+   *   darken('rgb(255, 0, 0)', '20%').rgb().string();
    */
   const darken = (color: SupportedColorFormats, amount: number | string): ConversionMethods => {
     const { h, s, l, a } = HSL(color).object();
@@ -1821,7 +1843,7 @@ export function colorKitUI() {
     return returnColorObject(darkenedColor);
   };
 
-  /** - Set HSV's `value` (brightness) channel for a given color to a specific amount.*/
+  /** - Set HSV's `value` (brightness) channel for a given color to a specific amount. */
   const setBrightness = (color: SupportedColorFormats, amount: number): ConversionMethods => {
     const { h, s, a } = HSV(color).object();
     const newV = clamp100(amount);
@@ -1830,7 +1852,7 @@ export function colorKitUI() {
     return returnColorObject(newColor);
   };
 
-  /** Increase HSV's `value` (brightness) channel value of a color by the given percentage/amount.*/
+  /** Increase HSV's `value` (brightness) channel value of a color by the given percentage/amount. */
   const increaseBrightness = (color: SupportedColorFormats, amount: number | string): ConversionMethods => {
     const { h, s, v, a } = HSV(color).object();
     const value = typeof amount === 'string' ? v + v * (parseFloat(amount) / 100) : v + amount;
@@ -1840,7 +1862,7 @@ export function colorKitUI() {
     return returnColorObject(newColor);
   };
 
-  /** Decrease HSV's `value` (brightness) channel value of a color by the given percentage/amount.*/
+  /** Decrease HSV's `value` (brightness) channel value of a color by the given percentage/amount. */
   const decreaseBrightness = (color: SupportedColorFormats, amount: number | string): ConversionMethods => {
     const { h, s, v, a } = HSV(color).object();
     const value = typeof amount === 'string' ? v - v * (parseFloat(amount) / 100) : v - amount;
@@ -1854,8 +1876,9 @@ export function colorKitUI() {
 
   /**
    * - Blends two colors by a certain amount.
+   *
    * @example
-   * blend('yellow', 'red', 50).hex(); // #ff8000
+   *   blend('yellow', 'red', 50).hex(); // #ff8000
    */
   const blend = (color1: SupportedColorFormats, color2: SupportedColorFormats, percentage: number): ConversionMethods => {
     percentage = percentage / 100;

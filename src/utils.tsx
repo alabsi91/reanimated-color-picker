@@ -61,8 +61,8 @@ export function RenderWebOnly({ children }: { children: React.ReactNode }) {
 }
 
 /**
- * Enable Android hardware texture rendering for Android Nougat(API 24) to Pie(API 28)
- * to address an issue when applying a transform on a View with a border radius > 0.
+ * Enable Android hardware texture rendering for Android Nougat(API 24) to Pie(API 28) to address an issue when applying a
+ * transform on a View with a border radius > 0.
  *
  * See: https://github.com/facebook/react-native/issues/18266
  */

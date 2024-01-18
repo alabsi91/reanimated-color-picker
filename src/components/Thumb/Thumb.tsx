@@ -34,8 +34,8 @@ export default function Thumb({
   const adaptiveColor = useSharedValue<'#000000' | '#ffffff'>('#ffffff');
 
   /**
-   * Get the current color and calculate its contrast ratio against white or black,
-   * depending on the channel and whether 'adaptSpectrum' is enabled
+   * Get the current color and calculate its contrast ratio against white or black, depending on the channel and whether
+   * 'adaptSpectrum' is enabled
    */
   const getColorForAdaptiveColor = () => {
     'worklet';

@@ -49,7 +49,7 @@ export function OpacitySlider({ gestures = [], style = {}, vertical = false, rev
     const color = HSVA2HSLA_string(
       hueValue.value,
       adaptSpectrum ? saturationValue.value : 100,
-      adaptSpectrum ? brightnessValue.value : 100
+      adaptSpectrum ? brightnessValue.value : 100,
     );
 
     return { background: `linear-gradient(${deg}deg, transparent 0%, ${color} 100%)` };
@@ -67,7 +67,7 @@ export function OpacitySlider({ gestures = [], style = {}, vertical = false, rev
       tintColor: HSVA2HSLA_string(
         hueValue.value,
         adaptSpectrum ? saturationValue.value : 100,
-        adaptSpectrum ? brightnessValue.value : 100
+        adaptSpectrum ? brightnessValue.value : 100,
       ),
       borderRadius,
       transform: [

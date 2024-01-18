@@ -12,9 +12,7 @@ import type { Panel4Props } from '@types';
 import type { LayoutChangeEvent } from 'react-native';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
-/**
- * - A slider with a square shape is used to adjust the channels of hue, saturation, and brightness.
- */
+/** - A slider with a square shape is used to adjust the channels of hue, saturation, and brightness. */
 export function Panel4({
   reverseHue = false,
   reverseHorizontalChannels = false,

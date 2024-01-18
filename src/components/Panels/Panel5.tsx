@@ -11,9 +11,7 @@ import { findIndexIn2DArray, getStyle, isRtl } from '@utils';
 import type { Panel5Props } from '@types';
 import type { LayoutChangeEvent } from 'react-native';
 
-/**
- * - This is a grid of 120 colors, arranged in 12 columns and 10 rows of squares.
- */
+/** - This is a grid of 120 colors, arranged in 12 columns and 10 rows of squares. */
 export function Panel5({ gestures = [], style = {}, selectionStyle = {} }: Panel5Props) {
   const { value, hueValue, saturationValue, brightnessValue, onGestureChange, onGestureEnd } = usePickerContext();
 
@@ -71,7 +69,7 @@ export function Panel5({ gestures = [], style = {}, selectionStyle = {} }: Panel
 
     if (column === null || row === null) {
       console.warn(
-        `[ColorPicker]: The color '${value}' specified in the 'value' prop cannot be displayed in 'Panel5' as it falls outside the limited range of available colors.`
+        `[ColorPicker]: The color '${value}' specified in the 'value' prop cannot be displayed in 'Panel5' as it falls outside the limited range of available colors.`,
       );
       return;
     }

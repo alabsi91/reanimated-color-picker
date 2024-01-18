@@ -28,7 +28,7 @@ export function PreviewText({ style = {}, colorFormat = 'hex' }: PreviewTextProp
     return returnedResults()[colorFormat];
   }, [colorFormat, hueValue, saturationValue, brightnessValue, alphaValue]); // track changes on WEB
 
-  const animatedProps = useAnimatedProps(() => ({ text: colorString.value } as never), [colorString]);
+  const animatedProps = useAnimatedProps(() => ({ text: colorString.value }) as never, [colorString]);
 
   return (
     <AnimatedTextInput
