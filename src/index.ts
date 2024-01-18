@@ -4,6 +4,9 @@ export default ColorPicker;
 import colorKit from '@colorKit';
 export { colorKit };
 
+import useColorPickerContext from '@context';
+export { useColorPickerContext };
+
 export { Panel1 } from '@panels/Panel1';
 export { Panel2 } from '@panels/Panel2';
 export { Panel3 } from '@panels/Panel3/Panel3';
