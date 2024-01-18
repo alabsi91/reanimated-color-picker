@@ -1,0 +1,36 @@
+diff --git a/node_modules/@react-native/eslint-config/index.js b/node_modules/@react-native/eslint-config/index.js
+index 8de0800..c061ad4 100644
+--- a/node_modules/@react-native/eslint-config/index.js
++++ b/node_modules/@react-native/eslint-config/index.js
+@@ -27,7 +27,6 @@ module.exports = {
+     'react-hooks',
+     'react-native',
+     '@react-native',
+-    'jest',
+   ],
+ 
+   settings: {
+@@ -78,10 +77,6 @@ module.exports = {
+         '*.{spec,test}.{js,ts,tsx}',
+         '**/__{mocks,tests}__/**/*.{js,ts,tsx}',
+       ],
+-      env: {
+-        jest: true,
+-        'jest/globals': true,
+-      },
+       rules: {
+         'react-native/no-inline-styles': 0,
+         quotes: [1, 'single', {avoidEscape: true, allowTemplateLiterals: true}],
+@@ -329,12 +324,5 @@ module.exports = {
+     // The following rules are made available via `eslint-plugin-react-native`
+ 
+     'react-native/no-inline-styles': 1,
+-
+-    // Jest Plugin
+-    // The following rules are made available via `eslint-plugin-jest`.
+-    'jest/no-disabled-tests': 1,
+-    'jest/no-focused-tests': 1,
+-    'jest/no-identical-title': 1,
+-    'jest/valid-expect': 1,
+   },
+ };
