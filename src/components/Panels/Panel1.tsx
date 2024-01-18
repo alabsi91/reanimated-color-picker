@@ -77,8 +77,8 @@ export function Panel1({
       lengthY = height.value - (boundedThumb ? thumbSize : 0),
       posX = clamp(x - (boundedThumb ? thumbSize / 2 : 0), lengthX),
       posY = clamp(y - (boundedThumb ? thumbSize / 2 : 0), lengthY),
-      newSaturationValue = Math.round((posX / lengthX) * 100),
-      newBrightnessValue = Math.round(100 - (posY / lengthY) * 100);
+      newSaturationValue = (posX / lengthX) * 100,
+      newBrightnessValue = 100 - (posY / lengthY) * 100;
 
     if (saturationValue.value === newSaturationValue && brightnessValue.value === newBrightnessValue) return;
 

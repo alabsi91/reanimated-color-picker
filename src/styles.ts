@@ -140,14 +140,19 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     backgroundColor: '#ffffff',
 
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
+    ...Platform.select({
+      web: { boxShadow: 'rgba(0, 0, 0, 0.3) 0px 0px 2px' },
+      default: {
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 1,
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: 1.41,
 
-    elevation: 2,
+        elevation: 2,
+      },
+    }),
   },
 });

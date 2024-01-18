@@ -7,6 +7,7 @@ import usePickerContext from '@context';
 import { styles } from '@styles';
 import Thumb from '@thumb';
 import { clamp, ConditionalRendering, HSVA2HSLA_string } from '@utils';
+import { Panel3ContextProvider } from './Panel3Context';
 
 import type { Panel3Props } from '@types';
 import type { LayoutChangeEvent } from 'react-native';
@@ -28,6 +29,7 @@ export function Panel3({
   centerChannel = 'saturation',
   gestures = [],
   style = {},
+  children,
 }: Panel3Props) {
   const {
     hueValue,
@@ -62,16 +64,12 @@ export function Panel3({
   const handleScale = useSharedValue(1);
 
   const handleStyle = useAnimatedStyle(() => {
-    const center = width.value / 2 - (boundedThumb ? thumbSize / 2 : 0),
-      distance = (channelValue.value / 100) * (width.value / 2 - (boundedThumb ? thumbSize / 2 : 0)),
-      posY =
-        width.value -
-        Math.round(Math.sin((hueValue.value * Math.PI) / 180) * distance + center) -
-        (boundedThumb ? thumbSize : thumbSize / 2),
-      posX =
-        width.value -
-        Math.round(Math.cos((hueValue.value * Math.PI) / 180) * distance + center) -
-        (boundedThumb ? thumbSize : thumbSize / 2);
+    const center = width.value / 2 - (boundedThumb ? thumbSize / 2 : 0);
+    const distance = (channelValue.value / 100) * (width.value / 2 - (boundedThumb ? thumbSize / 2 : 0));
+    const posY =
+      width.value - (Math.sin((hueValue.value * Math.PI) / 180) * distance + center) - (boundedThumb ? thumbSize : thumbSize / 2);
+    const posX =
+      width.value - (Math.cos((hueValue.value * Math.PI) / 180) * distance + center) - (boundedThumb ? thumbSize : thumbSize / 2);
     return {
       transform: [
         { translateX: posX },
@@ -117,8 +115,8 @@ export function Panel3({
       theta = Math.atan2(dy, dx) * (180 / Math.PI), // [0 - 180] range
       angle = theta < 0 ? 360 + theta : theta, // [0 - 360] range
       radiusPercent = radius / center,
-      newHueValue = Math.round(angle),
-      newChannelValue = Math.round(radiusPercent * 100);
+      newHueValue = angle,
+      newChannelValue = radiusPercent * 100;
 
     if (hueValue.value === newHueValue && channelValue.value === newChannelValue) return;
 
@@ -162,47 +160,65 @@ export function Panel3({
   }, []);
 
   return (
-    <GestureDetector gesture={composed}>
-      <Animated.View
-        onLayout={onLayout}
-        style={[
-          styles.panel_container,
-          style,
-          { position: 'relative', aspectRatio: 1, borderWidth: 0, padding: 0, borderRadius },
-        ]}
-      >
-        <ImageBackground source={require('@assets/circularHue.png')} style={styles.panel_image} resizeMode='stretch'>
-          <ConditionalRendering if={adaptSpectrum && centerChannel === 'brightness'}>
-            <Animated.View style={[{ borderRadius }, spectrumStyle, StyleSheet.absoluteFillObject]} />
+    <Panel3ContextProvider
+      value={{
+        width,
+        adaptSpectrum,
+        centerChannel,
+        thumbShape,
+        thumbColor,
+        thumbStyle,
+        thumbInnerStyle,
+        renderThumb,
+        boundedThumb,
+        renderCenterLine,
+        thumbSize,
+      }}
+    >
+      <GestureDetector gesture={composed}>
+        <Animated.View
+          onLayout={onLayout}
+          style={[
+            styles.panel_container,
+            style,
+            { position: 'relative', aspectRatio: 1, borderWidth: 0, padding: 0, borderRadius },
+          ]}
+        >
+          <ImageBackground source={require('@assets/circularHue.png')} style={styles.panel_image} resizeMode='stretch'>
+            <ConditionalRendering if={adaptSpectrum && centerChannel === 'brightness'}>
+              <Animated.View style={[{ borderRadius }, spectrumStyle, StyleSheet.absoluteFillObject]} />
+            </ConditionalRendering>
+
+            <Image
+              source={require('@assets/blackRadial.png')}
+              style={[styles.panel_image, { tintColor: centerChannel === 'saturation' ? '#fff' : undefined }]}
+              resizeMode='stretch'
+            />
+
+            <ConditionalRendering if={adaptSpectrum && centerChannel === 'saturation'}>
+              <Animated.View style={[{ borderRadius }, spectrumStyle, StyleSheet.absoluteFillObject]} />
+            </ConditionalRendering>
+          </ImageBackground>
+
+          <ConditionalRendering if={renderCenterLine}>
+            <Animated.View style={[styles.panel3Line, centerLineStyle]} />
           </ConditionalRendering>
 
-          <Image
-            source={require('@assets/blackRadial.png')}
-            style={[styles.panel_image, { tintColor: centerChannel === 'saturation' ? '#fff' : undefined }]}
-            resizeMode='stretch'
+          {children}
+
+          <Thumb
+            channel={centerChannel === 'brightness' ? 'v' : 's'}
+            thumbShape={thumbShape}
+            thumbSize={thumbSize}
+            thumbColor={thumbColor}
+            renderThumb={renderThumb}
+            innerStyle={thumbInnerStyle}
+            handleStyle={handleStyle}
+            style={thumbStyle}
+            adaptSpectrum={adaptSpectrum}
           />
-
-          <ConditionalRendering if={adaptSpectrum && centerChannel === 'saturation'}>
-            <Animated.View style={[{ borderRadius }, spectrumStyle, StyleSheet.absoluteFillObject]} />
-          </ConditionalRendering>
-        </ImageBackground>
-
-        <ConditionalRendering if={renderCenterLine}>
-          <Animated.View style={[styles.panel3Line, centerLineStyle]} />
-        </ConditionalRendering>
-
-        <Thumb
-          channel={centerChannel === 'brightness' ? 'v' : 's'}
-          thumbShape={thumbShape}
-          thumbSize={thumbSize}
-          thumbColor={thumbColor}
-          renderThumb={renderThumb}
-          innerStyle={thumbInnerStyle}
-          handleStyle={handleStyle}
-          style={thumbStyle}
-          adaptSpectrum={adaptSpectrum}
-        />
-      </Animated.View>
-    </GestureDetector>
+        </Animated.View>
+      </GestureDetector>
+    </Panel3ContextProvider>
   );
 }

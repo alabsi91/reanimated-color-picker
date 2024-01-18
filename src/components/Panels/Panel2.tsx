@@ -87,8 +87,8 @@ export function Panel2({
       lengthY = height.value - (boundedThumb ? thumbSize : 0),
       posX = clamp(x - (boundedThumb ? thumbSize / 2 : 0), lengthX),
       posY = clamp(y - (boundedThumb ? thumbSize / 2 : 0), lengthY),
-      valueX = Math.round((posX / lengthX) * 360),
-      valueY = Math.round((posY / lengthY) * 100),
+      valueX = (posX / lengthX) * 360,
+      valueY = (posY / lengthY) * 100,
       newHueValue = reverseHue ? 360 - valueX : valueX,
       newChannelValue = reverseVerticalChannel ? valueY : 100 - valueY;
 

@@ -61,8 +61,8 @@ export function HueCircular({
   const handleStyle = useAnimatedStyle(() => {
     const center = width.value / 2,
       distance = (width.value - sliderThickness) / 2,
-      posY = width.value - Math.round(Math.sin((hueValue.value * Math.PI) / 180) * distance + center) - thumbSize / 2,
-      posX = width.value - Math.round(Math.cos((hueValue.value * Math.PI) / 180) * distance + center) - thumbSize / 2;
+      posY = width.value - (Math.sin((hueValue.value * Math.PI) / 180) * distance + center) - thumbSize / 2,
+      posX = width.value - (Math.cos((hueValue.value * Math.PI) / 180) * distance + center) - thumbSize / 2;
     return {
       transform: [
         { translateX: posX },
@@ -101,7 +101,7 @@ export function HueCircular({
       dy = center - y,
       theta = Math.atan2(dy, dx) * (180 / Math.PI), // [0 - 180] range
       angle = theta < 0 ? 360 + theta : theta, // [0 - 360] range
-      newHueValue = Math.round(angle);
+      newHueValue = angle;
 
     if (hueValue.value === newHueValue) return;
 

@@ -2,7 +2,15 @@ import React, { useState } from 'react';
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 
-import ColorPicker, { Panel3, Swatches, OpacitySlider, colorKit, BrightnessSlider, Preview } from 'reanimated-color-picker';
+import ColorPicker, {
+  Panel3,
+  Swatches,
+  OpacitySlider,
+  colorKit,
+  BrightnessSlider,
+  Preview,
+  ExtraThumb,
+} from 'reanimated-color-picker';
 import type { returnedResults } from 'reanimated-color-picker';
 
 export default function Example() {
@@ -32,7 +40,15 @@ export default function Example() {
                 <Preview style={styles.previewStyle} />
               </View>
 
-              <Panel3 style={styles.panelStyle} renderCenterLine />
+              <Panel3 style={styles.panelStyle} renderCenterLine adaptSpectrum>
+                <ExtraThumb thumbShape='circle' hueTransform={120} />
+                <ExtraThumb thumbShape='circle' hueTransform={140} />
+                <ExtraThumb thumbShape='circle' hueTransform={160} />
+                <ExtraThumb thumbShape='circle' hueTransform={180} />
+                <ExtraThumb thumbShape='circle' hueTransform={200} />
+                <ExtraThumb thumbShape='circle' hueTransform={220} />
+                <ExtraThumb thumbShape='circle' hueTransform={240} />
+              </Panel3>
 
               <BrightnessSlider style={styles.sliderStyle} />
 

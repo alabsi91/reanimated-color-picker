@@ -88,7 +88,7 @@ export function HueSlider({
 
     const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0),
       pos = clamp((vertical ? y : x) - (boundedThumb ? thumbSize / 2 : 0), length),
-      value = Math.round((pos / length) * 360),
+      value = (pos / length) * 360,
       newHueValue = reverse ? 360 - value : value;
 
     if (hueValue.value === newHueValue) return;
