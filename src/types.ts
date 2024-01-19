@@ -232,6 +232,7 @@ export interface Panel3Context {
   renderThumb?: RenderThumbType;
   boundedThumb: boolean;
   renderCenterLine: boolean;
+  rotate: number;
 }
 
 export interface ColorPickerProps {
@@ -413,6 +414,9 @@ export interface Panel3Props extends PanelProps {
 
   /** - Render a line from the center of the Panel to the thumb (handle). */
   renderCenterLine?: boolean;
+
+  /** - Rotate the hue circle, from 0 to 360 */
+  rotate?: number;
 
   children?: ReactNode;
 }
