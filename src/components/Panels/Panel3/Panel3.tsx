@@ -19,6 +19,7 @@ export function Panel3({
   centerChannel = 'saturation',
   gestures = [],
   style = {},
+  rotate = 0,
   children,
   ...props
 }: Panel3Props) {
@@ -42,23 +43,14 @@ export function Panel3({
 
   const handleStyle = useAnimatedStyle(() => {
     const center = width.value / 2 - (boundedThumb ? thumbSize / 2 : 0),
+      rotatedHue = (hueValue.value - rotate) % 360,
       distance = (channelValue.value / 100) * (width.value / 2 - (boundedThumb ? thumbSize / 2 : 0)),
-      posY =
-        width.value -
-        (Math.sin((hueValue.value * Math.PI) / 180) * distance + center) -
-        (boundedThumb ? thumbSize : thumbSize / 2),
-      posX =
-        width.value -
-        (Math.cos((hueValue.value * Math.PI) / 180) * distance + center) -
-        (boundedThumb ? thumbSize : thumbSize / 2);
+      angle = (rotatedHue * Math.PI) / 180,
+      posY = width.value - (Math.sin(angle) * distance + center) - (boundedThumb ? thumbSize : thumbSize / 2),
+      posX = width.value - (Math.cos(angle) * distance + center) - (boundedThumb ? thumbSize : thumbSize / 2);
 
     return {
-      transform: [
-        { translateX: posX },
-        { translateY: posY },
-        { scale: handleScale.value },
-        { rotate: hueValue.value + 90 + 'deg' },
-      ],
+      transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }, { rotate: rotatedHue + 90 + 'deg' }],
     };
   }, [width, channelValue, hueValue, handleScale]);
 
@@ -75,8 +67,9 @@ export function Panel3({
 
     const lineThickness = 1,
       center = width.value / 2 - (boundedThumb ? thumbSize / 2 : 0),
+      rotatedHue = (hueValue.value - rotate) % 360,
       distance = (channelValue.value / 100) * center,
-      angle = ((hueValue.value * Math.PI) / Math.PI + 180) % 360; // reversed angle
+      angle = ((rotatedHue * Math.PI) / Math.PI + 180) % 360; // reversed angle
 
     return {
       top: (width.value - lineThickness) / 2,
@@ -99,7 +92,7 @@ export function Panel3({
       theta = Math.atan2(dy, dx) * (180 / Math.PI), // [0 - 180] range
       angle = theta < 0 ? 360 + theta : theta, // [0 - 360] range
       radiusPercent = radius / center,
-      newHueValue = angle,
+      newHueValue = (angle + rotate) % 360,
       newChannelValue = radiusPercent * 100;
 
     if (hueValue.value === newHueValue && channelValue.value === newChannelValue) return;
@@ -160,6 +153,7 @@ export function Panel3({
         boundedThumb,
         renderCenterLine,
         thumbSize,
+        rotate,
       }}
     >
       <GestureDetector gesture={composed}>
@@ -171,7 +165,12 @@ export function Panel3({
             { position: 'relative', aspectRatio: 1, borderWidth: 0, padding: 0, borderRadius },
           ]}
         >
-          <ImageBackground source={require('@assets/circularHue.png')} style={styles.panel_image} resizeMode='stretch'>
+          <ImageBackground
+            source={require('@assets/circularHue.png')}
+            style={styles.panel_image}
+            imageStyle={{ transform: [{ rotate: -rotate + 'deg' }] }}
+            resizeMode='stretch'
+          >
             <ConditionalRendering if={adaptSpectrum && centerChannel === 'brightness'}>
               <Animated.View style={[{ borderRadius }, spectrumStyle, StyleSheet.absoluteFillObject]} />
             </ConditionalRendering>
