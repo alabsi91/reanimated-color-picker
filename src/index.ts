@@ -19,6 +19,9 @@ export { HueSlider } from '@sliders/HSB/HueSlider';
 export { SaturationSlider } from '@sliders/HSB/SaturationSlider';
 export { BrightnessSlider } from '@sliders/HSB/BrightnessSlider';
 
+export { LuminanceSlider } from '@sliders/HSL/LuminanceSlider';
+export { HSLSaturationSlider } from '@sliders/HSL/HSLSaturationSlider';
+
 export { OpacitySlider } from '@sliders/OpacitySlider';
 export { HueCircular } from '@sliders/HueCircular';
 
