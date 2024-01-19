@@ -1,16 +1,18 @@
 import React from 'react';
 import { StatusBar, StyleSheet, View } from 'react-native';
+import CircularHue from './src/CircularHue';
+import HorizontalHsbSliders from './src/HorizontalHsbSliders';
+import HorizontalHslSliders from './src/HorizontalHslSliders';
+import HorizontalRgbSliders from './src/HorizontalRgbSliders';
 import Panel1Example from './src/Panel1Example';
-import Panel2Saturation from './src/Panel2Saturation';
 import Panel2Brightness from './src/Panel2Brightness';
-import WheelSaturation from './src/Panel3Saturation';
+import Panel2Saturation from './src/Panel2Saturation';
 import WheelBrightness from './src/Panel3Brightness';
+import WheelSaturation from './src/Panel3Saturation';
 import Panel4Example from './src/Panel4Example';
 import Panel5Example from './src/Panel5Example';
-import CircularHue from './src/CircularHue';
-import HorizontalSliders from './src/HorizontalSliders';
-import VerticalSliders from './src/VerticalSliders';
-import HorizontalRgbSliders from './src/HorizontalRgbSliders';
+import VerticalHsbSliders from './src/VerticalHsbSliders';
+import VerticalHslSliders from './src/VerticalHslSliders';
 import VerticalRgbSliders from './src/VerticalRgbSliders';
 
 export default function App() {
@@ -21,15 +23,25 @@ export default function App() {
       <View style={[styles.container, { paddingTop: 20, backgroundColor: '#202124' }]}>
         <View style={[styles.container, { width: 240, alignSelf: 'center' }]}>
           <Panel1Example />
+
           <Panel2Saturation />
           <Panel2Brightness />
+
           <WheelSaturation />
           <WheelBrightness />
+
           <Panel4Example />
+
           <Panel5Example />
+
           <CircularHue />
-          <HorizontalSliders />
-          <VerticalSliders />
+
+          <HorizontalHsbSliders />
+          <VerticalHsbSliders />
+
+          <HorizontalHslSliders />
+          <VerticalHslSliders />
+
           <HorizontalRgbSliders />
           <VerticalRgbSliders />
         </View>

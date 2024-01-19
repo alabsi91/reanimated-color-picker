@@ -8,8 +8,8 @@ import ColorPicker, {
   HueSlider,
   colorKit,
   PreviewText,
-  SaturationSlider,
-  BrightnessSlider,
+  HSLSaturationSlider,
+  LuminanceSlider,
 } from 'reanimated-color-picker';
 
 export default function Example() {
@@ -28,7 +28,7 @@ export default function Example() {
   return (
     <>
       <Pressable style={styles.openButton} onPress={() => setShowModal(true)}>
-        <Text style={{ color: '#707070', fontWeight: 'bold', textAlign: 'center' }}>Horizontal Sliders</Text>
+        <Text style={{ color: '#707070', fontWeight: 'bold', textAlign: 'center' }}>Vertical HSL Sliders</Text>
       </Pressable>
 
       <Modal onRequestClose={() => setShowModal(false)} visible={showModal} animationType='slide'>
@@ -36,28 +36,23 @@ export default function Example() {
           <View style={styles.pickerContainer}>
             <ColorPicker
               value={selectedColor.value}
-              sliderThickness={25}
-              thumbSize={24}
+              sliderThickness={30}
+              thumbSize={30}
               thumbShape='circle'
               onChange={onColorSelect}
               adaptSpectrum
               boundedThumb
             >
-              <Text style={styles.sliderTitle}>Hue</Text>
-              <HueSlider style={styles.sliderStyle} />
-
-              <Text style={styles.sliderTitle}>Saturation</Text>
-              <SaturationSlider style={styles.sliderStyle} reverse />
-
-              <Text style={styles.sliderTitle}>Brightness</Text>
-              <BrightnessSlider style={styles.sliderStyle} />
-
-              <Text style={styles.sliderTitle}>Opacity</Text>
-              <OpacitySlider style={styles.sliderStyle} />
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: 300 }}>
+                <HueSlider style={styles.sliderStyle} vertical reverse />
+                <HSLSaturationSlider style={styles.sliderStyle} vertical reverse />
+                <LuminanceSlider style={styles.sliderStyle} vertical reverse />
+                <OpacitySlider style={styles.sliderStyle} vertical reverse />
+              </View>
 
               <Swatches style={styles.swatchesContainer} swatchStyle={styles.swatchStyle} colors={customSwatches} />
               <View style={styles.previewTxtContainer}>
-                <PreviewText style={{ color: '#707070' }} colorFormat='rgba' />
+                <PreviewText style={{ color: '#707070' }} colorFormat='hsva' />
               </View>
             </ColorPicker>
           </View>
@@ -93,15 +88,8 @@ const styles = StyleSheet.create({
 
     elevation: 10,
   },
-  sliderTitle: {
-    color: '#000',
-    fontWeight: 'bold',
-    marginBottom: 5,
-    paddingHorizontal: 4,
-  },
   sliderStyle: {
     borderRadius: 20,
-    marginBottom: 20,
 
     shadowColor: '#000',
     shadowOffset: {
