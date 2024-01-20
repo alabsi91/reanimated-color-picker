@@ -34,6 +34,8 @@ export function HSLSaturationSlider({ gestures = [], style = {}, vertical = fals
   const handleScale = useSharedValue(1);
   const lastHslSaturationValue = useSharedValue(0);
 
+  // We need to keep track of the HSL saturation value because, when the luminance is 0 or 100,
+  // when converting to/from HSV, the previous saturation value will be lost.
   const hsl = useDerivedValue(() => {
     const hsvColor = { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
     const { h, s, l } = colorKit.runOnUI().HSL(hsvColor).object(false);
@@ -81,7 +83,7 @@ export function HSLSaturationSlider({ gestures = [], style = {}, vertical = fals
   }, [width, height]);
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
-    'worklet';
+    ('worklet');
 
     const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0),
       pos = clamp((vertical ? y : x) - (boundedThumb ? thumbSize / 2 : 0), length),
@@ -90,7 +92,10 @@ export function HSLSaturationSlider({ gestures = [], style = {}, vertical = fals
 
     if (newSaturationValue === hsl.value.s) return;
 
+    // To prevent locking this slider when the luminance is 0 or 100,
+    // this should not affect the resulting color, as the value will be rounded.
     const l = hsl.value.l === 0 ? 0.01 : hsl.value.l === 100 ? 99.99 : hsl.value.l;
+
     const { s, v } = colorKit.runOnUI().HSV({ h: hsl.value.h, s: newSaturationValue, l }).object(false);
 
     saturationValue.value = s;

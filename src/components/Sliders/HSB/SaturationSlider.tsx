@@ -28,9 +28,8 @@ export function SaturationSlider({ gestures = [], style = {}, vertical = false, 
     getWidth = getStyle(style, 'width'),
     getHeight = getStyle(style, 'height');
 
-  const width = useSharedValue(vertical ? sliderThickness : typeof getWidth === 'number' ? getWidth : 0),
-    height = useSharedValue(!vertical ? sliderThickness : typeof getHeight === 'number' ? getHeight : 0);
-
+  const width = useSharedValue(vertical ? sliderThickness : typeof getWidth === 'number' ? getWidth : 0);
+  const height = useSharedValue(!vertical ? sliderThickness : typeof getHeight === 'number' ? getHeight : 0);
   const handleScale = useSharedValue(1);
 
   const handleStyle = useAnimatedStyle(() => {
