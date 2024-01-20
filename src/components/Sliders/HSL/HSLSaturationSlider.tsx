@@ -83,7 +83,7 @@ export function HSLSaturationSlider({ gestures = [], style = {}, vertical = fals
   }, [width, height]);
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
-    ('worklet');
+    'worklet';
 
     const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0),
       pos = clamp((vertical ? y : x) - (boundedThumb ? thumbSize / 2 : 0), length),
