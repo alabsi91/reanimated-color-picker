@@ -11,6 +11,7 @@ import ColorPicker, {
   SaturationSlider,
   BrightnessSlider,
 } from 'reanimated-color-picker';
+import type { returnedResults } from 'reanimated-color-picker';
 
 export default function Example() {
   const [showModal, setShowModal] = useState(false);
@@ -20,7 +21,7 @@ export default function Example() {
   const selectedColor = useSharedValue(customSwatches[0]);
   const backgroundColorStyle = useAnimatedStyle(() => ({ backgroundColor: selectedColor.value }));
 
-  const onColorSelect = color => {
+  const onColorSelect = (color: returnedResults) => {
     'worklet';
     selectedColor.value = color.hex;
   };
@@ -28,7 +29,7 @@ export default function Example() {
   return (
     <>
       <Pressable style={styles.openButton} onPress={() => setShowModal(true)}>
-        <Text style={{ color: '#707070', fontWeight: 'bold', textAlign: 'center' }}>Vertical HSB Sliders</Text>
+        <Text style={{ color: '#707070', fontWeight: 'bold', textAlign: 'center' }}>HSB Vertical</Text>
       </Pressable>
 
       <Modal onRequestClose={() => setShowModal(false)} visible={showModal} animationType='slide'>
@@ -43,13 +44,27 @@ export default function Example() {
               adaptSpectrum
               boundedThumb
             >
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: 300 }}>
-                <HueSlider style={styles.sliderStyle} vertical reverse />
-                <SaturationSlider style={styles.sliderStyle} vertical reverse />
-                <BrightnessSlider style={styles.sliderStyle} vertical reverse />
-                <OpacitySlider style={styles.sliderStyle} vertical reverse />
-              </View>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <View style={{ alignItems: 'center' }}>
+                  <Text style={styles.sliderTitle}>H</Text>
+                  <HueSlider style={styles.sliderStyle} vertical reverse />
+                </View>
 
+                <View style={{ alignItems: 'center' }}>
+                  <Text style={styles.sliderTitle}>S</Text>
+                  <SaturationSlider style={styles.sliderStyle} vertical reverse />
+                </View>
+
+                <View style={{ alignItems: 'center' }}>
+                  <Text style={styles.sliderTitle}>B</Text>
+                  <BrightnessSlider style={styles.sliderStyle} vertical reverse />
+                </View>
+
+                <View style={{ alignItems: 'center' }}>
+                  <Text style={styles.sliderTitle}>A</Text>
+                  <OpacitySlider style={styles.sliderStyle} vertical reverse />
+                </View>
+              </View>
               <Swatches style={styles.swatchesContainer} swatchStyle={styles.swatchStyle} colors={customSwatches} />
               <View style={styles.previewTxtContainer}>
                 <PreviewText style={{ color: '#707070' }} colorFormat='hsva' />
@@ -88,7 +103,14 @@ const styles = StyleSheet.create({
 
     elevation: 10,
   },
+  sliderTitle: {
+    color: '#000',
+    fontWeight: 'bold',
+    marginBottom: 5,
+    paddingHorizontal: 4,
+  },
   sliderStyle: {
+    height: 300,
     borderRadius: 20,
 
     shadowColor: '#000',
@@ -144,7 +166,7 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     position: 'absolute',
-    bottom: 20,
+    bottom: 10,
     borderRadius: 20,
     paddingHorizontal: 40,
     paddingVertical: 10,

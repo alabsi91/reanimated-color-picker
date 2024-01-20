@@ -2,7 +2,15 @@ import React, { useState } from 'react';
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 
-import ColorPicker, { Panel1, Swatches, OpacitySlider, HueSlider, colorKit, PreviewText } from 'reanimated-color-picker';
+import ColorPicker, {
+  Swatches,
+  OpacitySlider,
+  HueSlider,
+  colorKit,
+  PreviewText,
+  SaturationSlider,
+  BrightnessSlider,
+} from 'reanimated-color-picker';
 import type { returnedResults } from 'reanimated-color-picker';
 
 export default function Example() {
@@ -21,7 +29,7 @@ export default function Example() {
   return (
     <>
       <Pressable style={styles.openButton} onPress={() => setShowModal(true)}>
-        <Text style={{ color: '#707070', fontWeight: 'bold', textAlign: 'center' }}>Panel1</Text>
+        <Text style={{ color: '#707070', fontWeight: 'bold', textAlign: 'center' }}>HSB Vertical</Text>
       </Pressable>
 
       <Modal onRequestClose={() => setShowModal(false)} visible={showModal} animationType='slide'>
@@ -29,18 +37,37 @@ export default function Example() {
           <View style={styles.pickerContainer}>
             <ColorPicker
               value={selectedColor.value}
-              sliderThickness={25}
-              thumbSize={24}
+              sliderThickness={30}
+              thumbSize={30}
               thumbShape='circle'
               onChange={onColorSelect}
+              adaptSpectrum
               boundedThumb
             >
-              <Panel1 style={styles.panelStyle} />
-              <HueSlider style={styles.sliderStyle} />
-              <OpacitySlider style={styles.sliderStyle} />
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <View style={{ alignItems: 'center' }}>
+                  <Text style={styles.sliderTitle}>H</Text>
+                  <HueSlider style={styles.sliderStyle} vertical reverse />
+                </View>
+
+                <View style={{ alignItems: 'center' }}>
+                  <Text style={styles.sliderTitle}>S</Text>
+                  <SaturationSlider style={styles.sliderStyle} vertical reverse />
+                </View>
+
+                <View style={{ alignItems: 'center' }}>
+                  <Text style={styles.sliderTitle}>B</Text>
+                  <BrightnessSlider style={styles.sliderStyle} vertical reverse />
+                </View>
+
+                <View style={{ alignItems: 'center' }}>
+                  <Text style={styles.sliderTitle}>A</Text>
+                  <OpacitySlider style={styles.sliderStyle} vertical reverse />
+                </View>
+              </View>
               <Swatches style={styles.swatchesContainer} swatchStyle={styles.swatchStyle} colors={customSwatches} />
               <View style={styles.previewTxtContainer}>
-                <PreviewText style={{ color: '#707070' }} />
+                <PreviewText style={{ color: '#707070' }} colorFormat='hsva' />
               </View>
             </ColorPicker>
           </View>
@@ -58,6 +85,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignContent: 'center',
+    backgroundColor: 'orange',
   },
   pickerContainer: {
     alignSelf: 'center',
@@ -75,22 +103,15 @@ const styles = StyleSheet.create({
 
     elevation: 10,
   },
-  panelStyle: {
-    borderRadius: 16,
-
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-
-    elevation: 5,
+  sliderTitle: {
+    color: '#000',
+    fontWeight: 'bold',
+    marginBottom: 5,
+    paddingHorizontal: 4,
   },
   sliderStyle: {
+    height: 300,
     borderRadius: 20,
-    marginTop: 20,
 
     shadowColor: '#000',
     shadowOffset: {
@@ -145,7 +166,7 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     position: 'absolute',
-    bottom: 20,
+    bottom: 10,
     borderRadius: 20,
     paddingHorizontal: 40,
     paddingVertical: 10,

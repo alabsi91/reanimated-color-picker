@@ -2,15 +2,8 @@ import React, { useState } from 'react';
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 
-import ColorPicker, {
-  Swatches,
-  OpacitySlider,
-  colorKit,
-  PreviewText,
-  RedSlider,
-  GreenSlider,
-  BlueSlider,
-} from 'reanimated-color-picker';
+import ColorPicker, { Panel1, Swatches, colorKit, PreviewText, HueCircular } from 'reanimated-color-picker';
+import type { returnedResults } from 'reanimated-color-picker';
 
 export default function Example() {
   const [showModal, setShowModal] = useState(false);
@@ -20,7 +13,7 @@ export default function Example() {
   const selectedColor = useSharedValue(customSwatches[0]);
   const backgroundColorStyle = useAnimatedStyle(() => ({ backgroundColor: selectedColor.value }));
 
-  const onColorSelect = color => {
+  const onColorSelect = (color: returnedResults) => {
     'worklet';
     selectedColor.value = color.hex;
   };
@@ -28,47 +21,19 @@ export default function Example() {
   return (
     <>
       <Pressable style={styles.openButton} onPress={() => setShowModal(true)}>
-        <Text style={{ color: '#707070', fontWeight: 'bold', textAlign: 'center' }}>Vertical RGB</Text>
+        <Text style={{ color: '#707070', fontWeight: 'bold', textAlign: 'center' }}>Circular Hue</Text>
       </Pressable>
 
       <Modal onRequestClose={() => setShowModal(false)} visible={showModal} animationType='slide'>
         <Animated.View style={[styles.container, backgroundColorStyle]}>
           <View style={styles.pickerContainer}>
-            <ColorPicker
-              value={selectedColor.value}
-              sliderThickness={30}
-              thumbSize={30}
-              thumbShape='circle'
-              onChange={onColorSelect}
-              thumbAnimationDuration={100}
-              adaptSpectrum
-              boundedThumb
-            >
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <View style={{ alignItems: 'center' }}>
-                  <Text style={styles.sliderTitle}>R</Text>
-                  <RedSlider style={styles.sliderStyle} vertical reverse />
-                </View>
-
-                <View style={{ alignItems: 'center' }}>
-                  <Text style={styles.sliderTitle}>G</Text>
-                  <GreenSlider style={styles.sliderStyle} vertical reverse />
-                </View>
-
-                <View style={{ alignItems: 'center' }}>
-                  <Text style={styles.sliderTitle}>B</Text>
-                  <BlueSlider style={styles.sliderStyle} vertical reverse />
-                </View>
-
-                <View style={{ alignItems: 'center' }}>
-                  <Text style={styles.sliderTitle}>A</Text>
-                  <OpacitySlider style={styles.sliderStyle} vertical reverse />
-                </View>
-              </View>
-
+            <ColorPicker value={selectedColor.value} sliderThickness={20} thumbSize={24} onChange={onColorSelect} boundedThumb>
+              <HueCircular containerStyle={styles.hueContainer} thumbShape='pill'>
+                <Panel1 style={styles.panelStyle} />
+              </HueCircular>
               <Swatches style={styles.swatchesContainer} swatchStyle={styles.swatchStyle} colors={customSwatches} />
               <View style={styles.previewTxtContainer}>
-                <PreviewText style={{ color: '#707070' }} colorFormat='hsva' />
+                <PreviewText style={{ color: '#707070' }} colorFormat='hsl' />
               </View>
             </ColorPicker>
           </View>
@@ -104,25 +69,14 @@ const styles = StyleSheet.create({
 
     elevation: 10,
   },
-  sliderTitle: {
-    color: '#000',
-    fontWeight: 'bold',
-    marginBottom: 5,
-    paddingHorizontal: 4,
+  hueContainer: {
+    justifyContent: 'center',
   },
-  sliderStyle: {
-    height: 300,
-    borderRadius: 20,
-
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-
-    elevation: 5,
+  panelStyle: {
+    width: '70%',
+    height: '70%',
+    alignSelf: 'center',
+    borderRadius: 16,
   },
   previewTxtContainer: {
     paddingTop: 20,
@@ -167,7 +121,7 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     position: 'absolute',
-    bottom: 20,
+    bottom: 10,
     borderRadius: 20,
     paddingHorizontal: 40,
     paddingVertical: 10,

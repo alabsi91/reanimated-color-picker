@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { KeyboardAvoidingView, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 
-import ColorPicker, { Panel2, OpacitySlider, colorKit, InputWidget, SaturationSlider } from 'reanimated-color-picker';
+import ColorPicker, { Panel2, OpacitySlider, colorKit, BrightnessSlider, InputWidget } from 'reanimated-color-picker';
+import type { returnedResults } from 'reanimated-color-picker';
 
 export default function Example() {
   const [showModal, setShowModal] = useState(false);
@@ -12,7 +13,7 @@ export default function Example() {
   const selectedColor = useSharedValue(initialColor);
   const backgroundColorStyle = useAnimatedStyle(() => ({ backgroundColor: selectedColor.value }));
 
-  const onColorSelect = color => {
+  const onColorSelect = (color: returnedResults) => {
     'worklet';
     selectedColor.value = color.hex;
   };
@@ -20,7 +21,7 @@ export default function Example() {
   return (
     <>
       <Pressable style={styles.openButton} onPress={() => setShowModal(true)}>
-        <Text style={{ color: '#707070', fontWeight: 'bold', textAlign: 'center' }}>Panel2 Brightness</Text>
+        <Text style={{ color: '#707070', fontWeight: 'bold', textAlign: 'center' }}>Panel2 Saturation</Text>
       </Pressable>
 
       <Modal onRequestClose={() => setShowModal(false)} visible={showModal} animationType='slide'>
@@ -30,22 +31,15 @@ export default function Example() {
               <ColorPicker
                 value={selectedColor.value}
                 sliderThickness={25}
-                thumbSize={20}
-                thumbShape='doubleTriangle'
+                thumbSize={30}
+                thumbShape='rect'
                 onChange={onColorSelect}
-                adaptSpectrum
               >
-                <Panel2
-                  style={styles.panelStyle}
-                  verticalChannel='brightness'
-                  thumbShape='ring'
-                  thumbSize={30}
-                  reverseVerticalChannel
-                />
+                <Panel2 style={styles.panelStyle} thumbShape='ring' reverseVerticalChannel />
 
-                <SaturationSlider style={styles.sliderStyle} thumbColor='#fff' />
+                <BrightnessSlider style={styles.sliderStyle} />
 
-                <OpacitySlider style={styles.sliderStyle} thumbColor='#fff' />
+                <OpacitySlider style={styles.sliderStyle} />
 
                 <View style={styles.previewTxtContainer}>
                   <InputWidget
@@ -139,7 +133,7 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     position: 'absolute',
-    bottom: 20,
+    bottom: 10,
     borderRadius: 20,
     paddingHorizontal: 40,
     paddingVertical: 10,

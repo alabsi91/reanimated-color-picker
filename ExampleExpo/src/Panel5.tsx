@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 
-import ColorPicker, { Panel4, OpacitySlider, colorKit, PreviewText } from 'reanimated-color-picker';
+import ColorPicker, { Panel5, OpacitySlider, colorKit, PreviewText } from 'reanimated-color-picker';
 import type { returnedResults } from 'reanimated-color-picker';
 
 export default function Example() {
   const [showModal, setShowModal] = useState(false);
 
-  const initialColor = colorKit.randomHsvColor({ s: [100, 100], v: [100, 100] }).hex();
+  const initialColor = colorKit.randomRgbColor().hex();
+
   const selectedColor = useSharedValue(initialColor);
   const backgroundColorStyle = useAnimatedStyle(() => ({ backgroundColor: selectedColor.value }));
 
@@ -20,7 +21,7 @@ export default function Example() {
   return (
     <>
       <Pressable style={styles.openButton} onPress={() => setShowModal(true)}>
-        <Text style={{ color: '#707070', fontWeight: 'bold', textAlign: 'center' }}>Panel4</Text>
+        <Text style={{ color: '#707070', fontWeight: 'bold', textAlign: 'center' }}>Panel5 Grid</Text>
       </Pressable>
 
       <Modal onRequestClose={() => setShowModal(false)} visible={showModal} animationType='slide'>
@@ -33,12 +34,12 @@ export default function Example() {
               thumbShape='circle'
               onChange={onColorSelect}
             >
-              <Panel4 style={styles.panelStyle} thumbShape='ring' />
+              <Panel5 style={styles.panelStyle} />
 
-              <OpacitySlider style={styles.sliderStyle} />
+              <OpacitySlider style={styles.sliderStyle} adaptSpectrum />
 
               <View style={styles.previewTxtContainer}>
-                <PreviewText style={{ color: '#707070' }} colorFormat='hwba' />
+                <PreviewText style={{ color: '#707070' }} colorFormat='hsla' />
               </View>
             </ColorPicker>
           </View>
@@ -74,7 +75,7 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   panelStyle: {
-    borderRadius: 16,
+    borderRadius: 2,
 
     shadowColor: '#000',
     shadowOffset: {
@@ -125,7 +126,7 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     position: 'absolute',
-    bottom: 20,
+    bottom: 10,
     borderRadius: 20,
     paddingHorizontal: 40,
     paddingVertical: 10,

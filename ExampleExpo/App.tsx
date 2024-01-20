@@ -1,19 +1,19 @@
 import React from 'react';
-import { StatusBar, StyleSheet, View } from 'react-native';
+import { ScrollView, StatusBar, StyleSheet, View } from 'react-native';
 import CircularHue from './src/CircularHue';
-import HorizontalHsbSliders from './src/HorizontalHsbSliders';
-import HorizontalHslSliders from './src/HorizontalHslSliders';
-import HorizontalRgbSliders from './src/HorizontalRgbSliders';
-import Panel1Example from './src/Panel1Example';
+import HorizontalHsbSliders from './src/HsbHorizontal';
+import HorizontalHslSliders from './src/HslHorizontal';
+import HorizontalRgbSliders from './src/RgbHorizontal';
+import Panel1Example from './src/Panel1';
 import Panel2Brightness from './src/Panel2Brightness';
 import Panel2Saturation from './src/Panel2Saturation';
 import WheelBrightness from './src/Panel3Brightness';
 import WheelSaturation from './src/Panel3Saturation';
-import Panel4Example from './src/Panel4Example';
-import Panel5Example from './src/Panel5Example';
-import VerticalHsbSliders from './src/VerticalHsbSliders';
-import VerticalHslSliders from './src/VerticalHslSliders';
-import VerticalRgbSliders from './src/VerticalRgbSliders';
+import Panel4Example from './src/Panel4';
+import Panel5Example from './src/Panel5';
+import VerticalHsbSliders from './src/HsbVertical';
+import VerticalHslSliders from './src/HslVertical';
+import VerticalRgbSliders from './src/RgbVertical';
 
 export default function App() {
   return (
@@ -21,7 +21,7 @@ export default function App() {
       <StatusBar backgroundColor='transparent' translucent />
 
       <View style={[styles.container, { paddingTop: 20, backgroundColor: '#202124' }]}>
-        <View style={[styles.container, { width: 240, alignSelf: 'center' }]}>
+        <ScrollView contentContainerStyle={[styles.container, { width: 240, alignSelf: 'center' }]}>
           <Panel1Example />
 
           <Panel2Saturation />
@@ -44,7 +44,7 @@ export default function App() {
 
           <HorizontalRgbSliders />
           <VerticalRgbSliders />
-        </View>
+        </ScrollView>
       </View>
     </>
   );

@@ -2,16 +2,26 @@ import React, { useState } from 'react';
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 
-import ColorPicker, { Panel4, OpacitySlider, colorKit, PreviewText } from 'reanimated-color-picker';
+import ColorPicker, {
+  Panel3,
+  Swatches,
+  OpacitySlider,
+  colorKit,
+  BrightnessSlider,
+  Preview,
+  ExtraThumb,
+} from 'reanimated-color-picker';
+import type { returnedResults } from 'reanimated-color-picker';
 
 export default function Example() {
   const [showModal, setShowModal] = useState(false);
 
-  const initialColor = colorKit.randomHsvColor({ s: [100, 100], v: [100, 100] }).hex();
-  const selectedColor = useSharedValue(initialColor);
+  const customSwatches = new Array(6).fill('#fff').map(() => colorKit.randomRgbColor().hex());
+
+  const selectedColor = useSharedValue(customSwatches[0]);
   const backgroundColorStyle = useAnimatedStyle(() => ({ backgroundColor: selectedColor.value }));
 
-  const onColorSelect = color => {
+  const onColorSelect = (color: returnedResults) => {
     'worklet';
     selectedColor.value = color.hex;
   };
@@ -19,26 +29,32 @@ export default function Example() {
   return (
     <>
       <Pressable style={styles.openButton} onPress={() => setShowModal(true)}>
-        <Text style={{ color: '#707070', fontWeight: 'bold', textAlign: 'center' }}>Panel4</Text>
+        <Text style={{ color: '#707070', fontWeight: 'bold', textAlign: 'center' }}>Panel3 Saturation</Text>
       </Pressable>
 
       <Modal onRequestClose={() => setShowModal(false)} visible={showModal} animationType='slide'>
         <Animated.View style={[styles.container, backgroundColorStyle]}>
           <View style={styles.pickerContainer}>
-            <ColorPicker
-              value={selectedColor.value}
-              sliderThickness={25}
-              thumbSize={24}
-              thumbShape='circle'
-              onChange={onColorSelect}
-            >
-              <Panel4 style={styles.panelStyle} thumbShape='ring' />
+            <ColorPicker value={selectedColor.value} sliderThickness={25} thumbSize={27} onChange={onColorSelect}>
+              <View style={styles.previewContainer}>
+                <Preview style={styles.previewStyle} />
+              </View>
+
+              <Panel3 style={styles.panelStyle} renderCenterLine adaptSpectrum>
+                <ExtraThumb thumbShape='circle' hueTransform={120} />
+                <ExtraThumb thumbShape='circle' hueTransform={140} />
+                <ExtraThumb thumbShape='circle' hueTransform={160} />
+                <ExtraThumb thumbShape='circle' hueTransform={180} />
+                <ExtraThumb thumbShape='circle' hueTransform={200} />
+                <ExtraThumb thumbShape='circle' hueTransform={220} />
+                <ExtraThumb thumbShape='circle' hueTransform={240} />
+              </Panel3>
+
+              <BrightnessSlider style={styles.sliderStyle} />
 
               <OpacitySlider style={styles.sliderStyle} />
 
-              <View style={styles.previewTxtContainer}>
-                <PreviewText style={{ color: '#707070' }} colorFormat='hwba' />
-              </View>
+              <Swatches style={styles.swatchesContainer} swatchStyle={styles.swatchStyle} colors={customSwatches} />
             </ColorPicker>
           </View>
 
@@ -99,11 +115,33 @@ const styles = StyleSheet.create({
 
     elevation: 5,
   },
-  previewTxtContainer: {
-    paddingTop: 20,
-    marginTop: 20,
+  previewContainer: {
+    paddingBottom: 20,
+    marginBottom: 20,
+    borderBottomWidth: 1,
+    borderColor: '#bebdbe',
+  },
+  previewStyle: {
+    height: 40,
+    borderRadius: 14,
+  },
+  swatchesContainer: {
     borderTopWidth: 1,
     borderColor: '#bebdbe',
+    marginTop: 20,
+    paddingTop: 20,
+    alignItems: 'center',
+    flexWrap: 'nowrap',
+    gap: 10,
+  },
+  swatchStyle: {
+    borderRadius: 20,
+    height: 30,
+    width: 30,
+    margin: 0,
+    marginBottom: 0,
+    marginHorizontal: 0,
+    marginVertical: 0,
   },
   openButton: {
     width: '100%',
@@ -124,7 +162,7 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     position: 'absolute',
-    bottom: 20,
+    bottom: 10,
     borderRadius: 20,
     paddingHorizontal: 40,
     paddingVertical: 10,

@@ -2,15 +2,8 @@ import React, { useState } from 'react';
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 
-import ColorPicker, {
-  Swatches,
-  OpacitySlider,
-  HueSlider,
-  colorKit,
-  PreviewText,
-  HSLSaturationSlider,
-  LuminanceSlider,
-} from 'reanimated-color-picker';
+import ColorPicker, { Panel3, Swatches, OpacitySlider, colorKit, Preview, SaturationSlider } from 'reanimated-color-picker';
+import type { returnedResults } from 'reanimated-color-picker';
 
 export default function Example() {
   const [showModal, setShowModal] = useState(false);
@@ -20,7 +13,7 @@ export default function Example() {
   const selectedColor = useSharedValue(customSwatches[0]);
   const backgroundColorStyle = useAnimatedStyle(() => ({ backgroundColor: selectedColor.value }));
 
-  const onColorSelect = color => {
+  const onColorSelect = (color: returnedResults) => {
     'worklet';
     selectedColor.value = color.hex;
   };
@@ -28,7 +21,7 @@ export default function Example() {
   return (
     <>
       <Pressable style={styles.openButton} onPress={() => setShowModal(true)}>
-        <Text style={{ color: '#707070', fontWeight: 'bold', textAlign: 'center' }}>Vertical HSL Sliders</Text>
+        <Text style={{ color: '#707070', fontWeight: 'bold', textAlign: 'center' }}>Panel3 Brightness</Text>
       </Pressable>
 
       <Modal onRequestClose={() => setShowModal(false)} visible={showModal} animationType='slide'>
@@ -36,24 +29,23 @@ export default function Example() {
           <View style={styles.pickerContainer}>
             <ColorPicker
               value={selectedColor.value}
-              sliderThickness={30}
-              thumbSize={30}
+              sliderThickness={25}
               thumbShape='circle'
+              thumbSize={25}
               onChange={onColorSelect}
               adaptSpectrum
-              boundedThumb
             >
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: 300 }}>
-                <HueSlider style={styles.sliderStyle} vertical reverse />
-                <HSLSaturationSlider style={styles.sliderStyle} vertical reverse />
-                <LuminanceSlider style={styles.sliderStyle} vertical reverse />
-                <OpacitySlider style={styles.sliderStyle} vertical reverse />
+              <View style={styles.previewContainer}>
+                <Preview style={styles.previewStyle} />
               </View>
 
+              <Panel3 style={styles.panelStyle} centerChannel='brightness' />
+
+              <SaturationSlider style={styles.sliderStyle} />
+
+              <OpacitySlider style={styles.sliderStyle} />
+
               <Swatches style={styles.swatchesContainer} swatchStyle={styles.swatchStyle} colors={customSwatches} />
-              <View style={styles.previewTxtContainer}>
-                <PreviewText style={{ color: '#707070' }} colorFormat='hsva' />
-              </View>
             </ColorPicker>
           </View>
 
@@ -70,7 +62,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignContent: 'center',
-    backgroundColor: 'orange',
   },
   pickerContainer: {
     alignSelf: 'center',
@@ -88,8 +79,8 @@ const styles = StyleSheet.create({
 
     elevation: 10,
   },
-  sliderStyle: {
-    borderRadius: 20,
+  panelStyle: {
+    borderRadius: 16,
 
     shadowColor: '#000',
     shadowOffset: {
@@ -101,17 +92,35 @@ const styles = StyleSheet.create({
 
     elevation: 5,
   },
-  previewTxtContainer: {
-    paddingTop: 20,
+  sliderStyle: {
+    borderRadius: 20,
     marginTop: 20,
-    borderTopWidth: 1,
+
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
+  },
+  previewContainer: {
+    paddingBottom: 20,
+    marginBottom: 20,
+    borderBottomWidth: 1,
     borderColor: '#bebdbe',
   },
+  previewStyle: {
+    height: 40,
+    borderRadius: 14,
+  },
   swatchesContainer: {
-    paddingTop: 20,
-    marginTop: 20,
     borderTopWidth: 1,
     borderColor: '#bebdbe',
+    marginTop: 20,
+    paddingTop: 20,
     alignItems: 'center',
     flexWrap: 'nowrap',
     gap: 10,
@@ -144,7 +153,7 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     position: 'absolute',
-    bottom: 20,
+    bottom: 10,
     borderRadius: 20,
     paddingHorizontal: 40,
     paddingVertical: 10,
