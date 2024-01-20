@@ -1,12 +1,12 @@
 ---
-sidebar_position: 17
+sidebar_position: 2
 sidebar_label: InputWidget
 description: The input widget component allows you to input color values in various formats.
 ---
 
 # `<InputWidget />`
 
-![InputWidget](../../../images/InputWidgets.png)
+![InputWidget](../../../../images/InputWidgets.png)
 
 - The input widget component allows you to input color values in various formats, including RGB, HEX, HSL, HWB, and HSV. The component features a button that lets you cycle through these formats, making it easy to switch between them and find the one that suits your needs.
 

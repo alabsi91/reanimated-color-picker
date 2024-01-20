@@ -1,12 +1,12 @@
 ---
-sidebar_position: 15
+sidebar_position: 0
 sidebar_label: Preview
 description: The preview of the selected and the initial color.
 ---
 
 # `<Preview />`
 
-![preview](../../../images/preview.png)
+![preview](../../../../images/preview.png)
 
 - The preview of the selected and the initial color.
 
@@ -22,7 +22,7 @@ description: The preview of the selected and the initial color.
 
 - Preview color's format.
 - `type: string`
-- `values:`<formats/>
+- `values:`<Formats/>
 - `default: 'hex'`
 
 ### `hideInitialColor`
