@@ -1,0 +1,100 @@
+---
+sidebar_position: 3
+sidebar_label: Panel4
+description: 'A slider with a square shape is used to adjust the channels of hue, saturation, and brightness.'
+---
+
+# `<Panel4 />`
+
+![panel4](../../../../images/panel4.png)
+
+- A slider with a square shape is used to adjust the channels of hue, saturation, and brightness.
+
+- To adjust the color's saturation and brightness, move the handle horizontally..
+
+- Move the handle vertically to change the color's hue.
+
+:::danger
+
+This panel cannot show all colors because it has a limited range of colors it can display. For example, if the input color has 50% saturation and 50% brightness, the panel thumb (handle) location won’t be accurate because it cannot show that color. This means that the color you select may not be exactly what you see in the panel.
+
+:::
+
+## Props
+
+### `boundedThumb`
+
+- Determines whether the panel slider thumb (or handle) should be constrained to stay within the boundaries of the panel.
+- When set to `true`, the thumb will not be allowed to move beyond the edges of the panel.
+- When set to `false`, part of it will be outside of the panel bounds.
+- `type: boolean`
+- `default: false`
+
+### `thumbSize`
+
+- Panel's handle (thumb) size (height\*width).
+- `type: number`
+- `default: 35`
+
+### `thumbColor`
+
+- Change thumb's color.
+- `type: string`
+- `default`: interactive\*
+
+:::info **\*interactive**
+
+- The thumb color will be changed depending on the contrast ratio if no color value is passed.
+
+:::
+
+### `thumbShape`
+
+- Change thumb's shape and appearance.
+- `type: string`
+- `values`: <shapes/>
+- `default: 'ring'`
+
+### `thumbStyle`
+
+- Thumb's containing View's style.
+- `type: ViewStyle`
+
+### `thumbInnerStyle`
+
+- Thumb's inner View(s) style.
+- `type: ViewStyle`
+
+import RenderThumb from '../_renderThumb.mdx';
+
+<RenderThumb />
+
+### `gestures`
+
+- An array of gestures or composed gestures from `react-native-gesture-handler`.
+- These gestures will run simultaneously with the color picker gestures.
+- `type: Gesture[]`
+- `default: []`
+
+### `reverseHue`
+
+- Reverse (flip) hue direction.
+- `type: boolean`
+- `default: false`
+
+### `reverseHorizontalChannels`
+
+- Reverse (flip) the direction of the horizontal channel's brightness and saturation..
+- `type: boolean`
+- `default: false`
+
+### `style`
+
+- Panel's container style.
+- `type: ViewStyle`
+
+:::info note
+
+- Certain style properties will be overridden.
+
+:::

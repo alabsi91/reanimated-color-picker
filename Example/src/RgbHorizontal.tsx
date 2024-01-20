@@ -1,16 +1,24 @@
 import React, { useState } from 'react';
-import { KeyboardAvoidingView, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 
-import ColorPicker, { Panel2, OpacitySlider, colorKit, InputWidget, SaturationSlider } from 'reanimated-color-picker';
+import ColorPicker, {
+  Swatches,
+  OpacitySlider,
+  colorKit,
+  PreviewText,
+  RedSlider,
+  GreenSlider,
+  BlueSlider,
+} from 'reanimated-color-picker';
 import type { returnedResults } from 'reanimated-color-picker';
 
 export default function Example() {
   const [showModal, setShowModal] = useState(false);
 
-  const initialColor = colorKit.randomRgbColor().hex();
+  const customSwatches = new Array(6).fill('#fff').map(() => colorKit.randomRgbColor().hex());
 
-  const selectedColor = useSharedValue(initialColor);
+  const selectedColor = useSharedValue(customSwatches[0]);
   const backgroundColorStyle = useAnimatedStyle(() => ({ backgroundColor: selectedColor.value }));
 
   const onColorSelect = (color: returnedResults) => {
@@ -21,36 +29,40 @@ export default function Example() {
   return (
     <>
       <Pressable style={styles.openButton} onPress={() => setShowModal(true)}>
-        <Text style={{ color: '#707070', fontWeight: 'bold', textAlign: 'center' }}>Panel2 Brightness</Text>
+        <Text style={{ color: '#707070', fontWeight: 'bold', textAlign: 'center' }}>RGB Horizontal</Text>
       </Pressable>
 
       <Modal onRequestClose={() => setShowModal(false)} visible={showModal} animationType='slide'>
         <Animated.View style={[styles.container, backgroundColorStyle]}>
-          <KeyboardAvoidingView behavior='position'>
-            <View style={styles.pickerContainer}>
-              <ColorPicker
-                value={selectedColor.value}
-                sliderThickness={25}
-                thumbSize={20}
-                thumbShape='doubleTriangle'
-                onChange={onColorSelect}
-                adaptSpectrum
-              >
-                <Panel2 style={styles.panelStyle} verticalChannel='brightness' thumbShape='ring' thumbSize={30} />
+          <View style={styles.pickerContainer}>
+            <ColorPicker
+              value={selectedColor.value}
+              sliderThickness={25}
+              thumbSize={24}
+              thumbShape='circle'
+              onChange={onColorSelect}
+              thumbAnimationDuration={100}
+              adaptSpectrum
+              boundedThumb
+            >
+              <Text style={styles.sliderTitle}>Red</Text>
+              <RedSlider style={styles.sliderStyle} />
 
-                <SaturationSlider style={styles.sliderStyle} thumbColor='#fff' />
+              <Text style={styles.sliderTitle}>Green</Text>
+              <GreenSlider style={styles.sliderStyle} />
 
-                <OpacitySlider style={styles.sliderStyle} thumbColor='#fff' />
+              <Text style={styles.sliderTitle}>Blue</Text>
+              <BlueSlider style={styles.sliderStyle} />
 
-                <View style={styles.previewTxtContainer}>
-                  <InputWidget
-                    inputStyle={{ color: '#fff', paddingVertical: 2, borderColor: '#707070', fontSize: 12, marginLeft: 5 }}
-                    iconColor='#707070'
-                  />
-                </View>
-              </ColorPicker>
-            </View>
-          </KeyboardAvoidingView>
+              <Text style={styles.sliderTitle}>Opacity</Text>
+              <OpacitySlider style={styles.sliderStyle} />
+
+              <Swatches style={styles.swatchesContainer} swatchStyle={styles.swatchStyle} colors={customSwatches} />
+              <View style={styles.previewTxtContainer}>
+                <PreviewText style={{ color: '#707070' }} colorFormat='rgba' />
+              </View>
+            </ColorPicker>
+          </View>
 
           <Pressable style={styles.closeButton} onPress={() => setShowModal(false)}>
             <Text style={{ color: '#707070', fontWeight: 'bold' }}>Close</Text>
@@ -65,11 +77,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignContent: 'center',
+    backgroundColor: 'orange',
   },
   pickerContainer: {
     alignSelf: 'center',
     width: 300,
-    backgroundColor: '#202124',
+    backgroundColor: '#fff',
     padding: 20,
     borderRadius: 20,
     shadowColor: '#000',
@@ -82,22 +95,15 @@ const styles = StyleSheet.create({
 
     elevation: 10,
   },
-  panelStyle: {
-    borderRadius: 16,
-
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-
-    elevation: 5,
+  sliderTitle: {
+    color: '#000',
+    fontWeight: 'bold',
+    marginBottom: 5,
+    paddingHorizontal: 4,
   },
   sliderStyle: {
     borderRadius: 20,
-    marginTop: 20,
+    marginBottom: 20,
 
     shadowColor: '#000',
     shadowOffset: {
@@ -114,6 +120,24 @@ const styles = StyleSheet.create({
     marginTop: 20,
     borderTopWidth: 1,
     borderColor: '#bebdbe',
+  },
+  swatchesContainer: {
+    paddingTop: 20,
+    marginTop: 20,
+    borderTopWidth: 1,
+    borderColor: '#bebdbe',
+    alignItems: 'center',
+    flexWrap: 'nowrap',
+    gap: 10,
+  },
+  swatchStyle: {
+    borderRadius: 20,
+    height: 30,
+    width: 30,
+    margin: 0,
+    marginBottom: 0,
+    marginHorizontal: 0,
+    marginVertical: 0,
   },
   openButton: {
     width: '100%',

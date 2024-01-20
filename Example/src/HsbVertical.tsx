@@ -3,13 +3,13 @@ import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 
 import ColorPicker, {
-  Panel3,
   Swatches,
   OpacitySlider,
+  HueSlider,
   colorKit,
+  PreviewText,
+  SaturationSlider,
   BrightnessSlider,
-  Preview,
-  ExtraThumb,
 } from 'reanimated-color-picker';
 import type { returnedResults } from 'reanimated-color-picker';
 
@@ -29,32 +29,46 @@ export default function Example() {
   return (
     <>
       <Pressable style={styles.openButton} onPress={() => setShowModal(true)}>
-        <Text style={{ color: '#707070', fontWeight: 'bold', textAlign: 'center' }}>Panel3 Saturation</Text>
+        <Text style={{ color: '#707070', fontWeight: 'bold', textAlign: 'center' }}>HSB Vertical</Text>
       </Pressable>
 
       <Modal onRequestClose={() => setShowModal(false)} visible={showModal} animationType='slide'>
         <Animated.View style={[styles.container, backgroundColorStyle]}>
           <View style={styles.pickerContainer}>
-            <ColorPicker value={selectedColor.value} sliderThickness={25} thumbSize={27} onChange={onColorSelect}>
-              <View style={styles.previewContainer}>
-                <Preview style={styles.previewStyle} />
+            <ColorPicker
+              value={selectedColor.value}
+              sliderThickness={30}
+              thumbSize={30}
+              thumbShape='circle'
+              onChange={onColorSelect}
+              adaptSpectrum
+              boundedThumb
+            >
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <View style={{ alignItems: 'center' }}>
+                  <Text style={styles.sliderTitle}>H</Text>
+                  <HueSlider style={styles.sliderStyle} vertical reverse />
+                </View>
+
+                <View style={{ alignItems: 'center' }}>
+                  <Text style={styles.sliderTitle}>S</Text>
+                  <SaturationSlider style={styles.sliderStyle} vertical reverse />
+                </View>
+
+                <View style={{ alignItems: 'center' }}>
+                  <Text style={styles.sliderTitle}>B</Text>
+                  <BrightnessSlider style={styles.sliderStyle} vertical reverse />
+                </View>
+
+                <View style={{ alignItems: 'center' }}>
+                  <Text style={styles.sliderTitle}>A</Text>
+                  <OpacitySlider style={styles.sliderStyle} vertical reverse />
+                </View>
               </View>
-
-              <Panel3 style={styles.panelStyle} renderCenterLine adaptSpectrum>
-                <ExtraThumb thumbShape='circle' hueTransform={120} />
-                <ExtraThumb thumbShape='circle' hueTransform={140} />
-                <ExtraThumb thumbShape='circle' hueTransform={160} />
-                <ExtraThumb thumbShape='circle' hueTransform={180} />
-                <ExtraThumb thumbShape='circle' hueTransform={200} />
-                <ExtraThumb thumbShape='circle' hueTransform={220} />
-                <ExtraThumb thumbShape='circle' hueTransform={240} />
-              </Panel3>
-
-              <BrightnessSlider style={styles.sliderStyle} />
-
-              <OpacitySlider style={styles.sliderStyle} />
-
               <Swatches style={styles.swatchesContainer} swatchStyle={styles.swatchStyle} colors={customSwatches} />
+              <View style={styles.previewTxtContainer}>
+                <PreviewText style={{ color: '#707070' }} colorFormat='hsva' />
+              </View>
             </ColorPicker>
           </View>
 
@@ -71,6 +85,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignContent: 'center',
+    backgroundColor: 'orange',
   },
   pickerContainer: {
     alignSelf: 'center',
@@ -88,22 +103,15 @@ const styles = StyleSheet.create({
 
     elevation: 10,
   },
-  panelStyle: {
-    borderRadius: 16,
-
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-
-    elevation: 5,
+  sliderTitle: {
+    color: '#000',
+    fontWeight: 'bold',
+    marginBottom: 5,
+    paddingHorizontal: 4,
   },
   sliderStyle: {
+    height: 300,
     borderRadius: 20,
-    marginTop: 20,
 
     shadowColor: '#000',
     shadowOffset: {
@@ -115,21 +123,17 @@ const styles = StyleSheet.create({
 
     elevation: 5,
   },
-  previewContainer: {
-    paddingBottom: 20,
-    marginBottom: 20,
-    borderBottomWidth: 1,
-    borderColor: '#bebdbe',
-  },
-  previewStyle: {
-    height: 40,
-    borderRadius: 14,
-  },
-  swatchesContainer: {
+  previewTxtContainer: {
+    paddingTop: 20,
+    marginTop: 20,
     borderTopWidth: 1,
     borderColor: '#bebdbe',
-    marginTop: 20,
+  },
+  swatchesContainer: {
     paddingTop: 20,
+    marginTop: 20,
+    borderTopWidth: 1,
+    borderColor: '#bebdbe',
     alignItems: 'center',
     flexWrap: 'nowrap',
     gap: 10,

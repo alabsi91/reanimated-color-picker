@@ -1,19 +1,19 @@
 import React from 'react';
 import { ScrollView, StatusBar, StyleSheet, View } from 'react-native';
-import CircularHue from './CircularHue';
-import HorizontalHsbSliders from './HsbHorizontal';
-import HorizontalHslSliders from './HslHorizontal';
-import HorizontalRgbSliders from './RgbHorizontal';
-import Panel1Example from './Panel1';
-import Panel2Brightness from './Panel2Brightness';
-import Panel2Saturation from './Panel2Saturation';
-import WheelBrightness from './Panel3Brightness';
-import WheelSaturation from './Panel3Saturation';
-import Panel4Example from './Panel4';
-import Panel5Example from './Panel5';
-import VerticalHsbSliders from './HsbVertical';
-import VerticalHslSliders from './HslVertical';
-import VerticalRgbSliders from './RgbVertical';
+import CircularHue from './src/CircularHue';
+import HorizontalHsbSliders from './src/HsbHorizontal';
+import HorizontalHslSliders from './src/HslHorizontal';
+import HorizontalRgbSliders from './src/RgbHorizontal';
+import Panel1Example from './src/Panel1';
+import Panel2Brightness from './src/Panel2Brightness';
+import Panel2Saturation from './src/Panel2Saturation';
+import WheelBrightness from './src/Panel3Brightness';
+import WheelSaturation from './src/Panel3Saturation';
+import Panel4Example from './src/Panel4';
+import Panel5Example from './src/Panel5';
+import VerticalHsbSliders from './src/HsbVertical';
+import VerticalHslSliders from './src/HslVertical';
+import VerticalRgbSliders from './src/RgbVertical';
 
 export default function App() {
   return (

@@ -1,0 +1,8 @@
+{
+  "label": "RGB",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "description": "API documentation for RGB Slider components"
+  }
+}

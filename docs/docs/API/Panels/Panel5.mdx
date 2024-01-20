@@ -1,0 +1,42 @@
+---
+sidebar_position: 4
+sidebar_label: Panel5
+description: 'This is a grid of 120 colors, arranged in 12 columns and 10 rows of squares.'
+---
+
+# `<Panel5 />`
+
+![panel5](../../../../images/panel5.png)
+
+- This is a grid of 120 colors, arranged in 12 columns and 10 rows of squares.
+
+:::danger
+
+This panel is limited to displaying only a fixed range of colors, and therefore cannot show all colors.
+
+:::
+
+## Props
+
+### `gestures`
+
+- An array of gestures or composed gestures from `react-native-gesture-handler`.
+- These gestures will run simultaneously with the color picker gestures.
+- `type: Gesture[]`
+- `default: []`
+
+### `style`
+
+- Panel's container style.
+- `type: ViewStyle`
+
+### `selectionStyle`
+
+- The style of the square that indicates the selected color.
+- `type: ViewStyle`
+
+:::info note
+
+- Certain style properties will be overridden.
+
+:::

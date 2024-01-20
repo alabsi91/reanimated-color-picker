@@ -1,0 +1,8 @@
+{
+  "label": "Hue",
+  "position": 0,
+  "link": {
+    "type": "generated-index",
+    "description": "API documentation for Hue Slider components"
+  }
+}

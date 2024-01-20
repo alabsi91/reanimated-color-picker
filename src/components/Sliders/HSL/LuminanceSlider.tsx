@@ -1,17 +1,19 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { Image } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useDerivedValue, useSharedValue, withTiming } from 'react-native-reanimated';
 
+import colorKit from '@colorKit';
 import usePickerContext from '@context';
+import { styles } from '@styles';
 import Thumb from '@thumb';
-import { clamp, ConditionalRendering, getStyle, HSVA2HSLA_string, isRtl } from '@utils';
+import { clamp, getStyle, isRtl } from '@utils';
 
 import type { SliderProps } from '@types';
 import type { LayoutChangeEvent } from 'react-native';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
-export function SaturationSlider({ gestures = [], style = {}, vertical = false, reverse = false, ...props }: SliderProps) {
+export function LuminanceSlider({ gestures = [], style = {}, vertical = false, reverse = false, ...props }: SliderProps) {
   const { hueValue, saturationValue, brightnessValue, onGestureChange, onGestureEnd, ...ctx } = usePickerContext();
 
   const thumbShape = props.thumbShape ?? ctx.thumbShape,
@@ -31,41 +33,47 @@ export function SaturationSlider({ gestures = [], style = {}, vertical = false, 
   const width = useSharedValue(vertical ? sliderThickness : typeof getWidth === 'number' ? getWidth : 0);
   const height = useSharedValue(!vertical ? sliderThickness : typeof getHeight === 'number' ? getHeight : 0);
   const handleScale = useSharedValue(1);
+  const lastHslSaturationValue = useSharedValue(0);
+
+  // We need to keep track of the HSL saturation value because, when the luminance is 0 or 100,
+  // when converting to/from HSV, the previous saturation value will be lost.
+  const hsl = useDerivedValue(() => {
+    const hsvColor = { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
+    const { h, s, l } = colorKit.runOnUI().HSL(hsvColor).object(false);
+    if (l === 100 || l === 0) return { h, s: lastHslSaturationValue.value, l };
+    lastHslSaturationValue.value = s;
+    return { h, s, l };
+  }, [hueValue, saturationValue, brightnessValue]);
 
   const handleStyle = useAnimatedStyle(() => {
     const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0),
-      percent = (saturationValue.value / 100) * length,
+      percent = (hsl.value.l / 100) * length,
       pos = (reverse ? length - percent : percent) - (boundedThumb ? 0 : thumbSize / 2),
       posY = vertical ? pos : height.value / 2 - thumbSize / 2,
       posX = vertical ? width.value / 2 - thumbSize / 2 : pos;
 
     return { transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }] };
-  }, [width, height, saturationValue, handleScale]);
+  }, [height, width, hsl, handleScale]);
 
   const activeColorStyle = useAnimatedStyle(() => {
-    return { backgroundColor: HSVA2HSLA_string(hueValue.value, 100, 100) };
-  }, [hueValue]);
-
-  const activeBrightnessStyle = useAnimatedStyle(() => {
-    if (!adaptSpectrum) return {};
-
-    return { backgroundColor: HSVA2HSLA_string(0, 0, 0, 1 - brightnessValue.value / 100) };
-  }, [adaptSpectrum, brightnessValue]);
+    return { backgroundColor: `hsl(${hsl.value.h}, ${adaptSpectrum ? hsl.value.s : 100}%, ${50}%)` };
+  }, [hueValue, saturationValue]);
 
   const imageStyle = useAnimatedStyle(() => {
-    const imageRotate = vertical ? (reverse ? '270deg' : '90deg') : reverse ? '180deg' : '0deg';
-    const imageTranslateY = ((height.value - width.value) / 2) * ((reverse && isRtl) || (!reverse && !isRtl) ? 1 : -1);
+    const imageRotate = vertical ? (reverse ? '90deg' : '270deg') : reverse ? '0deg' : '180deg';
+    const imageTranslateY = ((height.value - width.value) / 2) * ((!reverse && isRtl) || (reverse && !isRtl) ? 1 : -1);
+
     return {
       width: vertical ? height.value : '100%',
       height: vertical ? width.value : '100%',
       borderRadius,
       transform: [
         { rotate: imageRotate },
-        { translateX: vertical ? ((height.value - width.value) / 2) * (reverse ? -1 : 1) : 0 },
+        { translateX: vertical ? ((height.value - width.value) / 2) * (reverse ? 1 : -1) : 0 },
         { translateY: vertical ? imageTranslateY : 0 },
       ],
     };
-  }, [width, height]);
+  }, [height, width]);
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -73,11 +81,14 @@ export function SaturationSlider({ gestures = [], style = {}, vertical = false, 
     const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0),
       pos = clamp((vertical ? y : x) - (boundedThumb ? thumbSize / 2 : 0), length),
       value = (pos / length) * 100,
-      newSaturationValue = reverse ? 100 - value : value;
+      newLuminanceValue = reverse ? 100 - value : value;
 
-    if (saturationValue.value === newSaturationValue) return;
+    if (newLuminanceValue === hsl.value.l) return;
 
-    saturationValue.value = newSaturationValue;
+    const { s, v } = colorKit.runOnUI().HSV({ h: hsl.value.h, s: hsl.value.s, l: newLuminanceValue }).object(false);
+
+    saturationValue.value = s;
+    brightnessValue.value = v;
 
     onGestureChange();
   };
@@ -112,14 +123,17 @@ export function SaturationSlider({ gestures = [], style = {}, vertical = false, 
         onLayout={onLayout}
         style={[{ borderRadius }, style, { position: 'relative', borderWidth: 0, padding: 0 }, thicknessStyle, activeColorStyle]}
       >
-        <Animated.Image source={require('@assets/blackGradient.png')} style={[imageStyle, { tintColor: '#fff' }]} />
-
-        <ConditionalRendering if={adaptSpectrum}>
-          <Animated.View style={[{ borderRadius }, activeBrightnessStyle, StyleSheet.absoluteFillObject]} />
-        </ConditionalRendering>
+        <Animated.View style={[styles.panel_image, imageStyle, { borderRadius, flexDirection: isRtl ? 'row-reverse' : 'row' }]}>
+          <Image source={require('@assets/blackGradient.png')} style={{ flex: 1, tintColor: '#fff' }} resizeMode='stretch' />
+          <Image
+            source={require('@assets/blackGradient.png')}
+            style={{ flex: 1, transform: [{ scaleX: -1 }] }}
+            resizeMode='stretch'
+          />
+        </Animated.View>
 
         <Thumb
-          channel='s'
+          channel='v'
           thumbShape={thumbShape}
           thumbSize={thumbSize}
           thumbColor={thumbColor}
@@ -127,7 +141,6 @@ export function SaturationSlider({ gestures = [], style = {}, vertical = false, 
           innerStyle={thumbInnerStyle}
           handleStyle={handleStyle}
           style={thumbStyle}
-          adaptSpectrum={adaptSpectrum}
           vertical={vertical}
         />
       </Animated.View>

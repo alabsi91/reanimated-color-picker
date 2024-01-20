@@ -1,17 +1,18 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useDerivedValue, useSharedValue, withTiming } from 'react-native-reanimated';
 
+import colorKit from '@colorKit';
 import usePickerContext from '@context';
 import Thumb from '@thumb';
-import { clamp, ConditionalRendering, getStyle, HSVA2HSLA_string, isRtl } from '@utils';
+import { clamp, ConditionalRendering, getStyle, isRtl } from '@utils';
 
 import type { SliderProps } from '@types';
 import type { LayoutChangeEvent } from 'react-native';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
-export function SaturationSlider({ gestures = [], style = {}, vertical = false, reverse = false, ...props }: SliderProps) {
+export function HSLSaturationSlider({ gestures = [], style = {}, vertical = false, reverse = false, ...props }: SliderProps) {
   const { hueValue, saturationValue, brightnessValue, onGestureChange, onGestureEnd, ...ctx } = usePickerContext();
 
   const thumbShape = props.thumbShape ?? ctx.thumbShape,
@@ -31,25 +32,39 @@ export function SaturationSlider({ gestures = [], style = {}, vertical = false, 
   const width = useSharedValue(vertical ? sliderThickness : typeof getWidth === 'number' ? getWidth : 0);
   const height = useSharedValue(!vertical ? sliderThickness : typeof getHeight === 'number' ? getHeight : 0);
   const handleScale = useSharedValue(1);
+  const lastHslSaturationValue = useSharedValue(0);
+
+  // We need to keep track of the HSL saturation value because, when the luminance is 0 or 100,
+  // when converting to/from HSV, the previous saturation value will be lost.
+  const hsl = useDerivedValue(() => {
+    const hsvColor = { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
+    const { h, s, l } = colorKit.runOnUI().HSL(hsvColor).object(false);
+    if (l === 100 || l === 0) return { h, s: lastHslSaturationValue.value, l };
+    lastHslSaturationValue.value = s;
+    return { h, s, l };
+  }, [hueValue, saturationValue, brightnessValue]);
 
   const handleStyle = useAnimatedStyle(() => {
     const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0),
-      percent = (saturationValue.value / 100) * length,
+      percent = (hsl.value.s / 100) * length,
       pos = (reverse ? length - percent : percent) - (boundedThumb ? 0 : thumbSize / 2),
       posY = vertical ? pos : height.value / 2 - thumbSize / 2,
       posX = vertical ? width.value / 2 - thumbSize / 2 : pos;
 
     return { transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }] };
-  }, [width, height, saturationValue, handleScale]);
+  }, [width, height, hsl, handleScale]);
 
   const activeColorStyle = useAnimatedStyle(() => {
-    return { backgroundColor: HSVA2HSLA_string(hueValue.value, 100, 100) };
+    return { backgroundColor: `hsl(${hsl.value.h}, 100%, 50%)` };
   }, [hueValue]);
 
   const activeBrightnessStyle = useAnimatedStyle(() => {
     if (!adaptSpectrum) return {};
 
-    return { backgroundColor: HSVA2HSLA_string(0, 0, 0, 1 - brightnessValue.value / 100) };
+    return {
+      backgroundColor:
+        hsl.value.l < 50 ? `rgba(0, 0, 0, ${1 - hsl.value.l / 50})` : `rgba(255, 255, 255, ${(hsl.value.l - 50) / 50})`,
+    };
   }, [adaptSpectrum, brightnessValue]);
 
   const imageStyle = useAnimatedStyle(() => {
@@ -75,9 +90,16 @@ export function SaturationSlider({ gestures = [], style = {}, vertical = false, 
       value = (pos / length) * 100,
       newSaturationValue = reverse ? 100 - value : value;
 
-    if (saturationValue.value === newSaturationValue) return;
+    if (newSaturationValue === hsl.value.s) return;
 
-    saturationValue.value = newSaturationValue;
+    // To prevent locking this slider when the luminance is 0 or 100,
+    // this should not affect the resulting color, as the value will be rounded.
+    const l = hsl.value.l === 0 ? 0.01 : hsl.value.l === 100 ? 99.99 : hsl.value.l;
+
+    const { s, v } = colorKit.runOnUI().HSV({ h: hsl.value.h, s: newSaturationValue, l }).object(false);
+
+    saturationValue.value = s;
+    brightnessValue.value = v;
 
     onGestureChange();
   };
@@ -112,7 +134,7 @@ export function SaturationSlider({ gestures = [], style = {}, vertical = false, 
         onLayout={onLayout}
         style={[{ borderRadius }, style, { position: 'relative', borderWidth: 0, padding: 0 }, thicknessStyle, activeColorStyle]}
       >
-        <Animated.Image source={require('@assets/blackGradient.png')} style={[imageStyle, { tintColor: '#fff' }]} />
+        <Animated.Image source={require('@assets/blackGradient.png')} style={[imageStyle, { tintColor: '#888' }]} />
 
         <ConditionalRendering if={adaptSpectrum}>
           <Animated.View style={[{ borderRadius }, activeBrightnessStyle, StyleSheet.absoluteFillObject]} />
