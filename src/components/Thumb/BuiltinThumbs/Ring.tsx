@@ -35,18 +35,17 @@ export default function Ring({
     };
   }, [thumbColor, adaptiveColor]);
 
+  // Make sure to match the parity (odd or even) of the parent width, to solve the centering issue
+  const innerWidth = 0.75 * width;
+  const innerSize = width % 2 === 0 ? Math.floor(innerWidth / 2) * 2 : Math.floor(innerWidth / 2) * 2 + 1;
+
   return (
     <Animated.View
       style={[styles.handle, style, computedStyle, adaptiveColorStyle, handleStyle]}
       renderToHardwareTextureAndroid={enableAndroidHardwareTextures}
     >
       <Animated.View
-        style={[
-          styles.shadow,
-          { borderRadius, zIndex: 100, width: Math.round(width * 0.75), height: Math.round(width * 0.75) },
-          solidColor,
-          innerStyle,
-        ]}
+        style={[styles.shadow, { borderRadius, zIndex: 100, width: innerSize, height: innerSize }, solidColor, innerStyle]}
       />
     </Animated.View>
   );
