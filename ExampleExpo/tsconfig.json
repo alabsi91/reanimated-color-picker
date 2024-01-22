@@ -1,4 +1,10 @@
 {
-  "compilerOptions": {},
-  "extends": "expo/tsconfig.base"
+  "compilerOptions": {
+    "paths": {
+      "baseUrl": ["."],
+      "reanimated-color-picker": ["../src/index"],
+    },
+  },
+  "references": [{ "path": "../tsconfig.json" }],
+  "extends": "expo/tsconfig.base",
 }
