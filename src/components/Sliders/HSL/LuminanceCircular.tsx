@@ -1,18 +1,26 @@
 import React, { useCallback } from 'react';
-import { ImageBackground, StyleSheet } from 'react-native';
+import { Image } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useDerivedValue, useSharedValue, withTiming } from 'react-native-reanimated';
 
+import colorKit from '@colorKit';
 import usePickerContext from '@context';
 import { styles } from '@styles';
 import Thumb from '@thumb';
-import { ConditionalRendering, HSVA2HSLA_string } from '@utils';
+import { isRtl } from '@utils';
 
-import type { HueCircularProps } from '@types';
+import type { LuminanceCircularProps } from '@types';
 import type { LayoutChangeEvent } from 'react-native';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
-export function HueCircular({ children, gestures = [], style = {}, containerStyle = {}, ...props }: HueCircularProps) {
+export function LuminanceCircular({
+  children,
+  gestures = [],
+  style = {},
+  containerStyle = {},
+  rotate = 0,
+  ...props
+}: LuminanceCircularProps) {
   const { hueValue, saturationValue, brightnessValue, onGestureChange, onGestureEnd, ...ctx } = usePickerContext();
 
   const thumbShape = props.thumbShape ?? ctx.thumbShape,
@@ -30,40 +38,57 @@ export function HueCircular({ children, gestures = [], style = {}, containerStyl
   const borderRadiusStyle = useAnimatedStyle(() => ({ borderRadius: borderRadius.value }), [borderRadius]);
 
   const handleScale = useSharedValue(1);
+  const thumbSide = useSharedValue<0 | 1>(0); // to determine in which side of the circle the thumb is
+  const lastHslSaturationValue = useSharedValue(0);
+
+  // We need to keep track of the HSL saturation value because, when the luminance is 0 or 100,
+  // when converting to/from HSV, the previous saturation value will be lost.
+  const hsl = useDerivedValue(() => {
+    const hsvColor = { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
+    const { h, s, l } = colorKit.runOnUI().HSL(hsvColor).object(false);
+    if (l === 100 || l === 0) return { h, s: lastHslSaturationValue.value, l };
+    lastHslSaturationValue.value = s;
+    return { h, s, l };
+  }, [hueValue, saturationValue, brightnessValue]);
 
   const handleStyle = useAnimatedStyle(() => {
     const center = width.value / 2,
       distance = (width.value - sliderThickness) / 2,
-      posY = width.value - (Math.sin((hueValue.value * Math.PI) / 180) * distance + center) - thumbSize / 2,
-      posX = width.value - (Math.cos((hueValue.value * Math.PI) / 180) * distance + center) - thumbSize / 2;
+      angle = (hsl.value.l / 100) * 180 + thumbSide.value * 180,
+      mirroredAngle = ((thumbSide.value === 1 ? 180 - angle : angle) - rotate) % 360,
+      posY = width.value - (Math.sin((mirroredAngle * Math.PI) / 180) * distance + center) - thumbSize / 2,
+      posX = width.value - (Math.cos((mirroredAngle * Math.PI) / 180) * distance + center) - thumbSize / 2;
 
     return {
       transform: [
         { translateX: posX },
         { translateY: posY },
         { scale: handleScale.value },
-        { rotate: hueValue.value + 90 + 'deg' },
+        { rotate: mirroredAngle + 90 + 'deg' },
       ],
     };
-  }, [width, hueValue, handleScale]);
+  }, [width, hsl, handleScale, thumbSide]);
 
-  const activeSaturationStyle = useAnimatedStyle(() => {
-    if (!adaptSpectrum) return {};
-
-    return { backgroundColor: HSVA2HSLA_string(0, 0, brightnessValue.value, 1 - saturationValue.value / 100) };
-  }, [brightnessValue, saturationValue]);
-
-  const activeBrightnessStyle = useAnimatedStyle(() => {
-    if (!adaptSpectrum) return {};
-
-    return { backgroundColor: HSVA2HSLA_string(0, 0, 0, 1 - brightnessValue.value / 100) };
-  }, [brightnessValue]);
+  const activeColorStyle = useAnimatedStyle(() => {
+    return { backgroundColor: `hsl(${hsl.value.h}, ${adaptSpectrum ? hsl.value.s : 100}%, ${50}%)` };
+  }, [hueValue, saturationValue]);
 
   const clipViewStyle = useAnimatedStyle(() => {
     return {
       width: width.value - sliderThickness * 2,
       height: width.value - sliderThickness * 2,
       borderRadius: width.value / 2,
+    };
+  }, [width]);
+
+  const imageStyle = useAnimatedStyle(() => {
+    return {
+      borderRadius: width.value / 2,
+      transform: [
+        { rotate: -rotate + 'deg' },
+        { translateX: (width.value - width.value) / 2 },
+        { translateY: (width.value - width.value) / 2 },
+      ],
     };
   }, [width]);
 
@@ -75,13 +100,19 @@ export function HueCircular({ children, gestures = [], style = {}, containerStyl
     const center = width.value / 2,
       dx = center - x,
       dy = center - y,
-      theta = Math.atan2(dy, dx) * (180 / Math.PI), // [0 - 180] range
+      theta = (Math.atan2(dy, dx) + rotate * (Math.PI / 180)) * (180 / Math.PI), // [0 - 180] range
       angle = theta < 0 ? 360 + theta : theta, // [0 - 360] range
-      newHueValue = angle;
+      mirroredAngle = angle <= 180 ? angle : 360 - angle,
+      newLuminanceValue = (mirroredAngle / 180) * 100;
 
-    if (hueValue.value === newHueValue) return;
+    thumbSide.value = angle <= 180 ? 0 : 1;
 
-    hueValue.value = newHueValue;
+    if (newLuminanceValue === hsl.value.l) return;
+
+    const { s, v } = colorKit.runOnUI().HSV({ h: hsl.value.h, s: hsl.value.s, l: newLuminanceValue }).object(false);
+
+    saturationValue.value = s;
+    brightnessValue.value = v;
 
     onGestureChange();
   };
@@ -141,20 +172,31 @@ export function HueCircular({ children, gestures = [], style = {}, containerStyl
           borderRadiusStyle,
         ]}
       >
-        <ImageBackground
-          source={require('@assets/circularHue.png')}
-          style={[styles.panel_image, { justifyContent: 'center', alignItems: 'center' }]}
-          resizeMode='stretch'
+        <Animated.View
+          style={[
+            styles.panel_image,
+            imageStyle,
+            activeColorStyle,
+            { flexDirection: isRtl ? 'row-reverse' : 'row', justifyContent: 'center', alignItems: 'center' },
+          ]}
         >
-          <ConditionalRendering if={adaptSpectrum}>
-            <Animated.View style={[borderRadiusStyle, activeBrightnessStyle, StyleSheet.absoluteFillObject]} />
-            <Animated.View style={[borderRadiusStyle, activeSaturationStyle, StyleSheet.absoluteFillObject]} />
-          </ConditionalRendering>
+          <Image
+            source={require('@assets/blackGradient.png')}
+            style={{ width: '100%', height: '100%', flex: 1 }}
+            resizeMode='stretch'
+          />
+          <Image
+            source={require('@assets/blackGradient.png')}
+            style={{ width: '100%', height: '100%', flex: 1, tintColor: '#fff', transform: [{ scaleX: -1 }] }}
+            resizeMode='stretch'
+          />
+          <Animated.View style={[clipViewStyle, { position: 'absolute', backgroundColor: '#fff' }, containerStyle]}>
+            {children}
+          </Animated.View>
+        </Animated.View>
 
-          <Animated.View style={[clipViewStyle, { backgroundColor: '#fff' }, containerStyle]}>{children}</Animated.View>
-        </ImageBackground>
         <Thumb
-          channel='h'
+          channel='v'
           thumbShape={thumbShape}
           thumbSize={thumbSize}
           thumbColor={thumbColor}

@@ -496,11 +496,21 @@ export interface SliderProps {
 
 export type RgbSliderProps = Omit<SliderProps, 'adaptSpectrum'>;
 
-export interface HueCircular extends Omit<SliderProps, 'vertical' | 'reverse' | 'boundedThumb'> {
+export interface HueCircularProps extends Omit<SliderProps, 'vertical' | 'reverse' | 'boundedThumb'> {
   children?: ReactNode;
 
   /** - The style of the container that wraps the given children. */
   containerStyle?: StyleProp<ViewStyle>;
+}
+
+export interface LuminanceCircularProps extends Omit<SliderProps, 'vertical' | 'reverse' | 'boundedThumb'> {
+  children?: ReactNode;
+
+  /** - The style of the container that wraps the given children. */
+  containerStyle?: StyleProp<ViewStyle>;
+
+  /** - Rotate the hue circle, from 0 to 360 */
+  rotate?: number;
 }
 
 export type InputProps = Omit<
