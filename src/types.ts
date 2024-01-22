@@ -223,7 +223,8 @@ export interface ColorPickerContext {
 export interface Panel3Context {
   width: SharedValue<number>;
   adaptSpectrum: boolean;
-  centerChannel: 'saturation' | 'brightness';
+  centerChannel: 'saturation' | 'brightness' | 'hsl-saturation';
+  centerChannelValue: SharedValue<number>;
   thumbShape: thumbShapeType;
   thumbSize: number;
   thumbColor?: string;
@@ -407,7 +408,7 @@ export interface Panel2Props extends PanelProps {
 
 export interface Panel3Props extends PanelProps {
   /** - Determines which color channel to adjust when moving the thumb towards or away from the center of the circular slider. */
-  centerChannel?: 'saturation' | 'brightness';
+  centerChannel?: 'saturation' | 'brightness' | 'hsl-saturation';
 
   /** - Color spectrum adapts to changes in brightness and saturation */
   adaptSpectrum?: boolean;

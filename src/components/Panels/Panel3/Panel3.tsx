@@ -1,12 +1,13 @@
 import React, { useCallback } from 'react';
 import { Image, ImageBackground, StyleSheet } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useDerivedValue, useSharedValue, withTiming } from 'react-native-reanimated';
 
+import colorKit from '@colorKit';
 import usePickerContext from '@context';
 import { styles } from '@styles';
 import Thumb from '@thumb';
-import { clamp, ConditionalRendering, HSVA2HSLA_string } from '@utils';
+import { clamp, ConditionalRendering } from '@utils';
 import { Panel3ContextProvider } from './Panel3Context';
 
 import type { Panel3Props } from '@types';
@@ -32,19 +33,35 @@ export function Panel3({
     renderThumb = props.renderThumb ?? ctx.renderThumb,
     thumbStyle = props.thumbStyle ?? ctx.thumbStyle ?? {},
     thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle ?? {},
-    adaptSpectrum = props.adaptSpectrum ?? ctx.adaptSpectrum,
-    channelValue = centerChannel === 'brightness' ? brightnessValue : saturationValue;
+    adaptSpectrum = props.adaptSpectrum ?? ctx.adaptSpectrum;
 
   const borderRadius = 2000;
 
   const isGestureActive = useSharedValue(false);
   const width = useSharedValue(0);
   const handleScale = useSharedValue(1);
+  const lastHslSaturationValue = useSharedValue(0);
+
+  // We need to keep track of the HSL saturation value because, when the luminance is 0 or 100,
+  // when converting to/from HSV, the previous saturation value will be lost.
+  const hsl = useDerivedValue(() => {
+    const hsvColor = { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
+    const { h, s, l } = colorKit.runOnUI().HSL(hsvColor).object(false);
+    if (l === 100 || l === 0) return { h, s: lastHslSaturationValue.value, l };
+    lastHslSaturationValue.value = s;
+    return { h, s, l };
+  }, [hueValue, saturationValue, brightnessValue]);
+
+  const centerChannelValue = useDerivedValue(() => {
+    if (centerChannel === 'brightness') return brightnessValue.value;
+    if (centerChannel === 'hsl-saturation') return hsl.value.s;
+    return saturationValue.value;
+  }, [brightnessValue, saturationValue, hsl]);
 
   const handleStyle = useAnimatedStyle(() => {
     const center = width.value / 2 - (boundedThumb ? thumbSize / 2 : 0),
       rotatedHue = (hueValue.value - rotate) % 360,
-      distance = (channelValue.value / 100) * (width.value / 2 - (boundedThumb ? thumbSize / 2 : 0)),
+      distance = (centerChannelValue.value / 100) * (width.value / 2 - (boundedThumb ? thumbSize / 2 : 0)),
       angle = (rotatedHue * Math.PI) / 180,
       posY = width.value - (Math.sin(angle) * distance + center) - (boundedThumb ? thumbSize : thumbSize / 2),
       posX = width.value - (Math.cos(angle) * distance + center) - (boundedThumb ? thumbSize : thumbSize / 2);
@@ -52,14 +69,23 @@ export function Panel3({
     return {
       transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }, { rotate: rotatedHue + 90 + 'deg' }],
     };
-  }, [width, channelValue, hueValue, handleScale]);
+  }, [width, centerChannelValue, hueValue, handleScale]);
 
   const spectrumStyle = useAnimatedStyle(() => {
     if (!adaptSpectrum) return {};
 
-    if (centerChannel === 'brightness') return { backgroundColor: HSVA2HSLA_string(0, 0, 100, 1 - saturationValue.value / 100) };
+    if (centerChannel === 'brightness') {
+      return { backgroundColor: `hsla(0, 0%, ${100}%, ${1 - saturationValue.value / 100})` };
+    }
 
-    return { backgroundColor: HSVA2HSLA_string(0, 0, 0, 1 - brightnessValue.value / 100) };
+    if (centerChannel === 'hsl-saturation') {
+      return {
+        backgroundColor:
+          hsl.value.l < 50 ? `rgba(0, 0, 0, ${1 - hsl.value.l / 50})` : `rgba(255, 255, 255, ${(hsl.value.l - 50) / 50})`,
+      };
+    }
+
+    return { backgroundColor: `rgba(0, 0, 0, ${1 - brightnessValue.value / 100})` };
   }, [saturationValue, brightnessValue]);
 
   const centerLineStyle = useAnimatedStyle(() => {
@@ -68,7 +94,7 @@ export function Panel3({
     const lineThickness = 1,
       center = width.value / 2 - (boundedThumb ? thumbSize / 2 : 0),
       rotatedHue = (hueValue.value - rotate) % 360,
-      distance = (channelValue.value / 100) * center,
+      distance = (centerChannelValue.value / 100) * center,
       angle = ((rotatedHue * Math.PI) / Math.PI + 180) % 360; // reversed angle
 
     return {
@@ -78,7 +104,7 @@ export function Panel3({
       width: distance,
       transform: [{ rotate: angle + 'deg' }, { translateX: distance / 2 }, { translateY: 0 }],
     };
-  }, [width, hueValue, channelValue]);
+  }, [width, hueValue, centerChannelValue]);
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -95,10 +121,22 @@ export function Panel3({
       newHueValue = (angle + rotate) % 360,
       newChannelValue = radiusPercent * 100;
 
-    if (hueValue.value === newHueValue && channelValue.value === newChannelValue) return;
+    if (hueValue.value === newHueValue && centerChannelValue.value === newChannelValue) return;
 
     hueValue.value = newHueValue;
-    channelValue.value = newChannelValue;
+
+    if (centerChannel === 'hsl-saturation') {
+      // To prevent locking this slider when the luminance is 0 or 100,
+      // this should not affect the resulting color, as the value will be rounded.
+      const l = hsl.value.l === 0 ? 0.01 : hsl.value.l === 100 ? 99.99 : hsl.value.l;
+      const { s, v } = colorKit.runOnUI().HSV({ h: hsl.value.h, s: newChannelValue, l }).object(false);
+      saturationValue.value = s;
+      brightnessValue.value = v;
+    } else if (centerChannel === 'brightness') {
+      brightnessValue.value = newChannelValue;
+    } else {
+      saturationValue.value = newChannelValue;
+    }
 
     onGestureChange();
   };
@@ -145,6 +183,7 @@ export function Panel3({
         width,
         adaptSpectrum,
         centerChannel,
+        centerChannelValue,
         thumbShape,
         thumbColor,
         thumbStyle,
@@ -177,11 +216,14 @@ export function Panel3({
 
             <Image
               source={require('@assets/blackRadial.png')}
-              style={[styles.panel_image, { tintColor: centerChannel === 'saturation' ? '#fff' : undefined }]}
+              style={[
+                styles.panel_image,
+                { tintColor: centerChannel === 'saturation' ? '#fff' : centerChannel === 'hsl-saturation' ? '#888' : undefined },
+              ]}
               resizeMode='stretch'
             />
 
-            <ConditionalRendering if={adaptSpectrum && centerChannel === 'saturation'}>
+            <ConditionalRendering if={adaptSpectrum && (centerChannel === 'saturation' || centerChannel === 'hsl-saturation')}>
               <Animated.View style={[{ borderRadius }, spectrumStyle, StyleSheet.absoluteFillObject]} />
             </ConditionalRendering>
           </ImageBackground>
