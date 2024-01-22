@@ -7,6 +7,7 @@ import HorizontalHslSliders from './src/HslHorizontal';
 import VerticalHslSliders from './src/HslVertical';
 import Panel1Example from './src/Panel1';
 import Panel2Brightness from './src/Panel2Brightness';
+import Panel2HslSaturation from './src/Panel2HslSaturation';
 import Panel2Saturation from './src/Panel2Saturation';
 import WheelBrightness from './src/Panel3Brightness';
 import WheelHSLSaturation from './src/Panel3HslSaturation';
@@ -26,6 +27,7 @@ export default function App() {
           <Panel1Example />
 
           <Panel2Saturation />
+          <Panel2HslSaturation />
           <Panel2Brightness />
 
           <WheelSaturation />

@@ -1,12 +1,13 @@
 import React, { useCallback } from 'react';
 import { ImageBackground, StyleSheet } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useDerivedValue, useSharedValue, withTiming } from 'react-native-reanimated';
 
+import colorKit from '@colorKit';
 import usePickerContext from '@context';
 import { styles } from '@styles';
 import Thumb from '@thumb';
-import { clamp, ConditionalRendering, getStyle, HSVA2HSLA_string, isRtl } from '@utils';
+import { clamp, ConditionalRendering, getStyle, isRtl } from '@utils';
 
 import type { Panel2Props } from '@types';
 import type { LayoutChangeEvent } from 'react-native';
@@ -30,8 +31,7 @@ export function Panel2({
     renderThumb = props.renderThumb ?? ctx.renderThumb,
     thumbStyle = props.thumbStyle ?? ctx.thumbStyle ?? {},
     thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle ?? {},
-    adaptSpectrum = props.adaptSpectrum ?? ctx.adaptSpectrum,
-    channelValue = verticalChannel === 'brightness' ? brightnessValue : saturationValue;
+    adaptSpectrum = props.adaptSpectrum ?? ctx.adaptSpectrum;
 
   const borderRadius = getStyle(style, 'borderRadius') ?? 5;
   const getHeight = getStyle(style, 'height') ?? 200;
@@ -39,25 +39,47 @@ export function Panel2({
   const width = useSharedValue(0);
   const height = useSharedValue(0);
   const handleScale = useSharedValue(1);
+  const lastHslSaturationValue = useSharedValue(0);
+
+  // We need to keep track of the HSL saturation value because, when the luminance is 0 or 100,
+  // when converting to/from HSV, the previous saturation value will be lost.
+  const hsl = useDerivedValue(() => {
+    const hsvColor = { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
+    const { h, s, l } = colorKit.runOnUI().HSL(hsvColor).object(false);
+    if (l === 100 || l === 0) return { h, s: lastHslSaturationValue.value, l };
+    lastHslSaturationValue.value = s;
+    return { h, s, l };
+  }, [hueValue, saturationValue, brightnessValue]);
+
+  const verticalChannelValue = useDerivedValue(() => {
+    if (verticalChannel === 'brightness') return brightnessValue.value;
+    if (verticalChannel === 'hsl-saturation') return hsl.value.s;
+    return saturationValue.value;
+  }, [brightnessValue, saturationValue, hsl]);
 
   const handleStyle = useAnimatedStyle(() => {
     const length = { x: width.value - (boundedThumb ? thumbSize : 0), y: height.value - (boundedThumb ? thumbSize : 0) },
       percentX = (hueValue.value / 360) * length.x,
       posX = (reverseHue ? length.x - percentX : percentX) - (boundedThumb ? 0 : thumbSize / 2),
-      percentY = (channelValue.value / 100) * length.y,
+      percentY = (verticalChannelValue.value / 100) * length.y,
       posY = (reverseVerticalChannel ? percentY : length.y - percentY) - (boundedThumb ? 0 : thumbSize / 2);
 
     return { transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }] };
-  }, [width, height, hueValue, channelValue, handleScale]);
+  }, [width, height, hueValue, verticalChannelValue, handleScale]);
 
   const spectrumStyle = useAnimatedStyle(() => {
     if (!adaptSpectrum) return {};
 
     if (verticalChannel === 'brightness') {
-      return { backgroundColor: HSVA2HSLA_string(0, 0, 100, 1 - saturationValue.value / 100) };
+      return { backgroundColor: `rgba(255, 255, 255, ${1 - saturationValue.value / 100})` };
     }
 
-    return { backgroundColor: HSVA2HSLA_string(0, 0, 0, 1 - brightnessValue.value / 100) };
+    if (verticalChannel === 'hsl-saturation') {
+      if (hsl.value.l < 50) return { backgroundColor: `rgba(0, 0, 0, ${1 - hsl.value.l / 50})` };
+      return { backgroundColor: `rgba(255, 255, 255, ${(hsl.value.l - 50) / 50})` };
+    }
+
+    return { backgroundColor: `rgba(0, 0, 0, ${1 - brightnessValue.value / 100})` };
   }, [saturationValue, brightnessValue]);
 
   const panelImageStyle = useAnimatedStyle(() => {
@@ -84,10 +106,22 @@ export function Panel2({
       newHueValue = reverseHue ? 360 - valueX : valueX,
       newChannelValue = reverseVerticalChannel ? valueY : 100 - valueY;
 
-    if (hueValue.value === newHueValue && channelValue.value === newChannelValue) return;
+    if (hueValue.value === newHueValue && verticalChannelValue.value === newChannelValue) return;
 
     hueValue.value = newHueValue;
-    channelValue.value = newChannelValue;
+
+    if (verticalChannel === 'hsl-saturation') {
+      // To prevent locking this slider when the luminance is 0 or 100,
+      // this should not affect the resulting color, as the value will be rounded.
+      const l = hsl.value.l === 0 ? 0.01 : hsl.value.l === 100 ? 99.99 : hsl.value.l;
+      const { s, v } = colorKit.runOnUI().HSV({ h: hsl.value.h, s: newChannelValue, l }).object(false);
+      saturationValue.value = s;
+      brightnessValue.value = v;
+    } else if (verticalChannel === 'brightness') {
+      brightnessValue.value = newChannelValue;
+    } else {
+      saturationValue.value = newChannelValue;
+    }
 
     onGestureChange();
   };
@@ -131,11 +165,17 @@ export function Panel2({
 
           <Animated.Image
             source={require('@assets/blackGradient.png')}
-            style={[styles.panel_image, panelImageStyle, { tintColor: verticalChannel === 'saturation' ? '#fff' : undefined }]}
+            style={[
+              styles.panel_image,
+              panelImageStyle,
+              {
+                tintColor: verticalChannel === 'saturation' ? '#fff' : verticalChannel === 'hsl-saturation' ? '#888' : undefined,
+              },
+            ]}
             resizeMode='stretch'
           />
 
-          <ConditionalRendering if={adaptSpectrum && verticalChannel === 'saturation'}>
+          <ConditionalRendering if={adaptSpectrum && (verticalChannel === 'saturation' || verticalChannel === 'hsl-saturation')}>
             <Animated.View style={[spectrumStyle, StyleSheet.absoluteFillObject]} />
           </ConditionalRendering>
         </ImageBackground>
