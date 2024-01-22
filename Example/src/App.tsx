@@ -7,6 +7,7 @@ import HorizontalHslSliders from './HslHorizontal';
 import VerticalHslSliders from './HslVertical';
 import Panel1Example from './Panel1';
 import Panel2Brightness from './Panel2Brightness';
+import Panel2HslSaturation from './Panel2HslSaturation';
 import Panel2Saturation from './Panel2Saturation';
 import WheelBrightness from './Panel3Brightness';
 import WheelHSLSaturation from './Panel3HslSaturation';
@@ -22,10 +23,11 @@ export default function App() {
       <StatusBar backgroundColor='transparent' translucent />
 
       <View style={[styles.container, { paddingTop: 20, backgroundColor: '#202124' }]}>
-        <ScrollView contentContainerStyle={[styles.container, { width: 240, alignSelf: 'center' }]}>
+        <ScrollView contentContainerStyle={[styles.container, { width: 240, alignSelf: 'center', gap: 10 }]}>
           <Panel1Example />
 
           <Panel2Saturation />
+          <Panel2HslSaturation />
           <Panel2Brightness />
 
           <WheelSaturation />
@@ -54,7 +56,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'space-evenly',
   },

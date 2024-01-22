@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { KeyboardAvoidingView, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 
-import ColorPicker, { Panel2, OpacitySlider, colorKit, BrightnessSlider, InputWidget } from 'reanimated-color-picker';
 import type { returnedResults } from 'reanimated-color-picker';
+import ColorPicker, { InputWidget, LuminanceSlider, OpacitySlider, Panel2, colorKit } from 'reanimated-color-picker';
 
 export default function Example() {
   const [showModal, setShowModal] = useState(false);
@@ -21,7 +21,7 @@ export default function Example() {
   return (
     <>
       <Pressable style={styles.openButton} onPress={() => setShowModal(true)}>
-        <Text style={{ color: '#707070', fontWeight: 'bold', textAlign: 'center' }}>Panel2 Saturation</Text>
+        <Text style={{ color: '#707070', fontWeight: 'bold', textAlign: 'center' }}>Panel2 HSL Saturation</Text>
       </Pressable>
 
       <Modal onRequestClose={() => setShowModal(false)} visible={showModal} animationType='slide'>
@@ -34,10 +34,11 @@ export default function Example() {
                 thumbSize={30}
                 thumbShape='rect'
                 onChange={onColorSelect}
+                adaptSpectrum
               >
-                <Panel2 style={styles.panelStyle} thumbShape='ring' reverseVerticalChannel />
+                <Panel2 style={styles.panelStyle} thumbShape='ring' verticalChannel='hsl-saturation' />
 
-                <BrightnessSlider style={styles.sliderStyle} />
+                <LuminanceSlider style={styles.sliderStyle} />
 
                 <OpacitySlider style={styles.sliderStyle} />
 
@@ -117,7 +118,7 @@ const styles = StyleSheet.create({
   openButton: {
     width: '100%',
     borderRadius: 20,
-    paddingHorizontal: 10,
+    paddingHorizontal: 40,
     paddingVertical: 10,
     backgroundColor: '#fff',
 
