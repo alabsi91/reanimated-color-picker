@@ -75,14 +75,12 @@ export function Panel3({
     if (!adaptSpectrum) return {};
 
     if (centerChannel === 'brightness') {
-      return { backgroundColor: `hsla(0, 0%, ${100}%, ${1 - saturationValue.value / 100})` };
+      return { backgroundColor: `rgba(255, 255, 255, ${1 - saturationValue.value / 100})` };
     }
 
     if (centerChannel === 'hsl-saturation') {
-      return {
-        backgroundColor:
-          hsl.value.l < 50 ? `rgba(0, 0, 0, ${1 - hsl.value.l / 50})` : `rgba(255, 255, 255, ${(hsl.value.l - 50) / 50})`,
-      };
+      if (hsl.value.l < 50) return { backgroundColor: `rgba(0, 0, 0, ${1 - hsl.value.l / 50})` };
+      return { backgroundColor: `rgba(255, 255, 255, ${(hsl.value.l - 50) / 50})` };
     }
 
     return { backgroundColor: `rgba(0, 0, 0, ${1 - brightnessValue.value / 100})` };
