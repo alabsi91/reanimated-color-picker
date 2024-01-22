@@ -75,6 +75,8 @@ export function LuminanceCircular({
 
   const clipViewStyle = useAnimatedStyle(() => {
     return {
+      position: 'absolute',
+      backgroundColor: '#fff',
       width: width.value - sliderThickness * 2,
       height: width.value - sliderThickness * 2,
       borderRadius: width.value / 2,
@@ -167,18 +169,14 @@ export function LuminanceCircular({
         onLayout={onLayout}
         style={[
           styles.panel_container,
+          { justifyContent: 'center', alignItems: 'center' },
           style,
           { position: 'relative', aspectRatio: 1, borderWidth: 0, padding: 0 },
           borderRadiusStyle,
         ]}
       >
         <Animated.View
-          style={[
-            styles.panel_image,
-            imageStyle,
-            activeColorStyle,
-            { flexDirection: isRtl ? 'row-reverse' : 'row', justifyContent: 'center', alignItems: 'center' },
-          ]}
+          style={[styles.panel_image, imageStyle, activeColorStyle, { flexDirection: isRtl ? 'row-reverse' : 'row' }]}
         >
           <Image
             source={require('@assets/blackGradient.png')}
@@ -190,10 +188,9 @@ export function LuminanceCircular({
             style={{ width: '100%', height: '100%', flex: 1, tintColor: '#fff', transform: [{ scaleX: -1 }] }}
             resizeMode='stretch'
           />
-          <Animated.View style={[clipViewStyle, { position: 'absolute', backgroundColor: '#fff' }, containerStyle]}>
-            {children}
-          </Animated.View>
         </Animated.View>
+
+        <Animated.View style={[clipViewStyle, containerStyle]}>{children}</Animated.View>
 
         <Thumb
           channel='v'
