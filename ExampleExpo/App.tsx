@@ -5,6 +5,7 @@ import HorizontalHsbSliders from './src/HsbHorizontal';
 import VerticalHsbSliders from './src/HsbVertical';
 import HorizontalHslSliders from './src/HslHorizontal';
 import VerticalHslSliders from './src/HslVertical';
+import LuminanceCircular from './src/LuminanceCircular';
 import Panel1Example from './src/Panel1';
 import Panel2Brightness from './src/Panel2Brightness';
 import Panel2HslSaturation from './src/Panel2HslSaturation';
@@ -23,7 +24,7 @@ export default function App() {
       <StatusBar backgroundColor='transparent' translucent />
 
       <View style={[styles.container, { paddingTop: 20, backgroundColor: '#202124' }]}>
-        <ScrollView contentContainerStyle={[styles.container, { width: 240, alignSelf: 'center' }]}>
+        <ScrollView contentContainerStyle={[styles.container, { width: 240, alignSelf: 'center', gap: 10, paddingVertical: 20 }]}>
           <Panel1Example />
 
           <Panel2Saturation />
@@ -39,6 +40,7 @@ export default function App() {
           <Panel5Example />
 
           <CircularHue />
+          <LuminanceCircular />
 
           <HorizontalHsbSliders />
           <VerticalHsbSliders />
@@ -56,7 +58,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'space-evenly',
   },

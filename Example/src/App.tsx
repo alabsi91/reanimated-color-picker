@@ -1,10 +1,12 @@
 import React from 'react';
 import { ScrollView, StatusBar, StyleSheet, View } from 'react-native';
+
 import CircularHue from './CircularHue';
 import HorizontalHsbSliders from './HsbHorizontal';
 import VerticalHsbSliders from './HsbVertical';
 import HorizontalHslSliders from './HslHorizontal';
 import VerticalHslSliders from './HslVertical';
+import LuminanceCircular from './LuminanceCircular';
 import Panel1Example from './Panel1';
 import Panel2Brightness from './Panel2Brightness';
 import Panel2HslSaturation from './Panel2HslSaturation';
@@ -23,7 +25,7 @@ export default function App() {
       <StatusBar backgroundColor='transparent' translucent />
 
       <View style={[styles.container, { paddingTop: 20, backgroundColor: '#202124' }]}>
-        <ScrollView contentContainerStyle={[styles.container, { width: 240, alignSelf: 'center', gap: 10 }]}>
+        <ScrollView contentContainerStyle={[styles.container, { width: 240, alignSelf: 'center', gap: 10, paddingVertical: 20 }]}>
           <Panel1Example />
 
           <Panel2Saturation />
@@ -39,6 +41,7 @@ export default function App() {
           <Panel5Example />
 
           <CircularHue />
+          <LuminanceCircular />
 
           <HorizontalHsbSliders />
           <VerticalHsbSliders />
