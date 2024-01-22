@@ -18,7 +18,7 @@ export function ExtraThumb({
   renderThumb,
   ...props
 }: ExtraThumbProps) {
-  const { width, boundedThumb, centerChannel, adaptSpectrum, rotate, ...ctx } = usePanel3Context();
+  const { width, boundedThumb, centerChannel, centerChannelValue, adaptSpectrum, rotate, ...ctx } = usePanel3Context();
   const { hueValue, saturationValue, brightnessValue, alphaValue, returnedResults } = usePickerContext();
 
   const thumbSize = props.thumbSize ?? ctx.thumbSize,
@@ -94,12 +94,10 @@ export function ExtraThumb({
     }
   }, [hue, saturation, brightness]);
 
-  const channelValue = centerChannel === 'brightness' ? brightness : saturation;
-
   const handleStyle = useAnimatedStyle(() => {
     const center = width.value / 2 - (boundedThumb ? thumbSize / 2 : 0),
       rotatedHue = (hue.value - rotate) % 360,
-      distance = (channelValue.value / 100) * (width.value / 2 - (boundedThumb ? thumbSize / 2 : 0)),
+      distance = (centerChannelValue.value / 100) * (width.value / 2 - (boundedThumb ? thumbSize / 2 : 0)),
       angle = (rotatedHue * Math.PI) / 180,
       posY = width.value - (Math.sin(angle) * distance + center) - (boundedThumb ? thumbSize : thumbSize / 2),
       posX = width.value - (Math.cos(angle) * distance + center) - (boundedThumb ? thumbSize : thumbSize / 2);
@@ -107,7 +105,7 @@ export function ExtraThumb({
     return {
       transform: [{ translateX: posX }, { translateY: posY }, { rotate: rotatedHue + 90 + 'deg' }],
     };
-  }, [thumbSize, boundedThumb, width, channelValue, hue]);
+  }, [thumbSize, boundedThumb, width, centerChannelValue, hue]);
 
   const centerLineStyle = useAnimatedStyle(() => {
     if (!renderCenterLine) return {};
@@ -115,7 +113,7 @@ export function ExtraThumb({
     const lineThickness = 1,
       center = width.value / 2 - (boundedThumb ? thumbSize / 2 : 0),
       rotatedHue = (hue.value - rotate) % 360,
-      distance = (channelValue.value / 100) * center,
+      distance = (centerChannelValue.value / 100) * center,
       angle = ((rotatedHue * Math.PI) / Math.PI + 180) % 360; // reversed angle
 
     return {
@@ -125,7 +123,7 @@ export function ExtraThumb({
       width: distance,
       transform: [{ rotate: angle + 'deg' }, { translateX: distance / 2 }, { translateY: 0 }],
     };
-  }, [renderCenterLine, boundedThumb, thumbSize, width, hue, channelValue]);
+  }, [renderCenterLine, boundedThumb, thumbSize, width, hue, centerChannelValue]);
 
   return (
     <>

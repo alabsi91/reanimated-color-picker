@@ -60,11 +60,8 @@ export function HSLSaturationSlider({ gestures = [], style = {}, vertical = fals
 
   const activeBrightnessStyle = useAnimatedStyle(() => {
     if (!adaptSpectrum) return {};
-
-    return {
-      backgroundColor:
-        hsl.value.l < 50 ? `rgba(0, 0, 0, ${1 - hsl.value.l / 50})` : `rgba(255, 255, 255, ${(hsl.value.l - 50) / 50})`,
-    };
+    if (hsl.value.l < 50) return { backgroundColor: `rgba(0, 0, 0, ${1 - hsl.value.l / 50})` };
+    return { backgroundColor: `rgba(255, 255, 255, ${(hsl.value.l - 50) / 50})` };
   }, [adaptSpectrum, brightnessValue]);
 
   const imageStyle = useAnimatedStyle(() => {
