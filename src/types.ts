@@ -400,7 +400,7 @@ export interface Panel2Props extends PanelProps {
   reverseVerticalChannel?: boolean;
 
   /** - Determines which color channel to adjust when moving the thumb vertically on the slider. */
-  verticalChannel?: 'saturation' | 'brightness';
+  verticalChannel?: 'saturation' | 'brightness' | 'hsl-saturation';
 
   /** - Color spectrum adapts to changes in brightness and saturation */
   adaptSpectrum?: boolean;
