@@ -22,6 +22,8 @@ export function Panel1({ gestures = [], style = {}, ...props }: PanelProps) {
     boundedThumb = props.boundedThumb ?? ctx.boundedThumb,
     renderThumb = props.renderThumb ?? ctx.renderThumb,
     thumbStyle = props.thumbStyle ?? ctx.thumbStyle ?? {},
+    thumbScaleAnimationValue = props.thumbScaleUpValue ?? ctx.thumbScaleAnimationValue,
+    thumbScaleAnimationDuration = props.thumbScaleUpDuration ?? ctx.thumbScaleAnimationDuration,
     thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle ?? {};
 
   const borderRadius = getStyle(style, 'borderRadius') ?? 5;
@@ -76,13 +78,13 @@ export function Panel1({ gestures = [], style = {}, ...props }: PanelProps) {
 
   const onGestureBegin = (event: PanGestureHandlerEventPayload) => {
     'worklet';
-    handleScale.value = withTiming(1.2, { duration: 100 });
+    handleScale.value = withTiming(thumbScaleAnimationValue, { duration: thumbScaleAnimationDuration });
     onGestureUpdate(event);
   };
 
   const onGestureFinish = () => {
     'worklet';
-    handleScale.value = withTiming(1, { duration: 100 });
+    handleScale.value = withTiming(1, { duration: thumbScaleAnimationDuration });
     onGestureEnd();
   };
 

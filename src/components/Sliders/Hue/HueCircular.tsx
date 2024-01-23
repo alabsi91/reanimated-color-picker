@@ -21,6 +21,8 @@ export function HueCircular({ children, gestures = [], style = {}, containerStyl
     renderThumb = props.renderThumb ?? ctx.renderThumb,
     thumbStyle = props.thumbStyle ?? ctx.thumbStyle ?? {},
     sliderThickness = props.sliderThickness ?? ctx.sliderThickness,
+    thumbScaleAnimationValue = props.thumbScaleAnimationValue ?? ctx.thumbScaleAnimationValue,
+    thumbScaleAnimationDuration = props.thumbScaleAnimationDuration ?? ctx.thumbScaleAnimationDuration,
     adaptSpectrum = props.adaptSpectrum ?? ctx.adaptSpectrum,
     thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle ?? {};
 
@@ -108,14 +110,14 @@ export function HueCircular({ children, gestures = [], style = {}, containerStyl
     }
 
     isGestureActive.value = true;
-    handleScale.value = withTiming(1.2, { duration: 100 });
+    handleScale.value = withTiming(thumbScaleAnimationValue, { duration: thumbScaleAnimationDuration });
     onGestureUpdate(event);
   };
 
   const onGestureFinish = () => {
     'worklet';
     isGestureActive.value = false;
-    handleScale.value = withTiming(1, { duration: 100 });
+    handleScale.value = withTiming(1, { duration: thumbScaleAnimationDuration });
     onGestureEnd();
   };
 

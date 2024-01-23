@@ -21,6 +21,8 @@ export function HueSlider({ gestures = [], style = {}, vertical = false, reverse
     renderThumb = props.renderThumb ?? ctx.renderThumb,
     thumbStyle = props.thumbStyle ?? ctx.thumbStyle ?? {},
     thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle ?? {},
+    thumbScaleAnimationValue = props.thumbScaleAnimationValue ?? ctx.thumbScaleAnimationValue,
+    thumbScaleAnimationDuration = props.thumbScaleAnimationDuration ?? ctx.thumbScaleAnimationDuration,
     adaptSpectrum = props.adaptSpectrum ?? ctx.adaptSpectrum,
     sliderThickness = props.sliderThickness ?? ctx.sliderThickness;
 
@@ -87,13 +89,13 @@ export function HueSlider({ gestures = [], style = {}, vertical = false, reverse
 
   const onGestureBegin = (event: PanGestureHandlerEventPayload) => {
     'worklet';
-    handleScale.value = withTiming(1.2, { duration: 100 });
+    handleScale.value = withTiming(thumbScaleAnimationValue, { duration: thumbScaleAnimationDuration });
     onGestureUpdate(event);
   };
 
   const onGestureFinish = () => {
     'worklet';
-    handleScale.value = withTiming(1, { duration: 100 });
+    handleScale.value = withTiming(1, { duration: thumbScaleAnimationDuration });
     onGestureEnd();
   };
 

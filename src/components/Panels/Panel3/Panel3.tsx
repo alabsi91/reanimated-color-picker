@@ -32,6 +32,8 @@ export function Panel3({
     boundedThumb = props.boundedThumb ?? ctx.boundedThumb,
     renderThumb = props.renderThumb ?? ctx.renderThumb,
     thumbStyle = props.thumbStyle ?? ctx.thumbStyle ?? {},
+    thumbScaleAnimationValue = props.thumbScaleUpValue ?? ctx.thumbScaleAnimationValue,
+    thumbScaleAnimationDuration = props.thumbScaleUpDuration ?? ctx.thumbScaleAnimationDuration,
     thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle ?? {},
     adaptSpectrum = props.adaptSpectrum ?? ctx.adaptSpectrum;
 
@@ -141,6 +143,7 @@ export function Panel3({
 
   const onGestureBegin = (event: PanGestureHandlerEventPayload) => {
     'worklet';
+
     const R = width.value / 2,
       dx = R - event.x,
       dy = R - event.y,
@@ -154,14 +157,14 @@ export function Panel3({
 
     isGestureActive.value = true;
 
-    handleScale.value = withTiming(1.2, { duration: 100 });
+    handleScale.value = withTiming(thumbScaleAnimationValue, { duration: thumbScaleAnimationDuration });
     onGestureUpdate(event);
   };
 
   const onGestureFinish = () => {
     'worklet';
     isGestureActive.value = false;
-    handleScale.value = withTiming(1, { duration: 100 });
+    handleScale.value = withTiming(1, { duration: thumbScaleAnimationDuration });
     onGestureEnd();
   };
 
