@@ -31,6 +31,8 @@ const ColorPicker = forwardRef<ColorPickerRef, ColorPickerProps>(
       thumbSize = 35,
       thumbShape = 'ring',
       boundedThumb = false,
+      thumbScaleAnimationValue = 1.2,
+      thumbScaleAnimationDuration = 100,
       thumbColor,
       renderThumb,
       thumbStyle,
@@ -174,6 +176,8 @@ const ColorPicker = forwardRef<ColorPickerRef, ColorPickerProps>(
       renderThumb,
       thumbStyle,
       thumbInnerStyle,
+      thumbScaleAnimationValue,
+      thumbScaleAnimationDuration,
 
       value,
       setColor,

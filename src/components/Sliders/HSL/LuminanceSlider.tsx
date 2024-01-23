@@ -23,6 +23,8 @@ export function LuminanceSlider({ gestures = [], style = {}, vertical = false, r
     renderThumb = props.renderThumb ?? ctx.renderThumb,
     thumbStyle = props.thumbStyle ?? ctx.thumbStyle ?? {},
     thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle ?? {},
+    thumbScaleAnimationValue = props.thumbScaleAnimationValue ?? ctx.thumbScaleAnimationValue,
+    thumbScaleAnimationDuration = props.thumbScaleAnimationDuration ?? ctx.thumbScaleAnimationDuration,
     adaptSpectrum = props.adaptSpectrum ?? ctx.adaptSpectrum,
     sliderThickness = props.sliderThickness ?? ctx.sliderThickness;
 
@@ -95,13 +97,13 @@ export function LuminanceSlider({ gestures = [], style = {}, vertical = false, r
 
   const onGestureBegin = (event: PanGestureHandlerEventPayload) => {
     'worklet';
-    handleScale.value = withTiming(1.2, { duration: 100 });
+    handleScale.value = withTiming(thumbScaleAnimationValue, { duration: thumbScaleAnimationDuration });
     onGestureUpdate(event);
   };
 
   const onGestureFinish = () => {
     'worklet';
-    handleScale.value = withTiming(1, { duration: 100 });
+    handleScale.value = withTiming(1, { duration: thumbScaleAnimationDuration });
     onGestureEnd();
   };
 

@@ -194,6 +194,12 @@ export interface ColorPickerContext {
   /** A global prop for all sliders children. */
   thumbStyle: StyleProp<ViewStyle>;
 
+  /** - A global property to controls the scale value animation of the thumb when active. **Default**: `1.2` */
+  thumbScaleAnimationValue: number;
+
+  /** - A global property to sets the duration of the scaling-up animation of the thumb when active. **Default**: `100` */
+  thumbScaleAnimationDuration: number;
+
   /**
    * - Determines whether the slider thumb (or handle) should be constrained to stay within the boundaries of the slider.
    * - When set to true, the thumb will not be allowed to move beyond the edges of the slider.
@@ -263,6 +269,12 @@ export interface ColorPickerProps {
 
   /** - A global property to change the style of the thumb's View for all descendant sliders components */
   thumbStyle?: StyleProp<ViewStyle>;
+
+  /** - A global property to controls the scale value animation of the thumb when active. **Default**: `1.2` */
+  thumbScaleAnimationValue?: number;
+
+  /** - A global property to sets the duration of the scaling-up animation of the thumb when active. **Default**: `100` */
+  thumbScaleAnimationDuration?: number;
 
   /**
    * - A global property for all descendant sliders and panels components
@@ -379,6 +391,12 @@ export interface PanelProps {
   /** - Function which receives ThumbProps and renders slider's handle (thumb). */
   renderThumb?: RenderThumbType;
 
+  /** - Controls the scale value animation of the thumb when active. **Default**: `1.2` */
+  thumbScaleUpValue?: number;
+
+  /** - Sets the duration of the scaling-up animation of the thumb when active. **Default**: `100` */
+  thumbScaleUpDuration?: number;
+
   /**
    * - Array of gestures or composed gestures from `react-native-gesture-handler`.
    * - Will run simultaneously with the color picker gestures.
@@ -430,12 +448,19 @@ export interface Panel4Props extends PanelProps {
   reverseHorizontalChannels?: boolean;
 }
 
-export interface Panel5Props extends PanelProps {
+export interface Panel5Props {
+  /**
+   * - Array of gestures or composed gestures from `react-native-gesture-handler`.
+   * - Will run simultaneously with the color picker gestures.
+   */
+  gestures?: Gesture[];
+
   /**
    * - Panel container style.
    * - **Note** Certain style properties will be overridden.
    */
   style?: StyleProp<ViewStyle>;
+
   /**
    * - The style of the square that indicates the selected color.
    * - **Note** Certain style properties will be overridden.
@@ -468,6 +493,12 @@ export interface SliderProps {
 
   /** - Function which receives ThumbProps and renders slider's handle (thumb). */
   renderThumb?: RenderThumbType;
+
+  /** - Controls the scale value animation of the thumb when active. **Default**: `1.2` */
+  thumbScaleAnimationValue?: number;
+
+  /** - Sets the duration of the scaling-up animation of the thumb when active. **Default**: `100` */
+  thumbScaleAnimationDuration?: number;
 
   /** - Thickness is the width of the slider in vertical mode or the height in horizontal mode. */
   sliderThickness?: number;
