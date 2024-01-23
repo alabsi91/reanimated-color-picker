@@ -501,6 +501,9 @@ export interface HueCircularProps extends Omit<SliderProps, 'vertical' | 'revers
 
   /** - The style of the container that wraps the given children. */
   containerStyle?: StyleProp<ViewStyle>;
+
+  /** - Rotate the hue circle, from 0 to 360 */
+  rotate?: number;
 }
 
 export interface LuminanceCircularProps extends Omit<SliderProps, 'vertical' | 'reverse' | 'boundedThumb'> {
