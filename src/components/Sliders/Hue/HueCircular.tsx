@@ -12,7 +12,14 @@ import type { HueCircularProps } from '@types';
 import type { LayoutChangeEvent } from 'react-native';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
-export function HueCircular({ children, gestures = [], style = {}, containerStyle = {}, ...props }: HueCircularProps) {
+export function HueCircular({
+  children,
+  gestures = [],
+  style = {},
+  containerStyle = {},
+  rotate = 0,
+  ...props
+}: HueCircularProps) {
   const { hueValue, saturationValue, brightnessValue, onGestureChange, onGestureEnd, ...ctx } = usePickerContext();
 
   const thumbShape = props.thumbShape ?? ctx.thumbShape,
@@ -35,17 +42,14 @@ export function HueCircular({ children, gestures = [], style = {}, containerStyl
 
   const handleStyle = useAnimatedStyle(() => {
     const center = width.value / 2,
+      rotatedHue = (hueValue.value - rotate) % 360,
       distance = (width.value - sliderThickness) / 2,
-      posY = width.value - (Math.sin((hueValue.value * Math.PI) / 180) * distance + center) - thumbSize / 2,
-      posX = width.value - (Math.cos((hueValue.value * Math.PI) / 180) * distance + center) - thumbSize / 2;
+      angle = (rotatedHue * Math.PI) / 180,
+      posY = width.value - (Math.sin(angle) * distance + center) - thumbSize / 2,
+      posX = width.value - (Math.cos(angle) * distance + center) - thumbSize / 2;
 
     return {
-      transform: [
-        { translateX: posX },
-        { translateY: posY },
-        { scale: handleScale.value },
-        { rotate: hueValue.value + 90 + 'deg' },
-      ],
+      transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }, { rotate: rotatedHue + 90 + 'deg' }],
     };
   }, [width, hueValue, handleScale]);
 
@@ -63,6 +67,8 @@ export function HueCircular({ children, gestures = [], style = {}, containerStyl
 
   const clipViewStyle = useAnimatedStyle(() => {
     return {
+      position: 'absolute',
+      backgroundColor: '#fff',
       width: width.value - sliderThickness * 2,
       height: width.value - sliderThickness * 2,
       borderRadius: width.value / 2,
@@ -79,7 +85,7 @@ export function HueCircular({ children, gestures = [], style = {}, containerStyl
       dy = center - y,
       theta = Math.atan2(dy, dx) * (180 / Math.PI), // [0 - 180] range
       angle = theta < 0 ? 360 + theta : theta, // [0 - 360] range
-      newHueValue = angle;
+      newHueValue = (angle + rotate) % 360;
 
     if (hueValue.value === newHueValue) return;
 
@@ -138,6 +144,7 @@ export function HueCircular({ children, gestures = [], style = {}, containerStyl
         onLayout={onLayout}
         style={[
           styles.panel_container,
+          { justifyContent: 'center', alignItems: 'center' },
           style,
           { position: 'relative', aspectRatio: 1, borderWidth: 0, padding: 0 },
           borderRadiusStyle,
@@ -145,16 +152,17 @@ export function HueCircular({ children, gestures = [], style = {}, containerStyl
       >
         <ImageBackground
           source={require('@assets/circularHue.png')}
-          style={[styles.panel_image, { justifyContent: 'center', alignItems: 'center' }]}
+          style={[styles.panel_image, { transform: [{ rotate: -rotate + 'deg' }] }]}
           resizeMode='stretch'
         >
           <ConditionalRendering if={adaptSpectrum}>
             <Animated.View style={[borderRadiusStyle, activeBrightnessStyle, StyleSheet.absoluteFillObject]} />
             <Animated.View style={[borderRadiusStyle, activeSaturationStyle, StyleSheet.absoluteFillObject]} />
           </ConditionalRendering>
-
-          <Animated.View style={[clipViewStyle, { backgroundColor: '#fff' }, containerStyle]}>{children}</Animated.View>
         </ImageBackground>
+
+        <Animated.View style={[clipViewStyle, containerStyle]}>{children}</Animated.View>
+
         <Thumb
           channel='h'
           thumbShape={thumbShape}
