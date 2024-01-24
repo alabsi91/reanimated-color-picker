@@ -29,13 +29,18 @@ export default function Example() {
           <View style={styles.pickerContainer}>
             <ColorPicker
               value={selectedColor.value}
-              sliderThickness={14}
+              sliderThickness={24}
               thumbSize={24}
               onChange={onColorSelect}
               adaptSpectrum
               boundedThumb
             >
-              <LuminanceCircular containerStyle={styles.hueContainer} thumbShape='pill'>
+              <LuminanceCircular
+                containerStyle={styles.hueContainer}
+                thumbShape='circle'
+                thumbInnerStyle={{ borderWidth: 4, borderColor: '#fff' }}
+                thumbScaleAnimationValue={1}
+              >
                 <Panel3 style={styles.panelStyle} centerChannel='hsl-saturation' />
               </LuminanceCircular>
 
