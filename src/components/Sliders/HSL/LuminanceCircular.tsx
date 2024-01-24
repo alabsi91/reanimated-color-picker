@@ -7,7 +7,6 @@ import colorKit from '@colorKit';
 import usePickerContext from '@context';
 import { styles } from '@styles';
 import Thumb from '@thumb';
-import { isRtl } from '@utils';
 
 import type { LuminanceCircularProps } from '@types';
 import type { LayoutChangeEvent } from 'react-native';
@@ -72,8 +71,11 @@ export function LuminanceCircular({
   }, [width, hsl, handleScale, thumbSide]);
 
   const activeColorStyle = useAnimatedStyle(() => {
-    return { backgroundColor: `hsl(${hsl.value.h}, ${adaptSpectrum ? hsl.value.s : 100}%, ${50}%)` };
-  }, [hueValue, saturationValue]);
+    return {
+      backgroundColor: `hsl(${hsl.value.h}, ${adaptSpectrum ? hsl.value.s : 100}%, ${50}%)`,
+      borderRadius: width.value / 2,
+    };
+  }, [hueValue, saturationValue, width]);
 
   const clipViewStyle = useAnimatedStyle(() => {
     return {
@@ -82,17 +84,6 @@ export function LuminanceCircular({
       width: width.value - sliderThickness * 2,
       height: width.value - sliderThickness * 2,
       borderRadius: width.value / 2,
-    };
-  }, [width]);
-
-  const imageStyle = useAnimatedStyle(() => {
-    return {
-      borderRadius: width.value / 2,
-      transform: [
-        { rotate: -rotate + 'deg' },
-        { translateX: (width.value - width.value) / 2 },
-        { translateY: (width.value - width.value) / 2 },
-      ],
     };
   }, [width]);
 
@@ -177,17 +168,10 @@ export function LuminanceCircular({
           borderRadiusStyle,
         ]}
       >
-        <Animated.View
-          style={[styles.panel_image, imageStyle, activeColorStyle, { flexDirection: isRtl ? 'row-reverse' : 'row' }]}
-        >
+        <Animated.View style={[styles.panel_image, activeColorStyle, { transform: [{ rotate: -rotate + 'deg' }] }]}>
           <Image
-            source={require('@assets/blackGradient.png')}
+            source={require('@assets/angular-luminance.png')}
             style={{ width: '100%', height: '100%', flex: 1 }}
-            resizeMode='stretch'
-          />
-          <Image
-            source={require('@assets/blackGradient.png')}
-            style={{ width: '100%', height: '100%', flex: 1, tintColor: '#fff', transform: [{ scaleX: -1 }] }}
             resizeMode='stretch'
           />
         </Animated.View>
