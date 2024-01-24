@@ -19,15 +19,11 @@ export default function Hollow({
   const computedStyle = { width, height, borderRadius, borderWidth: 2 };
 
   const adaptiveColorStyle = useAnimatedStyle(() => {
-    return {
-      borderColor: thumbColor || adaptiveColor.value,
-    };
+    return { borderColor: thumbColor ?? adaptiveColor.value };
   }, [thumbColor, adaptiveColor]);
 
   const adaptiveColorBgStyle = useAnimatedStyle(() => {
-    return {
-      backgroundColor: thumbColor || adaptiveColor.value,
-    };
+    return { backgroundColor: thumbColor ?? adaptiveColor.value };
   }, [thumbColor, adaptiveColor]);
 
   return (

@@ -32,15 +32,11 @@ export default function Plus({
   } as const;
 
   const adaptiveColorStyle = useAnimatedStyle(() => {
-    return {
-      backgroundColor: thumbColor || adaptiveColor.value,
-    };
+    return { backgroundColor: thumbColor ?? adaptiveColor.value };
   }, [thumbColor, adaptiveColor]);
 
   const adaptiveBorderColorStyle = useAnimatedStyle(() => {
-    return {
-      borderColor: thumbColor || adaptiveColor.value,
-    };
+    return { borderColor: thumbColor ?? adaptiveColor.value };
   }, [thumbColor, adaptiveColor]);
 
   return (

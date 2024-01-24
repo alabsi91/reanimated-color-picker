@@ -30,7 +30,7 @@ export default function Thumb({
     alpha = overrideHSV?.alpha ?? alphaValue;
 
   const resultColor = useSharedValue('#ffffff');
-  const solidColor = useAnimatedStyle(() => ({ backgroundColor: resultColor.value }), [resultColor]);
+  const solidColor = useAnimatedStyle(() => ({ backgroundColor: thumbColor ?? resultColor.value }), [resultColor]);
   const adaptiveColor = useSharedValue<'#000000' | '#ffffff'>('#ffffff');
 
   /**

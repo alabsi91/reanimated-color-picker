@@ -36,9 +36,7 @@ export default function DoubleTriangle({
     transform: [{ rotate: vertical ? '270deg' : '180deg' }],
   };
   const adaptiveColorStyle = useAnimatedStyle(() => {
-    return {
-      borderBottomColor: thumbColor || adaptiveColor.value,
-    };
+    return { borderBottomColor: thumbColor ?? adaptiveColor.value };
   }, [thumbColor, adaptiveColor]);
 
   return (

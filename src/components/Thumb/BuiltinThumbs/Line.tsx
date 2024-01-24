@@ -25,10 +25,9 @@ export default function Line({
     width: vertical ? '100%' : thickness,
     height: vertical ? thickness : '100%',
   } as const;
+
   const adaptiveColorStyle = useAnimatedStyle(() => {
-    return {
-      backgroundColor: thumbColor || adaptiveColor.value,
-    };
+    return { backgroundColor: thumbColor ?? adaptiveColor.value };
   }, [thumbColor, adaptiveColor]);
 
   return (
