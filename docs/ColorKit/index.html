@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html
   lang="en"
   dir="ltr"
@@ -7,7 +7,7 @@
 >
   <head>
     <meta charset="UTF-8" />
-    <meta name="generator" content="Docusaurus v3.0.0" />
+    <meta name="generator" content="Docusaurus v3.1.0" />
     <title data-rh="true">ColorKit | Reanimated Color Picker</title>
     <meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1" />
     <meta data-rh="true" name="twitter:card" content="summary_large_image" />
@@ -45,9 +45,9 @@
       hreflang="x-default"
     />
     <script src="https://snack.expo.dev/embed.js" async></script>
-    <link rel="stylesheet" href="/reanimated-color-picker/assets/css/styles.3d301ff4.css" />
-    <script src="/reanimated-color-picker/assets/js/runtime~main.f916badc.js" defer="defer"></script>
-    <script src="/reanimated-color-picker/assets/js/main.ce2bc3c4.js" defer="defer"></script>
+    <link rel="stylesheet" href="/reanimated-color-picker/assets/css/styles.1fc1ae05.css" />
+    <script src="/reanimated-color-picker/assets/js/runtime~main.be6d0e57.js" defer="defer"></script>
+    <script src="/reanimated-color-picker/assets/js/main.ded2c658.js" defer="defer"></script>
   </head>
   <body class="navigation-with-keyboard">
     <script>
@@ -318,6 +318,53 @@
                             <li>azure (<code>#f0ffff</code>)</li>
                             <li>and more ...</li>
                           </ul>
+                          <div class="theme-admonition theme-admonition-info admonition_xJq3 alert alert--info">
+                            <div class="admonitionHeading_Gvgb">
+                              <span class="admonitionIcon_Rf37"
+                                ><svg viewBox="0 0 14 16">
+                                  <path
+                                    fill-rule="evenodd"
+                                    d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"
+                                  ></path></svg></span
+                              >HOW TO RUN ON THE UI THREAD
+                            </div>
+                            <div class="admonitionContent_BuS1">
+                              <ul>
+                                <li>
+                                  To execute any of the <code>colorKit</code> methods, you can use <code>runOnUI</code>. For
+                                  example:
+                                </li>
+                              </ul>
+                              <div
+                                class="language-js codeBlockContainer_Ckt0 theme-code-block"
+                                style="--prism-color: #f8f8f2; --prism-background-color: #282a36"
+                              >
+                                <div class="codeBlockContent_biex">
+                                  <pre
+                                    tabindex="0"
+                                    class="prism-code language-js codeBlock_bY9V thin-scrollbar"
+                                    style="color: #f8f8f2; background-color: #282a36"
+                                  ><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#F8F8F2"><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">function</span><span class="token plain"> </span><span class="token function" style="color:rgb(80, 250, 123)">workletFunction</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(248, 248, 242)">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">  </span><span class="token string" style="color:rgb(255, 121, 198)">&#x27;worklet&#x27;</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">  </span><span class="token keyword" style="color:rgb(189, 147, 249);font-style:italic">const</span><span class="token plain"> rgb </span><span class="token operator">=</span><span class="token plain"> colorKit</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token method function property-access" style="color:rgb(80, 250, 123)">runOnUI</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token constant" style="color:rgb(189, 147, 249)">RGB</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token string" style="color:rgb(255, 121, 198)">&#x27;#f0ff&#x27;</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token method function property-access" style="color:rgb(80, 250, 123)">object</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"></span><span class="token punctuation" style="color:rgb(248, 248, 242)">}</span><br></span></code></pre>
+                                  <div class="buttonGroup__atx">
+                                    <button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn">
+                                      <span class="copyButtonIcons_eSgA" aria-hidden="true"
+                                        ><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N">
+                                          <path
+                                            fill="currentColor"
+                                            d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"
+                                          ></path></svg
+                                        ><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS">
+                                          <path
+                                            fill="currentColor"
+                                            d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
+                                          ></path></svg
+                                      ></span>
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                           <h2 class="anchor anchorWithStickyNavbar_LWe7" id="color-conversion">
                             Color Conversion<a
                               href="#color-conversion"
@@ -334,6 +381,52 @@
                             Convert any of the <a href="#supported-colors">supported color</a> formats into the
                             <code>RGB</code> format.
                           </p>
+                          <h4 class="anchor anchorWithStickyNavbar_LWe7" id="syntax">
+                            Syntax<a
+                              href="#syntax"
+                              class="hash-link"
+                              aria-label="Direct link to Syntax"
+                              title="Direct link to Syntax"
+                              >​</a
+                            >
+                          </h4>
+                          <div
+                            class="language-ts codeBlockContainer_Ckt0 theme-code-block"
+                            style="--prism-color: #f8f8f2; --prism-background-color: #282a36"
+                          >
+                            <div class="codeBlockContent_biex">
+                              <pre
+                                tabindex="0"
+                                class="prism-code language-ts codeBlock_bY9V thin-scrollbar"
+                                style="color: #f8f8f2; background-color: #282a36"
+                              ><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#F8F8F2"><span class="token plain">colorKit</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token constant" style="color:rgb(189, 147, 249)">RGB</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token plain">color</span><span class="token operator">:</span><span class="token plain"> SupportedColorFormats</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token function" style="color:rgb(80, 250, 123)">string</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token plain">forceRGBA </span><span class="token operator">=</span><span class="token plain"> </span><span class="token boolean">false</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token operator">:</span><span class="token plain"> </span><span class="token builtin" style="color:rgb(189, 147, 249)">string</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">colorKit</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token constant" style="color:rgb(189, 147, 249)">RGB</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token plain">color</span><span class="token operator">:</span><span class="token plain"> SupportedColorFormats</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token function" style="color:rgb(80, 250, 123)">array</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token plain">roundValues </span><span class="token operator">=</span><span class="token plain"> </span><span class="token boolean">true</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token operator">:</span><span class="token plain"> </span><span class="token builtin" style="color:rgb(189, 147, 249)">number</span><span class="token punctuation" style="color:rgb(248, 248, 242)">[</span><span class="token punctuation" style="color:rgb(248, 248, 242)">]</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">colorKit</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token constant" style="color:rgb(189, 147, 249)">RGB</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token plain">color</span><span class="token operator">:</span><span class="token plain"> SupportedColorFormats</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token function" style="color:rgb(80, 250, 123)">object</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token plain">roundValues </span><span class="token operator">=</span><span class="token plain"> </span><span class="token boolean">true</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token operator">:</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(248, 248, 242)">{</span><span class="token plain"> r</span><span class="token operator">:</span><span class="token plain"> </span><span class="token builtin" style="color:rgb(189, 147, 249)">number</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"> g</span><span class="token operator">:</span><span class="token plain"> </span><span class="token builtin" style="color:rgb(189, 147, 249)">number</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"> b</span><span class="token operator">:</span><span class="token plain"> </span><span class="token builtin" style="color:rgb(189, 147, 249)">number</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"> a</span><span class="token operator">:</span><span class="token plain"> </span><span class="token builtin" style="color:rgb(189, 147, 249)">number</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(248, 248, 242)">}</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><br></span></code></pre>
+                              <div class="buttonGroup__atx">
+                                <button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn">
+                                  <span class="copyButtonIcons_eSgA" aria-hidden="true"
+                                    ><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N">
+                                      <path
+                                        fill="currentColor"
+                                        d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"
+                                      ></path></svg
+                                    ><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS">
+                                      <path
+                                        fill="currentColor"
+                                        d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
+                                      ></path></svg
+                                  ></span>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                          <h4 class="anchor anchorWithStickyNavbar_LWe7" id="example">
+                            Example<a
+                              href="#example"
+                              class="hash-link"
+                              aria-label="Direct link to Example"
+                              title="Direct link to Example"
+                              >​</a
+                            >
+                          </h4>
                           <div
                             class="language-js codeBlockContainer_Ckt0 theme-code-block"
                             style="--prism-color: #f8f8f2; --prism-background-color: #282a36"
@@ -369,6 +462,52 @@
                             Convert any of the <a href="#supported-colors">supported color</a> formats into the
                             <code>HEX</code> format.
                           </p>
+                          <h4 class="anchor anchorWithStickyNavbar_LWe7" id="syntax-1">
+                            Syntax<a
+                              href="#syntax-1"
+                              class="hash-link"
+                              aria-label="Direct link to Syntax"
+                              title="Direct link to Syntax"
+                              >​</a
+                            >
+                          </h4>
+                          <div
+                            class="language-ts codeBlockContainer_Ckt0 theme-code-block"
+                            style="--prism-color: #f8f8f2; --prism-background-color: #282a36"
+                          >
+                            <div class="codeBlockContent_biex">
+                              <pre
+                                tabindex="0"
+                                class="prism-code language-ts codeBlock_bY9V thin-scrollbar"
+                                style="color: #f8f8f2; background-color: #282a36"
+                              ><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#F8F8F2"><span class="token plain">colorKit</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token constant" style="color:rgb(189, 147, 249)">HEX</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token plain">color</span><span class="token operator">:</span><span class="token plain"> SupportedColorFormats</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token operator">:</span><span class="token plain"> </span><span class="token builtin" style="color:rgb(189, 147, 249)">string</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><br></span></code></pre>
+                              <div class="buttonGroup__atx">
+                                <button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn">
+                                  <span class="copyButtonIcons_eSgA" aria-hidden="true"
+                                    ><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N">
+                                      <path
+                                        fill="currentColor"
+                                        d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"
+                                      ></path></svg
+                                    ><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS">
+                                      <path
+                                        fill="currentColor"
+                                        d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
+                                      ></path></svg
+                                  ></span>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                          <h4 class="anchor anchorWithStickyNavbar_LWe7" id="example-1">
+                            Example<a
+                              href="#example-1"
+                              class="hash-link"
+                              aria-label="Direct link to Example"
+                              title="Direct link to Example"
+                              >​</a
+                            >
+                          </h4>
                           <div
                             class="language-js codeBlockContainer_Ckt0 theme-code-block"
                             style="--prism-color: #f8f8f2; --prism-background-color: #282a36"
@@ -404,6 +543,52 @@
                             Convert any of the <a href="#supported-colors">supported color</a> formats into the
                             <code>HSL</code> format.
                           </p>
+                          <h4 class="anchor anchorWithStickyNavbar_LWe7" id="syntax-2">
+                            Syntax<a
+                              href="#syntax-2"
+                              class="hash-link"
+                              aria-label="Direct link to Syntax"
+                              title="Direct link to Syntax"
+                              >​</a
+                            >
+                          </h4>
+                          <div
+                            class="language-ts codeBlockContainer_Ckt0 theme-code-block"
+                            style="--prism-color: #f8f8f2; --prism-background-color: #282a36"
+                          >
+                            <div class="codeBlockContent_biex">
+                              <pre
+                                tabindex="0"
+                                class="prism-code language-ts codeBlock_bY9V thin-scrollbar"
+                                style="color: #f8f8f2; background-color: #282a36"
+                              ><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#F8F8F2"><span class="token plain">colorKit</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token constant" style="color:rgb(189, 147, 249)">HSL</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token plain">color</span><span class="token operator">:</span><span class="token plain"> SupportedColorFormats</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token function" style="color:rgb(80, 250, 123)">string</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token plain">forceHSLA </span><span class="token operator">=</span><span class="token plain"> </span><span class="token boolean">false</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token operator">:</span><span class="token plain"> </span><span class="token builtin" style="color:rgb(189, 147, 249)">string</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">colorKit</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token constant" style="color:rgb(189, 147, 249)">HSL</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token plain">color</span><span class="token operator">:</span><span class="token plain"> SupportedColorFormats</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token function" style="color:rgb(80, 250, 123)">array</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token plain">roundValues </span><span class="token operator">=</span><span class="token plain"> </span><span class="token boolean">true</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token operator">:</span><span class="token plain"> </span><span class="token builtin" style="color:rgb(189, 147, 249)">number</span><span class="token punctuation" style="color:rgb(248, 248, 242)">[</span><span class="token punctuation" style="color:rgb(248, 248, 242)">]</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">colorKit</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token constant" style="color:rgb(189, 147, 249)">HSL</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token plain">color</span><span class="token operator">:</span><span class="token plain"> SupportedColorFormats</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token function" style="color:rgb(80, 250, 123)">object</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token plain">roundValues </span><span class="token operator">=</span><span class="token plain"> </span><span class="token boolean">true</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token operator">:</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(248, 248, 242)">{</span><span class="token plain"> h</span><span class="token operator">:</span><span class="token plain"> </span><span class="token builtin" style="color:rgb(189, 147, 249)">number</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"> s</span><span class="token operator">:</span><span class="token plain"> </span><span class="token builtin" style="color:rgb(189, 147, 249)">number</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"> l</span><span class="token operator">:</span><span class="token plain"> </span><span class="token builtin" style="color:rgb(189, 147, 249)">number</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"> a</span><span class="token operator">:</span><span class="token plain"> </span><span class="token builtin" style="color:rgb(189, 147, 249)">number</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(248, 248, 242)">}</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><br></span></code></pre>
+                              <div class="buttonGroup__atx">
+                                <button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn">
+                                  <span class="copyButtonIcons_eSgA" aria-hidden="true"
+                                    ><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N">
+                                      <path
+                                        fill="currentColor"
+                                        d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"
+                                      ></path></svg
+                                    ><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS">
+                                      <path
+                                        fill="currentColor"
+                                        d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
+                                      ></path></svg
+                                  ></span>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                          <h4 class="anchor anchorWithStickyNavbar_LWe7" id="example-2">
+                            Example<a
+                              href="#example-2"
+                              class="hash-link"
+                              aria-label="Direct link to Example"
+                              title="Direct link to Example"
+                              >​</a
+                            >
+                          </h4>
                           <div
                             class="language-js codeBlockContainer_Ckt0 theme-code-block"
                             style="--prism-color: #f8f8f2; --prism-background-color: #282a36"
@@ -439,6 +624,52 @@
                             Convert any of the <a href="#supported-colors">supported color</a> formats into the
                             <code>HSV</code> format.
                           </p>
+                          <h4 class="anchor anchorWithStickyNavbar_LWe7" id="syntax-3">
+                            Syntax<a
+                              href="#syntax-3"
+                              class="hash-link"
+                              aria-label="Direct link to Syntax"
+                              title="Direct link to Syntax"
+                              >​</a
+                            >
+                          </h4>
+                          <div
+                            class="language-ts codeBlockContainer_Ckt0 theme-code-block"
+                            style="--prism-color: #f8f8f2; --prism-background-color: #282a36"
+                          >
+                            <div class="codeBlockContent_biex">
+                              <pre
+                                tabindex="0"
+                                class="prism-code language-ts codeBlock_bY9V thin-scrollbar"
+                                style="color: #f8f8f2; background-color: #282a36"
+                              ><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#F8F8F2"><span class="token plain">colorKit</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token constant" style="color:rgb(189, 147, 249)">HSV</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token plain">color</span><span class="token operator">:</span><span class="token plain"> SupportedColorFormats</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token function" style="color:rgb(80, 250, 123)">string</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token plain">forceHSVA </span><span class="token operator">=</span><span class="token plain"> </span><span class="token boolean">false</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token operator">:</span><span class="token plain"> </span><span class="token builtin" style="color:rgb(189, 147, 249)">string</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">colorKit</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token constant" style="color:rgb(189, 147, 249)">HSV</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token plain">color</span><span class="token operator">:</span><span class="token plain"> SupportedColorFormats</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token function" style="color:rgb(80, 250, 123)">array</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token plain">roundValues </span><span class="token operator">=</span><span class="token plain"> </span><span class="token boolean">true</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token operator">:</span><span class="token plain"> </span><span class="token builtin" style="color:rgb(189, 147, 249)">number</span><span class="token punctuation" style="color:rgb(248, 248, 242)">[</span><span class="token punctuation" style="color:rgb(248, 248, 242)">]</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">colorKit</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token constant" style="color:rgb(189, 147, 249)">HSV</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token plain">color</span><span class="token operator">:</span><span class="token plain"> SupportedColorFormats</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token function" style="color:rgb(80, 250, 123)">object</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token plain">roundValues </span><span class="token operator">=</span><span class="token plain"> </span><span class="token boolean">true</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token operator">:</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(248, 248, 242)">{</span><span class="token plain"> h</span><span class="token operator">:</span><span class="token plain"> </span><span class="token builtin" style="color:rgb(189, 147, 249)">number</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"> s</span><span class="token operator">:</span><span class="token plain"> </span><span class="token builtin" style="color:rgb(189, 147, 249)">number</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"> v</span><span class="token operator">:</span><span class="token plain"> </span><span class="token builtin" style="color:rgb(189, 147, 249)">number</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"> a</span><span class="token operator">:</span><span class="token plain"> </span><span class="token builtin" style="color:rgb(189, 147, 249)">number</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(248, 248, 242)">}</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><br></span></code></pre>
+                              <div class="buttonGroup__atx">
+                                <button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn">
+                                  <span class="copyButtonIcons_eSgA" aria-hidden="true"
+                                    ><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N">
+                                      <path
+                                        fill="currentColor"
+                                        d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"
+                                      ></path></svg
+                                    ><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS">
+                                      <path
+                                        fill="currentColor"
+                                        d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
+                                      ></path></svg
+                                  ></span>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                          <h4 class="anchor anchorWithStickyNavbar_LWe7" id="example-3">
+                            Example<a
+                              href="#example-3"
+                              class="hash-link"
+                              aria-label="Direct link to Example"
+                              title="Direct link to Example"
+                              >​</a
+                            >
+                          </h4>
                           <div
                             class="language-js codeBlockContainer_Ckt0 theme-code-block"
                             style="--prism-color: #f8f8f2; --prism-background-color: #282a36"
@@ -474,6 +705,52 @@
                             Convert any of the <a href="#supported-colors">supported color</a> formats into the
                             <code>HWB</code> format.
                           </p>
+                          <h4 class="anchor anchorWithStickyNavbar_LWe7" id="syntax-4">
+                            Syntax<a
+                              href="#syntax-4"
+                              class="hash-link"
+                              aria-label="Direct link to Syntax"
+                              title="Direct link to Syntax"
+                              >​</a
+                            >
+                          </h4>
+                          <div
+                            class="language-ts codeBlockContainer_Ckt0 theme-code-block"
+                            style="--prism-color: #f8f8f2; --prism-background-color: #282a36"
+                          >
+                            <div class="codeBlockContent_biex">
+                              <pre
+                                tabindex="0"
+                                class="prism-code language-ts codeBlock_bY9V thin-scrollbar"
+                                style="color: #f8f8f2; background-color: #282a36"
+                              ><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#F8F8F2"><span class="token plain">colorKit</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token constant" style="color:rgb(189, 147, 249)">HWB</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token plain">color</span><span class="token operator">:</span><span class="token plain"> SupportedColorFormats</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token function" style="color:rgb(80, 250, 123)">string</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token plain">forceHWBA </span><span class="token operator">=</span><span class="token plain"> </span><span class="token boolean">false</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token operator">:</span><span class="token plain"> </span><span class="token builtin" style="color:rgb(189, 147, 249)">string</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">colorKit</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token constant" style="color:rgb(189, 147, 249)">HWB</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token plain">color</span><span class="token operator">:</span><span class="token plain"> SupportedColorFormats</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token function" style="color:rgb(80, 250, 123)">array</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token plain">roundValues </span><span class="token operator">=</span><span class="token plain"> </span><span class="token boolean">true</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token operator">:</span><span class="token plain"> </span><span class="token builtin" style="color:rgb(189, 147, 249)">number</span><span class="token punctuation" style="color:rgb(248, 248, 242)">[</span><span class="token punctuation" style="color:rgb(248, 248, 242)">]</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">colorKit</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token constant" style="color:rgb(189, 147, 249)">HWB</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token plain">color</span><span class="token operator">:</span><span class="token plain"> SupportedColorFormats</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token function" style="color:rgb(80, 250, 123)">object</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token plain">roundValues </span><span class="token operator">=</span><span class="token plain"> </span><span class="token boolean">true</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token operator">:</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(248, 248, 242)">{</span><span class="token plain"> h</span><span class="token operator">:</span><span class="token plain"> </span><span class="token builtin" style="color:rgb(189, 147, 249)">number</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"> w</span><span class="token operator">:</span><span class="token plain"> </span><span class="token builtin" style="color:rgb(189, 147, 249)">number</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"> b</span><span class="token operator">:</span><span class="token plain"> </span><span class="token builtin" style="color:rgb(189, 147, 249)">number</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><span class="token plain"> a</span><span class="token operator">:</span><span class="token plain"> </span><span class="token builtin" style="color:rgb(189, 147, 249)">number</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(248, 248, 242)">}</span><span class="token punctuation" style="color:rgb(248, 248, 242)">;</span><br></span></code></pre>
+                              <div class="buttonGroup__atx">
+                                <button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn">
+                                  <span class="copyButtonIcons_eSgA" aria-hidden="true"
+                                    ><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N">
+                                      <path
+                                        fill="currentColor"
+                                        d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"
+                                      ></path></svg
+                                    ><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS">
+                                      <path
+                                        fill="currentColor"
+                                        d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
+                                      ></path></svg
+                                  ></span>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                          <h4 class="anchor anchorWithStickyNavbar_LWe7" id="example-4">
+                            Example<a
+                              href="#example-4"
+                              class="hash-link"
+                              aria-label="Direct link to Example"
+                              title="Direct link to Example"
+                              >​</a
+                            >
+                          </h4>
                           <div
                             class="language-js codeBlockContainer_Ckt0 theme-code-block"
                             style="--prism-color: #f8f8f2; --prism-background-color: #282a36"
@@ -2233,9 +2510,9 @@
                       <nav class="pagination-nav docusaurus-mt-lg" aria-label="Docs pages">
                         <a
                           class="pagination-nav__link pagination-nav__link--prev"
-                          href="/reanimated-color-picker/docs/API/Swatches"
+                          href="/reanimated-color-picker/docs/API/Preview/ExtraThumb"
                           ><div class="pagination-nav__sublabel">Previous</div>
-                          <div class="pagination-nav__label">Swatches</div></a
+                          <div class="pagination-nav__label">ExtraThumb</div></a
                         ><a class="pagination-nav__link pagination-nav__link--next" href="/reanimated-color-picker/docs/Examples"
                           ><div class="pagination-nav__sublabel">Next</div>
                           <div class="pagination-nav__label">Examples</div></a

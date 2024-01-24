@@ -154,7 +154,7 @@
           function () {
             return 'function' == typeof e ? e(n) : { ...n, ...e };
           },
-          [n, e]
+          [n, e],
         );
       }
       function s(e) {
