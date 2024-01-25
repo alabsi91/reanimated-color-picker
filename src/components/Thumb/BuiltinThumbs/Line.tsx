@@ -28,7 +28,7 @@ export default function Line({
 
   const adaptiveColorStyle = useAnimatedStyle(() => {
     return { backgroundColor: thumbColor ?? adaptiveColor.value };
-  }, [thumbColor, adaptiveColor]);
+  }, [adaptiveColor]);
 
   return (
     <Animated.View
