@@ -29,11 +29,18 @@ export default function Ring({
   };
 
   const borderColor = getStyle(style, 'borderColor');
+  const ringBackgroundColor = getStyle(style, 'backgroundColor');
+
   const adaptiveColorStyle = useAnimatedStyle(() => {
-    const color = thumbColor ? colorKit.runOnUI().HEX(thumbColor) : adaptiveColor.value;
-    const backgroundColor = colorKit.runOnUI().setAlpha(color, 0.5).hex();
+    const backgroundColor =
+      ringBackgroundColor ??
+      colorKit
+        .runOnUI()
+        .setAlpha(thumbColor ?? adaptiveColor.value, 0.5)
+        .hex();
+
     return { backgroundColor, borderColor: borderColor ?? thumbColor ?? adaptiveColor.value };
-  }, [thumbColor, adaptiveColor]);
+  }, [adaptiveColor]);
 
   // Make sure to match the parity (odd or even) of the parent width, to solve the centering issue
   const innerWidth = 0.75 * width;
@@ -41,7 +48,7 @@ export default function Ring({
 
   return (
     <Animated.View
-      style={[styles.handle, style, computedStyle, adaptiveColorStyle, handleStyle]}
+      style={[styles.handle, computedStyle, adaptiveColorStyle, style, handleStyle]}
       renderToHardwareTextureAndroid={enableAndroidHardwareTextures}
     >
       <Animated.View
