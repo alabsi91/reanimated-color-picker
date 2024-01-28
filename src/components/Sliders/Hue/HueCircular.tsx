@@ -68,7 +68,6 @@ export function HueCircular({
   const clipViewStyle = useAnimatedStyle(() => {
     return {
       position: 'absolute',
-      backgroundColor: '#fff',
       width: width.value - sliderThickness * 2,
       height: width.value - sliderThickness * 2,
       borderRadius: width.value / 2,
@@ -161,7 +160,7 @@ export function HueCircular({
           </ConditionalRendering>
         </ImageBackground>
 
-        <Animated.View style={[clipViewStyle, containerStyle]}>{children}</Animated.View>
+        <Animated.View style={[clipViewStyle, { backgroundColor: '#fff' }, containerStyle]}>{children}</Animated.View>
 
         <Thumb
           channel='h'
