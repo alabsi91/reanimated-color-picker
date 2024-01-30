@@ -11,29 +11,28 @@ export default function Ring({
   width,
   height,
   borderRadius,
-  thumbColor,
   adaptiveColor,
   handleStyle,
   innerStyle,
   solidColor,
   style,
 }: BuiltinThumbsProps) {
-  const thumb_Color = thumbColor ? colorKit.HEX(thumbColor) : undefined;
-  const computedStyle = {
+  const ringStyle = {
     width,
     height,
     borderRadius,
-    backgroundColor: (thumb_Color || '#ffffff') + 50,
-    borderColor: thumbColor,
     borderWidth: 1,
   };
 
   const borderColor = getStyle(style, 'borderColor');
+  const ringBackgroundColor = getStyle(style, 'backgroundColor');
+
   const adaptiveColorStyle = useAnimatedStyle(() => {
-    const color = thumbColor ? colorKit.runOnUI().HEX(thumbColor) : adaptiveColor.value;
-    const backgroundColor = colorKit.runOnUI().setAlpha(color, 0.5).hex();
-    return { backgroundColor, borderColor: borderColor ?? thumbColor ?? adaptiveColor.value };
-  }, [thumbColor, adaptiveColor]);
+    return {
+      backgroundColor: ringBackgroundColor ?? colorKit.runOnUI().setAlpha(adaptiveColor.value, 0.5).hex(),
+      borderColor: borderColor ?? adaptiveColor.value,
+    };
+  }, [adaptiveColor]);
 
   // Make sure to match the parity (odd or even) of the parent width, to solve the centering issue
   const innerWidth = 0.75 * width;
@@ -41,7 +40,7 @@ export default function Ring({
 
   return (
     <Animated.View
-      style={[styles.handle, style, computedStyle, adaptiveColorStyle, handleStyle]}
+      style={[styles.handle, ringStyle, adaptiveColorStyle, style, handleStyle]}
       renderToHardwareTextureAndroid={enableAndroidHardwareTextures}
     >
       <Animated.View

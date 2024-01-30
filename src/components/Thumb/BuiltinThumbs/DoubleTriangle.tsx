@@ -37,7 +37,7 @@ export default function DoubleTriangle({
   };
   const adaptiveColorStyle = useAnimatedStyle(() => {
     return { borderBottomColor: thumbColor ?? adaptiveColor.value };
-  }, [thumbColor, adaptiveColor]);
+  }, [adaptiveColor]);
 
   return (
     <Animated.View

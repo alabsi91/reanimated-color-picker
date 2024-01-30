@@ -33,7 +33,7 @@ export default function ({
 
   const adaptiveColorStyle = useAnimatedStyle(() => {
     return { borderBottomColor: thumbColor ?? adaptiveColor.value };
-  }, [thumbColor, adaptiveColor]);
+  }, [adaptiveColor]);
 
   return (
     <Animated.View
