@@ -145,8 +145,8 @@ export function LuminanceCircular({
   };
 
   const pan = Gesture.Pan().onBegin(onGestureBegin).onUpdate(onGestureUpdate).onEnd(onGestureFinish);
-  const tap = Gesture.Tap().onTouchesUp(onGestureFinish);
-  const longPress = Gesture.LongPress().onTouchesUp(onGestureFinish);
+  const tap = Gesture.Tap().onEnd(onGestureFinish);
+  const longPress = Gesture.LongPress().onEnd(onGestureFinish);
   const composed = Gesture.Simultaneous(Gesture.Exclusive(pan, tap, longPress), ...gestures);
 
   const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
