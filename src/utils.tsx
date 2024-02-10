@@ -6,16 +6,6 @@ import type { StyleProp, ViewStyle } from 'react-native';
 export const isRtl = I18nManager.isRTL;
 export const isWeb = Platform.OS === 'web';
 
-/** - To find the index of an element in a two-dimensional array. */
-export function findIndexIn2DArray<T>(array: T[][], evaluate: (target: T) => boolean): [number, number] | [null, null] {
-  for (let i = 0; i < array.length; i++) {
-    for (let j = 0; j < array[i].length; j++) {
-      if (evaluate(array[i][j])) return [i, j];
-    }
-  }
-  return [null, null];
-}
-
 /** - Get a specific property from a react native style object */
 export function getStyle<T extends keyof ViewStyle>(style: StyleProp<ViewStyle>, property: T): ViewStyle[T] | undefined {
   const flattened = StyleSheet.flatten(style);
