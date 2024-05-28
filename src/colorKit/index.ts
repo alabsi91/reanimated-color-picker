@@ -21,7 +21,7 @@ import type {
 // this transformation can lead to a slow initial execution.
 // To address this issue, I consolidated them into a single worklet function.
 
-export function colorKitUI() {
+export const colorKitUI = () => {
   'worklet';
 
   const NAMED_COLORS = {
@@ -2066,7 +2066,7 @@ export function colorKitUI() {
     randomHwbColor,
     adjustContrast,
   };
-}
+};
 
 type ColorKit = ReturnType<typeof colorKitUI> & {
   /** - Initiates the asynchronous execution of a workletized colorKit function on the UI thread. */
