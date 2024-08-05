@@ -6,16 +6,6 @@ import type { StyleProp, ViewStyle } from 'react-native';
 export const isRtl = I18nManager.isRTL;
 export const isWeb = Platform.OS === 'web';
 
-/** - To find the index of an element in a two-dimensional array. */
-export function findIndexIn2DArray<T>(array: T[][], evaluate: (target: T) => boolean): [number, number] | [null, null] {
-  for (let i = 0; i < array.length; i++) {
-    for (let j = 0; j < array[i].length; j++) {
-      if (evaluate(array[i][j])) return [i, j];
-    }
-  }
-  return [null, null];
-}
-
 /** - Get a specific property from a react native style object */
 export function getStyle<T extends keyof ViewStyle>(style: StyleProp<ViewStyle>, property: T): ViewStyle[T] | undefined {
   const flattened = StyleSheet.flatten(style);
@@ -23,13 +13,13 @@ export function getStyle<T extends keyof ViewStyle>(style: StyleProp<ViewStyle>,
 }
 
 /** - Clamp a number value between `0` and a max value */
-export function clamp(v: number, max: number) {
+export const clamp = (v: number, max: number) => {
   'worklet';
   return Math.min(Math.max(v, 0), max);
-}
+};
 
 /** - Convert `HSV` color to an `HSLA` string representation */
-export function HSVA2HSLA_string(h: number, s: number, v: number, a = 1) {
+export const HSVA2HSLA_string = (h: number, s: number, v: number, a = 1) => {
   'worklet';
 
   s = s / 100;
@@ -40,7 +30,7 @@ export function HSVA2HSLA_string(h: number, s: number, v: number, a = 1) {
     sln = l !== 0 && l !== 1 ? sl / (l < 0.5 ? l * 2 : 2 - l * 2) : sl;
 
   return `hsla(${h}, ${sln * 100}%, ${l * 100}%, ${a})`;
-}
+};
 
 /** - Render children only if the `render` property is `true` */
 export function ConditionalRendering(props: { children: React.ReactNode; if: boolean }) {

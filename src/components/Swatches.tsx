@@ -44,6 +44,8 @@ export function Swatches({ colors = SWATCHES_COLORS, style = {}, swatchStyle = {
           key={swatch + i}
           onPress={() => onPress(swatch)}
           style={[styles.swatch, swatchStyle, { backgroundColor: swatch }]}
+          accessibilityLabel={`Select color: ${swatch}`}
+          accessibilityRole='button'
         />
       ))}
     </View>
