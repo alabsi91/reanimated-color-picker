@@ -16,7 +16,7 @@ import type {
 // If you find yourself wondering why all of this is within a single function,
 // the reason is that to execute each method on the UI thread, you must include the 'worklet' directive.
 // Functions marked with this directive are transformed by the Reanimated Babel plugin
-// into something like this: `const fun = (function{})()`.
+// into IIFE — IMMEDIATELY INVOKED FUNCTION EXPRESSION: `const fun = (function{})()`.
 // Due to the presence of numerous methods,
 // this transformation can lead to a slow initial execution.
 // To address this issue, I consolidated them into a single worklet function.
@@ -212,7 +212,7 @@ export function colorKitUI() {
     ],
   };
 
-  // * utilities -------------------------------------------------------------
+  // * MARK: General utilities
 
   const clamp = (value: number, min: number, max: number) => {
     return Math.max(min, Math.min(value, max));
@@ -315,7 +315,7 @@ export function colorKitUI() {
     return null;
   };
 
-  // * RGB -------------------------------------------------------------
+  // * MARK: RGB
 
   /** - Parse `RGB` or `RGBA` color string to an `object` */
   const RGB_string_to_object = (color: string): rgbaT => {
@@ -521,7 +521,7 @@ export function colorKitUI() {
     };
   };
 
-  // * HSL -------------------------------------------------------------
+  // * MARK: HSL
 
   /** - Parse `HSL` or `HSLA` color string to an `object` */
   const HSL_string_to_object = (color: string): hslaT => {
@@ -679,7 +679,7 @@ export function colorKitUI() {
     };
   };
 
-  // * HWB -------------------------------------------------------------
+  // * MARK: HWB
 
   /** - Parse `HWB` or `HWBA` color strong to an `object` */
   const HWB_string_to_object = (color: string): hwbaT => {
@@ -839,7 +839,7 @@ export function colorKitUI() {
     };
   };
 
-  // * HSV -------------------------------------------------------------
+  // * MARK: HSV
 
   /** - Parse `HSV` or `HSVA` color string to an `object` */
   const HSV_string_to_object = (color: string): hsvaT => {
@@ -1031,7 +1031,7 @@ export function colorKitUI() {
     };
   };
 
-  // * HEX -------------------------------------------------------------
+  // * MARK: HEX
 
   /** - Convert any `HEX` color to 8-digit `HEX` color (#rrggbbaa) */
   const normalize_HEX = (color: string | number): string => {
@@ -1111,7 +1111,7 @@ export function colorKitUI() {
     return RGB_to_HWBA(rgba);
   };
 
-  // * Color conversions -------------------------------------------------------------
+  // * MARK: Color conversions
 
   /** - Convert `HSL`, `HSV`, `HWB`, or `RGB` color to the `HEX` color format. */
   const HEX = (color: SupportedColorFormats): string => {
@@ -1363,7 +1363,7 @@ export function colorKitUI() {
     return HSV_types({ h: 0, s: 0, v: 0, a: 1 });
   };
 
-  // * Color Information -------------------------------------------------------------
+  // * MARK: Color Information
 
   /** - Identify the color format of a given `string` or `object`, and return `null` for invalid colors. */
   const getFormat = (color: SupportedColorFormats): ColorFormats | 'named' | null => {
@@ -1518,7 +1518,7 @@ export function colorKitUI() {
     return Math.round(contrast * 100) / 100;
   };
 
-  // * Color Manipulation -------------------------------------------------------------
+  // * MARK: Color Manipulation
 
   const returnColorObject = (color: SupportedColorFormats) => {
     return {
@@ -1540,7 +1540,7 @@ export function colorKitUI() {
     };
   };
 
-  // * Red channel
+  // * MARK: Red Manuipulation
   /** Set the `red` value of a color to a specific amount. */
   const setRed = (color: SupportedColorFormats, amount: number): ConversionMethods => {
     const { g, b, a } = RGB(color).object();
@@ -1582,7 +1582,7 @@ export function colorKitUI() {
     return returnColorObject(newColor);
   };
 
-  // * Green channel
+  // * MARK: Green Manuipulation
   /** - Set the `green` value of a color to a specific amount. */
   const setGreen = (color: SupportedColorFormats, amount: number): ConversionMethods => {
     const { r, b, a } = RGB(color).object();
@@ -1624,7 +1624,7 @@ export function colorKitUI() {
     return returnColorObject(newColor);
   };
 
-  // * Blue channel
+  // * MARK: Blue Manuipulation
   /** - Set the `blue` value of a color to a specific amount. */
   const setBlue = (color: SupportedColorFormats, amount: number): ConversionMethods => {
     const { r, g, a } = RGB(color).object();
@@ -1666,7 +1666,7 @@ export function colorKitUI() {
     return returnColorObject(newColor);
   };
 
-  //* Alpha channel
+  //* MARK: Alpha Manuipulation
   /** - Get the `alpha` value of a given color. */
   const getAlpha = (color: SupportedColorFormats): number => {
     const { a } = RGB(color).object();
@@ -1702,7 +1702,7 @@ export function colorKitUI() {
     return returnColorObject(newColor);
   };
 
-  //* Hue
+  // * MARK: Hue Manuipulation
   /** - Set the `hue` value of a color to a specific amount. */
   const setHue = (color: SupportedColorFormats, amount: number): ConversionMethods => {
     const { s, l, a } = HSL(color).object();
@@ -1759,7 +1759,7 @@ export function colorKitUI() {
     return returnColorObject(newColor);
   };
 
-  //* Saturation
+  // * MARK: Saturation Manuipulation
   /** - Set the `saturation` value of a color to a specific amount. */
   const setSaturation = (color: SupportedColorFormats, amount: number): ConversionMethods => {
     const { h, l, a } = HSL(color).object();
@@ -1801,7 +1801,7 @@ export function colorKitUI() {
     return returnColorObject(desaturatedColor);
   };
 
-  //* Brightness
+  // * MARK: Brightness Manuipulation
   /** - Set HSL's `luminosity` channel for a given color to a specific amount. */
   const setLuminance = (color: SupportedColorFormats, amount: number): ConversionMethods => {
     const { h, s, a } = HSL(color).object();
@@ -1872,7 +1872,7 @@ export function colorKitUI() {
     return returnColorObject(newColor);
   };
 
-  // * Color Utilities -------------------------------------------------------------
+  // * MARK: Color Utilities
 
   /**
    * - Blends two colors by a certain amount.
