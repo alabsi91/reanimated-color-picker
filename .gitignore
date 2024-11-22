@@ -61,3 +61,4 @@ buck-out/
 
 lib
 tsconfig.tsbuildinfo
+*.tgz
