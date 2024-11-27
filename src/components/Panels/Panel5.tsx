@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { ImageBackground } from 'react-native';
+import { Image, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   Easing,
@@ -106,15 +106,18 @@ export function Panel5({ gestures = [], style = {}, selectionStyle = {} }: Panel
 
   return (
     <GestureDetector gesture={composed}>
-      <ImageBackground
-        source={require('@assets/grid.png')}
+      <View
+        collapsable={false}
         onLayout={onLayout}
         style={[style, { position: 'relative', borderWidth: 0, padding: 0, aspectRatio: 1.2 }]}
-        imageStyle={{ borderRadius }}
-        resizeMode='stretch'
       >
+        <Image
+          source={require('@assets/grid.png')}
+          style={{ borderRadius, width: '100%', height: '100%' }}
+          resizeMode='stretch'
+        />
         <Animated.View style={[styles.selected, selectionStyle, selectedStyle]} />
-      </ImageBackground>
+      </View>
     </GestureDetector>
   );
 }
