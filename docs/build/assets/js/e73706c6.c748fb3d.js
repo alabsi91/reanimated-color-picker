@@ -20,10 +20,10 @@
           sidebar_label: 'LuminanceCircular',
           description: 'A circular slider for adjusting the color luminance channel in the HSL color space.',
         },
-        d = '<HueCircular />',
+        d = '<LuminanceCircular />',
         s = {
           id: 'API/Sliders/HSL/LuminanceCircular',
-          title: '<HueCircular />',
+          title: '<LuminanceCircular />',
           description: 'A circular slider for adjusting the color luminance channel in the HSL color space.',
           source: '@site/docs/API/Sliders/HSL/LuminanceCircular.mdx',
           sourceDirName: 'API/Sliders/HSL',
@@ -95,10 +95,10 @@
             })('Shapes', !0),
           (0, l.jsxs)(l.Fragment, {
             children: [
-              (0, l.jsx)(n.h1, { id: 'huecircular-', children: (0, l.jsx)(n.code, { children: '<HueCircular />' }) }),
+              (0, l.jsx)(n.h1, { id: 'luminancecircular-', children: (0, l.jsx)(n.code, { children: '<LuminanceCircular />' }) }),
               '\n',
               (0, l.jsx)(n.p, {
-                children: (0, l.jsx)(n.img, { alt: 'HueCircular', src: i(2781).Z + '', width: '200', height: '200' }),
+                children: (0, l.jsx)(n.img, { alt: 'LuminanceCircular', src: i(2781).Z + '', width: '200', height: '200' }),
               }),
               '\n',
               (0, l.jsxs)(n.ul, {
