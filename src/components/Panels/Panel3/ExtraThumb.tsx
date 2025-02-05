@@ -79,6 +79,8 @@ export function ExtraThumb({
 
   // Call onChange prop on every value change
   useDerivedValue(() => {
+    if (!onChange && !onChangeJS) return;
+
     const colors = returnedResults({
       h: hue.value,
       s: saturation.value,

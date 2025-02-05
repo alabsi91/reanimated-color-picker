@@ -98,6 +98,7 @@ const ColorPicker = forwardRef<ColorPickerRef, ColorPickerProps>(
     const onGestureEnd = (color?: SupportedColorFormats) => {
       'worklet';
 
+      if (!onComplete && !onCompleteJS) return;
       const colorObject = returnedResults(color);
 
       if (onComplete) onComplete(colorObject);
@@ -107,11 +108,11 @@ const ColorPicker = forwardRef<ColorPickerRef, ColorPickerProps>(
     const onGestureChange = (color?: SupportedColorFormats) => {
       'worklet';
 
-      if (!onChange) return;
+      if (!onChange && !onChangeJS) return;
       const colorObject = returnedResults(color);
 
       if (onChange) onChange(colorObject);
-      if (onChangeJS) runOnJS(onChange)(colorObject);
+      if (onChangeJS) runOnJS(onChangeJS)(colorObject);
     };
 
     const setColor = (color: SupportedColorFormats, duration = thumbAnimationDuration) => {
