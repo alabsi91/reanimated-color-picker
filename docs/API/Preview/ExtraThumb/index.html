@@ -47,7 +47,7 @@
     />
     <script src="https://snack.expo.dev/embed.js" async></script>
     <link rel="stylesheet" href="/reanimated-color-picker/assets/css/styles.1fc1ae05.css" />
-    <script src="/reanimated-color-picker/assets/js/runtime~main.37e12777.js" defer="defer"></script>
+    <script src="/reanimated-color-picker/assets/js/runtime~main.a998acb4.js" defer="defer"></script>
     <script src="/reanimated-color-picker/assets/js/main.ded2c658.js" defer="defer"></script>
   </head>
   <body class="navigation-with-keyboard">
@@ -461,6 +461,37 @@
                               worklet function passed as a callback.
                             </li>
                             <li>
+                              Accepts <code>worklet</code> function only. For non-<code>worklet</code> functions, use
+                              <code>onChangeJS</code>.
+                            </li>
+                            <li>
+                              The passed color object has the following properties: <code>hex</code>, <code>rgb</code>,
+                              <code>rgba</code>, <code>hsv</code>, <code>hsva</code>, <code>hwb</code>, <code>hwba</code>,
+                              <code>hsl</code>, and <code>hsla</code>
+                            </li>
+                            <li><strong>Type:</strong> <code>(color: object) =&gt; void</code></li>
+                            <li><strong>Default:</strong> <code>undefined</code></li>
+                          </ul>
+                          <h3 class="anchor anchorWithStickyNavbar_LWe7" id="onchangejs">
+                            <code>onChangeJS</code
+                            ><a
+                              href="#onchangejs"
+                              class="hash-link"
+                              aria-label="Direct link to onchangejs"
+                              title="Direct link to onchangejs"
+                              >​</a
+                            >
+                          </h3>
+                          <ul>
+                            <li>
+                              Triggers every time the user modifies the color, allowing you to get the transformed color through a
+                              worklet function passed as a callback.
+                            </li>
+                            <li>
+                              Accepts none-<code>worklet</code> function. For <code>worklet</code> functions, use
+                              <code>onChange</code>.
+                            </li>
+                            <li>
                               The passed color object has the following properties: <code>hex</code>, <code>rgb</code>,
                               <code>rgba</code>, <code>hsv</code>, <code>hsva</code>, <code>hwb</code>, <code>hwba</code>,
                               <code>hsl</code>, and <code>hsla</code>
@@ -738,6 +769,9 @@
                             </li>
                             <li>
                               <a href="#onchange" class="table-of-contents__link toc-highlight"><code>onChange</code></a>
+                            </li>
+                            <li>
+                              <a href="#onchangejs" class="table-of-contents__link toc-highlight"><code>onChangeJS</code></a>
                             </li>
                             <li>
                               <a href="#thumbsize" class="table-of-contents__link toc-highlight"><code>thumbSize</code></a>
