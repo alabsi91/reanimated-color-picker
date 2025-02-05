@@ -63,6 +63,15 @@ Adds an extra thumb to the `Panel3` component.
 ### `onChange`
 
 - Triggers every time the user modifies the color, allowing you to get the transformed color through a worklet function passed as a callback.
+- Accepts `worklet` function only. For non-`worklet` functions, use `onChangeJS`.
+- The passed color object has the following properties: `hex`, `rgb`, `rgba`, `hsv`, `hsva`, `hwb`, `hwba`, `hsl`, and `hsla`
+- **Type:** `(color: object) => void`
+- **Default:** `undefined`
+
+### `onChangeJS`
+
+- Triggers every time the user modifies the color, allowing you to get the transformed color through a worklet function passed as a callback.
+- Accepts none-`worklet` function. For `worklet` functions, use `onChange`.
 - The passed color object has the following properties: `hex`, `rgb`, `rgba`, `hsv`, `hsva`, `hwb`, `hwba`, `hsl`, and `hsla`
 - **Type:** `(color: object) => void`
 - **Default:** `undefined`
