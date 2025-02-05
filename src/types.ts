@@ -116,8 +116,17 @@ export interface ExtraThumbProps {
   /** - Function which receives ThumbProps and renders slider's handle (thumb). */
   renderThumb?: RenderThumbType;
 
-  /** - Called when the user moves the sliders. */
+  /**
+   * - Called when the user moves the sliders.
+   * - Accepts `worklet` function only. For non-`worklet` functions, use `onChangeJS`.
+   */
   onChange?: (colors: returnedResults) => void;
+
+  /**
+   * - Called when the user moves the sliders.
+   * - Accepts non-`worklet` function only. For `worklet` functions, use `onChange`.
+   */
+  onChangeJS?: (colors: returnedResults) => void;
 
   /**
    * - The transform amount for the hue channel.
@@ -299,15 +308,33 @@ export interface ColorPickerProps {
    */
   value?: string;
 
-  /** - Called when the user moves the sliders. */
+  /**
+   * - Called when the user moves the sliders.
+   * - Accepts `worklet` function only. For non-`worklet` functions, use `onChangeJS`.
+   */
   onChange?: (colors: returnedResults) => void;
 
   /**
+   * - Called when the user moves the sliders.
+   * - Accepts none-`worklet` function. For `worklet` functions, use `onChange`.
+   */
+  onChangeJS?: (colors: returnedResults) => void;
+
+  /**
    * - Called when the user lifts his finger off the sliders.
+   * - Accepts `worklet` function only. for non-`worklet` functions, use `onCompleteJS`.
    * - CAUTION : As of `react-native-gesture-handler@2.9.0` the new web implementation does not support the events which trigger
    *   this callback.
    */
   onComplete?: (colors: returnedResults) => void;
+
+  /**
+   * - Called when the user lifts his finger off the sliders.
+   * - Accepts non-`worklet` Function only. For `worklet` functions, use `onComplete`.
+   * - CAUTION : As of `react-native-gesture-handler@2.9.0` the new web implementation does not support the events which trigger
+   *   this callback.
+   */
+  onCompleteJS?: (colors: returnedResults) => void;
 
   children?: React.ReactNode;
 }
