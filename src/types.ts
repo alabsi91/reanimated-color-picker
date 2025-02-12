@@ -16,7 +16,7 @@ export interface returnedResults {
   hwba: string;
 }
 
-export type thumbShapeType =
+export type ThumbShapeType =
   | 'ring'
   | 'solid'
   | 'hollow'
@@ -89,7 +89,7 @@ export type ThumbProps = {
   vertical?: boolean;
   adaptSpectrum?: boolean;
   channel?: 'h' | 's' | 'v' | 'a';
-  thumbShape?: thumbShapeType;
+  thumbShape?: ThumbShapeType;
   thumbSize: number;
   overrideHSV?: Partial<HSVObjectSharedValue>;
 };
@@ -102,7 +102,7 @@ export interface ExtraThumbProps {
   thumbColor?: string;
 
   /** - Panel handle (thumb) shape. */
-  thumbShape?: thumbShapeType;
+  thumbShape?: ThumbShapeType;
 
   /** - Render a line from the center of the Panel to the thumb (handle). */
   renderCenterLine?: boolean;
@@ -195,7 +195,7 @@ export interface ColorPickerContext {
   thumbSize: number;
 
   /** A global prop for all sliders children. */
-  thumbShape: thumbShapeType;
+  thumbShape: ThumbShapeType;
 
   /** A global prop for all sliders children. */
   thumbColor: string | undefined;
@@ -240,7 +240,7 @@ export interface Panel3Context {
   adaptSpectrum: boolean;
   centerChannel: 'saturation' | 'brightness' | 'hsl-saturation';
   centerChannelValue: SharedValue<number>;
-  thumbShape: thumbShapeType;
+  thumbShape: ThumbShapeType;
   thumbSize: number;
   thumbColor?: string;
   thumbStyle: StyleProp<ViewStyle>;
@@ -271,7 +271,7 @@ export interface ColorPickerProps {
   thumbSize?: number;
 
   /** - A global property to change the shape and appearance of the thumb of all descendant sliders components. */
-  thumbShape?: thumbShapeType;
+  thumbShape?: ThumbShapeType;
 
   /** - A global property to change the color of the thumb of all descendant sliders components. */
   thumbColor?: string;
@@ -400,7 +400,7 @@ export interface PanelProps {
   thumbColor?: string;
 
   /** - Panel handle (thumb) shape. */
-  thumbShape?: thumbShapeType;
+  thumbShape?: ThumbShapeType;
 
   /**
    * - Determines whether the slider thumb (or handle) should be constrained to stay within the boundaries of the slider.
@@ -503,7 +503,7 @@ export interface SliderProps {
   thumbColor?: string;
 
   /** - Slider's handle (thumb) shape. */
-  thumbShape?: thumbShapeType;
+  thumbShape?: ThumbShapeType;
 
   /**
    * - Determines whether the slider thumb (or handle) should be constrained to stay within the boundaries of the slider.
