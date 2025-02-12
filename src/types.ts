@@ -592,20 +592,20 @@ export type WidgetProps = {
   disableAlphaChannel: boolean;
 };
 
-type defaultFormats = 'HEX' | 'RGB' | 'HSL' | 'HWB' | 'HSV';
+type DefaultFormats = 'HEX' | 'RGB' | 'HSL' | 'HWB' | 'HSV';
 
 export interface InputWidgetProps {
   /**
    * - The initial input widget color format.
    * - You can select one of the following options: `'HEX'`, `'RGB'`, '`HSL'`, `'HWB'`, or `'HSV'`
    */
-  defaultFormat?: defaultFormats;
+  defaultFormat?: DefaultFormats;
 
   /**
    * - What input widgets should be included that can be cycled through.
    * - Available options: `'HEX'`, `'RGB'`, '`HSL'`, `'HWB'`, and `'HSV'`
    */
-  formats?: readonly defaultFormats[];
+  formats?: readonly DefaultFormats[];
 
   /** - Limit the user's ability to modify the alpha channel of the selected color. */
   disableAlphaChannel?: boolean;
