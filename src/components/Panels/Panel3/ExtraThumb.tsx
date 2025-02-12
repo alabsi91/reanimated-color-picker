@@ -11,6 +11,7 @@ import type { ExtraThumbProps } from '@types';
 
 export function ExtraThumb({
   onChange,
+  onChangeJS,
   colorTransform,
   hueTransform,
   saturationTransform,
@@ -78,7 +79,7 @@ export function ExtraThumb({
 
   // Call onChange prop on every value change
   useDerivedValue(() => {
-    if (!onChange) return;
+    if (!onChange && !onChangeJS) return;
 
     const colors = returnedResults({
       h: hue.value,
@@ -87,11 +88,8 @@ export function ExtraThumb({
       a: alphaValue.value,
     });
 
-    try {
-      onChange(colors);
-    } catch (error) {
-      runOnJS(onChange)(colors);
-    }
+    if (onChange) onChange(colors);
+    if (onChangeJS) runOnJS(onChangeJS)(colors);
   }, [hue, saturation, brightness]);
 
   const handleStyle = useAnimatedStyle(() => {

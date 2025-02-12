@@ -30,8 +30,9 @@ import ColorPicker, { Panel1, Swatches, Preview, OpacitySlider, HueSlider } from
 export default function App() {
   const [showModal, setShowModal] = useState(false);
 
-  // Note: 👇 This can be a `worklet` function.
+  // Note: use `onCompleteJS` and `onChangeJS` for non-worklet functions
   const onSelectColor = ({ hex }) => {
+    'worklet';
     // do something with the selected color.
     console.log(hex);
   };

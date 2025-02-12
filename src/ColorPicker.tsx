@@ -39,7 +39,9 @@ const ColorPicker = forwardRef<ColorPickerRef, ColorPickerProps>(
       thumbInnerStyle,
       value = '#fff',
       onChange,
+      onChangeJS,
       onComplete,
+      onCompleteJS,
       style = {},
       children = <Text>NO CHILDREN</Text>,
     },
@@ -96,31 +98,21 @@ const ColorPicker = forwardRef<ColorPickerRef, ColorPickerProps>(
     const onGestureEnd = (color?: SupportedColorFormats) => {
       'worklet';
 
-      if (!onComplete) return;
+      if (!onComplete && !onCompleteJS) return;
       const colorObject = returnedResults(color);
 
-      try {
-        // run on the UI thread
-        onComplete(colorObject);
-      } catch (error) {
-        // run on the JS thread
-        runOnJS(onComplete)(colorObject);
-      }
+      if (onComplete) onComplete(colorObject);
+      if (onCompleteJS) runOnJS(onCompleteJS)(colorObject);
     };
 
     const onGestureChange = (color?: SupportedColorFormats) => {
       'worklet';
 
-      if (!onChange) return;
+      if (!onChange && !onChangeJS) return;
       const colorObject = returnedResults(color);
 
-      try {
-        // run on the UI thread
-        onChange(colorObject);
-      } catch (error) {
-        // run on the JS thread
-        runOnJS(onChange)(colorObject);
-      }
+      if (onChange) onChange(colorObject);
+      if (onChangeJS) runOnJS(onChangeJS)(colorObject);
     };
 
     const setColor = (color: SupportedColorFormats, duration = thumbAnimationDuration) => {
