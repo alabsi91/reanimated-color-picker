@@ -4,7 +4,7 @@ import type { AnimatedStyleProp, SharedValue } from 'react-native-reanimated';
 import type { SupportedColorFormats } from './colorKit/types';
 import type { Gesture } from 'react-native-gesture-handler/lib/typescript/handlers/gestures/gesture';
 
-export type ColorFormats = Record<'hex' | 'rgb' | 'rgba' | 'hsl' | 'hsla' | 'hsv' | 'hsva' | 'hwb' | 'hwba', string>;
+export type ColorFormatsObject = Record<'hex' | 'rgb' | 'rgba' | 'hsl' | 'hsla' | 'hsv' | 'hsva' | 'hwb' | 'hwba', string>;
 
 export type ThumbShapeType =
   | 'ring'
@@ -110,13 +110,13 @@ export interface ExtraThumbProps {
    * - Called when the user moves the sliders.
    * - Accepts `worklet` function only. For non-`worklet` functions, use `onChangeJS`.
    */
-  onChange?: (colors: ColorFormats) => void;
+  onChange?: (colors: ColorFormatsObject) => void;
 
   /**
    * - Called when the user moves the sliders.
    * - Accepts non-`worklet` function only. For `worklet` functions, use `onChange`.
    */
-  onChangeJS?: (colors: ColorFormats) => void;
+  onChangeJS?: (colors: ColorFormatsObject) => void;
 
   /**
    * - The transform amount for the hue channel.
@@ -216,7 +216,7 @@ export interface ColorPickerContext {
   value: string;
 
   /** The returned results of the color picker. */
-  returnedResults: (color?: SupportedColorFormats) => ColorFormats;
+  returnedResults: (color?: SupportedColorFormats) => ColorFormatsObject;
 
   /** This function is called when the user lifts the finger from the color picker. */
   onGestureEnd: (color?: SupportedColorFormats) => void;
@@ -302,13 +302,13 @@ export interface ColorPickerProps {
    * - Called when the user moves the sliders.
    * - Accepts `worklet` function only. For non-`worklet` functions, use `onChangeJS`.
    */
-  onChange?: (colors: ColorFormats) => void;
+  onChange?: (colors: ColorFormatsObject) => void;
 
   /**
    * - Called when the user moves the sliders.
    * - Accepts none-`worklet` function. For `worklet` functions, use `onChange`.
    */
-  onChangeJS?: (colors: ColorFormats) => void;
+  onChangeJS?: (colors: ColorFormatsObject) => void;
 
   /**
    * - Called when the user lifts his finger off the sliders.
@@ -316,7 +316,7 @@ export interface ColorPickerProps {
    * - CAUTION : As of `react-native-gesture-handler@2.9.0` the new web implementation does not support the events which trigger
    *   this callback.
    */
-  onComplete?: (colors: ColorFormats) => void;
+  onComplete?: (colors: ColorFormatsObject) => void;
 
   /**
    * - Called when the user lifts his finger off the sliders.
@@ -324,7 +324,7 @@ export interface ColorPickerProps {
    * - CAUTION : As of `react-native-gesture-handler@2.9.0` the new web implementation does not support the events which trigger
    *   this callback.
    */
-  onCompleteJS?: (colors: ColorFormats) => void;
+  onCompleteJS?: (colors: ColorFormatsObject) => void;
 
   children?: React.ReactNode;
 }
