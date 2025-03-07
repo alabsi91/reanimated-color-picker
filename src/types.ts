@@ -4,19 +4,9 @@ import type { AnimatedStyleProp, SharedValue } from 'react-native-reanimated';
 import type { SupportedColorFormats } from './colorKit/types';
 import type { Gesture } from 'react-native-gesture-handler/lib/typescript/handlers/gestures/gesture';
 
-export interface returnedResults {
-  hex: string;
-  rgb: string;
-  rgba: string;
-  hsl: string;
-  hsla: string;
-  hsv: string;
-  hsva: string;
-  hwb: string;
-  hwba: string;
-}
+export type ColorFormatsObject = Record<'hex' | 'rgb' | 'rgba' | 'hsl' | 'hsla' | 'hsv' | 'hsva' | 'hwb' | 'hwba', string>;
 
-export type thumbShapeType =
+export type ThumbShapeType =
   | 'ring'
   | 'solid'
   | 'hollow'
@@ -89,7 +79,7 @@ export type ThumbProps = {
   vertical?: boolean;
   adaptSpectrum?: boolean;
   channel?: 'h' | 's' | 'v' | 'a';
-  thumbShape?: thumbShapeType;
+  thumbShape?: ThumbShapeType;
   thumbSize: number;
   overrideHSV?: Partial<HSVObjectSharedValue>;
 };
@@ -102,7 +92,7 @@ export interface ExtraThumbProps {
   thumbColor?: string;
 
   /** - Panel handle (thumb) shape. */
-  thumbShape?: thumbShapeType;
+  thumbShape?: ThumbShapeType;
 
   /** - Render a line from the center of the Panel to the thumb (handle). */
   renderCenterLine?: boolean;
@@ -120,13 +110,13 @@ export interface ExtraThumbProps {
    * - Called when the user moves the sliders.
    * - Accepts `worklet` function only. For non-`worklet` functions, use `onChangeJS`.
    */
-  onChange?: (colors: returnedResults) => void;
+  onChange?: (colors: ColorFormatsObject) => void;
 
   /**
    * - Called when the user moves the sliders.
    * - Accepts non-`worklet` function only. For `worklet` functions, use `onChange`.
    */
-  onChangeJS?: (colors: returnedResults) => void;
+  onChangeJS?: (colors: ColorFormatsObject) => void;
 
   /**
    * - The transform amount for the hue channel.
@@ -195,7 +185,7 @@ export interface ColorPickerContext {
   thumbSize: number;
 
   /** A global prop for all sliders children. */
-  thumbShape: thumbShapeType;
+  thumbShape: ThumbShapeType;
 
   /** A global prop for all sliders children. */
   thumbColor: string | undefined;
@@ -226,7 +216,7 @@ export interface ColorPickerContext {
   value: string;
 
   /** The returned results of the color picker. */
-  returnedResults: (color?: SupportedColorFormats) => returnedResults;
+  returnedResults: (color?: SupportedColorFormats) => ColorFormatsObject;
 
   /** This function is called when the user lifts the finger from the color picker. */
   onGestureEnd: (color?: SupportedColorFormats) => void;
@@ -240,7 +230,7 @@ export interface Panel3Context {
   adaptSpectrum: boolean;
   centerChannel: 'saturation' | 'brightness' | 'hsl-saturation';
   centerChannelValue: SharedValue<number>;
-  thumbShape: thumbShapeType;
+  thumbShape: ThumbShapeType;
   thumbSize: number;
   thumbColor?: string;
   thumbStyle: StyleProp<ViewStyle>;
@@ -271,7 +261,7 @@ export interface ColorPickerProps {
   thumbSize?: number;
 
   /** - A global property to change the shape and appearance of the thumb of all descendant sliders components. */
-  thumbShape?: thumbShapeType;
+  thumbShape?: ThumbShapeType;
 
   /** - A global property to change the color of the thumb of all descendant sliders components. */
   thumbColor?: string;
@@ -312,13 +302,13 @@ export interface ColorPickerProps {
    * - Called when the user moves the sliders.
    * - Accepts `worklet` function only. For non-`worklet` functions, use `onChangeJS`.
    */
-  onChange?: (colors: returnedResults) => void;
+  onChange?: (colors: ColorFormatsObject) => void;
 
   /**
    * - Called when the user moves the sliders.
    * - Accepts none-`worklet` function. For `worklet` functions, use `onChange`.
    */
-  onChangeJS?: (colors: returnedResults) => void;
+  onChangeJS?: (colors: ColorFormatsObject) => void;
 
   /**
    * - Called when the user lifts his finger off the sliders.
@@ -326,7 +316,7 @@ export interface ColorPickerProps {
    * - CAUTION : As of `react-native-gesture-handler@2.9.0` the new web implementation does not support the events which trigger
    *   this callback.
    */
-  onComplete?: (colors: returnedResults) => void;
+  onComplete?: (colors: ColorFormatsObject) => void;
 
   /**
    * - Called when the user lifts his finger off the sliders.
@@ -334,7 +324,7 @@ export interface ColorPickerProps {
    * - CAUTION : As of `react-native-gesture-handler@2.9.0` the new web implementation does not support the events which trigger
    *   this callback.
    */
-  onCompleteJS?: (colors: returnedResults) => void;
+  onCompleteJS?: (colors: ColorFormatsObject) => void;
 
   children?: React.ReactNode;
 }
@@ -400,7 +390,7 @@ export interface PanelProps {
   thumbColor?: string;
 
   /** - Panel handle (thumb) shape. */
-  thumbShape?: thumbShapeType;
+  thumbShape?: ThumbShapeType;
 
   /**
    * - Determines whether the slider thumb (or handle) should be constrained to stay within the boundaries of the slider.
@@ -503,7 +493,7 @@ export interface SliderProps {
   thumbColor?: string;
 
   /** - Slider's handle (thumb) shape. */
-  thumbShape?: thumbShapeType;
+  thumbShape?: ThumbShapeType;
 
   /**
    * - Determines whether the slider thumb (or handle) should be constrained to stay within the boundaries of the slider.
@@ -602,20 +592,20 @@ export type WidgetProps = {
   disableAlphaChannel: boolean;
 };
 
-type defaultFormats = 'HEX' | 'RGB' | 'HSL' | 'HWB' | 'HSV';
+type DefaultFormats = 'HEX' | 'RGB' | 'HSL' | 'HWB' | 'HSV';
 
 export interface InputWidgetProps {
   /**
    * - The initial input widget color format.
    * - You can select one of the following options: `'HEX'`, `'RGB'`, '`HSL'`, `'HWB'`, or `'HSV'`
    */
-  defaultFormat?: defaultFormats;
+  defaultFormat?: DefaultFormats;
 
   /**
    * - What input widgets should be included that can be cycled through.
    * - Available options: `'HEX'`, `'RGB'`, '`HSL'`, `'HWB'`, and `'HSV'`
    */
-  formats?: readonly defaultFormats[];
+  formats?: readonly DefaultFormats[];
 
   /** - Limit the user's ability to modify the alpha channel of the selected color. */
   disableAlphaChannel?: boolean;

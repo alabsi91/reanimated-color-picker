@@ -3,7 +3,7 @@ import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 
 import ColorPicker, { Panel4, OpacitySlider, colorKit, PreviewText } from 'reanimated-color-picker';
-import type { returnedResults } from 'reanimated-color-picker';
+import type { ColorFormatsObject } from 'reanimated-color-picker';
 
 export default function Example() {
   const [showModal, setShowModal] = useState(false);
@@ -12,7 +12,7 @@ export default function Example() {
   const selectedColor = useSharedValue(initialColor);
   const backgroundColorStyle = useAnimatedStyle(() => ({ backgroundColor: selectedColor.value }));
 
-  const onColorSelect = (color: returnedResults) => {
+  const onColorSelect = (color: ColorFormatsObject) => {
     'worklet';
     selectedColor.value = color.hex;
   };
