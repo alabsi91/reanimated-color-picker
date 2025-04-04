@@ -31,7 +31,7 @@ export default function Thumb({
 
   const resultColor = useSharedValue('#ffffff');
   const solidColor = useAnimatedStyle(() => ({ backgroundColor: thumbColor ?? resultColor.value }), [resultColor]);
-  const adaptiveColor = useSharedValue<'#000000' | '#ffffff'>('#ffffff');
+  const adaptiveColor = useSharedValue('#ffffff');
 
   /**
    * Get the current color and calculate its contrast ratio against white or black, depending on the channel and whether
