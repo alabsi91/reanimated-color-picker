@@ -1,10 +1,10 @@
 diff --git a/node_modules/resolve-tspaths/dist/steps/generateChanges.js b/node_modules/resolve-tspaths/dist/steps/generateChanges.js
-index 5944a00..dcd1066 100644
+index e752db4..9eb6500 100644
 --- a/node_modules/resolve-tspaths/dist/steps/generateChanges.js
 +++ b/node_modules/resolve-tspaths/dist/steps/generateChanges.js
-@@ -50,9 +50,7 @@ function replaceAliasPathsInFile(filePath, aliases, programPaths) {
+@@ -64,9 +64,7 @@ function replaceAliasPathsInFile(filePath, aliases, programPaths) {
      const changes = [];
-     const newText = originalText.replace(exports.IMPORT_EXPORT_REGEX, (original, importStatement, importSpecifier) => {
+     const newText = exports.MATCHERS.reduce((text, regex) => text.replace(regex, (original, importStatement, importSpecifier) => {
          // The import is an esm import if it is inside a typescript (definition) file or if it uses `import` or `export`
 -        const esmImport = !filePath.endsWith(".ts") &&
 -            (importStatement.includes("import") ||
