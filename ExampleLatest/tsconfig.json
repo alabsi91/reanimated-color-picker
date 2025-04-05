@@ -1,0 +1,10 @@
+{
+  "extends": "@react-native/typescript-config/tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "baseUrl": ["."],
+      "reanimated-color-picker": ["../src/index"]
+    }
+  },
+  "references": [{ "path": "../tsconfig.json" }]
+}

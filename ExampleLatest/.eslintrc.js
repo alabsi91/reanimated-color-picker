@@ -1,0 +1,20 @@
+module.exports = {
+  root: true,
+  extends: ['@react-native', 'plugin:prettier/recommended'],
+  rules: {
+    'prefer-const': 1,
+    '@typescript-eslint/consistent-type-imports': 1,
+    '@typescript-eslint/no-non-null-assertion': 0,
+    'react-native/no-inline-styles': 0,
+    'react-native/no-single-element-style-arrays': 1,
+    'react-native/no-unused-styles': 1,
+    'react-hooks/exhaustive-deps': 0,
+    'react/no-unstable-nested-components': 0,
+    'prettier/prettier': 1,
+    'jsx-quotes': 0,
+    curly: 0,
+    'no-shadow': 0,
+    'no-bitwise': 0,
+    'object-shorthand': 1,
+  },
+};
