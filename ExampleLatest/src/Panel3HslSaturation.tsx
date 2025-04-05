@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 
@@ -8,7 +8,9 @@ import type { ColorFormatsObject } from 'reanimated-color-picker';
 export default function Example() {
   const [showModal, setShowModal] = useState(false);
 
-  const customSwatches = new Array(6).fill('#fff').map(() => colorKit.randomRgbColor().hex());
+  const customSwatches = useMemo(() => new Array(6).fill('#fff').map(() => colorKit.randomRgbColor().hex()), []);
+
+  const [currentValue, setCurrentValue] = useState(customSwatches[0]);
 
   const selectedColor = useSharedValue(customSwatches[0]);
   const backgroundColorStyle = useAnimatedStyle(() => ({ backgroundColor: selectedColor.value }));
@@ -17,6 +19,8 @@ export default function Example() {
     'worklet';
     selectedColor.value = color.hex;
   };
+
+  const onColorCompleteJS = (color: ColorFormatsObject) => setCurrentValue(color.hex);
 
   return (
     <>
@@ -28,11 +32,12 @@ export default function Example() {
         <Animated.View style={[styles.container, backgroundColorStyle]}>
           <View style={styles.pickerContainer}>
             <ColorPicker
-              value={selectedColor.value}
+              value={currentValue}
               sliderThickness={25}
               thumbShape='circle'
               thumbSize={25}
               onChange={onColorSelect}
+              onCompleteJS={onColorCompleteJS}
               adaptSpectrum
             >
               <View style={styles.previewContainer}>

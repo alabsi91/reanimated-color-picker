@@ -1,5 +1,5 @@
-import React, { useMemo } from 'react';
-import { ImageBackground, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ImageBackground, View } from 'react-native';
 import Animated, { useAnimatedStyle, useDerivedValue, useSharedValue } from 'react-native-reanimated';
 
 import colorKit from '@colorKit';
@@ -24,11 +24,15 @@ export function Preview({
 
   const justifyContent = getStyle(style, 'justifyContent') ?? 'center';
 
-  const initialColorText = useMemo(() => {
+  const [initialValueFormatted, setInitialValueFormatted] = useState('');
+
+  useEffect(() => setInitialValueFormatted(returnedResults()[colorFormat]), [value, colorFormat]);
+
+  const initialColorText = useDerivedValue(() => {
     const adaptiveTextColor = alphaValue.value > 0.5 ? value : { h: 0, s: 0, v: 70 };
-    const contrast = colorKit.contrastRatio(adaptiveTextColor, '#ffffff');
+    const contrast = colorKit.runOnUI().contrastRatio(adaptiveTextColor, '#ffffff');
     const color = contrast < 4.5 ? '#000000' : '#ffffff';
-    return { formatted: returnedResults()[colorFormat], color };
+    return color;
   }, [value, colorFormat]);
 
   const textColor = useSharedValue<'#000000' | '#ffffff'>('#ffffff');
@@ -58,7 +62,9 @@ export function Preview({
       <ConditionalRendering if={!hideInitialColor}>
         <View style={[styles.previewContainer, { backgroundColor: value, justifyContent }]}>
           <ConditionalRendering if={!hideText}>
-            <Text style={[styles.previewText, { color: initialColorText.color }, textStyle]}>{initialColorText.formatted}</Text>
+            <Animated.Text style={[styles.previewText, { color: initialColorText }, textStyle]}>
+              {initialValueFormatted}
+            </Animated.Text>
           </ConditionalRendering>
         </View>
       </ConditionalRendering>
