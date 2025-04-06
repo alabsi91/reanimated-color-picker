@@ -26,14 +26,15 @@ export function Preview({
 
   const [initialValueFormatted, setInitialValueFormatted] = useState('');
 
-  useEffect(() => setInitialValueFormatted(returnedResults()[colorFormat]), [value, colorFormat]);
+  useEffect(() => {
+    setInitialValueFormatted(returnedResults()[colorFormat]);
+  }, [value, colorFormat]);
 
   const initialColorText = useDerivedValue(() => {
     const adaptiveTextColor = alphaValue.value > 0.5 ? value : { h: 0, s: 0, v: 70 };
     const contrast = colorKit.runOnUI().contrastRatio(adaptiveTextColor, '#ffffff');
-    const color = contrast < 4.5 ? '#000000' : '#ffffff';
-    return color;
-  }, [value, colorFormat]);
+    return contrast < 4.5 ? '#000000' : '#ffffff';
+  }, [alphaValue, value]);
 
   const textColor = useSharedValue<'#000000' | '#ffffff'>('#ffffff');
   const textColorStyle = useAnimatedStyle(() => ({ color: textColor.value }), [textColor]);

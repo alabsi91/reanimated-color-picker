@@ -18,7 +18,9 @@ export function PreviewText({ style = {}, colorFormat = 'hex' }: PreviewTextProp
 
   const [defaultValue, setDefaultValue] = useState('');
 
-  useEffect(() => setDefaultValue(returnedResults()[colorFormat]), []);
+  useEffect(() => {
+    setDefaultValue(returnedResults()[colorFormat]);
+  }, []);
 
   const colorString = useDerivedValue(() => {
     [colorFormat, hueValue, saturationValue, brightnessValue, alphaValue]; // track changes on Native
