@@ -198,6 +198,7 @@ export const colorKitUI = () => {
 
     hwb: [
       /^hwb\s*\(\s*(\d{1,3})(?:deg)?\s*,\s*([\d.]+)%\s*,\s*([\d.]+)%\s*\)$/i,
+      /^hwb\s*\(\s*(\d{1,3})\s+([\d.]+)%\s+([\d.]+)%\s+\/\s*(\d|\d\.\d+)\s*\)$/i,
       /^hwb\s*\(\s*(\d{1,3})(?:deg)?\s+([\d.]+)%\s+([\d.]+)%\s*\)$/i,
     ],
     hwba: [
@@ -812,13 +813,13 @@ export const colorKitUI = () => {
 
         // auto
         if (typeof forceAlpha === 'undefined') {
-          if (typeof a === 'number' && a !== 1) return `hwba(${h}, ${w}%, ${b}%, ${a})`;
-          return `hwb(${h}, ${w}%, ${b}%)`;
+          if (typeof a === 'number' && a !== 1) return `hwb(${h} ${w}% ${b}% / ${a})`;
+          return `hwb(${h} ${w}% ${b}%)`;
         }
 
-        if (forceAlpha) return `hwba(${h}, ${w}%, ${b}%, ${a ?? 1})`;
+        if (forceAlpha) return `hwb(${h} ${w}% ${b}% / ${a ?? 1})`;
 
-        return `hwb(${h}, ${w}%, ${b}%)`;
+        return `hwb(${h} ${w}% ${b}%)`;
       },
       array: (roundValues = true) => {
         if (roundValues) {
