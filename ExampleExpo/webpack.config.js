@@ -10,7 +10,7 @@ module.exports = async function (env, argv) {
 
   config.module.rules.push({
     test: /\.(js|jsx|ts|tsx)$/,
-    include: path.resolve(root, 'src'),
+    include: [path.resolve(root, 'src'), path.resolve(root, 'ExamplesShared')],
     use: 'babel-loader',
   });
 
