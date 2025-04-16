@@ -423,9 +423,9 @@ describe('HEX to HWB Conversion', () => {
   for (let i = 0; i < colors.length; i++) {
     const { hex, hwb } = colors[i];
     for (let r = 0; r < hex.length; r++) {
-      test(`converts ${hex[r]} to ${hwb[2]}`, () => {
+      test(`converts ${hex[r]} to ${hwb[0]}`, () => {
         const color = colorKit.HWB(hex[r]).string();
-        expect(color).toBe(hwb[2]);
+        expect(color).toBe(hwb[0]);
       });
     }
   }
@@ -435,9 +435,9 @@ describe('RGB to HWB Conversion', () => {
   for (let i = 0; i < colors.length; i++) {
     const { rgb, hwb } = colors[i];
     for (let r = 0; r < rgb.length; r++) {
-      test(`converts ${rgb[r]} to ${hwb[2]}`, () => {
+      test(`converts ${rgb[r]} to ${hwb[0]}`, () => {
         const color = colorKit.HWB(rgb[r]).string();
-        expect(color).toBe(hwb[2]);
+        expect(color).toBe(hwb[0]);
       });
     }
   }
@@ -447,9 +447,9 @@ describe('HSL to HWB Conversion', () => {
   for (let i = 0; i < colors.length; i++) {
     const { hsl, hwb } = colors[i];
     for (let r = 0; r < hsl.length; r++) {
-      test(`converts ${hsl[r]} to ${hwb[2]}`, () => {
+      test(`converts ${hsl[r]} to ${hwb[0]}`, () => {
         const color = colorKit.HWB(hsl[r]).string();
-        expect(color).toBe(hwb[2]);
+        expect(color).toBe(hwb[0]);
       });
     }
   }
@@ -459,9 +459,9 @@ describe('HSV to HWB Conversion', () => {
   for (let i = 0; i < colors.length; i++) {
     const { hsv, hwb } = colors[i];
     for (let r = 0; r < hsv.length; r++) {
-      test(`converts ${hsv[r]} to ${hwb[2]}`, () => {
+      test(`converts ${hsv[r]} to ${hwb[0]}`, () => {
         const color = colorKit.HWB(hsv[r]).string();
-        expect(color).toBe(hwb[2]);
+        expect(color).toBe(hwb[0]);
       });
     }
   }
@@ -471,9 +471,9 @@ describe('HWB to HWB Conversion', () => {
   for (let i = 0; i < colors.length; i++) {
     const { hwb } = colors[i];
     for (let r = 0; r < hwb.length; r++) {
-      test(`converts ${hwb[r]} to ${hwb[2]}`, () => {
+      test(`converts ${hwb[r]} to ${hwb[0]}`, () => {
         const color = colorKit.HWB(hwb[r]).string();
-        expect(color).toBe(hwb[2]);
+        expect(color).toBe(hwb[0]);
       });
     }
   }
