@@ -1,6 +1,12 @@
 import { StyleSheet } from 'react-native';
 
 export const colorPickerStyle = StyleSheet.create({
+  title: {
+    textAlign: 'center',
+    fontFamily: 'Quicksand',
+    fontWeight: 'bold',
+    marginVertical: 20,
+  },
   picker: {
     gap: 20,
   },

@@ -5,14 +5,14 @@ import Animated, { useAnimatedStyle, type SharedValue } from 'react-native-reani
 type BaseContainerProps = {
   name: string;
   children: React.ReactNode;
-  backgroundColor: SharedValue<string>;
+  backgroundColor?: SharedValue<string>;
 };
 
 export default function BaseContainer({ name, backgroundColor, children }: BaseContainerProps) {
   const [showModal, setShowModal] = useState(false);
 
   const backgroundColorStyle = useAnimatedStyle(() => {
-    return { backgroundColor: backgroundColor.value };
+    return { backgroundColor: backgroundColor ? backgroundColor.value : '#aaa' };
   });
 
   return (

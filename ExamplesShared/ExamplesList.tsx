@@ -18,6 +18,8 @@ import Panel4Example from './Panel4';
 import Panel5Example from './Panel5';
 import HorizontalRgbSliders from './RgbHorizontal';
 import VerticalRgbSliders from './RgbVertical';
+import WithRnghScrollView from './WithRnghScrollView';
+import WithReanimatedScrollView from './WithReanimatedScrollView';
 
 export default function ExamplesList() {
   return (
@@ -48,6 +50,9 @@ export default function ExamplesList() {
 
         <HorizontalRgbSliders />
         <VerticalRgbSliders />
+
+        <WithRnghScrollView />
+        <WithReanimatedScrollView />
       </ScrollView>
     </View>
   );
