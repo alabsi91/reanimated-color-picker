@@ -104,9 +104,8 @@ export function Panel1({ gestures = [], style = {}, ...props }: PanelProps) {
         onLayout={onLayout}
         style={[
           styles.panel_container,
-          { height: getHeight },
           style,
-          { position: 'relative', borderWidth: 0, padding: 0 },
+          { position: 'relative', height: getHeight, borderWidth: 0, padding: 0 },
           activeColorStyle,
         ]}
       >

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
@@ -63,7 +63,6 @@ export function HueSlider({ gestures = [], style = {}, vertical = false, reverse
     return {
       width: vertical ? height.value : '100%',
       height: vertical ? width.value : '100%',
-      borderRadius,
       transform: [
         { rotate: imageRotate },
         { translateX: vertical ? ((height.value - width.value) / 2) * (reverse ? -1 : 1) : 0 },
@@ -115,9 +114,11 @@ export function HueSlider({ gestures = [], style = {}, vertical = false, reverse
     <GestureDetector gesture={composed}>
       <Animated.View
         onLayout={onLayout}
-        style={[{ borderRadius }, style, thicknessStyle, { position: 'relative', borderWidth: 0, padding: 0 }]}
+        style={[style, thicknessStyle, { position: 'relative', borderRadius, borderWidth: 0, padding: 0 }]}
       >
-        <Animated.Image source={require('@assets/Hue.png')} style={imageStyle} />
+        <View style={{ flex: 1, borderRadius, overflow: 'hidden' }}>
+          <Animated.Image source={require('@assets/Hue.png')} style={imageStyle} />
+        </View>
 
         <ConditionalRendering if={adaptSpectrum}>
           <Animated.View style={[{ borderRadius }, activeBrightnessStyle, StyleSheet.absoluteFillObject]} />
