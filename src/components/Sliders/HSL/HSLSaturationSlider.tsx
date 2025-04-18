@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle, useDerivedValue, useSharedValue, withTiming } from 'react-native-reanimated';
 
@@ -72,7 +72,7 @@ export function HSLSaturationSlider({ gestures = [], style = {}, vertical = fals
     return {
       width: vertical ? height.value : '100%',
       height: vertical ? width.value : '100%',
-      borderRadius,
+      tintColor: '#888',
       transform: [
         { rotate: imageRotate },
         { translateX: vertical ? ((height.value - width.value) / 2) * (reverse ? -1 : 1) : 0 },
@@ -131,9 +131,11 @@ export function HSLSaturationSlider({ gestures = [], style = {}, vertical = fals
     <GestureDetector gesture={composed}>
       <Animated.View
         onLayout={onLayout}
-        style={[{ borderRadius }, style, { position: 'relative', borderWidth: 0, padding: 0 }, thicknessStyle, activeColorStyle]}
+        style={[style, { position: 'relative', borderRadius, borderWidth: 0, padding: 0 }, thicknessStyle, activeColorStyle]}
       >
-        <Animated.Image source={require('@assets/blackGradient.png')} style={[imageStyle, { tintColor: '#888' }]} />
+        <View style={{ flex: 1, borderRadius, overflow: 'hidden' }}>
+          <Animated.Image source={require('@assets/blackGradient.png')} style={imageStyle} />
+        </View>
 
         <ConditionalRendering if={adaptSpectrum}>
           <Animated.View style={[{ borderRadius }, activeBrightnessStyle, StyleSheet.absoluteFillObject]} />

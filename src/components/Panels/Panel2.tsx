@@ -154,7 +154,7 @@ export function Panel2({
     <GestureDetector gesture={composed}>
       <Animated.View
         onLayout={onLayout}
-        style={[styles.panel_container, { height: getHeight }, style, { position: 'relative', borderWidth: 0, padding: 0 }]}
+        style={[styles.panel_container, style, { position: 'relative', height: getHeight, borderWidth: 0, padding: 0 }]}
       >
         <ImageBackground
           source={require('@assets/Hue.png')}
