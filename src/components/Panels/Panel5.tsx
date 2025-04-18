@@ -1,14 +1,7 @@
 import React, { useCallback } from 'react';
 import { Image, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, {
-  Easing,
-  useAnimatedStyle,
-  useDerivedValue,
-  useSharedValue,
-  withDelay,
-  withTiming,
-} from 'react-native-reanimated';
+import Animated, { Easing, useAnimatedStyle, useDerivedValue, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import colorKit from '@colorKit';
 import usePickerContext from '@context';
@@ -29,8 +22,7 @@ export function Panel5({ gestures = [], style = {}, selectionStyle = {} }: Panel
   const squareSize = useSharedValue(0),
     posX = useSharedValue(0),
     posY = useSharedValue(0),
-    adaptiveColor = useSharedValue('#000'),
-    isTap = useSharedValue<0 | 1>(0);
+    adaptiveColor = useSharedValue('#000');
 
   const setAdaptiveColor = (color1: string) => {
     'worklet';
@@ -39,16 +31,15 @@ export function Panel5({ gestures = [], style = {}, selectionStyle = {} }: Panel
     adaptiveColor.value = contrast < 4.5 ? color : adaptiveColor.value;
   };
 
-  // To apply color changes that are not triggered by the tap gesture
+  // Calculate the position of the selected square on color change.
+  // Since color conversion is not 100% accurate, we need to find the closest color in the grid.
   useDerivedValue(() => {
-    if (isTap.value === 1) return;
-
     const hsvColor = { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
 
     for (let y = 0; y < gridColors.length; y++) {
       for (let x = 0; x < gridColors[y].length; x++) {
         const gridColor = gridColors[y][x];
-        const areColorsEqual = colorKit.runOnUI().areColorsEqual(gridColor, hsvColor, 6);
+        const areColorsEqual = colorKit.runOnUI().areColorsEqual(gridColor, hsvColor, 5);
         if (!areColorsEqual) continue;
         setAdaptiveColor(gridColor);
         posX.value = withTiming(x, animationOptions);
@@ -56,7 +47,7 @@ export function Panel5({ gestures = [], style = {}, selectionStyle = {} }: Panel
         break;
       }
     }
-  }, [hueValue, saturationValue, brightnessValue, isTap, posX, posY]);
+  }, [hueValue, saturationValue, brightnessValue, posX, posY]);
 
   const selectedStyle = useAnimatedStyle(() => {
     const x = posX.value * squareSize.value;
@@ -81,21 +72,14 @@ export function Panel5({ gestures = [], style = {}, selectionStyle = {} }: Panel
     const color: string | undefined = gridColors[row]?.[column];
     if (!color) return;
 
-    isTap.value = 1;
-
     const { h, s, v } = colorKit.runOnUI().HSV(color).object(false);
     hueValue.value = h;
     saturationValue.value = s;
     brightnessValue.value = v;
 
-    posX.value = withTiming(column, animationOptions);
-    posY.value = withTiming(row, animationOptions);
-
     setAdaptiveColor(color);
     onGestureChange();
     onGestureEnd();
-
-    isTap.value = withDelay(300, withTiming(0, { duration: 0 }));
   });
 
   const composed = Gesture.Simultaneous(tap, ...gestures);
