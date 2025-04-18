@@ -7,7 +7,7 @@ import colorKit from '@colorKit';
 import usePickerContext from '@context';
 import { styles } from '@styles';
 import Thumb from '@thumb';
-import { clamp, getStyle, isRtl } from '@utils';
+import { clamp, enableAndroidHardwareTextures, getStyle, isRtl } from '@utils';
 
 import type { SliderProps } from '@types';
 import type { LayoutChangeEvent } from 'react-native';
@@ -123,9 +123,12 @@ export function LuminanceSlider({ gestures = [], style = {}, vertical = false, r
     <GestureDetector gesture={composed}>
       <Animated.View
         onLayout={onLayout}
-        style={[{ borderRadius }, style, { position: 'relative', borderWidth: 0, padding: 0 }, thicknessStyle, activeColorStyle]}
+        style={[style, { borderRadius, position: 'relative', borderWidth: 0, padding: 0 }, thicknessStyle, activeColorStyle]}
       >
-        <Animated.View style={[styles.panel_image, imageStyle, { borderRadius, flexDirection: isRtl ? 'row-reverse' : 'row' }]}>
+        <Animated.View
+          style={[styles.panel_image, imageStyle, { borderRadius, flexDirection: isRtl ? 'row-reverse' : 'row' }]}
+          renderToHardwareTextureAndroid={enableAndroidHardwareTextures}
+        >
           <Image source={require('@assets/blackGradient.png')} style={{ flex: 1, tintColor: '#fff' }} resizeMode='stretch' />
           <Image
             source={require('@assets/blackGradient.png')}

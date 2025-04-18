@@ -121,13 +121,15 @@ export function Panel4({
     <GestureDetector gesture={composed}>
       <Animated.View
         onLayout={onLayout}
-        style={[styles.panel_container, { height: getHeight }, style, { position: 'relative', borderWidth: 0, padding: 0 }]}
+        style={[styles.panel_container, style, { position: 'relative', height: getHeight, borderWidth: 0, padding: 0 }]}
       >
-        <Animated.Image
-          source={require('@assets/Hue.png')}
-          style={[styles.panel_image, { borderRadius }, panelImageStyle]}
-          resizeMode='stretch'
-        />
+        <View style={{ flex: 1, borderRadius, overflow: 'hidden' }}>
+          <Animated.Image
+            source={require('@assets/Hue.png')}
+            style={[styles.panel_image, panelImageStyle]}
+            resizeMode='stretch'
+          />
+        </View>
 
         <View
           style={[
