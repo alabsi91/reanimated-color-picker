@@ -29,7 +29,7 @@ export default function Example() {
           onChange={onColorSelect}
           style={colorPickerStyle.picker}
         >
-          <Panel5 style={colorPickerStyle.panelStyle} />
+          <Panel5 style={[colorPickerStyle.panelStyle, { borderRadius: 4 }]} />
           <OpacitySlider style={colorPickerStyle.sliderStyle} adaptSpectrum />
           <Divider />
           <PreviewText style={colorPickerStyle.previewTxt} colorFormat='hsla' />
