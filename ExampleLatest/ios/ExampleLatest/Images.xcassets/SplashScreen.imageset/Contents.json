@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "filename" : "Animated_Splash_Screen_256x256.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "Animated_Splash_Screen_512x512.png",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "Animated_Splash_Screen_1024x1024.png",
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
