@@ -6,5 +6,5 @@
     },
   },
   "references": [{ "path": "../tsconfig.json" }],
-  "extends": "expo/tsconfig.base",
+  "extends": "expo/tsconfig.base.json",
 }
