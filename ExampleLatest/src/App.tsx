@@ -6,7 +6,7 @@ import NativeSplashScreen from '../specs/NativeSplashScreen';
 
 export default function App() {
   useEffect(() => {
-    setTimeout(() => NativeSplashScreen.hide(), 800);
+    setTimeout(() => NativeSplashScreen.hide(), 500);
   }, []);
 
   return (
