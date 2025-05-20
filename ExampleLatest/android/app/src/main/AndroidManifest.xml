@@ -9,8 +9,7 @@
     android:roundIcon="@mipmap/ic_launcher"
     android:allowBackup="false"
     android:theme="@style/Theme.App.Starting"
-    android:supportsRtl="true"
-    android:extractNativeLibs="true">
+    android:supportsRtl="true">
 
     <activity
       android:name=".MainActivity"
