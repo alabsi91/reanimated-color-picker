@@ -1,10 +1,11 @@
 {
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "ExamplesShared/**/*"],
   "exclude": ["Example", "ExampleExpo", "scripts", "docs"],
   "compilerOptions": {
     "types": ["react-native", "react-native-reanimated", "react-native-gesture-handler"],
     "baseUrl": ".",
     "paths": {
+      "reanimated-color-picker": ["src/index.ts"],
       "@sliders/*": ["src/components/Sliders/*"],
       "@panels/*": ["src/components/Panels/*"],
       "@assets/*": ["src/assets/*"],

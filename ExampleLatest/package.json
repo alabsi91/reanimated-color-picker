@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "react-native run-android",
+    "android": "react-native run-android --list-devices",
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
@@ -11,9 +11,9 @@
   },
   "dependencies": {
     "react": "19.0.0",
-    "react-native": "0.79.0",
+    "react-native": "0.79.2",
     "react-native-gesture-handler": "^2.25.0",
-    "react-native-reanimated": "^3.17.3"
+    "react-native-reanimated": "^3.17.5"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
@@ -22,10 +22,10 @@
     "@react-native-community/cli": "18.0.0",
     "@react-native-community/cli-platform-android": "18.0.0",
     "@react-native-community/cli-platform-ios": "18.0.0",
-    "@react-native/babel-preset": "0.79.0",
-    "@react-native/eslint-config": "0.79.0",
-    "@react-native/metro-config": "0.79.0",
-    "@react-native/typescript-config": "0.79.0",
+    "@react-native/babel-preset": "0.79.2",
+    "@react-native/eslint-config": "0.79.2",
+    "@react-native/metro-config": "0.79.2",
+    "@react-native/typescript-config": "0.79.2",
     "@types/jest": "^29.5.13",
     "@types/react": "^19.0.0",
     "@types/react-test-renderer": "^19.0.0",
@@ -36,6 +36,19 @@
     "prettier": "3.5.3",
     "react-test-renderer": "19.0.0",
     "typescript": "5.0.4"
+  },
+  "codegenConfig": {
+    "name": "NativeSplashScreenSpec",
+    "type": "modules",
+    "jsSrcsDir": "specs",
+    "android": {
+      "javaPackageName": "com.nativeSplashScreen"
+    },
+    "ios": {
+      "modulesProvider": {
+        "NativeSplashScreen": "RCTNativeSplashScreen"
+      }
+    }
   },
   "engines": {
     "node": ">=18"
