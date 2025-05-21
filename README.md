@@ -33,8 +33,11 @@
 ![Example_12](https://raw.githubusercontent.com/alabsi91/reanimated-color-picker/main/images/example_12.png)
 
 ## Examples
-- [Expo snack demo](https://snack.expo.dev/@alabsi91/reanimated-color-picker)
-- [Typescript Examples](https://github.com/alabsi91/reanimated-color-picker/tree/main/ExamplesShared)
+
+- [Interactive Demo on Expo Snack](https://snack.expo.dev/@alabsi91/reanimated-color-picker)  
+- [TypeScript Example Code](https://github.com/alabsi91/reanimated-color-picker/tree/main/ExamplesShared)  
+- [Download APK for Demo Examples (Android)](https://github.com/alabsi91/reanimated-color-picker/releases/latest)  
+
 
 ## Prerequisites
 
