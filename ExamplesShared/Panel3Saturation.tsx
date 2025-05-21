@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
 
@@ -12,28 +12,39 @@ import ColorPicker, {
   Swatches,
   colorKit,
 } from 'reanimated-color-picker';
+
 import BaseContainer from './components/BaseContainer';
 import Divider from './components/Divider';
 import { colorPickerStyle } from './components/colorPickerStyle';
 
+// generate 6 random colors for swatches
+const customSwatches = new Array(6).fill('#fff').map(() => colorKit.randomRgbColor().hex());
+
 export default function Example() {
-  const customSwatches = new Array(6).fill('#fff').map(() => colorKit.randomRgbColor().hex());
+  const [resultColor, setResultColor] = useState(customSwatches[0]);
 
-  const selectedColor = useSharedValue(customSwatches[0]);
+  const currentColor = useSharedValue(customSwatches[0]);
 
-  const onColorSelect = (color: ColorFormatsObject) => {
+  // runs on the ui thread on color change
+  const onColorChange = (color: ColorFormatsObject) => {
     'worklet';
-    selectedColor.value = color.hex;
+    currentColor.value = color.hex;
+  };
+
+  // runs on the js thread on color pick
+  const onColorPick = (color: ColorFormatsObject) => {
+    setResultColor(color.hex);
   };
 
   return (
-    <BaseContainer name='Panel3 Saturation' backgroundColor={selectedColor}>
+    <BaseContainer name='Panel3 Saturation' backgroundColor={currentColor}>
       <View style={colorPickerStyle.pickerContainer}>
         <ColorPicker
-          value={selectedColor.value}
+          value={resultColor}
           sliderThickness={25}
           thumbSize={27}
-          onChange={onColorSelect}
+          onChange={onColorChange}
+          onCompleteJS={onColorPick}
           style={colorPickerStyle.picker}
         >
           <Preview style={colorPickerStyle.previewStyle} textStyle={colorPickerStyle.previewTxt} />

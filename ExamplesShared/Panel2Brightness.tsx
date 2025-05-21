@@ -1,33 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { KeyboardAvoidingView, View } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
 
 import type { ColorFormatsObject } from 'reanimated-color-picker';
 import ColorPicker, { colorKit, InputWidget, OpacitySlider, Panel2, SaturationSlider } from 'reanimated-color-picker';
+
 import BaseContainer from './components/BaseContainer';
 import Divider from './components/Divider';
 import { colorPickerStyle } from './components/colorPickerStyle';
 
+// initial random color
+const initialColor = colorKit.randomRgbColor().hex();
+
 export default function Example() {
-  const initialColor = colorKit.randomRgbColor().hex();
+  const [resultColor, setResultColor] = useState(initialColor);
 
-  const selectedColor = useSharedValue(initialColor);
+  const currentColor = useSharedValue(initialColor);
 
-  const onColorSelect = (color: ColorFormatsObject) => {
+  // runs on the ui thread on color change
+  const onColorChange = (color: ColorFormatsObject) => {
     'worklet';
-    selectedColor.value = color.hex;
+    currentColor.value = color.hex;
+  };
+
+  // runs on the js thread on color pick
+  const onColorPick = (color: ColorFormatsObject) => {
+    setResultColor(color.hex);
   };
 
   return (
-    <BaseContainer name='Panel2 Brightness' backgroundColor={selectedColor}>
+    <BaseContainer name='Panel2 Brightness' backgroundColor={currentColor}>
       <KeyboardAvoidingView behavior='position'>
         <View style={colorPickerStyle.pickerContainer}>
           <ColorPicker
-            value={selectedColor.value}
+            value={resultColor}
             sliderThickness={26}
             thumbSize={13}
             thumbShape='doubleTriangle'
-            onChange={onColorSelect}
+            onChange={onColorChange}
+            onCompleteJS={onColorPick}
             style={colorPickerStyle.picker}
             adaptSpectrum
           >

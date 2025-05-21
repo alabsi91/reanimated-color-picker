@@ -1,23 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Text, View } from 'react-native';
 import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler';
 import { useSharedValue } from 'react-native-reanimated';
 
 import type { ColorFormatsObject } from 'reanimated-color-picker';
 import ColorPicker, { HSLSaturationSlider, HueSlider, LuminanceSlider, OpacitySlider } from 'reanimated-color-picker';
+
 import BaseContainer from './components/BaseContainer';
 import { colorPickerStyle } from './components/colorPickerStyle';
 
 /*
  * Using react-native-gesture-handler ScrollView to prevent scrolling while using the color picker
  */
-
 export default function Example() {
-  const selectedColor = useSharedValue('#f00');
+  const [resultColor, setResultColor] = useState('#f00');
 
-  const onColorSelect = (color: ColorFormatsObject) => {
+  const currentColor = useSharedValue('#f00');
+
+  // runs on the ui thread on color change
+  const onColorChange = (color: ColorFormatsObject) => {
     'worklet';
-    selectedColor.value = color.hex;
+    currentColor.value = color.hex;
+  };
+
+  // runs on the js thread on color pick
+  const onColorPick = (color: ColorFormatsObject) => {
+    setResultColor(color.hex);
   };
 
   return (
@@ -28,10 +36,11 @@ export default function Example() {
 
           <View style={colorPickerStyle.pickerContainer}>
             <ColorPicker
-              value={selectedColor.value}
+              value={resultColor}
               sliderThickness={30}
               thumbSize={30}
-              onChange={onColorSelect}
+              onChange={onColorChange}
+              onCompleteJS={onColorPick}
               style={colorPickerStyle.picker}
               boundedThumb
             >
