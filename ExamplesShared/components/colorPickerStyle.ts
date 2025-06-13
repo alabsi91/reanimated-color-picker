@@ -13,7 +13,7 @@ export const colorPickerStyle = StyleSheet.create({
   pickerContainer: {
     alignSelf: 'center',
     width: 300,
-    backgroundColor: '#fff',
+    backgroundColor: '#eee',
     padding: 20,
     borderRadius: 20,
     shadowColor: '#000',
