@@ -1,4 +1,4 @@
-# ![icon](https://github.com/user-attachments/assets/dd3dbb1f-25c3-463d-9413-ca963c17862c) Reanimated Color Picker 
+# ![icon](https://github.com/user-attachments/assets/dd3dbb1f-25c3-463d-9413-ca963c17862c) Reanimated Color Picker
 
 [![npm](https://img.shields.io/npm/v/reanimated-color-picker?style=for-the-badge)](https://www.npmjs.com/package/reanimated-color-picker)
 [![GitHub](https://img.shields.io/github/license/alabsi91/reanimated-color-picker?style=for-the-badge)](https://github.com/alabsi91/reanimated-color-picker/blob/main/LICENSE)
@@ -34,16 +34,15 @@
 
 ## Examples
 
-- [Interactive Demo on Expo Snack](https://snack.expo.dev/@alabsi91/reanimated-color-picker)  
-- [TypeScript Example Code](https://github.com/alabsi91/reanimated-color-picker/tree/main/ExamplesShared)  
-- [Download APK for Demo Examples (Android)](https://github.com/alabsi91/reanimated-color-picker/releases/latest)  
-
+- [Interactive Demo on Expo Snack](https://snack.expo.dev/@alabsi91/reanimated-color-picker)
+- [TypeScript Example Code](https://github.com/alabsi91/reanimated-color-picker/tree/main/ExamplesShared)
+- [Download APK for Demo Examples (Android)](https://github.com/alabsi91/reanimated-color-picker/releases/latest)
 
 ## Prerequisites
 
 - Follow the installation instructions by using the links provided below.
 
-- [react-native-gesture-handler](https://docs.swmansion.com/react-native-gesture-handler/docs/installation) version `2.0.0` or higher.
+- [react-native-gesture-handler](https://docs.swmansion.com/react-native-gesture-handler/docs/fundamentals/installation) version `2.0.0` or higher.
 
 - [react-native-reanimated](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/getting-started/#installation) version `2.0.0` or higher.
 
@@ -52,7 +51,7 @@
 ## Installation
 
 > **Note**
-> First we need to install [react-native-gesture-handler](https://docs.swmansion.com/react-native-gesture-handler/docs/installation)(>=2.0.0) and [react-native-reanimated](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/installation)(>=2.0.0),
+> First we need to install [react-native-gesture-handler](https://docs.swmansion.com/react-native-gesture-handler/docs/fundamentals/installation)(>=2.0.0) and [react-native-reanimated](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/installation)(>=2.0.0),
 
 - Open a Terminal in the project root and run:
 
