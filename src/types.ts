@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import type { ImageStyle, StyleProp, TextInputProps, TextStyle, ViewStyle } from 'react-native';
-import type { AnimatedStyleProp, SharedValue } from 'react-native-reanimated';
+import type { AnimatedStyle, SharedValue } from 'react-native-reanimated';
 import type { SupportedColorFormats } from './colorKit/types';
 import type { Gesture } from 'react-native-gesture-handler/lib/typescript/handlers/gestures/gesture';
 
@@ -157,7 +157,7 @@ export type BuiltinThumbsProps = {
   handleStyle: StyleProp<ViewStyle>;
   innerStyle?: StyleProp<ViewStyle>;
   style?: StyleProp<ViewStyle>;
-  solidColor: AnimatedStyleProp<ViewStyle>;
+  solidColor: AnimatedStyle<ViewStyle>;
   renderThumb?: RenderThumbType;
   vertical?: boolean;
 };
