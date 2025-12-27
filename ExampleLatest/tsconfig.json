@@ -3,10 +3,11 @@
   "include": ["**/*.ts", "**/*.tsx"],
   "exclude": ["**/node_modules", "**/Pods"],
   "compilerOptions": {
+    "types": ["jest"],
     "paths": {
       "baseUrl": ["."],
-      "reanimated-color-picker": ["../src/index"],
-    },
+      "reanimated-color-picker": ["../src/index"]
+    }
   },
-  "references": [{ "path": "../tsconfig.json" }],
+  "references": [{ "path": "../tsconfig.json" }]
 }
