@@ -23,7 +23,8 @@ export function PreviewText({ style = {}, colorFormat = 'hex' }: PreviewTextProp
   }, []);
 
   const colorString = useDerivedValue(() => {
-    [colorFormat, hueValue, saturationValue, brightnessValue, alphaValue]; // track changes on Native
+    // Explicitly touch dependencies so Reanimated tracks them and doesn’t prune the worklet
+    (() => [colorFormat, hueValue, saturationValue, brightnessValue, alphaValue])();
 
     if (isWeb && inputRef.current) {
       // @ts-expect-error value doesn't exist
@@ -32,7 +33,7 @@ export function PreviewText({ style = {}, colorFormat = 'hex' }: PreviewTextProp
     }
 
     return returnedResults()[colorFormat];
-  }, [colorFormat, hueValue, saturationValue, brightnessValue, alphaValue]); // track changes on WEB
+  }, [colorFormat, hueValue, saturationValue, brightnessValue, alphaValue]);
 
   const animatedProps = useAnimatedProps(() => ({ text: colorString.value }) as never, [colorString]);
 
@@ -44,7 +45,7 @@ export function PreviewText({ style = {}, colorFormat = 'hex' }: PreviewTextProp
       defaultValue={defaultValue}
       style={[styles.previewText, style]}
       animatedProps={animatedProps}
-      pointerEvents='none'
+      pointerEvents={isWeb ? undefined : 'none'}
     />
   );
 }

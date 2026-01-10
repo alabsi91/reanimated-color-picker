@@ -10,16 +10,10 @@ import { isWeb } from '@utils';
 import type { ColorPickerContext, ColorPickerProps, ColorPickerRef } from '@types';
 import type { SupportedColorFormats } from './colorKit/types';
 
-if (isWeb) {
+// @ts-expect-error no global
+if (isWeb && !global.setImmediate) {
   // @ts-expect-error no global
-  if (!global.setImmediate) global.setImmediate = setTimeout;
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { enableExperimentalWebImplementation } = require('react-native-gesture-handler');
-    enableExperimentalWebImplementation(true);
-  } catch (error) {
-    // ignore
-  }
+  global.setImmediate = setTimeout;
 }
 
 const ColorPicker = forwardRef<ColorPickerRef, ColorPickerProps>(

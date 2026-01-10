@@ -110,11 +110,7 @@ export function Panel1({ gestures = [], style = {}, ...props }: PanelProps) {
         ]}
       >
         <View style={[styles.panel_image, { borderRadius }]}>
-          <Image
-            source={require('@assets/blackGradient.png')}
-            style={[styles.panel_image, { tintColor: '#fff' }]}
-            resizeMode='stretch'
-          />
+          <Image source={require('@assets/blackGradient.png')} style={styles.panel_image} tintColor='#fff' resizeMode='stretch' />
           <Animated.Image
             source={require('@assets/blackGradient.png')}
             style={[styles.panel_image, brightnessImageStyle]}

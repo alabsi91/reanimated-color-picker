@@ -141,7 +141,7 @@ export function Panel4({
             },
           ]}
         >
-          <Image source={require('@assets/blackGradient.png')} style={{ flex: 1, tintColor: '#fff' }} resizeMode='stretch' />
+          <Image source={require('@assets/blackGradient.png')} style={{ flex: 1 }} tintColor='#fff' resizeMode='stretch' />
           <Image
             source={require('@assets/blackGradient.png')}
             style={{ flex: 1, transform: [{ scaleX: -1 }] }}

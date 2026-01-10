@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import Animated, { useAnimatedProps, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import usePickerContext from '@context';
 import Thumb from '@thumb';
@@ -66,12 +66,6 @@ export function OpacitySlider({ gestures = [], style = {}, vertical = false, rev
     return {
       width: vertical ? height.value : '100%',
       height: vertical ? width.value : '100%',
-      tintColor: HSVA2HSLA_string(
-        hueValue.value,
-        adaptSpectrum ? saturationValue.value : 100,
-        adaptSpectrum ? brightnessValue.value : 100,
-      ),
-      // borderRadius,
       transform: [
         { rotate: imageRotate },
         { translateX: vertical ? ((height.value - width.value) / 2) * (reverse ? 1 : -1) : 0 },
@@ -79,6 +73,16 @@ export function OpacitySlider({ gestures = [], style = {}, vertical = false, rev
       ],
     };
   }, [width, height, hueValue, saturationValue, brightnessValue]);
+
+  const imageTintColorProp = useAnimatedProps(() => {
+    return {
+      tintColor: HSVA2HSLA_string(
+        hueValue.value,
+        adaptSpectrum ? saturationValue.value : 100,
+        adaptSpectrum ? brightnessValue.value : 100,
+      ),
+    };
+  }, [hueValue, saturationValue, brightnessValue]);
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -137,7 +141,12 @@ export function OpacitySlider({ gestures = [], style = {}, vertical = false, rev
             resizeMode='repeat'
           />
           <View style={{ flex: 1, borderRadius, overflow: 'hidden' }}>
-            <Animated.Image source={require('@assets/blackGradient.png')} style={imageStyle} resizeMode='stretch' />
+            <Animated.Image
+              source={require('@assets/blackGradient.png')}
+              style={imageStyle}
+              resizeMode='stretch'
+              animatedProps={imageTintColorProp}
+            />
           </View>
         </RenderNativeOnly>
 

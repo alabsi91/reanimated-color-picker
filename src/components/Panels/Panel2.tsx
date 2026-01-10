@@ -167,13 +167,8 @@ export function Panel2({
 
           <Animated.Image
             source={require('@assets/blackGradient.png')}
-            style={[
-              styles.panel_image,
-              panelImageStyle,
-              {
-                tintColor: verticalChannel === 'saturation' ? '#fff' : verticalChannel === 'hsl-saturation' ? '#888' : undefined,
-              },
-            ]}
+            style={[styles.panel_image, panelImageStyle]}
+            tintColor={verticalChannel === 'saturation' ? '#fff' : verticalChannel === 'hsl-saturation' ? '#888' : undefined}
             resizeMode='stretch'
           />
 
