@@ -1,0 +1,25 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "paths": {
+      "reanimated-color-picker": ["../src/index"],
+      "@sliders/*": ["../src/components/Sliders/*"],
+      "@panels/*": ["../src/components/Panels/*"],
+      "@assets/*": ["../src/assets/*"],
+      "@thumb": ["../src/components/Thumb/Thumb"],
+      "@colorKit": ["../src/colorKit/index"],
+      "@context": ["../src/AppContext"],
+      "@styles": ["../src/styles"],
+      "@utils": ["../src/utils"],
+      "@types": ["../src/types"]
+    }
+  },
+  "references": [{ "path": "../tsconfig.json" }],
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts"
+  ]
+}

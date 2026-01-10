@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Modal, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, { useAnimatedStyle, type SharedValue } from 'react-native-reanimated';
 
 type BaseContainerProps = {
@@ -58,15 +58,20 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     backgroundColor: '#fff',
 
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    ...Platform.select({
+      web: { boxShadow: 'rgba(0, 0, 0, 0.3) 0px 0px 2px' },
+      default: {
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 1,
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: 1.41,
 
-    elevation: 5,
+        elevation: 2,
+      },
+    }),
   },
   closeBtnContainer: {
     marginVertical: 24,

@@ -5,7 +5,6 @@
   "compilerOptions": {
     "types": ["jest"],
     "paths": {
-      "baseUrl": ["."],
       "reanimated-color-picker": ["../src/index"]
     }
   },

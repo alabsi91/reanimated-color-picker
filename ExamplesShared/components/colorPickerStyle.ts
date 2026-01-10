@@ -1,4 +1,19 @@
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
+
+const shadow = Platform.select({
+  web: { boxShadow: 'rgba(0, 0, 0, 0.3) 0px 0px 2px' },
+  default: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+
+    elevation: 2,
+  },
+});
 
 export const colorPickerStyle = StyleSheet.create({
   title: {
@@ -16,55 +31,20 @@ export const colorPickerStyle = StyleSheet.create({
     backgroundColor: '#eee',
     padding: 20,
     borderRadius: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 5,
-    },
-    shadowOpacity: 0.34,
-    shadowRadius: 6.27,
-
-    elevation: 10,
+    ...shadow,
   },
   panelStyle: {
     borderRadius: 16,
-
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-
-    elevation: 5,
+    ...shadow,
   },
   sliderStyle: {
     borderRadius: 20,
-
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-
-    elevation: 5,
+    ...shadow,
   },
   sliderVerticalStyle: {
     borderRadius: 20,
     height: 300,
-
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-
-    elevation: 5,
+    ...shadow,
   },
   sliderTitle: {
     color: '#000',
