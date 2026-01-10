@@ -35,15 +35,20 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   shadow: {
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    ...Platform.select({
+      web: { boxShadow: 'rgba(0, 0, 0, 0.3) 0px 0px 2px' },
+      default: {
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 1,
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: 1.41,
 
-    elevation: 5,
+        elevation: 2,
+      },
+    }),
   },
   triangle: {
     width: 0,
@@ -102,16 +107,20 @@ export const styles = StyleSheet.create({
     borderRadius: 15,
     marginHorizontal: 5,
     marginBottom: 15,
+    ...Platform.select({
+      web: { boxShadow: 'rgba(0, 0, 0, 0.3) 0px 0px 7px' },
+      default: {
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 1,
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: 1.41,
 
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-
-    elevation: 5,
+        elevation: 2,
+      },
+    }),
   },
 
   // Preview
@@ -139,7 +148,6 @@ export const styles = StyleSheet.create({
   panel3Line: {
     position: 'absolute',
     backgroundColor: '#ffffff',
-
     ...Platform.select({
       web: { boxShadow: 'rgba(0, 0, 0, 0.3) 0px 0px 2px' },
       default: {

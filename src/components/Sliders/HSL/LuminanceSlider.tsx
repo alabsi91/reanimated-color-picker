@@ -129,7 +129,7 @@ export function LuminanceSlider({ gestures = [], style = {}, vertical = false, r
           style={[styles.panel_image, imageStyle, { borderRadius, flexDirection: isRtl ? 'row-reverse' : 'row' }]}
           renderToHardwareTextureAndroid={enableAndroidHardwareTextures}
         >
-          <Image source={require('@assets/blackGradient.png')} style={{ flex: 1, tintColor: '#fff' }} resizeMode='stretch' />
+          <Image source={require('@assets/blackGradient.png')} style={{ flex: 1 }} tintColor='#fff' resizeMode='stretch' />
           <Image
             source={require('@assets/blackGradient.png')}
             style={{ flex: 1, transform: [{ scaleX: -1 }] }}

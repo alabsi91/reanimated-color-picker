@@ -72,7 +72,6 @@ export function HSLSaturationSlider({ gestures = [], style = {}, vertical = fals
     return {
       width: vertical ? height.value : '100%',
       height: vertical ? width.value : '100%',
-      tintColor: '#888',
       transform: [
         { rotate: imageRotate },
         { translateX: vertical ? ((height.value - width.value) / 2) * (reverse ? -1 : 1) : 0 },
@@ -134,7 +133,7 @@ export function HSLSaturationSlider({ gestures = [], style = {}, vertical = fals
         style={[style, { position: 'relative', borderRadius, borderWidth: 0, padding: 0 }, thicknessStyle, activeColorStyle]}
       >
         <View style={{ flex: 1, borderRadius, overflow: 'hidden' }}>
-          <Animated.Image source={require('@assets/blackGradient.png')} style={imageStyle} />
+          <Animated.Image source={require('@assets/blackGradient.png')} style={imageStyle} tintColor='#888' />
         </View>
 
         <ConditionalRendering if={adaptSpectrum}>

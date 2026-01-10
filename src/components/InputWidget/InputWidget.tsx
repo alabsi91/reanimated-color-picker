@@ -89,7 +89,7 @@ export function InputWidget({
       <ConditionalRendering if={formats.length > 1}>
         <View style={{ width: iconWidth }}>
           <Pressable onPress={cycle}>
-            <Image style={[buttonIconStyle, { tintColor: iconColor }]} source={require('@assets/arrow-icon.png')} />
+            <Image style={buttonIconStyle} tintColor={iconColor} source={require('@assets/arrow-icon.png')} />
           </Pressable>
           <Text style={styles.inputTitle}> </Text>
         </View>

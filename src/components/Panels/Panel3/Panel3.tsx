@@ -217,10 +217,8 @@ export function Panel3({
 
             <Image
               source={require('@assets/blackRadial.png')}
-              style={[
-                styles.panel_image,
-                { tintColor: centerChannel === 'saturation' ? '#fff' : centerChannel === 'hsl-saturation' ? '#888' : undefined },
-              ]}
+              style={styles.panel_image}
+              tintColor={centerChannel === 'saturation' ? '#fff' : centerChannel === 'hsl-saturation' ? '#888' : undefined}
               resizeMode='stretch'
             />
 
