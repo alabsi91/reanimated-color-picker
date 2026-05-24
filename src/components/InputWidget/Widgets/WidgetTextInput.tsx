@@ -35,7 +35,7 @@ export default function WidgetTextInput({
 }: Props) {
   const inputRef = useAnimatedRef<TextInput>();
 
-  const animatedProps = useAnimatedProps(() => ({ text: textValue.value }) as never, [textValue]);
+  const animatedProps = useAnimatedProps(() => ({ text: textValue.value, defaultValue: textValue.value }) as never, [textValue]);
 
   const submit = (e: TextInputEndEditingEvent | BlurEvent) => {
     // @ts-expect-error text doesn't exist on BlurEvent
@@ -75,7 +75,6 @@ export default function WidgetTextInput({
       <AnimatedTextInput
         ref={inputRef}
         style={[styles.input, inputStyle]}
-        defaultValue={textValue.value}
         maxLength={decimal ? 4 : textKeyboard ? 9 : 3} // length example: Alpha (1.55), RGB (255), Hue (360), Brightness (100), hex (#00000000)
         onEndEditing={submit}
         onBlur={isWeb ? submit : undefined}
