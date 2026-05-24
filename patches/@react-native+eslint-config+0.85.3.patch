@@ -1,0 +1,47 @@
+diff --git a/node_modules/@react-native/eslint-config/index.js b/node_modules/@react-native/eslint-config/index.js
+index 7be4f9d..152d432 100644
+--- a/node_modules/@react-native/eslint-config/index.js
++++ b/node_modules/@react-native/eslint-config/index.js
+@@ -25,7 +25,6 @@ module.exports = {
+     'react-hooks',
+     'react-native',
+     '@react-native',
+-    'jest',
+   ],
+ 
+   settings: sharedConfig.settings,
+@@ -51,17 +50,6 @@ module.exports = {
+       parser: '@typescript-eslint/parser',
+       plugins: ['@typescript-eslint/eslint-plugin'],
+     },
+-    {
+-      ...sharedConfig.overrides.jest,
+-      files: [
+-        '*.{spec,test}.{js,ts,tsx}',
+-        '**/__{mocks,tests}__/**/*.{js,ts,tsx}',
+-      ],
+-      env: {
+-        jest: true,
+-        'jest/globals': true,
+-      },
+-    },
+   ],
+ 
+   // Map from global var to bool specifying if it can be redefined
+diff --git a/node_modules/@react-native/eslint-config/shared.js b/node_modules/@react-native/eslint-config/shared.js
+index 0d190f3..dce8129 100644
+--- a/node_modules/@react-native/eslint-config/shared.js
++++ b/node_modules/@react-native/eslint-config/shared.js
+@@ -270,12 +270,5 @@ module.exports = {
+     // The following rules are made available via `eslint-plugin-react-native`
+ 
+     'react-native/no-inline-styles': 1,
+-
+-    // Jest Plugin
+-    // The following rules are made available via `eslint-plugin-jest`.
+-    'jest/no-disabled-tests': 1,
+-    'jest/no-focused-tests': 1,
+-    'jest/no-identical-title': 1,
+-    'jest/valid-expect': 1,
+   },
+ };

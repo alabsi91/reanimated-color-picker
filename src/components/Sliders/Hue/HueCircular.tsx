@@ -155,8 +155,8 @@ export function HueCircular({
           resizeMode='stretch'
         >
           <ConditionalRendering if={adaptSpectrum}>
-            <Animated.View style={[borderRadiusStyle, activeBrightnessStyle, StyleSheet.absoluteFillObject]} />
-            <Animated.View style={[borderRadiusStyle, activeSaturationStyle, StyleSheet.absoluteFillObject]} />
+            <Animated.View style={[borderRadiusStyle, activeBrightnessStyle, StyleSheet.absoluteFill]} />
+            <Animated.View style={[borderRadiusStyle, activeSaturationStyle, StyleSheet.absoluteFill]} />
           </ConditionalRendering>
         </ImageBackground>
 

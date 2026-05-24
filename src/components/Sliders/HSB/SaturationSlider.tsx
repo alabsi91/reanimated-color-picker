@@ -118,7 +118,7 @@ export function SaturationSlider({ gestures = [], style = {}, vertical = false, 
         </View>
 
         <ConditionalRendering if={adaptSpectrum}>
-          <Animated.View style={[{ borderRadius }, activeBrightnessStyle, StyleSheet.absoluteFillObject]} />
+          <Animated.View style={[{ borderRadius }, activeBrightnessStyle, StyleSheet.absoluteFill]} />
         </ConditionalRendering>
 
         <Thumb

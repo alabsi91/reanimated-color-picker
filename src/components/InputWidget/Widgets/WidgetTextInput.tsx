@@ -6,7 +6,7 @@ import { styles } from '@styles';
 import { isWeb } from '@utils';
 
 import type { InputProps } from '@types';
-import type { NativeSyntheticEvent, StyleProp, TextInputSubmitEditingEventData, TextStyle } from 'react-native';
+import type { BlurEvent, StyleProp, TextInputEndEditingEvent, TextStyle } from 'react-native';
 import type { SharedValue } from 'react-native-reanimated';
 
 type Props = {
@@ -37,7 +37,8 @@ export default function WidgetTextInput({
 
   const animatedProps = useAnimatedProps(() => ({ text: textValue.value }) as never, [textValue]);
 
-  const submit = (e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
+  const submit = (e: TextInputEndEditingEvent | BlurEvent) => {
+    // @ts-expect-error text doesn't exist on BlurEvent
     const text = e.nativeEvent.text;
 
     // number input mode

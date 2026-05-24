@@ -38,7 +38,7 @@ export type RenderThumbProps = {
    * - This style determines the position of the thumb and is a crucial element that should be included.
    * - It should be tied to an `Reanimated` component, for example, `<Animated.View style={positionStyle} />`.
    */
-  positionStyle: StyleProp<ViewStyle | ImageStyle | TextStyle>;
+  positionStyle: StyleProp<AnimatedStyle<StyleProp<ViewStyle | ImageStyle | TextStyle>>>;
 
   /**
    * - A `number` that determines the thumb's width in pixels and is important for thumb position calculation.
@@ -72,7 +72,7 @@ export type RenderThumbType = React.FC<RenderThumbProps>;
 
 export type ThumbProps = {
   thumbColor?: string;
-  handleStyle: StyleProp<ViewStyle>;
+  handleStyle: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>;
   innerStyle?: StyleProp<ViewStyle>;
   style?: StyleProp<ViewStyle>;
   renderThumb?: RenderThumbType;
@@ -154,7 +154,7 @@ export type BuiltinThumbsProps = {
   borderRadius: number;
   thumbColor?: string;
   adaptiveColor: SharedValue<string>;
-  handleStyle: StyleProp<ViewStyle>;
+  handleStyle: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>;
   innerStyle?: StyleProp<ViewStyle>;
   style?: StyleProp<ViewStyle>;
   solidColor: AnimatedStyle<ViewStyle>;
@@ -379,7 +379,7 @@ export interface PreviewTextProps {
   colorFormat?: 'hex' | 'rgb' | 'rgba' | 'hsl' | 'hsla' | 'hsv' | 'hsva' | 'hwb' | 'hwba';
 
   /** - Preview text style */
-  style?: StyleProp<TextStyle>;
+  style?: StyleProp<AnimatedStyle<StyleProp<TextStyle>>>;
 }
 
 export interface PanelProps {

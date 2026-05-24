@@ -137,7 +137,7 @@ export function HSLSaturationSlider({ gestures = [], style = {}, vertical = fals
         </View>
 
         <ConditionalRendering if={adaptSpectrum}>
-          <Animated.View style={[{ borderRadius }, activeBrightnessStyle, StyleSheet.absoluteFillObject]} />
+          <Animated.View style={[{ borderRadius }, activeBrightnessStyle, StyleSheet.absoluteFill]} />
         </ConditionalRendering>
 
         <Thumb

@@ -121,8 +121,8 @@ export function HueSlider({ gestures = [], style = {}, vertical = false, reverse
         </View>
 
         <ConditionalRendering if={adaptSpectrum}>
-          <Animated.View style={[{ borderRadius }, activeBrightnessStyle, StyleSheet.absoluteFillObject]} />
-          <Animated.View style={[{ borderRadius }, activeSaturationStyle, StyleSheet.absoluteFillObject]} />
+          <Animated.View style={[{ borderRadius }, activeBrightnessStyle, StyleSheet.absoluteFill]} />
+          <Animated.View style={[{ borderRadius }, activeSaturationStyle, StyleSheet.absoluteFill]} />
         </ConditionalRendering>
 
         <Thumb

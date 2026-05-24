@@ -162,7 +162,7 @@ export function Panel2({
           resizeMode='stretch'
         >
           <ConditionalRendering if={adaptSpectrum && verticalChannel === 'brightness'}>
-            <Animated.View style={[spectrumStyle, StyleSheet.absoluteFillObject]} />
+            <Animated.View style={[spectrumStyle, StyleSheet.absoluteFill]} />
           </ConditionalRendering>
 
           <Animated.Image
@@ -173,7 +173,7 @@ export function Panel2({
           />
 
           <ConditionalRendering if={adaptSpectrum && (verticalChannel === 'saturation' || verticalChannel === 'hsl-saturation')}>
-            <Animated.View style={[spectrumStyle, StyleSheet.absoluteFillObject]} />
+            <Animated.View style={[spectrumStyle, StyleSheet.absoluteFill]} />
           </ConditionalRendering>
         </ImageBackground>
 

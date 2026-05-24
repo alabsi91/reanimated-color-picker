@@ -212,7 +212,7 @@ export function Panel3({
             resizeMode='stretch'
           >
             <ConditionalRendering if={adaptSpectrum && centerChannel === 'brightness'}>
-              <Animated.View style={[{ borderRadius }, spectrumStyle, StyleSheet.absoluteFillObject]} />
+              <Animated.View style={[{ borderRadius }, spectrumStyle, StyleSheet.absoluteFill]} />
             </ConditionalRendering>
 
             <Image
@@ -223,7 +223,7 @@ export function Panel3({
             />
 
             <ConditionalRendering if={adaptSpectrum && (centerChannel === 'saturation' || centerChannel === 'hsl-saturation')}>
-              <Animated.View style={[{ borderRadius }, spectrumStyle, StyleSheet.absoluteFillObject]} />
+              <Animated.View style={[{ borderRadius }, spectrumStyle, StyleSheet.absoluteFill]} />
             </ConditionalRendering>
           </ImageBackground>
 
