@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { TextInput } from 'react-native';
-import Animated, { useAnimatedProps, useAnimatedRef, useDerivedValue } from 'react-native-reanimated';
-
 import usePickerContext from '@context';
 import { styles } from '@styles';
 import { isWeb } from '@utils';
+import React from 'react';
+import { TextInput } from 'react-native';
+import Animated, { useAnimatedProps, useAnimatedRef, useDerivedValue } from 'react-native-reanimated';
 
 import type { PreviewTextProps } from '@types';
 
@@ -15,12 +14,6 @@ export function PreviewText({ style = {}, colorFormat = 'hex' }: PreviewTextProp
   const { returnedResults, hueValue, saturationValue, brightnessValue, alphaValue } = usePickerContext();
 
   const inputRef = useAnimatedRef<TextInput>();
-
-  const [defaultValue, setDefaultValue] = useState('');
-
-  useEffect(() => {
-    setDefaultValue(returnedResults()[colorFormat]);
-  }, []);
 
   const colorString = useDerivedValue(() => {
     // Explicitly touch dependencies so Reanimated tracks them and doesn’t prune the worklet
@@ -35,14 +28,16 @@ export function PreviewText({ style = {}, colorFormat = 'hex' }: PreviewTextProp
     return returnedResults()[colorFormat];
   }, [colorFormat, hueValue, saturationValue, brightnessValue, alphaValue]);
 
-  const animatedProps = useAnimatedProps(() => ({ text: colorString.value }) as never, [colorString]);
+  const animatedProps = useAnimatedProps(
+    () => ({ text: colorString.value, defaultValue: colorString.value }) as never,
+    [colorString],
+  );
 
   return (
     <AnimatedTextInput
       ref={inputRef}
       underlineColorAndroid='transparent'
       editable={false}
-      defaultValue={defaultValue}
       style={[styles.previewText, style]}
       animatedProps={animatedProps}
       pointerEvents={isWeb ? undefined : 'none'}
