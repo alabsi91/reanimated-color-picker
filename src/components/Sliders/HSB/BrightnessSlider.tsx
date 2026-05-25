@@ -57,7 +57,7 @@ export function BrightnessSlider({ gestures = [], style = {}, vertical = false, 
       height: vertical ? width.value : '100%',
       transform: [
         { rotate: imageRotate },
-        { translateX: vertical ? ((height.value - width.value) / 2) * (reverse ? -1 : 1) : 0 },
+        { translateX: vertical ? ((height.value - width.value) / 2) * (reverse ? -1 : 1) : -1 },
         { translateY: vertical ? imageTranslateY : 0 },
       ],
     };
