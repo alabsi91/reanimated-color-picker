@@ -24,7 +24,7 @@ import WithReanimatedScrollView from './WithReanimatedScrollView';
 export default function ExamplesList() {
   return (
     <View style={{ flex: 1, paddingTop: 46, paddingBottom: 24, backgroundColor: '#202124' }}>
-      <ScrollView contentContainerStyle={styles.container} fadingEdgeLength={30}>
+      <ScrollView contentContainerStyle={styles.container} fadingEdgeLength={20}>
         <Panel1Example />
 
         <Panel2Saturation />

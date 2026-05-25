@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Text, View } from 'react-native';
 import { Gesture } from 'react-native-gesture-handler';
-import Animated, { useSharedValue } from 'react-native-reanimated';
+import Animated, { useAnimatedProps, useSharedValue } from 'react-native-reanimated';
 
 import type { ColorFormatsObject } from 'reanimated-color-picker';
 import ColorPicker, { HSLSaturationSlider, HueSlider, LuminanceSlider, OpacitySlider } from 'reanimated-color-picker';
@@ -30,28 +30,21 @@ export default function Example() {
 
   const isScrollEnabled = useSharedValue<boolean | undefined>(true);
 
-  const enableScroll = () => {
-    'worklet';
-    isScrollEnabled.value = true;
-  };
-
-  const disableScroll = () => {
-    'worklet';
-    isScrollEnabled.value = false;
-  };
-
   //? NOTE:
   // - You cannot use the same gesture for multiple color picker components.
   // - Either pass a new gesture or deep clone the gesture constructor.
-  const hueGesture = Gesture.Pan().onBegin(disableScroll).onFinalize(enableScroll);
-  const saturationGesture = Gesture.Pan().onBegin(disableScroll).onFinalize(enableScroll);
-  const lumGesture = Gesture.Pan().onBegin(disableScroll).onFinalize(enableScroll);
-  const opacityGesture = Gesture.Pan().onBegin(disableScroll).onFinalize(enableScroll);
+  const [hueGesture, saturationGesture, lumGesture, opacityGesture] = Array.from({ length: 4 }, () =>
+    Gesture.Pan()
+      .onBegin(() => (isScrollEnabled.value = false))
+      .onFinalize(() => (isScrollEnabled.value = true)),
+  );
+
+  const animatedProps = useAnimatedProps(() => ({ scrollEnabled: isScrollEnabled.value }), [isScrollEnabled]);
 
   return (
-    <BaseContainer name='With Reanimated ScrollView'>
-      <Animated.ScrollView scrollEnabled={isScrollEnabled} contentContainerStyle={{ height: '150%', justifyContent: 'center' }}>
-        <Text style={colorPickerStyle.title}>Color Picker in a ScrollView</Text>
+    <BaseContainer name='With Reanimated ScrollView' backgroundColor={currentColor}>
+      <Animated.ScrollView animatedProps={animatedProps} contentContainerStyle={{ height: '150%', justifyContent: 'center' }}>
+        <Text style={colorPickerStyle.title}>Color Picker in a Animated.ScrollView</Text>
 
         <View style={colorPickerStyle.pickerContainer}>
           <ColorPicker

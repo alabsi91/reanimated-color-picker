@@ -29,10 +29,10 @@ export default function Example() {
   };
 
   return (
-    <BaseContainer name='With RNGH ScrollView'>
+    <BaseContainer name='With RNGH ScrollView' backgroundColor={currentColor}>
       <GestureHandlerRootView style={{ flex: 1 }}>
         <ScrollView contentContainerStyle={{ height: '150%', justifyContent: 'center' }}>
-          <Text style={colorPickerStyle.title}>Color Picker in a ScrollView</Text>
+          <Text style={colorPickerStyle.title}>Color Picker in a RNGH ScrollView</Text>
 
           <View style={colorPickerStyle.pickerContainer}>
             <ColorPicker
