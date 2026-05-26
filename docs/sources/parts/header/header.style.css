@@ -81,6 +81,7 @@
         font-size: var(--sb-text-h3);
         font-weight: 600;
         color: var(--sb-color-accent-high);
+        text-wrap: nowrap;
         text-decoration: none;
       }
     }
