@@ -8,6 +8,7 @@ sidebar.order: 6
 - [Bare workflow](https://github.com/alabsi91/reanimated-color-picker/tree/main/ExampleLatest)
 - [Expo managed workflow](https://github.com/alabsi91/reanimated-color-picker/tree/main/ExampleExpoLatest)
 - [Expo snack](https://snack.expo.dev/@alabsi91/reanimated-color-picker)
+- [Download APK for Demo Examples (Android)](https://github.com/alabsi91/reanimated-color-picker/releases/latest)
 
 <br />
 

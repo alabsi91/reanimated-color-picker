@@ -9,7 +9,7 @@
   "scripts": {
     "test": "jest --silent=false && tsc --noEmit && eslint src --max-warnings=0",
     "build": "node scripts/build.mjs",
-    "deploy-docs": "git -C docs/dist init && git -C docs/dist add . && git -C docs/dist commit -m 'docs: deploy' && (git -C docs/dist fetch $(git remote get-url origin) gh-pages && git -C docs/dist checkout gh-pages || git -C docs/dist checkout -b gh-pages) && git -C docs/dist push -f $(git remote get-url origin) HEAD:gh-pages && rm -rf docs/dist/.git",
+    "deploy-docs": "npm --prefix docs run build && git -C docs/dist init && git -C docs/dist add . && git -C docs/dist commit -m 'docs: deploy' && (git -C docs/dist fetch $(git remote get-url origin) gh-pages && git -C docs/dist checkout gh-pages || git -C docs/dist checkout -b gh-pages) && git -C docs/dist push -f $(git remote get-url origin) HEAD:gh-pages && rm -rf docs/dist/.git",
     "prettier ": "prettier --ignore-unknown --write src --config-precedence prefer-file",
     "prepare": "patch-package && npm run test && npm run build"
   },
