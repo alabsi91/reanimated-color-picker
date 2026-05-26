@@ -11,7 +11,7 @@ function getOrCreateDirectory(tree: SidebarTree, title: string, realPath: string
   let directory = tree.find((entry): entry is SidebarDirectory => "items" in entry && entry.title === title);
 
   if (!directory) {
-    directory = { title, realPath, collapsed: true, items: [] };
+    directory = { title, realPath, collapsed: false, items: [] };
     tree.push(directory);
   }
 
