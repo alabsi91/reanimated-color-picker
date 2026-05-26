@@ -21,7 +21,7 @@ sidebar.order: 5
 
 - `"#f0f"` (#rgb)
 - `"#ff00ff"` (#rrggbb)
-- `"#f0ff`" (#rgba)
+- `"#f0ff"` (#rgba)
 - `"#ff00ff00"` (#rrggbbaa)
 
 #### HSL
@@ -269,7 +269,7 @@ colorKit.getGreen("rgb(0, 200, 0)"); // 200
 
 ### `getBlue`
 
-Get the `green` channel value of a given color.
+Get the `blue` channel value of a given color.
 
 ```js
 colorKit.getBlue("hsl(200, 60%, 50%)"); // 204
