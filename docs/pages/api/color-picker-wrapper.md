@@ -2,7 +2,7 @@
 sidebar.order: 1
 ---
 
-# ColorPicker
+# `<ColorPicker />`
 
 The `ColorPicker` component is responsible for managing all built-in components.
 
@@ -52,7 +52,7 @@ A global property that allows slider background color spectrums to adapt to chan
 
 ![boundedThumb](@assets/images/boundedThumb.png)
 
-A global property for all descendant sliders and panels. Determines whether the thumb is constrained within the boundaries of the slider. When `false`, part of the thumb may extend beyond the slider edges.
+A global property for all descendant sliders and panels. Determines whether the thumb is constrained within the boundaries of the slider. When `false`, half of the thumb extend beyond the slider edges.
 
 `type: boolean` · `default: false`
 
@@ -106,7 +106,7 @@ A global property for the thumb shape and appearance of all descendant slider co
 
 A global property for the thumb's `View` style across all descendant slider components.
 
-`type: ViewStyle`
+`type: ViewStyle`[^style-override]
 
 ---
 
@@ -114,7 +114,7 @@ A global property for the thumb's `View` style across all descendant slider comp
 
 A global property for the thumb's inner `View` style across all descendant slider components.
 
-`type: ViewStyle`
+`type: ViewStyle`[^style-override]
 
 ---
 
@@ -144,9 +144,7 @@ A global property for the duration of the thumb scale animation when active.
 
 The container style of the `ColorPicker`.
 
-> [!caution] Certain style properties will be overridden.
-
-`type: ViewStyle`
+`type: ViewStyle`[^style-override]
 
 ---
 
@@ -226,3 +224,5 @@ function MyComponent() {
   return <ColorPicker ref={pickerRef}>{/* ... */}</ColorPicker>;
 }
 ```
+
+[^style-override]: Certain style properties will be overridden.

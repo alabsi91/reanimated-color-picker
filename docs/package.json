@@ -25,7 +25,7 @@
     "@html-eslint/eslint-plugin": "^0.60.0",
     "@html-eslint/parser": "^0.60.0",
     "@shikijs/rehype": "^4.0.2",
-    "@staticbolt/core": "^1.0.0-beta.12",
+    "@staticbolt/core": "^1.0.0-beta.13",
     "@stylistic/stylelint-config": "^5.0.0",
     "@trivago/prettier-plugin-sort-imports": "^6.0.2",
     "@xt0rted/expressive-code-file-icons": "^1.0.0",
@@ -59,7 +59,7 @@
   },
   "dependencies": {
     "@pagefind/component-ui": "^1.5.2",
-    "@staticbolt/wcp": "beta",
+    "@staticbolt/wcp": "^1.0.0-beta.13",
     "mermaid": "^11.15.0",
     "rehype-katex": "^7.0.1",
     "remark-math": "^6.0.0",
