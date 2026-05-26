@@ -1,0 +1,62 @@
+<header class="header">
+  <div class="header-content">
+    <div class="side-menu-trigger-container">
+      <button class="side-menu-trigger-button" aria-expanded="false" aria-label="Toggle side menu">
+        <svg class="menu-open-icon" aria-hidden="true" viewBox="0 -960 960 960" xmlns="http://www.w3.org/2000/svg">
+          <path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z" />
+        </svg>
+
+        <svg class="menu-close-icon" aria-hidden="true" viewBox="0 -960 960 960" xmlns="http://www.w3.org/2000/svg">
+          <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="header-title">
+      <div class="title-wrapper">
+        <a href="~/" translate="no">
+          <span>Reanimated Color Picker</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="header-center">
+      <part src="@parts/pagefind/pagefind.part.html"></part>
+    </div>
+
+    <div class="header-icons">
+      <part src="@parts/social-icons/social-icons.part.html"></part>
+
+      <div class="header-color-scheme-switch">
+        <part src="@parts/color-scheme-switch/color-scheme-switch.part.html"></part>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ::: Toggle the sidebar ::: -->
+<script type="module">
+  // @ts-check
+
+  (() => {
+    /** @type {HTMLDivElement | null} */
+    const sidebar = document.querySelector(".sidebar");
+    if (!sidebar) {
+      console.error("Could not find sidebar element");
+      return;
+    }
+
+    /** @type {HTMLButtonElement | null} */
+    const menuTrigger = document.querySelector(".side-menu-trigger-button");
+    if (!menuTrigger) {
+      console.error("Could not find menu trigger element");
+      return;
+    }
+
+    menuTrigger.addEventListener("click", () => {
+      const isOpen = menuTrigger.getAttribute("aria-expanded") === "true";
+      menuTrigger.setAttribute("aria-expanded", String(!isOpen));
+      sidebar.classList.toggle("open", !isOpen);
+    });
+  })();
+</script>

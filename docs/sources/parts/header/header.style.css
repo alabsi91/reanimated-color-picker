@@ -1,0 +1,123 @@
+:root {
+  --header-icon-size: 1.5em;
+  --sb-header-height: 4rem;
+
+  @media (max-width: 900px) {
+    --sb-header-height: 3rem;
+  }
+}
+
+.header {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 100;
+  display: grid;
+  align-items: center;
+  block-size: var(--sb-header-height);
+  padding-inline: 1.5em 1em;
+  background-color: rgb(from var(--sb-color-black) r g b / 80%);
+  border-block-end: 1px solid var(--sb-color-gray-5);
+  backdrop-filter: blur(7px);
+
+  @media (max-width: 900px) {
+    padding-inline: 0.8em 0.5em;
+  }
+
+  @media print {
+    display: none;
+  }
+
+  .header-content {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    align-content: center;
+    inline-size: 100%;
+    max-inline-size: 100rem;
+    margin: auto;
+  }
+
+  .side-menu-trigger-container {
+    display: none;
+    align-items: center;
+
+    .side-menu-trigger-button {
+      position: relative;
+      inline-size: var(--header-icon-size);
+      block-size: var(--header-icon-size);
+      color: inherit;
+      cursor: pointer;
+      background-color: transparent;
+      border: none;
+
+      svg {
+        position: absolute;
+        inset: 0;
+        inline-size: var(--header-icon-size);
+        block-size: var(--header-icon-size);
+        opacity: 0;
+        fill: currentcolor;
+        rotate: 0deg;
+        scale: 0;
+        transition:
+          opacity 0.25s ease,
+          scale 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      &[aria-expanded="true"] .menu-close-icon,
+      &[aria-expanded="false"] .menu-open-icon {
+        opacity: 1;
+        scale: 1;
+      }
+    }
+  }
+
+  .header-title {
+    display: grid;
+    align-items: center;
+
+    .title-wrapper {
+      a {
+        font-family: var(--sb-md-font);
+        font-size: var(--sb-text-h3);
+        font-weight: 600;
+        color: var(--sb-color-accent-high);
+        text-decoration: none;
+      }
+    }
+  }
+
+  .header-center {
+    display: grid;
+    place-items: center;
+  }
+
+  .header-icons {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    .header-color-scheme-switch {
+      border-inline-start: solid 1px var(--sb-color-gray-5);
+    }
+  }
+}
+
+@media (max-width: 900px) {
+  .header {
+    .side-menu-trigger-container {
+      display: flex;
+    }
+
+    .header-title {
+      text-align: center;
+    }
+
+    .header-center {
+      justify-items: end;
+    }
+
+    .header-icons {
+      display: none;
+    }
+  }
+}

@@ -1,0 +1,72 @@
+<div class="pagination-links">
+  <a class="pagination-link-prev" href="#" rel="prev">
+    <span class="link-label">
+      <svg aria-hidden="true" viewBox="0 0 24 24">
+        <path
+          d="M17 11H9.41l3.3-3.29a1.004 1.004 0 1 0-1.42-1.42l-5 5a1 1 0 0 0-.21.33 1 1 0 0 0 0 .76 1 1 0 0 0 .21.33l5 5a1.002 1.002 0 0 0 1.639-.325 1 1 0 0 0-.219-1.095L9.41 13H17a1 1 0 0 0 0-2Z"
+        ></path>
+      </svg>
+
+      <span >Previous</span>
+    </span>
+    <span class="link-title"></span>
+  </a>
+
+  <a class="pagination-link-next" href="#" rel="next">
+    <span class="link-label">
+      <span>Next</span>
+
+      <svg aria-hidden="true" viewBox="0 0 24 24">
+        <path
+          d="M17.92 11.62a1.001 1.001 0 0 0-.21-.33l-5-5a1.003 1.003 0 1 0-1.42 1.42l3.3 3.29H7a1 1 0 0 0 0 2h7.59l-3.3 3.29a1.002 1.002 0 0 0 .325 1.639 1 1 0 0 0 1.095-.219l5-5a1 1 0 0 0 .21-.33 1 1 0 0 0 0-.76Z"
+        ></path>
+      </svg>
+    </span>
+    <span class="link-title"></span>
+  </a>
+</div>
+
+<!-- This script will run once at build time for each page -->
+<script type="module" build-time>
+  // ::: Get current link and populate previous/next links :::
+  import { join, dirname, normalize } from "node:path";
+
+  const paginationPrev = document.querySelector(".pagination-link-prev");
+  const paginationPrevTitle = paginationPrev.querySelector(".link-title");
+
+  const paginationNext = document.querySelector(".pagination-link-next");
+  const paginationNextTitle = paginationNext.querySelector(".link-title");
+
+  // You can find `.sidebar` in the documentation layout
+  const navigationLinks = document.querySelectorAll(".sidebar a.sidebar-link");
+  const currentFile = normalize(__filepath);
+
+  for (const [linkIndex, link] of navigationLinks.entries()) {
+    const linkPath = join(dirname(__filepath), link.attributes.href, "index.html");
+    if (linkPath !== currentFile) continue;
+
+    // Previous
+    const previousLink = navigationLinks[linkIndex - 1];
+    if (previousLink) {
+      const prevHref = previousLink.getAttribute("href");
+      paginationPrev.setAttribute("href", prevHref);
+
+      const prevTitle = previousLink.textContent;
+      paginationPrevTitle.textContent = prevTitle;
+    } else {
+      paginationPrev.remove();
+    }
+
+    // Next
+    const nextLink = navigationLinks[linkIndex + 1];
+    if (nextLink) {
+      const nextHref = nextLink.getAttribute("href");
+      paginationNext.setAttribute("href", nextHref);
+
+      const nextTitle = nextLink.textContent;
+      paginationNextTitle.textContent = nextTitle;
+    } else {
+      paginationNext.remove();
+    }
+  }
+</script>

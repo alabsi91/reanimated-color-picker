@@ -1,0 +1,10 @@
+<wcp-accordion class="sidebar-accordion" add-attr-opened="{{ !$data.collapsed }}" heading-level="none" marker="start">
+  <span slot="summary">
+    {{ $data.title }} {{ ($data.badgeVariant && $data.badgeText) ? `
+    <part src="@parts/badge/badge.part.html" text="${$data.badgeText}" variant="${$data.badgeVariant}"></part>
+    ` : "" }}
+  </span>
+
+  <!-- Items -->
+  <slot></slot>
+</wcp-accordion>

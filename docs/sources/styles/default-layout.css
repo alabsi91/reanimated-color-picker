@@ -1,0 +1,62 @@
+@import url("@pagefind/component-ui/css");
+@import url("@styles/global.css");
+@import url("@styles/document.css");
+@import url("@parts/header/header.style.css");
+@import url("@parts/social-icons/social-icons.style.css");
+@import url("@parts/sidebar/sidbebar.style.css");
+@import url("@parts/table-of-content/table-of-content.style.css");
+@import url("@parts/pagination-links/pagination-links.style.css");
+@import url("@parts/color-scheme-switch/color-scheme-switch.sytle.css");
+@import url("@parts/badge/badge.style.css");
+
+@media print {
+  :root {
+    --sb-color-gray-0: #000;
+    --sb-color-gray-1: #000;
+    --sb-color-gray-2: #000;
+    --sb-color-black: #fff;
+  }
+
+  html {
+    color-scheme: light;
+  }
+}
+
+a.skip-content-link {
+  position: fixed;
+  inset-block-start: 0.75rem;
+  inset-inline-start: 0.75rem;
+  z-index: 300;
+  padding: 0.5rem 1rem;
+  color: var(--sb-color-black);
+  text-decoration: none;
+  background-color: var(--sb-color-accent-high);
+  translate: 0 calc(-100% - 1.5rem);
+  transition: translate 0.15s ease;
+
+  &:focus-visible {
+    translate: 0 0;
+  }
+}
+
+.markdown-layout {
+  display: grid;
+  grid-template-columns:
+    minmax(min-content, 2fr) /* sidebar */
+    minmax(0, 1000px) /* content: 1000px matches the content max-inline-size */
+    minmax(min-content, 2fr); /* toc */
+
+  align-items: start;
+  inline-size: 100%;
+  max-inline-size: 100rem; /* matching the header max-inline-size */
+  min-block-size: calc(100svh - var(--sb-header-height));
+  margin-inline: auto;
+
+  @media (max-width: 72rem) {
+    grid-template-columns: minmax(min-content, 2fr) minmax(0, 1000px);
+  }
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}

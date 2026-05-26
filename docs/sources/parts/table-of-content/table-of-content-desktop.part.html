@@ -1,0 +1,115 @@
+<aside class="toc desktop">
+  <div class="toc-nav-container">
+    <nav class="toc-nav toc-content" aria-labelledby="toc-title">
+      <h2 id="toc-title" class="toc-title" data-ignore-toc>On this page</h2>
+    </nav>
+  </div>
+</aside>
+
+<script build-time>
+  const tocContents = document.querySelectorAll(".toc-content");
+  const headings = document
+    .querySelectorAll("h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]")
+    .filter(el => !el.closest(".not-content"));
+
+  const maxHeading = +"{{ $data.maxHeading }}";
+  const minHeading = +"{{ $data.minHeading }}";
+
+  const ul = document.createElement("ul");
+  ul.classList.add("toc-list");
+
+  const title = document.querySelector("h1[id]");
+
+  // Overview
+  const overviewItem = document.createElement("li");
+  overviewItem.style.setProperty("--depth", "0");
+
+  const overviewLink = document.createElement("a");
+  overviewLink.setAttribute("href", `#${title?.id || ""}`);
+  overviewLink.textContent = "Overview";
+
+  overviewItem.appendChild(overviewLink);
+  ul.appendChild(overviewItem);
+
+  for (const heading of headings) {
+    const level = +heading.tagName.slice(1);
+
+    if (heading.hasAttribute("data-ignore-toc")) {
+      heading.removeAttribute("data-ignore-toc");
+      continue;
+    }
+
+    if (level < minHeading || level > maxHeading) {
+      continue;
+    }
+
+    const id = heading.getAttribute("id");
+    const content = heading.textContent;
+    const depth = Math.max(level - minHeading, 0);
+
+    const listItem = document.createElement("li");
+    listItem.style.setProperty("--depth", String(depth));
+
+    const link = document.createElement("a");
+    link.setAttribute("href", `#${id}`);
+    link.textContent = content;
+
+    listItem.appendChild(link);
+    ul.appendChild(listItem);
+  }
+
+  for (const tocContent of tocContents) {
+    tocContent.appendChild(ul.cloneNode(true));
+  }
+</script>
+
+<script>
+  (() => {
+    // All links in the mobile and desktop TOC
+    const links = document.querySelectorAll(".toc-list a");
+
+    // Mobile TOC current title
+    const currentTitle = document.querySelector(".toc-current-title");
+
+    const headings = Array.from(links)
+      .map(a => document.getElementById(a.getAttribute("href").slice(1)))
+      .filter(Boolean);
+
+    function setActive(id) {
+      for (const link of links) {
+        const active = link.getAttribute("href") === "#" + id;
+        link.classList.toggle("active", active);
+        if (active) {
+          currentTitle.textContent = link.textContent;
+        }
+      }
+    }
+
+    function update() {
+      if (!headings.length) return;
+
+      let scrollPaddingTop = getComputedStyle(document.documentElement).getPropertyValue("scroll-padding-top");
+      scrollPaddingTop = parseFloat(scrollPaddingTop.replace("px", "").trim());
+      scrollPaddingTop = !isFinite(scrollPaddingTop) ? 50 : scrollPaddingTop + 2;
+
+      let active = headings[0];
+
+      for (const heading of headings) {
+        if (heading.getBoundingClientRect().top <= scrollPaddingTop) {
+          active = heading;
+        }
+
+        // headings are in document order, so we can stop early
+        else {
+          break;
+        }
+      }
+
+      setActive(active.id);
+    }
+
+    window.addEventListener("scroll", update, { passive: true });
+
+    update(); // set correct state on page load / hash navigation
+  })();
+</script>

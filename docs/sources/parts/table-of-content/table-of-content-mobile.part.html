@@ -1,0 +1,24 @@
+<div class="toc mobile">
+  <nav class="toc-nav-mobile">
+    <wcp-accordion class="toc-accordion" heading-level="none" marker="start">
+      <span slot="summary">
+        <span class="toc-accordion-summary">On this page</span>
+        <span class="toc-current-title"></span>
+      </span>
+
+      <div class="toc-content"></div>
+    </wcp-accordion>
+  </nav>
+</div>
+
+<!-- ::: Close the accordion when a link is clicked ::: -->
+<script type="module">
+  const tocAccordion = document.querySelector(".toc-accordion");
+  const tocLinks = document.querySelectorAll(".toc-accordion a");
+
+  for (const link of tocLinks) {
+    link.addEventListener("click", () => {
+      tocAccordion.opened = false;
+    });
+  }
+</script>

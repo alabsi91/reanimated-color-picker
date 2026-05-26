@@ -1,0 +1,107 @@
+<div class="sidebar">
+  <nav aria-label="Sidebar navigation">
+    <slot name="sidebar"></slot>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-social-icons">
+      <part src="@parts/social-icons/social-icons.part.html"></part>
+    </div>
+
+    <div class="sidebar-color-scheme-switcher">
+      <part src="@parts/color-scheme-switch/color-scheme-switch.part.html"></part>
+    </div>
+  </div>
+</div>
+
+<script type="module" build-time>
+  import { join, dirname, normalize } from "node:path";
+
+  // ::: Mark current page links as active and expand matching accordions. :::
+
+  const navigationLinks = document.querySelectorAll(".sidebar a");
+  const currentFile = normalize(__filepath);
+
+  for (const [linkIndex, link] of navigationLinks.entries()) {
+    const linkPath = join(dirname(__filepath), link.attributes.href, "index.html");
+    if (linkPath !== currentFile) continue;
+
+    link.classList.add("active");
+
+    // Open all parent accordions
+    let parent = link.parentNode;
+    while (parent) {
+      if (parent.classList?.contains("sidebar-accordion")) {
+        parent.setAttribute("opened", "");
+      }
+
+      parent = parent.parentNode;
+    }
+  }
+</script>
+
+<insert selector="body">
+  <!-- ::: Persist sidebar navigation state across page loads. ::: -->
+  <script>
+    (() => {
+      /** @type {NodeListOf<HTMLDivElement>} */
+      const accordions = document.querySelectorAll(".sidebar-accordion");
+
+      // ::: Restore the accordion's previous open state. :::
+      try {
+        const state = JSON.parse(sessionStorage.getItem("sidebar-state") ?? {});
+
+        for (const [accordionIndex, opened] of Object.entries(state)) {
+          const accordion = /** @type {HTMLDivElement} */ (accordions[accordionIndex]);
+          if (!accordion) continue;
+
+          // Keep accordions containing the active link expanded by default
+          // to preserve navigation context and visibility of the current page.
+          if (accordion.matches(":has(a.active)")) continue;
+
+          // Toggle the accordion instantly without animation.
+          accordion[opened ? "open" : "close"](true);
+        }
+      } catch {
+        // ignore
+      }
+
+      // ::: Save accordion open state when toggled. :::
+      const accordionToggleHandler = () => {
+        const state = {};
+
+        for (const [accordionIndex, accordion] of accordions.entries()) {
+          state[accordionIndex] = accordion.opened;
+        }
+
+        sessionStorage.setItem("sidebar-state", JSON.stringify(state));
+      };
+
+      for (const accordion of accordions) {
+        accordion.addEventListener("toggled", accordionToggleHandler);
+      }
+
+      // ::: Restore sidebar scroll position. :::
+      const sidebar = document.querySelector(".sidebar");
+
+      const onReady = () => {
+        // First rAF: end of current task, second rAF: after first paint
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            const saved = sessionStorage.getItem("sidebar-scroll");
+            if (saved) sidebar.scrollTop = +saved;
+          });
+        });
+      };
+
+      document.addEventListener("DOMContentLoaded", onReady, { once: true });
+
+      // ::: Save sidebar scroll position. :::
+      const sidebarScrollHandler = () => {
+        sessionStorage.setItem("sidebar-scroll", sidebar.scrollTop);
+      };
+
+      sidebar.addEventListener("scroll", sidebarScrollHandler, { passive: true });
+    })();
+  </script>
+</insert>

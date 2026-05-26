@@ -1,0 +1,115 @@
+<div class="color-scheme-switch-container">
+  <button
+    type="button"
+    class="color-scheme-switch"
+    aria-label="Change color scheme"
+    aria-pressed="false"
+    title="Change color scheme"
+  >
+    <!-- Sun — shown when light mode is active -->
+    <svg
+      class="switch-icon switch-icon-sun"
+      aria-hidden="true"
+      focusable="false"
+      viewBox="0 -960 960 960"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M480-360q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35Zm0 80q-83 0-141.5-58.5T280-480q0-83 58.5-141.5T480-680q83 0 141.5 58.5T680-480q0 83-58.5 141.5T480-280ZM200-440H40v-80h160v80Zm720 0H760v-80h160v80ZM440-760v-160h80v160h-80Zm0 720v-160h80v160h-80ZM256-650l-101-97 57-59 96 100-52 56Zm492 496-97-101 53-55 101 97-57 59Zm-98-550 97-101 59 57-100 96-56-52ZM154-212l101-97 55 53-97 101-59-57Zm326-268Z"
+      />
+    </svg>
+
+    <!-- Moon — shown when dark mode is active -->
+    <svg
+      class="switch-icon switch-icon-moon"
+      aria-hidden="true"
+      focusable="false"
+      viewBox="0 -960 960 960"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M484-87q-81.77 0-154.11-31.27-72.35-31.27-126.35-85.27t-85.27-126.35Q87-402.23 87-484q0-140.38 87.12-248.04 87.11-107.65 224.19-136.65-7.08 97.31 20.34 190.27 27.43 92.96 97.12 162.65 69.69 69.69 162.65 97.12 92.96 27.42 190.27 17.34-28.38 138.08-136.35 226.19Q624.38-87 484-87Z"
+      />
+    </svg>
+  </button>
+</div>
+
+<insert selector="head">
+  <script>
+    // @ts-check
+    (() => {
+      const STORAGE_KEY = "color-scheme";
+      const PREFERS_DARK = window.matchMedia("(prefers-color-scheme: dark)");
+
+      let currentScheme = PREFERS_DARK.matches ? "dark" : "light";
+
+      // Override with stored value
+      const stored = window.localStorage.getItem(STORAGE_KEY);
+      if (stored === "dark" || stored === "light") {
+        currentScheme = stored;
+        document.documentElement.style.colorScheme = stored;
+      }
+
+      /**
+       * @param {"light" | "dark"} scheme
+       * @param {NodeListOf<HTMLButtonElement>} buttons
+       */
+      const applyScheme = (scheme, buttons) => {
+        const isDark = scheme === "dark";
+
+        for (const button of buttons) {
+          document.documentElement.style.colorScheme = scheme;
+          window.localStorage.setItem(STORAGE_KEY, scheme);
+          button.classList.remove("no-animation");
+          button.setAttribute("aria-pressed", String(isDark));
+        }
+
+        document.dispatchEvent(new CustomEvent("color-scheme-changed", { detail: scheme }));
+      };
+
+      const onReady = () => {
+        /** @type {NodeListOf<HTMLButtonElement>} */
+        const colorSchemeButtons = document.querySelectorAll(".color-scheme-switch");
+
+        const isDark = currentScheme === "dark";
+
+        for (const colorSchemeButton of colorSchemeButtons) {
+          // Set initial state without side-effects
+          colorSchemeButton.classList.add("no-animation");
+          colorSchemeButton.setAttribute("aria-pressed", String(isDark));
+
+          // Add event listener
+          colorSchemeButton.addEventListener("click", event => {
+            const nextScheme = colorSchemeButton.getAttribute("aria-pressed") === "true" ? "light" : "dark";
+            viewTransition(() => applyScheme(nextScheme, colorSchemeButtons), event.clientX, event.clientY);
+          });
+        }
+      };
+
+      document.addEventListener("DOMContentLoaded", onReady, { once: true, passive: true });
+
+      /**
+       * @param {() => void} update
+       * @param {number} x
+       * @param {number} y
+       */
+      async function viewTransition(update, x, y) {
+        if (!document.startViewTransition || matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          update();
+          return;
+        }
+
+        const transition = document.startViewTransition({ update, types: ["circular-reveal"] });
+
+        await transition.ready;
+
+        const endRadius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+
+        document.documentElement.animate(
+          { clipPath: [`circle(0 at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`] },
+          { duration: 400, easing: "cubic-bezier(0.64, 0, 0.78, 0)", pseudoElement: "::view-transition-new(root)" }
+        );
+      }
+    })();
+  </script>
+</insert>

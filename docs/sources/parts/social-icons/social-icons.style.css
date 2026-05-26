@@ -1,0 +1,13 @@
+.social-icon {
+  padding: 0.5em 1em;
+
+  a {
+    display: grid;
+    place-content: center;
+  }
+
+  svg {
+    inline-size: var(--header-icon-size);
+    block-size: var(--header-icon-size);
+  }
+}

@@ -1,0 +1,81 @@
+:root:active-view-transition-type(circular-reveal) {
+  &::view-transition-image-pair(root) {
+    isolation: auto;
+  }
+
+  &::view-transition-old(root),
+  &::view-transition-new(root) {
+    display: block;
+    mix-blend-mode: normal;
+    animation: none;
+  }
+}
+
+.color-scheme-switch-container {
+  display: flex;
+  align-items: center;
+  padding: 0.5em 1em;
+}
+
+.switch-icon {
+  position: absolute;
+  inset: 0;
+  inline-size: 1.4em;
+  block-size: 1.4em;
+  fill: currentcolor;
+  transition:
+    opacity 250ms ease,
+    rotate 350ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    scale 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.color-scheme-switch {
+  position: relative;
+  inline-size: var(--header-icon-size);
+  block-size: var(--header-icon-size);
+  padding: 0;
+  line-height: 0;
+  color: inherit;
+  appearance: none;
+  cursor: pointer;
+  outline-offset: 4px;
+  background: none;
+  border: none;
+  border-radius: 50%;
+
+  &:focus-visible {
+    outline: 2px solid var(--sb-color-accent, currentColor);
+  }
+
+  &.no-animation .switch-icon {
+    transition: none;
+  }
+
+  &[aria-pressed="false"] {
+    .switch-icon-sun {
+      opacity: 1;
+      rotate: 0deg;
+      scale: 1;
+    }
+
+    .switch-icon-moon {
+      opacity: 0;
+      rotate: -180deg;
+      scale: 0.5;
+    }
+  }
+
+  &[aria-pressed="true"] {
+    .switch-icon-sun {
+      opacity: 0;
+      rotate: 180deg;
+      scale: 0.5;
+    }
+
+    .switch-icon-moon {
+      opacity: 1;
+      rotate: 0deg;
+      scale: 1;
+    }
+  }
+}

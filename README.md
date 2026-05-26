@@ -50,7 +50,7 @@
 
 ## Installation
 
-> **Note**
+> [!NOTE]
 > First we need to install [react-native-gesture-handler](https://docs.swmansion.com/react-native-gesture-handler/docs/fundamentals/installation)(>=2.0.0) and [react-native-reanimated](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/installation)(>=2.0.0),
 
 - Open a Terminal in the project root and run:
@@ -72,7 +72,7 @@ npm i reanimated-color-picker
 
 ## License
 
-- Reanimated Color Picker library is licensed under [**The MIT License.**](https://github.com/alabsi91/reanimated-color-picker/blob/main/LICENSE)
+Reanimated Color Picker library is licensed under [**The MIT License.**](https://github.com/alabsi91/reanimated-color-picker/blob/main/LICENSE)
 
 ## Sponsoring
 

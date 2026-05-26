@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="{{ $data.lang ?? 'en' }}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta content="light dark" name="color-scheme" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <link bundle href="@styles/default-layout.css" rel="stylesheet" />
+    <link href="@assets/favicon.ico" rel="icon" sizes="any" />
+    <link type="image/svg" href="@assets/favicon.svg" rel="icon" />
+    <link href="@assets/apple-touch-icon.png" rel="apple-touch-icon" />
+    <meta content="My obsidian notes" name="description" />
+    <title data-translate>Reanimated Color Picker</title>
+  </head>
+
+  <body>
+    <!-- ::: Accordion web component for the sidebar and table of content (Mobile) ::: -->
+    <script src="@staticbolt/wcp/accordion"></script>
+
+    <!-- ::: Skip content ::: -->
+    <a class="skip-content-link" href="">Skip to content</a>
+
+    <part src="@parts/header/header.part.html"></part>
+
+    <div class="markdown-layout">
+      <!-- ::: Sidebar ::: -->
+      <part src="@parts/sidebar/sidebar.part.html"></part>
+
+      <div class="markdown-wrapper">
+        <!-- ::: Table of content (Mobile) ::: -->
+        <part src="@parts/table-of-content/table-of-content-mobile.part.html"></part>
+
+        <div class="markdown-body">
+          <!-- ::: Markdown content ::: -->
+          <main data-pagefind-body dir="{{ $data.dir ?? 'inherit' }}">
+            <slot />
+          </main>
+
+          <!-- ::: Footer ::: -->
+          <footer>
+            <part src="@parts/pagination-links/pagination-links.part.html"></part>
+          </footer>
+        </div>
+      </div>
+
+      <!-- ::: Table of content (Desktop) ::: -->
+      <part
+        maxHeading="{{ $data.maxHeading ?? 3 }}"
+        minHeading="{{ $data.minHeading ?? 2 }}"
+        src="@parts/table-of-content/table-of-content-desktop.part.html"
+      ></part>
+    </div>
+  </body>
+</html>
+
+<script build-time>
+  //#region --- Update page title and skip content link
+  const title = document.querySelector("h1[id]");
+  const titleMeta = document.querySelector("title");
+  const skipContent = document.querySelector("a.skip-content-link");
+
+  if (title && titleMeta) {
+    titleMeta.textContent = `${title.textContent} | ${titleMeta.textContent}`;
+  }
+
+  if (title && skipContent) {
+    skipContent.setAttribute("href", `#${title.id}`);
+  }
+  //#endregion
+
+  //#region --- Add tags after title
+  const tagsString = "{{ $data.tags ?? '' }}";
+  const tags = tagsString
+    .split(",")
+    .map(tag => tag.trim())
+    .filter(Boolean)
+    .map(tag => `<span class="badge tip">${tag}</span>`)
+    .join(" ");
+
+  if (title && tagsString) {
+    title.after(`<div style="margin-block: 1em;">${tags}</div>`);
+  }
+  //#endregion
+
+  //#region --- Replace collapsible callouts with wcp-accordion web component
+  const callouts = document.querySelectorAll("details.callout");
+
+  for (const callout of callouts) {
+    const accordion = document.createElement("wcp-accordion");
+    accordion.setAttribute("data-callout", callout.getAttribute("data-callout"));
+    accordion.setAttribute("class", callout.getAttribute("class"));
+    accordion.setAttribute("heading-level", "none");
+    if (callout.hasAttribute("open")) {
+      accordion.setAttribute("opened", "");
+    }
+
+    const summary = callout.querySelector(".callout-title");
+    if (summary) {
+      const span = document.createElement("span");
+      span.setAttribute("slot", "summary");
+      span.classList.add("callout-title");
+      span.innerHTML = summary.innerHTML;
+      accordion.append(span);
+    }
+
+    const content = callout.querySelector(".callout-content");
+    if (content) {
+      accordion.append(content);
+    }
+
+    callout.replaceWith(accordion);
+
+    const foldIcon = accordion.querySelector(".callout-fold-icon");
+    if (foldIcon) {
+      foldIcon.remove();
+    }
+  }
+  //#endregion
+</script>

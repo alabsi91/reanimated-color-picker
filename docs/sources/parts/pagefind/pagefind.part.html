@@ -1,0 +1,67 @@
+<pagefind-modal-trigger></pagefind-modal-trigger>
+
+<button class="pagefind-modal-trigger-button" style="display: none" aria-keyshortcuts="Control+k" aria-label="Search">
+  <svg aria-hidden="true" viewBox="0 0 24 24">
+    <path
+      d="M21.71 20.29 18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a.999.999 0 0 0 1.42 0 1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z"
+    ></path>
+  </svg>
+</button>
+
+<pagefind-modal></pagefind-modal>
+
+<insert selector="body">
+  <link class="pagefind-stylesheet" as="style" bundle href="@parts/pagefind/pagefind.style.css" rel="preload" />
+
+  <script type="module">
+    // @ts-check
+
+    (async () => {
+      // ::: Lazy-load the Pagefind UI. :::
+
+      /** @type {HTMLLinkElement | null} */
+      const pagefindStyleSheet = document.querySelector(".pagefind-stylesheet");
+      if (!pagefindStyleSheet) {
+        console.error("Could not find pagefind stylesheet element");
+        return;
+      }
+
+      const onLoad = async () => {
+        pagefindStyleSheet.rel = "stylesheet";
+
+        const { getInstanceManager } = await import("@pagefind/component-ui");
+
+        // Resolve Pagefind using a relative path so the site works correctly on any subpath.
+        const bundlePath = new URL("~/pagefind/", import.meta.url).pathname;
+        getInstanceManager().instances.get("default").options.bundlePath = bundlePath;
+      };
+
+      const isDownloaded = performance.getEntriesByName(pagefindStyleSheet.href).length > 0;
+      if (isDownloaded) {
+        await onLoad();
+      } else {
+        pagefindStyleSheet.addEventListener("load", onLoad, { once: true });
+      }
+
+      // ::: Open the Pagefind modal when the search button is clicked. :::
+
+      /** @type {(HTMLElement & { openModal(): void }) | null} */
+      const pagefindModalTrigger = document.querySelector("pagefind-modal-trigger");
+      if (!pagefindModalTrigger) {
+        console.error("Could not find pagefind modal trigger element");
+        return;
+      }
+
+      /** @type {HTMLButtonElement | null} */
+      const triggerModalIconButton = document.querySelector(".pagefind-modal-trigger-button");
+      if (!triggerModalIconButton) {
+        console.error("Could not find pagefind modal trigger button element");
+        return;
+      }
+
+      triggerModalIconButton.addEventListener("click", () => {
+        pagefindModalTrigger.openModal();
+      });
+    })();
+  </script>
+</insert>

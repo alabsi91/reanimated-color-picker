@@ -1,0 +1,12 @@
+{
+  "plugins": ["prettier-plugin-markdown-html", "@trivago/prettier-plugin-sort-imports", "prettier-plugin-jsdoc"],
+  "trailingComma": "es5",
+  "tabWidth": 2,
+  "printWidth": 130,
+  "semi": true,
+  "arrowParens": "avoid",
+  "htmlWhitespaceSensitivity": "ignore",
+  "singleQuote": false,
+  "importOrder": ["<BUILTIN_MODULES>", "<THIRD_PARTY_MODULES>", "<SEPARATOR>", "^[./]", "<SEPARATOR>", "<TS_TYPES>"],
+  "importOrderSeparation": true
+}

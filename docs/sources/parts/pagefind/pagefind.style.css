@@ -1,0 +1,57 @@
+@import url("@pagefind/component-ui/css");
+
+:root {
+  --pf-text: var(--sb-color-gray-0);
+  --pf-text-secondary: var(--sb-color-gray-0);
+  --pf-text-muted: var(--sb-color-gray-3);
+  --pf-background: var(--sb-color-gray-7);
+  --pf-border: var(--sb-color-gray-5);
+  --pf-border-focus: var(--sb-color-gray-4);
+  --pf-skeleton: var(--sb-color-gray-5);
+  --pf-skeleton-shine: var(--sb-color-gray-6);
+  --pf-hover: var(--sb-color-gray-5);
+  --pf-mark: var(--sb-color-accent-high);
+  --pf-error-text: var(--sb-caution-text);
+  --pf-error-bg: var(--sb-caution-background);
+  --pf-error-border: var(--sb-caution-border);
+}
+
+:is(pagefind-modal-trigger, pagefind-modal, pagefind-modal-header, pagefind-summary, pagefind-results, pagefind-input) {
+  color-scheme: inherit !important;
+
+  &:not(:defined) {
+    display: none;
+  }
+}
+
+pagefind-modal-trigger {
+  inline-size: 100%;
+  max-inline-size: 20em;
+  padding-inline: 0.5em;
+
+  @media (max-width: 900px) {
+    display: none;
+  }
+}
+
+pagefind-modal {
+  display: contents;
+}
+
+.pagefind-modal-trigger-button {
+  display: none;
+  color: inherit;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+
+  @media (max-width: 900px) {
+    display: block !important;
+  }
+
+  svg {
+    inline-size: var(--header-icon-size);
+    block-size: var(--header-icon-size);
+    fill: currentcolor;
+  }
+}

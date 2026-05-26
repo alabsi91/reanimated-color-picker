@@ -1,0 +1,5 @@
+<a class="sidebar-link" href="{{ $data.href }}">
+  {{ $data.title }} {{ ($data.badgeVariant && $data.badgeText) ? `
+  <part src="@parts/badge/badge.part.html" text="${$data.badgeText}" variant="${$data.badgeVariant}"></part>
+  ` : "" }}
+</a>
