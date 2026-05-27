@@ -7,8 +7,12 @@ export const isRtl = I18nManager.isRTL;
 export const isWeb = Platform.OS === 'web';
 
 /** - Get a specific property from a react native style object */
-export function getStyle<T extends keyof ViewStyle>(style: StyleProp<ViewStyle>, property: T): ViewStyle[T] | undefined {
-  const flattened = StyleSheet.flatten(style);
+export function getStyle<T extends ViewStyle, K extends keyof T>(style: StyleProp<T>, property: K): T[K] | undefined {
+  if (!style) {
+    return undefined;
+  }
+
+  const flattened = StyleSheet.flatten(style) as T;
   return flattened[property];
 }
 
