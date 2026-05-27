@@ -30,21 +30,28 @@ export function Preview({
     setInitialValueFormatted(returnedResults()[colorFormat]);
   }, [value, colorFormat]);
 
-  const initialColorText = useDerivedValue(() => {
+  const initialTextColor = useDerivedValue(() => {
     const adaptiveTextColor = alphaValue.value > 0.5 ? value : { h: 0, s: 0, v: 70 };
     const contrast = colorKit.runOnUI().contrastRatio(adaptiveTextColor, '#ffffff');
 
     return contrast < 4.5 ? '#000000' : '#ffffff';
   }, [alphaValue, value]);
 
-  const textColor = useSharedValue<'#000000' | '#ffffff'>('#ffffff');
-  const textColorStyle = useAnimatedStyle(() => ({ color: textColor.value }), [textColor]);
+  const initialTextStyle = useAnimatedStyle(() => ({ color: initialTextColor.value }), [initialTextColor]);
 
-  const previewColor = useSharedValue('#ffffff');
+  const previewColor = useDerivedValue(() => {
+    return colorKit.runOnUI().HEX({
+      h: hueValue.value,
+      s: saturationValue.value,
+      v: brightnessValue.value,
+      a: alphaValue.value,
+    });
+  }, [hueValue, saturationValue, brightnessValue, alphaValue]);
+
   const previewColorStyle = useAnimatedStyle(() => ({ backgroundColor: previewColor.value }), [previewColor]);
 
-  // When the values of channels change
-  useDerivedValue(() => {
+  const isWhite = useSharedValue(true);
+  const previewTextColor = useDerivedValue(() => {
     const currentColor = {
       h: hueValue.value,
       s: saturationValue.value,
@@ -52,37 +59,35 @@ export function Preview({
       a: alphaValue.value,
     };
 
-    previewColor.value = colorKit.runOnUI().HEX({
-      h: hueValue.value,
-      s: saturationValue.value,
-      v: brightnessValue.value,
-      a: alphaValue.value,
-    });
-
     // calculate the contrast ratio
     const compareColor1 = alphaValue.value > 0.5 ? currentColor : { h: 0, s: 0, v: 70 };
-    const compareColor2 = textColor.value === '#000000' ? { h: 0, s: 0, v: 0 } : { h: 0, s: 0, v: 100 };
+    const compareColor2 = isWhite.value ? { h: 0, s: 0, v: 100 } : { h: 0, s: 0, v: 0 };
     const contrast = colorKit.runOnUI().contrastRatio(compareColor1, compareColor2);
-    const reversedColor = textColor.value === '#ffffff' ? '#000000' : '#ffffff';
+    const reversedColor = isWhite.value ? '#000000' : '#ffffff';
 
-    textColor.value = contrast < 4.5 ? reversedColor : textColor.value;
+    if (contrast < 4.5) {
+      isWhite.value = !isWhite.value;
+      return reversedColor;
+    }
+
+    return isWhite.value ? '#ffffff' : '#000000';
   }, [hueValue, saturationValue, brightnessValue, alphaValue]);
+
+  const previewTextStyle = useAnimatedStyle(() => ({ color: previewTextColor.value }), [previewTextColor]);
 
   return (
     <Wrapper disableTexture={disableOpacityTexture} style={style}>
       <ConditionalRendering if={!hideInitialColor}>
         <View style={[styles.previewContainer, { backgroundColor: value, justifyContent }]}>
           <ConditionalRendering if={!hideText}>
-            <Animated.Text style={[styles.previewText, { color: initialColorText }, textStyle]}>
-              {initialValueFormatted}
-            </Animated.Text>
+            <Animated.Text style={[styles.previewText, textStyle, initialTextStyle]}>{initialValueFormatted}</Animated.Text>
           </ConditionalRendering>
         </View>
       </ConditionalRendering>
 
       <Animated.View style={[styles.previewContainer, { justifyContent }, previewColorStyle]}>
         <ConditionalRendering if={!hideText}>
-          <PreviewText colorFormat={colorFormat} style={[textStyle, textColorStyle]} />
+          <PreviewText colorFormat={colorFormat} style={[textStyle, previewTextStyle]} />
         </ConditionalRendering>
       </Animated.View>
     </Wrapper>

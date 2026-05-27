@@ -29,10 +29,6 @@ export default function Thumb({
   const brightness = overrideHSV?.brightness ?? brightnessValue;
   const alpha = overrideHSV?.alpha ?? alphaValue;
 
-  const resultColor = useSharedValue('#ffffff');
-  const solidColor = useAnimatedStyle(() => ({ backgroundColor: thumbColor ?? resultColor.value }), [resultColor]);
-  const adaptiveColor = useSharedValue('#ffffff');
-
   /**
    * Get the current color and calculate its contrast ratio against white or black, depending on the channel and whether
    * 'adaptSpectrum' is enabled
@@ -42,7 +38,10 @@ export default function Thumb({
 
     if (adaptSpectrum) {
       if (channel === 'a') {
-        if (alpha.value > 0.5) return { h: hue.value, s: saturation.value, v: brightness.value };
+        if (alpha.value > 0.5) {
+          return { h: hue.value, s: saturation.value, v: brightness.value };
+        }
+
         return { h: 0, s: 0, v: 70 };
       }
 
@@ -68,18 +67,29 @@ export default function Thumb({
     return { h: hue.value, s: saturation.value, v: brightness.value };
   };
 
-  // When the values of channels change
-  useDerivedValue(() => {
-    alpha.value; // to track alpha changes too;
-    resultColor.value = colorKit.runOnUI().HEX({ h: hue.value, s: saturation.value, v: brightness.value });
+  const currentColor = useDerivedValue(() => {
+    return colorKit.runOnUI().HEX({ h: hue.value, s: saturation.value, v: brightness.value });
+  }, [hue, saturation, brightness]);
+
+  const solidColor = useAnimatedStyle(() => ({ backgroundColor: thumbColor ?? currentColor.value }), [currentColor]);
+
+  const isWhite = useSharedValue(true);
+
+  const adaptiveColor = useDerivedValue<string>(() => {
+    [alpha, hue, saturation, brightness]; // track changes on Native
 
     // calculate the contrast ratio
     const compareColor1 = getColorForAdaptiveColor();
-    const compareColor2 = adaptiveColor.value === '#000000' ? { h: 0, s: 0, v: 0 } : { h: 0, s: 0, v: 100 };
+    const compareColor2 = isWhite.value ? { h: 0, s: 0, v: 100 } : { h: 0, s: 0, v: 0 };
     const contrast = colorKit.runOnUI().contrastRatio(compareColor1, compareColor2);
-    const reversedColor = adaptiveColor.value === '#ffffff' ? '#000000' : '#ffffff';
+    const reversedColor = isWhite.value ? '#000000' : '#ffffff';
 
-    adaptiveColor.value = contrast < 4.5 ? reversedColor : adaptiveColor.value;
+    if (contrast < 4.5) {
+      isWhite.value = !isWhite.value;
+      return reversedColor;
+    }
+
+    return isWhite.value ? '#ffffff' : '#000000';
   }, [alpha, hue, saturation, brightness]);
 
   const thumbProps: BuiltinThumbsProps = {
@@ -96,17 +106,18 @@ export default function Thumb({
   };
 
   // render a custom thumb
-  if (RenderThumb)
+  if (RenderThumb) {
     return (
       <RenderThumb
         positionStyle={[styles.handle, handleStyle]}
         width={width}
         height={height}
         initialColor={value}
-        currentColor={resultColor}
+        currentColor={currentColor}
         adaptiveColor={adaptiveColor}
       />
     );
+  }
 
   // normalize 'thumbShape' string to match 'BuiltinThumbs' keys.
   const thumb_Shape = (thumbShape.toLowerCase().charAt(0).toUpperCase() + thumbShape.slice(1)) as keyof typeof BuiltinThumbs;
