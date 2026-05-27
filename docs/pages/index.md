@@ -9,7 +9,7 @@ sidebar.order: 1
 
 - **Highly customizable.**
 
-- **Supports IOS, Android, Expo, and Web platforms.**
+- **Supports iOS, Android, Expo, and Web platforms.**
 
 - **Supports right-to-left (RTL) layouts.**
 
