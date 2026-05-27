@@ -1,0 +1,29 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "src/assets/fonts/BungeeSpice-Regular.ttf",
+      "sha1": "13c96387d974dca8c5ae9b178e93e1243a015351"
+    },
+    {
+      "path": "src/assets/fonts/Quicksand-Bold.ttf",
+      "sha1": "111e880f4de54ccf0a7fd14f38999b9c066e46bb"
+    },
+    {
+      "path": "src/assets/fonts/Quicksand-Light.ttf",
+      "sha1": "4d3b72ff1544d92ca9a435d7e34d21eda322dd76"
+    },
+    {
+      "path": "src/assets/fonts/Quicksand-Medium.ttf",
+      "sha1": "04b8198132a4a092b10d0631500268d6a2a0f889"
+    },
+    {
+      "path": "src/assets/fonts/Quicksand-Regular.ttf",
+      "sha1": "61504eaec812663121918199aac7d960229bd306"
+    },
+    {
+      "path": "src/assets/fonts/Quicksand-SemiBold.ttf",
+      "sha1": "339f8d3e09ad271ff12727eef33a99f7a066eee3"
+    }
+  ]
+}

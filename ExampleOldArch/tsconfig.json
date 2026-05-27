@@ -1,0 +1,12 @@
+{
+  "extends": "@react-native/typescript-config",
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["**/node_modules", "**/Pods"],
+  "compilerOptions": {
+    "types": ["jest"],
+    "paths": {
+      "reanimated-color-picker": ["../src/index"]
+    }
+  },
+  "references": [{ "path": "../tsconfig.json" }]
+}
