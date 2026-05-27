@@ -22,15 +22,15 @@ export function Panel4({
 }: Panel4Props) {
   const { hueValue, saturationValue, brightnessValue, onGestureChange, onGestureEnd, ...ctx } = usePickerContext();
 
-  const thumbShape = props.thumbShape ?? ctx.thumbShape,
-    thumbSize = props.thumbSize ?? ctx.thumbSize,
-    thumbColor = props.thumbColor ?? ctx.thumbColor,
-    boundedThumb = props.boundedThumb ?? ctx.boundedThumb,
-    renderThumb = props.renderThumb ?? ctx.renderThumb,
-    thumbStyle = props.thumbStyle ?? ctx.thumbStyle ?? {},
-    thumbScaleAnimationValue = props.thumbScaleUpValue ?? ctx.thumbScaleAnimationValue,
-    thumbScaleAnimationDuration = props.thumbScaleUpDuration ?? ctx.thumbScaleAnimationDuration,
-    thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle ?? {};
+  const thumbShape = props.thumbShape ?? ctx.thumbShape;
+  const thumbSize = props.thumbSize ?? ctx.thumbSize;
+  const thumbColor = props.thumbColor ?? ctx.thumbColor;
+  const boundedThumb = props.boundedThumb ?? ctx.boundedThumb;
+  const renderThumb = props.renderThumb ?? ctx.renderThumb;
+  const thumbStyle = props.thumbStyle ?? ctx.thumbStyle ?? {};
+  const thumbScaleAnimationValue = props.thumbScaleUpValue ?? ctx.thumbScaleAnimationValue;
+  const thumbScaleAnimationDuration = props.thumbScaleUpDuration ?? ctx.thumbScaleAnimationDuration;
+  const thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle ?? {};
 
   const borderRadius = getStyle(style, 'borderRadius') ?? 5;
   const getHeight = getStyle(style, 'height') ?? 200;
@@ -40,15 +40,15 @@ export function Panel4({
   const handleScale = useSharedValue(1);
 
   const handleStyle = useAnimatedStyle(() => {
-    const length = { x: width.value - (boundedThumb ? thumbSize : 0), y: height.value - (boundedThumb ? thumbSize : 0) },
-      calcThumb = boundedThumb ? 0 : thumbSize / 2,
-      // luminance
-      lum = (((2 - saturationValue.value / 100) * (brightnessValue.value / 100)) / 2) * 100,
-      posPercentX = (lum / 100) * length.x,
-      posX = (reverseHorizontalChannels ? posPercentX : length.x - posPercentX) - calcThumb,
-      // hue
-      percentY = (hueValue.value / 360) * length.y,
-      posY = (reverseHue ? percentY : length.y - percentY) - calcThumb;
+    const length = { x: width.value - (boundedThumb ? thumbSize : 0), y: height.value - (boundedThumb ? thumbSize : 0) };
+    const calcThumb = boundedThumb ? 0 : thumbSize / 2;
+    // luminance
+    const lum = (((2 - saturationValue.value / 100) * (brightnessValue.value / 100)) / 2) * 100;
+    const posPercentX = (lum / 100) * length.x;
+    const posX = (reverseHorizontalChannels ? posPercentX : length.x - posPercentX) - calcThumb;
+    // hue
+    const percentY = (hueValue.value / 360) * length.y;
+    const posY = (reverseHue ? percentY : length.y - percentY) - calcThumb;
 
     return {
       transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }],
@@ -71,22 +71,23 @@ export function Panel4({
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
 
-    const lengthX = width.value - (boundedThumb ? thumbSize : 0),
-      lengthY = height.value - (boundedThumb ? thumbSize : 0),
-      posX = clamp(x - (boundedThumb ? thumbSize / 2 : 0), lengthX),
-      posY = clamp(y - (boundedThumb ? thumbSize / 2 : 0), lengthY),
-      valueX = (posX / lengthX) * 200,
-      valueY = (posY / lengthY) * 360,
-      newHueValue = reverseHue ? valueY : 360 - valueY,
-      newSaturationValue = clamp(reverseHorizontalChannels ? 200 - valueX : valueX, 100),
-      newBrightnessValue = clamp(reverseHorizontalChannels ? valueX : 200 - valueX, 100);
+    const lengthX = width.value - (boundedThumb ? thumbSize : 0);
+    const lengthY = height.value - (boundedThumb ? thumbSize : 0);
+    const posX = clamp(x - (boundedThumb ? thumbSize / 2 : 0), lengthX);
+    const posY = clamp(y - (boundedThumb ? thumbSize / 2 : 0), lengthY);
+    const valueX = (posX / lengthX) * 200;
+    const valueY = (posY / lengthY) * 360;
+    const newHueValue = reverseHue ? valueY : 360 - valueY;
+    const newSaturationValue = clamp(reverseHorizontalChannels ? 200 - valueX : valueX, 100);
+    const newBrightnessValue = clamp(reverseHorizontalChannels ? valueX : 200 - valueX, 100);
 
     if (
       hueValue.value === newHueValue &&
       saturationValue.value === newSaturationValue &&
       brightnessValue.value === newBrightnessValue
-    )
+    ) {
       return;
+    }
 
     hueValue.value = newHueValue;
     saturationValue.value = newSaturationValue;
@@ -113,6 +114,7 @@ export function Panel4({
   const composed = Gesture.Simultaneous(Gesture.Exclusive(pan, tap, longPress), ...gestures);
 
   const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
+    if (!layout.width || !layout.height) return;
     width.value = layout.width;
     height.value = layout.height;
   }, []);
@@ -121,19 +123,15 @@ export function Panel4({
     <GestureDetector gesture={composed}>
       <Animated.View
         onLayout={onLayout}
-        style={[styles.panel_container, style, { position: 'relative', height: getHeight, borderWidth: 0, padding: 0 }]}
+        style={[styles.panelContainer, style, { position: 'relative', height: getHeight, borderWidth: 0, padding: 0 }]}
       >
         <View style={{ flex: 1, borderRadius, overflow: 'hidden' }}>
-          <Animated.Image
-            source={require('@assets/Hue.png')}
-            style={[styles.panel_image, panelImageStyle]}
-            resizeMode='stretch'
-          />
+          <Animated.Image source={require('@assets/Hue.png')} style={[styles.panelImage, panelImageStyle]} resizeMode='stretch' />
         </View>
 
         <View
           style={[
-            styles.panel_image,
+            styles.panelImage,
             {
               borderRadius,
               flexDirection: isRtl ? 'row-reverse' : 'row',

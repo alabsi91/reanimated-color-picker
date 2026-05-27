@@ -28,7 +28,9 @@ export default function HslWidget({
 
   useDerivedValue(() => {
     [hueValue, saturationValue, brightnessValue, alphaValue]; // track changes on Native
+
     hsl.current = colorKit.runOnUI().HSL(returnedResults().hsla).object(false);
+
     h.value = hsl.current.h.toString();
     s.value = hsl.current.s.toString();
     l.value = hsl.current.l.toString();

@@ -24,16 +24,16 @@ export function Panel2({
 }: Panel2Props) {
   const { hueValue, saturationValue, brightnessValue, onGestureChange, onGestureEnd, ...ctx } = usePickerContext();
 
-  const thumbShape = props.thumbShape ?? ctx.thumbShape,
-    thumbSize = props.thumbSize ?? ctx.thumbSize,
-    thumbColor = props.thumbColor ?? ctx.thumbColor,
-    boundedThumb = props.boundedThumb ?? ctx.boundedThumb,
-    renderThumb = props.renderThumb ?? ctx.renderThumb,
-    thumbStyle = props.thumbStyle ?? ctx.thumbStyle ?? {},
-    thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle ?? {},
-    thumbScaleAnimationValue = props.thumbScaleUpValue ?? ctx.thumbScaleAnimationValue,
-    thumbScaleAnimationDuration = props.thumbScaleUpDuration ?? ctx.thumbScaleAnimationDuration,
-    adaptSpectrum = props.adaptSpectrum ?? ctx.adaptSpectrum;
+  const thumbShape = props.thumbShape ?? ctx.thumbShape;
+  const thumbSize = props.thumbSize ?? ctx.thumbSize;
+  const thumbColor = props.thumbColor ?? ctx.thumbColor;
+  const boundedThumb = props.boundedThumb ?? ctx.boundedThumb;
+  const renderThumb = props.renderThumb ?? ctx.renderThumb;
+  const thumbStyle = props.thumbStyle ?? ctx.thumbStyle ?? {};
+  const thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle ?? {};
+  const thumbScaleAnimationValue = props.thumbScaleUpValue ?? ctx.thumbScaleAnimationValue;
+  const thumbScaleAnimationDuration = props.thumbScaleUpDuration ?? ctx.thumbScaleAnimationDuration;
+  const adaptSpectrum = props.adaptSpectrum ?? ctx.adaptSpectrum;
 
   const borderRadius = getStyle(style, 'borderRadius') ?? 5;
   const getHeight = getStyle(style, 'height') ?? 200;
@@ -48,40 +48,71 @@ export function Panel2({
   const hsl = useDerivedValue(() => {
     const hsvColor = { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
     const { h, s, l } = colorKit.runOnUI().HSL(hsvColor).object(false);
-    if (l === 100 || l === 0) return { h, s: lastHslSaturationValue.value, l };
+
+    if (l === 100 || l === 0) {
+      return { h, s: lastHslSaturationValue.value, l };
+    }
+
     lastHslSaturationValue.value = s;
-    return { h, s, l };
+
+    return {
+      h,
+      s,
+      l,
+    };
   }, [hueValue, saturationValue, brightnessValue]);
 
   const verticalChannelValue = useDerivedValue(() => {
-    if (verticalChannel === 'brightness') return brightnessValue.value;
-    if (verticalChannel === 'hsl-saturation') return hsl.value.s;
+    if (verticalChannel === 'brightness') {
+      return brightnessValue.value;
+    }
+
+    if (verticalChannel === 'hsl-saturation') {
+      return hsl.value.s;
+    }
+
     return saturationValue.value;
   }, [brightnessValue, saturationValue, hsl]);
 
   const handleStyle = useAnimatedStyle(() => {
-    const length = { x: width.value - (boundedThumb ? thumbSize : 0), y: height.value - (boundedThumb ? thumbSize : 0) },
-      percentX = (hueValue.value / 360) * length.x,
-      posX = (reverseHue ? length.x - percentX : percentX) - (boundedThumb ? 0 : thumbSize / 2),
-      percentY = (verticalChannelValue.value / 100) * length.y,
-      posY = (reverseVerticalChannel ? percentY : length.y - percentY) - (boundedThumb ? 0 : thumbSize / 2);
+    const length = {
+      x: width.value - (boundedThumb ? thumbSize : 0),
+      y: height.value - (boundedThumb ? thumbSize : 0),
+    };
+    const percentX = (hueValue.value / 360) * length.x;
+    const posX = (reverseHue ? length.x - percentX : percentX) - (boundedThumb ? 0 : thumbSize / 2);
+    const percentY = (verticalChannelValue.value / 100) * length.y;
+    const posY = (reverseVerticalChannel ? percentY : length.y - percentY) - (boundedThumb ? 0 : thumbSize / 2);
 
-    return { transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }] };
+    return {
+      transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }],
+    };
   }, [width, height, hueValue, verticalChannelValue, handleScale]);
 
   const spectrumStyle = useAnimatedStyle(() => {
     if (!adaptSpectrum) return {};
 
     if (verticalChannel === 'brightness') {
-      return { backgroundColor: `rgba(255, 255, 255, ${1 - saturationValue.value / 100})` };
+      return {
+        backgroundColor: `rgba(255, 255, 255, ${1 - saturationValue.value / 100})`,
+      };
     }
 
     if (verticalChannel === 'hsl-saturation') {
-      if (hsl.value.l < 50) return { backgroundColor: `rgba(0, 0, 0, ${1 - hsl.value.l / 50})` };
-      return { backgroundColor: `rgba(255, 255, 255, ${(hsl.value.l - 50) / 50})` };
+      if (hsl.value.l < 50) {
+        return {
+          backgroundColor: `rgba(0, 0, 0, ${1 - hsl.value.l / 50})`,
+        };
+      }
+
+      return {
+        backgroundColor: `rgba(255, 255, 255, ${(hsl.value.l - 50) / 50})`,
+      };
     }
 
-    return { backgroundColor: `rgba(0, 0, 0, ${1 - brightnessValue.value / 100})` };
+    return {
+      backgroundColor: `rgba(0, 0, 0, ${1 - brightnessValue.value / 100})`,
+    };
   }, [saturationValue, brightnessValue]);
 
   const panelImageStyle = useAnimatedStyle(() => {
@@ -99,14 +130,14 @@ export function Panel2({
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
 
-    const lengthX = width.value - (boundedThumb ? thumbSize : 0),
-      lengthY = height.value - (boundedThumb ? thumbSize : 0),
-      posX = clamp(x - (boundedThumb ? thumbSize / 2 : 0), lengthX),
-      posY = clamp(y - (boundedThumb ? thumbSize / 2 : 0), lengthY),
-      valueX = (posX / lengthX) * 360,
-      valueY = (posY / lengthY) * 100,
-      newHueValue = reverseHue ? 360 - valueX : valueX,
-      newChannelValue = reverseVerticalChannel ? valueY : 100 - valueY;
+    const lengthX = width.value - (boundedThumb ? thumbSize : 0);
+    const lengthY = height.value - (boundedThumb ? thumbSize : 0);
+    const posX = clamp(x - (boundedThumb ? thumbSize / 2 : 0), lengthX);
+    const posY = clamp(y - (boundedThumb ? thumbSize / 2 : 0), lengthY);
+    const valueX = (posX / lengthX) * 360;
+    const valueY = (posY / lengthY) * 100;
+    const newHueValue = reverseHue ? 360 - valueX : valueX;
+    const newChannelValue = reverseVerticalChannel ? valueY : 100 - valueY;
 
     if (hueValue.value === newHueValue && verticalChannelValue.value === newChannelValue) return;
 
@@ -146,6 +177,7 @@ export function Panel2({
   const composed = Gesture.Simultaneous(Gesture.Exclusive(pan, tap, longPress), ...gestures);
 
   const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
+    if (!layout.width || !layout.height) return;
     width.value = layout.width;
     height.value = layout.height;
   }, []);
@@ -154,11 +186,11 @@ export function Panel2({
     <GestureDetector gesture={composed}>
       <Animated.View
         onLayout={onLayout}
-        style={[styles.panel_container, style, { position: 'relative', height: getHeight, borderWidth: 0, padding: 0 }]}
+        style={[styles.panelContainer, style, { position: 'relative', height: getHeight, borderWidth: 0, padding: 0 }]}
       >
         <ImageBackground
           source={require('@assets/Hue.png')}
-          style={[styles.panel_image, { position: 'relative', borderRadius, transform: [{ scaleX: reverseHue ? -1 : 1 }] }]}
+          style={[styles.panelImage, { position: 'relative', borderRadius, transform: [{ scaleX: reverseHue ? -1 : 1 }] }]}
           resizeMode='stretch'
         >
           <ConditionalRendering if={adaptSpectrum && verticalChannel === 'brightness'}>
@@ -167,7 +199,7 @@ export function Panel2({
 
           <Animated.Image
             source={require('@assets/blackGradient.png')}
-            style={[styles.panel_image, panelImageStyle]}
+            style={[styles.panelImage, panelImageStyle]}
             tintColor={verticalChannel === 'saturation' ? '#fff' : verticalChannel === 'hsl-saturation' ? '#888' : undefined}
             resizeMode='stretch'
           />

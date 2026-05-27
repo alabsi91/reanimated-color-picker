@@ -22,16 +22,16 @@ export function LuminanceCircular({
 }: LuminanceCircularProps) {
   const { hueValue, saturationValue, brightnessValue, onGestureChange, onGestureEnd, ...ctx } = usePickerContext();
 
-  const thumbShape = props.thumbShape ?? ctx.thumbShape,
-    thumbSize = props.thumbSize ?? ctx.thumbSize,
-    thumbColor = props.thumbColor ?? ctx.thumbColor,
-    renderThumb = props.renderThumb ?? ctx.renderThumb,
-    thumbStyle = props.thumbStyle ?? ctx.thumbStyle ?? {},
-    sliderThickness = props.sliderThickness ?? ctx.sliderThickness,
-    thumbScaleAnimationValue = props.thumbScaleAnimationValue ?? ctx.thumbScaleAnimationValue,
-    thumbScaleAnimationDuration = props.thumbScaleAnimationDuration ?? ctx.thumbScaleAnimationDuration,
-    adaptSpectrum = props.adaptSpectrum ?? ctx.adaptSpectrum,
-    thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle ?? {};
+  const thumbShape = props.thumbShape ?? ctx.thumbShape;
+  const thumbSize = props.thumbSize ?? ctx.thumbSize;
+  const thumbColor = props.thumbColor ?? ctx.thumbColor;
+  const renderThumb = props.renderThumb ?? ctx.renderThumb;
+  const thumbStyle = props.thumbStyle ?? ctx.thumbStyle ?? {};
+  const sliderThickness = props.sliderThickness ?? ctx.sliderThickness;
+  const thumbScaleAnimationValue = props.thumbScaleAnimationValue ?? ctx.thumbScaleAnimationValue;
+  const thumbScaleAnimationDuration = props.thumbScaleAnimationDuration ?? ctx.thumbScaleAnimationDuration;
+  const adaptSpectrum = props.adaptSpectrum ?? ctx.adaptSpectrum;
+  const thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle ?? {};
 
   const isGestureActive = useSharedValue(false);
   const width = useSharedValue(0);
@@ -47,18 +47,31 @@ export function LuminanceCircular({
   const hsl = useDerivedValue(() => {
     const hsvColor = { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
     const { h, s, l } = colorKit.runOnUI().HSL(hsvColor).object(false);
-    if (l === 100 || l === 0) return { h, s: lastHslSaturationValue.value, l };
+
+    if (l === 100 || l === 0) {
+      return {
+        h,
+        s: lastHslSaturationValue.value,
+        l,
+      };
+    }
+
     lastHslSaturationValue.value = s;
-    return { h, s, l };
+
+    return {
+      h,
+      s,
+      l,
+    };
   }, [hueValue, saturationValue, brightnessValue]);
 
   const handleStyle = useAnimatedStyle(() => {
-    const center = width.value / 2,
-      distance = (width.value - sliderThickness) / 2,
-      angle = (hsl.value.l / 100) * 180 + thumbSide.value * 180,
-      mirroredAngle = ((thumbSide.value === 1 ? 180 - angle : angle) - rotate) % 360,
-      posY = width.value - (Math.sin((mirroredAngle * Math.PI) / 180) * distance + center) - thumbSize / 2,
-      posX = width.value - (Math.cos((mirroredAngle * Math.PI) / 180) * distance + center) - thumbSize / 2;
+    const center = width.value / 2;
+    const distance = (width.value - sliderThickness) / 2;
+    const angle = (hsl.value.l / 100) * 180 + thumbSide.value * 180;
+    const mirroredAngle = ((thumbSide.value === 1 ? 180 - angle : angle) - rotate) % 360;
+    const posY = width.value - (Math.sin((mirroredAngle * Math.PI) / 180) * distance + center) - thumbSize / 2;
+    const posX = width.value - (Math.cos((mirroredAngle * Math.PI) / 180) * distance + center) - thumbSize / 2;
 
     return {
       transform: [
@@ -91,13 +104,13 @@ export function LuminanceCircular({
 
     if (!isGestureActive.value) return;
 
-    const center = width.value / 2,
-      dx = center - x,
-      dy = center - y,
-      theta = (Math.atan2(dy, dx) + rotate * (Math.PI / 180)) * (180 / Math.PI), // [0 - 180] range
-      angle = theta < 0 ? 360 + theta : theta, // [0 - 360] range
-      mirroredAngle = angle <= 180 ? angle : 360 - angle,
-      newLuminanceValue = (mirroredAngle / 180) * 100;
+    const center = width.value / 2;
+    const dx = center - x;
+    const dy = center - y;
+    const theta = (Math.atan2(dy, dx) + rotate * (Math.PI / 180)) * (180 / Math.PI); // [0 - 180] range
+    const angle = theta < 0 ? 360 + theta : theta; // [0 - 360] range
+    const mirroredAngle = angle <= 180 ? angle : 360 - angle;
+    const newLuminanceValue = (mirroredAngle / 180) * 100;
 
     thumbSide.value = angle <= 180 ? 0 : 1;
 
@@ -114,10 +127,10 @@ export function LuminanceCircular({
   const onGestureBegin = (event: PanGestureHandlerEventPayload) => {
     'worklet';
 
-    const R = width.value / 2,
-      dx = R - event.x,
-      dy = R - event.y,
-      clickR = Math.sqrt(dx * dx + dy * dy);
+    const R = width.value / 2;
+    const dx = R - event.x;
+    const dy = R - event.y;
+    const clickR = Math.sqrt(dx * dx + dy * dy);
 
     // Check if the press is outside the circle
     if (clickR > R) {
@@ -134,6 +147,7 @@ export function LuminanceCircular({
 
     isGestureActive.value = true;
     handleScale.value = withTiming(thumbScaleAnimationValue, { duration: thumbScaleAnimationDuration });
+
     onGestureUpdate(event);
   };
 
@@ -150,9 +164,9 @@ export function LuminanceCircular({
   const composed = Gesture.Simultaneous(Gesture.Exclusive(pan, tap, longPress), ...gestures);
 
   const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
-    const layoutWidth = layout.width;
-    width.value = layoutWidth;
-    borderRadius.value = withTiming(layoutWidth / 2, { duration: 5 });
+    if (!layout.width) return;
+    width.value = layout.width;
+    borderRadius.value = layout.width / 2;
   }, []);
 
   return (
@@ -160,14 +174,14 @@ export function LuminanceCircular({
       <Animated.View
         onLayout={onLayout}
         style={[
-          styles.panel_container,
+          styles.panelContainer,
           { justifyContent: 'center', alignItems: 'center' },
           style,
           { position: 'relative', aspectRatio: 1, borderWidth: 0, padding: 0 },
           borderRadiusStyle,
         ]}
       >
-        <Animated.View style={[styles.panel_image, activeColorStyle, { transform: [{ rotate: -rotate + 'deg' }] }]}>
+        <Animated.View style={[styles.panelImage, activeColorStyle, { transform: [{ rotate: -rotate + 'deg' }] }]}>
           <Image
             source={require('@assets/angular-luminance.png')}
             style={{ width: '100%', height: '100%', flex: 1 }}

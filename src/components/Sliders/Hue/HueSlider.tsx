@@ -14,46 +14,56 @@ import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler
 export function HueSlider({ gestures = [], style = {}, vertical = false, reverse = false, ...props }: SliderProps) {
   const { hueValue, saturationValue, brightnessValue, onGestureChange, onGestureEnd, ...ctx } = usePickerContext();
 
-  const thumbShape = props.thumbShape ?? ctx.thumbShape,
-    thumbSize = props.thumbSize ?? ctx.thumbSize,
-    thumbColor = props.thumbColor ?? ctx.thumbColor,
-    boundedThumb = props.boundedThumb ?? ctx.boundedThumb,
-    renderThumb = props.renderThumb ?? ctx.renderThumb,
-    thumbStyle = props.thumbStyle ?? ctx.thumbStyle ?? {},
-    thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle ?? {},
-    thumbScaleAnimationValue = props.thumbScaleAnimationValue ?? ctx.thumbScaleAnimationValue,
-    thumbScaleAnimationDuration = props.thumbScaleAnimationDuration ?? ctx.thumbScaleAnimationDuration,
-    adaptSpectrum = props.adaptSpectrum ?? ctx.adaptSpectrum,
-    sliderThickness = props.sliderThickness ?? ctx.sliderThickness;
+  const thumbShape = props.thumbShape ?? ctx.thumbShape;
+  const thumbSize = props.thumbSize ?? ctx.thumbSize;
+  const thumbColor = props.thumbColor ?? ctx.thumbColor;
+  const boundedThumb = props.boundedThumb ?? ctx.boundedThumb;
+  const renderThumb = props.renderThumb ?? ctx.renderThumb;
+  const thumbStyle = props.thumbStyle ?? ctx.thumbStyle ?? {};
+  const thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle ?? {};
+  const thumbScaleAnimationValue = props.thumbScaleAnimationValue ?? ctx.thumbScaleAnimationValue;
+  const thumbScaleAnimationDuration = props.thumbScaleAnimationDuration ?? ctx.thumbScaleAnimationDuration;
+  const adaptSpectrum = props.adaptSpectrum ?? ctx.adaptSpectrum;
+  const sliderThickness = props.sliderThickness ?? ctx.sliderThickness;
 
-  const borderRadius = getStyle(style, 'borderRadius') ?? 5,
-    getWidth = getStyle(style, 'width'),
-    getHeight = getStyle(style, 'height');
+  const borderRadius = getStyle(style, 'borderRadius') ?? 5;
+  const getWidth = getStyle(style, 'width');
+  const getHeight = getStyle(style, 'height');
 
   const width = useSharedValue(vertical ? sliderThickness : typeof getWidth === 'number' ? getWidth : 0);
   const height = useSharedValue(!vertical ? sliderThickness : typeof getHeight === 'number' ? getHeight : 0);
   const handleScale = useSharedValue(1);
 
   const handleStyle = useAnimatedStyle(() => {
-    const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0),
-      percent = (hueValue.value / 360) * length,
-      pos = (reverse ? length - percent : percent) - (boundedThumb ? 0 : thumbSize / 2),
-      posY = vertical ? pos : height.value / 2 - thumbSize / 2,
-      posX = vertical ? width.value / 2 - thumbSize / 2 : pos;
+    const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0);
+    const percent = (hueValue.value / 360) * length;
+    const pos = (reverse ? length - percent : percent) - (boundedThumb ? 0 : thumbSize / 2);
+    const posY = vertical ? pos : height.value / 2 - thumbSize / 2;
+    const posX = vertical ? width.value / 2 - thumbSize / 2 : pos;
 
-    return { transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }] };
+    return {
+      transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }],
+    };
   }, [width, height, hueValue, handleScale]);
 
   const activeSaturationStyle = useAnimatedStyle(() => {
-    if (!adaptSpectrum) return {};
+    if (!adaptSpectrum) {
+      return {};
+    }
 
-    return { backgroundColor: HSVA2HSLA_string(0, 0, brightnessValue.value, 1 - saturationValue.value / 100) };
+    return {
+      backgroundColor: HSVA2HSLA_string(0, 0, brightnessValue.value, 1 - saturationValue.value / 100),
+    };
   }, [brightnessValue, saturationValue]);
 
   const activeBrightnessStyle = useAnimatedStyle(() => {
-    if (!adaptSpectrum) return {};
+    if (!adaptSpectrum) {
+      return {};
+    }
 
-    return { backgroundColor: HSVA2HSLA_string(0, 0, 0, 1 - brightnessValue.value / 100) };
+    return {
+      backgroundColor: HSVA2HSLA_string(0, 0, 0, 1 - brightnessValue.value / 100),
+    };
   }, [brightnessValue]);
 
   const imageStyle = useAnimatedStyle(() => {
@@ -74,10 +84,10 @@ export function HueSlider({ gestures = [], style = {}, vertical = false, reverse
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
 
-    const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0),
-      pos = clamp((vertical ? y : x) - (boundedThumb ? thumbSize / 2 : 0), length),
-      value = (pos / length) * 360,
-      newHueValue = reverse ? 360 - value : value;
+    const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0);
+    const pos = clamp((vertical ? y : x) - (boundedThumb ? thumbSize / 2 : 0), length);
+    const value = (pos / length) * 360;
+    const newHueValue = reverse ? 360 - value : value;
 
     if (hueValue.value === newHueValue) return;
 
@@ -104,8 +114,13 @@ export function HueSlider({ gestures = [], style = {}, vertical = false, reverse
   const composed = Gesture.Simultaneous(Gesture.Exclusive(pan, tap, longPress), ...gestures);
 
   const onLayout = ({ nativeEvent: { layout } }: LayoutChangeEvent) => {
-    if (!vertical) width.value = withTiming(layout.width, { duration: 5 });
-    if (vertical) height.value = withTiming(layout.height, { duration: 5 });
+    if (!vertical && layout.width) {
+      width.value = layout.width;
+    }
+
+    if (vertical && layout.height) {
+      height.value = layout.height;
+    }
   };
 
   const thicknessStyle = vertical ? { width: sliderThickness } : { height: sliderThickness };

@@ -22,38 +22,52 @@ export function ExtraThumb({
   const { width, boundedThumb, centerChannel, centerChannelValue, adaptSpectrum, rotate, ...ctx } = usePanel3Context();
   const { hueValue, saturationValue, brightnessValue, alphaValue, returnedResults } = usePickerContext();
 
-  const thumbSize = props.thumbSize ?? ctx.thumbSize,
-    thumbShape = props.thumbShape ?? ctx.thumbShape,
-    thumbColor = props.thumbColor ?? ctx.thumbColor,
-    thumbStyle = props.thumbStyle ?? ctx.thumbStyle,
-    thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle,
-    renderCenterLine = props.renderCenterLine ?? ctx.renderCenterLine;
+  const thumbSize = props.thumbSize ?? ctx.thumbSize;
+  const thumbShape = props.thumbShape ?? ctx.thumbShape;
+  const thumbColor = props.thumbColor ?? ctx.thumbColor;
+  const thumbStyle = props.thumbStyle ?? ctx.thumbStyle;
+  const thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle;
+  const renderCenterLine = props.renderCenterLine ?? ctx.renderCenterLine;
 
   // Calculate color
   const hsv = useDerivedValue(() => {
-    const currentColor = { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value, a: alphaValue.value };
-    if (!colorTransform) return currentColor;
-    const transformedColor = colorTransform(currentColor);
+    const currentColor = {
+      h: hueValue.value,
+      s: saturationValue.value,
+      v: brightnessValue.value,
+      a: alphaValue.value,
+    };
 
-    return transformedColor;
+    if (!colorTransform) {
+      return currentColor;
+    }
+
+    return colorTransform(currentColor);
   }, [hueValue, saturationValue, brightnessValue, alphaValue]);
 
   // Calculate hue value
   const hue = useDerivedValue(() => {
-    if (colorTransform) return hsv.value.h;
+    if (colorTransform) {
+      return hsv.value.h;
+    }
 
-    if (!hueTransform) return hueValue.value;
+    if (!hueTransform) {
+      return hueValue.value;
+    }
 
     const changeAmount = typeof hueTransform === 'string' ? hueValue.value * (parseFloat(hueTransform) / 100) : hueTransform;
-
     return clamp((hueValue.value + changeAmount) % 360, 360);
   }, [hsv, hueValue]);
 
   // Calculate saturation value
   const saturation = useDerivedValue(() => {
-    if (colorTransform) return hsv.value.s;
+    if (colorTransform) {
+      return hsv.value.s;
+    }
 
-    if (!saturationTransform) return saturationValue.value;
+    if (!saturationTransform) {
+      return saturationValue.value;
+    }
 
     const changeAmount =
       typeof saturationTransform === 'string'
@@ -65,9 +79,13 @@ export function ExtraThumb({
 
   // Calculate brightness value
   const brightness = useDerivedValue(() => {
-    if (colorTransform) return hsv.value.v;
+    if (colorTransform) {
+      return hsv.value.v;
+    }
 
-    if (!brightnessTransform) return brightnessValue.value;
+    if (!brightnessTransform) {
+      return brightnessValue.value;
+    }
 
     const changeAmount =
       typeof brightnessTransform === 'string'
@@ -88,17 +106,22 @@ export function ExtraThumb({
       a: alphaValue.value,
     });
 
-    if (onChange) onChange(colors);
-    if (onChangeJS) runOnJS(onChangeJS)(colors);
+    if (onChange) {
+      onChange(colors);
+    }
+
+    if (onChangeJS) {
+      runOnJS(onChangeJS)(colors);
+    }
   }, [hue, saturation, brightness]);
 
   const handleStyle = useAnimatedStyle(() => {
-    const center = width.value / 2 - (boundedThumb ? thumbSize / 2 : 0),
-      rotatedHue = (hue.value - rotate) % 360,
-      distance = (centerChannelValue.value / 100) * (width.value / 2 - (boundedThumb ? thumbSize / 2 : 0)),
-      angle = (rotatedHue * Math.PI) / 180,
-      posY = width.value - (Math.sin(angle) * distance + center) - (boundedThumb ? thumbSize : thumbSize / 2),
-      posX = width.value - (Math.cos(angle) * distance + center) - (boundedThumb ? thumbSize : thumbSize / 2);
+    const center = width.value / 2 - (boundedThumb ? thumbSize / 2 : 0);
+    const rotatedHue = (hue.value - rotate) % 360;
+    const distance = (centerChannelValue.value / 100) * (width.value / 2 - (boundedThumb ? thumbSize / 2 : 0));
+    const angle = (rotatedHue * Math.PI) / 180;
+    const posY = width.value - (Math.sin(angle) * distance + center) - (boundedThumb ? thumbSize : thumbSize / 2);
+    const posX = width.value - (Math.cos(angle) * distance + center) - (boundedThumb ? thumbSize : thumbSize / 2);
 
     return {
       transform: [{ translateX: posX }, { translateY: posY }, { rotate: rotatedHue + 90 + 'deg' }],
@@ -106,13 +129,15 @@ export function ExtraThumb({
   }, [thumbSize, boundedThumb, width, centerChannelValue, hue]);
 
   const centerLineStyle = useAnimatedStyle(() => {
-    if (!renderCenterLine) return {};
+    if (!renderCenterLine) {
+      return {};
+    }
 
-    const lineThickness = 1,
-      center = width.value / 2 - (boundedThumb ? thumbSize / 2 : 0),
-      rotatedHue = (hue.value - rotate) % 360,
-      distance = (centerChannelValue.value / 100) * center,
-      angle = ((rotatedHue * Math.PI) / Math.PI + 180) % 360; // reversed angle
+    const lineThickness = 1;
+    const center = width.value / 2 - (boundedThumb ? thumbSize / 2 : 0);
+    const rotatedHue = (hue.value - rotate) % 360;
+    const distance = (centerChannelValue.value / 100) * center;
+    const angle = ((rotatedHue * Math.PI) / Math.PI + 180) % 360; // reversed angle
 
     return {
       top: (width.value - lineThickness) / 2,

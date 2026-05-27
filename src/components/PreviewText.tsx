@@ -17,7 +17,7 @@ export function PreviewText({ style = {}, colorFormat = 'hex' }: PreviewTextProp
 
   const colorString = useDerivedValue(() => {
     // Explicitly touch dependencies so Reanimated tracks them and doesn’t prune the worklet
-    (() => [colorFormat, hueValue, saturationValue, brightnessValue, alphaValue])();
+    [colorFormat, hueValue, saturationValue, brightnessValue, alphaValue];
 
     if (isWeb && inputRef.current) {
       // @ts-expect-error value doesn't exist
@@ -28,10 +28,12 @@ export function PreviewText({ style = {}, colorFormat = 'hex' }: PreviewTextProp
     return returnedResults()[colorFormat];
   }, [colorFormat, hueValue, saturationValue, brightnessValue, alphaValue]);
 
-  const animatedProps = useAnimatedProps(
-    () => ({ text: colorString.value, defaultValue: colorString.value }) as never,
-    [colorString],
-  );
+  const animatedProps = useAnimatedProps(() => {
+    return {
+      text: colorString.value,
+      defaultValue: colorString.value,
+    } as never;
+  }, [colorString]);
 
   return (
     <AnimatedTextInput

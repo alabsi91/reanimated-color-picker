@@ -18,13 +18,21 @@ export default function Plus({
   vertical,
 }: BuiltinThumbsProps) {
   const thickness = 2;
-  const computedStyle = { width, height, borderRadius, borderWidth: thickness };
+
+  const computedStyle = {
+    width,
+    height,
+    borderRadius,
+    borderWidth: thickness,
+  };
+
   const line1 = {
     borderRadius,
     position: 'absolute' as const,
     width: vertical ? '100%' : thickness,
     height: vertical ? thickness : '100%',
   } as const;
+
   const line2 = {
     borderRadius,
     width: vertical ? thickness : '100%',
@@ -32,11 +40,15 @@ export default function Plus({
   } as const;
 
   const adaptiveColorStyle = useAnimatedStyle(() => {
-    return { backgroundColor: thumbColor ?? adaptiveColor.value };
+    return {
+      backgroundColor: thumbColor ?? adaptiveColor.value,
+    };
   }, [adaptiveColor]);
 
   const adaptiveBorderColorStyle = useAnimatedStyle(() => {
-    return { borderColor: thumbColor ?? adaptiveColor.value };
+    return {
+      borderColor: thumbColor ?? adaptiveColor.value,
+    };
   }, [adaptiveColor]);
 
   return (

@@ -33,6 +33,7 @@ export function Preview({
   const initialColorText = useDerivedValue(() => {
     const adaptiveTextColor = alphaValue.value > 0.5 ? value : { h: 0, s: 0, v: 70 };
     const contrast = colorKit.runOnUI().contrastRatio(adaptiveTextColor, '#ffffff');
+
     return contrast < 4.5 ? '#000000' : '#ffffff';
   }, [alphaValue, value]);
 
@@ -44,17 +45,26 @@ export function Preview({
 
   // When the values of channels change
   useDerivedValue(() => {
-    const currentColor = { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value, a: alphaValue.value };
+    const currentColor = {
+      h: hueValue.value,
+      s: saturationValue.value,
+      v: brightnessValue.value,
+      a: alphaValue.value,
+    };
 
-    previewColor.value = colorKit
-      .runOnUI()
-      .HEX({ h: hueValue.value, s: saturationValue.value, v: brightnessValue.value, a: alphaValue.value });
+    previewColor.value = colorKit.runOnUI().HEX({
+      h: hueValue.value,
+      s: saturationValue.value,
+      v: brightnessValue.value,
+      a: alphaValue.value,
+    });
 
     // calculate the contrast ratio
     const compareColor1 = alphaValue.value > 0.5 ? currentColor : { h: 0, s: 0, v: 70 };
     const compareColor2 = textColor.value === '#000000' ? { h: 0, s: 0, v: 0 } : { h: 0, s: 0, v: 100 };
     const contrast = colorKit.runOnUI().contrastRatio(compareColor1, compareColor2);
     const reversedColor = textColor.value === '#ffffff' ? '#000000' : '#ffffff';
+
     textColor.value = contrast < 4.5 ? reversedColor : textColor.value;
   }, [hueValue, saturationValue, brightnessValue, alphaValue]);
 

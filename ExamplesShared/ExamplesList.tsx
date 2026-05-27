@@ -18,8 +18,8 @@ import Panel4Example from './Panel4';
 import Panel5Example from './Panel5';
 import HorizontalRgbSliders from './RgbHorizontal';
 import VerticalRgbSliders from './RgbVertical';
-import WithRnghScrollView from './WithRnghScrollView';
 import WithReanimatedScrollView from './WithReanimatedScrollView';
+import WithRnghScrollView from './WithRnghScrollView';
 
 export default function ExamplesList() {
   return (

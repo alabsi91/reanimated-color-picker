@@ -21,6 +21,7 @@ export default function HexWidget({
 
   useDerivedValue(() => {
     [hueValue, saturationValue, brightnessValue, alphaValue]; // track changes on Native
+
     hexColor.value = returnedResults().hex;
   }, [hueValue, saturationValue, brightnessValue, alphaValue]); // track changes on WEB
 

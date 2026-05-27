@@ -22,6 +22,7 @@ export default function TriangleUp({
     height,
     ...(vertical ? { justifyContent: 'center', alignItems: isRtl ? 'flex-end' : 'flex-start' } : { justifyContent: 'flex-end' }),
   };
+
   const triangleStyle = {
     borderBottomWidth: width / 2,
     borderLeftWidth: width / 4,
@@ -30,7 +31,9 @@ export default function TriangleUp({
   };
 
   const adaptiveColorStyle = useAnimatedStyle(() => {
-    return { borderBottomColor: thumbColor ?? adaptiveColor.value };
+    return {
+      borderBottomColor: thumbColor ?? adaptiveColor.value,
+    };
   }, [adaptiveColor]);
 
   return (

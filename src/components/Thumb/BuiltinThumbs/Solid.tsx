@@ -15,9 +15,21 @@ export default function Solid({
   handleStyle,
   style,
 }: BuiltinThumbsProps) {
-  const computedStyle = { width, height, borderRadius, backgroundColor: thumbColor || 'gray', borderWidth: 1 };
+  const computedStyle = {
+    width,
+    height,
+    borderRadius,
+    backgroundColor: thumbColor || 'gray',
+    borderWidth: 1,
+  };
+
   const borderColor = getStyle(style, 'borderColor');
-  const adaptiveColorStyle = useAnimatedStyle(() => ({ borderColor: borderColor ?? adaptiveColor.value }), [adaptiveColor]);
+
+  const adaptiveColorStyle = useAnimatedStyle(() => {
+    return {
+      borderColor: borderColor ?? adaptiveColor.value,
+    };
+  }, [adaptiveColor]);
 
   return (
     <Animated.View

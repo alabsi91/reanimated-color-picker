@@ -15,20 +15,20 @@ import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler
 export function GreenSlider({ gestures = [], style = {}, vertical = false, reverse = false, ...props }: RgbSliderProps) {
   const { hueValue, saturationValue, brightnessValue, onGestureChange, onGestureEnd, ...ctx } = usePickerContext();
 
-  const thumbShape = props.thumbShape ?? ctx.thumbShape,
-    thumbSize = props.thumbSize ?? ctx.thumbSize,
-    thumbColor = props.thumbColor ?? ctx.thumbColor,
-    boundedThumb = props.boundedThumb ?? ctx.boundedThumb,
-    renderThumb = props.renderThumb ?? ctx.renderThumb,
-    thumbStyle = props.thumbStyle ?? ctx.thumbStyle ?? {},
-    thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle ?? {},
-    thumbScaleAnimationValue = props.thumbScaleAnimationValue ?? ctx.thumbScaleAnimationValue,
-    thumbScaleAnimationDuration = props.thumbScaleAnimationDuration ?? ctx.thumbScaleAnimationDuration,
-    sliderThickness = props.sliderThickness ?? ctx.sliderThickness;
+  const thumbShape = props.thumbShape ?? ctx.thumbShape;
+  const thumbSize = props.thumbSize ?? ctx.thumbSize;
+  const thumbColor = props.thumbColor ?? ctx.thumbColor;
+  const boundedThumb = props.boundedThumb ?? ctx.boundedThumb;
+  const renderThumb = props.renderThumb ?? ctx.renderThumb;
+  const thumbStyle = props.thumbStyle ?? ctx.thumbStyle ?? {};
+  const thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle ?? {};
+  const thumbScaleAnimationValue = props.thumbScaleAnimationValue ?? ctx.thumbScaleAnimationValue;
+  const thumbScaleAnimationDuration = props.thumbScaleAnimationDuration ?? ctx.thumbScaleAnimationDuration;
+  const sliderThickness = props.sliderThickness ?? ctx.sliderThickness;
 
-  const borderRadius = getStyle(style, 'borderRadius') ?? 5,
-    getWidth = getStyle(style, 'width'),
-    getHeight = getStyle(style, 'height');
+  const borderRadius = getStyle(style, 'borderRadius') ?? 5;
+  const getWidth = getStyle(style, 'width');
+  const getHeight = getStyle(style, 'height');
 
   const width = useSharedValue(vertical ? sliderThickness : typeof getWidth === 'number' ? getWidth : 0);
   const height = useSharedValue(!vertical ? sliderThickness : typeof getHeight === 'number' ? getHeight : 0);
@@ -39,17 +39,21 @@ export function GreenSlider({ gestures = [], style = {}, vertical = false, rever
   }, [hueValue, saturationValue, brightnessValue]);
 
   const handleStyle = useAnimatedStyle(() => {
-    const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0),
-      percent = (rgb.value.g / 255) * length,
-      pos = (reverse ? length - percent : percent) - (boundedThumb ? 0 : thumbSize / 2),
-      posY = vertical ? pos : height.value / 2 - thumbSize / 2,
-      posX = vertical ? width.value / 2 - thumbSize / 2 : pos;
+    const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0);
+    const percent = (rgb.value.g / 255) * length;
+    const pos = (reverse ? length - percent : percent) - (boundedThumb ? 0 : thumbSize / 2);
+    const posY = vertical ? pos : height.value / 2 - thumbSize / 2;
+    const posX = vertical ? width.value / 2 - thumbSize / 2 : pos;
 
-    return { transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }] };
+    return {
+      transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }],
+    };
   }, [rgb, width, height, handleScale]);
 
   const imageStyle = useAnimatedStyle(() => {
-    if (isWeb) return {};
+    if (isWeb) {
+      return {};
+    }
 
     const imageRotate = vertical ? (reverse ? '90deg' : '270deg') : reverse ? '0deg' : '180deg';
     const imageTranslateY = ((height.value - width.value) / 2) * ((reverse && isRtl) || (!reverse && !isRtl) ? -1 : 1);
@@ -72,19 +76,23 @@ export function GreenSlider({ gestures = [], style = {}, vertical = false, rever
 
     if (isWeb) {
       const deg = vertical ? (reverse ? 180 : 0) : reverse ? 90 : 270;
-      return { background: `linear-gradient(${deg}deg, rgb(${r}, 255, ${b}) 0%, rgb(${r}, 0, ${b}) 100%)` };
+      return {
+        background: `linear-gradient(${deg}deg, rgb(${r}, 255, ${b}) 0%, rgb(${r}, 0, ${b}) 100%)`,
+      };
     }
 
-    return { backgroundColor: `rgb(${r}, 0, ${b})` };
+    return {
+      backgroundColor: `rgb(${r}, 0, ${b})`,
+    };
   }, [rgb]);
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
 
-    const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0),
-      pos = clamp((vertical ? y : x) - (boundedThumb ? thumbSize / 2 : 0), length),
-      value = (pos / length) * 255,
-      newGreenValue = reverse ? 255 - value : value;
+    const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0);
+    const pos = clamp((vertical ? y : x) - (boundedThumb ? thumbSize / 2 : 0), length);
+    const value = (pos / length) * 255;
+    const newGreenValue = reverse ? 255 - value : value;
 
     if (newGreenValue === rgb.value.g) return;
 
@@ -115,8 +123,13 @@ export function GreenSlider({ gestures = [], style = {}, vertical = false, rever
   const composed = Gesture.Simultaneous(Gesture.Exclusive(pan, tap, longPress), ...gestures);
 
   const onLayout = ({ nativeEvent: { layout } }: LayoutChangeEvent) => {
-    if (!vertical) width.value = withTiming(layout.width, { duration: 5 });
-    if (vertical) height.value = withTiming(layout.height, { duration: 5 });
+    if (!vertical && layout.width) {
+      width.value = layout.width;
+    }
+
+    if (vertical && layout.height) {
+      height.value = layout.height;
+    }
   };
 
   const thicknessStyle = vertical ? { width: sliderThickness } : { height: sliderThickness };

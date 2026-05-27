@@ -17,7 +17,11 @@ export default function Pill({
   style,
   vertical,
 }: BuiltinThumbsProps) {
-  const computedStyle = { width, height };
+  const computedStyle = {
+    width,
+    height,
+  };
+
   const pillStyle = {
     borderRadius,
     borderColor: thumbColor,
@@ -27,7 +31,9 @@ export default function Pill({
   } as const;
 
   const adaptiveColorStyle = useAnimatedStyle(() => {
-    return { borderColor: thumbColor ?? adaptiveColor.value };
+    return {
+      borderColor: thumbColor ?? adaptiveColor.value,
+    };
   }, [adaptiveColor]);
 
   return (

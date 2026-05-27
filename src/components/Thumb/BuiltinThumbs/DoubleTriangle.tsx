@@ -23,20 +23,25 @@ export default function DoubleTriangle({
     height,
     flexDirection: vertical ? (isRtl ? 'row' : 'row-reverse') : 'column',
   };
+
   const triangleUpStyle = {
     borderBottomWidth: 10,
     borderLeftWidth: 5,
     borderRightWidth: 5,
     transform: [{ rotate: vertical ? '90deg' : '0deg' }],
   };
+
   const triangleDownStyle = {
     borderBottomWidth: 10,
     borderLeftWidth: 5,
     borderRightWidth: 5,
     transform: [{ rotate: vertical ? '270deg' : '180deg' }],
   };
+
   const adaptiveColorStyle = useAnimatedStyle(() => {
-    return { borderBottomColor: thumbColor ?? adaptiveColor.value };
+    return {
+      borderBottomColor: thumbColor ?? adaptiveColor.value,
+    };
   }, [adaptiveColor]);
 
   return (

@@ -3,11 +3,11 @@ import { Platform, StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   // Panels
-  panel_container: {
+  panelContainer: {
     position: 'relative',
     borderRadius: 5,
   },
-  panel_image: {
+  panelImage: {
     position: 'absolute',
     top: 0,
     left: 0,

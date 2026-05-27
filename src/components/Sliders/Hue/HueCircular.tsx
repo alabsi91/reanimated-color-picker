@@ -22,16 +22,16 @@ export function HueCircular({
 }: HueCircularProps) {
   const { hueValue, saturationValue, brightnessValue, onGestureChange, onGestureEnd, ...ctx } = usePickerContext();
 
-  const thumbShape = props.thumbShape ?? ctx.thumbShape,
-    thumbSize = props.thumbSize ?? ctx.thumbSize,
-    thumbColor = props.thumbColor ?? ctx.thumbColor,
-    renderThumb = props.renderThumb ?? ctx.renderThumb,
-    thumbStyle = props.thumbStyle ?? ctx.thumbStyle ?? {},
-    sliderThickness = props.sliderThickness ?? ctx.sliderThickness,
-    thumbScaleAnimationValue = props.thumbScaleAnimationValue ?? ctx.thumbScaleAnimationValue,
-    thumbScaleAnimationDuration = props.thumbScaleAnimationDuration ?? ctx.thumbScaleAnimationDuration,
-    adaptSpectrum = props.adaptSpectrum ?? ctx.adaptSpectrum,
-    thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle ?? {};
+  const thumbShape = props.thumbShape ?? ctx.thumbShape;
+  const thumbSize = props.thumbSize ?? ctx.thumbSize;
+  const thumbColor = props.thumbColor ?? ctx.thumbColor;
+  const renderThumb = props.renderThumb ?? ctx.renderThumb;
+  const thumbStyle = props.thumbStyle ?? ctx.thumbStyle ?? {};
+  const sliderThickness = props.sliderThickness ?? ctx.sliderThickness;
+  const thumbScaleAnimationValue = props.thumbScaleAnimationValue ?? ctx.thumbScaleAnimationValue;
+  const thumbScaleAnimationDuration = props.thumbScaleAnimationDuration ?? ctx.thumbScaleAnimationDuration;
+  const adaptSpectrum = props.adaptSpectrum ?? ctx.adaptSpectrum;
+  const thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle ?? {};
 
   const isGestureActive = useSharedValue(false);
   const width = useSharedValue(0);
@@ -41,12 +41,12 @@ export function HueCircular({
   const handleScale = useSharedValue(1);
 
   const handleStyle = useAnimatedStyle(() => {
-    const center = width.value / 2,
-      rotatedHue = (hueValue.value - rotate) % 360,
-      distance = (width.value - sliderThickness) / 2,
-      angle = (rotatedHue * Math.PI) / 180,
-      posY = width.value - (Math.sin(angle) * distance + center) - thumbSize / 2,
-      posX = width.value - (Math.cos(angle) * distance + center) - thumbSize / 2;
+    const center = width.value / 2;
+    const rotatedHue = (hueValue.value - rotate) % 360;
+    const distance = (width.value - sliderThickness) / 2;
+    const angle = (rotatedHue * Math.PI) / 180;
+    const posY = width.value - (Math.sin(angle) * distance + center) - thumbSize / 2;
+    const posX = width.value - (Math.cos(angle) * distance + center) - thumbSize / 2;
 
     return {
       transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }, { rotate: rotatedHue + 90 + 'deg' }],
@@ -54,15 +54,23 @@ export function HueCircular({
   }, [width, hueValue, handleScale]);
 
   const activeSaturationStyle = useAnimatedStyle(() => {
-    if (!adaptSpectrum) return {};
+    if (!adaptSpectrum) {
+      return {};
+    }
 
-    return { backgroundColor: HSVA2HSLA_string(0, 0, brightnessValue.value, 1 - saturationValue.value / 100) };
+    return {
+      backgroundColor: HSVA2HSLA_string(0, 0, brightnessValue.value, 1 - saturationValue.value / 100),
+    };
   }, [brightnessValue, saturationValue]);
 
   const activeBrightnessStyle = useAnimatedStyle(() => {
-    if (!adaptSpectrum) return {};
+    if (!adaptSpectrum) {
+      return {};
+    }
 
-    return { backgroundColor: HSVA2HSLA_string(0, 0, 0, 1 - brightnessValue.value / 100) };
+    return {
+      backgroundColor: HSVA2HSLA_string(0, 0, 0, 1 - brightnessValue.value / 100),
+    };
   }, [brightnessValue]);
 
   const clipViewStyle = useAnimatedStyle(() => {
@@ -79,12 +87,12 @@ export function HueCircular({
 
     if (!isGestureActive.value) return;
 
-    const center = width.value / 2,
-      dx = center - x,
-      dy = center - y,
-      theta = Math.atan2(dy, dx) * (180 / Math.PI), // [0 - 180] range
-      angle = theta < 0 ? 360 + theta : theta, // [0 - 360] range
-      newHueValue = (angle + rotate) % 360;
+    const center = width.value / 2;
+    const dx = center - x;
+    const dy = center - y;
+    const theta = Math.atan2(dy, dx) * (180 / Math.PI); // [0 - 180] range
+    const angle = theta < 0 ? 360 + theta : theta; // [0 - 360] range
+    const newHueValue = (angle + rotate) % 360;
 
     if (hueValue.value === newHueValue) return;
 
@@ -96,10 +104,10 @@ export function HueCircular({
   const onGestureBegin = (event: PanGestureHandlerEventPayload) => {
     'worklet';
 
-    const R = width.value / 2,
-      dx = R - event.x,
-      dy = R - event.y,
-      clickR = Math.sqrt(dx * dx + dy * dy);
+    const R = width.value / 2;
+    const dx = R - event.x;
+    const dy = R - event.y;
+    const clickR = Math.sqrt(dx * dx + dy * dy);
 
     // Check if the press is outside the circle
     if (clickR > R) {
@@ -116,6 +124,7 @@ export function HueCircular({
 
     isGestureActive.value = true;
     handleScale.value = withTiming(thumbScaleAnimationValue, { duration: thumbScaleAnimationDuration });
+
     onGestureUpdate(event);
   };
 
@@ -133,8 +142,10 @@ export function HueCircular({
 
   const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
     const layoutWidth = layout.width;
+    if (!layoutWidth) return;
+
     width.value = layoutWidth;
-    borderRadius.value = withTiming(layoutWidth / 2, { duration: 5 });
+    borderRadius.value = layoutWidth / 2;
   }, []);
 
   return (
@@ -142,7 +153,7 @@ export function HueCircular({
       <Animated.View
         onLayout={onLayout}
         style={[
-          styles.panel_container,
+          styles.panelContainer,
           { justifyContent: 'center', alignItems: 'center' },
           style,
           { position: 'relative', aspectRatio: 1, borderWidth: 0, padding: 0 },
@@ -151,7 +162,7 @@ export function HueCircular({
       >
         <ImageBackground
           source={require('@assets/circularHue.png')}
-          style={[styles.panel_image, { transform: [{ rotate: -rotate + 'deg' }] }]}
+          style={[styles.panelImage, { transform: [{ rotate: -rotate + 'deg' }] }]}
           resizeMode='stretch'
         >
           <ConditionalRendering if={adaptSpectrum}>

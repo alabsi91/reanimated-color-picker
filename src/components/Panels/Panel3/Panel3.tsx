@@ -26,47 +26,65 @@ export function Panel3({
 }: Panel3Props) {
   const { hueValue, saturationValue, brightnessValue, onGestureChange, onGestureEnd, ...ctx } = usePickerContext();
 
-  const thumbShape = props.thumbShape ?? ctx.thumbShape,
-    thumbSize = props.thumbSize ?? ctx.thumbSize,
-    thumbColor = props.thumbColor ?? ctx.thumbColor,
-    boundedThumb = props.boundedThumb ?? ctx.boundedThumb,
-    renderThumb = props.renderThumb ?? ctx.renderThumb,
-    thumbStyle = props.thumbStyle ?? ctx.thumbStyle ?? {},
-    thumbScaleAnimationValue = props.thumbScaleUpValue ?? ctx.thumbScaleAnimationValue,
-    thumbScaleAnimationDuration = props.thumbScaleUpDuration ?? ctx.thumbScaleAnimationDuration,
-    thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle ?? {},
-    adaptSpectrum = props.adaptSpectrum ?? ctx.adaptSpectrum;
-
-  const borderRadius = 2000;
+  const thumbShape = props.thumbShape ?? ctx.thumbShape;
+  const thumbSize = props.thumbSize ?? ctx.thumbSize;
+  const thumbColor = props.thumbColor ?? ctx.thumbColor;
+  const boundedThumb = props.boundedThumb ?? ctx.boundedThumb;
+  const renderThumb = props.renderThumb ?? ctx.renderThumb;
+  const thumbStyle = props.thumbStyle ?? ctx.thumbStyle ?? {};
+  const thumbScaleAnimationValue = props.thumbScaleUpValue ?? ctx.thumbScaleAnimationValue;
+  const thumbScaleAnimationDuration = props.thumbScaleUpDuration ?? ctx.thumbScaleAnimationDuration;
+  const thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle ?? {};
+  const adaptSpectrum = props.adaptSpectrum ?? ctx.adaptSpectrum;
 
   const isGestureActive = useSharedValue(false);
   const width = useSharedValue(0);
   const handleScale = useSharedValue(1);
   const lastHslSaturationValue = useSharedValue(0);
+  const borderRadius = 2000;
 
   // We need to keep track of the HSL saturation value because, when the luminance is 0 or 100,
   // when converting to/from HSV, the previous saturation value will be lost.
   const hsl = useDerivedValue(() => {
     const hsvColor = { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
+
     const { h, s, l } = colorKit.runOnUI().HSL(hsvColor).object(false);
-    if (l === 100 || l === 0) return { h, s: lastHslSaturationValue.value, l };
+    if (l === 100 || l === 0) {
+      return {
+        h,
+        s: lastHslSaturationValue.value,
+        l,
+      };
+    }
+
     lastHslSaturationValue.value = s;
-    return { h, s, l };
+
+    return {
+      h,
+      s,
+      l,
+    };
   }, [hueValue, saturationValue, brightnessValue]);
 
   const centerChannelValue = useDerivedValue(() => {
-    if (centerChannel === 'brightness') return brightnessValue.value;
-    if (centerChannel === 'hsl-saturation') return hsl.value.s;
+    if (centerChannel === 'brightness') {
+      return brightnessValue.value;
+    }
+
+    if (centerChannel === 'hsl-saturation') {
+      return hsl.value.s;
+    }
+
     return saturationValue.value;
   }, [brightnessValue, saturationValue, hsl]);
 
   const handleStyle = useAnimatedStyle(() => {
-    const center = width.value / 2 - (boundedThumb ? thumbSize / 2 : 0),
-      rotatedHue = (hueValue.value - rotate) % 360,
-      distance = (centerChannelValue.value / 100) * (width.value / 2 - (boundedThumb ? thumbSize / 2 : 0)),
-      angle = (rotatedHue * Math.PI) / 180,
-      posY = width.value - (Math.sin(angle) * distance + center) - (boundedThumb ? thumbSize : thumbSize / 2),
-      posX = width.value - (Math.cos(angle) * distance + center) - (boundedThumb ? thumbSize : thumbSize / 2);
+    const center = width.value / 2 - (boundedThumb ? thumbSize / 2 : 0);
+    const rotatedHue = (hueValue.value - rotate) % 360;
+    const distance = (centerChannelValue.value / 100) * (width.value / 2 - (boundedThumb ? thumbSize / 2 : 0));
+    const angle = (rotatedHue * Math.PI) / 180;
+    const posY = width.value - (Math.sin(angle) * distance + center) - (boundedThumb ? thumbSize : thumbSize / 2);
+    const posX = width.value - (Math.cos(angle) * distance + center) - (boundedThumb ? thumbSize : thumbSize / 2);
 
     return {
       transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }, { rotate: rotatedHue + 90 + 'deg' }],
@@ -74,14 +92,19 @@ export function Panel3({
   }, [width, centerChannelValue, hueValue, handleScale]);
 
   const spectrumStyle = useAnimatedStyle(() => {
-    if (!adaptSpectrum) return {};
+    if (!adaptSpectrum) {
+      return {};
+    }
 
     if (centerChannel === 'brightness') {
       return { backgroundColor: `rgba(255, 255, 255, ${1 - saturationValue.value / 100})` };
     }
 
     if (centerChannel === 'hsl-saturation') {
-      if (hsl.value.l < 50) return { backgroundColor: `rgba(0, 0, 0, ${1 - hsl.value.l / 50})` };
+      if (hsl.value.l < 50) {
+        return { backgroundColor: `rgba(0, 0, 0, ${1 - hsl.value.l / 50})` };
+      }
+
       return { backgroundColor: `rgba(255, 255, 255, ${(hsl.value.l - 50) / 50})` };
     }
 
@@ -89,13 +112,15 @@ export function Panel3({
   }, [saturationValue, brightnessValue]);
 
   const centerLineStyle = useAnimatedStyle(() => {
-    if (!renderCenterLine) return {};
+    if (!renderCenterLine) {
+      return {};
+    }
 
-    const lineThickness = 1,
-      center = width.value / 2 - (boundedThumb ? thumbSize / 2 : 0),
-      rotatedHue = (hueValue.value - rotate) % 360,
-      distance = (centerChannelValue.value / 100) * center,
-      angle = ((rotatedHue * Math.PI) / Math.PI + 180) % 360; // reversed angle
+    const lineThickness = 1;
+    const center = width.value / 2 - (boundedThumb ? thumbSize / 2 : 0);
+    const rotatedHue = (hueValue.value - rotate) % 360;
+    const distance = (centerChannelValue.value / 100) * center;
+    const angle = ((rotatedHue * Math.PI) / Math.PI + 180) % 360; // reversed angle
 
     return {
       top: (width.value - lineThickness) / 2,
@@ -111,15 +136,15 @@ export function Panel3({
 
     if (!isGestureActive.value) return;
 
-    const center = (width.value - (boundedThumb ? thumbSize : 0)) / 2,
-      dx = center - x + (boundedThumb ? thumbSize / 2 : 0),
-      dy = center - y + (boundedThumb ? thumbSize / 2 : 0),
-      radius = clamp(Math.sqrt(dx * dx + dy * dy), center), // distance from center
-      theta = Math.atan2(dy, dx) * (180 / Math.PI), // [0 - 180] range
-      angle = theta < 0 ? 360 + theta : theta, // [0 - 360] range
-      radiusPercent = radius / center,
-      newHueValue = (angle + rotate) % 360,
-      newChannelValue = radiusPercent * 100;
+    const center = (width.value - (boundedThumb ? thumbSize : 0)) / 2;
+    const dx = center - x + (boundedThumb ? thumbSize / 2 : 0);
+    const dy = center - y + (boundedThumb ? thumbSize / 2 : 0);
+    const radius = clamp(Math.sqrt(dx * dx + dy * dy), center); // distance from center
+    const theta = Math.atan2(dy, dx) * (180 / Math.PI); // [0 - 180] range
+    const angle = theta < 0 ? 360 + theta : theta; // [0 - 360] range
+    const radiusPercent = radius / center;
+    const newHueValue = (angle + rotate) % 360;
+    const newChannelValue = radiusPercent * 100;
 
     if (hueValue.value === newHueValue && centerChannelValue.value === newChannelValue) return;
 
@@ -144,10 +169,10 @@ export function Panel3({
   const onGestureBegin = (event: PanGestureHandlerEventPayload) => {
     'worklet';
 
-    const R = width.value / 2,
-      dx = R - event.x,
-      dy = R - event.y,
-      clickR = Math.sqrt(dx * dx + dy * dy);
+    const R = width.value / 2;
+    const dx = R - event.x;
+    const dy = R - event.y;
+    const clickR = Math.sqrt(dx * dx + dy * dy);
 
     // Check if the press is outside the circle
     if (clickR > R) {
@@ -156,8 +181,8 @@ export function Panel3({
     }
 
     isGestureActive.value = true;
-
     handleScale.value = withTiming(thumbScaleAnimationValue, { duration: thumbScaleAnimationDuration });
+
     onGestureUpdate(event);
   };
 
@@ -174,8 +199,8 @@ export function Panel3({
   const composed = Gesture.Simultaneous(Gesture.Exclusive(pan, tap, longPress), ...gestures);
 
   const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
-    const layoutWidth = layout.width;
-    width.value = layoutWidth;
+    if (!layout.width) return;
+    width.value = layout.width;
   }, []);
 
   return (
@@ -200,14 +225,14 @@ export function Panel3({
         <Animated.View
           onLayout={onLayout}
           style={[
-            styles.panel_container,
+            styles.panelContainer,
             style,
             { position: 'relative', aspectRatio: 1, borderWidth: 0, padding: 0, borderRadius },
           ]}
         >
           <ImageBackground
             source={require('@assets/circularHue.png')}
-            style={styles.panel_image}
+            style={styles.panelImage}
             imageStyle={{ transform: [{ rotate: -rotate + 'deg' }] }}
             resizeMode='stretch'
           >
@@ -217,7 +242,7 @@ export function Panel3({
 
             <Image
               source={require('@assets/blackRadial.png')}
-              style={styles.panel_image}
+              style={styles.panelImage}
               tintColor={centerChannel === 'saturation' ? '#fff' : centerChannel === 'hsl-saturation' ? '#888' : undefined}
               resizeMode='stretch'
             />

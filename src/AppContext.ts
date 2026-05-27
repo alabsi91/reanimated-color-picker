@@ -10,5 +10,6 @@ export default function usePickerContext() {
   if (!ctx) {
     throw new Error('[reanimated-color-picker]: App context is not ready yet!');
   }
+
   return ctx;
 }

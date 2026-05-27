@@ -36,7 +36,10 @@ export function InputWidget({
 
   const onChange = (color: SupportedColorFormats) => {
     const isHex = colorKit.getFormat(color)?.includes('hex');
-    if (disableAlphaChannel && isHex) color = colorKit.setAlpha(color, 1).hsv().object(false);
+
+    if (disableAlphaChannel && isHex) {
+      color = colorKit.setAlpha(color, 1).hsv().object(false);
+    }
 
     setColor(color, 0);
     onGestureChange(color);
@@ -61,6 +64,7 @@ export function InputWidget({
     inputProps,
     disableAlphaChannel,
   };
+
   const Input = () => {
     switch (format) {
       case 'HEX':

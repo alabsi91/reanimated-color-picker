@@ -16,7 +16,11 @@ export default function Rect({
   vertical,
   solidColor,
 }: BuiltinThumbsProps) {
-  const computedStyle = { width, height };
+  const computedStyle = {
+    width,
+    height,
+  };
+
   const pillStyle = {
     borderWidth: 1,
     width: vertical ? '100%' : 14,
@@ -24,7 +28,12 @@ export default function Rect({
   } as const;
 
   const borderColor = getStyle(innerStyle, 'borderColor');
-  const adaptiveColorStyle = useAnimatedStyle(() => ({ borderColor: borderColor ?? adaptiveColor.value }), [adaptiveColor]);
+
+  const adaptiveColorStyle = useAnimatedStyle(() => {
+    return {
+      borderColor: borderColor ?? adaptiveColor.value,
+    };
+  }, [adaptiveColor]);
 
   return (
     <Animated.View

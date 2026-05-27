@@ -18,7 +18,12 @@ export default function Line({
   vertical,
 }: BuiltinThumbsProps) {
   const thickness = 3;
-  const computedStyle = { width, height };
+
+  const computedStyle = {
+    width,
+    height,
+  };
+
   const lineStyle = {
     borderRadius,
     backgroundColor: thumbColor,
@@ -27,7 +32,9 @@ export default function Line({
   } as const;
 
   const adaptiveColorStyle = useAnimatedStyle(() => {
-    return { backgroundColor: thumbColor ?? adaptiveColor.value };
+    return {
+      backgroundColor: thumbColor ?? adaptiveColor.value,
+    };
   }, [adaptiveColor]);
 
   return (

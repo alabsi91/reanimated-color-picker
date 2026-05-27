@@ -16,21 +16,21 @@ import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler
 export function LuminanceSlider({ gestures = [], style = {}, vertical = false, reverse = false, ...props }: SliderProps) {
   const { hueValue, saturationValue, brightnessValue, onGestureChange, onGestureEnd, ...ctx } = usePickerContext();
 
-  const thumbShape = props.thumbShape ?? ctx.thumbShape,
-    thumbSize = props.thumbSize ?? ctx.thumbSize,
-    thumbColor = props.thumbColor ?? ctx.thumbColor,
-    boundedThumb = props.boundedThumb ?? ctx.boundedThumb,
-    renderThumb = props.renderThumb ?? ctx.renderThumb,
-    thumbStyle = props.thumbStyle ?? ctx.thumbStyle ?? {},
-    thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle ?? {},
-    thumbScaleAnimationValue = props.thumbScaleAnimationValue ?? ctx.thumbScaleAnimationValue,
-    thumbScaleAnimationDuration = props.thumbScaleAnimationDuration ?? ctx.thumbScaleAnimationDuration,
-    adaptSpectrum = props.adaptSpectrum ?? ctx.adaptSpectrum,
-    sliderThickness = props.sliderThickness ?? ctx.sliderThickness;
+  const thumbShape = props.thumbShape ?? ctx.thumbShape;
+  const thumbSize = props.thumbSize ?? ctx.thumbSize;
+  const thumbColor = props.thumbColor ?? ctx.thumbColor;
+  const boundedThumb = props.boundedThumb ?? ctx.boundedThumb;
+  const renderThumb = props.renderThumb ?? ctx.renderThumb;
+  const thumbStyle = props.thumbStyle ?? ctx.thumbStyle ?? {};
+  const thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle ?? {};
+  const thumbScaleAnimationValue = props.thumbScaleAnimationValue ?? ctx.thumbScaleAnimationValue;
+  const thumbScaleAnimationDuration = props.thumbScaleAnimationDuration ?? ctx.thumbScaleAnimationDuration;
+  const adaptSpectrum = props.adaptSpectrum ?? ctx.adaptSpectrum;
+  const sliderThickness = props.sliderThickness ?? ctx.sliderThickness;
 
-  const borderRadius = getStyle(style, 'borderRadius') ?? 5,
-    getWidth = getStyle(style, 'width'),
-    getHeight = getStyle(style, 'height');
+  const borderRadius = getStyle(style, 'borderRadius') ?? 5;
+  const getWidth = getStyle(style, 'width');
+  const getHeight = getStyle(style, 'height');
 
   const width = useSharedValue(vertical ? sliderThickness : typeof getWidth === 'number' ? getWidth : 0);
   const height = useSharedValue(!vertical ? sliderThickness : typeof getHeight === 'number' ? getHeight : 0);
@@ -42,23 +42,36 @@ export function LuminanceSlider({ gestures = [], style = {}, vertical = false, r
   const hsl = useDerivedValue(() => {
     const hsvColor = { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
     const { h, s, l } = colorKit.runOnUI().HSL(hsvColor).object(false);
-    if (l === 100 || l === 0) return { h, s: lastHslSaturationValue.value, l };
+
+    if (l === 100 || l === 0) {
+      return { h, s: lastHslSaturationValue.value, l };
+    }
+
     lastHslSaturationValue.value = s;
-    return { h, s, l };
+
+    return {
+      h,
+      s,
+      l,
+    };
   }, [hueValue, saturationValue, brightnessValue]);
 
   const handleStyle = useAnimatedStyle(() => {
-    const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0),
-      percent = (hsl.value.l / 100) * length,
-      pos = (reverse ? length - percent : percent) - (boundedThumb ? 0 : thumbSize / 2),
-      posY = vertical ? pos : height.value / 2 - thumbSize / 2,
-      posX = vertical ? width.value / 2 - thumbSize / 2 : pos;
+    const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0);
+    const percent = (hsl.value.l / 100) * length;
+    const pos = (reverse ? length - percent : percent) - (boundedThumb ? 0 : thumbSize / 2);
+    const posY = vertical ? pos : height.value / 2 - thumbSize / 2;
+    const posX = vertical ? width.value / 2 - thumbSize / 2 : pos;
 
-    return { transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }] };
+    return {
+      transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }],
+    };
   }, [height, width, hsl, handleScale]);
 
   const activeColorStyle = useAnimatedStyle(() => {
-    return { backgroundColor: `hsl(${hsl.value.h}, ${adaptSpectrum ? hsl.value.s : 100}%, ${50}%)` };
+    return {
+      backgroundColor: `hsl(${hsl.value.h}, ${adaptSpectrum ? hsl.value.s : 100}%, ${50}%)`,
+    };
   }, [hueValue, saturationValue]);
 
   const imageStyle = useAnimatedStyle(() => {
@@ -80,10 +93,10 @@ export function LuminanceSlider({ gestures = [], style = {}, vertical = false, r
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
 
-    const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0),
-      pos = clamp((vertical ? y : x) - (boundedThumb ? thumbSize / 2 : 0), length),
-      value = (pos / length) * 100,
-      newLuminanceValue = reverse ? 100 - value : value;
+    const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0);
+    const pos = clamp((vertical ? y : x) - (boundedThumb ? thumbSize / 2 : 0), length);
+    const value = (pos / length) * 100;
+    const newLuminanceValue = reverse ? 100 - value : value;
 
     if (newLuminanceValue === hsl.value.l) return;
 
@@ -113,8 +126,13 @@ export function LuminanceSlider({ gestures = [], style = {}, vertical = false, r
   const composed = Gesture.Simultaneous(Gesture.Exclusive(pan, tap, longPress), ...gestures);
 
   const onLayout = ({ nativeEvent: { layout } }: LayoutChangeEvent) => {
-    if (!vertical) width.value = withTiming(layout.width, { duration: 5 });
-    if (vertical) height.value = withTiming(layout.height, { duration: 5 });
+    if (!vertical && layout.width) {
+      width.value = layout.width;
+    }
+
+    if (vertical && layout.height) {
+      height.value = layout.height;
+    }
   };
 
   const thicknessStyle = vertical ? { width: sliderThickness } : { height: sliderThickness };
@@ -126,7 +144,7 @@ export function LuminanceSlider({ gestures = [], style = {}, vertical = false, r
         style={[style, { borderRadius, position: 'relative', borderWidth: 0, padding: 0 }, thicknessStyle, activeColorStyle]}
       >
         <Animated.View
-          style={[styles.panel_image, imageStyle, { borderRadius, flexDirection: isRtl ? 'row-reverse' : 'row' }]}
+          style={[styles.panelImage, imageStyle, { borderRadius, flexDirection: isRtl ? 'row-reverse' : 'row' }]}
           renderToHardwareTextureAndroid={enableAndroidHardwareTextures}
         >
           <Image source={require('@assets/blackGradient.png')} style={{ flex: 1 }} tintColor='#fff' resizeMode='stretch' />

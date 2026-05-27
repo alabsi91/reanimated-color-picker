@@ -28,7 +28,9 @@ export default function HwbWidget({
 
   useDerivedValue(() => {
     [hueValue, saturationValue, brightnessValue, alphaValue]; // track changes on Native
+
     hwb.current = colorKit.runOnUI().HWB(returnedResults().hwba).object(false);
+
     h.value = hwb.current.h.toString();
     w.value = hwb.current.w.toString();
     b.value = hwb.current.b.toString();

@@ -24,7 +24,12 @@ export default function Circle({
     height: '100%',
   } as const;
   const borderColor = getStyle(innerStyle, 'borderColor');
-  const adaptiveColorStyle = useAnimatedStyle(() => ({ borderColor: borderColor ?? adaptiveColor.value }), [adaptiveColor]);
+
+  const adaptiveColorStyle = useAnimatedStyle(() => {
+    return {
+      borderColor: borderColor ?? adaptiveColor.value,
+    };
+  }, [adaptiveColor]);
 
   return (
     <Animated.View
