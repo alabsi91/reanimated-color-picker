@@ -76,6 +76,5 @@ const styles = StyleSheet.create({
   },
   thumbInner: {
     borderWidth: 4,
-    borderColor: '#fff',
   },
 });
