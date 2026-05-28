@@ -32,7 +32,7 @@ export default function Thumb({
     return colorKit.runOnUI().HEX({ h: hue.value, s: saturation.value, v: brightness.value });
   }, [hue, saturation, brightness]);
 
-  const solidColor = useAnimatedStyle(() => ({ backgroundColor: thumbColor ?? currentColor.value }), [currentColor]);
+  const solidColor = useAnimatedStyle(() => ({ backgroundColor: thumbColor ?? currentColor.value }), [thumbColor, currentColor]);
 
   const adaptiveColor = useDerivedValue<string>(() => {
     const currentcolor = {

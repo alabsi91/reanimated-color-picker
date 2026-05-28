@@ -35,7 +35,7 @@ export default function Line({
     return {
       backgroundColor: thumbColor ?? adaptiveColor.value,
     };
-  }, [adaptiveColor]);
+  }, [thumbColor, adaptiveColor]);
 
   return (
     <Animated.View

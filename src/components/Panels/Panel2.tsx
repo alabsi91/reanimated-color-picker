@@ -13,7 +13,7 @@ import type { Panel2Props } from '@types';
 import type { LayoutChangeEvent } from 'react-native';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
-/** - A square-shaped slider (windows style) is utilized to adjust the hue and (saturation or brightness) channels. */
+/** A square-shaped panel slider (Windows-style) used to adjust the hue and saturation or brightness channels. */
 export function Panel2({
   verticalChannel = 'saturation',
   reverseHue = false,
@@ -36,7 +36,7 @@ export function Panel2({
   const adaptSpectrum = props.adaptSpectrum ?? ctx.adaptSpectrum;
 
   const borderRadius = getStyle(style, 'borderRadius') ?? 5;
-  const getHeight = getStyle(style, 'height') ?? 200;
+  const heightStyle = getStyle(style, 'height') ?? 200;
 
   const containerRef = useRef<Animated.View>(null);
   const width = useSharedValue(0);
@@ -45,7 +45,7 @@ export function Panel2({
   const lastHslSaturationValue = useSharedValue(0);
 
   // We need to keep track of the HSL saturation value because, when the luminance is 0 or 100,
-  // when converting to/from HSV, the previous saturation value will be lost.
+  // converting to/from HSV causes the previous saturation value to be lost.
   const hsl = useDerivedValue(() => {
     const hsvColor = { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
     const { h, s, l } = colorKit.runOnUI().HSL(hsvColor).object(false);
@@ -88,7 +88,7 @@ export function Panel2({
     return {
       transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }],
     };
-  }, [width, height, hueValue, verticalChannelValue, handleScale]);
+  }, [[width, height, hueValue, verticalChannelValue, handleScale, reverseHue, reverseVerticalChannel, boundedThumb, thumbSize]]);
 
   const spectrumStyle = useAnimatedStyle(() => {
     if (!adaptSpectrum) return {};
@@ -114,10 +114,11 @@ export function Panel2({
     return {
       backgroundColor: `rgba(0, 0, 0, ${1 - brightnessValue.value / 100})`,
     };
-  }, [saturationValue, brightnessValue, hsl]);
+  }, [saturationValue, brightnessValue, hsl, adaptSpectrum, verticalChannel]);
 
   const panelImageStyle = useAnimatedStyle(() => {
     return {
+      // Width and height are intentionally swapped to correct dimensions after the rotation
       width: height.value,
       height: width.value,
       transform: [
@@ -126,7 +127,7 @@ export function Panel2({
         { translateY: ((width.value - height.value) / 2) * (isRtl ? -1 : 1) * (reverseVerticalChannel ? -1 : 1) },
       ],
     };
-  }, [width, height]);
+  }, [width, height, reverseVerticalChannel]);
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -204,9 +205,10 @@ export function Panel2({
         return { h: hsva.h, s: hsva.s, v: 100 };
       case 'brightness':
         return { h: hsva.h, s: 100, v: hsva.v };
-      case 'hsl-saturation':
+      case 'hsl-saturation': {
         const { h, s } = hsl.value;
         return { h, s, l: 50 };
+      }
       default:
         return hsva;
     }
@@ -217,7 +219,7 @@ export function Panel2({
       <Animated.View
         ref={containerRef}
         onLayout={onLayout}
-        style={[styles.panelContainer, style, { position: 'relative', height: getHeight, borderWidth: 0, padding: 0 }]}
+        style={[styles.panelContainer, style, { position: 'relative', height: heightStyle, borderWidth: 0, padding: 0 }]}
       >
         <ImageBackground
           source={require('@assets/Hue.png')}

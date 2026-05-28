@@ -29,17 +29,17 @@ export function LuminanceSlider({ gestures = [], style = {}, vertical = false, r
   const sliderThickness = props.sliderThickness ?? ctx.sliderThickness;
 
   const borderRadius = getStyle(style, 'borderRadius') ?? 5;
-  const getWidth = getStyle(style, 'width');
-  const getHeight = getStyle(style, 'height');
+  const widthStyle = getStyle(style, 'width');
+  const heightStyle = getStyle(style, 'height');
 
   const containerRef = useRef<Animated.View>(null);
-  const width = useSharedValue(vertical ? sliderThickness : typeof getWidth === 'number' ? getWidth : 0);
-  const height = useSharedValue(!vertical ? sliderThickness : typeof getHeight === 'number' ? getHeight : 0);
+  const width = useSharedValue(vertical ? sliderThickness : typeof widthStyle === 'number' ? widthStyle : 0);
+  const height = useSharedValue(!vertical ? sliderThickness : typeof heightStyle === 'number' ? heightStyle : 0);
   const handleScale = useSharedValue(1);
   const lastHslSaturationValue = useSharedValue(0);
 
   // We need to keep track of the HSL saturation value because, when the luminance is 0 or 100,
-  // when converting to/from HSV, the previous saturation value will be lost.
+  // converting to/from HSV causes the previous saturation value to be lost.
   const hsl = useDerivedValue(() => {
     const hsvColor = { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
     const { h, s, l } = colorKit.runOnUI().HSL(hsvColor).object(false);
@@ -67,7 +67,7 @@ export function LuminanceSlider({ gestures = [], style = {}, vertical = false, r
     return {
       transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }],
     };
-  }, [height, width, hsl, handleScale]);
+  }, [height, width, hsl, handleScale, vertical, reverse, boundedThumb, thumbSize]);
 
   const activeColorStyle = useAnimatedStyle(() => {
     return {
@@ -89,7 +89,7 @@ export function LuminanceSlider({ gestures = [], style = {}, vertical = false, r
         { translateY: vertical ? imageTranslateY : 0 },
       ],
     };
-  }, [height, width]);
+  }, [height, width, borderRadius, reverse, vertical]);
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';

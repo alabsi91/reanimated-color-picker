@@ -12,7 +12,7 @@ import type { PanelProps } from '@types';
 import type { LayoutChangeEvent } from 'react-native';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
-/** - A square-shaped slider, reminiscent of Adobe style, is utilized to adjust the brightness and saturation of colors. */
+/** A square-shaped panel slider, similar to Adobe's style, used to adjust color brightness and saturation. */
 export function Panel1({ gestures = [], style = {}, ...props }: PanelProps) {
   const { hueValue, saturationValue, brightnessValue, onGestureChange, onGestureEnd, ...ctx } = usePickerContext();
 
@@ -47,7 +47,7 @@ export function Panel1({ gestures = [], style = {}, ...props }: PanelProps) {
     return {
       transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }],
     };
-  }, [handleScale, saturationValue, brightnessValue, width, height]);
+  }, [handleScale, saturationValue, brightnessValue, width, height, boundedThumb, thumbSize]);
 
   const activeColorStyle = useAnimatedStyle(() => {
     return {
@@ -57,6 +57,7 @@ export function Panel1({ gestures = [], style = {}, ...props }: PanelProps) {
 
   const brightnessImageStyle = useAnimatedStyle(() => {
     return {
+      // Width and height are intentionally swapped to correct dimensions after the 270° rotation
       width: height.value,
       height: width.value,
       transform: [

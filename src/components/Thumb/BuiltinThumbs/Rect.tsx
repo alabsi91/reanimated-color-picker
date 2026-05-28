@@ -33,7 +33,7 @@ export default function Rect({
     return {
       borderColor: borderColor ?? adaptiveColor.value,
     };
-  }, [adaptiveColor]);
+  }, [borderColor, adaptiveColor]);
 
   return (
     <Animated.View

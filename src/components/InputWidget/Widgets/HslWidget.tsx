@@ -40,7 +40,7 @@ export default function HslWidget({
     s.value = hsl.current.s.toString();
     l.value = hsl.current.l.toString();
     a.value = hsl.current.a.toString();
-  }, [hueValue, saturationValue, brightnessValue, alphaValue, h, s, l, a]);
+  }, [hueValue, saturationValue, brightnessValue, alphaValue]);
 
   const onHueEndEditing = (text: string) => {
     const hue = clamp(+text, 360);

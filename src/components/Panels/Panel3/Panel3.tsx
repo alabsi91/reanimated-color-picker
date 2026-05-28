@@ -14,7 +14,7 @@ import type { Panel3Props } from '@types';
 import type { LayoutChangeEvent } from 'react-native';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
-/** - The circle-shaped slider, with its wheel style design, is utilized to adjust the hue and (saturation or brightness) of colors. */
+/** A circle-shaped panel slider with a wheel-style design, used to adjust hue and saturation or brightness of colors. */
 export function Panel3({
   renderCenterLine = false,
   centerChannel = 'saturation',
@@ -45,7 +45,7 @@ export function Panel3({
   const borderRadius = 2000;
 
   // We need to keep track of the HSL saturation value because, when the luminance is 0 or 100,
-  // when converting to/from HSV, the previous saturation value will be lost.
+  // converting to/from HSV causes the previous saturation value to be lost.
   const hsl = useDerivedValue(() => {
     const hsvColor = { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
 
@@ -90,7 +90,7 @@ export function Panel3({
     return {
       transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }, { rotate: rotatedHue + 90 + 'deg' }],
     };
-  }, [width, centerChannelValue, hueValue, handleScale]);
+  }, [width, centerChannelValue, hueValue, handleScale, boundedThumb, thumbSize, rotate]);
 
   const spectrumStyle = useAnimatedStyle(() => {
     if (!adaptSpectrum) {
@@ -110,7 +110,7 @@ export function Panel3({
     }
 
     return { backgroundColor: `rgba(0, 0, 0, ${1 - brightnessValue.value / 100})` };
-  }, [saturationValue, brightnessValue]);
+  }, [saturationValue, brightnessValue, hsl, adaptSpectrum, centerChannel]);
 
   const centerLineStyle = useAnimatedStyle(() => {
     if (!renderCenterLine) {
@@ -121,16 +121,16 @@ export function Panel3({
     const center = width.value / 2 - (boundedThumb ? thumbSize / 2 : 0);
     const rotatedHue = (hueValue.value - rotate) % 360;
     const distance = (centerChannelValue.value / 100) * center;
-    const angle = ((rotatedHue * Math.PI) / Math.PI + 180) % 360; // reversed angle
+    const angle = (rotatedHue + 180) % 360; // reversed angle
 
     return {
       top: (width.value - lineThickness) / 2,
       left: (width.value - distance) / 2,
       height: lineThickness,
       width: distance,
-      transform: [{ rotate: angle + 'deg' }, { translateX: distance / 2 }, { translateY: 0 }],
+      transform: [{ rotate: angle + 'deg' }, { translateX: distance / 2 }],
     };
-  }, [width, hueValue, centerChannelValue]);
+  }, [width, hueValue, centerChannelValue, renderCenterLine, boundedThumb, thumbSize, rotate]);
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -170,13 +170,13 @@ export function Panel3({
   const onGestureBegin = (event: PanGestureHandlerEventPayload) => {
     'worklet';
 
-    const R = width.value / 2;
-    const dx = R - event.x;
-    const dy = R - event.y;
-    const clickR = Math.sqrt(dx * dx + dy * dy);
+    const radius = width.value / 2;
+    const dx = radius - event.x;
+    const dy = radius - event.y;
+    const pressDistance = Math.sqrt(dx * dx + dy * dy);
 
     // Check if the press is outside the circle
-    if (clickR > R) {
+    if (pressDistance > radius) {
       isGestureActive.value = false;
       return;
     }
@@ -224,9 +224,10 @@ export function Panel3({
         return { h: hsva.h, s: hsva.s, v: 100 };
       case 'brightness':
         return { h: hsva.h, s: 100, v: hsva.v };
-      case 'hsl-saturation':
-        const { h, s } = colorKit.runOnUI().HSL(hsva).object(false);
+      case 'hsl-saturation': {
+        const { h, s } = hsl.value;
         return { h, s, l: 50 };
+      }
       default:
         return hsva;
     }

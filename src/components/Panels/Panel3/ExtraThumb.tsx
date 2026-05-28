@@ -58,7 +58,7 @@ export function ExtraThumb({
 
     const changeAmount = typeof hueTransform === 'string' ? hueValue.value * (parseFloat(hueTransform) / 100) : hueTransform;
     return clamp((hueValue.value + changeAmount) % 360, 360);
-  }, [hsv, hueValue]);
+  }, [hsv, hueValue, hueTransform]);
 
   // Calculate saturation value
   const saturation = useDerivedValue(() => {
@@ -76,7 +76,7 @@ export function ExtraThumb({
         : saturationTransform;
 
     return clamp(saturationValue.value + changeAmount, 100);
-  }, [hsv, saturationValue]);
+  }, [hsv, saturationValue, saturationTransform]);
 
   // Calculate brightness value
   const brightness = useDerivedValue(() => {
@@ -94,7 +94,7 @@ export function ExtraThumb({
         : brightnessTransform;
 
     return clamp(brightnessValue.value + changeAmount, 100);
-  }, [hsv, brightnessValue]);
+  }, [hsv, brightnessValue, brightnessTransform]);
 
   // Call onChange prop on every value change
   useDerivedValue(() => {
@@ -114,7 +114,7 @@ export function ExtraThumb({
     if (onChangeJS) {
       runOnJS(onChangeJS)(colors);
     }
-  }, [hue, saturation, brightness]);
+  }, [hue, saturation, brightness, alphaValue]);
 
   const handleStyle = useAnimatedStyle(() => {
     const center = width.value / 2 - (boundedThumb ? thumbSize / 2 : 0);
@@ -127,7 +127,7 @@ export function ExtraThumb({
     return {
       transform: [{ translateX: posX }, { translateY: posY }, { rotate: rotatedHue + 90 + 'deg' }],
     };
-  }, [thumbSize, boundedThumb, width, centerChannelValue, hue]);
+  }, [thumbSize, boundedThumb, width, centerChannelValue, hue, rotate]);
 
   const centerLineStyle = useAnimatedStyle(() => {
     if (!renderCenterLine) {
@@ -138,16 +138,16 @@ export function ExtraThumb({
     const center = width.value / 2 - (boundedThumb ? thumbSize / 2 : 0);
     const rotatedHue = (hue.value - rotate) % 360;
     const distance = (centerChannelValue.value / 100) * center;
-    const angle = ((rotatedHue * Math.PI) / Math.PI + 180) % 360; // reversed angle
+    const angle = (rotatedHue + 180) % 360; // reversed angle
 
     return {
       top: (width.value - lineThickness) / 2,
       left: (width.value - distance) / 2,
       height: lineThickness,
       width: distance,
-      transform: [{ rotate: angle + 'deg' }, { translateX: distance / 2 }, { translateY: 0 }],
+      transform: [{ rotate: angle + 'deg' }, { translateX: distance / 2 }],
     };
-  }, [renderCenterLine, boundedThumb, thumbSize, width, hue, centerChannelValue]);
+  }, [renderCenterLine, boundedThumb, thumbSize, width, hue, centerChannelValue, rotate]);
 
   const getAdaptiveColor = () => {
     'worklet';
@@ -168,9 +168,10 @@ export function ExtraThumb({
         return { h: hsva.h, s: hsva.s, v: 100 };
       case 'brightness':
         return { h: hsva.h, s: 100, v: hsva.v };
-      case 'hsl-saturation':
+      case 'hsl-saturation': {
         const { h, s } = colorKit.runOnUI().HSL(hsva).object(false);
         return { h, s, l: 50 };
+      }
       default:
         return hsva;
     }

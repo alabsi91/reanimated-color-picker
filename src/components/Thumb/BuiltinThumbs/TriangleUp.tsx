@@ -34,7 +34,7 @@ export default function TriangleUp({
     return {
       borderBottomColor: thumbColor ?? adaptiveColor.value,
     };
-  }, [adaptiveColor]);
+  }, [thumbColor, adaptiveColor]);
 
   return (
     <Animated.View

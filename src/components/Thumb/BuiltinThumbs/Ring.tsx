@@ -32,7 +32,7 @@ export default function Ring({
       backgroundColor: ringBackgroundColor ?? colorKit.runOnUI().setAlpha(adaptiveColor.value, 0.5).hex(),
       borderColor: borderColor ?? adaptiveColor.value,
     };
-  }, [adaptiveColor]);
+  }, [borderColor, ringBackgroundColor, adaptiveColor]);
 
   // Make sure to match the parity (odd or even) of the parent width, to solve the centering issue
   const innerWidth = 0.75 * width;

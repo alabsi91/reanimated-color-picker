@@ -27,12 +27,12 @@ export function HueSlider({ gestures = [], style = {}, vertical = false, reverse
   const sliderThickness = props.sliderThickness ?? ctx.sliderThickness;
 
   const borderRadius = getStyle(style, 'borderRadius') ?? 5;
-  const getWidth = getStyle(style, 'width');
-  const getHeight = getStyle(style, 'height');
+  const widthStyle = getStyle(style, 'width');
+  const heightStyle = getStyle(style, 'height');
 
   const containerRef = useRef<Animated.View>(null);
-  const width = useSharedValue(vertical ? sliderThickness : typeof getWidth === 'number' ? getWidth : 0);
-  const height = useSharedValue(!vertical ? sliderThickness : typeof getHeight === 'number' ? getHeight : 0);
+  const width = useSharedValue(vertical ? sliderThickness : typeof widthStyle === 'number' ? widthStyle : 0);
+  const height = useSharedValue(!vertical ? sliderThickness : typeof heightStyle === 'number' ? heightStyle : 0);
   const handleScale = useSharedValue(1);
 
   const handleStyle = useAnimatedStyle(() => {
@@ -55,7 +55,7 @@ export function HueSlider({ gestures = [], style = {}, vertical = false, reverse
     return {
       backgroundColor: HSVA2HSLA_string(0, 0, brightnessValue.value, 1 - saturationValue.value / 100),
     };
-  }, [brightnessValue, saturationValue]);
+  }, [brightnessValue, saturationValue, adaptSpectrum]);
 
   const activeBrightnessStyle = useAnimatedStyle(() => {
     if (!adaptSpectrum) {
@@ -65,7 +65,7 @@ export function HueSlider({ gestures = [], style = {}, vertical = false, reverse
     return {
       backgroundColor: HSVA2HSLA_string(0, 0, 0, 1 - brightnessValue.value / 100),
     };
-  }, [brightnessValue]);
+  }, [brightnessValue, adaptSpectrum]);
 
   const imageStyle = useAnimatedStyle(() => {
     const imageRotate = vertical ? (reverse ? '270deg' : '90deg') : reverse ? '180deg' : '0deg';
@@ -80,7 +80,7 @@ export function HueSlider({ gestures = [], style = {}, vertical = false, reverse
         { translateY: vertical ? imageTranslateY : 0 },
       ],
     };
-  }, [width, height]);
+  }, [width, height, vertical, reverse]);
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';

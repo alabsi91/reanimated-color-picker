@@ -22,13 +22,13 @@ export default function Hollow({
     return {
       borderColor: thumbColor ?? adaptiveColor.value,
     };
-  }, [adaptiveColor]);
+  }, [thumbColor, adaptiveColor]);
 
   const adaptiveColorBgStyle = useAnimatedStyle(() => {
     return {
       backgroundColor: thumbColor ?? adaptiveColor.value,
     };
-  }, [adaptiveColor]);
+  }, [thumbColor, adaptiveColor]);
 
   return (
     <Animated.View

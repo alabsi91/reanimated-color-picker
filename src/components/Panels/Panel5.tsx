@@ -13,7 +13,7 @@ import type { LayoutChangeEvent } from 'react-native';
 
 const animationOptions = { duration: 300, easing: Easing.elastic(0.8) };
 
-/** - This is a grid of 120 colors, arranged in 12 columns and 10 rows of squares. */
+/** This is a grid of 120 colors, arranged in 12 columns and 10 rows of squares. */
 export function Panel5({ gestures = [], style = {}, selectionStyle = {} }: Panel5Props) {
   const { hueValue, saturationValue, brightnessValue, onGestureChange, onGestureEnd } = usePickerContext();
 

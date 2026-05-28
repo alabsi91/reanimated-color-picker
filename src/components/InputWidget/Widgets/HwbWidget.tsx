@@ -40,7 +40,7 @@ export default function HwbWidget({
     w.value = hwb.current.w.toString();
     b.value = hwb.current.b.toString();
     a.value = hwb.current.a.toString();
-  }, [hueValue, saturationValue, brightnessValue, alphaValue, h, w, b, a]);
+  }, [hueValue, saturationValue, brightnessValue, alphaValue]);
 
   const onHueEndEditing = (text: string) => {
     const hue = clamp(+text, 360);

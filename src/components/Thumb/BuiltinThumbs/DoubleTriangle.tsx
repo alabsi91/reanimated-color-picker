@@ -42,7 +42,7 @@ export default function DoubleTriangle({
     return {
       borderBottomColor: thumbColor ?? adaptiveColor.value,
     };
-  }, [adaptiveColor]);
+  }, [thumbColor, adaptiveColor]);
 
   return (
     <Animated.View

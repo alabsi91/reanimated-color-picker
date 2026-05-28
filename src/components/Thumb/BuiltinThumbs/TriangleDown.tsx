@@ -36,7 +36,7 @@ export default function ({
     return {
       borderBottomColor: thumbColor ?? adaptiveColor.value,
     };
-  }, [adaptiveColor]);
+  }, [thumbColor, adaptiveColor]);
 
   return (
     <Animated.View

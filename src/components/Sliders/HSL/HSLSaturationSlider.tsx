@@ -38,7 +38,7 @@ export function HSLSaturationSlider({ gestures = [], style = {}, vertical = fals
   const lastHslSaturationValue = useSharedValue(0);
 
   // We need to keep track of the HSL saturation value because, when the luminance is 0 or 100,
-  // when converting to/from HSV, the previous saturation value will be lost.
+  // converting to/from HSV causes the previous saturation value to be lost.
   const hsl = useDerivedValue(() => {
     const hsvColor = { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
     const { h, s, l } = colorKit.runOnUI().HSL(hsvColor).object(false);
@@ -70,7 +70,7 @@ export function HSLSaturationSlider({ gestures = [], style = {}, vertical = fals
     return {
       transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }],
     };
-  }, [width, height, hsl, handleScale]);
+  }, [width, height, hsl, handleScale, vertical, reverse, boundedThumb, thumbSize]);
 
   const activeColorStyle = useAnimatedStyle(() => {
     return {
@@ -92,13 +92,14 @@ export function HSLSaturationSlider({ gestures = [], style = {}, vertical = fals
     return {
       backgroundColor: `rgba(255, 255, 255, ${(hsl.value.l - 50) / 50})`,
     };
-  }, [adaptSpectrum, brightnessValue]);
+  }, [hsl, adaptSpectrum]);
 
   const imageStyle = useAnimatedStyle(() => {
     const imageRotate = vertical ? (reverse ? '270deg' : '90deg') : reverse ? '180deg' : '0deg';
     const imageTranslateY = ((height.value - width.value) / 2) * ((reverse && isRtl) || (!reverse && !isRtl) ? 1 : -1);
 
     return {
+      // Width and height are intentionally swapped to correct dimensions after the rotation
       width: vertical ? height.value : '100%',
       height: vertical ? width.value : '100%',
       transform: [
@@ -107,7 +108,7 @@ export function HSLSaturationSlider({ gestures = [], style = {}, vertical = fals
         { translateY: vertical ? imageTranslateY : 0 },
       ],
     };
-  }, [width, height]);
+  }, [width, height, vertical, reverse]);
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';

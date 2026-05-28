@@ -12,7 +12,7 @@ import type { Panel4Props } from '@types';
 import type { LayoutChangeEvent } from 'react-native';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
-/** - A slider with a square shape is used to adjust the channels of hue, saturation, and brightness. */
+/** A square-shaped slider used to adjust the hue, saturation, and brightness channels. */
 export function Panel4({
   reverseHue = false,
   reverseHorizontalChannels = false,
@@ -33,7 +33,7 @@ export function Panel4({
   const thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle ?? {};
 
   const borderRadius = getStyle(style, 'borderRadius') ?? 5;
-  const getHeight = getStyle(style, 'height') ?? 200;
+  const heightStyle = getStyle(style, 'height') ?? 200;
 
   const containerRef = useRef<Animated.View>(null);
   const width = useSharedValue(0);
@@ -42,22 +42,34 @@ export function Panel4({
 
   const handleStyle = useAnimatedStyle(() => {
     const length = { x: width.value - (boundedThumb ? thumbSize : 0), y: height.value - (boundedThumb ? thumbSize : 0) };
-    const calcThumb = boundedThumb ? 0 : thumbSize / 2;
+    const thumbOffset = boundedThumb ? 0 : thumbSize / 2;
     // luminance
-    const lum = (((2 - saturationValue.value / 100) * (brightnessValue.value / 100)) / 2) * 100;
-    const posPercentX = (lum / 100) * length.x;
-    const posX = (reverseHorizontalChannels ? posPercentX : length.x - posPercentX) - calcThumb;
+    const luminance = (((2 - saturationValue.value / 100) * (brightnessValue.value / 100)) / 2) * 100;
+    const posPercentX = (luminance / 100) * length.x;
+    const posX = (reverseHorizontalChannels ? posPercentX : length.x - posPercentX) - thumbOffset;
     // hue
     const percentY = (hueValue.value / 360) * length.y;
-    const posY = (reverseHue ? percentY : length.y - percentY) - calcThumb;
+    const posY = (reverseHue ? percentY : length.y - percentY) - thumbOffset;
 
     return {
       transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }],
     };
-  }, [width, height, saturationValue, brightnessValue, hueValue, handleScale]);
+  }, [
+    width,
+    height,
+    saturationValue,
+    brightnessValue,
+    hueValue,
+    handleScale,
+    boundedThumb,
+    thumbSize,
+    reverseHorizontalChannels,
+    reverseHue,
+  ]);
 
   const panelImageStyle = useAnimatedStyle(() => {
     return {
+      // Width and height are intentionally swapped to correct dimensions after the rotation
       width: height.value,
       height: width.value,
       transform: [
@@ -67,7 +79,7 @@ export function Panel4({
         { translateY: ((width.value - height.value) / 2) * (isRtl ? -1 : 1) },
       ],
     };
-  }, [height, width]);
+  }, [height, width, reverseHue]);
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -134,7 +146,7 @@ export function Panel4({
       <Animated.View
         ref={containerRef}
         onLayout={onLayout}
-        style={[styles.panelContainer, style, { position: 'relative', height: getHeight, borderWidth: 0, padding: 0 }]}
+        style={[styles.panelContainer, style, { position: 'relative', height: heightStyle, borderWidth: 0, padding: 0 }]}
       >
         <View style={{ flex: 1, borderRadius, overflow: 'hidden' }}>
           <Animated.Image source={require('@assets/Hue.png')} style={[styles.panelImage, panelImageStyle]} resizeMode='stretch' />

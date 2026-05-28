@@ -43,13 +43,13 @@ export default function Plus({
     return {
       backgroundColor: thumbColor ?? adaptiveColor.value,
     };
-  }, [adaptiveColor]);
+  }, [thumbColor, adaptiveColor]);
 
   const adaptiveBorderColorStyle = useAnimatedStyle(() => {
     return {
       borderColor: thumbColor ?? adaptiveColor.value,
     };
-  }, [adaptiveColor]);
+  }, [thumbColor, adaptiveColor]);
 
   return (
     <Animated.View

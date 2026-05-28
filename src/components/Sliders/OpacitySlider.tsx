@@ -27,12 +27,12 @@ export function OpacitySlider({ gestures = [], style = {}, vertical = false, rev
   const sliderThickness = props.sliderThickness ?? ctx.sliderThickness;
 
   const borderRadius = getStyle(style, 'borderRadius') ?? 5;
-  const getWidth = getStyle(style, 'width');
-  const getHeight = getStyle(style, 'height');
+  const widthStyle = getStyle(style, 'width');
+  const heightStyle = getStyle(style, 'height');
 
   const containerRef = useRef<Animated.View>(null);
-  const width = useSharedValue(vertical ? sliderThickness : typeof getWidth === 'number' ? getWidth : 0);
-  const height = useSharedValue(!vertical ? sliderThickness : typeof getHeight === 'number' ? getHeight : 0);
+  const width = useSharedValue(vertical ? sliderThickness : typeof widthStyle === 'number' ? widthStyle : 0);
+  const height = useSharedValue(!vertical ? sliderThickness : typeof heightStyle === 'number' ? heightStyle : 0);
   const handleScale = useSharedValue(1);
 
   const handleStyle = useAnimatedStyle(() => {
@@ -45,7 +45,7 @@ export function OpacitySlider({ gestures = [], style = {}, vertical = false, rev
     return {
       transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }],
     };
-  }, [width, height, alphaValue, handleScale]);
+  }, [width, height, alphaValue, handleScale, vertical, reverse, boundedThumb, thumbSize]);
 
   const activeColorStyle = useAnimatedStyle(() => {
     if (!isWeb) {
@@ -62,7 +62,7 @@ export function OpacitySlider({ gestures = [], style = {}, vertical = false, rev
     return {
       background: `linear-gradient(${deg}deg, transparent 0%, ${color} 100%)`,
     };
-  }, [hueValue, saturationValue, brightnessValue]);
+  }, [hueValue, saturationValue, brightnessValue, vertical, reverse]);
 
   const imageStyle = useAnimatedStyle(() => {
     if (isWeb) {
@@ -81,7 +81,7 @@ export function OpacitySlider({ gestures = [], style = {}, vertical = false, rev
         { translateY: vertical ? imageTranslateY : 0 },
       ],
     };
-  }, [width, height, hueValue, saturationValue, brightnessValue]);
+  }, [width, height, vertical, reverse]);
 
   const imageTintColorProp = useAnimatedProps(() => {
     return {
@@ -91,7 +91,7 @@ export function OpacitySlider({ gestures = [], style = {}, vertical = false, rev
         adaptSpectrum ? brightnessValue.value : 100,
       ),
     };
-  }, [hueValue, saturationValue, brightnessValue]);
+  }, [hueValue, saturationValue, brightnessValue, adaptSpectrum]);
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';

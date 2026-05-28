@@ -28,12 +28,12 @@ export function GreenSlider({ gestures = [], style = {}, vertical = false, rever
   const sliderThickness = props.sliderThickness ?? ctx.sliderThickness;
 
   const borderRadius = getStyle(style, 'borderRadius') ?? 5;
-  const getWidth = getStyle(style, 'width');
-  const getHeight = getStyle(style, 'height');
+  const widthStyle = getStyle(style, 'width');
+  const heightStyle = getStyle(style, 'height');
 
   const containerRef = useRef<Animated.View>(null);
-  const width = useSharedValue(vertical ? sliderThickness : typeof getWidth === 'number' ? getWidth : 0);
-  const height = useSharedValue(!vertical ? sliderThickness : typeof getHeight === 'number' ? getHeight : 0);
+  const width = useSharedValue(vertical ? sliderThickness : typeof widthStyle === 'number' ? widthStyle : 0);
+  const height = useSharedValue(!vertical ? sliderThickness : typeof heightStyle === 'number' ? heightStyle : 0);
   const handleScale = useSharedValue(1);
 
   const rgb = useDerivedValue(() => {
@@ -50,7 +50,7 @@ export function GreenSlider({ gestures = [], style = {}, vertical = false, rever
     return {
       transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }],
     };
-  }, [rgb, width, height, handleScale]);
+  }, [rgb, width, height, handleScale, vertical, reverse, boundedThumb, thumbSize]);
 
   const imageStyle = useAnimatedStyle(() => {
     if (isWeb) {
@@ -71,7 +71,7 @@ export function GreenSlider({ gestures = [], style = {}, vertical = false, rever
         { translateY: vertical ? imageTranslateY : 0 },
       ],
     };
-  }, [rgb, width, height, adaptSpectrum]);
+  }, [rgb, width, height, adaptSpectrum, vertical, reverse]);
 
   const sliderBackground = useAnimatedStyle(() => {
     const r = Math.round(rgb.value.r);

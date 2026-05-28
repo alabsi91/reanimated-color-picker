@@ -29,7 +29,7 @@ export default function Solid({
     return {
       borderColor: borderColor ?? adaptiveColor.value,
     };
-  }, [adaptiveColor]);
+  }, [borderColor, adaptiveColor]);
 
   return (
     <Animated.View

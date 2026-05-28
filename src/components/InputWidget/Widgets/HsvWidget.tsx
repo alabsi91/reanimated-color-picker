@@ -40,7 +40,7 @@ export default function HsvWidget({
     s.value = hsv.current.s.toString();
     v.value = hsv.current.v.toString();
     a.value = hsv.current.a.toString();
-  }, [hueValue, saturationValue, brightnessValue, alphaValue, h, s, v, a]);
+  }, [hueValue, saturationValue, brightnessValue, alphaValue]);
 
   const onHueEndEditing = (text: string) => {
     const hue = clamp(+text, 360);

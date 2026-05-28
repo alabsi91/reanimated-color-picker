@@ -52,7 +52,7 @@ export function HueCircular({
     return {
       transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }, { rotate: rotatedHue + 90 + 'deg' }],
     };
-  }, [width, hueValue, handleScale]);
+  }, [width, hueValue, handleScale, thumbSize, sliderThickness, rotate]);
 
   const activeSaturationStyle = useAnimatedStyle(() => {
     if (!adaptSpectrum) {
@@ -62,7 +62,7 @@ export function HueCircular({
     return {
       backgroundColor: HSVA2HSLA_string(0, 0, brightnessValue.value, 1 - saturationValue.value / 100),
     };
-  }, [brightnessValue, saturationValue]);
+  }, [brightnessValue, saturationValue, adaptSpectrum]);
 
   const activeBrightnessStyle = useAnimatedStyle(() => {
     if (!adaptSpectrum) {
@@ -72,7 +72,7 @@ export function HueCircular({
     return {
       backgroundColor: HSVA2HSLA_string(0, 0, 0, 1 - brightnessValue.value / 100),
     };
-  }, [brightnessValue]);
+  }, [brightnessValue, adaptSpectrum]);
 
   const clipViewStyle = useAnimatedStyle(() => {
     return {
@@ -81,7 +81,7 @@ export function HueCircular({
       height: width.value - sliderThickness * 2,
       borderRadius: width.value / 2,
     };
-  }, [width]);
+  }, [width, sliderThickness]);
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -105,20 +105,20 @@ export function HueCircular({
   const onGestureBegin = (event: PanGestureHandlerEventPayload) => {
     'worklet';
 
-    const R = width.value / 2;
-    const dx = R - event.x;
-    const dy = R - event.y;
-    const clickR = Math.sqrt(dx * dx + dy * dy);
+    const radius = width.value / 2;
+    const dx = radius - event.x;
+    const dy = radius - event.y;
+    const pressDistance = Math.sqrt(dx * dx + dy * dy);
 
     // Check if the press is outside the circle
-    if (clickR > R) {
+    if (pressDistance > radius) {
       isGestureActive.value = false;
       return;
     }
 
     // check if the press inside the circle (not on the actual slider)
     const innerR = width.value / 2 - sliderThickness;
-    if (clickR < innerR) {
+    if (pressDistance < innerR) {
       isGestureActive.value = false;
       return;
     }

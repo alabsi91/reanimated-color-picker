@@ -27,12 +27,12 @@ export function SaturationSlider({ gestures = [], style = {}, vertical = false, 
   const sliderThickness = props.sliderThickness ?? ctx.sliderThickness;
 
   const borderRadius = getStyle(style, 'borderRadius') ?? 5;
-  const getWidth = getStyle(style, 'width');
-  const getHeight = getStyle(style, 'height');
+  const widthStyle = getStyle(style, 'width');
+  const heightStyle = getStyle(style, 'height');
 
   const containerRef = useRef<Animated.View>(null);
-  const width = useSharedValue(vertical ? sliderThickness : typeof getWidth === 'number' ? getWidth : 0);
-  const height = useSharedValue(!vertical ? sliderThickness : typeof getHeight === 'number' ? getHeight : 0);
+  const width = useSharedValue(vertical ? sliderThickness : typeof widthStyle === 'number' ? widthStyle : 0);
+  const height = useSharedValue(!vertical ? sliderThickness : typeof heightStyle === 'number' ? heightStyle : 0);
   const handleScale = useSharedValue(1);
 
   const handleStyle = useAnimatedStyle(() => {
@@ -45,7 +45,7 @@ export function SaturationSlider({ gestures = [], style = {}, vertical = false, 
     return {
       transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }],
     };
-  }, [width, height, saturationValue, handleScale]);
+  }, [width, height, saturationValue, handleScale, vertical, reverse, boundedThumb, thumbSize]);
 
   const activeColorStyle = useAnimatedStyle(() => {
     return {
@@ -76,7 +76,7 @@ export function SaturationSlider({ gestures = [], style = {}, vertical = false, 
         { translateY: vertical ? imageTranslateY : 0 },
       ],
     };
-  }, [width, height]);
+  }, [width, height, vertical, reverse]);
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';

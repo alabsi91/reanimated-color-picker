@@ -82,14 +82,14 @@ export function LuminanceCircular({
         { rotate: mirroredAngle + 90 + 'deg' },
       ],
     };
-  }, [width, hsl, handleScale, thumbSide]);
+  }, [width, hsl, handleScale, thumbSide, rotate]);
 
   const activeColorStyle = useAnimatedStyle(() => {
     return {
       backgroundColor: `hsl(${hsl.value.h}, ${adaptSpectrum ? hsl.value.s : 100}%, ${50}%)`,
       borderRadius: width.value / 2,
     };
-  }, [hsl, width]);
+  }, [hsl, width, adaptSpectrum]);
 
   const clipViewStyle = useAnimatedStyle(() => {
     return {
@@ -98,7 +98,7 @@ export function LuminanceCircular({
       height: width.value - sliderThickness * 2,
       borderRadius: width.value / 2,
     };
-  }, [width]);
+  }, [width, sliderThickness]);
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -128,20 +128,20 @@ export function LuminanceCircular({
   const onGestureBegin = (event: PanGestureHandlerEventPayload) => {
     'worklet';
 
-    const R = width.value / 2;
-    const dx = R - event.x;
-    const dy = R - event.y;
-    const clickR = Math.sqrt(dx * dx + dy * dy);
+    const radius = width.value / 2;
+    const dx = radius - event.x;
+    const dy = radius - event.y;
+    const pressDistance = Math.sqrt(dx * dx + dy * dy);
 
     // Check if the press is outside the circle
-    if (clickR > R) {
+    if (pressDistance > radius) {
       isGestureActive.value = false;
       return;
     }
 
     // check if the press inside the circle (not on the actual slider)
     const innerR = width.value / 2 - sliderThickness;
-    if (clickR < innerR) {
+    if (pressDistance < innerR) {
       isGestureActive.value = false;
       return;
     }
