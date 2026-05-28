@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import { View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle, useDerivedValue, useSharedValue, withTiming } from 'react-native-reanimated';
@@ -30,6 +30,7 @@ export function RedSlider({ gestures = [], style = {}, vertical = false, reverse
   const getWidth = getStyle(style, 'width');
   const getHeight = getStyle(style, 'height');
 
+  const containerRef = useRef<Animated.View>(null);
   const width = useSharedValue(vertical ? sliderThickness : typeof getWidth === 'number' ? getWidth : 0);
   const height = useSharedValue(!vertical ? sliderThickness : typeof getHeight === 'number' ? getHeight : 0);
   const handleScale = useSharedValue(1);
@@ -122,6 +123,19 @@ export function RedSlider({ gestures = [], style = {}, vertical = false, reverse
   const longPress = Gesture.LongPress().onEnd(onGestureFinish);
   const composed = Gesture.Simultaneous(Gesture.Exclusive(pan, tap, longPress), ...gestures);
 
+  // useLayoutEffect → paint → onLayout
+  useLayoutEffect(() => {
+    containerRef.current?.measure((_x, _y, layoutWidth, layoutHeight) => {
+      if (!vertical && layoutWidth) {
+        width.value = layoutWidth;
+      }
+
+      if (vertical && layoutHeight) {
+        height.value = layoutHeight;
+      }
+    });
+  }, []);
+
   const onLayout = ({ nativeEvent: { layout } }: LayoutChangeEvent) => {
     if (!vertical && layout.width) {
       width.value = layout.width;
@@ -137,6 +151,7 @@ export function RedSlider({ gestures = [], style = {}, vertical = false, reverse
   return (
     <GestureDetector gesture={composed}>
       <Animated.View
+        ref={containerRef}
         onLayout={onLayout}
         style={[style, { position: 'relative', borderRadius, borderWidth: 0, padding: 0 }, thicknessStyle, greenBlue]}
       >

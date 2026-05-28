@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useLayoutEffect, useRef } from 'react';
 import { Image, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { Easing, useAnimatedStyle, useDerivedValue, useSharedValue, withTiming } from 'react-native-reanimated';
@@ -19,10 +19,11 @@ export function Panel5({ gestures = [], style = {}, selectionStyle = {} }: Panel
 
   const borderRadius = getStyle(style, 'borderRadius') ?? 0;
 
-  const squareSize = useSharedValue(0),
-    posX = useSharedValue(0),
-    posY = useSharedValue(0),
-    adaptiveColor = useSharedValue('#000');
+  const containerRef = useRef<Animated.View>(null);
+  const squareSize = useSharedValue(0);
+  const posX = useSharedValue(0);
+  const posY = useSharedValue(0);
+  const adaptiveColor = useSharedValue('#000');
 
   const setAdaptiveColor = (color1: string) => {
     'worklet';
@@ -34,14 +35,21 @@ export function Panel5({ gestures = [], style = {}, selectionStyle = {} }: Panel
   // Calculate the position of the selected square on color change.
   // Since color conversion is not 100% accurate, we need to find the closest color in the grid.
   useDerivedValue(() => {
-    const hsvColor = { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
+    const hsvColor = {
+      h: hueValue.value,
+      s: saturationValue.value,
+      v: brightnessValue.value,
+    };
 
     for (let y = 0; y < gridColors.length; y++) {
       for (let x = 0; x < gridColors[y].length; x++) {
         const gridColor = gridColors[y][x];
+
         const areColorsEqual = colorKit.runOnUI().areColorsEqual(gridColor, hsvColor, 5);
         if (!areColorsEqual) continue;
+
         setAdaptiveColor(gridColor);
+
         posX.value = withTiming(x, animationOptions);
         posY.value = withTiming(y, animationOptions);
         break;
@@ -84,14 +92,24 @@ export function Panel5({ gestures = [], style = {}, selectionStyle = {} }: Panel
 
   const composed = Gesture.Simultaneous(tap, ...gestures);
 
+  // useLayoutEffect → paint → onLayout
+  useLayoutEffect(() => {
+    containerRef.current?.measure((_x, _y, layoutWidth, layoutHeight) => {
+      if (!layoutWidth && !layoutHeight) return;
+      squareSize.value = layoutWidth / 12 || layoutHeight / 10;
+    });
+  }, []);
+
   const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
-    squareSize.value = withTiming(layout.width / 12 || layout.height / 10, { duration: 100 });
+    if (!layout.width && !layout.height) return;
+    squareSize.value = layout.width / 12 || layout.height / 10;
   }, []);
 
   return (
     <GestureDetector gesture={composed}>
       <View
         collapsable={false}
+        ref={containerRef}
         onLayout={onLayout}
         style={[style, { position: 'relative', borderWidth: 0, padding: 0, aspectRatio: 1.2 }]}
       >

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useLayoutEffect, useRef } from 'react';
 import { Image } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle, useDerivedValue, useSharedValue, withTiming } from 'react-native-reanimated';
@@ -33,6 +33,7 @@ export function LuminanceCircular({
   const adaptSpectrum = props.adaptSpectrum ?? ctx.adaptSpectrum;
   const thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle ?? {};
 
+  const containerRef = useRef<Animated.View>(null);
   const isGestureActive = useSharedValue(false);
   const width = useSharedValue(0);
   const borderRadius = useSharedValue(0);
@@ -163,6 +164,15 @@ export function LuminanceCircular({
   const longPress = Gesture.LongPress().onEnd(onGestureFinish);
   const composed = Gesture.Simultaneous(Gesture.Exclusive(pan, tap, longPress), ...gestures);
 
+  // useLayoutEffect → paint → onLayout
+  useLayoutEffect(() => {
+    containerRef.current?.measure((_x, _y, layoutWidth) => {
+      if (!layoutWidth) return;
+      width.value = layoutWidth;
+      borderRadius.value = layoutWidth / 2;
+    });
+  }, []);
+
   const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
     if (!layout.width) return;
     width.value = layout.width;
@@ -172,6 +182,7 @@ export function LuminanceCircular({
   return (
     <GestureDetector gesture={composed}>
       <Animated.View
+        ref={containerRef}
         onLayout={onLayout}
         style={[
           styles.panelContainer,
