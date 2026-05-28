@@ -73,7 +73,7 @@ export function LuminanceSlider({ gestures = [], style = {}, vertical = false, r
     return {
       backgroundColor: `hsl(${hsl.value.h}, ${adaptSpectrum ? hsl.value.s : 100}%, ${50}%)`,
     };
-  }, [hueValue, saturationValue]);
+  }, [hsl, adaptSpectrum]);
 
   const imageStyle = useAnimatedStyle(() => {
     const imageRotate = vertical ? (reverse ? '90deg' : '270deg') : reverse ? '0deg' : '180deg';
@@ -151,9 +151,9 @@ export function LuminanceSlider({ gestures = [], style = {}, vertical = false, r
 
   const thicknessStyle = vertical ? { width: sliderThickness } : { height: sliderThickness };
 
-  const getAdaptiveColor = (hsva: { h: number; s: number; v: number; a: number }) => {
+  const getAdaptiveColor = () => {
     'worklet';
-    const { h, l } = colorKit.runOnUI().HSL(hsva).object();
+    const { h, l } = hsl.value;
     return { h, s: 100, l };
   };
 

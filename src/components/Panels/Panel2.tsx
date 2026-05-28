@@ -114,7 +114,7 @@ export function Panel2({
     return {
       backgroundColor: `rgba(0, 0, 0, ${1 - brightnessValue.value / 100})`,
     };
-  }, [saturationValue, brightnessValue]);
+  }, [saturationValue, brightnessValue, hsl]);
 
   const panelImageStyle = useAnimatedStyle(() => {
     return {
@@ -205,7 +205,7 @@ export function Panel2({
       case 'brightness':
         return { h: hsva.h, s: 100, v: hsva.v };
       case 'hsl-saturation':
-        const { h, s } = colorKit.runOnUI().HSL(hsva).object(false);
+        const { h, s } = hsl.value;
         return { h, s, l: 50 };
       default:
         return hsva;

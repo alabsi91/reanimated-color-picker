@@ -24,7 +24,7 @@ export function HSLSaturationSlider({ gestures = [], style = {}, vertical = fals
   const thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle ?? {};
   const thumbScaleAnimationValue = props.thumbScaleAnimationValue ?? ctx.thumbScaleAnimationValue;
   const thumbScaleAnimationDuration = props.thumbScaleAnimationDuration ?? ctx.thumbScaleAnimationDuration;
-  const adaptSpectrum = false;
+  const adaptSpectrum = props.adaptSpectrum ?? ctx.adaptSpectrum;
   const sliderThickness = props.sliderThickness ?? ctx.sliderThickness;
 
   const borderRadius = getStyle(style, 'borderRadius') ?? 5;
@@ -76,7 +76,7 @@ export function HSLSaturationSlider({ gestures = [], style = {}, vertical = fals
     return {
       backgroundColor: `hsl(${hsl.value.h}, 100%, 50%)`,
     };
-  }, [hueValue]);
+  }, [hsl]);
 
   const activeBrightnessStyle = useAnimatedStyle(() => {
     if (!adaptSpectrum) {
@@ -180,7 +180,7 @@ export function HSLSaturationSlider({ gestures = [], style = {}, vertical = fals
       return hsva;
     }
 
-    const { h, s } = colorKit.runOnUI().HSL(hsva).object();
+    const { h, s } = hsl.value;
     return { h, s, l: 50 };
   };
 

@@ -89,7 +89,7 @@ export function LuminanceCircular({
       backgroundColor: `hsl(${hsl.value.h}, ${adaptSpectrum ? hsl.value.s : 100}%, ${50}%)`,
       borderRadius: width.value / 2,
     };
-  }, [hueValue, saturationValue, width]);
+  }, [hsl, width]);
 
   const clipViewStyle = useAnimatedStyle(() => {
     return {
@@ -179,9 +179,9 @@ export function LuminanceCircular({
     borderRadius.value = layout.width / 2;
   }, []);
 
-  const getAdaptiveColor = (hsva: { h: number; s: number; v: number; a: number }) => {
+  const getAdaptiveColor = () => {
     'worklet';
-    const { h, l } = colorKit.runOnUI().HSL(hsva).object();
+    const { h, l } = hsl.value;
     return { h, s: 100, l };
   };
 
