@@ -6,7 +6,7 @@ sidebar.order: 5
 
 ## Supported Colors
 
-#### RBG
+#### RGB
 
 - `"rgb(255, 0, 255)"`
 - `"rgb(255 0 255)"`
