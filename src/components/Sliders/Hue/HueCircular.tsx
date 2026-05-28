@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useLayoutEffect, useRef } from 'react';
 import { ImageBackground, StyleSheet } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
@@ -33,6 +33,7 @@ export function HueCircular({
   const adaptSpectrum = props.adaptSpectrum ?? ctx.adaptSpectrum;
   const thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle ?? {};
 
+  const containerRef = useRef<Animated.View>(null);
   const isGestureActive = useSharedValue(false);
   const width = useSharedValue(0);
   const borderRadius = useSharedValue(0);
@@ -140,6 +141,15 @@ export function HueCircular({
   const longPress = Gesture.LongPress().onEnd(onGestureFinish);
   const composed = Gesture.Simultaneous(Gesture.Exclusive(pan, tap, longPress), ...gestures);
 
+  // useLayoutEffect → paint → onLayout
+  useLayoutEffect(() => {
+    containerRef.current?.measure((_x, _y, layoutWidth) => {
+      if (!layoutWidth) return;
+      width.value = layoutWidth;
+      borderRadius.value = layoutWidth / 2;
+    });
+  }, []);
+
   const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
     const layoutWidth = layout.width;
     if (!layoutWidth) return;
@@ -152,6 +162,7 @@ export function HueCircular({
     <GestureDetector gesture={composed}>
       <Animated.View
         onLayout={onLayout}
+        ref={containerRef}
         style={[
           styles.panelContainer,
           { justifyContent: 'center', alignItems: 'center' },

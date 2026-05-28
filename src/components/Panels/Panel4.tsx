@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useLayoutEffect, useRef } from 'react';
 import { Image, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
@@ -35,6 +35,7 @@ export function Panel4({
   const borderRadius = getStyle(style, 'borderRadius') ?? 5;
   const getHeight = getStyle(style, 'height') ?? 200;
 
+  const containerRef = useRef<Animated.View>(null);
   const width = useSharedValue(0);
   const height = useSharedValue(0);
   const handleScale = useSharedValue(1);
@@ -113,6 +114,15 @@ export function Panel4({
   const longPress = Gesture.LongPress().onEnd(onGestureFinish);
   const composed = Gesture.Simultaneous(Gesture.Exclusive(pan, tap, longPress), ...gestures);
 
+  // useLayoutEffect → paint → onLayout
+  useLayoutEffect(() => {
+    containerRef.current?.measure((_x, _y, layoutWidth, layoutHeight) => {
+      if (!layoutWidth || !layoutHeight) return;
+      width.value = layoutWidth;
+      height.value = layoutHeight;
+    });
+  }, []);
+
   const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
     if (!layout.width || !layout.height) return;
     width.value = layout.width;
@@ -122,6 +132,7 @@ export function Panel4({
   return (
     <GestureDetector gesture={composed}>
       <Animated.View
+        ref={containerRef}
         onLayout={onLayout}
         style={[styles.panelContainer, style, { position: 'relative', height: getHeight, borderWidth: 0, padding: 0 }]}
       >
