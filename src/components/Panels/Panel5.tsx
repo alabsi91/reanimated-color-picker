@@ -25,11 +25,10 @@ export function Panel5({ gestures = [], style = {}, selectionStyle = {} }: Panel
   const posY = useSharedValue(0);
   const adaptiveColor = useSharedValue('#000');
 
-  const setAdaptiveColor = (color1: string) => {
+  const setAdaptiveColor = (color: string) => {
     'worklet';
-    const color = adaptiveColor.value === '#ffffff' ? '#000000' : '#ffffff';
-    const contrast = colorKit.runOnUI().contrastRatio(color1, adaptiveColor.value);
-    adaptiveColor.value = contrast < 4.5 ? color : adaptiveColor.value;
+    const isDark = colorKit.runOnUI().isDark(color);
+    adaptiveColor.value = isDark ? '#ffffff' : '#000000';
   };
 
   // Calculate the position of the selected square on color change.
