@@ -93,11 +93,12 @@
     ],
     "ignorePatterns": [
       "scripts/*",
-      "Example/**/*",
-      "ExampleExpo/**/*",
+      "ExampleExpoLatest/**/*",
+      "ExampleLatest/**/*",
+      "ExampleOldArch/**/*",
       "lib/**/*",
       "docs/**/*",
-      "docusaurus/**/*"
+      "*.md"
     ],
     "rules": {
       "prefer-const": 1,
