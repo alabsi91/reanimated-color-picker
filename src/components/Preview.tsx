@@ -32,9 +32,8 @@ export function Preview({
 
   const initialTextColor = useDerivedValue(() => {
     const adaptiveTextColor = alphaValue.value > 0.5 ? value : { h: 0, s: 0, v: 70 };
-    const contrast = colorKit.runOnUI().contrastRatio(adaptiveTextColor, '#ffffff');
-
-    return contrast < 4.5 ? '#000000' : '#ffffff';
+    const isDark = colorKit.runOnUI().isDark(adaptiveTextColor);
+    return isDark ? '#ffffff' : '#000000';
   }, [alphaValue, value]);
 
   const initialTextStyle = useAnimatedStyle(() => ({ color: initialTextColor.value }), [initialTextColor]);
@@ -60,7 +59,6 @@ export function Preview({
 
     const compareColor = alphaValue.value > 0.5 ? currentColor : { h: 0, s: 0, v: 70 };
     const isDark = colorKit.runOnUI().isDark(compareColor);
-
     return isDark ? '#ffffff' : '#000000';
   }, [hueValue, saturationValue, brightnessValue, alphaValue]);
 
