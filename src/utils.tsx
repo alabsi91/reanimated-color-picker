@@ -27,6 +27,7 @@ export const clamp = (v: number, max: number) => {
 export const HSVA2HSLA_string = (h: number, s: number, v: number, a = 1) => {
   'worklet';
 
+  a = +a.toFixed(2);
   s = s / 100;
   v = v / 100;
 
