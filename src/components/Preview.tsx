@@ -30,13 +30,14 @@ export function Preview({
     setInitialValueFormatted(returnedResults()[colorFormat]);
   }, [value, colorFormat]);
 
-  const initialTextColor = useDerivedValue(() => {
-    const adaptiveTextColor = alphaValue.value > 0.5 ? value : { h: 0, s: 0, v: 70 };
-    const isDark = colorKit.runOnUI().isDark(adaptiveTextColor);
-    return isDark ? '#ffffff' : '#000000';
-  }, [alphaValue, value]);
+  const initialTextColor = (() => {
+    if (alphaValue.value < 0.5) {
+      return '#000000';
+    }
 
-  const initialTextStyle = useAnimatedStyle(() => ({ color: initialTextColor.value }), [initialTextColor]);
+    const isDark = colorKit.runOnUI().isDark(value);
+    return isDark ? '#ffffff' : '#000000';
+  })();
 
   const previewColor = useDerivedValue(() => {
     return colorKit.runOnUI().HEX({
@@ -50,6 +51,10 @@ export function Preview({
   const previewColorStyle = useAnimatedStyle(() => ({ backgroundColor: previewColor.value }), [previewColor]);
 
   const previewTextColor = useDerivedValue(() => {
+    if (alphaValue.value < 0.5) {
+      return '#000000';
+    }
+
     const currentColor = {
       h: hueValue.value,
       s: saturationValue.value,
@@ -57,8 +62,7 @@ export function Preview({
       a: alphaValue.value,
     };
 
-    const compareColor = alphaValue.value > 0.5 ? currentColor : { h: 0, s: 0, v: 70 };
-    const isDark = colorKit.runOnUI().isDark(compareColor);
+    const isDark = colorKit.runOnUI().isDark(currentColor);
     return isDark ? '#ffffff' : '#000000';
   }, [hueValue, saturationValue, brightnessValue, alphaValue]);
 
@@ -69,7 +73,9 @@ export function Preview({
       <ConditionalRendering if={!hideInitialColor}>
         <View style={[styles.previewContainer, { backgroundColor: value, justifyContent }]}>
           <ConditionalRendering if={!hideText}>
-            <Animated.Text style={[styles.previewText, textStyle, initialTextStyle]}>{initialValueFormatted}</Animated.Text>
+            <Animated.Text style={[styles.previewText, textStyle, { color: initialTextColor }]}>
+              {initialValueFormatted}
+            </Animated.Text>
           </ConditionalRendering>
         </View>
       </ConditionalRendering>
