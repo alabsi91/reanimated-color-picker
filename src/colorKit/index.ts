@@ -514,6 +514,7 @@ export const colorKitUI = () => {
         r = Math.round(r);
         g = Math.round(g);
         b = Math.round(b);
+        a = +a.toFixed(2);
 
         // auto
         if (typeof forceAlpha === 'undefined') {
@@ -672,6 +673,7 @@ export const colorKitUI = () => {
         h = Math.round(h);
         s = Math.round(s);
         l = Math.round(l);
+        a = +a.toFixed(2);
 
         // auto
         if (typeof forceAlpha === 'undefined') {
@@ -832,6 +834,7 @@ export const colorKitUI = () => {
         h = Math.round(h);
         w = Math.round(w);
         b = Math.round(b);
+        a = +a.toFixed(2);
 
         // auto
         if (typeof forceAlpha === 'undefined') {
@@ -1024,6 +1027,7 @@ export const colorKitUI = () => {
         h = Math.round(h);
         s = Math.round(s);
         v = Math.round(v);
+        a = +a.toFixed(2);
 
         // auto
         if (typeof forceAlpha === 'undefined') {
