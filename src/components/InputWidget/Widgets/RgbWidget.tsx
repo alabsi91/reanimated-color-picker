@@ -27,14 +27,9 @@ export default function RgbWidget({
   const a = useSharedValue(rgb.current.a.toString());
 
   useDerivedValue(() => {
-    const currentColor = {
-      h: hueValue.value,
-      s: saturationValue.value,
-      v: brightnessValue.value,
-      a: alphaValue.value,
-    };
+    [hueValue, saturationValue, brightnessValue, alphaValue]; // track changes on Native
 
-    rgb.current = colorKit.runOnUI().RGB(returnedResults(currentColor).rgba).object(false);
+    rgb.current = colorKit.runOnUI().RGB(returnedResults().rgba).object(false);
 
     r.value = rgb.current.r.toString();
     g.value = rgb.current.g.toString();

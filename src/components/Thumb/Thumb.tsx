@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAnimatedStyle, useDerivedValue } from 'react-native-reanimated';
+import { useAnimatedStyle, useDerivedValue, useSharedValue } from 'react-native-reanimated';
 
 import colorKit from '@colorKit';
 import usePickerContext from '@context';
@@ -29,34 +29,42 @@ export default function Thumb({
   const brightness = overrideHSV?.brightness ?? brightnessValue;
   const alpha = overrideHSV?.alpha ?? alphaValue;
 
-  const getColorForAdaptiveColor = ({ h, s, v, a }: { h: number; s: number; v: number; a: number }) => {
+  /**
+   * Get the current color and calculate its contrast ratio against white or black, depending on the channel and whether
+   * 'adaptSpectrum' is enabled
+   */
+  const getColorForAdaptiveColor = () => {
     'worklet';
 
     if (adaptSpectrum) {
       if (channel === 'a') {
-        // at low alpha the background (white/checkered) shows through
-        return a > 0.5 ? { h, s, v } : { h: 0, s: 0, v: 100 };
+        if (alpha.value > 0.5) {
+          return { h: hue.value, s: saturation.value, v: brightness.value };
+        }
+
+        return { h: 0, s: 0, v: 70 };
       }
-      // all other channels adapt to current color values
-      return { h, s, v };
+
+      return { h: hue.value, s: saturation.value, v: brightness.value };
     }
 
-    switch (channel) {
-      case 'h':
-        // hue strip always renders at full saturation + brightness
-        return { h, s: 100, v: 100 };
-      case 's':
-        // goes from gray → full color, brightness stays at max
-        return { h, s, v: 100 };
-      case 'v':
-        // goes from black → full hue at full saturation
-        return { h, s: 100, v };
-      case 'a':
-        // goes from transparent → color; at low alpha white bg dominates
-        return a > 0.5 ? { h, s, v } : { h: 0, s: 0, v: 100 };
-      default:
-        return { h, s, v };
+    if (channel === 'h') {
+      return { h: hue.value, s: 100, v: 100 };
     }
+
+    if (channel === 'v') {
+      return { h: hue.value, s: 100, v: brightness.value };
+    }
+
+    if (channel === 's') {
+      return { h: hue.value, s: saturation.value, v: 70 };
+    }
+
+    if (channel === 'a') {
+      return { h: hue.value, s: alpha.value * 100, v: 70 };
+    }
+
+    return { h: hue.value, s: saturation.value, v: brightness.value };
   };
 
   const currentColor = useDerivedValue(() => {
@@ -65,12 +73,24 @@ export default function Thumb({
 
   const solidColor = useAnimatedStyle(() => ({ backgroundColor: thumbColor ?? currentColor.value }), [currentColor]);
 
-  const adaptiveColor = useDerivedValue<string>(() => {
-    const compareColor = getColorForAdaptiveColor({ h: hue.value, s: saturation.value, v: brightness.value, a: alpha.value });
-    const isDark = colorKit.runOnUI().isDark(compareColor);
+  const isWhite = useSharedValue(true);
 
-    return isDark ? '#ffffff' : '#000000';
-  }, [hue, saturation, brightness, alpha]);
+  const adaptiveColor = useDerivedValue<string>(() => {
+    [alpha, hue, saturation, brightness]; // track changes on Native
+
+    // calculate the contrast ratio
+    const compareColor1 = getColorForAdaptiveColor();
+    const compareColor2 = isWhite.value ? { h: 0, s: 0, v: 100 } : { h: 0, s: 0, v: 0 };
+    const contrast = colorKit.runOnUI().contrastRatio(compareColor1, compareColor2);
+    const reversedColor = isWhite.value ? '#000000' : '#ffffff';
+
+    if (contrast < 4.5) {
+      isWhite.value = !isWhite.value;
+      return reversedColor;
+    }
+
+    return isWhite.value ? '#ffffff' : '#000000';
+  }, [alpha, hue, saturation, brightness]);
 
   const thumbProps: BuiltinThumbsProps = {
     width,

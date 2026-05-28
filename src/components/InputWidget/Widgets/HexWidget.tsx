@@ -20,15 +20,10 @@ export default function HexWidget({
   const hexColor = useSharedValue(returnedResults().hex);
 
   useDerivedValue(() => {
-    const currentColor = {
-      h: hueValue.value,
-      s: saturationValue.value,
-      v: brightnessValue.value,
-      a: alphaValue.value,
-    };
+    [hueValue, saturationValue, brightnessValue, alphaValue]; // track changes on Native
 
-    hexColor.value = returnedResults(currentColor).hex;
-  }, [hueValue, saturationValue, brightnessValue, alphaValue]);
+    hexColor.value = returnedResults().hex;
+  }, [hueValue, saturationValue, brightnessValue, alphaValue]); // track changes on WEB
 
   const onEndEditing = (text: string) => {
     text = text.startsWith('#') ? text : '#' + text;

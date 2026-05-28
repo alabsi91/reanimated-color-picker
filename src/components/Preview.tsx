@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ImageBackground, View } from 'react-native';
-import Animated, { useAnimatedStyle, useDerivedValue } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useDerivedValue, useSharedValue } from 'react-native-reanimated';
 
 import colorKit from '@colorKit';
 import usePickerContext from '@context';
@@ -50,6 +50,7 @@ export function Preview({
 
   const previewColorStyle = useAnimatedStyle(() => ({ backgroundColor: previewColor.value }), [previewColor]);
 
+  const isWhite = useSharedValue(true);
   const previewTextColor = useDerivedValue(() => {
     const currentColor = {
       h: hueValue.value,
@@ -58,10 +59,18 @@ export function Preview({
       a: alphaValue.value,
     };
 
-    const compareColor = alphaValue.value > 0.5 ? currentColor : { h: 0, s: 0, v: 70 };
-    const isDark = colorKit.runOnUI().isDark(compareColor);
+    // calculate the contrast ratio
+    const compareColor1 = alphaValue.value > 0.5 ? currentColor : { h: 0, s: 0, v: 70 };
+    const compareColor2 = isWhite.value ? { h: 0, s: 0, v: 100 } : { h: 0, s: 0, v: 0 };
+    const contrast = colorKit.runOnUI().contrastRatio(compareColor1, compareColor2);
+    const reversedColor = isWhite.value ? '#000000' : '#ffffff';
 
-    return isDark ? '#ffffff' : '#000000';
+    if (contrast < 4.5) {
+      isWhite.value = !isWhite.value;
+      return reversedColor;
+    }
+
+    return isWhite.value ? '#ffffff' : '#000000';
   }, [hueValue, saturationValue, brightnessValue, alphaValue]);
 
   const previewTextStyle = useAnimatedStyle(() => ({ color: previewTextColor.value }), [previewTextColor]);

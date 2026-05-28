@@ -27,20 +27,15 @@ export default function HsvWidget({
   const a = useSharedValue(hsv.current.a.toString());
 
   useDerivedValue(() => {
-    const currentColor = {
-      h: hueValue.value,
-      s: saturationValue.value,
-      v: brightnessValue.value,
-      a: alphaValue.value,
-    };
+    [hueValue, saturationValue, brightnessValue, alphaValue]; // track changes on Native
 
-    hsv.current = colorKit.runOnUI().HSV(returnedResults(currentColor).hsva).object(false);
+    hsv.current = colorKit.runOnUI().HSV(returnedResults().hsva).object(false);
 
     h.value = hsv.current.h.toString();
     s.value = hsv.current.s.toString();
     v.value = hsv.current.v.toString();
     a.value = hsv.current.a.toString();
-  }, [hueValue, saturationValue, brightnessValue, alphaValue, h, s, v, a]);
+  }, [hueValue, saturationValue, brightnessValue, alphaValue, h, s, v, a]); // track changes on WEB
 
   const onHueEndEditing = (text: string) => {
     const hue = clamp(+text, 360);
