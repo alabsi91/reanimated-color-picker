@@ -1,3 +1,19 @@
+### `sliderThickness`
+
+The slider's thickness — `width` in `vertical` mode, `height` in `horizontal` mode.
+
+`type: number` · `default: 25`
+
+---
+
+### `adaptSpectrum`
+
+The slider background color spectrum adapts to changes.
+
+`type: boolean` · `default: false`
+
+---
+
 ### `boundedThumb`
 
 ![boundedThumb](@assets/images/boundedThumb.png)
@@ -21,14 +37,6 @@ The size of the slider's thumb.
 The thumb's color. Defaults to an adaptive color based on contrast ratio.
 
 `type: string` · `default: interactive`[^interactive]
-
----
-
-### `sliderThickness`
-
-The slider's thickness — `width` in `vertical` mode, `height` in `horizontal` mode.
-
-`type: number` · `default: 25`
 
 ---
 

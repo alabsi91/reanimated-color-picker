@@ -24,6 +24,7 @@ export function GreenSlider({ gestures = [], style = {}, vertical = false, rever
   const thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle ?? {};
   const thumbScaleAnimationValue = props.thumbScaleAnimationValue ?? ctx.thumbScaleAnimationValue;
   const thumbScaleAnimationDuration = props.thumbScaleAnimationDuration ?? ctx.thumbScaleAnimationDuration;
+  const adaptSpectrum = props.adaptSpectrum ?? ctx.adaptSpectrum;
   const sliderThickness = props.sliderThickness ?? ctx.sliderThickness;
 
   const borderRadius = getStyle(style, 'borderRadius') ?? 5;
@@ -58,9 +59,10 @@ export function GreenSlider({ gestures = [], style = {}, vertical = false, rever
 
     const imageRotate = vertical ? (reverse ? '90deg' : '270deg') : reverse ? '0deg' : '180deg';
     const imageTranslateY = ((height.value - width.value) / 2) * ((reverse && isRtl) || (!reverse && !isRtl) ? -1 : 1);
+    const tintColor = adaptSpectrum ? `rgb(${Math.round(rgb.value.r)}, 255, ${Math.round(rgb.value.b)})` : 'rgb(0, 255, 0)';
 
     return {
-      tintColor: `rgb(${Math.round(rgb.value.r)}, 255, ${Math.round(rgb.value.b)})`,
+      tintColor,
       width: vertical ? height.value : '100%',
       height: vertical ? width.value : '100%',
       transform: [
@@ -69,23 +71,25 @@ export function GreenSlider({ gestures = [], style = {}, vertical = false, rever
         { translateY: vertical ? imageTranslateY : 0 },
       ],
     };
-  }, [rgb, width, height]);
+  }, [rgb, width, height, adaptSpectrum]);
 
-  const redBlue = useAnimatedStyle(() => {
+  const sliderBackground = useAnimatedStyle(() => {
     const r = Math.round(rgb.value.r);
     const b = Math.round(rgb.value.b);
 
     if (isWeb) {
       const deg = vertical ? (reverse ? 180 : 0) : reverse ? 90 : 270;
       return {
-        background: `linear-gradient(${deg}deg, rgb(${r}, 255, ${b}) 0%, rgb(${r}, 0, ${b}) 100%)`,
+        background: adaptSpectrum
+          ? `linear-gradient(${deg}deg, rgb(${r}, 255, ${b}) 0%, rgb(${r}, 0, ${b}) 100%)`
+          : 'linear-gradient(180deg, rgb(0, 255, 0) 0%, rgb(0, 0, 0) 100%)',
       };
     }
 
     return {
-      backgroundColor: `rgb(${r}, 0, ${b})`,
+      backgroundColor: adaptSpectrum ? `rgb(${r}, 0, ${b})` : 'rgb(0, 0, 0)',
     };
-  }, [rgb]);
+  }, [rgb, adaptSpectrum]);
 
   const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
     'worklet';
@@ -148,12 +152,22 @@ export function GreenSlider({ gestures = [], style = {}, vertical = false, rever
 
   const thicknessStyle = vertical ? { width: sliderThickness } : { height: sliderThickness };
 
+  const getAdaptiveColor = (hsva: { h: number; s: number; v: number; a: number }) => {
+    'worklet';
+
+    if (adaptSpectrum) {
+      return hsva;
+    }
+
+    return { r: 0, g: rgb.value.g, b: 0 };
+  };
+
   return (
     <GestureDetector gesture={composed}>
       <Animated.View
         ref={containerRef}
         onLayout={onLayout}
-        style={[style, { position: 'relative', borderRadius, borderWidth: 0, padding: 0 }, thicknessStyle, redBlue]}
+        style={[style, { position: 'relative', borderRadius, borderWidth: 0, padding: 0 }, thicknessStyle, sliderBackground]}
       >
         <RenderNativeOnly>
           <View style={{ flex: 1, borderRadius, overflow: 'hidden' }}>
@@ -169,6 +183,7 @@ export function GreenSlider({ gestures = [], style = {}, vertical = false, rever
           handleStyle={handleStyle}
           style={thumbStyle}
           vertical={vertical}
+          getAdaptiveColor={getAdaptiveColor}
         />
       </Animated.View>
     </GestureDetector>
