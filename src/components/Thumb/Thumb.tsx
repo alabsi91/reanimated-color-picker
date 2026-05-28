@@ -46,7 +46,7 @@ export default function Thumb({
     const isDark = colorKit.runOnUI().isDark(compareColor);
 
     return isDark ? '#ffffff' : '#000000';
-  }, [hue, saturation, brightness, alpha]);
+  }, [hue, saturation, brightness, alpha, getAdaptiveColor]);
 
   const thumbProps: BuiltinThumbsProps = {
     width,
