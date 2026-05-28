@@ -27,15 +27,20 @@ export default function HslWidget({
   const a = useSharedValue(hsl.current.a.toString());
 
   useDerivedValue(() => {
-    [hueValue, saturationValue, brightnessValue, alphaValue]; // track changes on Native
+    const currentColor = {
+      h: hueValue.value,
+      s: saturationValue.value,
+      v: brightnessValue.value,
+      a: alphaValue.value,
+    };
 
-    hsl.current = colorKit.runOnUI().HSL(returnedResults().hsla).object(false);
+    hsl.current = colorKit.runOnUI().HSL(returnedResults(currentColor).hsla).object(false);
 
     h.value = hsl.current.h.toString();
     s.value = hsl.current.s.toString();
     l.value = hsl.current.l.toString();
     a.value = hsl.current.a.toString();
-  }, [hueValue, saturationValue, brightnessValue, alphaValue, h, s, l, a]); // track changes on WEB
+  }, [hueValue, saturationValue, brightnessValue, alphaValue, h, s, l, a]);
 
   const onHueEndEditing = (text: string) => {
     const hue = clamp(+text, 360);

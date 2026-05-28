@@ -27,15 +27,20 @@ export default function HwbWidget({
   const a = useSharedValue(hwb.current.a.toString());
 
   useDerivedValue(() => {
-    [hueValue, saturationValue, brightnessValue, alphaValue]; // track changes on Native
+    const currentColor = {
+      h: hueValue.value,
+      s: saturationValue.value,
+      v: brightnessValue.value,
+      a: alphaValue.value,
+    };
 
-    hwb.current = colorKit.runOnUI().HWB(returnedResults().hwba).object(false);
+    hwb.current = colorKit.runOnUI().HWB(returnedResults(currentColor).hwba).object(false);
 
     h.value = hwb.current.h.toString();
     w.value = hwb.current.w.toString();
     b.value = hwb.current.b.toString();
     a.value = hwb.current.a.toString();
-  }, [hueValue, saturationValue, brightnessValue, alphaValue, h, w, b, a]); // track changes on WEB
+  }, [hueValue, saturationValue, brightnessValue, alphaValue, h, w, b, a]);
 
   const onHueEndEditing = (text: string) => {
     const hue = clamp(+text, 360);
