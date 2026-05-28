@@ -24,7 +24,7 @@ export function HSLSaturationSlider({ gestures = [], style = {}, vertical = fals
   const thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle ?? {};
   const thumbScaleAnimationValue = props.thumbScaleAnimationValue ?? ctx.thumbScaleAnimationValue;
   const thumbScaleAnimationDuration = props.thumbScaleAnimationDuration ?? ctx.thumbScaleAnimationDuration;
-  const adaptSpectrum = props.adaptSpectrum ?? ctx.adaptSpectrum;
+  const adaptSpectrum = false;
   const sliderThickness = props.sliderThickness ?? ctx.sliderThickness;
 
   const borderRadius = getStyle(style, 'borderRadius') ?? 5;
@@ -173,6 +173,17 @@ export function HSLSaturationSlider({ gestures = [], style = {}, vertical = fals
 
   const thicknessStyle = vertical ? { width: sliderThickness } : { height: sliderThickness };
 
+  const getAdaptiveColor = (hsva: { h: number; s: number; v: number; a: number }) => {
+    'worklet';
+
+    if (adaptSpectrum) {
+      return hsva;
+    }
+
+    const { h, s } = colorKit.runOnUI().HSL(hsva).object();
+    return { h, s, l: 50 };
+  };
+
   return (
     <GestureDetector gesture={composed}>
       <Animated.View
@@ -189,7 +200,6 @@ export function HSLSaturationSlider({ gestures = [], style = {}, vertical = fals
         </ConditionalRendering>
 
         <Thumb
-          channel='s'
           thumbShape={thumbShape}
           thumbSize={thumbSize}
           thumbColor={thumbColor}
@@ -197,8 +207,8 @@ export function HSLSaturationSlider({ gestures = [], style = {}, vertical = fals
           innerStyle={thumbInnerStyle}
           handleStyle={handleStyle}
           style={thumbStyle}
-          adaptSpectrum={adaptSpectrum}
           vertical={vertical}
+          getAdaptiveColor={getAdaptiveColor}
         />
       </Animated.View>
     </GestureDetector>

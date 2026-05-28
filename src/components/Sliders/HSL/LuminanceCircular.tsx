@@ -179,6 +179,12 @@ export function LuminanceCircular({
     borderRadius.value = layout.width / 2;
   }, []);
 
+  const getAdaptiveColor = (hsva: { h: number; s: number; v: number; a: number }) => {
+    'worklet';
+    const { h, l } = colorKit.runOnUI().HSL(hsva).object();
+    return { h, s: 100, l };
+  };
+
   return (
     <GestureDetector gesture={composed}>
       <Animated.View
@@ -203,7 +209,6 @@ export function LuminanceCircular({
         <Animated.View style={[clipViewStyle, { backgroundColor: '#fff' }, containerStyle]}>{children}</Animated.View>
 
         <Thumb
-          channel='v'
           thumbShape={thumbShape}
           thumbSize={thumbSize}
           thumbColor={thumbColor}
@@ -211,7 +216,7 @@ export function LuminanceCircular({
           innerStyle={thumbInnerStyle}
           handleStyle={handleStyle}
           style={thumbStyle}
-          adaptSpectrum={adaptSpectrum}
+          getAdaptiveColor={getAdaptiveColor}
         />
       </Animated.View>
     </GestureDetector>

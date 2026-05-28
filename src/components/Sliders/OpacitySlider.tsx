@@ -150,6 +150,11 @@ export function OpacitySlider({ gestures = [], style = {}, vertical = false, rev
 
   const thicknessStyle = vertical ? { width: sliderThickness } : { height: sliderThickness };
 
+  const getAdaptiveColor = (hsva: { h: number; s: number; v: number; a: number }) => {
+    'worklet';
+    return hsva.a > 0.5 ? hsva : { h: 0, s: 0, v: 100 };
+  };
+
   return (
     <GestureDetector gesture={composed}>
       <Animated.View
@@ -183,7 +188,6 @@ export function OpacitySlider({ gestures = [], style = {}, vertical = false, rev
         </RenderWebOnly>
 
         <Thumb
-          channel='a'
           thumbShape={thumbShape}
           thumbSize={thumbSize}
           thumbColor={thumbColor}
@@ -191,8 +195,8 @@ export function OpacitySlider({ gestures = [], style = {}, vertical = false, rev
           innerStyle={thumbInnerStyle}
           handleStyle={handleStyle}
           style={thumbStyle}
-          adaptSpectrum={adaptSpectrum}
           vertical={vertical}
+          getAdaptiveColor={getAdaptiveColor}
         />
       </Animated.View>
     </GestureDetector>

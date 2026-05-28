@@ -17,9 +17,8 @@ export default function Thumb({
   thumbShape = 'ring',
   thumbSize,
   vertical = false,
-  adaptSpectrum,
-  channel,
   overrideHSV,
+  getAdaptiveColor,
 }: ThumbProps) {
   const { width, height, borderRadius } = { width: thumbSize, height: thumbSize, borderRadius: thumbSize / 2 };
   const { hueValue, saturationValue, brightnessValue, alphaValue, value } = usePickerContext();
@@ -29,36 +28,6 @@ export default function Thumb({
   const brightness = overrideHSV?.brightness ?? brightnessValue;
   const alpha = overrideHSV?.alpha ?? alphaValue;
 
-  const getColorForAdaptiveColor = ({ h, s, v, a }: { h: number; s: number; v: number; a: number }) => {
-    'worklet';
-
-    if (adaptSpectrum) {
-      if (channel === 'a') {
-        // at low alpha the background (white/checkered) shows through
-        return a > 0.5 ? { h, s, v } : { h: 0, s: 0, v: 100 };
-      }
-      // all other channels adapt to current color values
-      return { h, s, v };
-    }
-
-    switch (channel) {
-      case 'h':
-        // hue strip always renders at full saturation + brightness
-        return { h, s: 100, v: 100 };
-      case 's':
-        // goes from gray → full color, brightness stays at max
-        return { h, s, v: 100 };
-      case 'v':
-        // goes from black → full hue at full saturation
-        return { h, s: 100, v };
-      case 'a':
-        // goes from transparent → color; at low alpha white bg dominates
-        return a > 0.5 ? { h, s, v } : { h: 0, s: 0, v: 100 };
-      default:
-        return { h, s, v };
-    }
-  };
-
   const currentColor = useDerivedValue(() => {
     return colorKit.runOnUI().HEX({ h: hue.value, s: saturation.value, v: brightness.value });
   }, [hue, saturation, brightness]);
@@ -66,7 +35,14 @@ export default function Thumb({
   const solidColor = useAnimatedStyle(() => ({ backgroundColor: thumbColor ?? currentColor.value }), [currentColor]);
 
   const adaptiveColor = useDerivedValue<string>(() => {
-    const compareColor = getColorForAdaptiveColor({ h: hue.value, s: saturation.value, v: brightness.value, a: alpha.value });
+    const currentcolor = {
+      h: hue.value,
+      s: saturation.value,
+      v: brightness.value,
+      a: alpha.value,
+    };
+
+    const compareColor = getAdaptiveColor?.(currentcolor) || currentcolor;
     const isDark = colorKit.runOnUI().isDark(compareColor);
 
     return isDark ? '#ffffff' : '#000000';

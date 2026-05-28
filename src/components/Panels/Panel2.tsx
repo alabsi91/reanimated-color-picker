@@ -192,6 +192,26 @@ export function Panel2({
     height.value = layout.height;
   }, []);
 
+  const getAdaptiveColor = (hsva: { h: number; s: number; v: number; a: number }) => {
+    'worklet';
+
+    if (adaptSpectrum) {
+      return hsva;
+    }
+
+    switch (verticalChannel) {
+      case 'saturation':
+        return { h: hsva.h, s: hsva.s, v: 100 };
+      case 'brightness':
+        return { h: hsva.h, s: 100, v: hsva.v };
+      case 'hsl-saturation':
+        const { h, s } = colorKit.runOnUI().HSL(hsva).object(false);
+        return { h, s, l: 50 };
+      default:
+        return hsva;
+    }
+  };
+
   return (
     <GestureDetector gesture={composed}>
       <Animated.View
@@ -221,7 +241,6 @@ export function Panel2({
         </ImageBackground>
 
         <Thumb
-          channel={verticalChannel === 'brightness' ? 'v' : 's'}
           thumbShape={thumbShape}
           thumbSize={thumbSize}
           thumbColor={thumbColor}
@@ -229,7 +248,7 @@ export function Panel2({
           innerStyle={thumbInnerStyle}
           handleStyle={handleStyle}
           style={thumbStyle}
-          adaptSpectrum={adaptSpectrum}
+          getAdaptiveColor={getAdaptiveColor}
         />
       </Animated.View>
     </GestureDetector>

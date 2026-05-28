@@ -77,11 +77,10 @@ export type ThumbProps = {
   style?: StyleProp<ViewStyle>;
   renderThumb?: RenderThumbType;
   vertical?: boolean;
-  adaptSpectrum?: boolean;
-  channel?: 'h' | 's' | 'v' | 'a';
   thumbShape?: ThumbShapeType;
   thumbSize: number;
   overrideHSV?: Partial<HSVObjectSharedValue>;
+  getAdaptiveColor?: (hsva: { h: number; s: number; v: number; a: number }) => SupportedColorFormats;
 };
 
 export interface ExtraThumbProps {

@@ -158,6 +158,16 @@ export function HueCircular({
     borderRadius.value = layoutWidth / 2;
   }, []);
 
+  const getAdaptiveColor = (hsva: { h: number; s: number; v: number; a: number }) => {
+    'worklet';
+
+    if (adaptSpectrum) {
+      return hsva;
+    }
+
+    return { h: hsva.h, s: 100, v: 100 };
+  };
+
   return (
     <GestureDetector gesture={composed}>
       <Animated.View
@@ -185,7 +195,6 @@ export function HueCircular({
         <Animated.View style={[clipViewStyle, { backgroundColor: '#fff' }, containerStyle]}>{children}</Animated.View>
 
         <Thumb
-          channel='h'
           thumbShape={thumbShape}
           thumbSize={thumbSize}
           thumbColor={thumbColor}
@@ -193,7 +202,7 @@ export function HueCircular({
           innerStyle={thumbInnerStyle}
           handleStyle={handleStyle}
           style={thumbStyle}
-          adaptSpectrum={adaptSpectrum}
+          getAdaptiveColor={getAdaptiveColor}
         />
       </Animated.View>
     </GestureDetector>

@@ -212,6 +212,26 @@ export function Panel3({
     width.value = layout.width;
   }, []);
 
+  const getAdaptiveColor = (hsva: { h: number; s: number; v: number; a: number }) => {
+    'worklet';
+
+    if (adaptSpectrum) {
+      return hsva;
+    }
+
+    switch (centerChannel) {
+      case 'saturation':
+        return { h: hsva.h, s: hsva.s, v: 100 };
+      case 'brightness':
+        return { h: hsva.h, s: 100, v: hsva.v };
+      case 'hsl-saturation':
+        const { h, s } = colorKit.runOnUI().HSL(hsva).object(false);
+        return { h, s, l: 50 };
+      default:
+        return hsva;
+    }
+  };
+
   return (
     <Panel3ContextProvider
       value={{
@@ -269,7 +289,6 @@ export function Panel3({
           {children}
 
           <Thumb
-            channel={centerChannel === 'brightness' ? 'v' : 's'}
             thumbShape={thumbShape}
             thumbSize={thumbSize}
             thumbColor={thumbColor}
@@ -277,7 +296,7 @@ export function Panel3({
             innerStyle={thumbInnerStyle}
             handleStyle={handleStyle}
             style={thumbStyle}
-            adaptSpectrum={adaptSpectrum}
+            getAdaptiveColor={getAdaptiveColor}
           />
         </Animated.View>
       </GestureDetector>

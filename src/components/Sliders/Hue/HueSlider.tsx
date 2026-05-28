@@ -139,6 +139,16 @@ export function HueSlider({ gestures = [], style = {}, vertical = false, reverse
 
   const thicknessStyle = vertical ? { width: sliderThickness } : { height: sliderThickness };
 
+  const getAdaptiveColor = (hsva: { h: number; s: number; v: number; a: number }) => {
+    'worklet';
+
+    if (adaptSpectrum) {
+      return hsva;
+    }
+
+    return { h: hsva.h, s: 100, v: 100 };
+  };
+
   return (
     <GestureDetector gesture={composed}>
       <Animated.View
@@ -156,7 +166,6 @@ export function HueSlider({ gestures = [], style = {}, vertical = false, reverse
         </ConditionalRendering>
 
         <Thumb
-          channel='h'
           thumbShape={thumbShape}
           thumbSize={thumbSize}
           thumbColor={thumbColor}
@@ -164,8 +173,8 @@ export function HueSlider({ gestures = [], style = {}, vertical = false, reverse
           innerStyle={thumbInnerStyle}
           handleStyle={handleStyle}
           style={thumbStyle}
-          adaptSpectrum={adaptSpectrum}
           vertical={vertical}
+          getAdaptiveColor={getAdaptiveColor}
         />
       </Animated.View>
     </GestureDetector>

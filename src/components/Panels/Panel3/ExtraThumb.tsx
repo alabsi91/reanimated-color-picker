@@ -6,6 +6,7 @@ import { styles } from '@styles';
 import Thumb from '@thumb';
 import { ConditionalRendering, clamp } from '@utils';
 import usePanel3Context from './Panel3Context';
+import colorKit from '@colorKit';
 
 import type { ExtraThumbProps } from '@types';
 
@@ -148,6 +149,33 @@ export function ExtraThumb({
     };
   }, [renderCenterLine, boundedThumb, thumbSize, width, hue, centerChannelValue]);
 
+  const getAdaptiveColor = () => {
+    'worklet';
+
+    const hsva = {
+      h: hue.value,
+      s: saturation.value,
+      v: brightness.value,
+      a: alphaValue.value,
+    };
+
+    if (adaptSpectrum) {
+      return hsva;
+    }
+
+    switch (centerChannel) {
+      case 'saturation':
+        return { h: hsva.h, s: hsva.s, v: 100 };
+      case 'brightness':
+        return { h: hsva.h, s: 100, v: hsva.v };
+      case 'hsl-saturation':
+        const { h, s } = colorKit.runOnUI().HSL(hsva).object(false);
+        return { h, s, l: 50 };
+      default:
+        return hsva;
+    }
+  };
+
   return (
     <>
       <ConditionalRendering if={renderCenterLine}>
@@ -155,7 +183,6 @@ export function ExtraThumb({
       </ConditionalRendering>
 
       <Thumb
-        channel={centerChannel === 'brightness' ? 'v' : 's'}
         thumbShape={thumbShape}
         thumbSize={thumbSize}
         thumbColor={thumbColor}
@@ -163,8 +190,8 @@ export function ExtraThumb({
         innerStyle={thumbInnerStyle}
         handleStyle={handleStyle}
         style={thumbStyle}
-        adaptSpectrum={adaptSpectrum}
         overrideHSV={{ hue, saturation, brightness }}
+        getAdaptiveColor={getAdaptiveColor}
       />
     </>
   );

@@ -151,6 +151,12 @@ export function LuminanceSlider({ gestures = [], style = {}, vertical = false, r
 
   const thicknessStyle = vertical ? { width: sliderThickness } : { height: sliderThickness };
 
+  const getAdaptiveColor = (hsva: { h: number; s: number; v: number; a: number }) => {
+    'worklet';
+    const { h, l } = colorKit.runOnUI().HSL(hsva).object();
+    return { h, s: 100, l };
+  };
+
   return (
     <GestureDetector gesture={composed}>
       <Animated.View
@@ -171,7 +177,6 @@ export function LuminanceSlider({ gestures = [], style = {}, vertical = false, r
         </Animated.View>
 
         <Thumb
-          channel='v'
           thumbShape={thumbShape}
           thumbSize={thumbSize}
           thumbColor={thumbColor}
@@ -180,6 +185,7 @@ export function LuminanceSlider({ gestures = [], style = {}, vertical = false, r
           handleStyle={handleStyle}
           style={thumbStyle}
           vertical={vertical}
+          getAdaptiveColor={getAdaptiveColor}
         />
       </Animated.View>
     </GestureDetector>

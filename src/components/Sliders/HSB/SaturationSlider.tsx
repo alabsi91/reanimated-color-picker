@@ -135,6 +135,16 @@ export function SaturationSlider({ gestures = [], style = {}, vertical = false, 
 
   const thicknessStyle = vertical ? { width: sliderThickness } : { height: sliderThickness };
 
+  const getAdaptiveColor = (hsva: { h: number; s: number; v: number; a: number }) => {
+    'worklet';
+
+    if (adaptSpectrum) {
+      return hsva;
+    }
+
+    return { h: hsva.h, s: hsva.s, v: 100 };
+  };
+
   return (
     <GestureDetector gesture={composed}>
       <Animated.View
@@ -151,7 +161,6 @@ export function SaturationSlider({ gestures = [], style = {}, vertical = false, 
         </ConditionalRendering>
 
         <Thumb
-          channel='s'
           thumbShape={thumbShape}
           thumbSize={thumbSize}
           thumbColor={thumbColor}
@@ -159,8 +168,8 @@ export function SaturationSlider({ gestures = [], style = {}, vertical = false, 
           innerStyle={thumbInnerStyle}
           handleStyle={handleStyle}
           style={thumbStyle}
-          adaptSpectrum={adaptSpectrum}
           vertical={vertical}
+          getAdaptiveColor={getAdaptiveColor}
         />
       </Animated.View>
     </GestureDetector>
