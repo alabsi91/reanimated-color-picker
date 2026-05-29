@@ -37,7 +37,14 @@ export function GreenSlider({ gestures = [], style = {}, vertical = false, rever
   const handleScale = useSharedValue(1);
 
   const rgb = useDerivedValue(() => {
-    return colorKit.runOnUI().RGB({ h: hueValue.value, s: saturationValue.value, v: brightnessValue.value }).object(false);
+    return colorKit
+      .runOnUI()
+      .RGB({
+        h: hueValue.value,
+        s: saturationValue.value,
+        v: brightnessValue.value,
+      })
+      .object(false);
   }, [hueValue, saturationValue, brightnessValue]);
 
   const thumbAnimatedStyle = useAnimatedStyle(() => {
