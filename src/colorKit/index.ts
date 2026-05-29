@@ -235,8 +235,7 @@ export const colorKitUI = () => {
     ],
   };
 
-  // * MARK: General utilities
-
+  // #region General utilities
   const clamp = (value: number, min: number, max: number) => {
     return Math.max(min, Math.min(value, max));
   };
@@ -276,7 +275,7 @@ export const colorKitUI = () => {
     return p;
   };
 
-  /** - Identify the color format of a given `string` or `object` */
+  /** Identify the color format of a given `string` or `object` */
   const detectColorFormat = (color: SupportedColorFormats): ColorFormats | null => {
     // color int
     if (typeof color === 'number') {
@@ -337,10 +336,10 @@ export const colorKitUI = () => {
 
     return null;
   };
+  // #endregion
 
-  // * MARK: RGB
-
-  /** - Parse `RGB` or `RGBA` color string to an `object` */
+  // #region RGB
+  /** Parse `RGB` or `RGBA` color string to an `object` */
   const RGB_string_to_object = (color: string): rgbaT => {
     color = color.trim().toLowerCase();
     const colorType = detectColorFormat(color);
@@ -382,7 +381,7 @@ export const colorKitUI = () => {
     };
   };
 
-  /** - Ensure that the `RGB` object values are within the correct range and that it has the alpha channel */
+  /** Ensure that the `RGB` object values are within the correct range and that it has the alpha channel */
   const normalize_RGB_object = (color: rgbaT | rgbT): rgbaT => {
     return {
       r: clampRGB(color.r),
@@ -392,7 +391,7 @@ export const colorKitUI = () => {
     };
   };
 
-  /** - Convert an `RGB` or `RGBA` color to its corresponding `Hex` color */
+  /** Convert an `RGB` or `RGBA` color to its corresponding `Hex` color */
   const RGB_to_HEX = (color: string | rgbaT | rgbT): string => {
     const { r, g, b, a } = typeof color === 'string' ? RGB_string_to_object(color) : normalize_RGB_object(color);
 
@@ -404,12 +403,12 @@ export const colorKitUI = () => {
     return `#${red + green + blue + alpha}`;
   };
 
-  /** - Convert `RGB` or `RGBA` color to an `RGBA` object representation */
+  /** Convert `RGB` or `RGBA` color to an `RGBA` object representation */
   const RGB_to_RGB = (color: string | rgbaT | rgbT): rgbaT => {
     return typeof color === 'string' ? RGB_string_to_object(color) : normalize_RGB_object(color);
   };
 
-  /** - Convert an `RGB` or `RGBA` color to an `HSLA` object representation */
+  /** Convert an `RGB` or `RGBA` color to an `HSLA` object representation */
   const RGB_to_HSLA = (color: string | rgbaT | rgbT): hslaT => {
     const rgb = typeof color === 'string' ? RGB_string_to_object(color) : normalize_RGB_object(color),
       r = rgb.r / 255,
@@ -448,7 +447,7 @@ export const colorKitUI = () => {
     return { h, s, l, a: clampAlpha(a) };
   };
 
-  /** - Convert `RGB` or `RGBA` color to an `HSVA` object representation */
+  /** Convert `RGB` or `RGBA` color to an `HSVA` object representation */
   const RGB_to_HSVA = (color: string | rgbaT | rgbT): hsvaT => {
     const rgb = typeof color === 'string' ? RGB_string_to_object(color) : normalize_RGB_object(color),
       r = rgb.r / 255,
@@ -486,7 +485,7 @@ export const colorKitUI = () => {
     };
   };
 
-  /** - Convert `RGB` or `RGBA` color to an `HWBA` object representation */
+  /** Convert `RGB` or `RGBA` color to an `HWBA` object representation */
   const RGB_to_HWBA = (color: string | rgbaT | rgbT): hwbaT => {
     const rgb = typeof color === 'string' ? RGB_string_to_object(color) : normalize_RGB_object(color),
       red = rgb.r / 255,
@@ -507,7 +506,7 @@ export const colorKitUI = () => {
     };
   };
 
-  /** - Return the `RGB` color as a string, an array, or an object */
+  /** Return the `RGB` color as a string, an array, or an object */
   const RGB_types = ({ r, g, b, a }: rgbaT): ColorTypes<rgbaT> => {
     return {
       string: (forceAlpha?: boolean) => {
@@ -544,10 +543,10 @@ export const colorKitUI = () => {
       },
     };
   };
+  // #endregion
 
-  // * MARK: HSL
-
-  /** - Parse `HSL` or `HSLA` color string to an `object` */
+  // #region HSL
+  /** Parse `HSL` or `HSLA` color string to an `object` */
   const HSL_string_to_object = (color: string): hslaT => {
     color = color.trim().toLowerCase();
     const colorType = detectColorFormat(color);
@@ -589,7 +588,7 @@ export const colorKitUI = () => {
     };
   };
 
-  /** - Ensure that the `HSL` object values are within the correct range and that it has the alpha channel */
+  /** Ensure that the `HSL` object values are within the correct range and that it has the alpha channel */
   const normalize_HSL_object = (color: hslaT | hslT): hslaT => {
     return {
       h: clampHue(color.h),
@@ -599,7 +598,7 @@ export const colorKitUI = () => {
     };
   };
 
-  /** - Convert `HSL` or `HSLA` color to an `RGBA` object representation */
+  /** Convert `HSL` or `HSLA` color to an `RGBA` object representation */
   const HSL_to_RGBA = (color: string | hslaT | hslT): rgbaT => {
     const hsla = typeof color === 'string' ? HSL_string_to_object(color) : normalize_HSL_object(color);
 
@@ -623,7 +622,7 @@ export const colorKitUI = () => {
     };
   };
 
-  /** - Convert `HSL` or `HSLA` color to `HEX` color */
+  /** Convert `HSL` or `HSLA` color to `HEX` color */
   const HSL_to_HEX = (color: string | hslaT | hslT): string => {
     const hsla = typeof color === 'string' ? HSL_string_to_object(color) : normalize_HSL_object(color);
     const rgb = HSL_to_RGBA(hsla);
@@ -636,7 +635,7 @@ export const colorKitUI = () => {
     return `#${r + g + b + a}`;
   };
 
-  /** - Convert `HSL` or `HSLA` color to an `HSVA` object representation */
+  /** Convert `HSL` or `HSLA` color to an `HSVA` object representation */
   const HSL_to_HSVA = (color: string | hslaT | hslT): hsvaT => {
     const hsla = typeof color === 'string' ? HSL_string_to_object(color) : normalize_HSL_object(color);
     const h = hsla.h;
@@ -655,18 +654,18 @@ export const colorKitUI = () => {
     };
   };
 
-  /** - Convert `HSL` or `HSLA` color to an `HWBA` object representation */
+  /** Convert `HSL` or `HSLA` color to an `HWBA` object representation */
   const HSL_to_HWBA = (color: string | hslaT | hslT): hwbaT => {
     const hsva = HSL_to_HSVA(color);
     return HSV_to_HWBA(hsva);
   };
 
-  /** - Convert `HSL` or `HSLA` color to an `HSLA` object representation */
+  /** Convert `HSL` or `HSLA` color to an `HSLA` object representation */
   const HSL_to_HSL = (color: string | hslaT | hslT): hslaT => {
     return typeof color === 'string' ? HSL_string_to_object(color) : normalize_HSL_object(color);
   };
 
-  /** - Return the `HSL` color as a string, an array, or an object */
+  /** Return the `HSL` color as a string, an array, or an object */
   const HSL_types = ({ h, s, l, a }: hslaT): ColorTypes<hslaT> => {
     return {
       string: (forceAlpha?: boolean) => {
@@ -703,10 +702,10 @@ export const colorKitUI = () => {
       },
     };
   };
+  // #endregion
 
-  // * MARK: HWB
-
-  /** - Parse `HWB` or `HWBA` color strong to an `object` */
+  // #region HWB
+  /** Parse `HWB` or `HWBA` color strong to an `object` */
   const HWB_string_to_object = (color: string): hwbaT => {
     color = color.trim().toLowerCase();
     const colorType = detectColorFormat(color);
@@ -748,7 +747,7 @@ export const colorKitUI = () => {
     };
   };
 
-  /** - Ensure that the `HWB` object values are within the correct range and that it has the alpha channel */
+  /** Ensure that the `HWB` object values are within the correct range and that it has the alpha channel */
   const normalize_HWB_object = (color: hwbaT | hwbT): hwbaT => {
     return {
       h: clampHue(color.h),
@@ -758,7 +757,7 @@ export const colorKitUI = () => {
     };
   };
 
-  /** - Convert `HWB` or `HWBA` color to an `RGBA` object representation */
+  /** Convert `HWB` or `HWBA` color to an `RGBA` object representation */
   const HWB_to_RGBA = (color: hwbaT | hwbT | string): rgbaT => {
     const hwba = typeof color === 'string' ? HWB_string_to_object(color) : normalize_HWB_object(color);
 
@@ -789,13 +788,13 @@ export const colorKitUI = () => {
     };
   };
 
-  /** - Convert `HWB` or `HWBA` color to an `Hex` color */
+  /** Convert `HWB` or `HWBA` color to an `Hex` color */
   const HWB_to_HEX = (color: hwbaT | hwbT | string): string => {
     const rgba = HWB_to_RGBA(color);
     return RGB_to_HEX(rgba);
   };
 
-  /** - Convert `HWB` or `HWBA` color to an `HSVA` object representation */
+  /** Convert `HWB` or `HWBA` color to an `HSVA` object representation */
   function HWB_to_HSVA(color: hwbaT | hwbT | string): hsvaT {
     const hwba = typeof color === 'string' ? HWB_string_to_object(color) : normalize_HWB_object(color);
 
@@ -816,18 +815,18 @@ export const colorKitUI = () => {
     };
   }
 
-  /** - Convert `HWB` or `HWBA` color to an `HSLA` object representation */
+  /** Convert `HWB` or `HWBA` color to an `HSLA` object representation */
   const HWB_to_HSLA = (color: hwbaT | hwbT | string): hslaT => {
     const hsva = HWB_to_HSVA(color);
     return HSV_to_HSLA(hsva);
   };
 
-  /** - Convert `HWB` or `HWBA` color to an `HWBA` object representation */
+  /** Convert `HWB` or `HWBA` color to an `HWBA` object representation */
   const HWB_to_HWB = (color: hwbaT | hwbT | string): hwbaT => {
     return typeof color === 'string' ? HWB_string_to_object(color) : normalize_HWB_object(color);
   };
 
-  /** - Return the `HWB` color as a string, an array, or an object */
+  /** Return the `HWB` color as a string, an array, or an object */
   const HWB_types = ({ h, w, b, a }: hwbaT): ColorTypes<hwbaT> => {
     return {
       string: (forceAlpha?: boolean) => {
@@ -864,10 +863,10 @@ export const colorKitUI = () => {
       },
     };
   };
+  // #endregion
 
-  // * MARK: HSV
-
-  /** - Parse `HSV` or `HSVA` color string to an `object` */
+  // #region HSV
+  /** Parse `HSV` or `HSVA` color string to an `object` */
   const HSV_string_to_object = (color: string): hsvaT => {
     color = color.trim().toLowerCase();
     const colorType = detectColorFormat(color);
@@ -909,7 +908,7 @@ export const colorKitUI = () => {
     };
   };
 
-  /** - Ensure that the `HSV` object values are within the correct range and that it has the alpha channel */
+  /** Ensure that the `HSV` object values are within the correct range and that it has the alpha channel */
   const normalize_HSV_object = (color: hsvaT | hsvT): hsvaT => {
     return {
       h: clampHue(color.h),
@@ -919,7 +918,7 @@ export const colorKitUI = () => {
     };
   };
 
-  /** - Convert `HSV` color to an `RGBA` object representation */
+  /** Convert `HSV` color to an `RGBA` object representation */
   const HSV_to_RGBA = (color: hsvaT | hsvT | string): rgbaT => {
     const hsva = typeof color === 'string' ? HSV_string_to_object(color) : normalize_HSV_object(color);
 
@@ -972,7 +971,7 @@ export const colorKitUI = () => {
     };
   };
 
-  /** - Convert `HSV` color to an `HSLA` object representation */
+  /** Convert `HSV` color to an `HSLA` object representation */
   const HSV_to_HSLA = (color: hsvaT | hsvT | string): hslaT => {
     const hsva = typeof color === 'string' ? HSV_string_to_object(color) : normalize_HSV_object(color);
 
@@ -993,14 +992,14 @@ export const colorKitUI = () => {
     };
   };
 
-  /** - Convert `HSV` color to an `Hex` color */
+  /** Convert `HSV` color to an `Hex` color */
   const HSV_to_HEX = (color: hsvaT | hsvT | string): string => {
     const rgba = HSV_to_RGBA(color);
     const hex = RGB_to_HEX(rgba);
     return hex;
   };
 
-  /** - Convert `HSV` color to an `HWBA` object representation */
+  /** Convert `HSV` color to an `HWBA` object representation */
   const HSV_to_HWBA = (color: hsvaT | hsvT | string): hwbaT => {
     const { h, s, v, a } = typeof color === 'string' ? HSV_string_to_object(color) : normalize_HSV_object(color);
 
@@ -1015,12 +1014,12 @@ export const colorKitUI = () => {
     };
   };
 
-  /** - Convert `HSV` color to an `HSVA` object representation */
+  /** Convert `HSV` color to an `HSVA` object representation */
   const HSV_to_HSV = (color: hsvaT | hsvT | string): hsvaT => {
     return typeof color === 'string' ? HSV_string_to_object(color) : normalize_HSV_object(color);
   };
 
-  /** - Return the `HSV` color as a string, an array, or an object */
+  /** Return the `HSV` color as a string, an array, or an object */
   const HSV_types = ({ h, s, v, a }: hsvaT): ColorTypes<hsvaT> => {
     return {
       string: (forceAlpha?: boolean) => {
@@ -1057,10 +1056,10 @@ export const colorKitUI = () => {
       },
     };
   };
+  // #endregion
 
-  // * MARK: HEX
-
-  /** - Convert any `HEX` color to 8-digit `HEX` color (#rrggbbaa) */
+  // #region HEX
+  /** Convert any `HEX` color to 8-digit `HEX` color (#rrggbbaa) */
   const normalize_HEX = (color: string | number): string => {
     if (typeof color === 'number') {
       return '#' + color.toString(16).padStart(8, '0');
@@ -1085,7 +1084,7 @@ export const colorKitUI = () => {
     return color;
   };
 
-  /** - Convert any `HEX` color to an `RGBA` object representation */
+  /** Convert any `HEX` color to an `RGBA` object representation */
   const HEX_to_RGBA = (color: string | number): rgbaT => {
     const hex = normalize_HEX(color);
 
@@ -1119,28 +1118,28 @@ export const colorKitUI = () => {
     };
   };
 
-  /** - Convert any `HEX` color to an `HSVA` object representation */
+  /** Convert any `HEX` color to an `HSVA` object representation */
   const HEX_to_HSVA = (color: string | number): hsvaT => {
     const rgb = HEX_to_RGBA(color);
     const hsva = RGB_to_HSVA(rgb);
     return hsva;
   };
 
-  /** - Convert any `HEX` color to an `HSLA` object representation */
+  /** Convert any `HEX` color to an `HSLA` object representation */
   const HEX_to_HSLA = (color: string): hslaT => {
     const rgb = HEX_to_RGBA(color);
     return RGB_to_HSLA(rgb);
   };
 
-  /** - Convert any `HEX` color to an `HWBA` object representation */
+  /** Convert any `HEX` color to an `HWBA` object representation */
   const HEX_to_HWBA = (color: string): hwbaT => {
     const rgba = HEX_to_RGBA(color);
     return RGB_to_HWBA(rgba);
   };
+  // #endregion
 
-  // * MARK: Color conversions
-
-  /** - Convert `HSL`, `HSV`, `HWB`, or `RGB` color to the `HEX` color format. */
+  // #region Color conversions
+  /** Convert `HSL`, `HSV`, `HWB`, or `RGB` color to the `HEX` color format. */
   const HEX = (color: SupportedColorFormats): string => {
     // named color
     if (typeof color === 'string') {
@@ -1186,7 +1185,7 @@ export const colorKitUI = () => {
     return '#000000';
   };
 
-  /** - Convert `HSL`, `HSV`, `HWB`, or `HEX` color to the `RGB` color format. */
+  /** Convert `HSL`, `HSV`, `HWB`, or `HEX` color to the `RGB` color format. */
   const RGB = (color: SupportedColorFormats): ColorTypes<rgbaT> => {
     // named color
     if (typeof color === 'string') {
@@ -1237,7 +1236,7 @@ export const colorKitUI = () => {
     return RGB_types({ r: 0, g: 0, b: 0, a: 1 });
   };
 
-  /** - Convert `HEX`, `HSV`, `HWB`, or `RGB` color to the `HSL` color format. */
+  /** Convert `HEX`, `HSV`, `HWB`, or `RGB` color to the `HSL` color format. */
   const HSL = (color: SupportedColorFormats): ColorTypes<hslaT> => {
     // named color
     if (typeof color === 'string') {
@@ -1288,7 +1287,7 @@ export const colorKitUI = () => {
     return HSL_types({ h: 0, s: 0, l: 0, a: 1 });
   };
 
-  /** - Convert `HSL`, `HEX`, `HSV`, or `RGB` color to the `HWB` color format. */
+  /** Convert `HSL`, `HEX`, `HSV`, or `RGB` color to the `HWB` color format. */
   const HWB = (color: SupportedColorFormats): ColorTypes<hwbaT> => {
     // named color
     if (typeof color === 'string') {
@@ -1339,7 +1338,7 @@ export const colorKitUI = () => {
     return HWB_types({ h: 0, w: 0, b: 100, a: 1 });
   };
 
-  /** - Convert `HSL`, `HEX`, `HWB`, or `RGB` color to the `HSV` color format. */
+  /** Convert `HSL`, `HEX`, `HWB`, or `RGB` color to the `HSV` color format. */
   const HSV = (color: SupportedColorFormats): ColorTypes<hsvaT> => {
     // named color
     if (typeof color === 'string') {
@@ -1389,10 +1388,10 @@ export const colorKitUI = () => {
 
     return HSV_types({ h: 0, s: 0, v: 0, a: 1 });
   };
+  // #endregion
 
-  // * MARK: Color Information
-
-  /** - Identify the color format of a given `string` or `object`, and return `null` for invalid colors. */
+  // #region Color Information
+  /** Identify the color format of a given `string` or `object`, and return `null` for invalid colors. */
   const getFormat = (color: SupportedColorFormats): ColorFormats | 'named' | null => {
     // color int
     if (typeof color === 'number') {
@@ -1454,72 +1453,72 @@ export const colorKitUI = () => {
     return null;
   };
 
-  /** - Get the `red` channel value of a given color. */
+  /** Get the `red` channel value of a given color. */
   const getRed = (color: SupportedColorFormats): number => {
     const { r } = RGB(color).object();
     return r;
   };
 
-  /** - Get the `green` channel value of a given color. */
+  /** Get the `green` channel value of a given color. */
   const getGreen = (color: SupportedColorFormats): number => {
     const { g } = RGB(color).object();
     return g;
   };
 
-  /** - Get the `blue` channel value of a given color. */
+  /** Get the `blue` channel value of a given color. */
   const getBlue = (color: SupportedColorFormats): number => {
     const { b } = RGB(color).object();
     return b;
   };
 
-  /** - Get the `hue` channel value of a given color. */
+  /** Get the `hue` channel value of a given color. */
   const getHue = (color: SupportedColorFormats): number => {
     const { h } = HSL(color).object();
     return h;
   };
 
-  /** - Get the `saturation` value of a given color. */
+  /** Get the `saturation` value of a given color. */
   const getSaturation = (color: SupportedColorFormats): number => {
     const { s } = HSL(color).object();
     return s;
   };
 
   /**
-   * - Get color's HSL `luminosity` channel value.
-   * - If you want the overall `luminosity` of a color use `getLuminanceWCAG` method.
+   * Get color's HSL `luminosity` channel value.\
+   * If you want the overall `luminosity` of a color use `getLuminanceWCAG` method.
    */
   const getLuminance = (color: SupportedColorFormats): number => {
     const { l } = HSL(color).object();
     return l;
   };
 
-  /** - Get the HSV's `value` (brightness) channel value of a given color. */
+  /** Get the HSV's `value` (brightness) channel value of a given color. */
   const getBrightness = (color: SupportedColorFormats): number => {
     const { v } = HSV(color).object();
     return v;
   };
 
-  /** - Returns the perceived `luminance` of a color, from `0-1` as defined by Web Content Accessibility Guidelines (Version 2.0). */
+  /** Returns the perceived `luminance` of a color, from `0-1` as defined by Web Content Accessibility Guidelines (Version 2.0). */
   const getLuminanceWCAG = (color: SupportedColorFormats): number => {
     const { r, g, b } = RGB(color).object(false);
     const a = [r, g, b].map(v => (v / 255 <= 0.03928 ? v / 255 / 12.92 : Math.pow((v / 255 + 0.055) / 1.055, 2.4)));
     return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
   };
 
-  /** - Returns a boolean indicating whether the color is considered "dark" or not */
+  /** Returns a boolean indicating whether the color is considered "dark" or not */
   const isDark = (color: SupportedColorFormats): boolean => {
     const luminance = getLuminanceWCAG(color);
     return luminance < 0.5;
   };
 
-  /** - Returns a boolean indicating whether the color is considered "light" or not */
+  /** Returns a boolean indicating whether the color is considered "light" or not */
   const isLight = (color: SupportedColorFormats): boolean => {
     const luminance = getLuminanceWCAG(color);
     return luminance >= 0.5;
   };
 
   /**
-   * - Check if two colors are similar within a specified tolerance.
+   * Check if two colors are similar within a specified tolerance.
    *
    * @example
    *   const tolerance = 0;
@@ -1537,16 +1536,16 @@ export const colorKitUI = () => {
     return difference <= tolerance;
   };
 
-  /** - Calculates the contrast ratio between two colors, useful for ensuring accessibility and readability. */
+  /** Calculates the contrast ratio between two colors, useful for ensuring accessibility and readability. */
   const contrastRatio = (color1: SupportedColorFormats, color2: SupportedColorFormats): number => {
     const luminance1 = getLuminanceWCAG(color1);
     const luminance2 = getLuminanceWCAG(color2);
     const contrast = (Math.max(luminance1, luminance2) + 0.05) / (Math.min(luminance1, luminance2) + 0.05);
     return Math.round(contrast * 100) / 100;
   };
+  // #endregion
 
-  // * MARK: Color Manipulation
-
+  // #region Color Manipulation
   const returnColorObject = (color: SupportedColorFormats) => {
     return {
       hex() {
@@ -1567,7 +1566,7 @@ export const colorKitUI = () => {
     };
   };
 
-  // * MARK: Red Manuipulation
+  // #region Red Manuipulation
   /** Set the `red` value of a color to a specific amount. */
   const setRed = (color: SupportedColorFormats, amount: number): ConversionMethods => {
     const { g, b, a } = RGB(color).object();
@@ -1608,9 +1607,10 @@ export const colorKitUI = () => {
 
     return returnColorObject(newColor);
   };
+  // #endregion
 
-  // * MARK: Green Manuipulation
-  /** - Set the `green` value of a color to a specific amount. */
+  // #region Green Manuipulation
+  /** Set the `green` value of a color to a specific amount. */
   const setGreen = (color: SupportedColorFormats, amount: number): ConversionMethods => {
     const { r, b, a } = RGB(color).object();
     const newG = clampRGB(amount);
@@ -1650,9 +1650,10 @@ export const colorKitUI = () => {
 
     return returnColorObject(newColor);
   };
+  // #endregion
 
-  // * MARK: Blue Manuipulation
-  /** - Set the `blue` value of a color to a specific amount. */
+  // #region Blue Manuipulation
+  /** Set the `blue` value of a color to a specific amount. */
   const setBlue = (color: SupportedColorFormats, amount: number): ConversionMethods => {
     const { r, g, a } = RGB(color).object();
     const newB = clampRGB(amount);
@@ -1692,15 +1693,16 @@ export const colorKitUI = () => {
 
     return returnColorObject(newColor);
   };
+  // #endregion
 
-  //* MARK: Alpha Manuipulation
-  /** - Get the `alpha` value of a given color. */
+  // #region Alpha Manuipulation
+  /** Get the `alpha` value of a given color. */
   const getAlpha = (color: SupportedColorFormats): number => {
     const { a } = RGB(color).object();
     return a;
   };
 
-  /** - Set the `alpha` value of a color to a specific amount. */
+  /** Set the `alpha` value of a color to a specific amount. */
   const setAlpha = (color: SupportedColorFormats, amount: number): ConversionMethods => {
     const { r, g, b } = RGB(color).object();
     const newA = clampAlpha(amount);
@@ -1728,9 +1730,10 @@ export const colorKitUI = () => {
 
     return returnColorObject(newColor);
   };
+  // #endregion
 
-  // * MARK: Hue Manuipulation
-  /** - Set the `hue` value of a color to a specific amount. */
+  // #region Hue Manuipulation
+  /** Set the `hue` value of a color to a specific amount. */
   const setHue = (color: SupportedColorFormats, amount: number): ConversionMethods => {
     const { s, l, a } = HSL(color).object();
     const newH = clampHue(amount);
@@ -1772,7 +1775,7 @@ export const colorKitUI = () => {
   };
 
   /**
-   * - Spin the `hue` channel by a certain percentage/amount.
+   * Spin the `hue` channel by a certain percentage/amount.
    *
    * @example
    *   spin('red', 20).hex();
@@ -1785,9 +1788,10 @@ export const colorKitUI = () => {
 
     return returnColorObject(newColor);
   };
+  // #endregion
 
-  // * MARK: Saturation Manuipulation
-  /** - Set the `saturation` value of a color to a specific amount. */
+  // #region Saturation Manuipulation
+  /** Set the `saturation` value of a color to a specific amount. */
   const setSaturation = (color: SupportedColorFormats, amount: number): ConversionMethods => {
     const { h, l, a } = HSL(color).object();
     const newS = clamp100(amount);
@@ -1797,7 +1801,7 @@ export const colorKitUI = () => {
   };
 
   /**
-   * - Increase the saturation of the given color by a certain percentage/amount.
+   * Increase the saturation of the given color by a certain percentage/amount.
    *
    * @example
    *   saturate('red', 20).hex();
@@ -1813,7 +1817,7 @@ export const colorKitUI = () => {
   };
 
   /**
-   * - Decrease the saturation of the given color by a certain percentage/amount.
+   * Decrease the saturation of the given color by a certain percentage/amount.
    *
    * @example
    *   saturate('red', 20).hex();
@@ -1827,9 +1831,10 @@ export const colorKitUI = () => {
 
     return returnColorObject(desaturatedColor);
   };
+  // #endregion
 
-  // * MARK: Brightness Manuipulation
-  /** - Set HSL's `luminosity` channel for a given color to a specific amount. */
+  // #region Brightness Manuipulation
+  /** Set HSL's `luminosity` channel for a given color to a specific amount. */
   const setLuminance = (color: SupportedColorFormats, amount: number): ConversionMethods => {
     const { h, s, a } = HSL(color).object();
     const newL = clamp100(amount);
@@ -1839,7 +1844,7 @@ export const colorKitUI = () => {
   };
 
   /**
-   * - Increase the brightness of the given color by a certain percentage/amount.
+   * Increase the brightness of the given color by a certain percentage/amount.
    *
    * @example
    *   brighten('red', 20).hex();
@@ -1855,7 +1860,7 @@ export const colorKitUI = () => {
   };
 
   /**
-   * - Decrease the brightness of the given color by a certain percentage/amount.
+   * Decrease the brightness of the given color by a certain percentage/amount.
    *
    * @example
    *   darken('red', 20).hex();
@@ -1870,7 +1875,7 @@ export const colorKitUI = () => {
     return returnColorObject(darkenedColor);
   };
 
-  /** - Set HSV's `value` (brightness) channel for a given color to a specific amount. */
+  /** Set HSV's `value` (brightness) channel for a given color to a specific amount. */
   const setBrightness = (color: SupportedColorFormats, amount: number): ConversionMethods => {
     const { h, s, a } = HSV(color).object();
     const newV = clamp100(amount);
@@ -1898,11 +1903,12 @@ export const colorKitUI = () => {
 
     return returnColorObject(newColor);
   };
+  // #endregion
+  // #endregion
 
-  // * MARK: Color Utilities
-
+  // #region Color Utilities
   /**
-   * - Blends two colors by a certain amount.
+   * Blends two colors by a certain amount.
    *
    * @example
    *   blend('yellow', 'red', 50).hex(); // #ff8000
@@ -1923,14 +1929,14 @@ export const colorKitUI = () => {
     return returnColorObject(blendedColor);
   };
 
-  /** - Invert (negate) a color, black becomes white, white becomes black, blue becomes orange and so on. */
+  /** Invert (negate) a color, black becomes white, white becomes black, blue becomes orange and so on. */
   const invert = (color: SupportedColorFormats): ConversionMethods => {
     const { r, g, b, a } = RGB(color).object();
     const invertedColor = { r: 255 - r, g: 255 - g, b: 255 - b, a };
     return returnColorObject(invertedColor);
   };
 
-  /** - Completely desaturate a color into grayscale. */
+  /** Completely desaturate a color into grayscale. */
   const grayscale = (color: SupportedColorFormats): ConversionMethods => {
     const { r, g, b, a } = RGB(color).object();
     const gray = clampRGB(r * 0.3 + g * 0.59 + b * 0.11);
@@ -1939,7 +1945,7 @@ export const colorKitUI = () => {
     return returnColorObject(grayColor);
   };
 
-  /** - Generate a random color from `HSL` values. */
+  /** Generate a random color from `HSL` values. */
   const randomHslColor = ({ h = [0, 360], s = [0, 100], l = [0, 100], a = [1, 1] } = {}): ConversionMethods => {
     const random = {
       h: clampHue(randomNumber(h[0], h[1])),
@@ -1951,7 +1957,7 @@ export const colorKitUI = () => {
     return returnColorObject(random);
   };
 
-  /** - Generate a random color from `HSV` values. */
+  /** Generate a random color from `HSV` values. */
   const randomHsvColor = ({ h = [0, 360], s = [0, 100], v = [0, 100], a = [1, 1] } = {}): ConversionMethods => {
     const random = {
       h: clampHue(randomNumber(h[0], h[1])),
@@ -1963,7 +1969,7 @@ export const colorKitUI = () => {
     return returnColorObject(random);
   };
 
-  /** - Generate a random color from `RGB` values. */
+  /** Generate a random color from `RGB` values. */
   const randomRgbColor = ({ r = [0, 255], g = [0, 255], b = [0, 255], a = [1, 1] } = {}): ConversionMethods => {
     const random = {
       r: clampRGB(randomNumber(r[0], r[1])),
@@ -1975,7 +1981,7 @@ export const colorKitUI = () => {
     return returnColorObject(random);
   };
 
-  /** - Generate a random color from `HWB` values. */
+  /** Generate a random color from `HWB` values. */
   const randomHwbColor = ({ h = [0, 360], w = [0, 100], b = [0, 100], a = [1, 1] } = {}): ConversionMethods => {
     const random = {
       h: clampHue(randomNumber(h[0], h[1])),
@@ -1987,7 +1993,7 @@ export const colorKitUI = () => {
     return returnColorObject(random);
   };
 
-  /** - Returns the first color with the desired contrast ratio against the second color */
+  /** Returns the first color with the desired contrast ratio against the second color */
   const adjustContrast = (color1: SupportedColorFormats, color2: SupportedColorFormats, ratio = 4.5): ConversionMethods => {
     const contrast = contrastRatio(color1, color2);
     const color1RGB = RGB(color1).object();
@@ -2026,6 +2032,7 @@ export const colorKitUI = () => {
 
     return returnColorObject(newColor);
   };
+  //#endregion
 
   return {
     // color conversion
@@ -2096,7 +2103,7 @@ export const colorKitUI = () => {
 };
 
 type ColorKit = ReturnType<typeof colorKitUI> & {
-  /** - Initiates the asynchronous execution of a workletized colorKit function on the UI thread. */
+  /** Initiates the asynchronous execution of a workletized colorKit function on the UI thread. */
   runOnUI: typeof colorKitUI;
 };
 
