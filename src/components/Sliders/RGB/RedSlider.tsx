@@ -89,7 +89,7 @@ export function RedSlider({ gestures = [], style = {}, vertical = false, reverse
       return {
         background: adaptSpectrum
           ? `linear-gradient(${deg}deg, rgb(255, ${g}, ${b}) 0%, rgb(0, ${g}, ${b}) 100%)`
-          : 'linear-gradient(180deg, rgb(255, 0, 0) 0%, rgb(0, 0, 0) 100%)',
+          : `linear-gradient(${deg}deg, rgb(255, 0, 0) 0%, rgb(0, 0, 0) 100%)`,
       };
     }
 

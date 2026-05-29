@@ -89,7 +89,7 @@ export function GreenSlider({ gestures = [], style = {}, vertical = false, rever
       return {
         background: adaptSpectrum
           ? `linear-gradient(${deg}deg, rgb(${r}, 255, ${b}) 0%, rgb(${r}, 0, ${b}) 100%)`
-          : 'linear-gradient(180deg, rgb(0, 255, 0) 0%, rgb(0, 0, 0) 100%)',
+          : `linear-gradient(${deg}deg, rgb(0, 255, 0) 0%, rgb(0, 0, 0) 100%)`,
       };
     }
 
