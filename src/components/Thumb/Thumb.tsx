@@ -9,7 +9,7 @@ import BuiltinThumbs from './BuiltinThumbs/index';
 import type { BuiltinThumbsProps, ThumbProps } from '@types';
 
 export default function Thumb({
-  thumbAnimatedStyle: handleStyle,
+  thumbAnimatedStyle,
   innerStyle,
   style,
   thumbColor,
@@ -55,7 +55,7 @@ export default function Thumb({
     vertical,
     solidColor,
     adaptiveColor,
-    handleStyle,
+    thumbAnimatedStyle,
     innerStyle,
     style,
     thumbColor,
@@ -65,7 +65,7 @@ export default function Thumb({
   if (RenderThumb) {
     return (
       <RenderThumb
-        positionStyle={[styles.handle, handleStyle]}
+        positionStyle={[styles.handle, thumbAnimatedStyle]}
         width={width}
         height={height}
         initialColor={value}

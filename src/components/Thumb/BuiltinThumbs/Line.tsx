@@ -12,7 +12,7 @@ export default function Line({
   borderRadius,
   thumbColor,
   adaptiveColor,
-  handleStyle,
+  thumbAnimatedStyle,
   innerStyle,
   style,
   vertical,
@@ -39,7 +39,7 @@ export default function Line({
 
   return (
     <Animated.View
-      style={[styles.handle, style, computedStyle, handleStyle]}
+      style={[styles.handle, style, computedStyle, thumbAnimatedStyle]}
       renderToHardwareTextureAndroid={enableAndroidHardwareTextures}
     >
       <Animated.View style={[lineStyle, styles.shadow, adaptiveColorStyle, innerStyle]} />

@@ -12,7 +12,7 @@ export default function Hollow({
   borderRadius,
   thumbColor,
   adaptiveColor,
-  handleStyle,
+  thumbAnimatedStyle,
   innerStyle,
   style,
 }: BuiltinThumbsProps) {
@@ -32,7 +32,7 @@ export default function Hollow({
 
   return (
     <Animated.View
-      style={[styles.handle, style, computedStyle, adaptiveColorStyle, handleStyle]}
+      style={[styles.handle, style, computedStyle, adaptiveColorStyle, thumbAnimatedStyle]}
       renderToHardwareTextureAndroid={enableAndroidHardwareTextures}
     >
       <Animated.View style={[{ width: 4, height: 4, borderRadius: 2 }, adaptiveColorBgStyle, styles.shadow, innerStyle]} />

@@ -12,7 +12,7 @@ export default function Ring({
   height,
   borderRadius,
   adaptiveColor,
-  handleStyle,
+  thumbAnimatedStyle,
   innerStyle,
   solidColor,
   style,
@@ -40,7 +40,7 @@ export default function Ring({
 
   return (
     <Animated.View
-      style={[styles.handle, ringStyle, adaptiveColorStyle, style, handleStyle]}
+      style={[styles.handle, ringStyle, adaptiveColorStyle, style, thumbAnimatedStyle]}
       renderToHardwareTextureAndroid={enableAndroidHardwareTextures}
     >
       <Animated.View

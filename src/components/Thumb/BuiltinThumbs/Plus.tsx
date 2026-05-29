@@ -12,7 +12,7 @@ export default function Plus({
   borderRadius,
   thumbColor,
   adaptiveColor,
-  handleStyle,
+  thumbAnimatedStyle,
   innerStyle,
   style,
   vertical,
@@ -53,7 +53,7 @@ export default function Plus({
 
   return (
     <Animated.View
-      style={[styles.handle, style, computedStyle, adaptiveBorderColorStyle, handleStyle]}
+      style={[styles.handle, style, computedStyle, adaptiveBorderColorStyle, thumbAnimatedStyle]}
       renderToHardwareTextureAndroid={enableAndroidHardwareTextures}
     >
       <Animated.View style={[line1, styles.shadow, adaptiveColorStyle, innerStyle]} />

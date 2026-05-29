@@ -10,7 +10,7 @@ export default function Rect({
   width,
   height,
   adaptiveColor,
-  handleStyle,
+  thumbAnimatedStyle,
   innerStyle,
   style,
   vertical,
@@ -37,7 +37,7 @@ export default function Rect({
 
   return (
     <Animated.View
-      style={[styles.handle, style, computedStyle, handleStyle]}
+      style={[styles.handle, style, computedStyle, thumbAnimatedStyle]}
       renderToHardwareTextureAndroid={enableAndroidHardwareTextures}
     >
       <Animated.View style={[pillStyle, styles.shadow, adaptiveColorStyle, solidColor, innerStyle]} />

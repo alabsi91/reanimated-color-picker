@@ -12,7 +12,7 @@ export default function TriangleUp({
   height,
   thumbColor,
   adaptiveColor,
-  handleStyle,
+  thumbAnimatedStyle,
   innerStyle,
   style,
   vertical,
@@ -38,7 +38,7 @@ export default function TriangleUp({
 
   return (
     <Animated.View
-      style={[styles.handle, style, computedStyle, handleStyle]}
+      style={[styles.handle, style, computedStyle, thumbAnimatedStyle]}
       renderToHardwareTextureAndroid={enableAndroidHardwareTextures}
     >
       <Animated.View style={[styles.triangle, triangleStyle, adaptiveColorStyle, innerStyle]} />

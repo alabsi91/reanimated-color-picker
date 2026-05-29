@@ -153,7 +153,7 @@ export type BuiltinThumbsProps = {
   borderRadius: number;
   thumbColor?: string;
   adaptiveColor: SharedValue<string>;
-  handleStyle: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>;
+  thumbAnimatedStyle: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>;
   innerStyle?: StyleProp<ViewStyle>;
   style?: StyleProp<ViewStyle>;
   solidColor: AnimatedStyle<ViewStyle>;

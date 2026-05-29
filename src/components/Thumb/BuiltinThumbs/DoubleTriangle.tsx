@@ -13,7 +13,7 @@ export default function DoubleTriangle({
   height,
   thumbColor,
   adaptiveColor,
-  handleStyle,
+  thumbAnimatedStyle,
   innerStyle,
   style,
   vertical,
@@ -46,7 +46,7 @@ export default function DoubleTriangle({
 
   return (
     <Animated.View
-      style={[styles.handle, style, computedStyle, handleStyle]}
+      style={[styles.handle, style, computedStyle, thumbAnimatedStyle]}
       renderToHardwareTextureAndroid={enableAndroidHardwareTextures}
     >
       <Animated.View style={[styles.triangle, triangleDownStyle, adaptiveColorStyle, innerStyle]} />

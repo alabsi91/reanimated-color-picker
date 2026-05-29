@@ -12,7 +12,7 @@ export default function Solid({
   borderRadius,
   thumbColor,
   adaptiveColor,
-  handleStyle,
+  thumbAnimatedStyle,
   style,
 }: BuiltinThumbsProps) {
   const computedStyle = {
@@ -33,7 +33,7 @@ export default function Solid({
 
   return (
     <Animated.View
-      style={[styles.handle, computedStyle, style, styles.shadow, adaptiveColorStyle, handleStyle]}
+      style={[styles.handle, computedStyle, style, styles.shadow, adaptiveColorStyle, thumbAnimatedStyle]}
       renderToHardwareTextureAndroid={enableAndroidHardwareTextures}
     />
   );
