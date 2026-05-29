@@ -8,11 +8,11 @@ import usePickerContext from '@context';
 import Thumb from '@thumb';
 import { clamp, getStyle, isRtl, isWeb, RenderNativeOnly } from '@utils';
 
-import type { RgbSliderProps } from '@types';
+import type { SliderProps } from '@types';
 import type { LayoutChangeEvent } from 'react-native';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
-export function RedSlider({ gestures = [], style = {}, vertical = false, reverse = false, ...props }: RgbSliderProps) {
+export function RedSlider({ gestures = [], style = {}, vertical = false, reverse = false, ...props }: SliderProps) {
   const { hueValue, saturationValue, brightnessValue, onGestureChange, onGestureEnd, ...ctx } = usePickerContext();
 
   const thumbShape = props.thumbShape ?? ctx.thumbShape;
