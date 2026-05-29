@@ -45,7 +45,7 @@ export function HueSlider({ gestures = [], style = {}, vertical = false, reverse
     return {
       transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }],
     };
-  }, [width, height, hueValue, handleScale]);
+  }, [width, height, hueValue, handleScale, vertical, reverse, boundedThumb, thumbSize]);
 
   const activeSaturationStyle = useAnimatedStyle(() => {
     if (!adaptSpectrum) {
