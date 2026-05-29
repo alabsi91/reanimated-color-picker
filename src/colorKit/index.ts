@@ -1,14 +1,14 @@
 import type {
   SupportedColorFormats,
   ColorFormats,
-  rgbaT,
-  rgbT,
-  hslaT,
-  hslT,
-  hsvaT,
-  hsvT,
-  hwbaT,
-  hwbT,
+  RgbaT,
+  RgbT,
+  HslaT,
+  HslT,
+  HsvaT,
+  HsvT,
+  HwbaT,
+  HwbT,
   ColorTypes,
   ConversionMethods,
 } from './types';
@@ -301,36 +301,36 @@ export const colorKitUI = () => {
 
     // color object
     if (typeof color === 'object') {
-      const rgbaKeys = ['r', 'g', 'b', 'a'] as (keyof rgbaT)[];
-      const isRgbaOb = rgbaKeys.every(k => color.hasOwnProperty(k) && typeof (color as rgbaT)[k] === 'number');
+      const rgbaKeys = ['r', 'g', 'b', 'a'] as (keyof RgbaT)[];
+      const isRgbaOb = rgbaKeys.every(k => color.hasOwnProperty(k) && typeof (color as RgbaT)[k] === 'number');
       if (isRgbaOb) return 'rgba';
 
-      const rgbKeys = ['r', 'g', 'b'] as (keyof rgbT)[];
-      const isRgbOb = rgbKeys.every(k => color.hasOwnProperty(k) && typeof (color as rgbT)[k] === 'number');
+      const rgbKeys = ['r', 'g', 'b'] as (keyof RgbT)[];
+      const isRgbOb = rgbKeys.every(k => color.hasOwnProperty(k) && typeof (color as RgbT)[k] === 'number');
       if (isRgbOb) return 'rgb';
 
-      const hslaKeys = ['h', 's', 'l', 'a'] as (keyof hslaT)[];
-      const isHslaOb = hslaKeys.every(k => color.hasOwnProperty(k) && typeof (color as hslaT)[k] === 'number');
+      const hslaKeys = ['h', 's', 'l', 'a'] as (keyof HslaT)[];
+      const isHslaOb = hslaKeys.every(k => color.hasOwnProperty(k) && typeof (color as HslaT)[k] === 'number');
       if (isHslaOb) return 'hsla';
 
-      const hslKeys = ['h', 's', 'l'] as (keyof hslT)[];
-      const isHslOb = hslKeys.every(k => color.hasOwnProperty(k) && typeof (color as hslT)[k] === 'number');
+      const hslKeys = ['h', 's', 'l'] as (keyof HslT)[];
+      const isHslOb = hslKeys.every(k => color.hasOwnProperty(k) && typeof (color as HslT)[k] === 'number');
       if (isHslOb) return 'hsl';
 
-      const hsvaKeys = ['h', 's', 'v', 'a'] as (keyof hsvaT)[];
-      const isHsvaOb = hsvaKeys.every(k => color.hasOwnProperty(k) && typeof (color as hsvaT)[k] === 'number');
+      const hsvaKeys = ['h', 's', 'v', 'a'] as (keyof HsvaT)[];
+      const isHsvaOb = hsvaKeys.every(k => color.hasOwnProperty(k) && typeof (color as HsvaT)[k] === 'number');
       if (isHsvaOb) return 'hsva';
 
-      const hsvKeys = ['h', 's', 'v'] as (keyof hsvT)[];
-      const isHsvOb = hsvKeys.every(k => color.hasOwnProperty(k) && typeof (color as hsvT)[k] === 'number');
+      const hsvKeys = ['h', 's', 'v'] as (keyof HsvT)[];
+      const isHsvOb = hsvKeys.every(k => color.hasOwnProperty(k) && typeof (color as HsvT)[k] === 'number');
       if (isHsvOb) return 'hsv';
 
-      const hwbaKeys = ['h', 'w', 'b', 'a'] as (keyof hwbaT)[];
-      const isHwbaOb = hwbaKeys.every(k => color.hasOwnProperty(k) && typeof (color as hwbaT)[k] === 'number');
+      const hwbaKeys = ['h', 'w', 'b', 'a'] as (keyof HwbaT)[];
+      const isHwbaOb = hwbaKeys.every(k => color.hasOwnProperty(k) && typeof (color as HwbaT)[k] === 'number');
       if (isHwbaOb) return 'hwba';
 
-      const hwbKeys = ['h', 'w', 'b'] as (keyof hwbT)[];
-      const isHwbOb = hwbKeys.every(k => color.hasOwnProperty(k) && typeof (color as hwbT)[k] === 'number');
+      const hwbKeys = ['h', 'w', 'b'] as (keyof HwbT)[];
+      const isHwbOb = hwbKeys.every(k => color.hasOwnProperty(k) && typeof (color as HwbT)[k] === 'number');
       if (isHwbOb) return 'hwb';
     }
 
@@ -340,7 +340,7 @@ export const colorKitUI = () => {
 
   // #region RGB
   /** Parse `RGB` or `RGBA` color string to an `object` */
-  const RGB_string_to_object = (color: string): rgbaT => {
+  const RGB_string_to_object = (color: string): RgbaT => {
     color = color.trim().toLowerCase();
     const colorType = detectColorFormat(color);
 
@@ -382,17 +382,17 @@ export const colorKitUI = () => {
   };
 
   /** Ensure that the `RGB` object values are within the correct range and that it has the alpha channel */
-  const normalize_RGB_object = (color: rgbaT | rgbT): rgbaT => {
+  const normalize_RGB_object = (color: RgbaT | RgbT): RgbaT => {
     return {
       r: clampRGB(color.r),
       g: clampRGB(color.g),
       b: clampRGB(color.b),
-      a: clampAlpha((color as rgbaT).a ?? 1),
+      a: clampAlpha((color as RgbaT).a ?? 1),
     };
   };
 
   /** Convert an `RGB` or `RGBA` color to its corresponding `Hex` color */
-  const RGB_to_HEX = (color: string | rgbaT | rgbT): string => {
+  const RGB_to_HEX = (color: string | RgbaT | RgbT): string => {
     const { r, g, b, a } = typeof color === 'string' ? RGB_string_to_object(color) : normalize_RGB_object(color);
 
     const red = numberToHexString(r),
@@ -404,12 +404,12 @@ export const colorKitUI = () => {
   };
 
   /** Convert `RGB` or `RGBA` color to an `RGBA` object representation */
-  const RGB_to_RGB = (color: string | rgbaT | rgbT): rgbaT => {
+  const RGB_to_RGB = (color: string | RgbaT | RgbT): RgbaT => {
     return typeof color === 'string' ? RGB_string_to_object(color) : normalize_RGB_object(color);
   };
 
   /** Convert an `RGB` or `RGBA` color to an `HSLA` object representation */
-  const RGB_to_HSLA = (color: string | rgbaT | rgbT): hslaT => {
+  const RGB_to_HSLA = (color: string | RgbaT | RgbT): HslaT => {
     const rgb = typeof color === 'string' ? RGB_string_to_object(color) : normalize_RGB_object(color),
       r = rgb.r / 255,
       g = rgb.g / 255,
@@ -448,7 +448,7 @@ export const colorKitUI = () => {
   };
 
   /** Convert `RGB` or `RGBA` color to an `HSVA` object representation */
-  const RGB_to_HSVA = (color: string | rgbaT | rgbT): hsvaT => {
+  const RGB_to_HSVA = (color: string | RgbaT | RgbT): HsvaT => {
     const rgb = typeof color === 'string' ? RGB_string_to_object(color) : normalize_RGB_object(color),
       r = rgb.r / 255,
       g = rgb.g / 255,
@@ -486,7 +486,7 @@ export const colorKitUI = () => {
   };
 
   /** Convert `RGB` or `RGBA` color to an `HWBA` object representation */
-  const RGB_to_HWBA = (color: string | rgbaT | rgbT): hwbaT => {
+  const RGB_to_HWBA = (color: string | RgbaT | RgbT): HwbaT => {
     const rgb = typeof color === 'string' ? RGB_string_to_object(color) : normalize_RGB_object(color),
       red = rgb.r / 255,
       green = rgb.g / 255,
@@ -507,7 +507,7 @@ export const colorKitUI = () => {
   };
 
   /** Return the `RGB` color as a string, an array, or an object */
-  const RGB_types = ({ r, g, b, a }: rgbaT): ColorTypes<rgbaT> => {
+  const RGB_types = ({ r, g, b, a }: RgbaT): ColorTypes<RgbaT> => {
     return {
       string: (forceAlpha?: boolean) => {
         r = Math.round(r);
@@ -547,7 +547,7 @@ export const colorKitUI = () => {
 
   // #region HSL
   /** Parse `HSL` or `HSLA` color string to an `object` */
-  const HSL_string_to_object = (color: string): hslaT => {
+  const HSL_string_to_object = (color: string): HslaT => {
     color = color.trim().toLowerCase();
     const colorType = detectColorFormat(color);
 
@@ -589,17 +589,17 @@ export const colorKitUI = () => {
   };
 
   /** Ensure that the `HSL` object values are within the correct range and that it has the alpha channel */
-  const normalize_HSL_object = (color: hslaT | hslT): hslaT => {
+  const normalize_HSL_object = (color: HslaT | HslT): HslaT => {
     return {
       h: clampHue(color.h),
       s: clamp100(color.s),
       l: clamp100(color.l),
-      a: clampAlpha((color as hslaT).a ?? 1),
+      a: clampAlpha((color as HslaT).a ?? 1),
     };
   };
 
   /** Convert `HSL` or `HSLA` color to an `RGBA` object representation */
-  const HSL_to_RGBA = (color: string | hslaT | hslT): rgbaT => {
+  const HSL_to_RGBA = (color: string | HslaT | HslT): RgbaT => {
     const hsla = typeof color === 'string' ? HSL_string_to_object(color) : normalize_HSL_object(color);
 
     const h = hsla.h / 360,
@@ -623,7 +623,7 @@ export const colorKitUI = () => {
   };
 
   /** Convert `HSL` or `HSLA` color to `HEX` color */
-  const HSL_to_HEX = (color: string | hslaT | hslT): string => {
+  const HSL_to_HEX = (color: string | HslaT | HslT): string => {
     const hsla = typeof color === 'string' ? HSL_string_to_object(color) : normalize_HSL_object(color);
     const rgb = HSL_to_RGBA(hsla);
 
@@ -636,13 +636,13 @@ export const colorKitUI = () => {
   };
 
   /** Convert `HSL` or `HSLA` color to an `HSVA` object representation */
-  const HSL_to_HSVA = (color: string | hslaT | hslT): hsvaT => {
+  const HSL_to_HSVA = (color: string | HslaT | HslT): HsvaT => {
     const hsla = typeof color === 'string' ? HSL_string_to_object(color) : normalize_HSL_object(color);
     const h = hsla.h;
 
     const s = hsla.s / 100,
       l = hsla.l / 100,
-      a = (hsla as hslaT).a ?? 1,
+      a = (hsla as HslaT).a ?? 1,
       v = l + s * Math.min(l, 1 - l),
       sNew = v === 0 ? 0 : 2 - (2 * l) / v;
 
@@ -655,18 +655,18 @@ export const colorKitUI = () => {
   };
 
   /** Convert `HSL` or `HSLA` color to an `HWBA` object representation */
-  const HSL_to_HWBA = (color: string | hslaT | hslT): hwbaT => {
+  const HSL_to_HWBA = (color: string | HslaT | HslT): HwbaT => {
     const hsva = HSL_to_HSVA(color);
     return HSV_to_HWBA(hsva);
   };
 
   /** Convert `HSL` or `HSLA` color to an `HSLA` object representation */
-  const HSL_to_HSL = (color: string | hslaT | hslT): hslaT => {
+  const HSL_to_HSL = (color: string | HslaT | HslT): HslaT => {
     return typeof color === 'string' ? HSL_string_to_object(color) : normalize_HSL_object(color);
   };
 
   /** Return the `HSL` color as a string, an array, or an object */
-  const HSL_types = ({ h, s, l, a }: hslaT): ColorTypes<hslaT> => {
+  const HSL_types = ({ h, s, l, a }: HslaT): ColorTypes<HslaT> => {
     return {
       string: (forceAlpha?: boolean) => {
         h = Math.round(h);
@@ -706,7 +706,7 @@ export const colorKitUI = () => {
 
   // #region HWB
   /** Parse `HWB` or `HWBA` color strong to an `object` */
-  const HWB_string_to_object = (color: string): hwbaT => {
+  const HWB_string_to_object = (color: string): HwbaT => {
     color = color.trim().toLowerCase();
     const colorType = detectColorFormat(color);
 
@@ -748,17 +748,17 @@ export const colorKitUI = () => {
   };
 
   /** Ensure that the `HWB` object values are within the correct range and that it has the alpha channel */
-  const normalize_HWB_object = (color: hwbaT | hwbT): hwbaT => {
+  const normalize_HWB_object = (color: HwbaT | HwbT): HwbaT => {
     return {
       h: clampHue(color.h),
       w: clamp100(color.w),
       b: clamp100(color.b),
-      a: clampAlpha((color as hwbaT).a ?? 1),
+      a: clampAlpha((color as HwbaT).a ?? 1),
     };
   };
 
   /** Convert `HWB` or `HWBA` color to an `RGBA` object representation */
-  const HWB_to_RGBA = (color: hwbaT | hwbT | string): rgbaT => {
+  const HWB_to_RGBA = (color: HwbaT | HwbT | string): RgbaT => {
     const hwba = typeof color === 'string' ? HWB_string_to_object(color) : normalize_HWB_object(color);
 
     const h = hwba.h / 360,
@@ -789,13 +789,13 @@ export const colorKitUI = () => {
   };
 
   /** Convert `HWB` or `HWBA` color to an `Hex` color */
-  const HWB_to_HEX = (color: hwbaT | hwbT | string): string => {
+  const HWB_to_HEX = (color: HwbaT | HwbT | string): string => {
     const rgba = HWB_to_RGBA(color);
     return RGB_to_HEX(rgba);
   };
 
   /** Convert `HWB` or `HWBA` color to an `HSVA` object representation */
-  function HWB_to_HSVA(color: hwbaT | hwbT | string): hsvaT {
+  function HWB_to_HSVA(color: HwbaT | HwbT | string): HsvaT {
     const hwba = typeof color === 'string' ? HWB_string_to_object(color) : normalize_HWB_object(color);
 
     const h = hwba.h % 360,
@@ -816,18 +816,18 @@ export const colorKitUI = () => {
   }
 
   /** Convert `HWB` or `HWBA` color to an `HSLA` object representation */
-  const HWB_to_HSLA = (color: hwbaT | hwbT | string): hslaT => {
+  const HWB_to_HSLA = (color: HwbaT | HwbT | string): HslaT => {
     const hsva = HWB_to_HSVA(color);
     return HSV_to_HSLA(hsva);
   };
 
   /** Convert `HWB` or `HWBA` color to an `HWBA` object representation */
-  const HWB_to_HWB = (color: hwbaT | hwbT | string): hwbaT => {
+  const HWB_to_HWB = (color: HwbaT | HwbT | string): HwbaT => {
     return typeof color === 'string' ? HWB_string_to_object(color) : normalize_HWB_object(color);
   };
 
   /** Return the `HWB` color as a string, an array, or an object */
-  const HWB_types = ({ h, w, b, a }: hwbaT): ColorTypes<hwbaT> => {
+  const HWB_types = ({ h, w, b, a }: HwbaT): ColorTypes<HwbaT> => {
     return {
       string: (forceAlpha?: boolean) => {
         h = Math.round(h);
@@ -867,7 +867,7 @@ export const colorKitUI = () => {
 
   // #region HSV
   /** Parse `HSV` or `HSVA` color string to an `object` */
-  const HSV_string_to_object = (color: string): hsvaT => {
+  const HSV_string_to_object = (color: string): HsvaT => {
     color = color.trim().toLowerCase();
     const colorType = detectColorFormat(color);
 
@@ -909,17 +909,17 @@ export const colorKitUI = () => {
   };
 
   /** Ensure that the `HSV` object values are within the correct range and that it has the alpha channel */
-  const normalize_HSV_object = (color: hsvaT | hsvT): hsvaT => {
+  const normalize_HSV_object = (color: HsvaT | HsvT): HsvaT => {
     return {
       h: clampHue(color.h),
       s: clamp100(color.s),
       v: clamp100(color.v),
-      a: clampAlpha((color as hsvaT).a ?? 1),
+      a: clampAlpha((color as HsvaT).a ?? 1),
     };
   };
 
   /** Convert `HSV` color to an `RGBA` object representation */
-  const HSV_to_RGBA = (color: hsvaT | hsvT | string): rgbaT => {
+  const HSV_to_RGBA = (color: HsvaT | HsvT | string): RgbaT => {
     const hsva = typeof color === 'string' ? HSV_string_to_object(color) : normalize_HSV_object(color);
 
     const h = hsva.h / 360,
@@ -972,7 +972,7 @@ export const colorKitUI = () => {
   };
 
   /** Convert `HSV` color to an `HSLA` object representation */
-  const HSV_to_HSLA = (color: hsvaT | hsvT | string): hslaT => {
+  const HSV_to_HSLA = (color: HsvaT | HsvT | string): HslaT => {
     const hsva = typeof color === 'string' ? HSV_string_to_object(color) : normalize_HSV_object(color);
 
     const h = hsva.h,
@@ -993,14 +993,14 @@ export const colorKitUI = () => {
   };
 
   /** Convert `HSV` color to an `Hex` color */
-  const HSV_to_HEX = (color: hsvaT | hsvT | string): string => {
+  const HSV_to_HEX = (color: HsvaT | HsvT | string): string => {
     const rgba = HSV_to_RGBA(color);
     const hex = RGB_to_HEX(rgba);
     return hex;
   };
 
   /** Convert `HSV` color to an `HWBA` object representation */
-  const HSV_to_HWBA = (color: hsvaT | hsvT | string): hwbaT => {
+  const HSV_to_HWBA = (color: HsvaT | HsvT | string): HwbaT => {
     const { h, s, v, a } = typeof color === 'string' ? HSV_string_to_object(color) : normalize_HSV_object(color);
 
     const w = (1 - s / 100) * v,
@@ -1015,12 +1015,12 @@ export const colorKitUI = () => {
   };
 
   /** Convert `HSV` color to an `HSVA` object representation */
-  const HSV_to_HSV = (color: hsvaT | hsvT | string): hsvaT => {
+  const HSV_to_HSV = (color: HsvaT | HsvT | string): HsvaT => {
     return typeof color === 'string' ? HSV_string_to_object(color) : normalize_HSV_object(color);
   };
 
   /** Return the `HSV` color as a string, an array, or an object */
-  const HSV_types = ({ h, s, v, a }: hsvaT): ColorTypes<hsvaT> => {
+  const HSV_types = ({ h, s, v, a }: HsvaT): ColorTypes<HsvaT> => {
     return {
       string: (forceAlpha?: boolean) => {
         h = Math.round(h);
@@ -1085,7 +1085,7 @@ export const colorKitUI = () => {
   };
 
   /** Convert any `HEX` color to an `RGBA` object representation */
-  const HEX_to_RGBA = (color: string | number): rgbaT => {
+  const HEX_to_RGBA = (color: string | number): RgbaT => {
     const hex = normalize_HEX(color);
 
     let matches: RegExpMatchArray | null = null;
@@ -1119,20 +1119,20 @@ export const colorKitUI = () => {
   };
 
   /** Convert any `HEX` color to an `HSVA` object representation */
-  const HEX_to_HSVA = (color: string | number): hsvaT => {
+  const HEX_to_HSVA = (color: string | number): HsvaT => {
     const rgb = HEX_to_RGBA(color);
     const hsva = RGB_to_HSVA(rgb);
     return hsva;
   };
 
   /** Convert any `HEX` color to an `HSLA` object representation */
-  const HEX_to_HSLA = (color: string): hslaT => {
+  const HEX_to_HSLA = (color: string): HslaT => {
     const rgb = HEX_to_RGBA(color);
     return RGB_to_HSLA(rgb);
   };
 
   /** Convert any `HEX` color to an `HWBA` object representation */
-  const HEX_to_HWBA = (color: string): hwbaT => {
+  const HEX_to_HWBA = (color: string): HwbaT => {
     const rgba = HEX_to_RGBA(color);
     return RGB_to_HWBA(rgba);
   };
@@ -1154,22 +1154,22 @@ export const colorKitUI = () => {
 
     // RGB to HEX
     if (colorType === 'rgb' || colorType === 'rgba') {
-      return RGB_to_HEX(color as string | rgbT | rgbaT);
+      return RGB_to_HEX(color as string | RgbT | RgbaT);
     }
 
     // HSL to HEX
     if (colorType === 'hsl' || colorType === 'hsla') {
-      return HSL_to_HEX(color as string | hslaT | hslT);
+      return HSL_to_HEX(color as string | HslaT | HslT);
     }
 
     // HSV to HEX
     if (colorType === 'hsv' || colorType === 'hsva') {
-      return HSV_to_HEX(color as string | hsvaT | hsvT);
+      return HSV_to_HEX(color as string | HsvaT | HsvT);
     }
 
     // HWB to HEX
     if (colorType === 'hwb' || colorType === 'hwba') {
-      return HWB_to_HEX(color as string | hwbaT | hwbT);
+      return HWB_to_HEX(color as string | HwbaT | HwbT);
     }
 
     // HEX
@@ -1186,7 +1186,7 @@ export const colorKitUI = () => {
   };
 
   /** Convert `HSL`, `HSV`, `HWB`, or `HEX` color to the `RGB` color format. */
-  const RGB = (color: SupportedColorFormats): ColorTypes<rgbaT> => {
+  const RGB = (color: SupportedColorFormats): ColorTypes<RgbaT> => {
     // named color
     if (typeof color === 'string') {
       color = color.trim().toLowerCase();
@@ -1206,25 +1206,25 @@ export const colorKitUI = () => {
 
     // HSL to RGB
     if (colorType === 'hsl' || colorType === 'hsla') {
-      const rgb = HSL_to_RGBA(color as string | hslaT | hslT);
+      const rgb = HSL_to_RGBA(color as string | HslaT | HslT);
       return RGB_types(rgb);
     }
 
     // HSV to RGB
     if (colorType === 'hsv' || colorType === 'hsva') {
-      const rgb = HSV_to_RGBA(color as string | hsvaT | hsvT);
+      const rgb = HSV_to_RGBA(color as string | HsvaT | HsvT);
       return RGB_types(rgb);
     }
 
     // HWB to RGB
     if (colorType === 'hwb' || colorType === 'hwba') {
-      const rgb = HWB_to_RGBA(color as string | hwbaT | hwbT);
+      const rgb = HWB_to_RGBA(color as string | HwbaT | HwbT);
       return RGB_types(rgb);
     }
 
     // RGB to normalized RGB
     if (colorType === 'rgb' || colorType === 'rgba') {
-      const rgba = RGB_to_RGB(color as string | rgbaT | rgbT);
+      const rgba = RGB_to_RGB(color as string | RgbaT | RgbT);
       return RGB_types(rgba);
     }
 
@@ -1237,7 +1237,7 @@ export const colorKitUI = () => {
   };
 
   /** Convert `HEX`, `HSV`, `HWB`, or `RGB` color to the `HSL` color format. */
-  const HSL = (color: SupportedColorFormats): ColorTypes<hslaT> => {
+  const HSL = (color: SupportedColorFormats): ColorTypes<HslaT> => {
     // named color
     if (typeof color === 'string') {
       color = color.trim().toLowerCase();
@@ -1257,25 +1257,25 @@ export const colorKitUI = () => {
 
     // RGB to HSL
     if (colorType === 'rgb' || colorType === 'rgba') {
-      const hsla = RGB_to_HSLA(color as string | rgbaT | rgbT);
+      const hsla = RGB_to_HSLA(color as string | RgbaT | RgbT);
       return HSL_types(hsla);
     }
 
     // HSV to HSL
     if (colorType === 'hsv' || colorType === 'hsva') {
-      const hsla = HSV_to_HSLA(color as string | hsvaT | hsvT);
+      const hsla = HSV_to_HSLA(color as string | HsvaT | HsvT);
       return HSL_types(hsla);
     }
 
     // HWB to HSL
     if (colorType === 'hwb' || colorType === 'hwba') {
-      const hsla = HWB_to_HSLA(color as string | hwbaT | hwbT);
+      const hsla = HWB_to_HSLA(color as string | HwbaT | HwbT);
       return HSL_types(hsla);
     }
 
     // HSL to normalized HSL
     if (colorType === 'hsl' || colorType === 'hsla') {
-      const hsla = HSL_to_HSL(color as string | hslaT | hslT);
+      const hsla = HSL_to_HSL(color as string | HslaT | HslT);
       return HSL_types(hsla);
     }
 
@@ -1288,7 +1288,7 @@ export const colorKitUI = () => {
   };
 
   /** Convert `HSL`, `HEX`, `HSV`, or `RGB` color to the `HWB` color format. */
-  const HWB = (color: SupportedColorFormats): ColorTypes<hwbaT> => {
+  const HWB = (color: SupportedColorFormats): ColorTypes<HwbaT> => {
     // named color
     if (typeof color === 'string') {
       color = color.trim().toLowerCase();
@@ -1308,25 +1308,25 @@ export const colorKitUI = () => {
 
     // RGB to HWB
     if (colorType === 'rgb' || colorType === 'rgba') {
-      const hwba = RGB_to_HWBA(color as string | rgbaT | rgbT);
+      const hwba = RGB_to_HWBA(color as string | RgbaT | RgbT);
       return HWB_types(hwba);
     }
 
     // HSL to HWB
     if (colorType === 'hsl' || colorType === 'hsla') {
-      const hwba = HSL_to_HWBA(color as string | hslaT | hslT);
+      const hwba = HSL_to_HWBA(color as string | HslaT | HslT);
       return HWB_types(hwba);
     }
 
     // HSV to HWB
     if (colorType === 'hsv' || colorType === 'hsva') {
-      const hwba = HSV_to_HWBA(color as string | hsvaT | hsvT);
+      const hwba = HSV_to_HWBA(color as string | HsvaT | HsvT);
       return HWB_types(hwba);
     }
 
     // HWB to normalized HWB
     if (colorType === 'hwb' || colorType === 'hwba') {
-      const hwba = HWB_to_HWB(color as string | hwbaT | hwbT);
+      const hwba = HWB_to_HWB(color as string | HwbaT | HwbT);
       return HWB_types(hwba);
     }
 
@@ -1339,7 +1339,7 @@ export const colorKitUI = () => {
   };
 
   /** Convert `HSL`, `HEX`, `HWB`, or `RGB` color to the `HSV` color format. */
-  const HSV = (color: SupportedColorFormats): ColorTypes<hsvaT> => {
+  const HSV = (color: SupportedColorFormats): ColorTypes<HsvaT> => {
     // named color
     if (typeof color === 'string') {
       color = color.trim().toLowerCase();
@@ -1359,25 +1359,25 @@ export const colorKitUI = () => {
 
     // RGB to HSV
     if (colorType === 'rgb' || colorType === 'rgba') {
-      const hsva = RGB_to_HSVA(color as string | rgbaT | rgbT);
+      const hsva = RGB_to_HSVA(color as string | RgbaT | RgbT);
       return HSV_types(hsva);
     }
 
     // HSL to HSV
     if (colorType === 'hsl' || colorType === 'hsla') {
-      const hsva = HSL_to_HSVA(color as string | hslaT | hslT);
+      const hsva = HSL_to_HSVA(color as string | HslaT | HslT);
       return HSV_types(hsva);
     }
 
     // HWB to HSV
     if (colorType === 'hwb' || colorType === 'hwba') {
-      const hsva = HWB_to_HSVA(color as string | hwbaT | hwbT);
+      const hsva = HWB_to_HSVA(color as string | HwbaT | HwbT);
       return HSV_types(hsva);
     }
 
     // HSV to normalized HSV
     if (colorType === 'hsv' || colorType === 'hsva') {
-      const hsva = HSV_to_HSV(color as string | hsvaT | hsvT);
+      const hsva = HSV_to_HSV(color as string | HsvaT | HsvT);
       return HSV_types(hsva);
     }
 
@@ -1417,36 +1417,36 @@ export const colorKitUI = () => {
 
     // color object
     if (typeof color === 'object') {
-      const rgbaKeys = ['r', 'g', 'b', 'a'] as (keyof rgbaT)[];
-      const isRgbaOb = rgbaKeys.every(k => color.hasOwnProperty(k) && typeof (color as rgbaT)[k] === 'number');
+      const rgbaKeys = ['r', 'g', 'b', 'a'] as (keyof RgbaT)[];
+      const isRgbaOb = rgbaKeys.every(k => color.hasOwnProperty(k) && typeof (color as RgbaT)[k] === 'number');
       if (isRgbaOb) return 'rgba';
 
-      const rgbKeys = ['r', 'g', 'b'] as (keyof rgbT)[];
-      const isRgbOb = rgbKeys.every(k => color.hasOwnProperty(k) && typeof (color as rgbT)[k] === 'number');
+      const rgbKeys = ['r', 'g', 'b'] as (keyof RgbT)[];
+      const isRgbOb = rgbKeys.every(k => color.hasOwnProperty(k) && typeof (color as RgbT)[k] === 'number');
       if (isRgbOb) return 'rgb';
 
-      const hslaKeys = ['h', 's', 'l', 'a'] as (keyof hslaT)[];
-      const isHslaOb = hslaKeys.every(k => color.hasOwnProperty(k) && typeof (color as hslaT)[k] === 'number');
+      const hslaKeys = ['h', 's', 'l', 'a'] as (keyof HslaT)[];
+      const isHslaOb = hslaKeys.every(k => color.hasOwnProperty(k) && typeof (color as HslaT)[k] === 'number');
       if (isHslaOb) return 'hsla';
 
-      const hslKeys = ['h', 's', 'l'] as (keyof hslT)[];
-      const isHslOb = hslKeys.every(k => color.hasOwnProperty(k) && typeof (color as hslT)[k] === 'number');
+      const hslKeys = ['h', 's', 'l'] as (keyof HslT)[];
+      const isHslOb = hslKeys.every(k => color.hasOwnProperty(k) && typeof (color as HslT)[k] === 'number');
       if (isHslOb) return 'hsl';
 
-      const hsvaKeys = ['h', 's', 'v', 'a'] as (keyof hsvaT)[];
-      const isHsvaOb = hsvaKeys.every(k => color.hasOwnProperty(k) && typeof (color as hsvaT)[k] === 'number');
+      const hsvaKeys = ['h', 's', 'v', 'a'] as (keyof HsvaT)[];
+      const isHsvaOb = hsvaKeys.every(k => color.hasOwnProperty(k) && typeof (color as HsvaT)[k] === 'number');
       if (isHsvaOb) return 'hsva';
 
-      const hsvKeys = ['h', 's', 'v'] as (keyof hsvT)[];
-      const isHsvOb = hsvKeys.every(k => color.hasOwnProperty(k) && typeof (color as hsvT)[k] === 'number');
+      const hsvKeys = ['h', 's', 'v'] as (keyof HsvT)[];
+      const isHsvOb = hsvKeys.every(k => color.hasOwnProperty(k) && typeof (color as HsvT)[k] === 'number');
       if (isHsvOb) return 'hsv';
 
-      const hwbaKeys = ['h', 'w', 'b', 'a'] as (keyof hwbaT)[];
-      const isHwbaOb = hwbaKeys.every(k => color.hasOwnProperty(k) && typeof (color as hwbaT)[k] === 'number');
+      const hwbaKeys = ['h', 'w', 'b', 'a'] as (keyof HwbaT)[];
+      const isHwbaOb = hwbaKeys.every(k => color.hasOwnProperty(k) && typeof (color as HwbaT)[k] === 'number');
       if (isHwbaOb) return 'hwba';
 
-      const hwbKeys = ['h', 'w', 'b'] as (keyof hwbT)[];
-      const isHwbOb = hwbKeys.every(k => color.hasOwnProperty(k) && typeof (color as hwbT)[k] === 'number');
+      const hwbKeys = ['h', 'w', 'b'] as (keyof HwbT)[];
+      const isHwbOb = hwbKeys.every(k => color.hasOwnProperty(k) && typeof (color as HwbT)[k] === 'number');
       if (isHwbOb) return 'hwb';
     }
 
@@ -1999,7 +1999,7 @@ export const colorKitUI = () => {
     const color1RGB = RGB(color1).object();
     const channels = ['r', 'g', 'b'] as const;
 
-    function adjustLuminance(colorRGB: rgbaT, by: number) {
+    function adjustLuminance(colorRGB: RgbaT, by: number) {
       const r = clampRGB(colorRGB.r + by);
       const g = clampRGB(colorRGB.g + by);
       const b = clampRGB(colorRGB.b + by);

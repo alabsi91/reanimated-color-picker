@@ -150,19 +150,19 @@ export type ColorFormats = 'hex3' | 'hex4' | 'hex6' | 'hex8' | 'hsl' | 'hsla' | 
 
 export type ColorString = keyof NAMED_COLORS | (string & NonNullable<unknown>);
 
-export type rgbaT = { r: number; g: number; b: number; a: number };
-export type rgbT = Omit<rgbaT, 'a'>;
+export type RgbaT = { r: number; g: number; b: number; a: number };
+export type RgbT = Omit<RgbaT, 'a'>;
 
-export type hslaT = { h: number; s: number; l: number; a: number };
-export type hslT = Omit<hslaT, 'a'>;
+export type HslaT = { h: number; s: number; l: number; a: number };
+export type HslT = Omit<HslaT, 'a'>;
 
-export type hsvaT = { h: number; s: number; v: number; a: number };
-export type hsvT = Omit<hsvaT, 'a'>;
+export type HsvaT = { h: number; s: number; v: number; a: number };
+export type HsvT = Omit<HsvaT, 'a'>;
 
-export type hwbaT = { h: number; w: number; b: number; a: number };
-export type hwbT = Omit<hwbaT, 'a'>;
+export type HwbaT = { h: number; w: number; b: number; a: number };
+export type HwbT = Omit<HwbaT, 'a'>;
 
-export type SupportedColorFormats = ColorString | rgbaT | rgbT | hslaT | hslT | hsvaT | hsvT | hwbaT | hwbT | number;
+export type SupportedColorFormats = ColorString | RgbaT | RgbT | HslaT | HslT | HsvaT | HsvT | HwbaT | HwbT | number;
 
 export type ColorTypes<T extends object> = {
   object: (roundValues?: boolean) => T;
@@ -172,8 +172,8 @@ export type ColorTypes<T extends object> = {
 
 export type ConversionMethods = {
   hex: () => string;
-  rgb: () => ColorTypes<rgbaT>;
-  hsl: () => ColorTypes<hslaT>;
-  hsv: () => ColorTypes<hsvaT>;
-  hwb: () => ColorTypes<hwbaT>;
+  rgb: () => ColorTypes<RgbaT>;
+  hsl: () => ColorTypes<HslaT>;
+  hsv: () => ColorTypes<HsvaT>;
+  hwb: () => ColorTypes<HwbaT>;
 };
