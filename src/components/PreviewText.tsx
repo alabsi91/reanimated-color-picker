@@ -44,6 +44,16 @@ export function PreviewText({ style = {}, colorFormat = 'hex' }: PreviewTextProp
       style={[styles.previewText, style]}
       animatedProps={animatedProps}
       pointerEvents={isWeb ? undefined : 'none'}
+      id={'color-picker-preview-text-' + colorFormat}
+      role='presentation'
+      autoCapitalize='none'
+      autoComplete='off'
+      autoCorrect={false}
+      focusable={false}
+      autoFocus={false}
+      tabIndex={-1}
+      onFocus={() => inputRef.current?.blur()}
+      readOnly
     />
   );
 }
