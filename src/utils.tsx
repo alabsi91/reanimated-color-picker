@@ -6,7 +6,7 @@ import type { StyleProp, ViewStyle } from 'react-native';
 export const isRtl = I18nManager.isRTL;
 export const isWeb = Platform.OS === 'web';
 
-/** - Get a specific property from a react native style object */
+/** Get a specific property from a react native style object */
 export function getStyle<T extends ViewStyle, K extends keyof T>(style: StyleProp<T>, property: K): T[K] | undefined {
   if (!style) {
     return undefined;
@@ -16,14 +16,14 @@ export function getStyle<T extends ViewStyle, K extends keyof T>(style: StylePro
   return flattened[property];
 }
 
-/** - Clamp a number value between `0` and a max value */
+/** Clamp a number value between `0` and a max value */
 export const clamp = (v: number, max: number) => {
   'worklet';
 
   return Math.min(Math.max(v, 0), max);
 };
 
-/** - Convert `HSV` color to an `HSLA` string representation */
+/** Convert `HSV` color to an `HSLA` string representation */
 export const HSVA2HSLA_string = (h: number, s: number, v: number, a = 1) => {
   'worklet';
 
@@ -38,7 +38,7 @@ export const HSVA2HSLA_string = (h: number, s: number, v: number, a = 1) => {
   return `hsla(${h}, ${sln * 100}%, ${l * 100}%, ${a})`;
 };
 
-/** - Render children only if the `render` property is `true` */
+/** Render children only if the `render` property is `true` */
 export function ConditionalRendering(props: { children: React.ReactNode; if: boolean }) {
   if (!props.if) {
     return null;
@@ -47,7 +47,7 @@ export function ConditionalRendering(props: { children: React.ReactNode; if: boo
   return <>{props.children}</>;
 }
 
-/** - Render children for native platforms only (Android, IOS) */
+/** Render children for native platforms only (Android, IOS) */
 export function RenderNativeOnly({ children }: { children: React.ReactNode }) {
   if (isWeb) {
     return null;
@@ -56,7 +56,7 @@ export function RenderNativeOnly({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
-/** - Render children for Web platform only */
+/** Render children for Web platform only */
 export function RenderWebOnly({ children }: { children: React.ReactNode }) {
   if (!isWeb) {
     return null;
