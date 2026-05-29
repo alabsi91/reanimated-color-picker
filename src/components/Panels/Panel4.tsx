@@ -40,7 +40,7 @@ export function Panel4({
   const height = useSharedValue(0);
   const handleScale = useSharedValue(1);
 
-  const handleStyle = useAnimatedStyle(() => {
+  const thumbAnimatedStyle = useAnimatedStyle(() => {
     const length = { x: width.value - (boundedThumb ? thumbSize : 0), y: height.value - (boundedThumb ? thumbSize : 0) };
     const thumbOffset = boundedThumb ? 0 : thumbSize / 2;
     // luminance
@@ -176,7 +176,7 @@ export function Panel4({
           thumbColor={thumbColor}
           renderThumb={renderThumb}
           innerStyle={thumbInnerStyle}
-          handleStyle={handleStyle}
+          thumbAnimatedStyle={thumbAnimatedStyle}
           style={thumbStyle}
         />
       </Animated.View>

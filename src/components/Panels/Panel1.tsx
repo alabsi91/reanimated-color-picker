@@ -34,7 +34,7 @@ export function Panel1({ gestures = [], style = {}, ...props }: PanelProps) {
   const height = useSharedValue(0);
   const handleScale = useSharedValue(1);
 
-  const handleStyle = useAnimatedStyle(() => {
+  const thumbAnimatedStyle = useAnimatedStyle(() => {
     const length = {
       x: width.value - (boundedThumb ? thumbSize : 0),
       y: height.value - (boundedThumb ? thumbSize : 0),
@@ -145,7 +145,7 @@ export function Panel1({ gestures = [], style = {}, ...props }: PanelProps) {
           thumbColor={thumbColor}
           renderThumb={renderThumb}
           innerStyle={thumbInnerStyle}
-          handleStyle={handleStyle}
+          thumbAnimatedStyle={thumbAnimatedStyle}
           style={thumbStyle}
         />
       </Animated.View>

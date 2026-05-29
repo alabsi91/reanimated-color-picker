@@ -79,7 +79,7 @@ export function Panel3({
     return saturationValue.value;
   }, [brightnessValue, saturationValue, hsl]);
 
-  const handleStyle = useAnimatedStyle(() => {
+  const thumbAnimatedStyle = useAnimatedStyle(() => {
     const center = width.value / 2 - (boundedThumb ? thumbSize / 2 : 0);
     const rotatedHue = (hueValue.value - rotate) % 360;
     const distance = (centerChannelValue.value / 100) * (width.value / 2 - (boundedThumb ? thumbSize / 2 : 0));
@@ -295,7 +295,7 @@ export function Panel3({
             thumbColor={thumbColor}
             renderThumb={renderThumb}
             innerStyle={thumbInnerStyle}
-            handleStyle={handleStyle}
+            thumbAnimatedStyle={thumbAnimatedStyle}
             style={thumbStyle}
             getAdaptiveColor={getAdaptiveColor}
           />

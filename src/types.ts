@@ -72,7 +72,7 @@ export type RenderThumbType = React.FC<RenderThumbProps>;
 
 export type ThumbProps = {
   thumbColor?: string;
-  handleStyle: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>;
+  thumbAnimatedStyle: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>;
   innerStyle?: StyleProp<ViewStyle>;
   style?: StyleProp<ViewStyle>;
   renderThumb?: RenderThumbType;

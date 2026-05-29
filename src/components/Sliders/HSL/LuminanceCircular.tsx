@@ -66,7 +66,7 @@ export function LuminanceCircular({
     };
   }, [hueValue, saturationValue, brightnessValue]);
 
-  const handleStyle = useAnimatedStyle(() => {
+  const thumbAnimatedStyle = useAnimatedStyle(() => {
     const center = width.value / 2;
     const distance = (width.value - sliderThickness) / 2;
     const angle = (hsl.value.l / 100) * 180 + thumbSide.value * 180;
@@ -214,7 +214,7 @@ export function LuminanceCircular({
           thumbColor={thumbColor}
           renderThumb={renderThumb}
           innerStyle={thumbInnerStyle}
-          handleStyle={handleStyle}
+          thumbAnimatedStyle={thumbAnimatedStyle}
           style={thumbStyle}
           getAdaptiveColor={getAdaptiveColor}
         />

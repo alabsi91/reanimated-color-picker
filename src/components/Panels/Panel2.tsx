@@ -75,7 +75,7 @@ export function Panel2({
     return saturationValue.value;
   }, [brightnessValue, saturationValue, hsl]);
 
-  const handleStyle = useAnimatedStyle(() => {
+  const thumbAnimatedStyle = useAnimatedStyle(() => {
     const length = {
       x: width.value - (boundedThumb ? thumbSize : 0),
       y: height.value - (boundedThumb ? thumbSize : 0),
@@ -248,7 +248,7 @@ export function Panel2({
           thumbColor={thumbColor}
           renderThumb={renderThumb}
           innerStyle={thumbInnerStyle}
-          handleStyle={handleStyle}
+          thumbAnimatedStyle={thumbAnimatedStyle}
           style={thumbStyle}
           getAdaptiveColor={getAdaptiveColor}
         />

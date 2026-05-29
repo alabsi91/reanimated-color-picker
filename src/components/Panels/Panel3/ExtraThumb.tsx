@@ -116,7 +116,7 @@ export function ExtraThumb({
     }
   }, [hue, saturation, brightness, alphaValue]);
 
-  const handleStyle = useAnimatedStyle(() => {
+  const thumbAnimatedStyle = useAnimatedStyle(() => {
     const center = width.value / 2 - (boundedThumb ? thumbSize / 2 : 0);
     const rotatedHue = (hue.value - rotate) % 360;
     const distance = (centerChannelValue.value / 100) * (width.value / 2 - (boundedThumb ? thumbSize / 2 : 0));
@@ -189,7 +189,7 @@ export function ExtraThumb({
         thumbColor={thumbColor}
         renderThumb={renderThumb}
         innerStyle={thumbInnerStyle}
-        handleStyle={handleStyle}
+        thumbAnimatedStyle={thumbAnimatedStyle}
         style={thumbStyle}
         overrideHSV={{ hue, saturation, brightness }}
         getAdaptiveColor={getAdaptiveColor}

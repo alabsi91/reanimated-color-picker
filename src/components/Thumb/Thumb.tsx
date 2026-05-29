@@ -9,7 +9,7 @@ import BuiltinThumbs from './BuiltinThumbs/index';
 import type { BuiltinThumbsProps, ThumbProps } from '@types';
 
 export default function Thumb({
-  handleStyle,
+  thumbAnimatedStyle: handleStyle,
   innerStyle,
   style,
   thumbColor,

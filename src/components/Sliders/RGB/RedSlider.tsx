@@ -40,7 +40,7 @@ export function RedSlider({ gestures = [], style = {}, vertical = false, reverse
     return colorKit.runOnUI().RGB({ h: hueValue.value, s: saturationValue.value, v: brightnessValue.value }).object(false);
   }, [hueValue, saturationValue, brightnessValue]);
 
-  const handleStyle = useAnimatedStyle(() => {
+  const thumbAnimatedStyle = useAnimatedStyle(() => {
     const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0);
     const percent = (rgb.value.r / 255) * length;
     const pos = (reverse ? length - percent : percent) - (boundedThumb ? 0 : thumbSize / 2);
@@ -181,7 +181,7 @@ export function RedSlider({ gestures = [], style = {}, vertical = false, reverse
           thumbColor={thumbColor}
           renderThumb={renderThumb}
           innerStyle={thumbInnerStyle}
-          handleStyle={handleStyle}
+          thumbAnimatedStyle={thumbAnimatedStyle}
           style={thumbStyle}
           vertical={vertical}
           getAdaptiveColor={getAdaptiveColor}

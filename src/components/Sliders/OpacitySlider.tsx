@@ -35,7 +35,7 @@ export function OpacitySlider({ gestures = [], style = {}, vertical = false, rev
   const height = useSharedValue(!vertical ? sliderThickness : typeof heightStyle === 'number' ? heightStyle : 0);
   const handleScale = useSharedValue(1);
 
-  const handleStyle = useAnimatedStyle(() => {
+  const thumbAnimatedStyle = useAnimatedStyle(() => {
     const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0);
     const percent = alphaValue.value * length;
     const pos = (reverse ? length - percent : percent) - (boundedThumb ? 0 : thumbSize / 2);
@@ -193,7 +193,7 @@ export function OpacitySlider({ gestures = [], style = {}, vertical = false, rev
           thumbColor={thumbColor}
           renderThumb={renderThumb}
           innerStyle={thumbInnerStyle}
-          handleStyle={handleStyle}
+          thumbAnimatedStyle={thumbAnimatedStyle}
           style={thumbStyle}
           vertical={vertical}
           getAdaptiveColor={getAdaptiveColor}

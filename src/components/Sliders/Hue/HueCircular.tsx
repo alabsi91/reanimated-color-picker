@@ -41,7 +41,7 @@ export function HueCircular({
 
   const handleScale = useSharedValue(1);
 
-  const handleStyle = useAnimatedStyle(() => {
+  const thumbAnimatedStyle = useAnimatedStyle(() => {
     const center = width.value / 2;
     const rotatedHue = (hueValue.value - rotate) % 360;
     const distance = (width.value - sliderThickness) / 2;
@@ -200,7 +200,7 @@ export function HueCircular({
           thumbColor={thumbColor}
           renderThumb={renderThumb}
           innerStyle={thumbInnerStyle}
-          handleStyle={handleStyle}
+          thumbAnimatedStyle={thumbAnimatedStyle}
           style={thumbStyle}
           getAdaptiveColor={getAdaptiveColor}
         />
