@@ -1,17 +1,16 @@
-import React, { useCallback, useLayoutEffect, useRef } from 'react';
+import React from 'react';
 import { ImageBackground, StyleSheet } from 'react-native';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import usePickerContext from '@context';
+import { CircularSliderCore } from '@sliders/CircularSliderCore';
 import { styles } from '@styles';
 import Thumb from '@thumb';
 import { ConditionalRendering, HSVA2HSLA_string } from '@utils';
 
 import type { HueCircularProps } from '@types';
-import type { LayoutChangeEvent } from 'react-native';
-import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
+/** @see [HueCircular](https://alabsi91.github.io/reanimated-color-picker/api/sliders/hue/hue-circular-slider/) */
 export function HueCircular({
   children,
   gestures = [],
@@ -33,7 +32,6 @@ export function HueCircular({
   const adaptSpectrum = props.adaptSpectrum ?? ctx.adaptSpectrum;
   const thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle ?? {};
 
-  const containerRef = useRef<Animated.View>(null);
   const isGestureActive = useSharedValue(false);
   const width = useSharedValue(0);
   const borderRadius = useSharedValue(0);
@@ -83,31 +81,12 @@ export function HueCircular({
     };
   }, [width, sliderThickness]);
 
-  const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
-    'worklet';
-
-    if (!isGestureActive.value) return;
-
-    const center = width.value / 2;
-    const dx = center - x;
-    const dy = center - y;
-    const theta = Math.atan2(dy, dx) * (180 / Math.PI); // [0 - 180] range
-    const angle = theta < 0 ? 360 + theta : theta; // [0 - 360] range
-    const newHueValue = (angle + rotate) % 360;
-
-    if (hueValue.value === newHueValue) return;
-
-    hueValue.value = newHueValue;
-
-    onGestureChange();
-  };
-
-  const onGestureBegin = (event: PanGestureHandlerEventPayload) => {
+  const onBegin = ({ x, y }: { x: number; y: number }) => {
     'worklet';
 
     const radius = width.value / 2;
-    const dx = radius - event.x;
-    const dy = radius - event.y;
+    const dx = radius - x;
+    const dy = radius - y;
     const pressDistance = Math.sqrt(dx * dx + dy * dy);
 
     // Check if the press is outside the circle
@@ -125,38 +104,41 @@ export function HueCircular({
 
     isGestureActive.value = true;
     handleScale.value = withTiming(thumbScaleAnimationValue, { duration: thumbScaleAnimationDuration });
-
-    onGestureUpdate(event);
   };
 
-  const onGestureFinish = () => {
+  const onUpdate = (newValue: number) => {
+    'worklet';
+
+    if (hueValue.value === newValue) {
+      return;
+    }
+
+    hueValue.value = newValue;
+
+    onGestureChange();
+  };
+
+  const onGestureUpdate = ({ x, y }: { x: number; y: number }) => {
+    'worklet';
+
+    if (!isGestureActive.value) return;
+
+    const center = width.value / 2;
+    const dx = center - x;
+    const dy = center - y;
+    const theta = Math.atan2(dy, dx) * (180 / Math.PI); // [0 - 180] range
+    const angle = theta < 0 ? 360 + theta : theta; // [0 - 360] range
+    const newHueValue = (angle + rotate) % 360;
+
+    onUpdate(newHueValue);
+  };
+
+  const onEnd = () => {
     'worklet';
     isGestureActive.value = false;
     handleScale.value = withTiming(1, { duration: thumbScaleAnimationDuration });
     onGestureEnd();
   };
-
-  const pan = Gesture.Pan().onBegin(onGestureBegin).onUpdate(onGestureUpdate).onEnd(onGestureFinish);
-  const tap = Gesture.Tap().onEnd(onGestureFinish);
-  const longPress = Gesture.LongPress().onEnd(onGestureFinish);
-  const composed = Gesture.Simultaneous(Gesture.Exclusive(pan, tap, longPress), ...gestures);
-
-  // useLayoutEffect → paint → onLayout
-  useLayoutEffect(() => {
-    containerRef.current?.measure((_x, _y, layoutWidth) => {
-      if (!layoutWidth) return;
-      width.value = layoutWidth;
-      borderRadius.value = layoutWidth / 2;
-    });
-  }, []);
-
-  const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
-    const layoutWidth = layout.width;
-    if (!layoutWidth) return;
-
-    width.value = layoutWidth;
-    borderRadius.value = layoutWidth / 2;
-  }, []);
 
   const getAdaptiveColor = (hsva: { h: number; s: number; v: number; a: number }) => {
     'worklet';
@@ -169,42 +151,50 @@ export function HueCircular({
   };
 
   return (
-    <GestureDetector gesture={composed}>
-      <Animated.View
-        onLayout={onLayout}
-        ref={containerRef}
-        style={[
-          styles.panelContainer,
-          { justifyContent: 'center', alignItems: 'center' },
-          style,
-          { position: 'relative', aspectRatio: 1, borderWidth: 0, padding: 0 },
-          borderRadiusStyle,
-        ]}
+    <CircularSliderCore
+      style={[
+        styles.panelContainer,
+        { justifyContent: 'center', alignItems: 'center' },
+        style,
+        { position: 'relative', aspectRatio: 1, borderWidth: 0, padding: 0 },
+        borderRadiusStyle,
+      ]}
+      label={props.accessibilityLabel ?? 'Hue circular slider'}
+      hint={props.accessibilityHint}
+      currentValue={hueValue}
+      maxValue={360}
+      width={width}
+      borderRadius={borderRadius}
+      gestures={gestures}
+      onGestureUpdate={onGestureUpdate}
+      onBegin={onBegin}
+      onUpdate={onUpdate}
+      onEnd={onEnd}
+    >
+      <ImageBackground
+        source={require('@assets/circularHue.png')}
+        style={[styles.panelImage, { transform: [{ rotate: -rotate + 'deg' }] }]}
+        resizeMode='stretch'
+        aria-hidden
       >
-        <ImageBackground
-          source={require('@assets/circularHue.png')}
-          style={[styles.panelImage, { transform: [{ rotate: -rotate + 'deg' }] }]}
-          resizeMode='stretch'
-        >
-          <ConditionalRendering if={adaptSpectrum}>
-            <Animated.View style={[borderRadiusStyle, activeBrightnessStyle, StyleSheet.absoluteFill]} />
-            <Animated.View style={[borderRadiusStyle, activeSaturationStyle, StyleSheet.absoluteFill]} />
-          </ConditionalRendering>
-        </ImageBackground>
+        <ConditionalRendering if={adaptSpectrum}>
+          <Animated.View style={[borderRadiusStyle, activeBrightnessStyle, StyleSheet.absoluteFill]} />
+          <Animated.View style={[borderRadiusStyle, activeSaturationStyle, StyleSheet.absoluteFill]} />
+        </ConditionalRendering>
+      </ImageBackground>
 
-        <Animated.View style={[clipViewStyle, { backgroundColor: '#fff' }, containerStyle]}>{children}</Animated.View>
+      <Animated.View style={[clipViewStyle, { backgroundColor: '#fff' }, containerStyle]}>{children}</Animated.View>
 
-        <Thumb
-          thumbShape={thumbShape}
-          thumbSize={thumbSize}
-          thumbColor={thumbColor}
-          renderThumb={renderThumb}
-          innerStyle={thumbInnerStyle}
-          thumbAnimatedStyle={thumbAnimatedStyle}
-          style={thumbStyle}
-          getAdaptiveColor={getAdaptiveColor}
-        />
-      </Animated.View>
-    </GestureDetector>
+      <Thumb
+        thumbShape={thumbShape}
+        thumbSize={thumbSize}
+        thumbColor={thumbColor}
+        renderThumb={renderThumb}
+        innerStyle={thumbInnerStyle}
+        thumbAnimatedStyle={thumbAnimatedStyle}
+        style={thumbStyle}
+        getAdaptiveColor={getAdaptiveColor}
+      />
+    </CircularSliderCore>
   );
 }

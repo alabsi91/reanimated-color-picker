@@ -1,20 +1,18 @@
-import React, { useCallback, useLayoutEffect, useRef } from 'react';
+import React from 'react';
 import { Image, ImageBackground, StyleSheet } from 'react-native';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle, useDerivedValue, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import colorKit from '@colorKit';
 import usePickerContext from '@context';
+import { PanelCore } from '@panels/PanelCore';
 import { styles } from '@styles';
 import Thumb from '@thumb';
 import { clamp, ConditionalRendering } from '@utils';
 import { Panel3ContextProvider } from './Panel3Context';
 
 import type { Panel3Props } from '@types';
-import type { LayoutChangeEvent } from 'react-native';
-import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
-/** A circle-shaped panel slider with a wheel-style design, used to adjust hue and saturation or brightness of colors. */
+/** @see [Panel3](https://alabsi91.github.io/reanimated-color-picker/api/panels/panel3/) */
 export function Panel3({
   renderCenterLine = false,
   centerChannel = 'saturation',
@@ -37,7 +35,6 @@ export function Panel3({
   const thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle ?? {};
   const adaptSpectrum = props.adaptSpectrum ?? ctx.adaptSpectrum;
 
-  const containerRef = useRef<Animated.View>(null);
   const isGestureActive = useSharedValue(false);
   const width = useSharedValue(0);
   const handleScale = useSharedValue(1);
@@ -132,7 +129,54 @@ export function Panel3({
     };
   }, [width, hueValue, centerChannelValue, renderCenterLine, boundedThumb, thumbSize, rotate]);
 
-  const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
+  const onBegin = ({ x, y }: { x: number; y: number }) => {
+    'worklet';
+
+    const radius = width.value / 2;
+    const dx = radius - x;
+    const dy = radius - y;
+    const pressDistance = Math.sqrt(dx * dx + dy * dy);
+
+    // Check if the press is outside the circle
+    if (pressDistance > radius) {
+      isGestureActive.value = false;
+      return;
+    }
+
+    isGestureActive.value = true;
+    handleScale.value = withTiming(thumbScaleAnimationValue, { duration: thumbScaleAnimationDuration });
+  };
+
+  const onUpdate = (newXValue: number, newYValue: number) => {
+    'worklet';
+
+    if (hueValue.value === newXValue && centerChannelValue.value === newYValue) {
+      return;
+    }
+
+    hueValue.value = newXValue;
+
+    if (centerChannel === 'hsl-saturation') {
+      // To prevent locking this slider when the luminance is 0 or 100,
+      // this should not affect the resulting color, as the value will be rounded.
+      const l = hsl.value.l === 0 ? 0.01 : hsl.value.l === 100 ? 99.99 : hsl.value.l;
+      const { s, v } = colorKit.runOnUI().HSV({ h: hsl.value.h, s: newYValue, l }).object(false);
+      saturationValue.value = s;
+      brightnessValue.value = v;
+    }
+    // Vertical channel is brightness
+    else if (centerChannel === 'brightness') {
+      brightnessValue.value = newYValue;
+    }
+    // Vertical channel is saturation
+    else {
+      saturationValue.value = newYValue;
+    }
+
+    onGestureChange();
+  };
+
+  const onGestureUpdate = ({ x, y }: { x: number; y: number }) => {
     'worklet';
 
     if (!isGestureActive.value) return;
@@ -147,70 +191,15 @@ export function Panel3({
     const newHueValue = (angle + rotate) % 360;
     const newChannelValue = radiusPercent * 100;
 
-    if (hueValue.value === newHueValue && centerChannelValue.value === newChannelValue) return;
-
-    hueValue.value = newHueValue;
-
-    if (centerChannel === 'hsl-saturation') {
-      // To prevent locking this slider when the luminance is 0 or 100,
-      // this should not affect the resulting color, as the value will be rounded.
-      const l = hsl.value.l === 0 ? 0.01 : hsl.value.l === 100 ? 99.99 : hsl.value.l;
-      const { s, v } = colorKit.runOnUI().HSV({ h: hsl.value.h, s: newChannelValue, l }).object(false);
-      saturationValue.value = s;
-      brightnessValue.value = v;
-    } else if (centerChannel === 'brightness') {
-      brightnessValue.value = newChannelValue;
-    } else {
-      saturationValue.value = newChannelValue;
-    }
-
-    onGestureChange();
+    onUpdate(newHueValue, newChannelValue);
   };
 
-  const onGestureBegin = (event: PanGestureHandlerEventPayload) => {
-    'worklet';
-
-    const radius = width.value / 2;
-    const dx = radius - event.x;
-    const dy = radius - event.y;
-    const pressDistance = Math.sqrt(dx * dx + dy * dy);
-
-    // Check if the press is outside the circle
-    if (pressDistance > radius) {
-      isGestureActive.value = false;
-      return;
-    }
-
-    isGestureActive.value = true;
-    handleScale.value = withTiming(thumbScaleAnimationValue, { duration: thumbScaleAnimationDuration });
-
-    onGestureUpdate(event);
-  };
-
-  const onGestureFinish = () => {
+  const onEnd = () => {
     'worklet';
     isGestureActive.value = false;
     handleScale.value = withTiming(1, { duration: thumbScaleAnimationDuration });
     onGestureEnd();
   };
-
-  const pan = Gesture.Pan().onBegin(onGestureBegin).onUpdate(onGestureUpdate).onEnd(onGestureFinish);
-  const tap = Gesture.Tap().onEnd(onGestureFinish);
-  const longPress = Gesture.LongPress().onEnd(onGestureFinish);
-  const composed = Gesture.Simultaneous(Gesture.Exclusive(pan, tap, longPress), ...gestures);
-
-  // useLayoutEffect → paint → onLayout
-  useLayoutEffect(() => {
-    containerRef.current?.measure((_x, _y, layoutWidth) => {
-      if (!layoutWidth) return;
-      width.value = layoutWidth;
-    });
-  }, []);
-
-  const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
-    if (!layout.width) return;
-    width.value = layout.width;
-  }, []);
 
   const getAdaptiveColor = (hsva: { h: number; s: number; v: number; a: number }) => {
     'worklet';
@@ -251,56 +240,62 @@ export function Panel3({
         rotate,
       }}
     >
-      <GestureDetector gesture={composed}>
-        <Animated.View
-          ref={containerRef}
-          onLayout={onLayout}
-          style={[
-            styles.panelContainer,
-            style,
-            { position: 'relative', aspectRatio: 1, borderWidth: 0, padding: 0, borderRadius },
-          ]}
+      <PanelCore
+        style={[styles.panelContainer, style, { position: 'relative', aspectRatio: 1, borderWidth: 0, padding: 0, borderRadius }]}
+        label={props.accessibilityLabel ?? `Hue and ${centerChannel} wheel slider`}
+        hint={props.accessibilityHint ?? `Double tap to switch between hue and ${centerChannel}`}
+        labelX='Hue'
+        currentXValue={hueValue}
+        maxXValue={360}
+        labelY={centerChannel}
+        currentYValue={centerChannelValue}
+        width={width}
+        gestures={gestures}
+        onGestureUpdate={onGestureUpdate}
+        onBegin={onBegin}
+        onUpdate={onUpdate}
+        onEnd={onEnd}
+      >
+        <ImageBackground
+          source={require('@assets/circularHue.png')}
+          style={styles.panelImage}
+          imageStyle={{ transform: [{ rotate: -rotate + 'deg' }] }}
+          resizeMode='stretch'
+          aria-hidden
         >
-          <ImageBackground
-            source={require('@assets/circularHue.png')}
-            style={styles.panelImage}
-            imageStyle={{ transform: [{ rotate: -rotate + 'deg' }] }}
-            resizeMode='stretch'
-          >
-            <ConditionalRendering if={adaptSpectrum && centerChannel === 'brightness'}>
-              <Animated.View style={[{ borderRadius }, spectrumStyle, StyleSheet.absoluteFill]} />
-            </ConditionalRendering>
-
-            <Image
-              source={require('@assets/blackRadial.png')}
-              style={styles.panelImage}
-              tintColor={centerChannel === 'saturation' ? '#fff' : centerChannel === 'hsl-saturation' ? '#888' : undefined}
-              resizeMode='stretch'
-            />
-
-            <ConditionalRendering if={adaptSpectrum && (centerChannel === 'saturation' || centerChannel === 'hsl-saturation')}>
-              <Animated.View style={[{ borderRadius }, spectrumStyle, StyleSheet.absoluteFill]} />
-            </ConditionalRendering>
-          </ImageBackground>
-
-          <ConditionalRendering if={renderCenterLine}>
-            <Animated.View style={[styles.panel3Line, centerLineStyle]} />
+          <ConditionalRendering if={adaptSpectrum && centerChannel === 'brightness'}>
+            <Animated.View style={[{ borderRadius }, spectrumStyle, StyleSheet.absoluteFill]} />
           </ConditionalRendering>
 
-          {children}
-
-          <Thumb
-            thumbShape={thumbShape}
-            thumbSize={thumbSize}
-            thumbColor={thumbColor}
-            renderThumb={renderThumb}
-            innerStyle={thumbInnerStyle}
-            thumbAnimatedStyle={thumbAnimatedStyle}
-            style={thumbStyle}
-            getAdaptiveColor={getAdaptiveColor}
+          <Image
+            source={require('@assets/blackRadial.png')}
+            style={styles.panelImage}
+            tintColor={centerChannel === 'saturation' ? '#fff' : centerChannel === 'hsl-saturation' ? '#888' : undefined}
+            resizeMode='stretch'
           />
-        </Animated.View>
-      </GestureDetector>
+
+          <ConditionalRendering if={adaptSpectrum && (centerChannel === 'saturation' || centerChannel === 'hsl-saturation')}>
+            <Animated.View style={[{ borderRadius }, spectrumStyle, StyleSheet.absoluteFill]} />
+          </ConditionalRendering>
+        </ImageBackground>
+
+        <ConditionalRendering if={renderCenterLine}>
+          <Animated.View style={[styles.panel3Line, centerLineStyle]} aria-hidden />
+        </ConditionalRendering>
+
+        {children}
+
+        <Thumb
+          thumbShape={thumbShape}
+          thumbSize={thumbSize}
+          thumbColor={thumbColor}
+          renderThumb={renderThumb}
+          innerStyle={thumbInnerStyle}
+          thumbAnimatedStyle={thumbAnimatedStyle}
+          style={thumbStyle}
+          getAdaptiveColor={getAdaptiveColor}
+        />
+      </PanelCore>
     </Panel3ContextProvider>
   );
 }

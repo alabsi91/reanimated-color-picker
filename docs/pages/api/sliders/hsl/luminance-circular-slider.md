@@ -112,6 +112,20 @@ The style of the container that wraps the given children.
 
 ---
 
+### `accessibilityLabel`
+
+Slider's label for accessibility.
+
+`type: string`
+
+---
+
+### `accessibilityHint`
+
+Slider's hint for accessibility.
+
+`type: string`
+
 [^interactive]: The thumb color adjusts automatically based on contrast ratio when no value is provided.
 
 [^style-override]: Certain style properties will be overridden.

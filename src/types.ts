@@ -4,8 +4,20 @@ import type { AnimatedStyle, SharedValue } from 'react-native-reanimated';
 import type { SupportedColorFormats } from './colorKit/types';
 import type { Gesture } from 'react-native-gesture-handler/lib/typescript/handlers/gestures/gesture';
 
-export type ColorFormatsObject = Record<'hex' | 'rgb' | 'rgba' | 'hsl' | 'hsla' | 'hsv' | 'hsva' | 'hwb' | 'hwba', string>;
+/** An object containing the current color value in all supported formats. */
+export interface ColorFormatsObject {
+  hex: string;
+  rgb: string;
+  rgba: string;
+  hsl: string;
+  hsla: string;
+  hsv: string;
+  hsva: string;
+  hwb: string;
+  hwba: string;
+}
 
+/** The shape of the slider or panel thumb. */
 export type ThumbShapeType =
   | 'ring'
   | 'solid'
@@ -19,58 +31,48 @@ export type ThumbShapeType =
   | 'rect'
   | 'circle';
 
-export type HSVObject = {
+/** A color represented in the HSV color space, including an alpha channel. */
+export interface HSVObject {
   h: number;
   s: number;
   v: number;
   a: number;
-};
+}
 
-type HSVObjectSharedValue = {
+interface HSVObjectSharedValue {
   hue: SharedValue<number>;
   saturation: SharedValue<number>;
   brightness: SharedValue<number>;
   alpha: SharedValue<number>;
-};
+}
 
-export type RenderThumbProps = {
-  /**
-   * - This style determines the position of the thumb and is a crucial element that should be included.
-   * - It should be tied to an `Reanimated` component, for example, `<Animated.View style={positionStyle} />`.
-   */
+export interface RenderThumbProps {
+  /** Determines the position of the thumb. This style must be applied to a Reanimated component. */
   positionStyle: StyleProp<AnimatedStyle<StyleProp<ViewStyle | ImageStyle | TextStyle>>>;
 
-  /**
-   * - A `number` that determines the thumb's width in pixels and is important for thumb position calculation.
-   * - It's extracted from the `thumbSize` prop.
-   */
+  /** The thumb's width in pixels. Used internally for thumb position calculation. Extracted from the `thumbSize` prop. */
   width: number;
 
-  /**
-   * - A `number` that determines the thumb's height in pixels and is important for thumb position calculation.
-   * - It's extracted from the `thumbSize` prop.
-   */
+  /** The thumb's height in pixels. Used internally for thumb position calculation. Extracted from the `thumbSize` prop. */
   height: number;
 
   /**
-   * - The `adaptiveColor` is a type of `SharedValue<string>` that determines the color to be displayed based on the contrast ratio.
-   * - It can either be a `white` or `black` color.
+   * A shared value representing the accessible contrast color for the thumb. Resolves to either `'white'` or `'black'` based on
+   * the contrast ratio against the current color.
    */
   adaptiveColor: SharedValue<string>;
 
-  /**
-   * - A `SharedValue` of type `string` that represents the current color.
-   * - This shared value will update whenever the color changes, but without the alpha channel.
-   */
+  /** A shared value representing the current color as a string, without the alpha channel. Updates whenever the color changes. */
   currentColor: SharedValue<string>;
 
-  /** - The initial color value as a `string` */
+  /** The initial color value passed to the color picker. */
   initialColor: string;
-};
+}
 
+/** A component that renders a custom thumb for sliders and panels. */
 export type RenderThumbType = React.FC<RenderThumbProps>;
 
-export type ThumbProps = {
+export interface ThumbProps {
   thumbColor?: string;
   thumbAnimatedStyle: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>;
   innerStyle?: StyleProp<ViewStyle>;
@@ -79,75 +81,80 @@ export type ThumbProps = {
   vertical?: boolean;
   thumbShape?: ThumbShapeType;
   thumbSize: number;
+  /**
+   * Overrides specific HSV channel values used for this thumb's position calculation. Useful for thumbs located at different
+   * positions within the slider that should not rely on the global HSV values.
+   */
   overrideHSV?: Partial<HSVObjectSharedValue>;
+  /**
+   * Provides the color used to calculate this thumb's adaptive contrast color. The adaptive color resolves to either white or
+   * black based on the contrast ratio against the returned color.
+   *
+   * @worklet
+   */
   getAdaptiveColor?: (hsva: { h: number; s: number; v: number; a: number }) => SupportedColorFormats;
-};
+}
 
 export interface ExtraThumbProps {
-  /** - Panel handle (thumb) size (height*width). */
+  /** The thumb's size in pixels (height × width). */
   thumbSize?: number;
 
-  /** - Panel handle (thumb) color. */
+  /** The thumb's color. */
   thumbColor?: string;
 
-  /** - Panel handle (thumb) shape. */
+  /** The thumb's shape. */
   thumbShape?: ThumbShapeType;
 
-  /** - Render a line from the center of the Panel to the thumb (handle). */
+  /** Renders a line from the center of the panel to the thumb. */
   renderCenterLine?: boolean;
 
-  /** - Slider's handle (thumb) outer View style. */
+  /** The thumb's outer `View` style. */
   thumbStyle?: StyleProp<ViewStyle>;
 
-  /** - Slider's handle (thumb) inner View style. */
+  /** The thumb's inner `View` style. */
   thumbInnerStyle?: StyleProp<ViewStyle>;
 
-  /** - Function which receives ThumbProps and renders slider's handle (thumb). */
+  /** A function that receives `ThumbProps` and renders a custom thumb. */
   renderThumb?: RenderThumbType;
 
   /**
-   * - Called when the user moves the sliders.
-   * - Accepts `worklet` function only. For non-`worklet` functions, use `onChangeJS`.
+   * Called when the user moves the slider. Accepts `worklet` functions only. For regular functions, use `onChangeJS`.
+   *
+   * @worklet
    */
   onChange?: (colors: ColorFormatsObject) => void;
 
   /**
-   * - Called when the user moves the sliders.
-   * - Accepts non-`worklet` function only. For `worklet` functions, use `onChange`.
+   * Called when the user moves the slider. Accepts regular (non-`worklet`) functions only. For `worklet` functions, use
+   * `onChange`.
    */
   onChangeJS?: (colors: ColorFormatsObject) => void;
 
-  /**
-   * - The transform amount for the hue channel.
-   * - Can be a `number` or a `string`.
-   * - Negative values can be used.
-   * - Example: '50%' or `130`
-   */
+  /** The amount by which to shift the hue channel. Accepts a `number` or a percentage `string`. Negative values are supported. */
   hueTransform?: string | number;
+
   /**
-   * - The transform amount for the saturation channel.
-   * - Can be a `number` or a `string`.
-   * - Negative values can be used.
-   * - Example: '50%' or `50`
+   * The amount by which to shift the saturation channel. Accepts a `number` or a percentage `string`. Negative values are
+   * supported.
    */
   saturationTransform?: string | number;
+
   /**
-   * - The transform amount for the brightness channel.
-   * - Can be a `number` or a `string`.
-   * - Negative values can be used.
-   * - Example: '50%' or `50`
+   * The amount by which to shift the brightness channel. Accepts a `number` or a percentage `string`. Negative values are
+   * supported.
    */
   brightnessTransform?: string | number;
 
   /**
-   * - Worklet function to transform or modify the color in the HSV (Hue, Saturation, Value) color space.
-   * - The function takes an HSVA color object and returns a new HSVA color object.
-   * - The returned object will determine the thumb's position inside the panel.
+   * A worklet function to transform the color in HSV color space before it is applied. Receives the current HSVA color object and
+   * must return a modified HSVA color object. The returned value determines the thumb's position within the panel.
+   *
+   * @worklet
    */
   colorTransform?: (color: HSVObject) => HSVObject;
 }
 
-export type BuiltinThumbsProps = {
+export interface BuiltinThumbsProps {
   width: number;
   height: number;
   borderRadius: number;
@@ -159,166 +166,223 @@ export type BuiltinThumbsProps = {
   solidColor: AnimatedStyle<ViewStyle>;
   renderThumb?: RenderThumbType;
   vertical?: boolean;
-};
+}
 
 export interface ColorPickerContext {
-  /** Color's channels. */
+  /** The hue channel value shared across all descendant components. */
   hueValue: SharedValue<number>;
+
+  /** The saturation channel value shared across all descendant components. */
   saturationValue: SharedValue<number>;
+
+  /** The brightness channel value shared across all descendant components. */
   brightnessValue: SharedValue<number>;
+
+  /** The alpha channel value shared across all descendant components. */
   alphaValue: SharedValue<number>;
 
-  /**
-   * A global property that allows the color spectrum to adapt to changes in brightness and saturation for all descendant slider
-   * components.
-   */
+  /** When enabled, the color spectrum adapts to changes in brightness and saturation across all descendant slider components. */
   adaptSpectrum: boolean;
 
-  /** Apply a color to the color picker. */
+  /** Programmatically applies a color to the color picker. */
   setColor: (color: SupportedColorFormats, duration?: number) => void;
 
-  /** A global prop for all sliders children. */
+  /** The default slider thickness for all descendant slider components. */
   sliderThickness: number;
 
-  /** A global prop for all sliders children. */
+  /** The default thumb size for all descendant slider components. */
   thumbSize: number;
 
-  /** A global prop for all sliders children. */
+  /** The default thumb shape for all descendant slider components. */
   thumbShape: ThumbShapeType;
 
-  /** A global prop for all sliders children. */
+  /** The default thumb color for all descendant slider components. */
   thumbColor: string | undefined;
 
-  /** A global prop for all sliders children. */
+  /** The default thumb outer `View` style for all descendant slider components. */
   thumbStyle: StyleProp<ViewStyle>;
 
-  /** - A global property to controls the scale value animation of the thumb when active. **Default**: `1.2` */
+  /** The scale factor applied to the thumb when it is active. Default: `1.2` */
   thumbScaleAnimationValue: number;
 
-  /** - A global property to sets the duration of the scaling-up animation of the thumb when active. **Default**: `100` */
+  /** The duration of the thumb's scale-up animation when active, in milliseconds. Default: `100` */
   thumbScaleAnimationDuration: number;
 
   /**
-   * - Determines whether the slider thumb (or handle) should be constrained to stay within the boundaries of the slider.
-   * - When set to true, the thumb will not be allowed to move beyond the edges of the slider.
-   * - When set to false, part of it will be outside of the slider bounds.
+   * When enabled, constrains the thumb to stay within the slider's boundaries. When disabled, part of the thumb may extend beyond
+   * the slider edges.
    */
   boundedThumb: boolean;
 
-  /** A global style for all sliders children. */
+  /** The default thumb inner `View` style for all descendant slider components. */
   thumbInnerStyle: StyleProp<ViewStyle>;
 
-  /** A global prop for all sliders children. */
+  /** The default custom thumb renderer for all descendant slider components. */
   renderThumb: RenderThumbType | undefined;
 
-  /** The initial color value as a `string` */
+  /** The initial color value passed to the color picker. */
   value: string;
 
-  /** The returned results of the color picker. */
-  returnedResults: (color?: SupportedColorFormats) => ColorFormatsObject;
+  /**
+   * Returns the current color in all supported formats.
+   *
+   * @worklet
+   */
+  colorResult: (color?: SupportedColorFormats) => ColorFormatsObject;
 
-  /** This function is called when the user lifts the finger from the color picker. */
+  /**
+   * Called when the user lifts their finger from the color picker.
+   *
+   * @worklet
+   */
   onGestureEnd: (color?: SupportedColorFormats) => void;
 
-  /** This function is called every time the color is changed. */
+  /**
+   * Called every time the color changes.
+   *
+   * @worklet
+   */
   onGestureChange: (color?: SupportedColorFormats) => void;
 }
 
 export interface Panel3Context {
+  /** The current panel width as a shared value. */
   width: SharedValue<number>;
+
+  /** When enabled, the color spectrum adapts to changes in brightness and saturation. */
   adaptSpectrum: boolean;
+
+  /** The color channel adjusted when moving the thumb towards or away from the center. */
   centerChannel: 'saturation' | 'brightness' | 'hsl-saturation';
+
+  /** The current value of the center channel as a shared value. */
   centerChannelValue: SharedValue<number>;
+
+  /** The thumb's shape. */
   thumbShape: ThumbShapeType;
+
+  /** The thumb's size in pixels (height × width). */
   thumbSize: number;
+
+  /** The thumb's color. */
   thumbColor?: string;
+
+  /** The thumb's outer `View` style. */
   thumbStyle: StyleProp<ViewStyle>;
+
+  /** The thumb's inner `View` style. */
   thumbInnerStyle: StyleProp<ViewStyle>;
+
+  /** A function that receives `ThumbProps` and renders a custom thumb. */
   renderThumb?: RenderThumbType;
+
+  /**
+   * When enabled, constrains the thumb to stay within the slider's boundaries. When disabled, part of the thumb may extend beyond
+   * the slider edges.
+   */
   boundedThumb: boolean;
+
+  /** When enabled, renders a line from the center of the panel to the thumb. */
   renderCenterLine: boolean;
+
+  /** The rotation of the hue circle in degrees, from 0 to 360. */
   rotate: number;
 }
 
 export interface ColorPickerProps {
-  /** A global property that allows the color spectrum to adapt to changes for all descendant slider components. */
+  /** When enabled, the color spectrum adapts to changes in brightness and saturation across all descendant slider components. */
   adaptSpectrum?: boolean;
 
   /**
-   * A global property to change the thickness of all descendant sliders components.\
-   * Thickness is the width of the slider in vertical mode or the height in horizontal mode.
+   * The default thickness for all descendant slider components. Thickness refers to the slider's width in vertical mode, or its
+   * height in horizontal mode.
    */
   sliderThickness?: number;
 
-  /** A global property to change the duration which the thumbs animate when the value prop changes. */
+  /** The duration of the thumb animation when the `value` prop changes, in milliseconds. */
   thumbAnimationDuration?: number;
 
-  /** A global property to change the thumb size of all descendant sliders components. */
+  /** The default thumb size for all descendant slider components. */
   thumbSize?: number;
 
-  /** A global property to change the shape and appearance of the thumb of all descendant sliders components. */
+  /** The default thumb shape for all descendant slider components. */
   thumbShape?: ThumbShapeType;
 
-  /** A global property to change the color of the thumb of all descendant sliders components. */
+  /** The default thumb color for all descendant slider components. */
   thumbColor?: string;
 
-  /** A global property to change the style of the thumb's View for all descendant sliders components */
+  /** The default thumb outer `View` style for all descendant slider components. */
   thumbStyle?: StyleProp<ViewStyle>;
 
-  /** A global property to controls the scale value animation of the thumb when active. **Default**: `1.2` */
+  /** The scale factor applied to the thumb when it is active. Default: `1.2` */
   thumbScaleAnimationValue?: number;
 
-  /** A global property to sets the duration of the scaling-up animation of the thumb when active. **Default**: `100` */
+  /** The duration of the thumb's scale-up animation when active, in milliseconds. Default: `100` */
   thumbScaleAnimationDuration?: number;
 
   /**
-   * - A global property for all descendant sliders and panels components
-   * - Determines whether the slider thumb (or handle) should be constrained to stay within the boundaries of the slider.
-   * - When set to true, the thumb will not be allowed to move beyond the edges of the slider.
-   * - When set to false, part of it will be outside of the slider bounds.
+   * When enabled, constrains the thumb to stay within the slider's boundaries across all descendant sliders and panels. When
+   * disabled, part of the thumb may extend beyond the slider edges.
    */
   boundedThumb?: boolean;
 
-  /** A global property to change the color of the thumb's inner View(s) for all descendant sliders components. */
+  /** The default thumb inner `View` style for all descendant slider components. */
   thumbInnerStyle?: StyleProp<ViewStyle>;
 
-  /** A global function for rendering a thumb component based on ThumbProps. */
+  /** The default custom thumb renderer for all descendant slider components. */
   renderThumb?: RenderThumbType;
 
-  /** Color picker wrapper style. */
+  /** The color picker wrapper style. */
   style?: StyleProp<ViewStyle>;
 
-  /**
-   * Initial color.\
-   * Accepts `hex`, `rgb`, `rgba`, `hsl`, `hsla`, `hsv`, `hsva`, `hwb`, `hwba` and `named color` formats.
-   */
+  /** The initial color value. Accepts `hex`, `rgb`, `rgba`, `hsl`, `hsla`, `hsv`, `hsva`, `hwb`, `hwba`, and named color formats. */
   value?: string;
 
   /**
-   * Called when the user moves the sliders.\
-   * Accepts `worklet` function only. For non-`worklet` functions, use `onChangeJS`.
+   * Enables accessibility announcements when the color changes.
+   *
+   * When enabled, color updates are announced using the selected format defined by `colorAnnouncementFormat`.
+   *
+   * @default true
+   */
+  enableColorAnnouncements?: boolean;
+
+  /**
+   * Defines the format used when announcing color values for accessibility.
+   *
+   * Used only when `enableColorAnnouncements` is true. Must match a key from `ColorFormatsObject` (e.g. "rgb", "hex", "hsl").
+   *
+   * @default 'rgb'
+   */
+  colorAnnouncementFormat?: keyof ColorFormatsObject;
+
+  /**
+   * Called when the user moves the sliders. Accepts `worklet` functions only. For regular functions, use `onChangeJS`.
+   *
+   * @worklet
    */
   onChange?: (colors: ColorFormatsObject) => void;
 
   /**
-   * - Called when the user moves the sliders.
-   * - Accepts none-`worklet` function. For `worklet` functions, use `onChange`.
+   * Called when the user moves the sliders. Accepts regular (non-`worklet`) functions only. For `worklet` functions, use
+   * `onChange`.
    */
   onChangeJS?: (colors: ColorFormatsObject) => void;
 
   /**
-   * - Called when the user lifts his finger off the sliders.
-   * - Accepts `worklet` function only. for non-`worklet` functions, use `onCompleteJS`.
-   * - CAUTION : As of `react-native-gesture-handler@2.9.0` the new web implementation does not support the events which trigger
-   *   this callback.
+   * Called when the user lifts their finger off the sliders. Accepts `worklet` functions only. For regular functions, use
+   * `onCompleteJS`.
+   *
+   * @caution As of `react-native-gesture-handler@2.9.0`, the new web implementation does not support the events that trigger this callback.
+   * @worklet
    */
   onComplete?: (colors: ColorFormatsObject) => void;
 
   /**
-   * - Called when the user lifts his finger off the sliders.
-   * - Accepts non-`worklet` Function only. For `worklet` functions, use `onComplete`.
-   * - CAUTION : As of `react-native-gesture-handler@2.9.0` the new web implementation does not support the events which trigger
-   *   this callback.
+   * Called when the user lifts their finger off the sliders. Accepts regular (non-`worklet`) functions only. For `worklet`
+   * functions, use `onComplete`.
+   *
+   * @caution As of `react-native-gesture-handler@2.9.0`, the new web implementation does not support the events that trigger this callback.
    */
   onCompleteJS?: (colors: ColorFormatsObject) => void;
 
@@ -326,235 +390,221 @@ export interface ColorPickerProps {
 }
 
 export interface ColorPickerRef {
-  /** Apply a color to the color picker. */
+  /** Programmatically applies a color to the color picker. */
   setColor: (color: string, duration?: number) => void;
 }
 
 export interface SwatchesProps {
-  /**
-   * Swatch style.\
-   * **Note** Certain style properties will be overridden.
-   */
+  /** The style of each swatch. Note: certain style properties will be overridden. */
   swatchStyle?: StyleProp<ViewStyle>;
 
-  /** Swatches container style. */
+  /** The swatches container style. */
   style?: StyleProp<ViewStyle>;
 
-  /** Provide your own swatches colors. */
+  /** A custom list of swatch colors. */
   colors?: string[];
 }
 
 export interface PreviewProps {
-  /** Show color preview in specific format. */
+  /** The color format displayed in the preview. */
   colorFormat?: 'hex' | 'rgb' | 'rgba' | 'hsl' | 'hsla' | 'hsv' | 'hsva' | 'hwb' | 'hwba';
 
-  /** Hide initial color preview and show the picked color preview only. */
+  /** Hides the initial color preview, showing only the currently selected color. */
   hideInitialColor?: boolean;
 
-  /** Hide color preview text. */
+  /** Hides the color value text in the preview. */
   hideText?: boolean;
 
-  /** Hide the preview background texture image that appears when the color has an opacity less than 1. */
+  /** Hides the background texture that appears when the color has transparency. */
   disableOpacityTexture?: boolean;
 
-  /**
-   * Preview container style.\
-   * **Note** Certain style properties will be overridden.
-   */
+  /** The preview container style. Note: certain style properties will be overridden. */
   style?: StyleProp<ViewStyle>;
 
-  /**
-   * Preview text style.\
-   * **Note** Certain style properties will be overridden..
-   */
+  /** The preview text style. Note: certain style properties will be overridden. */
   textStyle?: StyleProp<TextStyle>;
 }
 
 export interface PreviewTextProps {
-  /** Show color preview in specific format. */
+  /** The color format displayed in the preview text. */
   colorFormat?: 'hex' | 'rgb' | 'rgba' | 'hsl' | 'hsla' | 'hsv' | 'hsva' | 'hwb' | 'hwba';
 
-  /** Preview text style */
+  /** The preview text style. */
   style?: StyleProp<AnimatedStyle<StyleProp<TextStyle>>>;
 }
 
 export interface PanelProps {
-  /** Panel handle (thumb) size (height*width). */
+  /** An accessibility label for the panel. */
+  accessibilityLabel?: string;
+
+  /** An accessibility hint for the panel. */
+  accessibilityHint?: string;
+
+  /** The thumb's size in pixels (height × width). */
   thumbSize?: number;
 
-  /** Panel handle (thumb) color. */
+  /** The thumb's color. */
   thumbColor?: string;
 
-  /** Panel handle (thumb) shape. */
+  /** The thumb's shape. */
   thumbShape?: ThumbShapeType;
 
   /**
-   * - Determines whether the slider thumb (or handle) should be constrained to stay within the boundaries of the slider.
-   * - When set to true, the thumb will not be allowed to move beyond the edges of the slider.
-   * - When set to false, part of it will be outside of the slider bounds.
+   * When enabled, constrains the thumb to stay within the panel's boundaries. When disabled, part of the thumb may extend beyond
+   * the panel edges.
    */
   boundedThumb?: boolean;
 
-  /** Slider's handle (thumb) outer View style. */
+  /** The thumb's outer `View` style. */
   thumbStyle?: StyleProp<ViewStyle>;
 
-  /** Slider's handle (thumb) inner View style. */
+  /** The thumb's inner `View` style. */
   thumbInnerStyle?: StyleProp<ViewStyle>;
 
-  /** Function which receives ThumbProps and renders slider's handle (thumb). */
+  /** A function that receives `ThumbProps` and renders a custom thumb. */
   renderThumb?: RenderThumbType;
 
-  /** Controls the scale value animation of the thumb when active. **Default**: `1.2` */
+  /** The scale factor applied to the thumb when it is active. Default: `1.2` */
   thumbScaleUpValue?: number;
 
-  /** Sets the duration of the scaling-up animation of the thumb when active. **Default**: `100` */
+  /** The duration of the thumb's scale-up animation when active, in milliseconds. Default: `100` */
   thumbScaleUpDuration?: number;
 
-  /**
-   * Array of gestures or composed gestures from `react-native-gesture-handler`.\
-   * Will run simultaneously with the color picker gestures.
-   */
+  /** Additional gestures from `react-native-gesture-handler` to run simultaneously with the panel's gestures. */
   gestures?: Gesture[];
 
-  /**
-   * Panel container style.\
-   * **Note** Certain style properties will be overridden.
-   */
+  /** The panel container style. Note: certain style properties will be overridden. */
   style?: StyleProp<ViewStyle>;
 }
 
 export interface Panel2Props extends PanelProps {
-  /** Reverse (flip) hue direction. */
+  /** Reverses the hue direction. */
   reverseHue?: boolean;
 
-  /** Reverse (flip) the direction of the vertical channel's saturation or brightness. */
+  /** Reverses the direction of the vertical channel. */
   reverseVerticalChannel?: boolean;
 
-  /** Determines which color channel to adjust when moving the thumb vertically on the slider. */
+  /** The color channel adjusted when moving the thumb vertically. */
   verticalChannel?: 'saturation' | 'brightness' | 'hsl-saturation';
 
-  /** Color spectrum adapts to changes in brightness and saturation */
+  /** When enabled, the color spectrum adapts to changes in brightness and saturation. */
   adaptSpectrum?: boolean;
 }
 
 export interface Panel3Props extends PanelProps {
-  /** Determines which color channel to adjust when moving the thumb towards or away from the center of the circular slider. */
+  /** The color channel adjusted when moving the thumb towards or away from the center. */
   centerChannel?: 'saturation' | 'brightness' | 'hsl-saturation';
 
-  /** Color spectrum adapts to changes in brightness and saturation */
+  /** When enabled, the color spectrum adapts to changes in brightness and saturation. */
   adaptSpectrum?: boolean;
 
-  /** Render a line from the center of the Panel to the thumb (handle). */
+  /** Renders a line from the center of the panel to the thumb. */
   renderCenterLine?: boolean;
 
-  /** Rotate the hue circle, from 0 to 360 */
+  /** Rotates the hue circle in degrees, from 0 to 360. */
   rotate?: number;
 
   children?: ReactNode;
 }
 
 export interface Panel4Props extends PanelProps {
-  /** Reverse (flip) hue direction. */
+  /** Reverses the hue direction. */
   reverseHue?: boolean;
 
-  /** Reverse (flip) the horizontal channel's brightness and saturation. */
+  /** Reverses the direction of the horizontal brightness and saturation channels. */
   reverseHorizontalChannels?: boolean;
 }
 
 export interface Panel5Props {
-  /**
-   * Array of gestures or composed gestures from `react-native-gesture-handler`.\
-   * Will run simultaneously with the color picker gestures.
-   */
+  /** An accessibility label for the panel. */
+  accessibilityLabel?: string;
+
+  /** An accessibility hint for the panel. */
+  accessibilityHint?: string;
+
+  /** Additional gestures from `react-native-gesture-handler` to run simultaneously with the panel's gestures. */
   gestures?: Gesture[];
 
-  /**
-   * Panel container style.\
-   * **Note** Certain style properties will be overridden.
-   */
+  /** The panel container style. Note: certain style properties will be overridden. */
   style?: StyleProp<ViewStyle>;
 
-  /**
-   * The style of the square that indicates the selected color.\
-   * **Note** Certain style properties will be overridden.
-   */
+  /** The style of the square indicating the selected color. Note: certain style properties will be overridden. */
   selectionStyle?: StyleProp<ViewStyle>;
 }
 
 export interface SliderProps {
-  /** Slider's handle (thumb) size (height*width). */
+  /** An accessibility label for the slider. */
+  accessibilityLabel?: string;
+
+  /** An accessibility hint for the slider. */
+  accessibilityHint?: string;
+
+  /** The thumb's size in pixels (height × width). */
   thumbSize?: number;
 
-  /** Slider's handle (thumb) color. */
+  /** The thumb's color. */
   thumbColor?: string;
 
-  /** Slider's handle (thumb) shape. */
+  /** The thumb's shape. */
   thumbShape?: ThumbShapeType;
 
   /**
-   * - Determines whether the slider thumb (or handle) should be constrained to stay within the boundaries of the slider.
-   * - When set to true, the thumb will not be allowed to move beyond the edges of the slider.
-   * - When set to false, part of it will be outside of the slider bounds.
+   * When enabled, constrains the thumb to stay within the slider's boundaries. When disabled, part of the thumb may extend beyond
+   * the slider edges.
    */
   boundedThumb?: boolean;
 
-  /** Slider's handle (thumb) outer View style. */
+  /** The thumb's outer `View` style. */
   thumbStyle?: StyleProp<ViewStyle>;
 
-  /** Slider's handle (thumb) inner View style. */
+  /** The thumb's inner `View` style. */
   thumbInnerStyle?: StyleProp<ViewStyle>;
 
-  /** Function which receives ThumbProps and renders slider's handle (thumb). */
+  /** A function that receives `ThumbProps` and renders a custom thumb. */
   renderThumb?: RenderThumbType;
 
-  /** Controls the scale value animation of the thumb when active. **Default**: `1.2` */
+  /** The scale factor applied to the thumb when it is active. Default: `1.2` */
   thumbScaleAnimationValue?: number;
 
-  /** - Sets the duration of the scaling-up animation of the thumb when active. **Default**: `100` */
+  /** The duration of the thumb's scale-up animation when active, in milliseconds. Default: `100` */
   thumbScaleAnimationDuration?: number;
 
-  /** Thickness is the width of the slider in vertical mode or the height in horizontal mode. */
+  /** The slider's thickness. Thickness refers to the slider's width in vertical mode, or its height in horizontal mode. */
   sliderThickness?: number;
 
-  /** Reverse slider direction. */
+  /** Reverses the slider direction. */
   reverse?: boolean;
 
-  /** Vertical slider. */
+  /** Renders the slider vertically. */
   vertical?: boolean;
 
-  /** Color spectrum adapts to changes in brightness and saturation */
+  /** When enabled, the color spectrum adapts to changes in brightness and saturation. */
   adaptSpectrum?: boolean;
 
-  /**
-   * Array of gestures or composed gestures from `react-native-gesture-handler`.\
-   * Will run simultaneously with the color picker gestures.
-   */
+  /** Additional gestures from `react-native-gesture-handler` to run simultaneously with the slider's gestures. */
   gestures?: Gesture[];
 
-  /**
-   * Slider's container style.\
-   * **Note** Certain style properties will be overridden.
-   */
+  /** The slider container style. Note: certain style properties will be overridden. */
   style?: StyleProp<ViewStyle>;
 }
 
 export interface HueCircularProps extends Omit<SliderProps, 'vertical' | 'reverse' | 'boundedThumb'> {
   children?: ReactNode;
 
-  /** The style of the container that wraps the given children. */
+  /** The style of the container wrapping the given children. */
   containerStyle?: StyleProp<ViewStyle>;
 
-  /** Rotate the hue circle, from 0 to 360 */
+  /** Rotates the hue circle in degrees, from 0 to 360. */
   rotate?: number;
 }
 
 export interface LuminanceCircularProps extends Omit<SliderProps, 'vertical' | 'reverse' | 'boundedThumb'> {
   children?: ReactNode;
 
-  /** The style of the container that wraps the given children. */
+  /** The style of the container wrapping the given children. */
   containerStyle?: StyleProp<ViewStyle>;
 
-  /** Rotate the hue circle, from 0 to 360 */
+  /** Rotates the luminance circle in degrees, from 0 to 360. */
   rotate?: number;
 }
 
@@ -573,52 +623,76 @@ export type InputProps = Omit<
   | 'defaultValue'
 >;
 
-export type WidgetProps = {
+/** Props passed to each color format input widget. */
+export interface WidgetProps {
+  /** Called when the color value changes via text input. */
   onChange: (color: SupportedColorFormats) => void;
-  returnedResults: ColorPickerContext['returnedResults'];
+
+  /**
+   * Returns the current color in all supported formats.
+   *
+   * @worklet
+   */
+  colorResult: ColorPickerContext['colorResult'];
+
+  /** The hue channel shared value. */
   hueValue: ColorPickerContext['hueValue'];
+
+  /** The saturation channel shared value. */
   saturationValue: ColorPickerContext['saturationValue'];
+
+  /** The brightness channel shared value. */
   brightnessValue: ColorPickerContext['brightnessValue'];
+
+  /** The alpha channel shared value. */
   alphaValue: ColorPickerContext['alphaValue'];
+
+  /** The style of each text input field. */
   inputStyle: StyleProp<TextStyle>;
+
+  /** The style of the title label below each text input. */
   inputTitleStyle?: StyleProp<TextStyle>;
+
+  /** Additional props forwarded to the underlying `TextInput` components. */
   inputProps: InputProps;
+
+  /** When enabled, hides the alpha channel input field. */
   disableAlphaChannel: boolean;
-};
+}
 
 type DefaultFormats = 'HEX' | 'RGB' | 'HSL' | 'HWB' | 'HSV';
 
 export interface InputWidgetProps {
-  /**
-   * The initial input widget color format.\
-   * You can select one of the following options: `'HEX'`, `'RGB'`, '`HSL'`, `'HWB'`, or `'HSV'`
-   */
+  /** The initially selected color format. Accepted values: `'HEX'`, `'RGB'`, `'HSL'`, `'HWB'`, `'HSV'`. */
   defaultFormat?: DefaultFormats;
 
-  /**
-   * What input widgets should be included that can be cycled through.\
-   * Available options: `'HEX'`, `'RGB'`, '`HSL'`, `'HWB'`, and `'HSV'`
-   */
+  /** The list of color formats available to cycle through. Accepted values: `'HEX'`, `'RGB'`, `'HSL'`, `'HWB'`, `'HSV'`. */
   formats?: readonly DefaultFormats[];
 
-  /** Limit the user's ability to modify the alpha channel of the selected color. */
+  /** When enabled, prevents the user from modifying the alpha channel. */
   disableAlphaChannel?: boolean;
 
-  /** `InputText` components style. */
+  /** The style of each `TextInput` component. */
   inputStyle?: StyleProp<TextStyle>;
 
-  /** The props for the `TextInput` components. */
+  /** Additional props forwarded to the underlying `TextInput` components. */
   inputProps?: InputProps;
 
-  /** The style of the `Text` component for the title located below the inputs. */
+  /** The style of the title label below each `TextInput`. */
   inputTitleStyle?: StyleProp<TextStyle>;
 
-  /** The style of the `View` component that wraps around all the widgets. */
+  /** The style of the `View` wrapping all input widgets. */
   containerStyle?: StyleProp<ViewStyle>;
 
-  /** The color of the cycle button icon (`Image` component). */
+  /** The color of the cycle button icon. */
   iconColor?: string;
 
-  /** The style of the cycle button (`Image` component). */
+  /** The style of the cycle button icon (`Image` component). */
   iconStyle?: StyleProp<ImageStyle>;
+
+  /** Accessibility label for the cycle button, used by screen readers to identify the button. */
+  cycleButtonAccessibilityLabel?: string;
+
+  /** Accessibility hint for the cycle button, describing what happens when the user activates it. */
+  cycleButtonAccessibilityHint?: string;
 }

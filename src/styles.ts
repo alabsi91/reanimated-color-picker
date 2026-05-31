@@ -68,7 +68,7 @@ export const styles = StyleSheet.create({
   arrowButton: {
     width: 24,
     height: 24,
-    marginLeft: 10,
+    // marginLeft: 10,
   },
   inputsWrapper: {
     flex: 1,

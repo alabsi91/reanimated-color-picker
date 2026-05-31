@@ -141,6 +141,4 @@ Controls whether a line is rendered from the center of the panel to the thumb.
   <markdown src="@parts/markdown/render-thumb.md"></markdown>
 </div>
 
----
-
 [^style-override]: Certain style properties will be overridden.

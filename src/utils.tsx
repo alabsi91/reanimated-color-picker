@@ -16,14 +16,22 @@ export function getStyle<T extends ViewStyle, K extends keyof T>(style: StylePro
   return flattened[property];
 }
 
-/** Clamp a number value between `0` and a max value */
+/**
+ * Clamp a number value between `0` and a max value.
+ *
+ * @worklet
+ */
 export const clamp = (v: number, max: number) => {
   'worklet';
 
   return Math.min(Math.max(v, 0), max);
 };
 
-/** Convert `HSV` color to an `HSLA` string representation */
+/**
+ * Convert `HSV` color to an `HSLA` string representation.
+ *
+ * @worklet
+ */
 export const HSVA2HSLA_string = (h: number, s: number, v: number, a = 1) => {
   'worklet';
 

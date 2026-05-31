@@ -2107,6 +2107,7 @@ type ColorKit = ReturnType<typeof colorKitUI> & {
   runOnUI: typeof colorKitUI;
 };
 
+/** @see [colorKit](https://alabsi91.github.io/reanimated-color-picker/colorkit/) */
 const colorKit = colorKitUI() as ColorKit;
 colorKit.runOnUI = colorKitUI;
 export default colorKit;

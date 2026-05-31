@@ -1,18 +1,16 @@
-import React, { useCallback, useLayoutEffect, useRef } from 'react';
+import React from 'react';
 import { Image, View } from 'react-native';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import usePickerContext from '@context';
+import { PanelCore } from '@panels/PanelCore';
 import { styles } from '@styles';
 import Thumb from '@thumb';
 import { clamp, getStyle, isRtl } from '@utils';
 
 import type { PanelProps } from '@types';
-import type { LayoutChangeEvent } from 'react-native';
-import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
-/** A square-shaped panel slider, similar to Adobe's style, used to adjust color brightness and saturation. */
+/** @see [Panel1](https://alabsi91.github.io/reanimated-color-picker/api/panels/panel1/) */
 export function Panel1({ gestures = [], style = {}, ...props }: PanelProps) {
   const { hueValue, saturationValue, brightnessValue, onGestureChange, onGestureEnd, ...ctx } = usePickerContext();
 
@@ -29,7 +27,6 @@ export function Panel1({ gestures = [], style = {}, ...props }: PanelProps) {
   const borderRadius = getStyle(style, 'borderRadius') ?? 5;
   const heightStyle = getStyle(style, 'height') ?? 200;
 
-  const containerRef = useRef<Animated.View>(null);
   const width = useSharedValue(0);
   const height = useSharedValue(0);
   const handleScale = useSharedValue(1);
@@ -68,87 +65,85 @@ export function Panel1({ gestures = [], style = {}, ...props }: PanelProps) {
     };
   }, [width, height]);
 
-  const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
+  const onBegin = () => {
+    'worklet';
+    handleScale.value = withTiming(thumbScaleAnimationValue, { duration: thumbScaleAnimationDuration });
+  };
+
+  const onUpdate = (newXValue: number, newYValue: number) => {
+    'worklet';
+
+    if (saturationValue.value === newXValue && brightnessValue.value === newYValue) {
+      return;
+    }
+
+    saturationValue.value = newXValue;
+    brightnessValue.value = newYValue;
+
+    onGestureChange();
+  };
+
+  const onGestureUpdate = ({ x, y }: { x: number; y: number }) => {
     'worklet';
 
     const lengthX = width.value - (boundedThumb ? thumbSize : 0);
     const lengthY = height.value - (boundedThumb ? thumbSize : 0);
     const posX = clamp(x - (boundedThumb ? thumbSize / 2 : 0), lengthX);
     const posY = clamp(y - (boundedThumb ? thumbSize / 2 : 0), lengthY);
-    const newSaturationValue = (posX / lengthX) * 100;
-    const newBrightnessValue = 100 - (posY / lengthY) * 100;
+    const valueX = (posX / lengthX) * 100;
+    const valueY = (posY / lengthY) * 100;
+    const newXValue = valueX;
+    const newYValue = 100 - valueY;
 
-    if (saturationValue.value === newSaturationValue && brightnessValue.value === newBrightnessValue) return;
-
-    saturationValue.value = newSaturationValue;
-    brightnessValue.value = newBrightnessValue;
-
-    onGestureChange();
+    onUpdate(newXValue, newYValue);
   };
 
-  const onGestureBegin = (event: PanGestureHandlerEventPayload) => {
-    'worklet';
-    handleScale.value = withTiming(thumbScaleAnimationValue, { duration: thumbScaleAnimationDuration });
-    onGestureUpdate(event);
-  };
-
-  const onGestureFinish = () => {
+  const onEnd = () => {
     'worklet';
     handleScale.value = withTiming(1, { duration: thumbScaleAnimationDuration });
     onGestureEnd();
   };
 
-  const pan = Gesture.Pan().onBegin(onGestureBegin).onUpdate(onGestureUpdate).onEnd(onGestureFinish);
-  const tap = Gesture.Tap().onEnd(onGestureFinish);
-  const longPress = Gesture.LongPress().onEnd(onGestureFinish);
-  const composed = Gesture.Simultaneous(Gesture.Exclusive(pan, tap, longPress), ...gestures);
-
-  // useLayoutEffect → paint → onLayout
-  useLayoutEffect(() => {
-    containerRef.current?.measure((_x, _y, layoutWidth, layoutHeight) => {
-      if (!layoutWidth || !layoutHeight) return;
-      width.value = layoutWidth;
-      height.value = layoutHeight;
-    });
-  }, []);
-
-  const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
-    if (!layout.width || !layout.height) return;
-    width.value = layout.width;
-    height.value = layout.height;
-  }, []);
-
   return (
-    <GestureDetector gesture={composed}>
-      <Animated.View
-        ref={containerRef}
-        onLayout={onLayout}
-        style={[
-          styles.panelContainer,
-          style,
-          { position: 'relative', height: heightStyle, borderWidth: 0, padding: 0 },
-          activeColorStyle,
-        ]}
-      >
-        <View style={[styles.panelImage, { borderRadius }]}>
-          <Image source={require('@assets/blackGradient.png')} style={styles.panelImage} tintColor='#fff' resizeMode='stretch' />
-          <Animated.Image
-            source={require('@assets/blackGradient.png')}
-            style={[styles.panelImage, brightnessImageStyle]}
-            resizeMode='stretch'
-          />
-        </View>
-
-        <Thumb
-          thumbShape={thumbShape}
-          thumbSize={thumbSize}
-          thumbColor={thumbColor}
-          renderThumb={renderThumb}
-          innerStyle={thumbInnerStyle}
-          thumbAnimatedStyle={thumbAnimatedStyle}
-          style={thumbStyle}
+    <PanelCore
+      style={[
+        styles.panelContainer,
+        style,
+        { position: 'relative', height: heightStyle, borderWidth: 0, padding: 0 },
+        activeColorStyle,
+      ]}
+      label={props.accessibilityLabel ?? 'Saturation and brightness 2D slider'}
+      hint={props.accessibilityHint ?? 'Double tap to switch between brightness and saturation'}
+      labelX='Saturation'
+      labelY='Brightness'
+      currentXValue={saturationValue}
+      currentYValue={brightnessValue}
+      width={width}
+      height={height}
+      gestures={gestures}
+      onGestureUpdate={onGestureUpdate}
+      onBegin={onBegin}
+      onUpdate={onUpdate}
+      onEnd={onEnd}
+    >
+      <View style={[styles.panelImage, { borderRadius }]} aria-hidden>
+        <Image source={require('@assets/blackGradient.png')} style={styles.panelImage} tintColor='#fff' resizeMode='stretch' />
+        <Animated.Image
+          source={require('@assets/blackGradient.png')}
+          style={[styles.panelImage, brightnessImageStyle]}
+          resizeMode='stretch'
         />
-      </Animated.View>
-    </GestureDetector>
+      </View>
+
+      <Thumb
+        thumbShape={thumbShape}
+        thumbSize={thumbSize}
+        thumbColor={thumbColor}
+        renderThumb={renderThumb}
+        innerStyle={thumbInnerStyle}
+        thumbAnimatedStyle={thumbAnimatedStyle}
+        style={thumbStyle}
+      />
+    </PanelCore>
   );
 }

@@ -26,6 +26,4 @@ The preview text style.
 
 `type: TextStyle`[^style-override]
 
----
-
 [^style-override]: Certain style properties will be overridden.

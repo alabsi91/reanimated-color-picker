@@ -13,26 +13,26 @@ export { Panel3 } from '@panels/Panel3/Panel3';
 export { Panel4 } from '@panels/Panel4';
 export { Panel5 } from '@panels/Panel5';
 
-export { HueSlider } from '@sliders/Hue/HueSlider';
 export { HueCircular } from '@sliders/Hue/HueCircular';
+export { HueSlider } from '@sliders/Hue/HueSlider';
 
-export { SaturationSlider } from '@sliders/HSB/SaturationSlider';
 export { BrightnessSlider } from '@sliders/HSB/BrightnessSlider';
+export { SaturationSlider } from '@sliders/HSB/SaturationSlider';
 
-export { LuminanceSlider } from '@sliders/HSL/LuminanceSlider';
-export { LuminanceCircular } from '@sliders/HSL/LuminanceCircular';
 export { HSLSaturationSlider } from '@sliders/HSL/HSLSaturationSlider';
+export { LuminanceCircular } from '@sliders/HSL/LuminanceCircular';
+export { LuminanceSlider } from '@sliders/HSL/LuminanceSlider';
+
+export { BlueSlider } from '@sliders/RGB/BlueSlider';
+export { GreenSlider } from '@sliders/RGB/GreenSlider';
+export { RedSlider } from '@sliders/RGB/RedSlider';
 
 export { OpacitySlider } from '@sliders/OpacitySlider';
 
-export { RedSlider } from '@sliders/RGB/RedSlider';
-export { GreenSlider } from '@sliders/RGB/GreenSlider';
-export { BlueSlider } from '@sliders/RGB/BlueSlider';
-
+export { ExtraThumb } from '@panels/Panel3/ExtraThumb';
+export { InputWidget } from './components/InputWidget/InputWidget';
 export { Preview } from './components/Preview';
 export { PreviewText } from './components/PreviewText';
-export { InputWidget } from './components/InputWidget/InputWidget';
 export { Swatches } from './components/Swatches';
-export { ExtraThumb } from '@panels/Panel3/ExtraThumb';
 
 export * from '@types';

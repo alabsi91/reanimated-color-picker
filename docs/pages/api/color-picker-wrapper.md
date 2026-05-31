@@ -148,6 +148,28 @@ The container style of the `ColorPicker`.
 
 ---
 
+### `enableColorAnnouncements`
+
+Enables accessibility announcements when the color changes.
+
+When enabled, color updates are announced using the format defined by [`colorAnnouncementFormat`](#colorannouncementformat).
+
+`type: boolean` · `default: true`
+
+---
+
+### `colorAnnouncementFormat`
+
+Defines the format used when announcing color values for accessibility.
+
+Accepts `hex`, `rgb`, `rgba`, `hsl`, `hsla`, `hsv`, `hsva`, `hwb` and `hwba`.
+
+`type: keyof ColorFormatsObject` · `default: "rgb"`
+
+---
+
+## Events
+
 ### `onChange`
 
 Fires every time the user modifies the color. Accepts `worklet` functions only — use [`onChangeJS`](#onchangejs) for regular functions.

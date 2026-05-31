@@ -32,6 +32,4 @@ The individual swatch style.
 
 `type: ViewStyle`[^style-override]
 
----
-
 [^style-override]: Certain style properties will be overridden.

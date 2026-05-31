@@ -1,17 +1,16 @@
-import React, { useLayoutEffect, useRef } from 'react';
+import React from 'react';
 import { View } from 'react-native';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle, useDerivedValue, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import colorKit from '@colorKit';
 import usePickerContext from '@context';
+import { SliderCore } from '@sliders/SliderCore';
 import Thumb from '@thumb';
-import { clamp, getStyle, isRtl, isWeb, RenderNativeOnly } from '@utils';
+import { getStyle, isRtl, isWeb, RenderNativeOnly } from '@utils';
 
 import type { SliderProps } from '@types';
-import type { LayoutChangeEvent } from 'react-native';
-import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
+/** @see [RedSlider](https://alabsi91.github.io/reanimated-color-picker/api/sliders/rgb/red-slider/) */
 export function RedSlider({ gestures = [], style = {}, vertical = false, reverse = false, ...props }: SliderProps) {
   const { hueValue, saturationValue, brightnessValue, onGestureChange, onGestureEnd, ...ctx } = usePickerContext();
 
@@ -31,20 +30,16 @@ export function RedSlider({ gestures = [], style = {}, vertical = false, reverse
   const widthStyle = getStyle(style, 'width');
   const heightStyle = getStyle(style, 'height');
 
-  const containerRef = useRef<Animated.View>(null);
   const width = useSharedValue(vertical ? sliderThickness : typeof widthStyle === 'number' ? widthStyle : 0);
   const height = useSharedValue(!vertical ? sliderThickness : typeof heightStyle === 'number' ? heightStyle : 0);
   const handleScale = useSharedValue(1);
+  const redValue = useSharedValue(0);
 
   const rgb = useDerivedValue(() => {
-    return colorKit
-      .runOnUI()
-      .RGB({
-        h: hueValue.value,
-        s: saturationValue.value,
-        v: brightnessValue.value,
-      })
-      .object(false);
+    const currentHsvColor = { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
+    const rgbColor = colorKit.runOnUI().RGB(currentHsvColor).object(false);
+    redValue.value = rgbColor.r;
+    return rgbColor;
   }, [hueValue, saturationValue, brightnessValue]);
 
   const thumbAnimatedStyle = useAnimatedStyle(() => {
@@ -98,17 +93,19 @@ export function RedSlider({ gestures = [], style = {}, vertical = false, reverse
     };
   }, [rgb, adaptSpectrum, reverse, vertical]);
 
-  const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
+  const onBegin = () => {
+    'worklet';
+    handleScale.value = withTiming(thumbScaleAnimationValue, { duration: thumbScaleAnimationDuration });
+  };
+
+  const onUpdate = (newValue: number) => {
     'worklet';
 
-    const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0);
-    const pos = clamp((vertical ? y : x) - (boundedThumb ? thumbSize / 2 : 0), length);
-    const value = (pos / length) * 255;
-    const newRedValue = reverse ? 255 - value : value;
+    const { h, s, v } = colorKit.runOnUI().HSV({ r: newValue, g: rgb.value.g, b: rgb.value.b }).object(false);
 
-    if (newRedValue === rgb.value.r) return;
-
-    const { h, s, v } = colorKit.runOnUI().HSV({ r: newRedValue, g: rgb.value.g, b: rgb.value.b }).object(false);
+    if (hueValue.value === h && saturationValue.value === s && brightnessValue.value === v) {
+      return;
+    }
 
     hueValue.value = h;
     saturationValue.value = s;
@@ -117,47 +114,11 @@ export function RedSlider({ gestures = [], style = {}, vertical = false, reverse
     onGestureChange();
   };
 
-  const onGestureBegin = (event: PanGestureHandlerEventPayload) => {
-    'worklet';
-    handleScale.value = withTiming(thumbScaleAnimationValue, { duration: thumbScaleAnimationDuration });
-    onGestureUpdate(event);
-  };
-
-  const onGestureFinish = () => {
+  const onEnd = () => {
     'worklet';
     handleScale.value = withTiming(1, { duration: thumbScaleAnimationDuration });
     onGestureEnd();
   };
-
-  const pan = Gesture.Pan().onBegin(onGestureBegin).onUpdate(onGestureUpdate).onEnd(onGestureFinish);
-  const tap = Gesture.Tap().onEnd(onGestureFinish);
-  const longPress = Gesture.LongPress().onEnd(onGestureFinish);
-  const composed = Gesture.Simultaneous(Gesture.Exclusive(pan, tap, longPress), ...gestures);
-
-  // useLayoutEffect → paint → onLayout
-  useLayoutEffect(() => {
-    containerRef.current?.measure((_x, _y, layoutWidth, layoutHeight) => {
-      if (!vertical && layoutWidth) {
-        width.value = layoutWidth;
-      }
-
-      if (vertical && layoutHeight) {
-        height.value = layoutHeight;
-      }
-    });
-  }, []);
-
-  const onLayout = ({ nativeEvent: { layout } }: LayoutChangeEvent) => {
-    if (!vertical && layout.width) {
-      width.value = layout.width;
-    }
-
-    if (vertical && layout.height) {
-      height.value = layout.height;
-    }
-  };
-
-  const thicknessStyle = vertical ? { width: sliderThickness } : { height: sliderThickness };
 
   const getAdaptiveColor = (hsva: { h: number; s: number; v: number; a: number }) => {
     'worklet';
@@ -170,30 +131,41 @@ export function RedSlider({ gestures = [], style = {}, vertical = false, reverse
   };
 
   return (
-    <GestureDetector gesture={composed}>
-      <Animated.View
-        ref={containerRef}
-        onLayout={onLayout}
-        style={[style, { position: 'relative', borderRadius, borderWidth: 0, padding: 0 }, thicknessStyle, sliderBackground]}
-      >
-        <RenderNativeOnly>
-          <View style={{ flex: 1, borderRadius, overflow: 'hidden' }}>
-            <Animated.Image source={require('@assets/blackGradient.png')} style={imageStyle} />
-          </View>
-        </RenderNativeOnly>
+    <SliderCore
+      style={[style, { position: 'relative', borderRadius, borderWidth: 0, padding: 0 }, sliderBackground]}
+      maxValue={255}
+      label={props.accessibilityLabel ?? 'Red Slider'}
+      hint={props.accessibilityHint}
+      currentValue={redValue}
+      width={width}
+      height={height}
+      thumbSize={thumbSize}
+      boundedThumb={boundedThumb}
+      sliderThickness={sliderThickness}
+      gestures={gestures}
+      vertical={vertical}
+      reverse={reverse}
+      onBegin={onBegin}
+      onUpdate={onUpdate}
+      onEnd={onEnd}
+    >
+      <RenderNativeOnly>
+        <View style={{ flex: 1, borderRadius, overflow: 'hidden' }} aria-hidden>
+          <Animated.Image source={require('@assets/blackGradient.png')} style={imageStyle} />
+        </View>
+      </RenderNativeOnly>
 
-        <Thumb
-          thumbShape={thumbShape}
-          thumbSize={thumbSize}
-          thumbColor={thumbColor}
-          renderThumb={renderThumb}
-          innerStyle={thumbInnerStyle}
-          thumbAnimatedStyle={thumbAnimatedStyle}
-          style={thumbStyle}
-          vertical={vertical}
-          getAdaptiveColor={getAdaptiveColor}
-        />
-      </Animated.View>
-    </GestureDetector>
+      <Thumb
+        thumbShape={thumbShape}
+        thumbSize={thumbSize}
+        thumbColor={thumbColor}
+        renderThumb={renderThumb}
+        innerStyle={thumbInnerStyle}
+        thumbAnimatedStyle={thumbAnimatedStyle}
+        style={thumbStyle}
+        vertical={vertical}
+        getAdaptiveColor={getAdaptiveColor}
+      />
+    </SliderCore>
   );
 }

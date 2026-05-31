@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { AccessibilityInfo, Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import colorKit from '@colorKit';
 import usePickerContext from '@context';
@@ -16,18 +16,23 @@ import type { SupportedColorFormats } from '../../colorKit/types';
 
 const defaultFormats = ['HEX', 'RGB', 'HSL', 'HWB', 'HSV'] as const;
 
-export function InputWidget({
-  defaultFormat = 'HEX',
-  formats = defaultFormats,
-  iconColor = 'black',
-  disableAlphaChannel = false,
-  containerStyle = {},
-  inputStyle = {},
-  inputTitleStyle = {},
-  iconStyle = {},
-  inputProps = {},
-}: InputWidgetProps) {
-  const { setColor, returnedResults, hueValue, saturationValue, brightnessValue, alphaValue, onGestureChange, onGestureEnd } =
+/** @see [InputWidget](https://alabsi91.github.io/reanimated-color-picker/api/preview/input-widget/) */
+export function InputWidget(props: InputWidgetProps) {
+  const {
+    defaultFormat = 'HEX',
+    formats = defaultFormats,
+    iconColor = 'black',
+    disableAlphaChannel = false,
+    containerStyle = {},
+    inputStyle = {},
+    inputTitleStyle = {},
+    iconStyle = {},
+    inputProps = {},
+    cycleButtonAccessibilityHint,
+    cycleButtonAccessibilityLabel = 'Cycle inputs color format',
+  } = props;
+
+  const { setColor, colorResult, hueValue, saturationValue, brightnessValue, alphaValue, onGestureChange, onGestureEnd } =
     usePickerContext();
 
   const [format, setFormat] = useState<typeof defaultFormat>(
@@ -50,11 +55,12 @@ export function InputWidget({
     const index = formats.indexOf(format);
     const nextIndex = (index + 1) % formats.length;
     setFormat(formats[nextIndex]);
+    AccessibilityInfo.announceForAccessibility(formats[nextIndex]);
   };
 
   const inputsProps = {
     onChange,
-    returnedResults,
+    colorResult,
     hueValue,
     saturationValue,
     brightnessValue,
@@ -91,11 +97,18 @@ export function InputWidget({
       </View>
 
       <ConditionalRendering if={formats.length > 1}>
-        <View style={{ width: iconWidth }}>
-          <Pressable onPress={cycle}>
+        <View style={{ width: iconWidth, marginLeft: 10 }}>
+          <Pressable
+            onPress={cycle}
+            accessibilityLabel={cycleButtonAccessibilityLabel}
+            accessibilityHint={cycleButtonAccessibilityHint}
+          >
             <Image style={buttonIconStyle} tintColor={iconColor} source={require('@assets/arrow-icon.png')} />
           </Pressable>
-          <Text style={styles.inputTitle}> </Text>
+
+          <Text style={styles.inputTitle} aria-hidden>
+            {' '}
+          </Text>
         </View>
       </ConditionalRendering>
     </View>

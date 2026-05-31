@@ -22,7 +22,7 @@
     "module": "ESNext",
     "target": "es6",
     "moduleResolution": "node",
-    "lib": ["ES2017"],
+    "lib": ["ES2017", "DOM"],
     "esModuleInterop": true,
     "alwaysStrict": true,
     "strict": true,

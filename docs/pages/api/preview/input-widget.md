@@ -82,4 +82,18 @@ The style of the cycle button icon.
 
 ---
 
+### `cycleButtonAccessibilityLabel`
+
+Accessibility label for the cycle button. Used by screen readers to identify the button.
+
+`type: string`
+
+---
+
+### `cycleButtonAccessibilityHint`
+
+Accessibility hint for the cycle button. Describes what happens when the user activates it.
+
+`type: string`
+
 [^style-override]: Certain style properties will be overridden.

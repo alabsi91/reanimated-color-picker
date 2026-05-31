@@ -6,18 +6,20 @@ import WidgetTextInput from './WidgetTextInput';
 
 import type { WidgetProps } from '@types';
 
-export default function HexWidget({
-  onChange,
-  returnedResults,
-  hueValue,
-  saturationValue,
-  brightnessValue,
-  alphaValue,
-  inputStyle,
-  inputTitleStyle,
-  inputProps,
-}: WidgetProps) {
-  const hexColor = useSharedValue(returnedResults().hex);
+export default function HexWidget(props: WidgetProps) {
+  const {
+    onChange,
+    colorResult,
+    hueValue,
+    saturationValue,
+    brightnessValue,
+    alphaValue,
+    inputStyle,
+    inputTitleStyle,
+    inputProps,
+  } = props;
+
+  const hexColor = useSharedValue(colorResult().hex);
 
   useDerivedValue(() => {
     const currentColor = {
@@ -27,16 +29,18 @@ export default function HexWidget({
       a: alphaValue.value,
     };
 
-    hexColor.value = returnedResults(currentColor).hex;
+    hexColor.value = colorResult(currentColor).hex;
   }, [hueValue, saturationValue, brightnessValue, alphaValue]);
 
   const onEndEditing = (text: string) => {
     text = text.startsWith('#') ? text : '#' + text;
-    const isHex = colorKit.getFormat(text)?.includes('hex');
-    hexColor.value = ''; // force update in case the value of `hexColor` didn't change
-    if (isHex) {
+
+    // Force update in case `hexColor` value has not changed
+    hexColor.value = '';
+
+    const isValidHex = colorKit.getFormat(text)?.includes('hex');
+    if (isValidHex) {
       onChange(text);
-      return;
     }
   };
 
@@ -46,6 +50,7 @@ export default function HexWidget({
       textStyle={inputTitleStyle}
       textValue={hexColor}
       title='HEX'
+      label='Hex color input'
       onEndEditing={onEndEditing}
       inputProps={inputProps}
       textKeyboard

@@ -1,17 +1,16 @@
-import React, { useCallback, useLayoutEffect, useRef } from 'react';
+import React from 'react';
 import { Image } from 'react-native';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle, useDerivedValue, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import colorKit from '@colorKit';
 import usePickerContext from '@context';
+import { CircularSliderCore } from '@sliders/CircularSliderCore';
 import { styles } from '@styles';
 import Thumb from '@thumb';
 
 import type { LuminanceCircularProps } from '@types';
-import type { LayoutChangeEvent } from 'react-native';
-import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
+/** @see [LuminanceCircular](https://alabsi91.github.io/reanimated-color-picker/api/sliders/hsl/luminance-circular-slider/) */
 export function LuminanceCircular({
   children,
   gestures = [],
@@ -33,7 +32,6 @@ export function LuminanceCircular({
   const adaptSpectrum = props.adaptSpectrum ?? ctx.adaptSpectrum;
   const thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle ?? {};
 
-  const containerRef = useRef<Animated.View>(null);
   const isGestureActive = useSharedValue(false);
   const width = useSharedValue(0);
   const borderRadius = useSharedValue(0);
@@ -41,30 +39,28 @@ export function LuminanceCircular({
 
   const handleScale = useSharedValue(1);
   const thumbSide = useSharedValue<0 | 1>(0); // to determine in which side of the circle the thumb is
-  const lastHslSaturationValue = useSharedValue(0);
 
-  // We need to keep track of the HSL saturation value because, when the luminance is 0 or 100,
-  // when converting to/from HSV, the previous saturation value will be lost.
+  // HSL saturation is mathematically undefined (collapses to 0) when luminance is 0 or 100,
+  // because those represent pure black and white regardless of saturation.
+  // This ref holds the last valid saturation so we can restore it when luminance moves away from the boundary.
+  const hslSaturationValue = useSharedValue(0);
+  const hslLuminanceValue = useSharedValue(0);
+
   const hsl = useDerivedValue(() => {
-    const hsvColor = { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
-    const { h, s, l } = colorKit.runOnUI().HSL(hsvColor).object(false);
+    const currentHsvColor = { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
+    const { h, s, l } = colorKit.runOnUI().HSL(currentHsvColor).object(false);
 
+    hslLuminanceValue.value = l;
+
+    // At l=0 (black) or l=100 (white), the conversion loses saturation information.
+    // Substitute the last known saturation so it's restored when luminance changes.
     if (l === 100 || l === 0) {
-      return {
-        h,
-        s: lastHslSaturationValue.value,
-        l,
-      };
+      return { h, s: hslSaturationValue.value, l };
     }
 
-    lastHslSaturationValue.value = s;
-
-    return {
-      h,
-      s,
-      l,
-    };
-  }, [hueValue, saturationValue, brightnessValue]);
+    hslSaturationValue.value = s;
+    return { h, s, l };
+  }, [hueValue, saturationValue, brightnessValue, hslLuminanceValue]);
 
   const thumbAnimatedStyle = useAnimatedStyle(() => {
     const center = width.value / 2;
@@ -100,37 +96,12 @@ export function LuminanceCircular({
     };
   }, [width, sliderThickness]);
 
-  const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
-    'worklet';
-
-    if (!isGestureActive.value) return;
-
-    const center = width.value / 2;
-    const dx = center - x;
-    const dy = center - y;
-    const theta = (Math.atan2(dy, dx) + rotate * (Math.PI / 180)) * (180 / Math.PI); // [0 - 180] range
-    const angle = theta < 0 ? 360 + theta : theta; // [0 - 360] range
-    const mirroredAngle = angle <= 180 ? angle : 360 - angle;
-    const newLuminanceValue = (mirroredAngle / 180) * 100;
-
-    thumbSide.value = angle <= 180 ? 0 : 1;
-
-    if (newLuminanceValue === hsl.value.l) return;
-
-    const { s, v } = colorKit.runOnUI().HSV({ h: hsl.value.h, s: hsl.value.s, l: newLuminanceValue }).object(false);
-
-    saturationValue.value = s;
-    brightnessValue.value = v;
-
-    onGestureChange();
-  };
-
-  const onGestureBegin = (event: PanGestureHandlerEventPayload) => {
+  const onBegin = ({ x, y }: { x: number; y: number }) => {
     'worklet';
 
     const radius = width.value / 2;
-    const dx = radius - event.x;
-    const dy = radius - event.y;
+    const dx = radius - x;
+    const dy = radius - y;
     const pressDistance = Math.sqrt(dx * dx + dy * dy);
 
     // Check if the press is outside the circle
@@ -148,36 +119,47 @@ export function LuminanceCircular({
 
     isGestureActive.value = true;
     handleScale.value = withTiming(thumbScaleAnimationValue, { duration: thumbScaleAnimationDuration });
-
-    onGestureUpdate(event);
   };
 
-  const onGestureFinish = () => {
+  const onUpdate = (newValue: number) => {
+    'worklet';
+
+    if (newValue === hsl.value.l) {
+      return;
+    }
+
+    const { s, v } = colorKit.runOnUI().HSV({ h: hsl.value.h, s: hsl.value.s, l: newValue }).object(false);
+
+    saturationValue.value = s;
+    brightnessValue.value = v;
+
+    onGestureChange();
+  };
+
+  const onGestureUpdate = ({ x, y }: { x: number; y: number }) => {
+    'worklet';
+
+    if (!isGestureActive.value) return;
+
+    const center = width.value / 2;
+    const dx = center - x;
+    const dy = center - y;
+    const theta = (Math.atan2(dy, dx) + rotate * (Math.PI / 180)) * (180 / Math.PI); // [0 - 180] range
+    const angle = theta < 0 ? 360 + theta : theta; // [0 - 360] range
+    const mirroredAngle = angle <= 180 ? angle : 360 - angle;
+    const newLuminanceValue = (mirroredAngle / 180) * 100;
+
+    thumbSide.value = angle <= 180 ? 0 : 1;
+
+    onUpdate(newLuminanceValue);
+  };
+
+  const onEnd = () => {
     'worklet';
     isGestureActive.value = false;
     handleScale.value = withTiming(1, { duration: thumbScaleAnimationDuration });
     onGestureEnd();
   };
-
-  const pan = Gesture.Pan().onBegin(onGestureBegin).onUpdate(onGestureUpdate).onEnd(onGestureFinish);
-  const tap = Gesture.Tap().onEnd(onGestureFinish);
-  const longPress = Gesture.LongPress().onEnd(onGestureFinish);
-  const composed = Gesture.Simultaneous(Gesture.Exclusive(pan, tap, longPress), ...gestures);
-
-  // useLayoutEffect → paint → onLayout
-  useLayoutEffect(() => {
-    containerRef.current?.measure((_x, _y, layoutWidth) => {
-      if (!layoutWidth) return;
-      width.value = layoutWidth;
-      borderRadius.value = layoutWidth / 2;
-    });
-  }, []);
-
-  const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
-    if (!layout.width) return;
-    width.value = layout.width;
-    borderRadius.value = layout.width / 2;
-  }, []);
 
   const getAdaptiveColor = () => {
     'worklet';
@@ -186,39 +168,45 @@ export function LuminanceCircular({
   };
 
   return (
-    <GestureDetector gesture={composed}>
-      <Animated.View
-        ref={containerRef}
-        onLayout={onLayout}
-        style={[
-          styles.panelContainer,
-          { justifyContent: 'center', alignItems: 'center' },
-          style,
-          { position: 'relative', aspectRatio: 1, borderWidth: 0, padding: 0 },
-          borderRadiusStyle,
-        ]}
-      >
-        <Animated.View style={[styles.panelImage, activeColorStyle, { transform: [{ rotate: -rotate + 'deg' }] }]}>
-          <Image
-            source={require('@assets/angular-luminance.png')}
-            style={{ width: '100%', height: '100%', flex: 1 }}
-            resizeMode='stretch'
-          />
-        </Animated.View>
-
-        <Animated.View style={[clipViewStyle, { backgroundColor: '#fff' }, containerStyle]}>{children}</Animated.View>
-
-        <Thumb
-          thumbShape={thumbShape}
-          thumbSize={thumbSize}
-          thumbColor={thumbColor}
-          renderThumb={renderThumb}
-          innerStyle={thumbInnerStyle}
-          thumbAnimatedStyle={thumbAnimatedStyle}
-          style={thumbStyle}
-          getAdaptiveColor={getAdaptiveColor}
+    <CircularSliderCore
+      style={[
+        styles.panelContainer,
+        { justifyContent: 'center', alignItems: 'center' },
+        style,
+        { position: 'relative', aspectRatio: 1, borderWidth: 0, padding: 0 },
+        borderRadiusStyle,
+      ]}
+      label={props.accessibilityLabel ?? 'Luminance circular slider'}
+      hint={props.accessibilityHint}
+      currentValue={hslLuminanceValue}
+      width={width}
+      borderRadius={borderRadius}
+      gestures={gestures}
+      onGestureUpdate={onGestureUpdate}
+      onBegin={onBegin}
+      onUpdate={onUpdate}
+      onEnd={onEnd}
+    >
+      <Animated.View style={[styles.panelImage, activeColorStyle, { transform: [{ rotate: -rotate + 'deg' }] }]} aria-hidden>
+        <Image
+          source={require('@assets/angular-luminance.png')}
+          style={{ width: '100%', height: '100%', flex: 1 }}
+          resizeMode='stretch'
         />
       </Animated.View>
-    </GestureDetector>
+
+      <Animated.View style={[clipViewStyle, { backgroundColor: '#fff' }, containerStyle]}>{children}</Animated.View>
+
+      <Thumb
+        thumbShape={thumbShape}
+        thumbSize={thumbSize}
+        thumbColor={thumbColor}
+        renderThumb={renderThumb}
+        innerStyle={thumbInnerStyle}
+        thumbAnimatedStyle={thumbAnimatedStyle}
+        style={thumbStyle}
+        getAdaptiveColor={getAdaptiveColor}
+      />
+    </CircularSliderCore>
   );
 }

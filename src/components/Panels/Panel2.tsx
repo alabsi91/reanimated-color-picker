@@ -1,19 +1,17 @@
-import React, { useCallback, useLayoutEffect, useRef } from 'react';
+import React from 'react';
 import { ImageBackground, StyleSheet } from 'react-native';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle, useDerivedValue, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import colorKit from '@colorKit';
 import usePickerContext from '@context';
+import { PanelCore } from '@panels/PanelCore';
 import { styles } from '@styles';
 import Thumb from '@thumb';
 import { clamp, ConditionalRendering, getStyle, isRtl } from '@utils';
 
 import type { Panel2Props } from '@types';
-import type { LayoutChangeEvent } from 'react-native';
-import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
-/** A square-shaped panel slider (Windows-style) used to adjust the hue and saturation or brightness channels. */
+/** @see [Panel2](https://alabsi91.github.io/reanimated-color-picker/api/panels/panel2/) */
 export function Panel2({
   verticalChannel = 'saturation',
   reverseHue = false,
@@ -38,29 +36,28 @@ export function Panel2({
   const borderRadius = getStyle(style, 'borderRadius') ?? 5;
   const heightStyle = getStyle(style, 'height') ?? 200;
 
-  const containerRef = useRef<Animated.View>(null);
   const width = useSharedValue(0);
   const height = useSharedValue(0);
   const handleScale = useSharedValue(1);
-  const lastHslSaturationValue = useSharedValue(0);
 
-  // We need to keep track of the HSL saturation value because, when the luminance is 0 or 100,
-  // converting to/from HSV causes the previous saturation value to be lost.
+  // HSL saturation is mathematically undefined (collapses to 0) when luminance is 0 or 100,
+  // because those represent pure black and white regardless of saturation.
+  // This ref holds the last valid saturation so we can restore it when luminance moves away from the boundary.
+  const hslSaturationValue = useSharedValue(0);
+
   const hsl = useDerivedValue(() => {
     const hsvColor = { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
     const { h, s, l } = colorKit.runOnUI().HSL(hsvColor).object(false);
 
+    // At l=0 (black) or l=100 (white), the conversion loses saturation information.
+    // Substitute the last known saturation so it's restored when luminance changes.
     if (l === 100 || l === 0) {
-      return { h, s: lastHslSaturationValue.value, l };
+      return { h, s: hslSaturationValue.value, l };
     }
 
-    lastHslSaturationValue.value = s;
+    hslSaturationValue.value = s;
 
-    return {
-      h,
-      s,
-      l,
-    };
+    return { h, s, l };
   }, [hueValue, saturationValue, brightnessValue]);
 
   const verticalChannelValue = useDerivedValue(() => {
@@ -129,7 +126,42 @@ export function Panel2({
     };
   }, [width, height, reverseVerticalChannel]);
 
-  const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
+  const onBegin = () => {
+    'worklet';
+    handleScale.value = withTiming(thumbScaleAnimationValue, { duration: thumbScaleAnimationDuration });
+  };
+
+  const onUpdate = (newXValue: number, newYValue: number) => {
+    'worklet';
+
+    if (hueValue.value === newXValue && verticalChannelValue.value === newYValue) {
+      return;
+    }
+
+    hueValue.value = newXValue;
+
+    if (verticalChannel === 'hsl-saturation') {
+      // Converting back from HSL→HSV at l=0 or l=100 would zero out HSV saturation and brightness,
+      // locking the slider. Nudging l by ±0.01 keeps the conversion well-behaved without any
+      // visible effect on the output color (values are rounded before use).
+      const l = hsl.value.l === 0 ? 0.01 : hsl.value.l === 100 ? 99.99 : hsl.value.l;
+      const { s, v } = colorKit.runOnUI().HSV({ h: hsl.value.h, s: newYValue, l }).object(false);
+      saturationValue.value = s;
+      brightnessValue.value = v;
+    }
+    // Vertical channel is brightness
+    else if (verticalChannel === 'brightness') {
+      brightnessValue.value = newYValue;
+    }
+    // Vertical channel is saturation
+    else {
+      saturationValue.value = newYValue;
+    }
+
+    onGestureChange();
+  };
+
+  const onGestureUpdate = ({ x, y }: { x: number; y: number }) => {
     'worklet';
 
     const lengthX = width.value - (boundedThumb ? thumbSize : 0);
@@ -138,60 +170,17 @@ export function Panel2({
     const posY = clamp(y - (boundedThumb ? thumbSize / 2 : 0), lengthY);
     const valueX = (posX / lengthX) * 360;
     const valueY = (posY / lengthY) * 100;
-    const newHueValue = reverseHue ? 360 - valueX : valueX;
-    const newChannelValue = reverseVerticalChannel ? valueY : 100 - valueY;
+    const newXValue = reverseHue ? 360 - valueX : valueX;
+    const newYValue = reverseVerticalChannel ? valueY : 100 - valueY;
 
-    if (hueValue.value === newHueValue && verticalChannelValue.value === newChannelValue) return;
-
-    hueValue.value = newHueValue;
-
-    if (verticalChannel === 'hsl-saturation') {
-      // To prevent locking this slider when the luminance is 0 or 100,
-      // this should not affect the resulting color, as the value will be rounded.
-      const l = hsl.value.l === 0 ? 0.01 : hsl.value.l === 100 ? 99.99 : hsl.value.l;
-      const { s, v } = colorKit.runOnUI().HSV({ h: hsl.value.h, s: newChannelValue, l }).object(false);
-      saturationValue.value = s;
-      brightnessValue.value = v;
-    } else if (verticalChannel === 'brightness') {
-      brightnessValue.value = newChannelValue;
-    } else {
-      saturationValue.value = newChannelValue;
-    }
-
-    onGestureChange();
+    onUpdate(newXValue, newYValue);
   };
 
-  const onGestureBegin = (event: PanGestureHandlerEventPayload) => {
-    'worklet';
-    handleScale.value = withTiming(thumbScaleAnimationValue, { duration: thumbScaleAnimationDuration });
-    onGestureUpdate(event);
-  };
-
-  const onGestureFinish = () => {
+  const onEnd = () => {
     'worklet';
     handleScale.value = withTiming(1, { duration: thumbScaleAnimationDuration });
     onGestureEnd();
   };
-
-  const pan = Gesture.Pan().onBegin(onGestureBegin).onUpdate(onGestureUpdate).onEnd(onGestureFinish);
-  const tap = Gesture.Tap().onEnd(onGestureFinish);
-  const longPress = Gesture.LongPress().onEnd(onGestureFinish);
-  const composed = Gesture.Simultaneous(Gesture.Exclusive(pan, tap, longPress), ...gestures);
-
-  // useLayoutEffect → paint → onLayout
-  useLayoutEffect(() => {
-    containerRef.current?.measure((_x, _y, layoutWidth, layoutHeight) => {
-      if (!layoutWidth || !layoutHeight) return;
-      width.value = layoutWidth;
-      height.value = layoutHeight;
-    });
-  }, []);
-
-  const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
-    if (!layout.width || !layout.height) return;
-    width.value = layout.width;
-    height.value = layout.height;
-  }, []);
 
   const getAdaptiveColor = (hsva: { h: number; s: number; v: number; a: number }) => {
     'worklet';
@@ -215,44 +204,57 @@ export function Panel2({
   };
 
   return (
-    <GestureDetector gesture={composed}>
-      <Animated.View
-        ref={containerRef}
-        onLayout={onLayout}
-        style={[styles.panelContainer, style, { position: 'relative', height: heightStyle, borderWidth: 0, padding: 0 }]}
+    <PanelCore
+      style={[styles.panelContainer, style, { position: 'relative', height: heightStyle, borderWidth: 0, padding: 0 }]}
+      label={props.accessibilityHint ?? `Hue and ${verticalChannel} 2D slider`}
+      hint={props.accessibilityHint ?? `Double tap to switch between hue and ${verticalChannel}`}
+      labelX='Hue'
+      currentXValue={hueValue}
+      maxXValue={360}
+      labelY={verticalChannel}
+      currentYValue={verticalChannelValue}
+      reverseX={reverseHue}
+      reverseY={reverseVerticalChannel}
+      width={width}
+      height={height}
+      gestures={gestures}
+      onGestureUpdate={onGestureUpdate}
+      onBegin={onBegin}
+      onUpdate={onUpdate}
+      onEnd={onEnd}
+    >
+      <ImageBackground
+        source={require('@assets/Hue.png')}
+        style={[styles.panelImage, { position: 'relative', borderRadius, transform: [{ scaleX: reverseHue ? -1 : 1 }] }]}
+        resizeMode='stretch'
+        aria-hidden
       >
-        <ImageBackground
-          source={require('@assets/Hue.png')}
-          style={[styles.panelImage, { position: 'relative', borderRadius, transform: [{ scaleX: reverseHue ? -1 : 1 }] }]}
+        <ConditionalRendering if={adaptSpectrum && verticalChannel === 'brightness'}>
+          <Animated.View style={[spectrumStyle, StyleSheet.absoluteFill]} />
+        </ConditionalRendering>
+
+        <Animated.Image
+          source={require('@assets/blackGradient.png')}
+          style={[styles.panelImage, panelImageStyle]}
+          tintColor={verticalChannel === 'saturation' ? '#fff' : verticalChannel === 'hsl-saturation' ? '#888' : undefined}
           resizeMode='stretch'
-        >
-          <ConditionalRendering if={adaptSpectrum && verticalChannel === 'brightness'}>
-            <Animated.View style={[spectrumStyle, StyleSheet.absoluteFill]} />
-          </ConditionalRendering>
-
-          <Animated.Image
-            source={require('@assets/blackGradient.png')}
-            style={[styles.panelImage, panelImageStyle]}
-            tintColor={verticalChannel === 'saturation' ? '#fff' : verticalChannel === 'hsl-saturation' ? '#888' : undefined}
-            resizeMode='stretch'
-          />
-
-          <ConditionalRendering if={adaptSpectrum && (verticalChannel === 'saturation' || verticalChannel === 'hsl-saturation')}>
-            <Animated.View style={[spectrumStyle, StyleSheet.absoluteFill]} />
-          </ConditionalRendering>
-        </ImageBackground>
-
-        <Thumb
-          thumbShape={thumbShape}
-          thumbSize={thumbSize}
-          thumbColor={thumbColor}
-          renderThumb={renderThumb}
-          innerStyle={thumbInnerStyle}
-          thumbAnimatedStyle={thumbAnimatedStyle}
-          style={thumbStyle}
-          getAdaptiveColor={getAdaptiveColor}
         />
-      </Animated.View>
-    </GestureDetector>
+
+        <ConditionalRendering if={adaptSpectrum && (verticalChannel === 'saturation' || verticalChannel === 'hsl-saturation')}>
+          <Animated.View style={[spectrumStyle, StyleSheet.absoluteFill]} />
+        </ConditionalRendering>
+      </ImageBackground>
+
+      <Thumb
+        thumbShape={thumbShape}
+        thumbSize={thumbSize}
+        thumbColor={thumbColor}
+        renderThumb={renderThumb}
+        innerStyle={thumbInnerStyle}
+        thumbAnimatedStyle={thumbAnimatedStyle}
+        style={thumbStyle}
+        getAdaptiveColor={getAdaptiveColor}
+      />
+    </PanelCore>
   );
 }

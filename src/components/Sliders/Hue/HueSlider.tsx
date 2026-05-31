@@ -1,16 +1,15 @@
-import React, { useLayoutEffect, useRef } from 'react';
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import usePickerContext from '@context';
+import { SliderCore } from '@sliders/SliderCore';
 import Thumb from '@thumb';
-import { clamp, ConditionalRendering, getStyle, HSVA2HSLA_string, isRtl } from '@utils';
+import { ConditionalRendering, getStyle, HSVA2HSLA_string, isRtl } from '@utils';
 
 import type { SliderProps } from '@types';
-import type { LayoutChangeEvent } from 'react-native';
-import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
 
+/** @see [HueSlider](https://alabsi91.github.io/reanimated-color-picker/api/sliders/hue/hue-slider/) */
 export function HueSlider({ gestures = [], style = {}, vertical = false, reverse = false, ...props }: SliderProps) {
   const { hueValue, saturationValue, brightnessValue, onGestureChange, onGestureEnd, ...ctx } = usePickerContext();
 
@@ -30,7 +29,6 @@ export function HueSlider({ gestures = [], style = {}, vertical = false, reverse
   const widthStyle = getStyle(style, 'width');
   const heightStyle = getStyle(style, 'height');
 
-  const containerRef = useRef<Animated.View>(null);
   const width = useSharedValue(vertical ? sliderThickness : typeof widthStyle === 'number' ? widthStyle : 0);
   const height = useSharedValue(!vertical ? sliderThickness : typeof heightStyle === 'number' ? heightStyle : 0);
   const handleScale = useSharedValue(1);
@@ -82,62 +80,28 @@ export function HueSlider({ gestures = [], style = {}, vertical = false, reverse
     };
   }, [width, height, vertical, reverse]);
 
-  const onGestureUpdate = ({ x, y }: PanGestureHandlerEventPayload) => {
+  const onBegin = () => {
+    'worklet';
+    handleScale.value = withTiming(thumbScaleAnimationValue, { duration: thumbScaleAnimationDuration });
+  };
+
+  const onUpdate = (value: number) => {
     'worklet';
 
-    const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0);
-    const pos = clamp((vertical ? y : x) - (boundedThumb ? thumbSize / 2 : 0), length);
-    const value = (pos / length) * 360;
-    const newHueValue = reverse ? 360 - value : value;
+    if (hueValue.value === value) {
+      return;
+    }
 
-    if (hueValue.value === newHueValue) return;
-
-    hueValue.value = newHueValue;
+    hueValue.value = value;
 
     onGestureChange();
   };
 
-  const onGestureBegin = (event: PanGestureHandlerEventPayload) => {
-    'worklet';
-    handleScale.value = withTiming(thumbScaleAnimationValue, { duration: thumbScaleAnimationDuration });
-    onGestureUpdate(event);
-  };
-
-  const onGestureFinish = () => {
+  const onEnd = () => {
     'worklet';
     handleScale.value = withTiming(1, { duration: thumbScaleAnimationDuration });
     onGestureEnd();
   };
-
-  const pan = Gesture.Pan().onBegin(onGestureBegin).onUpdate(onGestureUpdate).onEnd(onGestureFinish);
-  const tap = Gesture.Tap().onEnd(onGestureFinish);
-  const longPress = Gesture.LongPress().onEnd(onGestureFinish);
-  const composed = Gesture.Simultaneous(Gesture.Exclusive(pan, tap, longPress), ...gestures);
-
-  // useLayoutEffect → paint → onLayout
-  useLayoutEffect(() => {
-    containerRef.current?.measure((_x, _y, layoutWidth, layoutHeight) => {
-      if (!vertical && layoutWidth) {
-        width.value = layoutWidth;
-      }
-
-      if (vertical && layoutHeight) {
-        height.value = layoutHeight;
-      }
-    });
-  }, []);
-
-  const onLayout = ({ nativeEvent: { layout } }: LayoutChangeEvent) => {
-    if (!vertical && layout.width) {
-      width.value = layout.width;
-    }
-
-    if (vertical && layout.height) {
-      height.value = layout.height;
-    }
-  };
-
-  const thicknessStyle = vertical ? { width: sliderThickness } : { height: sliderThickness };
 
   const getAdaptiveColor = (hsva: { h: number; s: number; v: number; a: number }) => {
     'worklet';
@@ -150,33 +114,44 @@ export function HueSlider({ gestures = [], style = {}, vertical = false, reverse
   };
 
   return (
-    <GestureDetector gesture={composed}>
-      <Animated.View
-        ref={containerRef}
-        onLayout={onLayout}
-        style={[style, thicknessStyle, { position: 'relative', borderRadius, borderWidth: 0, padding: 0 }]}
-      >
-        <View style={{ flex: 1, borderRadius, overflow: 'hidden' }}>
-          <Animated.Image source={require('@assets/Hue.png')} style={imageStyle} />
-        </View>
+    <SliderCore
+      style={[style, { position: 'relative', borderRadius, borderWidth: 0, padding: 0 }]}
+      maxValue={360}
+      label={props.accessibilityLabel ?? 'Hue Slider'}
+      hint={props.accessibilityHint}
+      currentValue={hueValue}
+      width={width}
+      height={height}
+      thumbSize={thumbSize}
+      boundedThumb={boundedThumb}
+      sliderThickness={sliderThickness}
+      gestures={gestures}
+      vertical={vertical}
+      reverse={reverse}
+      onBegin={onBegin}
+      onUpdate={onUpdate}
+      onEnd={onEnd}
+    >
+      <View style={{ flex: 1, borderRadius, overflow: 'hidden' }} aria-hidden>
+        <Animated.Image source={require('@assets/Hue.png')} style={imageStyle} />
+      </View>
 
-        <ConditionalRendering if={adaptSpectrum}>
-          <Animated.View style={[{ borderRadius }, activeBrightnessStyle, StyleSheet.absoluteFill]} />
-          <Animated.View style={[{ borderRadius }, activeSaturationStyle, StyleSheet.absoluteFill]} />
-        </ConditionalRendering>
+      <ConditionalRendering if={adaptSpectrum}>
+        <Animated.View style={[{ borderRadius }, activeBrightnessStyle, StyleSheet.absoluteFill]} aria-hidden />
+        <Animated.View style={[{ borderRadius }, activeSaturationStyle, StyleSheet.absoluteFill]} aria-hidden />
+      </ConditionalRendering>
 
-        <Thumb
-          thumbShape={thumbShape}
-          thumbSize={thumbSize}
-          thumbColor={thumbColor}
-          renderThumb={renderThumb}
-          innerStyle={thumbInnerStyle}
-          thumbAnimatedStyle={thumbAnimatedStyle}
-          style={thumbStyle}
-          vertical={vertical}
-          getAdaptiveColor={getAdaptiveColor}
-        />
-      </Animated.View>
-    </GestureDetector>
+      <Thumb
+        thumbShape={thumbShape}
+        thumbSize={thumbSize}
+        thumbColor={thumbColor}
+        renderThumb={renderThumb}
+        innerStyle={thumbInnerStyle}
+        thumbAnimatedStyle={thumbAnimatedStyle}
+        style={thumbStyle}
+        vertical={vertical}
+        getAdaptiveColor={getAdaptiveColor}
+      />
+    </SliderCore>
   );
 }

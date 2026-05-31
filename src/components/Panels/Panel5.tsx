@@ -1,29 +1,27 @@
-import React, { useCallback, useLayoutEffect, useRef } from 'react';
-import { Image, View } from 'react-native';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, { Easing, useAnimatedStyle, useDerivedValue, useSharedValue, withTiming } from 'react-native-reanimated';
+import React from 'react';
+import { Image } from 'react-native';
+import Animated, { useAnimatedStyle, useDerivedValue, useSharedValue } from 'react-native-reanimated';
 
 import colorKit from '@colorKit';
 import usePickerContext from '@context';
+import { PanelCore } from '@panels/PanelCore';
 import { styles } from '@styles';
 import { getStyle, isRtl } from '@utils';
 
 import type { Panel5Props } from '@types';
-import type { LayoutChangeEvent } from 'react-native';
 
-const animationOptions = { duration: 300, easing: Easing.elastic(0.8) };
-
-/** This is a grid of 120 colors, arranged in 12 columns and 10 rows of squares. */
-export function Panel5({ gestures = [], style = {}, selectionStyle = {} }: Panel5Props) {
+/** @see [Panel5](https://alabsi91.github.io/reanimated-color-picker/api/panels/panel5/) */
+export function Panel5({ gestures = [], style = {}, selectionStyle = {}, accessibilityLabel, accessibilityHint }: Panel5Props) {
   const { hueValue, saturationValue, brightnessValue, onGestureChange, onGestureEnd } = usePickerContext();
 
   const borderRadius = getStyle(style, 'borderRadius') ?? 0;
 
-  const containerRef = useRef<Animated.View>(null);
-  const squareSize = useSharedValue(0);
-  const posX = useSharedValue(0);
-  const posY = useSharedValue(0);
+  const row = useSharedValue(0);
+  const column = useSharedValue(0);
   const adaptiveColor = useSharedValue('#000');
+  const width = useSharedValue(0);
+  const height = useSharedValue(0);
+  const squareSize = useDerivedValue(() => Math.max(width.value / 12, height.value / 10), [width, height]);
 
   const setAdaptiveColor = (color: string) => {
     'worklet';
@@ -40,25 +38,25 @@ export function Panel5({ gestures = [], style = {}, selectionStyle = {} }: Panel
       v: brightnessValue.value,
     };
 
-    for (let y = 0; y < gridColors.length; y++) {
-      for (let x = 0; x < gridColors[y].length; x++) {
-        const gridColor = gridColors[y][x];
+    for (let y = 0; y < GRID_COLORS.length; y++) {
+      for (let x = 0; x < GRID_COLORS[y].length; x++) {
+        const gridColor = GRID_COLORS[y][x];
 
         const areColorsEqual = colorKit.runOnUI().areColorsEqual(gridColor, hsvColor, 5);
         if (!areColorsEqual) continue;
 
+        row.value = y;
+        column.value = x;
         setAdaptiveColor(gridColor);
 
-        posX.value = withTiming(x, animationOptions);
-        posY.value = withTiming(y, animationOptions);
         break;
       }
     }
-  }, [hueValue, saturationValue, brightnessValue, posX, posY]);
+  }, [hueValue, saturationValue, brightnessValue, row, column]);
 
   const selectedStyle = useAnimatedStyle(() => {
-    const x = posX.value * squareSize.value;
-    const y = posY.value * squareSize.value;
+    const x = column.value * squareSize.value;
+    const y = row.value * squareSize.value;
 
     return {
       width: squareSize.value,
@@ -68,62 +66,76 @@ export function Panel5({ gestures = [], style = {}, selectionStyle = {} }: Panel
       right: isRtl ? x : undefined,
       borderColor: adaptiveColor.value,
     };
-  }, [squareSize, adaptiveColor, posX, posY]);
+  }, [squareSize, adaptiveColor, row, column]);
 
-  const tap = Gesture.Tap().onBegin(({ x, y }) => {
-    if (!squareSize.value) return;
+  const onUpdate = (newColumn: number, newRow: number) => {
+    'worklet';
 
-    const row = Math.floor(y / squareSize.value);
-    const column = Math.floor(x / squareSize.value);
-
-    const color: string | undefined = gridColors[row]?.[column];
+    const color: string | undefined = GRID_COLORS[newRow]?.[newColumn];
     if (!color) return;
 
     const { h, s, v } = colorKit.runOnUI().HSV(color).object(false);
+
+    if (hueValue.value === h && saturationValue.value === s && brightnessValue.value === v) {
+      return;
+    }
+
     hueValue.value = h;
     saturationValue.value = s;
     brightnessValue.value = v;
 
     setAdaptiveColor(color);
     onGestureChange();
+  };
+
+  const onGestureUpdate = ({ x, y }: { x: number; y: number }) => {
+    'worklet';
+
+    if (!squareSize.value) return;
+
+    const newRow = Math.floor(y / squareSize.value);
+    const newColumn = Math.floor(x / squareSize.value);
+
+    onUpdate(newColumn, newRow);
+  };
+
+  const onEnd = () => {
+    'worklet';
     onGestureEnd();
-  });
-
-  const composed = Gesture.Simultaneous(tap, ...gestures);
-
-  // useLayoutEffect → paint → onLayout
-  useLayoutEffect(() => {
-    containerRef.current?.measure((_x, _y, layoutWidth, layoutHeight) => {
-      if (!layoutWidth && !layoutHeight) return;
-      squareSize.value = layoutWidth / 12 || layoutHeight / 10;
-    });
-  }, []);
-
-  const onLayout = useCallback(({ nativeEvent: { layout } }: LayoutChangeEvent) => {
-    if (!layout.width && !layout.height) return;
-    squareSize.value = layout.width / 12 || layout.height / 10;
-  }, []);
+  };
 
   return (
-    <GestureDetector gesture={composed}>
-      <View
-        collapsable={false}
-        ref={containerRef}
-        onLayout={onLayout}
-        style={[style, { position: 'relative', borderWidth: 0, padding: 0, aspectRatio: 1.2 }]}
-      >
-        <Image
-          source={require('@assets/grid.png')}
-          style={{ borderRadius, width: '100%', height: '100%' }}
-          resizeMode='stretch'
-        />
-        <Animated.View style={[styles.selected, selectionStyle, selectedStyle]} />
-      </View>
-    </GestureDetector>
+    <PanelCore
+      style={[style, { position: 'relative', borderWidth: 0, padding: 0, aspectRatio: 1.2 }]}
+      label={accessibilityLabel ?? '12 by 10 Grid of 120 Colors'}
+      hint={accessibilityHint ?? 'Double tap to switch between column and row selection'}
+      labelX='Column'
+      currentXValue={column}
+      maxXValue={12}
+      labelY='Row'
+      currentYValue={row}
+      maxYValue={10}
+      reverseY
+      width={width}
+      height={height}
+      gestures={gestures}
+      onGestureUpdate={onGestureUpdate}
+      onUpdate={onUpdate}
+      onEnd={onEnd}
+    >
+      <Image
+        source={require('@assets/grid.png')}
+        style={{ borderRadius, width: '100%', height: '100%' }}
+        resizeMode='stretch'
+        aria-hidden
+      />
+
+      <Animated.View style={[styles.selected, selectionStyle, selectedStyle]} aria-hidden />
+    </PanelCore>
   );
 }
 
-const gridColors = [
+const GRID_COLORS = [
   [
     '#FFFFFF',
     '#EBEBEB',

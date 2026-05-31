@@ -7,19 +7,21 @@ import WidgetTextInput from './WidgetTextInput';
 
 import type { WidgetProps } from '@types';
 
-export default function HslWidget({
-  onChange,
-  returnedResults,
-  hueValue,
-  saturationValue,
-  brightnessValue,
-  alphaValue,
-  inputStyle,
-  inputTitleStyle,
-  inputProps,
-  disableAlphaChannel,
-}: WidgetProps) {
-  const hsl = useRef(colorKit.HSL(returnedResults().hsla).object(false));
+export default function HslWidget(props: WidgetProps) {
+  const {
+    onChange,
+    colorResult,
+    hueValue,
+    saturationValue,
+    brightnessValue,
+    alphaValue,
+    inputStyle,
+    inputTitleStyle,
+    inputProps,
+    disableAlphaChannel,
+  } = props;
+
+  const hsl = useRef(colorKit.HSL(colorResult().hsla).object(false));
 
   const h = useSharedValue(hsl.current.h.toString());
   const s = useSharedValue(hsl.current.s.toString());
@@ -34,7 +36,7 @@ export default function HslWidget({
       a: alphaValue.value,
     };
 
-    hsl.current = colorKit.runOnUI().HSL(returnedResults(currentColor).hsla).object(false);
+    hsl.current = colorKit.runOnUI().HSL(colorResult(currentColor).hsla).object(false);
 
     h.value = hsl.current.h.toString();
     s.value = hsl.current.s.toString();
@@ -44,25 +46,28 @@ export default function HslWidget({
 
   const onHueEndEditing = (text: string) => {
     const hue = clamp(+text, 360);
-    h.value = ''; // force update in case the value of h didn't change
+
+    // Force update in case `h` value has not changed
+    h.value = '';
+
     onChange({ h: hue, s: +s.value, l: +l.value, a: +a.value });
   };
 
   const onSaturationEndEditing = (text: string) => {
     const saturation = clamp(+text, 100);
-    s.value = ''; // force update in case the value of `s` didn't change
+    s.value = '';
     onChange({ h: +h.value, s: saturation, l: +l.value, a: +a.value });
   };
 
   const onLumEndEditing = (text: string) => {
     const lum = clamp(+text, 100);
-    l.value = ''; // force update in case the value of `l` didn't change
+    l.value = '';
     onChange({ h: +h.value, s: +s.value, l: lum, a: +a.value });
   };
 
   const onAlphaEndEditing = (text: string) => {
     const alpha = clamp(+text, 1);
-    a.value = ''; // force update in case the value of `a` didn't change
+    a.value = '';
     onChange({ h: +h.value, s: +s.value, l: +l.value, a: alpha });
   };
 
@@ -73,6 +78,7 @@ export default function HslWidget({
         textStyle={inputTitleStyle}
         textValue={h}
         title='H'
+        label='Hue channel in HSL color format'
         onEndEditing={onHueEndEditing}
         inputProps={inputProps}
       />
@@ -81,6 +87,7 @@ export default function HslWidget({
         textStyle={inputTitleStyle}
         textValue={s}
         title='S'
+        label='Saturation channel in HSL color format'
         onEndEditing={onSaturationEndEditing}
         inputProps={inputProps}
       />
@@ -89,6 +96,7 @@ export default function HslWidget({
         textStyle={inputTitleStyle}
         textValue={l}
         title='L'
+        label='Luminosity channel in HSL color format'
         onEndEditing={onLumEndEditing}
         inputProps={inputProps}
       />
@@ -98,6 +106,7 @@ export default function HslWidget({
           textStyle={inputTitleStyle}
           textValue={a}
           title='A'
+          label='Alpha channel in HSL color format'
           onEndEditing={onAlphaEndEditing}
           inputProps={inputProps}
           decimal

@@ -10,6 +10,7 @@ import colorKit from '@colorKit';
 
 import type { ExtraThumbProps } from '@types';
 
+/** @see [ExtraThumb](https://alabsi91.github.io/reanimated-color-picker/api/preview/extra-thumb/) */
 export function ExtraThumb({
   onChange,
   onChangeJS,
@@ -21,7 +22,7 @@ export function ExtraThumb({
   ...props
 }: ExtraThumbProps) {
   const { width, boundedThumb, centerChannel, centerChannelValue, adaptSpectrum, rotate, ...ctx } = usePanel3Context();
-  const { hueValue, saturationValue, brightnessValue, alphaValue, returnedResults } = usePickerContext();
+  const { hueValue, saturationValue, brightnessValue, alphaValue, colorResult } = usePickerContext();
 
   const thumbSize = props.thumbSize ?? ctx.thumbSize;
   const thumbShape = props.thumbShape ?? ctx.thumbShape;
@@ -30,7 +31,6 @@ export function ExtraThumb({
   const thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle;
   const renderCenterLine = props.renderCenterLine ?? ctx.renderCenterLine;
 
-  // Calculate color
   const hsv = useDerivedValue(() => {
     const currentColor = {
       h: hueValue.value,
@@ -39,14 +39,13 @@ export function ExtraThumb({
       a: alphaValue.value,
     };
 
-    if (!colorTransform) {
-      return currentColor;
+    if (colorTransform) {
+      return colorTransform(currentColor);
     }
 
-    return colorTransform(currentColor);
+    return currentColor;
   }, [hueValue, saturationValue, brightnessValue, alphaValue]);
 
-  // Calculate hue value
   const hue = useDerivedValue(() => {
     if (colorTransform) {
       return hsv.value.h;
@@ -100,7 +99,7 @@ export function ExtraThumb({
   useDerivedValue(() => {
     if (!onChange && !onChangeJS) return;
 
-    const colors = returnedResults({
+    const colors = colorResult({
       h: hue.value,
       s: saturation.value,
       v: brightness.value,
@@ -149,15 +148,8 @@ export function ExtraThumb({
     };
   }, [renderCenterLine, boundedThumb, thumbSize, width, hue, centerChannelValue, rotate]);
 
-  const getAdaptiveColor = () => {
+  const getAdaptiveColor = (hsva: { h: number; s: number; v: number; a: number }) => {
     'worklet';
-
-    const hsva = {
-      h: hue.value,
-      s: saturation.value,
-      v: brightness.value,
-      a: alphaValue.value,
-    };
 
     if (adaptSpectrum) {
       return hsva;

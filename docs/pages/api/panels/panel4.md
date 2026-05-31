@@ -119,4 +119,20 @@ The panel's container style.
 
 `type: ViewStyle`[^style-override]
 
+---
+
+### `accessibilityLabel`
+
+Panel's label for accessibility.
+
+`type: string`
+
+---
+
+### `accessibilityHint`
+
+Panel's hint for accessibility.
+
+`type: string`
+
 [^style-override]: Certain style properties will be overridden.

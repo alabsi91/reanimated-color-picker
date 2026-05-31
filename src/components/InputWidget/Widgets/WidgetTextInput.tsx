@@ -9,43 +9,47 @@ import type { InputProps } from '@types';
 import type { BlurEvent, StyleProp, TextInputEndEditingEvent, TextStyle } from 'react-native';
 import type { SharedValue } from 'react-native-reanimated';
 
-type Props = {
+interface WidgetTextInputProps {
   textValue: SharedValue<string>;
   textKeyboard?: boolean;
   decimal?: boolean;
   title: string;
+  label: string;
   inputStyle: StyleProp<TextStyle>;
   textStyle: StyleProp<TextStyle>;
-  onEndEditing: (text: string) => void;
   inputProps: InputProps;
-};
+  onEndEditing: (text: string) => void;
+}
 
 Animated.addWhitelistedNativeProps({ text: true });
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
 
-export default function WidgetTextInput({
-  textValue,
-  decimal = false,
-  textKeyboard = false,
-  title,
-  inputStyle,
-  textStyle,
-  inputProps,
-  onEndEditing,
-}: Props) {
+export default function WidgetTextInput(props: WidgetTextInputProps) {
+  const {
+    textValue,
+    decimal = false,
+    textKeyboard = false,
+    title,
+    label,
+    inputStyle,
+    textStyle,
+    inputProps,
+    onEndEditing,
+  } = props;
+
   const inputRef = useAnimatedRef<TextInput>();
 
   const animatedProps = useAnimatedProps(() => ({ text: textValue.value, defaultValue: textValue.value }) as never, [textValue]);
 
   const submit = (e: TextInputEndEditingEvent | BlurEvent) => {
-    // @ts-expect-error text doesn't exist on BlurEvent
+    // @ts-expect-error `text` doesn't exist on BlurEvent (It does)
     const text = e.nativeEvent.text;
 
     // number input mode
     if (decimal || !textKeyboard) {
-      const num = parseFloat(text);
-      if (typeof num !== 'number' || isNaN(num) || !isFinite(num)) {
-        textValue.value = ''; // reset input
+      const number = parseFloat(text);
+      if (typeof number !== 'number' || isNaN(number) || !isFinite(number)) {
+        textValue.value = '';
         return;
       }
     }
@@ -55,11 +59,14 @@ export default function WidgetTextInput({
 
   useEffect(() => {
     const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
-      if (!inputRef.current) return;
-      inputRef.current.blur();
+      if (inputRef.current) {
+        inputRef.current.blur();
+      }
     });
 
-    return () => hideSubscription.remove();
+    return () => {
+      hideSubscription.remove();
+    };
   }, []);
 
   // For web platform only
@@ -85,11 +92,15 @@ export default function WidgetTextInput({
         autoComplete='off'
         autoCorrect={false}
         autoFocus={false}
+        accessibilityLabel={label}
         {...inputProps}
         selectTextOnFocus={!textKeyboard}
         animatedProps={animatedProps}
       />
-      <Text style={[styles.inputTitle, textStyle]}>{title}</Text>
+
+      <Text style={[styles.inputTitle, textStyle]} accessibilityLabel={label}>
+        {title}
+      </Text>
     </View>
   );
 }

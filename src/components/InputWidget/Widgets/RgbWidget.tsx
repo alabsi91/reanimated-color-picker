@@ -7,19 +7,21 @@ import WidgetTextInput from './WidgetTextInput';
 
 import type { WidgetProps } from '@types';
 
-export default function RgbWidget({
-  onChange,
-  returnedResults,
-  hueValue,
-  saturationValue,
-  brightnessValue,
-  alphaValue,
-  inputStyle,
-  inputTitleStyle,
-  inputProps,
-  disableAlphaChannel,
-}: WidgetProps) {
-  const rgb = useRef(colorKit.RGB(returnedResults().rgba).object(false));
+export default function RgbWidget(props: WidgetProps) {
+  const {
+    onChange,
+    colorResult,
+    hueValue,
+    saturationValue,
+    brightnessValue,
+    alphaValue,
+    inputStyle,
+    inputTitleStyle,
+    inputProps,
+    disableAlphaChannel,
+  } = props;
+
+  const rgb = useRef(colorKit.RGB(colorResult().rgba).object(false));
 
   const r = useSharedValue(rgb.current.r.toString());
   const g = useSharedValue(rgb.current.g.toString());
@@ -34,7 +36,7 @@ export default function RgbWidget({
       a: alphaValue.value,
     };
 
-    rgb.current = colorKit.runOnUI().RGB(returnedResults(currentColor).rgba).object(false);
+    rgb.current = colorKit.runOnUI().RGB(colorResult(currentColor).rgba).object(false);
 
     r.value = rgb.current.r.toString();
     g.value = rgb.current.g.toString();
@@ -44,25 +46,28 @@ export default function RgbWidget({
 
   const onRedEndEditing = (text: string) => {
     const red = clamp(+text, 255);
-    r.value = ''; // force update in case the value of `r` didn't change
+
+    // Force update in case `r` value has not changed
+    r.value = '';
+
     onChange({ r: red, g: +g.value, b: +b.value, a: +a.value });
   };
 
   const onGreenEndEditing = (text: string) => {
     const green = clamp(+text, 255);
-    g.value = ''; // force update in case the value of `g` didn't change
+    g.value = '';
     onChange({ r: +r.value, g: green, b: +b.value, a: +a.value });
   };
 
   const onBlueEndEditing = (text: string) => {
     const blue = clamp(+text, 255);
-    b.value = ''; // force update in case the value of `b` didn't change
+    b.value = '';
     onChange({ r: +r.value, g: +g.value, b: blue, a: +a.value });
   };
 
   const onAlphaEndEditing = (text: string) => {
     const alpha = clamp(parseFloat(text), 1);
-    a.value = ''; // force update in case the value of `a` didn't change
+    a.value = '';
     onChange({ r: +r.value, g: +g.value, b: +b.value, a: alpha });
   };
 
@@ -73,6 +78,7 @@ export default function RgbWidget({
         textStyle={inputTitleStyle}
         textValue={r}
         title='R'
+        label='Red channel in RGB color format'
         onEndEditing={onRedEndEditing}
         inputProps={inputProps}
       />
@@ -81,6 +87,7 @@ export default function RgbWidget({
         textStyle={inputTitleStyle}
         textValue={g}
         title='G'
+        label='Green channel in RGB color format'
         onEndEditing={onGreenEndEditing}
         inputProps={inputProps}
       />
@@ -89,6 +96,7 @@ export default function RgbWidget({
         textStyle={inputTitleStyle}
         textValue={b}
         title='B'
+        label='Blue channel in RGB color format'
         onEndEditing={onBlueEndEditing}
         inputProps={inputProps}
       />
@@ -98,6 +106,7 @@ export default function RgbWidget({
           textStyle={inputTitleStyle}
           textValue={a}
           title='A'
+          label='Alpha channel in RGBA color format'
           onEndEditing={onAlphaEndEditing}
           inputProps={inputProps}
           decimal
