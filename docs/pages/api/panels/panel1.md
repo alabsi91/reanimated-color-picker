@@ -101,7 +101,7 @@ An array of gestures or composed gestures from `react-native-gesture-handler` th
 
 The panel's container style.
 
-## `type: ViewStyle`[^style-override]
+`type: ViewStyle`[^style-override]
 
 ---
 
