@@ -675,7 +675,7 @@ export const colorKitUI = () => {
         a = +a.toFixed(2);
 
         const hasAlpha = forceAlpha ?? a !== 1;
-        return hasAlpha ? `hwb(${h}, ${w}%, ${b}% / ${a ?? 1})` : `hwb(${h}, ${w}%, ${b}%)`;
+        return hasAlpha ? `hwb(${h} ${w}% ${b}% / ${a ?? 1})` : `hwb(${h} ${w}% ${b}%)`;
       },
       array: (roundValues = true) => {
         if (roundValues) {
