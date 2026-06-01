@@ -7,7 +7,7 @@ import colorKit from '@colorKit';
 import { PickerContextProvider } from '@context';
 import { isWeb } from '@utils';
 
-import type { ColorPickerContext, ColorPickerProps, ColorPickerRef } from '@types';
+import type { ColorFormatsObject, ColorPickerContext, ColorPickerProps, ColorPickerRef } from '@types';
 import type { SupportedColorFormats } from './colorKit/types';
 
 // @ts-expect-error no global
@@ -144,30 +144,34 @@ function ColorPickerWrapper(props: ColorPickerProps, ref: React.ForwardedRef<Col
     alphaValue.value = withTiming(a, { duration });
   };
 
+  // Prevent color shift caused by precision loss during format conversion.
+  // The color picker operates in HSV internally, so any incoming color is converted
+  // to HSV and back to the target format on every render. This round-trip can produce
+  // slightly different values than the original, causing sliders to drift. Before
+  // calling setColor, we convert the current color to the incoming format and compare
+  // channel values — if they match, the colors are perceptually identical and we skip
+  // the update.
   useEffect(() => {
-    // Ignore value changes if the current color already matches the new color from the value props.
-    const newColorFormat = colorKit.getFormat(value);
-    const currentColors = colorResult();
+    const incomingColor = colorKit.parse(value);
+    if (!incomingColor) {
+      return setColor(value);
+    }
 
-    // null or named color E.g "red"
-    if (!newColorFormat || newColorFormat === 'named') {
+    const HEX_FORMATS = new Set(['hex3', 'hex4', 'hex6', 'hex8', 'named']);
+    const incomingFormat = (HEX_FORMATS.has(incomingColor.format) ? 'hex' : incomingColor.format) as keyof ColorFormatsObject;
+
+    const currentColor = colorKit.parse(colorResult()[incomingFormat] ?? '');
+    if (!currentColor) {
+      return setColor(value);
+    }
+
+    const isEqual =
+      Object.keys(incomingColor.value).length === Object.keys(currentColor.value).length &&
+      Object.entries(incomingColor.value).every(([k, v]) => currentColor.value[k as keyof typeof currentColor.value] === v);
+
+    if (!isEqual) {
       setColor(value);
-      return;
     }
-
-    // hex color
-    if (newColorFormat === 'hex3' || newColorFormat === 'hex4' || newColorFormat === 'hex6' || newColorFormat === 'hex8') {
-      if (value !== currentColors.hex) setColor(value);
-      return;
-    }
-
-    // hsl | hsla | rgb | rgba | hsva | hsv | hwba | hwb
-    if (newColorFormat in currentColors) {
-      if (value !== currentColors[newColorFormat]) setColor(value);
-      return;
-    }
-
-    setColor(value);
   }, [value]);
 
   useImperativeHandle(ref, () => ({ setColor }));

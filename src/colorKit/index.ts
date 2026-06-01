@@ -1,16 +1,18 @@
 import type {
-  SupportedColorFormats,
   ColorFormats,
-  RgbaT,
-  RgbT,
+  ColorObject,
+  ColorParseResult,
+  ColorTypes,
+  ConversionMethods,
   HslaT,
   HslT,
   HsvaT,
   HsvT,
   HwbaT,
   HwbT,
-  ColorTypes,
-  ConversionMethods,
+  RgbaT,
+  RgbT,
+  SupportedColorFormats,
 } from './types';
 
 // If you find yourself wondering why all of this is within a single function,
@@ -172,7 +174,7 @@ export const colorKitUI = () => {
     yellowgreen: '#9acd32',
   };
 
-  const COLORS_REGEX: Record<ColorFormats, RegExp | RegExp[]> = {
+  const COLORS_REGEX = {
     // #rgb
     hex3: /^#([A-Fa-f0-9]{3})$/,
     // #rgba
@@ -233,7 +235,7 @@ export const colorKitUI = () => {
       // rgba(255 255 255 / 1.0) rgb(255 255 255 / 1.0)
       /^rgba?\s*\(\s*(\d{1,3})\s+(\d{1,3})\s+(\d{1,3})\s*\/\s*([\d.]+)\s*\)$/i,
     ],
-  };
+  } satisfies Record<ColorFormats, RegExp | RegExp[]>;
 
   // #region General utilities
   const clamp = (value: number, min: number, max: number) => {
@@ -262,8 +264,7 @@ export const colorKitUI = () => {
 
   const numberToHexString = (c: number): string => {
     c = clampRGB(Math.round(c));
-    const hex = c.toString(16).padStart(2, '0');
-    return hex;
+    return c.toString(16).padStart(2, '0');
   };
 
   const calculateHueValue = (p: number, q: number, t: number): number => {
@@ -275,146 +276,128 @@ export const colorKitUI = () => {
     return p;
   };
 
-  /** Identify the color format of a given `string` or `object` */
-  const detectColorFormat = (color: SupportedColorFormats): ColorFormats | null => {
-    // color int
-    if (typeof color === 'number') {
-      if (color >>> 0 === color && color >= 0 && color <= 0xffffffff) return 'hex8';
-      return null;
+  /** Convert any `HEX` color to 8-digit `HEX` color (#rrggbbaa) */
+  const normalize_HEX = (color: string): string => {
+    const parts = color.replace(/^#/, '').split('');
+
+    if (parts.length === 3) {
+      return `#${parts.map(x => x + x).join('')}ff`;
     }
 
-    // color string
-    if (typeof color === 'string') {
-      color = color.trim().toLowerCase();
-      for (const key in COLORS_REGEX) {
-        const format = key as ColorFormats;
-        const entry = COLORS_REGEX[format];
-        if (Array.isArray(entry)) {
-          for (let i = 0; i < entry.length; i++) {
-            if (entry[i].test(color)) return format;
-          }
-          continue;
-        }
-        if (entry.test(color)) return format;
+    if (parts.length === 4) {
+      return `#${parts.map(x => x + x).join('')}`;
+    }
+
+    if (parts.length === 6) {
+      return `#${parts.join('')}ff`;
+    }
+
+    return color;
+  };
+
+  /** Does not work for hex (16 base) */
+  const matchColorRegex = (color: string, regexArray: RegExp[]) => {
+    for (const regex of regexArray) {
+      const matches = color.match(regex);
+      if (matches) {
+        return [
+          parseInt(matches[1], 10),
+          parseInt(matches[2], 10),
+          parseInt(matches[3], 10),
+          parseFloat(matches[4] ?? '1'),
+        ] as const;
       }
     }
+  };
 
-    // color object
-    if (typeof color === 'object') {
-      const rgbaKeys = ['r', 'g', 'b', 'a'] as (keyof RgbaT)[];
-      const isRgbaOb = rgbaKeys.every(k => color.hasOwnProperty(k) && typeof (color as RgbaT)[k] === 'number');
-      if (isRgbaOb) return 'rgba';
+  /** Only for hex (16 base) */
+  const matchHexRegex = (color: string, regex: RegExp) => {
+    if (!regex.test(color)) return;
 
-      const rgbKeys = ['r', 'g', 'b'] as (keyof RgbT)[];
-      const isRgbOb = rgbKeys.every(k => color.hasOwnProperty(k) && typeof (color as RgbT)[k] === 'number');
-      if (isRgbOb) return 'rgb';
+    const hex8 = normalize_HEX(color);
 
-      const hslaKeys = ['h', 's', 'l', 'a'] as (keyof HslaT)[];
-      const isHslaOb = hslaKeys.every(k => color.hasOwnProperty(k) && typeof (color as HslaT)[k] === 'number');
-      if (isHslaOb) return 'hsla';
+    const matches = hex8.match(COLORS_REGEX.hex8);
+    if (!matches) return;
 
-      const hslKeys = ['h', 's', 'l'] as (keyof HslT)[];
-      const isHslOb = hslKeys.every(k => color.hasOwnProperty(k) && typeof (color as HslT)[k] === 'number');
-      if (isHslOb) return 'hsl';
+    return [
+      parseInt(matches[1], 16),
+      parseInt(matches[2], 16),
+      parseInt(matches[3], 16),
+      parseInt(matches[4], 16) / 255,
+    ] as const;
+  };
 
-      const hsvaKeys = ['h', 's', 'v', 'a'] as (keyof HsvaT)[];
-      const isHsvaOb = hsvaKeys.every(k => color.hasOwnProperty(k) && typeof (color as HsvaT)[k] === 'number');
-      if (isHsvaOb) return 'hsva';
+  /** Check if color object has all required keys */
+  const isColorObject = <T extends ColorObject>(colorObject: ColorObject, keys: (keyof T)[]): colorObject is T => {
+    return keys.every(k => colorObject.hasOwnProperty(k) && typeof colorObject[k as keyof ColorObject] === 'number');
+  };
 
-      const hsvKeys = ['h', 's', 'v'] as (keyof HsvT)[];
-      const isHsvOb = hsvKeys.every(k => color.hasOwnProperty(k) && typeof (color as HsvT)[k] === 'number');
-      if (isHsvOb) return 'hsv';
+  const clampColorObject = <T extends ColorObject>(color: T): T => {
+    const castColor = color as unknown as Record<string, number>;
 
-      const hwbaKeys = ['h', 'w', 'b', 'a'] as (keyof HwbaT)[];
-      const isHwbaOb = hwbaKeys.every(k => color.hasOwnProperty(k) && typeof (color as HwbaT)[k] === 'number');
-      if (isHwbaOb) return 'hwba';
+    for (const [key, value] of Object.entries(castColor)) {
+      // 'r' and 'g' are red and green (0-255) in RGB
+      if (key === 'r' || key === 'g') {
+        castColor[key] = clampRGB(value);
+        continue;
+      }
 
-      const hwbKeys = ['h', 'w', 'b'] as (keyof HwbT)[];
-      const isHwbOb = hwbKeys.every(k => color.hasOwnProperty(k) && typeof (color as HwbT)[k] === 'number');
-      if (isHwbOb) return 'hwb';
+      // 'b' is blue (0-255) in RGB, blackness (0-100) in HWB
+      if (key === 'b') {
+        castColor[key] = 'w' in castColor ? clamp100(value) : clampRGB(value);
+        continue;
+      }
+
+      // 'h' is hue (0-360) in HSL, HWB, and HSV
+      if (key === 'h') {
+        castColor[key] = clampHue(value);
+        continue;
+      }
+
+      // a is alpha (0-1)
+      if (key === 'a') {
+        castColor[key] = clampAlpha(value);
+        continue;
+      }
+
+      // 'v' is value/brightness (0-100) in HSV
+      // 's' is saturation (0-100) in HSL and HSV
+      // 'l' is lumenosity (0-100) in HSL
+      // 'w' is whiteness (0-100) in HWB
+      castColor[key] = clamp100(value);
     }
 
-    return null;
+    return color;
+  };
+
+  /** Mutate color object to have an `a` property */
+  const forceColorObjectAlpha = <T extends ColorObject>(color: T): T & { a: number } => {
+    if (!color.hasOwnProperty('a')) {
+      return Object.assign(color, { a: 1 }) as T & { a: number };
+    }
+
+    return color as T & { a: number };
   };
   // #endregion
 
   // #region RGB
-  /** Parse `RGB` or `RGBA` color string to an `object` */
-  const RGB_string_to_object = (color: string): RgbaT => {
-    color = color.trim().toLowerCase();
-    const colorType = detectColorFormat(color);
-
-    if (!colorType || !colorType.includes('rgb')) {
-      console.error(
-        '[colorKit.getRgbObject] is unable to parse the string into an `RGB` object. As a result, the color "black" will be returned instead.',
-      );
-      return { r: 0, g: 0, b: 0, a: 1 };
-    }
-
-    let matches: RegExpMatchArray | null = null;
-    const entry = COLORS_REGEX[colorType];
-    if (Array.isArray(entry)) {
-      for (let i = 0; i < entry.length; i++) {
-        if (entry[i].test(color)) matches = color.match(entry[i]);
-      }
-    } else {
-      matches = color.match(entry);
-    }
-
-    if (!matches || matches.length < 4) {
-      console.error(
-        '[colorKit.getRgbObject] An error occurred while attempting to destructuring `RGB` values from the given string. As a result, the color "black" will be returned instead.',
-      );
-      return { r: 0, g: 0, b: 0, a: 1 };
-    }
-
-    const r = parseInt(matches[1], 10),
-      g = parseInt(matches[2], 10),
-      b = parseInt(matches[3], 10),
-      a = parseFloat(matches[4] ?? '1');
-
-    return {
-      r: clampRGB(r),
-      g: clampRGB(g),
-      b: clampRGB(b),
-      a: clampAlpha(a),
-    };
-  };
-
-  /** Ensure that the `RGB` object values are within the correct range and that it has the alpha channel */
-  const normalize_RGB_object = (color: RgbaT | RgbT): RgbaT => {
-    return {
-      r: clampRGB(color.r),
-      g: clampRGB(color.g),
-      b: clampRGB(color.b),
-      a: clampAlpha((color as RgbaT).a ?? 1),
-    };
-  };
-
   /** Convert an `RGB` or `RGBA` color to its corresponding `Hex` color */
-  const RGB_to_HEX = (color: string | RgbaT | RgbT): string => {
-    const { r, g, b, a } = typeof color === 'string' ? RGB_string_to_object(color) : normalize_RGB_object(color);
+  const RGB_to_HEX = ({ r, g, b, a }: RgbaT, forceAlpha?: boolean): string => {
+    const red = numberToHexString(r);
+    const green = numberToHexString(g);
+    const blue = numberToHexString(b);
+    const alpha = numberToHexString(a * 255);
 
-    const red = numberToHexString(r),
-      green = numberToHexString(g),
-      blue = numberToHexString(b),
-      alpha = a === 1 ? '' : numberToHexString(a * 255);
-
-    return `#${red + green + blue + alpha}`;
-  };
-
-  /** Convert `RGB` or `RGBA` color to an `RGBA` object representation */
-  const RGB_to_RGB = (color: string | RgbaT | RgbT): RgbaT => {
-    return typeof color === 'string' ? RGB_string_to_object(color) : normalize_RGB_object(color);
+    const hasAlpha = forceAlpha ?? a !== 1;
+    return `#${red + green + blue + (hasAlpha ? alpha : '')}`;
   };
 
   /** Convert an `RGB` or `RGBA` color to an `HSLA` object representation */
-  const RGB_to_HSLA = (color: string | RgbaT | RgbT): HslaT => {
-    const rgb = typeof color === 'string' ? RGB_string_to_object(color) : normalize_RGB_object(color),
-      r = rgb.r / 255,
-      g = rgb.g / 255,
-      b = rgb.b / 255,
-      a = rgb.a;
+  const RGB_to_HSLA = (color: RgbaT): HslaT => {
+    const r = color.r / 255,
+      g = color.g / 255,
+      b = color.b / 255,
+      a = color.a;
 
     const max = Math.max(r, g, b),
       min = Math.min(r, g, b);
@@ -448,12 +431,11 @@ export const colorKitUI = () => {
   };
 
   /** Convert `RGB` or `RGBA` color to an `HSVA` object representation */
-  const RGB_to_HSVA = (color: string | RgbaT | RgbT): HsvaT => {
-    const rgb = typeof color === 'string' ? RGB_string_to_object(color) : normalize_RGB_object(color),
-      r = rgb.r / 255,
-      g = rgb.g / 255,
-      b = rgb.b / 255,
-      a = rgb.a;
+  const RGB_to_HSVA = (color: RgbaT): HsvaT => {
+    const r = color.r / 255,
+      g = color.g / 255,
+      b = color.b / 255,
+      a = color.a;
 
     const max = Math.max(r, g, b),
       min = Math.min(r, g, b),
@@ -486,12 +468,11 @@ export const colorKitUI = () => {
   };
 
   /** Convert `RGB` or `RGBA` color to an `HWBA` object representation */
-  const RGB_to_HWBA = (color: string | RgbaT | RgbT): HwbaT => {
-    const rgb = typeof color === 'string' ? RGB_string_to_object(color) : normalize_RGB_object(color),
-      red = rgb.r / 255,
-      green = rgb.g / 255,
-      blue = rgb.b / 255,
-      a = rgb.a;
+  const RGB_to_HWBA = (color: RgbaT): HwbaT => {
+    const red = color.r / 255,
+      green = color.g / 255,
+      blue = color.b / 255,
+      a = color.a;
 
     const { h } = RGB_to_HSLA(color);
 
@@ -515,15 +496,8 @@ export const colorKitUI = () => {
         b = Math.round(b);
         a = +a.toFixed(2);
 
-        // auto
-        if (typeof forceAlpha === 'undefined') {
-          if (typeof a === 'number' && a !== 1) return `rgba(${r}, ${g}, ${b}, ${a})`;
-          return `rgb(${r}, ${g}, ${b})`;
-        }
-
-        if (forceAlpha) return `rgba(${r}, ${g}, ${b}, ${a ?? 1})`;
-
-        return `rgb(${r}, ${g}, ${b})`;
+        const hasAlpha = forceAlpha ?? a !== 1;
+        return hasAlpha ? `rgba(${r}, ${g}, ${b}, ${a ?? 1})` : `rgb(${r}, ${g}, ${b})`;
       },
       array: (roundValues = true) => {
         if (roundValues) {
@@ -546,66 +520,12 @@ export const colorKitUI = () => {
   // #endregion
 
   // #region HSL
-  /** Parse `HSL` or `HSLA` color string to an `object` */
-  const HSL_string_to_object = (color: string): HslaT => {
-    color = color.trim().toLowerCase();
-    const colorType = detectColorFormat(color);
-
-    if (!colorType || !colorType.includes('hsl')) {
-      console.error(
-        '[colorKit.getHslObject] is unable to parse the string into an `HSL` object. As a result, the color "black" will be returned instead.',
-      );
-      return { h: 0, s: 0, l: 0, a: 1 };
-    }
-
-    let matches: RegExpMatchArray | null = null;
-    const entry = COLORS_REGEX[colorType as 'hsl' | 'hsla'];
-    if (Array.isArray(entry)) {
-      for (let i = 0; i < entry.length; i++) {
-        if (entry[i].test(color)) matches = color.match(entry[i]);
-      }
-    } else {
-      matches = color.match(entry);
-    }
-
-    if (!matches || matches.length < 3) {
-      console.error(
-        '[colorKit.getHslObject] An error occurred while attempting to destructuring `HSL` values from the given string. As a result, the color "black" will be returned instead.',
-      );
-      return { h: 0, s: 0, l: 0, a: 1 };
-    }
-
-    const h = parseInt(matches[1], 10),
-      s = parseInt(matches[2], 10),
-      l = parseInt(matches[3], 10),
-      a = parseFloat(matches[4] ?? '1');
-
-    return {
-      h: clampHue(h),
-      s: clamp100(s),
-      l: clamp100(l),
-      a: clampAlpha(a),
-    };
-  };
-
-  /** Ensure that the `HSL` object values are within the correct range and that it has the alpha channel */
-  const normalize_HSL_object = (color: HslaT | HslT): HslaT => {
-    return {
-      h: clampHue(color.h),
-      s: clamp100(color.s),
-      l: clamp100(color.l),
-      a: clampAlpha((color as HslaT).a ?? 1),
-    };
-  };
-
   /** Convert `HSL` or `HSLA` color to an `RGBA` object representation */
-  const HSL_to_RGBA = (color: string | HslaT | HslT): RgbaT => {
-    const hsla = typeof color === 'string' ? HSL_string_to_object(color) : normalize_HSL_object(color);
-
-    const h = hsla.h / 360,
-      s = hsla.s / 100,
-      l = hsla.l / 100,
-      a = hsla.a;
+  const HSL_to_RGBA = (color: HslaT): RgbaT => {
+    const h = color.h / 360,
+      s = color.s / 100,
+      l = color.l / 100,
+      a = color.a;
 
     const q = l < 0.5 ? l * (1 + s) : l + s - l * s,
       p = 2 * l - q;
@@ -623,26 +543,18 @@ export const colorKitUI = () => {
   };
 
   /** Convert `HSL` or `HSLA` color to `HEX` color */
-  const HSL_to_HEX = (color: string | HslaT | HslT): string => {
-    const hsla = typeof color === 'string' ? HSL_string_to_object(color) : normalize_HSL_object(color);
-    const rgb = HSL_to_RGBA(hsla);
-
-    const r = numberToHexString(rgb.r),
-      g = numberToHexString(rgb.g),
-      b = numberToHexString(rgb.b),
-      a = rgb.a === 1 ? '' : numberToHexString(rgb.a * 255);
-
-    return `#${r + g + b + a}`;
+  const HSL_to_HEX = (color: HslaT, forceAlpha?: boolean): string => {
+    const rgb = HSL_to_RGBA(color);
+    return RGB_to_HEX(rgb, forceAlpha);
   };
 
   /** Convert `HSL` or `HSLA` color to an `HSVA` object representation */
-  const HSL_to_HSVA = (color: string | HslaT | HslT): HsvaT => {
-    const hsla = typeof color === 'string' ? HSL_string_to_object(color) : normalize_HSL_object(color);
-    const h = hsla.h;
+  const HSL_to_HSVA = (color: HslaT): HsvaT => {
+    const h = color.h;
 
-    const s = hsla.s / 100,
-      l = hsla.l / 100,
-      a = (hsla as HslaT).a ?? 1,
+    const s = color.s / 100,
+      l = color.l / 100,
+      a = (color as HslaT).a ?? 1,
       v = l + s * Math.min(l, 1 - l),
       sNew = v === 0 ? 0 : 2 - (2 * l) / v;
 
@@ -655,14 +567,9 @@ export const colorKitUI = () => {
   };
 
   /** Convert `HSL` or `HSLA` color to an `HWBA` object representation */
-  const HSL_to_HWBA = (color: string | HslaT | HslT): HwbaT => {
+  const HSL_to_HWBA = (color: HslaT): HwbaT => {
     const hsva = HSL_to_HSVA(color);
     return HSV_to_HWBA(hsva);
-  };
-
-  /** Convert `HSL` or `HSLA` color to an `HSLA` object representation */
-  const HSL_to_HSL = (color: string | HslaT | HslT): HslaT => {
-    return typeof color === 'string' ? HSL_string_to_object(color) : normalize_HSL_object(color);
   };
 
   /** Return the `HSL` color as a string, an array, or an object */
@@ -674,15 +581,8 @@ export const colorKitUI = () => {
         l = Math.round(l);
         a = +a.toFixed(2);
 
-        // auto
-        if (typeof forceAlpha === 'undefined') {
-          if (typeof a === 'number' && a !== 1) return `hsla(${h}, ${s}%, ${l}%, ${a})`;
-          return `hsl(${h}, ${s}%, ${l}%)`;
-        }
-
-        if (forceAlpha) return `hsla(${h}, ${s}%, ${l}%, ${a ?? 1})`;
-
-        return `hsl(${h}, ${s}%, ${l}%)`;
+        const hasAlpha = forceAlpha ?? a !== 1;
+        return hasAlpha ? `hsla(${h}, ${s}%, ${l}%, ${a ?? 1})` : `hsl(${h}, ${s}%, ${l}%)`;
       },
       array: (roundValues = true) => {
         if (roundValues) {
@@ -705,66 +605,12 @@ export const colorKitUI = () => {
   // #endregion
 
   // #region HWB
-  /** Parse `HWB` or `HWBA` color strong to an `object` */
-  const HWB_string_to_object = (color: string): HwbaT => {
-    color = color.trim().toLowerCase();
-    const colorType = detectColorFormat(color);
-
-    if (!colorType || !colorType.includes('hwb')) {
-      console.error(
-        '[colorKit.getHwbObject] is unable to parse the string into an `HWB` object. As a result, the color "black" will be returned instead.',
-      );
-      return { h: 0, w: 0, b: 0, a: 1 };
-    }
-
-    let matches: RegExpMatchArray | null = null;
-    const entry = COLORS_REGEX[colorType as 'hwb' | 'hwba'];
-    if (Array.isArray(entry)) {
-      for (let i = 0; i < entry.length; i++) {
-        if (entry[i].test(color)) matches = color.match(entry[i]);
-      }
-    } else {
-      matches = color.match(entry);
-    }
-
-    if (!matches || matches.length < 4) {
-      console.error(
-        '[colorKit.getHwbObject] An error occurred while attempting to destructuring `HWB` values from the given string. As a result, the color "black" will be returned instead.',
-      );
-      return { h: 0, w: 0, b: 0, a: 1 };
-    }
-
-    const h = parseInt(matches[1], 10),
-      w = parseInt(matches[2], 10),
-      b = parseInt(matches[3], 10),
-      a = parseFloat(matches[4] ?? '1');
-
-    return {
-      h: clampHue(h),
-      w: clamp100(w),
-      b: clamp100(b),
-      a: clampAlpha(a),
-    };
-  };
-
-  /** Ensure that the `HWB` object values are within the correct range and that it has the alpha channel */
-  const normalize_HWB_object = (color: HwbaT | HwbT): HwbaT => {
-    return {
-      h: clampHue(color.h),
-      w: clamp100(color.w),
-      b: clamp100(color.b),
-      a: clampAlpha((color as HwbaT).a ?? 1),
-    };
-  };
-
   /** Convert `HWB` or `HWBA` color to an `RGBA` object representation */
-  const HWB_to_RGBA = (color: HwbaT | HwbT | string): RgbaT => {
-    const hwba = typeof color === 'string' ? HWB_string_to_object(color) : normalize_HWB_object(color);
-
-    const h = hwba.h / 360,
-      w = hwba.w / 100,
-      b = hwba.b / 100,
-      a = hwba.a;
+  const HWB_to_RGBA = (color: HwbaT): RgbaT => {
+    const h = color.h / 360,
+      w = color.w / 100,
+      b = color.b / 100,
+      a = color.a;
 
     if (w + b >= 1) {
       const gray = clampRGB((w * 255) / (w + b));
@@ -789,19 +635,17 @@ export const colorKitUI = () => {
   };
 
   /** Convert `HWB` or `HWBA` color to an `Hex` color */
-  const HWB_to_HEX = (color: HwbaT | HwbT | string): string => {
+  const HWB_to_HEX = (color: HwbaT, forceAlpha?: boolean): string => {
     const rgba = HWB_to_RGBA(color);
-    return RGB_to_HEX(rgba);
+    return RGB_to_HEX(rgba, forceAlpha);
   };
 
   /** Convert `HWB` or `HWBA` color to an `HSVA` object representation */
-  function HWB_to_HSVA(color: HwbaT | HwbT | string): HsvaT {
-    const hwba = typeof color === 'string' ? HWB_string_to_object(color) : normalize_HWB_object(color);
-
-    const h = hwba.h % 360,
-      w = hwba.w / 100,
-      b = hwba.b / 100,
-      a = hwba.a;
+  function HWB_to_HSVA(color: HwbaT): HsvaT {
+    const h = color.h % 360,
+      w = color.w / 100,
+      b = color.b / 100,
+      a = color.a;
 
     const v = (1 - b) * 100;
     let s = (1 - w / (v / 100)) * 100;
@@ -816,14 +660,9 @@ export const colorKitUI = () => {
   }
 
   /** Convert `HWB` or `HWBA` color to an `HSLA` object representation */
-  const HWB_to_HSLA = (color: HwbaT | HwbT | string): HslaT => {
+  const HWB_to_HSLA = (color: HwbaT): HslaT => {
     const hsva = HWB_to_HSVA(color);
     return HSV_to_HSLA(hsva);
-  };
-
-  /** Convert `HWB` or `HWBA` color to an `HWBA` object representation */
-  const HWB_to_HWB = (color: HwbaT | HwbT | string): HwbaT => {
-    return typeof color === 'string' ? HWB_string_to_object(color) : normalize_HWB_object(color);
   };
 
   /** Return the `HWB` color as a string, an array, or an object */
@@ -835,15 +674,8 @@ export const colorKitUI = () => {
         b = Math.round(b);
         a = +a.toFixed(2);
 
-        // auto
-        if (typeof forceAlpha === 'undefined') {
-          if (typeof a === 'number' && a !== 1) return `hwb(${h} ${w}% ${b}% / ${a})`;
-          return `hwb(${h}, ${w}%, ${b}%)`;
-        }
-
-        if (forceAlpha) return `hwb(${h} ${w}% ${b}% / ${a ?? 1})`;
-
-        return `hwb(${h} ${w}% ${b}%)`;
+        const hasAlpha = forceAlpha ?? a !== 1;
+        return hasAlpha ? `hwb(${h}, ${w}%, ${b}% / ${a ?? 1})` : `hwb(${h}, ${w}%, ${b}%)`;
       },
       array: (roundValues = true) => {
         if (roundValues) {
@@ -866,66 +698,12 @@ export const colorKitUI = () => {
   // #endregion
 
   // #region HSV
-  /** Parse `HSV` or `HSVA` color string to an `object` */
-  const HSV_string_to_object = (color: string): HsvaT => {
-    color = color.trim().toLowerCase();
-    const colorType = detectColorFormat(color);
-
-    if (!colorType || !colorType.includes('hsv')) {
-      console.error(
-        '[colorKit.getHsvObject] is unable to parse the string into an `HSV` object. As a result, the color "black" will be returned instead.',
-      );
-      return { h: 0, s: 0, v: 0, a: 1 };
-    }
-
-    let matches: RegExpMatchArray | null = null;
-    const entry = COLORS_REGEX[colorType as 'hsv' | 'hsva'];
-    if (Array.isArray(entry)) {
-      for (let i = 0; i < entry.length; i++) {
-        if (entry[i].test(color)) matches = color.match(entry[i]);
-      }
-    } else {
-      matches = color.match(entry);
-    }
-
-    if (!matches || matches.length < 4) {
-      console.error(
-        '[colorKit.getHsvObject] An error occurred while attempting to destructuring `HSV` values from the given string. As a result, the color "black" will be returned instead.',
-      );
-      return { h: 0, s: 0, v: 0, a: 1 };
-    }
-
-    const h = parseInt(matches[1], 10),
-      s = parseInt(matches[2], 10),
-      v = parseInt(matches[3], 10),
-      a = parseFloat(matches[4] ?? '1');
-
-    return {
-      h: clampHue(h),
-      s: clamp100(s),
-      v: clamp100(v),
-      a: clampAlpha(a),
-    };
-  };
-
-  /** Ensure that the `HSV` object values are within the correct range and that it has the alpha channel */
-  const normalize_HSV_object = (color: HsvaT | HsvT): HsvaT => {
-    return {
-      h: clampHue(color.h),
-      s: clamp100(color.s),
-      v: clamp100(color.v),
-      a: clampAlpha((color as HsvaT).a ?? 1),
-    };
-  };
-
   /** Convert `HSV` color to an `RGBA` object representation */
-  const HSV_to_RGBA = (color: HsvaT | HsvT | string): RgbaT => {
-    const hsva = typeof color === 'string' ? HSV_string_to_object(color) : normalize_HSV_object(color);
-
-    const h = hsva.h / 360,
-      s = hsva.s / 100,
-      v = hsva.v / 100,
-      a = hsva.a;
+  const HSV_to_RGBA = (color: HsvaT): RgbaT => {
+    const h = color.h / 360,
+      s = color.s / 100,
+      v = color.v / 100,
+      a = color.a;
 
     const i = Math.floor(h * 6),
       f = h * 6 - i,
@@ -972,13 +750,11 @@ export const colorKitUI = () => {
   };
 
   /** Convert `HSV` color to an `HSLA` object representation */
-  const HSV_to_HSLA = (color: HsvaT | HsvT | string): HslaT => {
-    const hsva = typeof color === 'string' ? HSV_string_to_object(color) : normalize_HSV_object(color);
-
-    const h = hsva.h,
-      s = hsva.s / 100,
-      v = hsva.v / 100,
-      a = hsva.a;
+  const HSV_to_HSLA = (color: HsvaT): HslaT => {
+    const h = color.h,
+      s = color.s / 100,
+      v = color.v / 100,
+      a = color.a;
 
     const l = ((2 - s) * v) / 2,
       sl = s * v,
@@ -993,16 +769,13 @@ export const colorKitUI = () => {
   };
 
   /** Convert `HSV` color to an `Hex` color */
-  const HSV_to_HEX = (color: HsvaT | HsvT | string): string => {
+  const HSV_to_HEX = (color: HsvaT, forceAlpha?: boolean): string => {
     const rgba = HSV_to_RGBA(color);
-    const hex = RGB_to_HEX(rgba);
-    return hex;
+    return RGB_to_HEX(rgba, forceAlpha);
   };
 
   /** Convert `HSV` color to an `HWBA` object representation */
-  const HSV_to_HWBA = (color: HsvaT | HsvT | string): HwbaT => {
-    const { h, s, v, a } = typeof color === 'string' ? HSV_string_to_object(color) : normalize_HSV_object(color);
-
+  const HSV_to_HWBA = ({ h, s, v, a }: HsvaT): HwbaT => {
     const w = (1 - s / 100) * v,
       b = (1 - v / 100) * 100;
 
@@ -1014,11 +787,6 @@ export const colorKitUI = () => {
     };
   };
 
-  /** Convert `HSV` color to an `HSVA` object representation */
-  const HSV_to_HSV = (color: HsvaT | HsvT | string): HsvaT => {
-    return typeof color === 'string' ? HSV_string_to_object(color) : normalize_HSV_object(color);
-  };
-
   /** Return the `HSV` color as a string, an array, or an object */
   const HSV_types = ({ h, s, v, a }: HsvaT): ColorTypes<HsvaT> => {
     return {
@@ -1028,15 +796,8 @@ export const colorKitUI = () => {
         v = Math.round(v);
         a = +a.toFixed(2);
 
-        // auto
-        if (typeof forceAlpha === 'undefined') {
-          if (typeof a === 'number' && a !== 1) return `hsva(${h}, ${s}%, ${v}%, ${a})`;
-          return `hsv(${h}, ${s}%, ${v}%)`;
-        }
-
-        if (forceAlpha) return `hsva(${h}, ${s}%, ${v}%, ${a ?? 1})`;
-
-        return `hsv(${h}, ${s}%, ${v}%)`;
+        const hasAlpha = forceAlpha ?? a !== 1;
+        return hasAlpha ? `hsva(${h}, ${s}%, ${v}%, ${a ?? 1})` : `hsv(${h}, ${s}%, ${v}%)`;
       },
       array: (roundValues = true) => {
         if (roundValues) {
@@ -1058,396 +819,269 @@ export const colorKitUI = () => {
   };
   // #endregion
 
-  // #region HEX
-  /** Convert any `HEX` color to 8-digit `HEX` color (#rrggbbaa) */
-  const normalize_HEX = (color: string | number): string => {
-    if (typeof color === 'number') {
-      return '#' + color.toString(16).padStart(8, '0');
-    }
-
-    color = color.trim().toLowerCase();
-    const colorType = detectColorFormat(color);
-
-    if (!colorType || !colorType.includes('hex')) {
-      console.error(
-        '[colorKit.normalizeHexColor] is unable to normalize the `HEX` string provided. As a result, the color "black" will be returned instead.',
-      );
-      return '#000000ff';
-    }
-
-    const hex = color.replace(/^#/, '').split('');
-
-    if (hex.length === 3) return `#${hex.map(x => x + x).join('')}ff`;
-    if (hex.length === 4) return `#${hex.map(x => x + x).join('')}`;
-    if (hex.length === 6) return `#${hex.join('')}ff`;
-
-    return color;
-  };
-
-  /** Convert any `HEX` color to an `RGBA` object representation */
-  const HEX_to_RGBA = (color: string | number): RgbaT => {
-    const hex = normalize_HEX(color);
-
-    let matches: RegExpMatchArray | null = null;
-    const entry = COLORS_REGEX.hex8;
-    if (Array.isArray(entry)) {
-      for (let i = 0; i < entry.length; i++) {
-        if (entry[i].test(hex)) matches = hex.match(entry[i]);
-      }
-    } else {
-      matches = hex.match(entry);
-    }
-
-    if (!matches || matches.length < 4) {
-      console.error(
-        '[colorKit.HEX_RGBA] An error occurred while attempting to destructuring `HEX` values from the given string. As a result, the color "black" will be returned instead.',
-      );
-      return { r: 0, g: 0, b: 0, a: 1 };
-    }
-
-    const r = parseInt(matches[1], 16),
-      g = parseInt(matches[2], 16),
-      b = parseInt(matches[3], 16),
-      a = parseInt(matches[4], 16) / 255;
-
-    return {
-      r: clampRGB(r),
-      g: clampRGB(g),
-      b: clampRGB(b),
-      a: clampAlpha(a),
-    };
-  };
-
-  /** Convert any `HEX` color to an `HSVA` object representation */
-  const HEX_to_HSVA = (color: string | number): HsvaT => {
-    const rgb = HEX_to_RGBA(color);
-    const hsva = RGB_to_HSVA(rgb);
-    return hsva;
-  };
-
-  /** Convert any `HEX` color to an `HSLA` object representation */
-  const HEX_to_HSLA = (color: string): HslaT => {
-    const rgb = HEX_to_RGBA(color);
-    return RGB_to_HSLA(rgb);
-  };
-
-  /** Convert any `HEX` color to an `HWBA` object representation */
-  const HEX_to_HWBA = (color: string): HwbaT => {
-    const rgba = HEX_to_RGBA(color);
-    return RGB_to_HWBA(rgba);
-  };
-  // #endregion
-
   // #region Color conversions
   /** Convert `HSL`, `HSV`, `HWB`, or `RGB` color to the `HEX` color format. */
-  const HEX = (color: SupportedColorFormats): string => {
-    // named color
-    if (typeof color === 'string') {
-      color = color.trim().toLowerCase();
+  const HEX = (color: SupportedColorFormats, forceAlpha?: boolean): string => {
+    const parsed = parse(color);
+    if (!parsed) {
+      console.error(
+        '[colorKit.HEX] An error occurred while attempting to convert the provided parameter into an `HEX` color. As a result, the default color "black" will be used instead.',
+      );
 
-      if (NAMED_COLORS.hasOwnProperty(color)) {
-        color = NAMED_COLORS[color as keyof typeof NAMED_COLORS] as string;
-      }
+      return '#000000';
     }
 
-    const colorType = detectColorFormat(color);
+    const format = parsed.format;
+    parsed.value = clampColorObject(parsed.value);
 
     // RGB to HEX
-    if (colorType === 'rgb' || colorType === 'rgba') {
-      return RGB_to_HEX(color as string | RgbT | RgbaT);
+    if (format === 'rgb' || format === 'rgba') {
+      const value = forceColorObjectAlpha(parsed.value);
+      return RGB_to_HEX(value, forceAlpha);
     }
 
     // HSL to HEX
-    if (colorType === 'hsl' || colorType === 'hsla') {
-      return HSL_to_HEX(color as string | HslaT | HslT);
+    if (format === 'hsl' || format === 'hsla') {
+      const value = forceColorObjectAlpha(parsed.value);
+      return HSL_to_HEX(value, forceAlpha);
     }
 
     // HSV to HEX
-    if (colorType === 'hsv' || colorType === 'hsva') {
-      return HSV_to_HEX(color as string | HsvaT | HsvT);
+    if (format === 'hsv' || format === 'hsva') {
+      const value = forceColorObjectAlpha(parsed.value);
+      return HSV_to_HEX(value, forceAlpha);
     }
 
     // HWB to HEX
-    if (colorType === 'hwb' || colorType === 'hwba') {
-      return HWB_to_HEX(color as string | HwbaT | HwbT);
+    if (format === 'hwb' || format === 'hwba') {
+      const value = forceColorObjectAlpha(parsed.value);
+      return HWB_to_HEX(value, forceAlpha);
     }
 
     // HEX
-    if (colorType?.includes('hex')) {
-      return normalize_HEX(color as string | number);
+    if (format === 'hex3' || format === 'hex4' || format === 'hex6' || format === 'hex8' || format === 'named') {
+      const value = forceColorObjectAlpha(parsed.value);
+      return RGB_to_HEX(value, forceAlpha);
     }
 
-    // ! error
-    console.error(
-      '[colorKit.HEX] An error occurred while attempting to convert the provided parameter into an `HEX` color. As a result, the default color "black" will be used instead.',
-    );
-
-    return '#000000';
+    const _: never = format;
+    return _;
   };
 
   /** Convert `HSL`, `HSV`, `HWB`, or `HEX` color to the `RGB` color format. */
   const RGB = (color: SupportedColorFormats): ColorTypes<RgbaT> => {
-    // named color
-    if (typeof color === 'string') {
-      color = color.trim().toLowerCase();
+    const parsed = parse(color);
+    if (!parsed) {
+      console.error(
+        '[colorKit.RGB] An error occurred while attempting to convert the provided parameter into an `RGB` color. As a result, the default color "black" will be used instead.',
+      );
 
-      if (NAMED_COLORS.hasOwnProperty(color)) {
-        color = NAMED_COLORS[color as keyof typeof NAMED_COLORS] as string;
-      }
+      return RGB_types({ r: 0, g: 0, b: 0, a: 1 });
     }
 
-    const colorType = detectColorFormat(color);
+    const format = parsed.format;
+    parsed.value = clampColorObject(parsed.value);
 
     // HEX to RGB
-    if (colorType?.includes('hex')) {
-      const rgb = HEX_to_RGBA(color as string | number);
-      return RGB_types(rgb);
+    if (format === 'hex3' || format === 'hex4' || format === 'hex6' || format === 'hex8' || format === 'named') {
+      const value = forceColorObjectAlpha(parsed.value);
+      return RGB_types(value);
     }
 
     // HSL to RGB
-    if (colorType === 'hsl' || colorType === 'hsla') {
-      const rgb = HSL_to_RGBA(color as string | HslaT | HslT);
+    if (format === 'hsl' || format === 'hsla') {
+      const value = forceColorObjectAlpha(parsed.value);
+      const rgb = HSL_to_RGBA(value);
       return RGB_types(rgb);
     }
 
     // HSV to RGB
-    if (colorType === 'hsv' || colorType === 'hsva') {
-      const rgb = HSV_to_RGBA(color as string | HsvaT | HsvT);
+    if (format === 'hsv' || format === 'hsva') {
+      const value = forceColorObjectAlpha(parsed.value);
+      const rgb = HSV_to_RGBA(value);
       return RGB_types(rgb);
     }
 
     // HWB to RGB
-    if (colorType === 'hwb' || colorType === 'hwba') {
-      const rgb = HWB_to_RGBA(color as string | HwbaT | HwbT);
+    if (format === 'hwb' || format === 'hwba') {
+      const value = forceColorObjectAlpha(parsed.value);
+      const rgb = HWB_to_RGBA(value);
       return RGB_types(rgb);
     }
 
     // RGB to normalized RGB
-    if (colorType === 'rgb' || colorType === 'rgba') {
-      const rgba = RGB_to_RGB(color as string | RgbaT | RgbT);
-      return RGB_types(rgba);
+    if (format === 'rgb' || format === 'rgba') {
+      const value = forceColorObjectAlpha(parsed.value);
+      return RGB_types(value);
     }
 
-    // ! error
-    console.error(
-      '[colorKit.RGB] An error occurred while attempting to convert the provided parameter into an `RGB` color. As a result, the default color "black" will be used instead.',
-    );
-
-    return RGB_types({ r: 0, g: 0, b: 0, a: 1 });
+    const _: never = format;
+    return _;
   };
 
   /** Convert `HEX`, `HSV`, `HWB`, or `RGB` color to the `HSL` color format. */
   const HSL = (color: SupportedColorFormats): ColorTypes<HslaT> => {
-    // named color
-    if (typeof color === 'string') {
-      color = color.trim().toLowerCase();
+    const parsed = parse(color);
+    if (!parsed) {
+      console.error(
+        '[colorKit.HSL] An error occurred while attempting to convert the provided parameter into an `HSL` color. As a result, the default color "black" will be used instead.',
+      );
 
-      if (NAMED_COLORS.hasOwnProperty(color)) {
-        color = NAMED_COLORS[color as keyof typeof NAMED_COLORS] as string;
-      }
+      return HSL_types({ h: 0, s: 0, l: 0, a: 1 });
     }
 
-    const colorType = detectColorFormat(color);
+    const format = parsed.format;
+    parsed.value = clampColorObject(parsed.value);
 
     // HEX to HSL
-    if (colorType?.includes('hex')) {
-      const hsla = HEX_to_HSLA(color as string);
+    if (format === 'hex3' || format === 'hex4' || format === 'hex6' || format === 'hex8' || format === 'named') {
+      const value = forceColorObjectAlpha(parsed.value);
+      const hsla = RGB_to_HSLA(value);
       return HSL_types(hsla);
     }
 
     // RGB to HSL
-    if (colorType === 'rgb' || colorType === 'rgba') {
-      const hsla = RGB_to_HSLA(color as string | RgbaT | RgbT);
+    if (format === 'rgb' || format === 'rgba') {
+      const value = forceColorObjectAlpha(parsed.value);
+      const hsla = RGB_to_HSLA(value);
       return HSL_types(hsla);
     }
 
     // HSV to HSL
-    if (colorType === 'hsv' || colorType === 'hsva') {
-      const hsla = HSV_to_HSLA(color as string | HsvaT | HsvT);
+    if (format === 'hsv' || format === 'hsva') {
+      const value = forceColorObjectAlpha(parsed.value);
+      const hsla = HSV_to_HSLA(value);
       return HSL_types(hsla);
     }
 
     // HWB to HSL
-    if (colorType === 'hwb' || colorType === 'hwba') {
-      const hsla = HWB_to_HSLA(color as string | HwbaT | HwbT);
+    if (format === 'hwb' || format === 'hwba') {
+      const value = forceColorObjectAlpha(parsed.value);
+      const hsla = HWB_to_HSLA(value);
       return HSL_types(hsla);
     }
 
     // HSL to normalized HSL
-    if (colorType === 'hsl' || colorType === 'hsla') {
-      const hsla = HSL_to_HSL(color as string | HslaT | HslT);
-      return HSL_types(hsla);
+    if (format === 'hsl' || format === 'hsla') {
+      const value = forceColorObjectAlpha(parsed.value);
+      return HSL_types(value);
     }
 
-    // ! error
-    console.error(
-      '[colorKit.HSL] An error occurred while attempting to convert the provided parameter into an `HSL` color. As a result, the default color "black" will be used instead.',
-    );
-
-    return HSL_types({ h: 0, s: 0, l: 0, a: 1 });
+    const _: never = format;
+    return _;
   };
 
   /** Convert `HSL`, `HEX`, `HSV`, or `RGB` color to the `HWB` color format. */
   const HWB = (color: SupportedColorFormats): ColorTypes<HwbaT> => {
-    // named color
-    if (typeof color === 'string') {
-      color = color.trim().toLowerCase();
+    const parsed = parse(color);
+    if (!parsed) {
+      console.error(
+        '[colorKit.HWB] An error occurred while attempting to convert the provided parameter into an `HWB` color. As a result, the default color "black" will be used instead.',
+      );
 
-      if (NAMED_COLORS.hasOwnProperty(color)) {
-        color = NAMED_COLORS[color as keyof typeof NAMED_COLORS] as string;
-      }
+      return HWB_types({ h: 0, w: 0, b: 100, a: 1 });
     }
 
-    const colorType = detectColorFormat(color);
+    const format = parsed.format;
+    parsed.value = clampColorObject(parsed.value);
 
     // HEX to HWB
-    if (colorType?.includes('hex')) {
-      const hwba = HEX_to_HWBA(color as string);
+    if (format === 'hex3' || format === 'hex4' || format === 'hex6' || format === 'hex8' || format === 'named') {
+      const value = forceColorObjectAlpha(parsed.value);
+      const hwba = RGB_to_HWBA(value);
       return HWB_types(hwba);
     }
 
     // RGB to HWB
-    if (colorType === 'rgb' || colorType === 'rgba') {
-      const hwba = RGB_to_HWBA(color as string | RgbaT | RgbT);
+    if (format === 'rgb' || format === 'rgba') {
+      const value = forceColorObjectAlpha(parsed.value);
+      const hwba = RGB_to_HWBA(value);
       return HWB_types(hwba);
     }
 
     // HSL to HWB
-    if (colorType === 'hsl' || colorType === 'hsla') {
-      const hwba = HSL_to_HWBA(color as string | HslaT | HslT);
+    if (format === 'hsl' || format === 'hsla') {
+      const value = forceColorObjectAlpha(parsed.value);
+      const hwba = HSL_to_HWBA(value);
       return HWB_types(hwba);
     }
 
     // HSV to HWB
-    if (colorType === 'hsv' || colorType === 'hsva') {
-      const hwba = HSV_to_HWBA(color as string | HsvaT | HsvT);
+    if (format === 'hsv' || format === 'hsva') {
+      const value = forceColorObjectAlpha(parsed.value);
+      const hwba = HSV_to_HWBA(value);
       return HWB_types(hwba);
     }
 
     // HWB to normalized HWB
-    if (colorType === 'hwb' || colorType === 'hwba') {
-      const hwba = HWB_to_HWB(color as string | HwbaT | HwbT);
-      return HWB_types(hwba);
+    if (format === 'hwb' || format === 'hwba') {
+      const value = forceColorObjectAlpha(parsed.value);
+      return HWB_types(value);
     }
 
-    // ! error
-    console.error(
-      '[colorKit.HWB] An error occurred while attempting to convert the provided parameter into an `HWB` color. As a result, the default color "black" will be used instead.',
-    );
-
-    return HWB_types({ h: 0, w: 0, b: 100, a: 1 });
+    const _: never = format;
+    return _;
   };
 
   /** Convert `HSL`, `HEX`, `HWB`, or `RGB` color to the `HSV` color format. */
   const HSV = (color: SupportedColorFormats): ColorTypes<HsvaT> => {
-    // named color
-    if (typeof color === 'string') {
-      color = color.trim().toLowerCase();
+    const parsed = parse(color);
+    if (!parsed) {
+      console.error(
+        '[colorKit.HSV] An error occurred while attempting to convert the provided parameter into an `HSV` color. As a result, the default color "black" will be used instead.',
+      );
 
-      if (NAMED_COLORS.hasOwnProperty(color)) {
-        color = NAMED_COLORS[color as keyof typeof NAMED_COLORS] as string;
-      }
+      return HSV_types({ h: 0, s: 0, v: 0, a: 1 });
     }
 
-    const colorType = detectColorFormat(color);
+    const format = parsed.format;
+    parsed.value = clampColorObject(parsed.value);
 
     // HEX to HSV
-    if (colorType?.includes('hex')) {
-      const hsva = HEX_to_HSVA(color as string);
+    if (format === 'hex3' || format === 'hex4' || format === 'hex6' || format === 'hex8' || format === 'named') {
+      const value = forceColorObjectAlpha(parsed.value);
+      const hsva = RGB_to_HSVA(value);
       return HSV_types(hsva);
     }
 
     // RGB to HSV
-    if (colorType === 'rgb' || colorType === 'rgba') {
-      const hsva = RGB_to_HSVA(color as string | RgbaT | RgbT);
+    if (format === 'rgb' || format === 'rgba') {
+      const value = forceColorObjectAlpha(parsed.value);
+      const hsva = RGB_to_HSVA(value);
       return HSV_types(hsva);
     }
 
     // HSL to HSV
-    if (colorType === 'hsl' || colorType === 'hsla') {
-      const hsva = HSL_to_HSVA(color as string | HslaT | HslT);
+    if (format === 'hsl' || format === 'hsla') {
+      const value = forceColorObjectAlpha(parsed.value);
+      const hsva = HSL_to_HSVA(value);
       return HSV_types(hsva);
     }
 
     // HWB to HSV
-    if (colorType === 'hwb' || colorType === 'hwba') {
-      const hsva = HWB_to_HSVA(color as string | HwbaT | HwbT);
+    if (format === 'hwb' || format === 'hwba') {
+      const value = forceColorObjectAlpha(parsed.value);
+      const hsva = HWB_to_HSVA(value);
       return HSV_types(hsva);
     }
 
     // HSV to normalized HSV
-    if (colorType === 'hsv' || colorType === 'hsva') {
-      const hsva = HSV_to_HSV(color as string | HsvaT | HsvT);
-      return HSV_types(hsva);
+    if (format === 'hsv' || format === 'hsva') {
+      const value = forceColorObjectAlpha(parsed.value);
+      return HSV_types(value);
     }
 
-    // ! error
-    console.error(
-      '[colorKit.HSV] An error occurred while attempting to convert the provided parameter into an `HSV` color. As a result, the default color "black" will be used instead.',
-    );
-
-    return HSV_types({ h: 0, s: 0, v: 0, a: 1 });
+    const _: never = format;
+    return _;
   };
   // #endregion
 
   // #region Color Information
   /** Identify the color format of a given `string` or `object`, and return `null` for invalid colors. */
   const getFormat = (color: SupportedColorFormats): ColorFormats | 'named' | null => {
-    // color int
-    if (typeof color === 'number') {
-      if (color >>> 0 === color && color >= 0 && color <= 0xffffffff) return 'hex8';
-      return null;
-    }
-
-    // color string
-    if (typeof color === 'string') {
-      color = color.trim().toLowerCase();
-      if (NAMED_COLORS.hasOwnProperty(color)) return 'named';
-
-      for (const key in COLORS_REGEX) {
-        const format = key as ColorFormats;
-        const entry = COLORS_REGEX[format];
-        if (Array.isArray(entry)) {
-          for (let i = 0; i < entry.length; i++) if (entry[i].test(color)) return format;
-          continue;
-        }
-        if (entry.test(color)) return format;
-      }
-    }
-
-    // color object
-    if (typeof color === 'object') {
-      const rgbaKeys = ['r', 'g', 'b', 'a'] as (keyof RgbaT)[];
-      const isRgbaOb = rgbaKeys.every(k => color.hasOwnProperty(k) && typeof (color as RgbaT)[k] === 'number');
-      if (isRgbaOb) return 'rgba';
-
-      const rgbKeys = ['r', 'g', 'b'] as (keyof RgbT)[];
-      const isRgbOb = rgbKeys.every(k => color.hasOwnProperty(k) && typeof (color as RgbT)[k] === 'number');
-      if (isRgbOb) return 'rgb';
-
-      const hslaKeys = ['h', 's', 'l', 'a'] as (keyof HslaT)[];
-      const isHslaOb = hslaKeys.every(k => color.hasOwnProperty(k) && typeof (color as HslaT)[k] === 'number');
-      if (isHslaOb) return 'hsla';
-
-      const hslKeys = ['h', 's', 'l'] as (keyof HslT)[];
-      const isHslOb = hslKeys.every(k => color.hasOwnProperty(k) && typeof (color as HslT)[k] === 'number');
-      if (isHslOb) return 'hsl';
-
-      const hsvaKeys = ['h', 's', 'v', 'a'] as (keyof HsvaT)[];
-      const isHsvaOb = hsvaKeys.every(k => color.hasOwnProperty(k) && typeof (color as HsvaT)[k] === 'number');
-      if (isHsvaOb) return 'hsva';
-
-      const hsvKeys = ['h', 's', 'v'] as (keyof HsvT)[];
-      const isHsvOb = hsvKeys.every(k => color.hasOwnProperty(k) && typeof (color as HsvT)[k] === 'number');
-      if (isHsvOb) return 'hsv';
-
-      const hwbaKeys = ['h', 'w', 'b', 'a'] as (keyof HwbaT)[];
-      const isHwbaOb = hwbaKeys.every(k => color.hasOwnProperty(k) && typeof (color as HwbaT)[k] === 'number');
-      if (isHwbaOb) return 'hwba';
-
-      const hwbKeys = ['h', 'w', 'b'] as (keyof HwbT)[];
-      const isHwbOb = hwbKeys.every(k => color.hasOwnProperty(k) && typeof (color as HwbT)[k] === 'number');
-      if (isHwbOb) return 'hwb';
+    const parsed = parse(color);
+    if (parsed) {
+      return parsed.format;
     }
 
     return null;
@@ -1908,6 +1542,157 @@ export const colorKitUI = () => {
 
   // #region Color Utilities
   /**
+   * Parses any supported color format into a typed `{ format, value }` result.
+   *
+   * Accepts color strings (`"#fff"`, `"rgb(255,0,0)"`), color objects (`{ r, g, b }`), named colors (`"red"`), and integer colors
+   * (`0xff0000ff`).
+   *
+   * Returns `undefined` if the input cannot be recognized as a valid color.
+   */
+  const parse = (color: SupportedColorFormats): ColorParseResult | undefined => {
+    // Color int
+    if (typeof color === 'number') {
+      if (color >>> 0 === color && color >= 0 && color <= 0xffffffff) {
+        const hex = '#' + color.toString(16).padStart(8, '0');
+        const matches = matchHexRegex(hex, COLORS_REGEX.hex8);
+        if (matches) {
+          return { format: 'hex8', value: { r: matches[0], g: matches[1], b: matches[2], a: matches[3] } };
+        }
+      }
+      return;
+    }
+
+    if (typeof color === 'string') {
+      color = color.trim().toLowerCase();
+
+      // Named
+      if (NAMED_COLORS.hasOwnProperty(color)) {
+        const matches = matchHexRegex(NAMED_COLORS[color as keyof typeof NAMED_COLORS], COLORS_REGEX.hex6);
+        if (matches) {
+          return { format: 'named', value: { r: matches[0], g: matches[1], b: matches[2] } };
+        }
+      }
+
+      for (const key in COLORS_REGEX) {
+        const format = key as keyof typeof COLORS_REGEX;
+
+        if (format === 'hex3' || format === 'hex6') {
+          const matches = matchHexRegex(color, COLORS_REGEX[format]);
+          if (matches) {
+            return { format, value: { r: matches[0], g: matches[1], b: matches[2] } };
+          }
+        }
+
+        if (format === 'hex4' || format === 'hex8') {
+          const matches = matchHexRegex(color, COLORS_REGEX[format]);
+          if (matches) {
+            return { format, value: { r: matches[0], g: matches[1], b: matches[2], a: matches[3] } };
+          }
+        }
+
+        if (format === 'rgb') {
+          const matches = matchColorRegex(color, COLORS_REGEX[format]);
+          if (matches) {
+            return { format, value: { r: matches[0], g: matches[1], b: matches[2] } };
+          }
+        }
+
+        if (format === 'rgba') {
+          const matches = matchColorRegex(color, COLORS_REGEX[format]);
+          if (matches) {
+            return { format, value: { r: matches[0], g: matches[1], b: matches[2], a: matches[3] } };
+          }
+        }
+
+        if (format === 'hsl') {
+          const matches = matchColorRegex(color, COLORS_REGEX[format]);
+          if (matches) {
+            return { format, value: { h: matches[0], s: matches[1], l: matches[2] } };
+          }
+        }
+
+        if (format === 'hsla') {
+          const matches = matchColorRegex(color, COLORS_REGEX[format]);
+          if (matches) {
+            return { format, value: { h: matches[0], s: matches[1], l: matches[2], a: matches[3] } };
+          }
+        }
+
+        if (format === 'hsv') {
+          const matches = matchColorRegex(color, COLORS_REGEX[format]);
+          if (matches) {
+            return { format, value: { h: matches[0], s: matches[1], v: matches[2] } };
+          }
+        }
+
+        if (format === 'hsva') {
+          const matches = matchColorRegex(color, COLORS_REGEX[format]);
+          if (matches) {
+            return { format, value: { h: matches[0], s: matches[1], v: matches[2], a: matches[3] } };
+          }
+        }
+
+        if (format === 'hwb') {
+          const matches = matchColorRegex(color, COLORS_REGEX[format]);
+          if (matches) {
+            return { format, value: { h: matches[0], w: matches[1], b: matches[2] } };
+          }
+        }
+
+        if (format === 'hwba') {
+          const matches = matchColorRegex(color, COLORS_REGEX[format]);
+          if (matches) {
+            return { format, value: { h: matches[0], w: matches[1], b: matches[2], a: matches[3] } };
+          }
+        }
+      }
+
+      return;
+    }
+
+    // Color object
+    const rgbaKeys: (keyof RgbaT)[] = ['r', 'g', 'b', 'a'];
+    if (isColorObject(color, rgbaKeys)) {
+      return { format: 'rgba', value: color };
+    }
+
+    const rgbKeys: (keyof RgbT)[] = ['r', 'g', 'b'];
+    if (isColorObject(color, rgbKeys)) {
+      return { format: 'rgb', value: color };
+    }
+
+    const hslaKeys: (keyof HslaT)[] = ['h', 's', 'l', 'a'];
+    if (isColorObject(color, hslaKeys)) {
+      return { format: 'hsla', value: color };
+    }
+
+    const hslKeys: (keyof HslT)[] = ['h', 's', 'l'];
+    if (isColorObject(color, hslKeys)) {
+      return { format: 'hsl', value: color };
+    }
+
+    const hsvaKeys: (keyof HsvaT)[] = ['h', 's', 'v', 'a'];
+    if (isColorObject(color, hsvaKeys)) {
+      return { format: 'hsva', value: color };
+    }
+
+    const hsvKeys: (keyof HsvT)[] = ['h', 's', 'v'];
+    if (isColorObject(color, hsvKeys)) {
+      return { format: 'hsv', value: color };
+    }
+
+    const hwbaKeys: (keyof HwbaT)[] = ['h', 'w', 'b', 'a'];
+    if (isColorObject(color, hwbaKeys)) {
+      return { format: 'hwba', value: color };
+    }
+
+    const hwbKeys: (keyof HwbT)[] = ['h', 'w', 'b'];
+    if (isColorObject(color, hwbKeys)) {
+      return { format: 'hwb', value: color };
+    }
+  };
+
+  /**
    * Blends two colors by a certain amount.
    *
    * @example
@@ -2041,6 +1826,7 @@ export const colorKitUI = () => {
     HSL,
     HWB,
     HSV,
+
     // color information
     getFormat,
     getRed,
@@ -2091,6 +1877,7 @@ export const colorKitUI = () => {
     decreaseBrightness,
 
     // color utilities
+    parse,
     blend,
     invert,
     grayscale,

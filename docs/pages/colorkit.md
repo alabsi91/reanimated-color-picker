@@ -132,7 +132,7 @@ Convert any of the [supported color](#supported-colors) formats into the `HEX` f
 #### Syntax
 
 ```ts
-colorKit.HEX(color: SupportedColorFormats): string;
+colorKit.HEX(color: SupportedColorFormats, forceAlpha?: boolean): string;
 ```
 
 #### Example
@@ -565,6 +565,24 @@ Increase the `alpha` value of a color by the given percentage/amount.
 Decrease the `alpha` value of a color by the given percentage/amount.
 
 ## Color Utilities
+
+### `parse`
+
+Parse any supported color format into a typed `{ format, value }` object. Returns `undefined` if the input is invalid.
+
+```ts
+colorKit.parse("#ff0000");
+// → { format: 'hex6', value: { r: 255, g: 0, b: 0 } }
+
+colorKit.parse("hsl(120, 100%, 50%)");
+// → { format: 'hsl', value: { h: 120, s: 100, l: 50 } }
+
+colorKit.parse({ r: 255, g: 0, b: 0, a: 0.5 });
+// → { format: 'rgba', value: { r: 255, g: 0, b: 0, a: 0.5 } }
+
+colorKit.parse("not-a-color");
+// → undefined
+```
 
 ### `blend`
 

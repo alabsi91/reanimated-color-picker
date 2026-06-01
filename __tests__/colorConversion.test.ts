@@ -292,7 +292,7 @@ describe('Hex to Hex Conversion', () => {
     const { hex } = colors[i];
     for (let r = 0; r < hex.length; r++) {
       test(`converts ${hex[r]} to ${hex[3]}`, () => {
-        const color = colorKit.HEX(hex[r]);
+        const color = colorKit.HEX(hex[r], true);
         expect(color).toBe(hex[3]);
       });
     }

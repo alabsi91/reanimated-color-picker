@@ -189,7 +189,11 @@ export interface HwbaT extends HwbT {
   a: number;
 }
 
-export type SupportedColorFormats = ColorString | RgbaT | RgbT | HslaT | HslT | HsvaT | HsvT | HwbaT | HwbT | number;
+export type ColorObjectWithoutAlpha = RgbT | HslT | HsvT | HwbT;
+export type ColorObjectWithAlpha = RgbaT | HslaT | HsvaT | HwbaT;
+export type ColorObject = ColorObjectWithoutAlpha | ColorObjectWithAlpha;
+
+export type SupportedColorFormats = ColorString | ColorObject | number;
 
 export interface ColorTypes<T extends object> {
   object: (roundValues?: boolean) => T;
@@ -204,3 +208,18 @@ export interface ConversionMethods {
   hsv: () => ColorTypes<HsvaT>;
   hwb: () => ColorTypes<HwbaT>;
 }
+
+export type ColorParseResult =
+  | { format: 'named'; value: RgbT }
+  | { format: 'hex3'; value: RgbT }
+  | { format: 'hex6'; value: RgbT }
+  | { format: 'rgb'; value: RgbT }
+  | { format: 'hex4'; value: RgbaT }
+  | { format: 'hex8'; value: RgbaT }
+  | { format: 'rgba'; value: RgbaT }
+  | { format: 'hsl'; value: HslT }
+  | { format: 'hsla'; value: HslaT }
+  | { format: 'hsv'; value: HsvT }
+  | { format: 'hsva'; value: HsvaT }
+  | { format: 'hwb'; value: HwbT }
+  | { format: 'hwba'; value: HwbaT };
