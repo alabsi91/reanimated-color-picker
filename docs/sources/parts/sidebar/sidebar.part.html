@@ -40,68 +40,66 @@
   }
 </script>
 
-<insert selector="body">
-  <!-- ::: Persist sidebar navigation state across page loads. ::: -->
-  <script>
-    (() => {
-      /** @type {NodeListOf<HTMLDivElement>} */
-      const accordions = document.querySelectorAll(".sidebar-accordion");
+<!-- ::: Persist sidebar navigation state across page loads. ::: -->
+<script>
+  (() => {
+    /** @type {NodeListOf<HTMLDivElement>} */
+    const accordions = document.querySelectorAll(".sidebar-accordion");
 
-      // ::: Restore the accordion's previous open state. :::
-      try {
-        const state = JSON.parse(sessionStorage.getItem("sidebar-state") ?? {});
+    // ::: Restore the accordion's previous open state. :::
+    try {
+      const state = JSON.parse(sessionStorage.getItem("sidebar-state") ?? {});
 
-        for (const [accordionIndex, opened] of Object.entries(state)) {
-          const accordion = /** @type {HTMLDivElement} */ (accordions[accordionIndex]);
-          if (!accordion) continue;
+      for (const [accordionIndex, opened] of Object.entries(state)) {
+        const accordion = /** @type {HTMLDivElement} */ (accordions[accordionIndex]);
+        if (!accordion) continue;
 
-          // Keep accordions containing the active link expanded by default
-          // to preserve navigation context and visibility of the current page.
-          if (accordion.matches(":has(a.active)")) continue;
+        // Keep accordions containing the active link expanded by default
+        // to preserve navigation context and visibility of the current page.
+        if (accordion.matches(":has(a.active)")) continue;
 
-          // Toggle the accordion instantly without animation.
-          accordion[opened ? "open" : "close"](true);
-        }
-      } catch {
-        // ignore
+        // Toggle the accordion instantly without animation.
+        accordion[opened ? "open" : "close"](true);
+      }
+    } catch {
+      // ignore
+    }
+
+    // ::: Save accordion open state when toggled. :::
+    const accordionToggleHandler = () => {
+      const state = {};
+
+      for (const [accordionIndex, accordion] of accordions.entries()) {
+        state[accordionIndex] = accordion.opened;
       }
 
-      // ::: Save accordion open state when toggled. :::
-      const accordionToggleHandler = () => {
-        const state = {};
+      sessionStorage.setItem("sidebar-state", JSON.stringify(state));
+    };
 
-        for (const [accordionIndex, accordion] of accordions.entries()) {
-          state[accordionIndex] = accordion.opened;
-        }
+    for (const accordion of accordions) {
+      accordion.addEventListener("toggled", accordionToggleHandler);
+    }
 
-        sessionStorage.setItem("sidebar-state", JSON.stringify(state));
-      };
+    // ::: Restore sidebar scroll position. :::
+    const sidebar = document.querySelector(".sidebar");
 
-      for (const accordion of accordions) {
-        accordion.addEventListener("toggled", accordionToggleHandler);
-      }
-
-      // ::: Restore sidebar scroll position. :::
-      const sidebar = document.querySelector(".sidebar");
-
-      const onReady = () => {
-        // First rAF: end of current task, second rAF: after first paint
+    const onReady = () => {
+      // First rAF: end of current task, second rAF: after first paint
+      requestAnimationFrame(() => {
         requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            const saved = sessionStorage.getItem("sidebar-scroll");
-            if (saved) sidebar.scrollTop = +saved;
-          });
+          const saved = sessionStorage.getItem("sidebar-scroll");
+          if (saved) sidebar.scrollTop = +saved;
         });
-      };
+      });
+    };
 
-      document.addEventListener("DOMContentLoaded", onReady, { once: true });
+    document.addEventListener("DOMContentLoaded", onReady, { once: true });
 
-      // ::: Save sidebar scroll position. :::
-      const sidebarScrollHandler = () => {
-        sessionStorage.setItem("sidebar-scroll", sidebar.scrollTop);
-      };
+    // ::: Save sidebar scroll position. :::
+    const sidebarScrollHandler = () => {
+      sessionStorage.setItem("sidebar-scroll", sidebar.scrollTop);
+    };
 
-      sidebar.addEventListener("scroll", sidebarScrollHandler, { passive: true });
-    })();
-  </script>
-</insert>
+    sidebar.addEventListener("scroll", sidebarScrollHandler, { passive: true });
+  })();
+</script>
