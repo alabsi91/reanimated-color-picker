@@ -65,7 +65,13 @@ export default defineConfig({
       deleteUnused: true,
       exclude: ["pagefind/**", "robots.txt", "sitemap.xml"],
     }),
-    // plugins.serviceWorkerPlugin({ sourcemap: false }),
+    plugins.serviceWorkerPlugin({
+      globPatterns: ["**/*.{js,css,html}", "sources/assets/images/*.webp"],
+      sourcemap: false,
+      skipWaiting: true,
+      inlineWorkboxRuntime: true,
+      cleanupOutdatedCaches: true,
+    }),
 
     // Core plugins
     plugins.developmentServerPlugin(),

@@ -49,6 +49,16 @@
         src="@parts/table-of-content/table-of-content-desktop.part.html"
       ></part>
     </div>
+
+    <script type="module">
+      import { Workbox } from "workbox-window";
+
+      if ("serviceWorker" in navigator && _production) {
+        const swUrl = new URL("@/sw.js", import.meta.url);
+        const wb = new Workbox(swUrl.href);
+        wb.register();
+      }
+    </script>
   </body>
 </html>
 
