@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://alabsi91.github.io/reanimated-color-picker/sitemap.xml
