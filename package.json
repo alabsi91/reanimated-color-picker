@@ -74,7 +74,7 @@
     "typescript": "5.5"
   },
   "peerDependencies": {
-    "expo": "56",
+    "expo": ">=44.0.0",
     "react": "*",
     "react-native": "*",
     "react-native-gesture-handler": ">=2.0.0",
