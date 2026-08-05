@@ -25,6 +25,7 @@
   overviewItem.style.setProperty("--depth", "0");
 
   const overviewLink = document.createElement("a");
+  overviewLink.classList.add("toc-link");
   overviewLink.setAttribute("href", `#${title?.id || ""}`);
   overviewLink.textContent = "Overview";
 
@@ -51,6 +52,7 @@
     listItem.style.setProperty("--depth", String(depth));
 
     const link = document.createElement("a");
+    link.classList.add("toc-link");
     link.setAttribute("href", `#${id}`);
     link.textContent = content;
 
@@ -103,6 +105,11 @@
         else {
           break;
         }
+      }
+
+      const nearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 100;
+      if (nearBottom) {
+        active = headings[headings.length - 1];
       }
 
       setActive(active.id);

@@ -1,11 +1,11 @@
 import { escapeAttributeValue, isItem } from "./helpers.ts";
 
-import type { SidebarDirectory, SidebarLink, SidebarPluginOptions, SidebarTree } from "./types.ts";
+import type { SidebarDirectory, SidebarLink, RequiredOptions, SidebarTree } from "./types.ts";
 
 function renderDirectory(
   directory: SidebarDirectory,
   items: string,
-  { directoryLayout, customizations }: Required<SidebarPluginOptions>
+  { directoryLayout, customizations }: RequiredOptions
 ): string {
   const customization = customizations[directory.realPath];
 
@@ -22,7 +22,7 @@ function renderDirectory(
           </li>`;
 }
 
-function renderLink(link: SidebarLink, { linkLayout, customizations }: Required<SidebarPluginOptions>): string {
+function renderLink(link: SidebarLink, { linkLayout, customizations }: RequiredOptions): string {
   const customization = customizations[link.realPath];
 
   const data = {
@@ -36,7 +36,7 @@ function renderLink(link: SidebarLink, { linkLayout, customizations }: Required<
           </li>`;
 }
 
-export function renderTree(items: SidebarTree, options: Required<SidebarPluginOptions>): string {
+export function renderTree(items: SidebarTree, options: RequiredOptions): string {
   let tree = "";
 
   for (const item of items) {

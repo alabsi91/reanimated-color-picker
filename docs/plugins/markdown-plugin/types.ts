@@ -44,9 +44,10 @@ export interface SidebarPluginOptions {
   /**
    * Glob patterns for files to scan when generating the sidebar.
    *
-   * @default ["pages/contents/**\/*.{html,md}"]
+   * @example
+   *   ({ include: ["pages/contents/**\/*.{html,md}"] });
    */
-  include?: string[];
+  include: string[];
 
   /**
    * Glob patterns for files to exclude from sidebar generation.
@@ -62,9 +63,10 @@ export interface SidebarPluginOptions {
    * Given `baseDirectory: "contents"`, the file `pages/contents/components/accordion/accordion.md` produces the tree path
    * `components > accordion > accordion`.
    *
-   * @default "contents"
+   * @example
+   *   ({ baseDirectory: "contents" });
    */
-  baseDirectory?: string;
+  baseDirectory: string;
 
   /**
    * Per-node customizations, keyed by the real filesystem path of the file or directory relative to the project root.
@@ -182,7 +184,7 @@ export interface SidebarDirectory {
   /**
    * Whether the directory node is collapsed by default in the sidebar.
    *
-   * @default true
+   * @default false
    */
   collapsed: boolean;
 

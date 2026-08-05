@@ -13,6 +13,7 @@
       "@components/*": ["./sources/components/*"],
       "@types": ["./sources/types"]
     },
+    "ignoreDeprecations": "6.0",
     "lib": ["dom", "dom.iterable", "esnext"],
     "strict": true,
     "alwaysStrict": true,

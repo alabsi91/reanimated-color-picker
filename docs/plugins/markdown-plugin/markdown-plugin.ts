@@ -8,7 +8,7 @@ import { prepareOptions } from "./helpers.ts";
 import type { SidebarPluginOptions } from "./types.ts";
 import type { Plugin } from "@staticbolt/core";
 
-export function sidebarPlugin(options: SidebarPluginOptions): Plugin {
+export function markdownPlugin(options: SidebarPluginOptions): Plugin {
   const prepared = prepareOptions(options);
 
   const slotRegex = new RegExp(String.raw`<slot\s+name\s*=\s*['"]sidebar['"]\s*(\/>|>\s*<\/\s*slot\s*>)`, "g");
@@ -16,7 +16,7 @@ export function sidebarPlugin(options: SidebarPluginOptions): Plugin {
   let tree = "";
 
   return {
-    name: "sidebar-plugin",
+    name: "markdown-plugin",
 
     setup() {
       // Resolve "layouts" paths
@@ -69,7 +69,7 @@ export function sidebarPlugin(options: SidebarPluginOptions): Plugin {
         return;
       }
 
-      const isIncluded = path.matchPath(relativePath, { include: prepared.include, ignore: prepared.exclude, root: this.root });
+      const isIncluded = path.isPathMatch(relativePath, { include: prepared.include, ignore: prepared.exclude, root: this.root });
       if (!isIncluded) return;
 
       let pageContent = readFileSync(absolutePath, "utf8");
@@ -116,15 +116,14 @@ export function sidebarPlugin(options: SidebarPluginOptions): Plugin {
     },
 
     onFileEvent(_, id) {
-      const isIncluded = path.matchPath(id, { include: prepared.include, ignore: prepared.exclude, root: this.root });
+      const isIncluded = path.isPathMatch(id, { include: prepared.include, ignore: prepared.exclude, root: this.root });
       if (!isIncluded) return;
 
-      const result = generateTree.call(this, prepared);
-      if (result === tree) return;
+      const newTree = generateTree.call(this, prepared);
+      if (tree === newTree) return;
 
       this.log.info("Re-generating sidebar tree");
-
-      tree = result;
+      tree = newTree;
 
       // Force target layout to re-compile
       this.watcher?.emit("change", prepared.sidebarLayout.path);
