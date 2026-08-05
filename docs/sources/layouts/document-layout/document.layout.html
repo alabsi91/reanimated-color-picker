@@ -4,11 +4,17 @@
     <meta charset="UTF-8" />
     <meta content="light dark" name="color-scheme" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <link bundle href="@styles/default-layout.css" rel="stylesheet" />
+    <link bundle href="@styles/docs.css" rel="stylesheet" />
     <link href="@assets/favicon.ico" rel="icon" sizes="any" />
     <link type="image/svg" href="@assets/favicon.svg" rel="icon" />
     <link href="@assets/apple-touch-icon.png" rel="apple-touch-icon" />
+    <!-- eslint-disable-next-line html/use-baseline -->
+    <link href="@assets/manifest.json" rel="manifest" />
     <meta content="A Pure JavaScript Color Picker for React Native." name="description" />
+    <!-- eslint-disable-next-line html/use-baseline -->
+    <meta content="#f9f8f9" media="(prefers-color-scheme: light)" name="theme-color" />
+    <!-- eslint-disable-next-line html/use-baseline -->
+    <meta content="#121112" media="(prefers-color-scheme: dark)" name="theme-color" />
     <title data-translate>Reanimated Color Picker</title>
   </head>
 
@@ -50,15 +56,7 @@
       ></part>
     </div>
 
-    <script type="module">
-      import { Workbox } from "workbox-window";
-
-      if ("serviceWorker" in navigator && _production) {
-        const swUrl = new URL("@/sw.js", import.meta.url);
-        const wb = new Workbox(swUrl.href);
-        wb.register();
-      }
-    </script>
+    <part production-only src="@parts/service-worker/service-worker.part.html"></part>
   </body>
 </html>
 

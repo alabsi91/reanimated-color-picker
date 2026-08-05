@@ -3,7 +3,9 @@ import { ExpressiveCodeBlock } from "expressive-code";
 import { toHtml } from "hast-util-to-html";
 import { createRenderer } from "rehype-expressive-code";
 
-import type { MetadataBase, Plugin } from "@staticbolt/core";
+import { ecCacheSalt, PersistentCache, sha1 } from "./ec-cache.ts";
+
+import type { Plugin } from "@staticbolt/core";
 import type { Element } from "expressive-code/hast";
 import type { RehypeExpressiveCodeOptions } from "rehype-expressive-code";
 
@@ -26,7 +28,12 @@ export interface HtmlCodeBlockPlugin {
 export function HtmlCodeBlockPlugin(options: HtmlCodeBlockPlugin = {}): Plugin {
   const tag = options.tagName ?? "code-block";
 
-  const processedMetadata = new Set<MetadataBase>();
+  // code+lang+meta -> rendered result, so identical blocks are highlighted once per build.
+  // `html` is the serialized form, filled lazily on first use without style injection.
+  // Backed by a persistent cache, so unchanged blocks skip highlighting across builds too.
+  // Both stay undefined while serving, where every edit is a new key that is never read again.
+  let renderCache: Map<string, { groupAst: Element; styles: string[]; html?: string }> | undefined;
+  let diskCache: PersistentCache | undefined;
 
   let renderer: Awaited<ReturnType<typeof createRenderer>>;
 
@@ -34,6 +41,11 @@ export function HtmlCodeBlockPlugin(options: HtmlCodeBlockPlugin = {}): Plugin {
     name: "html-code-block",
 
     async setup() {
+      if (this.production) {
+        renderCache = new Map();
+        diskCache = new PersistentCache("code-block-expressive-code");
+      }
+
       renderer = await createRenderer(options.rehypeExpressiveCodeOptions);
     },
 
@@ -48,8 +60,6 @@ export function HtmlCodeBlockPlugin(options: HtmlCodeBlockPlugin = {}): Plugin {
       let hasExpressiveCode = Boolean(document.querySelector(".expressive-code"));
 
       for (const node of elements) {
-        processedMetadata.add(metadata);
-
         const contents = (node.getAttribute("code") ?? node.textContent ?? "").trimStart();
 
         let meta = "";
@@ -101,20 +111,40 @@ export function HtmlCodeBlockPlugin(options: HtmlCodeBlockPlugin = {}): Plugin {
         const collapse = node.getAttribute("collapse");
         if (collapse) meta += ` collapse=${collapse}`;
 
-        const codeBlock = new ExpressiveCodeBlock({
-          code: contents.trim(),
-          language: lang ?? "plaintext",
-          meta: meta.trim(),
-        });
+        const code = contents.trim();
+        const language = lang ?? "plaintext";
+        const metaTrimmed = meta.trim();
 
         const { ec, baseStyles, themeStyles, jsModules } = renderer;
-        const { renderedGroupAst, styles } = await ec.render(codeBlock);
+
+        const cacheKey = sha1(`${ecCacheSalt} ${language} ${metaTrimmed} ${code}`);
+        let cached = renderCache?.get(cacheKey);
+
+        if (!cached) {
+          const stored = diskCache?.get(cacheKey);
+
+          if (stored === undefined) {
+            const codeBlock = new ExpressiveCodeBlock({ code, language, meta: metaTrimmed });
+            const rendered = await ec.render(codeBlock);
+            cached = { groupAst: rendered.renderedGroupAst, styles: [...rendered.styles] };
+            diskCache?.set(cacheKey, JSON.stringify(cached));
+          } else {
+            cached = JSON.parse(stored) as { groupAst: Element; styles: string[] };
+          }
+
+          renderCache?.set(cacheKey, cached);
+        }
 
         // No need to inject styles and scripts again
         if (hasExpressiveCode) {
-          node.replaceWith(toHtml(renderedGroupAst));
+          cached.html ??= toHtml(cached.groupAst);
+          node.replaceWith(cached.html);
           continue;
         }
+
+        // The style/script injection below mutates the tree, so work on a clone of the cached one.
+        const renderedGroupAst = structuredClone(cached.groupAst);
+        const styles = cached.styles;
 
         hasExpressiveCode = true;
 

@@ -1,11 +1,5 @@
 <div class="color-scheme-switch-container">
-  <button
-    type="button"
-    class="color-scheme-switch"
-    aria-label="Change color scheme"
-    aria-pressed="false"
-    title="Change color scheme"
-  >
+  <button type="button" class="color-scheme-switch" aria-label="Switch to dark mode" aria-pressed="false" title="Select theme">
     <!-- Sun — shown when light mode is active -->
     <svg
       class="switch-icon switch-icon-sun"
@@ -60,8 +54,8 @@
         for (const button of buttons) {
           document.documentElement.style.colorScheme = scheme;
           window.localStorage.setItem(STORAGE_KEY, scheme);
-          button.classList.remove("no-animation");
           button.setAttribute("aria-pressed", String(isDark));
+          button.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
         }
 
         document.dispatchEvent(new CustomEvent("color-scheme-changed", { detail: scheme }));
@@ -74,14 +68,15 @@
         const isDark = currentScheme === "dark";
 
         for (const colorSchemeButton of colorSchemeButtons) {
-          // Set initial state without side-effects
-          colorSchemeButton.classList.add("no-animation");
+          // Set initial state without triggering storage/event side-effects
           colorSchemeButton.setAttribute("aria-pressed", String(isDark));
+          colorSchemeButton.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
 
           // Add event listener
-          colorSchemeButton.addEventListener("click", event => {
+          colorSchemeButton.addEventListener("click", () => {
             const nextScheme = colorSchemeButton.getAttribute("aria-pressed") === "true" ? "light" : "dark";
-            viewTransition(() => applyScheme(nextScheme, colorSchemeButtons), event.clientX, event.clientY);
+            const { left, top, width, height } = colorSchemeButton.getBoundingClientRect();
+            viewTransition(() => applyScheme(nextScheme, colorSchemeButtons), left + width / 2, top + height / 2);
           });
         }
       };
@@ -103,10 +98,11 @@
 
         await transition.ready;
 
-        const endRadius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+        const xPercent = (x / window.innerWidth) * 100;
+        const yPercent = (y / window.innerHeight) * 100;
 
         document.documentElement.animate(
-          { clipPath: [`circle(0 at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`] },
+          { clipPath: [`circle(0% at ${xPercent}% ${yPercent}%)`, `circle(150vmax at ${xPercent}% ${yPercent}%)`] },
           { duration: 400, easing: "cubic-bezier(0.64, 0, 0.78, 0)", pseudoElement: "::view-transition-new(root)" }
         );
       }
