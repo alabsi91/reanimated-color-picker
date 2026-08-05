@@ -5,12 +5,10 @@ import { toString } from "hast-util-to-string";
 import postcssPresetEnv from "postcss-preset-env";
 import rehypeAutolinkHeadings, { type Options as RehypeAutolinkHeadingsOptions } from "rehype-autolink-headings";
 import rehypeCallouts, { type UserOptions as RehypeCalloutsOptions } from "rehype-callouts";
-import rehypeExpressiveCode from "rehype-expressive-code";
 import remarkFlexibleMarkers, { type FlexibleMarkerOptions } from "remark-flexible-markers";
 
 import { rehypeExpressiveCodeOptions } from "./ec.config.ts";
 import * as templatePlugins from "./plugins/index.ts";
-import wrapTables from "./plugins/wrap-table.ts";
 
 export default defineConfig({
   plugins: [
@@ -22,14 +20,18 @@ export default defineConfig({
     // plugins.i18nPlugin(),
     plugins.bundlePackagesPlugin(),
 
-    templatePlugins.sidebarPlugin({
+    templatePlugins.markdownPlugin({
+      include: ["pages/**/*.{html,md}"],
+      baseDirectory: "pages",
       layouts: {
-        default: "@layouts/default.layout.html",
-        plain: "@layouts/plain.layout.html",
+        default: "@layouts/document-layout/document.layout.html",
       },
     }),
 
+    plugins.webManifestPlugin(),
+
     // Html plugins
+    plugins.htmlEnvOnlyPlugin(),
     plugins.htmlLayoutPlugin(),
     plugins.htmlPagesPlugin(),
     plugins.htmlInsertPlugin(),
@@ -52,9 +54,8 @@ export default defineConfig({
     plugins.convertImagePlugin(),
     plugins.copyAssetsPlugin({
       include: ["pages/**/*", "sources/assets/**/*"],
-      exclude: ["pages/**/*.{js,ts,jsx,tsx,css.html,md}"],
+      exclude: ["pages/**/*.{js,ts,jsx,tsx,css.html,md}", "sources/assets/manifest.json"],
     }),
-    // plugins.webManifestPlugin(),
     plugins.robotsTextPlugin({
       rules: [{ userAgent: "*", allow: ["/"], disallow: [] }],
       sitemapUrl: "https://alabsi91.github.io/reanimated-color-picker/sitemap.xml",
@@ -63,12 +64,15 @@ export default defineConfig({
     templatePlugins.pagefindPlugin(),
     plugins.analyzeOutputPlugin({
       deleteUnused: true,
-      exclude: ["pagefind/**", "robots.txt", "sitemap.xml"],
+      exclude: ["pagefind/**", "manifest.json", "robots.txt", "sitemap.xml", "sw.js"],
     }),
+
+    // After cleanup to prevent caching unneeded files
     plugins.serviceWorkerPlugin({
       globPatterns: ["**/*.{js,css,html}", "sources/assets/images/*.webp"],
       sourcemap: false,
       skipWaiting: true,
+      clientsClaim: true,
       inlineWorkboxRuntime: true,
       cleanupOutdatedCaches: true,
     }),
@@ -82,20 +86,21 @@ export default defineConfig({
         [remarkFlexibleMarkers, {} satisfies FlexibleMarkerOptions],
       ],
       rehypePlugins: [
-        wrapTables,
+        templatePlugins.wrapTables,
         [
           rehypeAutolinkHeadings,
           { behavior: "append", properties: node => ({ ariaLabel: toString(node) }) } satisfies RehypeAutolinkHeadingsOptions,
         ],
         [rehypeCallouts, {} satisfies RehypeCalloutsOptions],
-        [rehypeExpressiveCode, rehypeExpressiveCodeOptions],
+        [templatePlugins.cachedRehypeExpressiveCode, rehypeExpressiveCodeOptions],
       ],
     }),
+    templatePlugins.ecCachePlugin(),
     plugins.coreHtmlPlugin(),
     plugins.coreScriptPlugin(),
     plugins.coreStylePlugin(),
     // plugins.coreSvgPlugin(),
-    // plugins.coreWebManifestPlugin(),
+    plugins.coreWebManifestPlugin(),
 
     // Cli plugins
     plugins.buildCliPlugin(),

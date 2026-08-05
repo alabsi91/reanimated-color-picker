@@ -101,6 +101,13 @@
   --wcp-bdr-rad-md: 8px;
   --wcp-bdr-rad-lg: 16px;
   --wcp-dir: 1;
+
+  @media print {
+    --sb-color-gray-0: #000;
+    --sb-color-gray-1: #000;
+    --sb-color-gray-2: #000;
+    --sb-color-black: #fff;
+  }
 }
 
 [dir="rtl"] {
@@ -125,6 +132,10 @@ html {
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
   }
+
+  @media print {
+    color-scheme: light;
+  }
 }
 
 body {
@@ -143,6 +154,8 @@ button {
   -webkit-tap-highlight-color: transparent;
 }
 
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }

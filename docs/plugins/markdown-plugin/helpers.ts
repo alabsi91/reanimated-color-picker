@@ -80,7 +80,7 @@ export function applyOrdering(tree: SidebarTree, customizations: Record<string, 
 export function prepareOptions(options: SidebarPluginOptions): RequiredOptions {
   const include = options.include ?? ["pages/**/*.{html,md}"];
   const exclude = options.exclude ?? [];
-  const baseDirectory = options.baseDirectory ?? "pages";
+  const baseDirectory = options.baseDirectory ?? "contents";
   const customizations = options.customizations ?? {};
 
   const sidebarLayout = (options.sidebarLayout ?? {}) as Required<RequiredOptions["sidebarLayout"]>;

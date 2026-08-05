@@ -39,17 +39,16 @@
   // @ts-check
 
   (() => {
-    /** @type {HTMLDivElement | null} */
-    const sidebar = document.querySelector(".sidebar");
-    if (!sidebar) {
-      console.error("Could not find sidebar element");
-      return;
-    }
-
     /** @type {HTMLButtonElement | null} */
     const menuTrigger = document.querySelector(".side-menu-trigger-button");
     if (!menuTrigger) {
-      console.error("Could not find menu trigger element");
+      return;
+    }
+
+    /** @type {HTMLDivElement | null} */
+    const sidebar = document.querySelector(".sidebar");
+    if (!sidebar) {
+      menuTrigger.remove();
       return;
     }
 

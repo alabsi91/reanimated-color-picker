@@ -1,0 +1,36 @@
+<!-- ::: Offline support, only for the installed app :::
+
+  The service worker is not registered for regular browser visits; pages stay
+  plain static files. It is registered only when the site runs as an installed
+  app, or at the moment the user installs it (so precaching happens while the
+  user is still online). Note that a registration is origin-wide: once the
+  installed app registers it, later browser-tab visits are also served by it.
+-->
+<script type="module" production-only>
+  import { Workbox } from "workbox-window";
+
+  if ("serviceWorker" in navigator) {
+    const isStandalone =
+      window.matchMedia("(display-mode: standalone)").matches || ("standalone" in navigator && navigator.standalone === true);
+
+    const register = async () => {
+      const swUrl = new URL("@/sw.js", import.meta.url);
+      const wb = new Workbox(swUrl.href, { updateViaCache: "none" });
+
+      const registration = await wb.register({ immediate: true });
+      await registration.update();
+
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible") {
+          registration.update();
+        }
+      });
+    };
+
+    if (isStandalone) {
+      register();
+    } else {
+      window.addEventListener("appinstalled", () => register(), { once: true });
+    }
+  }
+</script>
