@@ -6,13 +6,13 @@ sidebar.order: 3
 
 A wheel-style circular panel for adjusting hue and either saturation or brightness. Move the thumb around the center to change hue, and toward or away from the center to adjust the channel set by `centerChannel`.
 
-![centerChannel: "saturation"](@assets/images/panel3-saturation.png)
+![centerChannel: "saturation"](@assets/images/panel3-saturation.png)  
 _`centerChannel: "saturation"`_
 
-![centerChannel: "brightness"](@assets/images/panel3-brightness.png)
+![centerChannel: "brightness"](@assets/images/panel3-brightness.png)  
 _`centerChannel: "brightness"`_
 
-![centerChannel: "hsl-saturation"](@assets/images/panel3-hsl-saturation.png)
+![centerChannel: "hsl-saturation"](@assets/images/panel3-hsl-saturation.png)  
 _`centerChannel: "hsl-saturation"`_
 
 > [!tip]

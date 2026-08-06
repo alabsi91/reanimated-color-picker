@@ -6,13 +6,13 @@ sidebar.order: 2
 
 A Windows-style square panel for adjusting hue and either saturation or brightness. Move the thumb horizontally to change hue, and vertically to adjust the channel set by `verticalChannel`.
 
-![verticalChannel: "saturation"](@assets/images/panel2-saturation.png)
+![verticalChannel: "saturation"](@assets/images/panel2-saturation.png)  
 _`verticalChannel: "saturation"`_
 
-![verticalChannel: "brightness"](@assets/images/panel2-brightness.png)
+![verticalChannel: "brightness"](@assets/images/panel2-brightness.png)  
 _`verticalChannel: "brightness"`_
 
-![verticalChannel: "hsl-saturation"](@assets/images/panel2-hsl-saturation.png)
+![verticalChannel: "hsl-saturation"](@assets/images/panel2-hsl-saturation.png)  
 _`verticalChannel: "hsl-saturation"`_
 
 > [!tip]
