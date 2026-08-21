@@ -22,7 +22,8 @@
     "noEmit": true,
     "allowJs": true,
     "allowImportingTsExtensions": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "skipLibCheck": true
   },
-  "include": ["sources", ".staticbolt.ts", "ec.config.ts", "plugins/**/*.ts"]
+  "include": ["sources", ".staticbolt.ts"]
 }

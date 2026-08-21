@@ -1,10 +1,3 @@
-@import url("@pagefind/component-ui/css");
-@import url("@styles/global.css");
-@import url("@layouts/document-layout/document.style.css");
-@import url("@parts/header/header.style.css");
+@import url("@staticbolt/docs/styles/docs.css");
+@import url("@styles/theme.css");
 @import url("@parts/social-icons/social-icons.style.css");
-@import url("@parts/sidebar/sidebar.style.css");
-@import url("@parts/table-of-content/table-of-content.style.css");
-@import url("@parts/pagination-links/pagination-links.style.css");
-@import url("@parts/color-scheme-switch/color-scheme-switch.style.css");
-@import url("@parts/badge/badge.style.css");

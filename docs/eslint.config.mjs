@@ -15,14 +15,7 @@ export default defineConfig(
 
   // prettier
   {
-    files: [
-      "**/*.md",
-      "sources/**/*.{ts,tsx,js,jsx,html}",
-      "pages/**/*.{html,md}",
-      "plugins/**/*.ts",
-      "ec.config.ts",
-      ".staticbolt.ts",
-    ],
+    files: ["**/*.md", "sources/**/*.{ts,tsx,js,jsx,html}", "pages/**/*.{html,md}", ".staticbolt.ts"],
     extends: [eslintPluginPrettierRecommended],
     rules: {
       "prettier/prettier": "warn",
@@ -31,7 +24,7 @@ export default defineConfig(
 
   // JavaScript and TypeScript
   {
-    files: ["sources/**/*.{js,jsx,ts,tsx}", ".staticbolt.ts", "ec.config.ts", "plugins/**/*.ts"],
+    files: ["sources/**/*.{js,jsx,ts,tsx}", ".staticbolt.ts"],
     extends: [
       pluginJs.configs.recommended,
       tsEslint.configs.recommendedTypeChecked,
