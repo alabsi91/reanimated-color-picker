@@ -47,6 +47,7 @@
     "stylelint-no-unsupported-browser-features": "^8.1.1",
     "stylelint-use-logical": "^2.1.3",
     "typescript": "^6.0.3",
+    "@staticbolt/lsp": "beta",
     "typescript-eslint": "^8.59.3"
   },
   "dependencies": {
