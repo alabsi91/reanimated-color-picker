@@ -19,12 +19,7 @@
   </head>
 
   <body>
-    <part
-      maxHeading="{{ $data.maxHeading ?? 3 }}"
-      minHeading="{{ $data.minHeading ?? 2 }}"
-      src="@staticbolt/docs/parts/document/document.part.html"
-      title="Reanimated Color Picker"
-    >
+    <part inherit src="@staticbolt/docs/parts/document/document.part.html" title="Reanimated Color Picker">
       <slot name="sidebar" slot="sidebar"></slot>
       <part slot="icons" src="@parts/social-icons/social-icons.part.html"></part>
       <slot />
