@@ -41,7 +41,7 @@ export default defineConfig({
     plugins.htmlBundleStylePlugin(),
     plugins.htmlInlineStylePlugin(),
     plugins.htmlInlineTextPlugin(),
-    templatePlugins.HtmlCodeBlockPlugin({ rehypeExpressiveCodeOptions }),
+    templatePlugins.htmlCodeBlockPlugin({ rehypeExpressiveCodeOptions }),
     plugins.htmlSvgoPlugin(),
     plugins.htmlBundleScriptPlugin(),
     plugins.htmlIifeScriptPlugin(),
