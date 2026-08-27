@@ -70,6 +70,10 @@ npm i reanimated-color-picker
 
 ### [📖 View the documentation site 📖](https://alabsi91.github.io/reanimated-color-picker/)
 
+For LLMs and AI coding agents, the documentation is also available as plain Markdown:
+[llms.txt](https://alabsi91.github.io/reanimated-color-picker/llms.txt) indexes every page, and
+[llms-full.txt](https://alabsi91.github.io/reanimated-color-picker/llms-full.txt) contains the whole documentation in a single file.
+
 > Related library, [React Native Material You Colors](https://github.com/alabsi91/react-native-material-you-colors).
 
 ## License

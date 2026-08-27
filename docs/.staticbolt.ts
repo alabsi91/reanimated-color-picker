@@ -2,12 +2,14 @@ import wikiLinkPlugin, { type Options as WikiLinkPluginOptions } from "@flowersh
 import { defineConfig } from "@staticbolt/core";
 import * as plugins from "@staticbolt/core/plugins";
 import { rehypeExpressiveCodeOptions as themeCodeOptions } from "@staticbolt/docs/ec-config";
-import * as templatePlugins from "@staticbolt/docs/plugins";
+import * as theme from "@staticbolt/docs/plugins";
 import { toString } from "hast-util-to-string";
 import postcssPresetEnv from "postcss-preset-env";
 import rehypeAutolinkHeadings, { type Options as RehypeAutolinkHeadingsOptions } from "rehype-autolink-headings";
 import rehypeCallouts, { type UserOptions as RehypeCalloutsOptions } from "rehype-callouts";
 import remarkFlexibleMarkers, { type FlexibleMarkerOptions } from "remark-flexible-markers";
+
+const siteUrl = "https://alabsi91.github.io/reanimated-color-picker";
 
 const rehypeExpressiveCodeOptions: typeof themeCodeOptions = {
   ...themeCodeOptions,
@@ -21,8 +23,9 @@ export default defineConfig({
     plugins.transformCssPlugin({ plugins: [postcssPresetEnv()] }),
     plugins.bundlePackagesPlugin(),
 
-    templatePlugins.contentPlugin({
+    theme.contentPlugin({
       include: ["pages/**/*.{html,md}"],
+      exclude: ["pages/examples-all.md"],
       baseDirectory: "pages",
       collapsed: false,
       layouts: {
@@ -41,7 +44,7 @@ export default defineConfig({
     plugins.htmlBundleStylePlugin(),
     plugins.htmlInlineStylePlugin(),
     plugins.htmlInlineTextPlugin(),
-    templatePlugins.htmlCodeBlockPlugin({ rehypeExpressiveCodeOptions }),
+    theme.htmlCodeBlockPlugin({ rehypeExpressiveCodeOptions }),
     plugins.htmlSvgoPlugin(),
     plugins.htmlBundleScriptPlugin(),
     plugins.htmlIifeScriptPlugin(),
@@ -53,19 +56,28 @@ export default defineConfig({
 
     plugins.writeFilesPlugin({ clean: true, minify: { enabled: true } }),
     plugins.convertImagePlugin({ preset: "drawing" }),
-    plugins.copyAssetsPlugin({
-      include: ["pages/**/*", "sources/assets/**/*"],
-      exclude: ["pages/**/*.{js,ts,jsx,tsx,css.html,md}", "sources/assets/manifest.json"],
+    plugins.copyAssetsPlugin({ exclude: ["sources/assets/manifest.json"] }),
+    plugins.robotsTextPlugin({ rules: [{ userAgent: "*", allow: ["/"], disallow: [] }], sitemapUrl: `${siteUrl}/sitemap.xml` }),
+    plugins.sitemapPlugin({ sitemapUrl: `${siteUrl}/` }),
+    theme.pagefindPlugin(),
+    theme.llmsPlugin({
+      siteUrl,
+      title: "Reanimated Color Picker",
+      summary: "A pure JavaScript color picker for React Native, supporting iOS, Android, Expo, Web and RTL layouts.",
+      include: ["pages/**/*.md"],
     }),
-    plugins.robotsTextPlugin({
-      rules: [{ userAgent: "*", allow: ["/"], disallow: [] }],
-      sitemapUrl: "https://alabsi91.github.io/reanimated-color-picker/sitemap.xml",
-    }),
-    plugins.sitemapPlugin({ sitemapUrl: "https://alabsi91.github.io/reanimated-color-picker/" }),
-    templatePlugins.pagefindPlugin(),
     plugins.analyzeOutputPlugin({
       deleteUnused: true,
-      exclude: ["pagefind/**", "manifest.json", "robots.txt", "sitemap.xml", "sw.js"],
+      exclude: [
+        "pagefind/**",
+        "manifest.json",
+        "**/index.md",
+        "**/llms.txt",
+        "**/llms-full.txt",
+        "robots.txt",
+        "sitemap.xml",
+        "sw.js",
+      ],
     }),
 
     // After cleanup to prevent caching unneeded files
@@ -87,16 +99,16 @@ export default defineConfig({
         [remarkFlexibleMarkers, {} satisfies FlexibleMarkerOptions],
       ],
       rehypePlugins: [
-        templatePlugins.wrapTables,
+        theme.wrapTables,
         [
           rehypeAutolinkHeadings,
           { behavior: "append", properties: node => ({ ariaLabel: toString(node) }) } satisfies RehypeAutolinkHeadingsOptions,
         ],
         [rehypeCallouts, {} satisfies RehypeCalloutsOptions],
-        [templatePlugins.cachedRehypeExpressiveCode, rehypeExpressiveCodeOptions],
+        [theme.cachedRehypeExpressiveCode, rehypeExpressiveCodeOptions],
       ],
     }),
-    templatePlugins.ecCachePlugin(),
+    theme.ecCachePlugin(),
     plugins.coreHtmlPlugin(),
     plugins.coreScriptPlugin(),
     plugins.coreStylePlugin(),

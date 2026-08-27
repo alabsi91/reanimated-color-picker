@@ -8,7 +8,7 @@
       "@styles/*": ["./sources/styles/*"],
       "@layouts/*": ["./sources/layouts/*"],
       "@parts/*": ["./sources/parts/*"],
-      "@examples/*": ["./sources/examples/*"],
+      "@examples/*": ["../ExamplesShared/*"],
       "@components/*": ["./sources/components/*"],
       "@types": ["./sources/types"]
     },

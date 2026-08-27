@@ -13,6 +13,12 @@ sidebar.order: 1
 
 - **Supports right-to-left (RTL) layouts.**
 
+## For LLMs
+
+This documentation is also published as plain Markdown for AI coding agents:
+[llms.txt](https://alabsi91.github.io/reanimated-color-picker/llms.txt) indexes every page, and
+[llms-full.txt](https://alabsi91.github.io/reanimated-color-picker/llms-full.txt) contains the whole documentation in a single file.
+
 ## Screenshots
 
 ![Example_1](https://raw.githubusercontent.com/alabsi91/reanimated-color-picker/main/images/example_1.png) ![Example_7](https://raw.githubusercontent.com/alabsi91/reanimated-color-picker/main/images/example_7.png)
