@@ -104,6 +104,7 @@ export default defineConfig({
 
     // Cli plugins
     plugins.buildCliPlugin(),
+    plugins.developmentCliPlugin(),
     plugins.serveCliPlugin(),
   ],
 });

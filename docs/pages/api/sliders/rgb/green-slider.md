@@ -10,6 +10,4 @@ A slider for adjusting the color's green channel.
 
 ## Props
 
-<div>
-  <markdown src="@parts/markdown/slider-props.md"></markdown>
-</div>
+<markdown src="@parts/markdown/slider-props.md"></markdown>

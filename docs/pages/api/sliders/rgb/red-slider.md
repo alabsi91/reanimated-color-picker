@@ -12,6 +12,4 @@ A slider for adjusting the color's red channel.
 
 ## Props
 
-<div>
-  <markdown src="@parts/markdown/slider-props.md"></markdown>
-</div>
+<markdown src="@parts/markdown/slider-props.md"></markdown>

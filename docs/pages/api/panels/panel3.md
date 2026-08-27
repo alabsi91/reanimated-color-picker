@@ -76,9 +76,7 @@ The thumb's shape and appearance.
 
 `type: ThumbShapeType` · `default: "ring"`
 
-<div>
-  <markdown src="@parts/markdown/thumb-shape-type.md"></markdown>
-</div>
+<markdown src="@parts/markdown/thumb-shape-type.md"></markdown>
 
 ---
 
@@ -114,9 +112,7 @@ The duration of the thumb scale animation when active.
 
 ---
 
-<div>
-  <markdown src="@parts/markdown/render-thumb.md"></markdown>
-</div>
+<markdown src="@parts/markdown/render-thumb.md"></markdown>
 
 ---
 

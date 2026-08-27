@@ -107,9 +107,7 @@ The thumb's shape and appearance.
 
 `type: ThumbShapeType` · `default: inherit from Panel3`
 
-<div>
-  <markdown src="@parts/markdown/thumb-shape-type.md"></markdown>
-</div>
+<markdown src="@parts/markdown/thumb-shape-type.md"></markdown>
 
 ---
 
@@ -137,8 +135,6 @@ Controls whether a line is rendered from the center of the panel to the thumb.
 
 ---
 
-<div>
-  <markdown src="@parts/markdown/render-thumb.md"></markdown>
-</div>
+<markdown src="@parts/markdown/render-thumb.md"></markdown>
 
 [^style-override]: Certain style properties will be overridden.

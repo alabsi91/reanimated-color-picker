@@ -1,7 +1,8 @@
 {
   "type": "module",
   "scripts": {
-    "dev": "staticbolt serve",
+    "dev": "staticbolt dev",
+    "serve": "staticbolt serve",
     "build": "staticbolt build",
     "fix-eslint": "eslint --config ./eslint.config.mjs --fix",
     "fix-stylelint": "stylelint \"./sources/**/*.{css,html}\" \"./pages/**/*.html\" --fix",

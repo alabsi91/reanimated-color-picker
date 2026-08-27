@@ -96,9 +96,7 @@ A global property for the thumb shape and appearance of all descendant slider co
 
 `type: ThumbShapeType` · `default: "ring"`
 
-<div>
-  <markdown src="@parts/markdown/thumb-shape-type.md"></markdown>
-</div>
+<markdown src="@parts/markdown/thumb-shape-type.md"></markdown>
 
 ---
 
@@ -134,9 +132,7 @@ A global property for the duration of the thumb scale animation when active.
 
 ---
 
-<div>
-  <markdown src="@parts/markdown/render-thumb.md"></markdown>
-</div>
+<markdown src="@parts/markdown/render-thumb.md"></markdown>
 
 ---
 
@@ -176,9 +172,7 @@ Fires every time the user modifies the color. Accepts `worklet` functions only �
 
 `type: (color: ColorFormatsObject) => void` · `default: undefined`
 
-<div>
-  <markdown src="@parts/markdown/color-format-type.md"></markdown>
-</div>
+<markdown src="@parts/markdown/color-format-type.md"></markdown>
 
 ---
 
@@ -191,9 +185,7 @@ Fires every time the user modifies the color. Accepts regular functions only —
 
 `type: (color: ColorFormatsObject) => void` · `default: undefined`
 
-<div>
-  <markdown src="@parts/markdown/color-format-type.md"></markdown>
-</div>
+<markdown src="@parts/markdown/color-format-type.md"></markdown>
 
 ---
 
@@ -203,9 +195,7 @@ Fires when the user releases the slider handle or taps a swatch. Accepts `workle
 
 `type: (color: ColorFormatsObject) => void` · `default: undefined`
 
-<div>
-  <markdown src="@parts/markdown/color-format-type.md"></markdown>
-</div>
+<markdown src="@parts/markdown/color-format-type.md"></markdown>
 
 ---
 
@@ -215,9 +205,7 @@ Fires when the user releases the slider handle or taps a swatch. Accepts regular
 
 `type: (color: ColorFormatsObject) => void` · `default: undefined`
 
-<div>
-  <markdown src="@parts/markdown/color-format-type.md"></markdown>
-</div>
+<markdown src="@parts/markdown/color-format-type.md"></markdown>
 
 ---
 
