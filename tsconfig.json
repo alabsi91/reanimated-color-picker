@@ -1,6 +1,6 @@
 {
   "include": ["src/**/*", "ExamplesShared/**/*"],
-  "exclude": ["Example", "ExampleExpo", "scripts", "docs"],
+  "exclude": ["ExampleLatest", "ExampleExpoLatest", "ExampleOldArch", "scripts", "docs"],
   "compilerOptions": {
     "types": ["react-native", "react-native-reanimated", "react-native-gesture-handler"],
     "baseUrl": ".",

@@ -1,7 +1,6 @@
 # OSX
 #
 .DS_Store
-.vscode
 *.web.js
 # Xcode
 #
