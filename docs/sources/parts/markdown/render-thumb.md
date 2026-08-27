@@ -1,6 +1,6 @@
 ### `renderThumb`
 
-Function that receives `ThumbProps` and returns a custom thumb component. Overrides `thumbShape`.
+A function that receives `ThumbProps` and returns a custom thumb component. Overrides `thumbShape`.
 
 `type: (props: ThumbProps) => ReactElement`
 

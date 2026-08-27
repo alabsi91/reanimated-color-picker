@@ -6,7 +6,7 @@ sidebar.order: 1
 
 The `ColorPicker` component is responsible for managing all built-in components.
 
-> [!caution] All built-in components must be wrapped within `ColorPicker` component.
+> [!caution] All built-in components must be wrapped within the `ColorPicker` component.
 
 You can nest components freely to achieve any layout:
 
@@ -52,7 +52,7 @@ A global property that allows slider background color spectrums to adapt to chan
 
 ![boundedThumb](@assets/images/boundedThumb.png)
 
-A global property for all descendant sliders and panels. Determines whether the thumb is constrained within the boundaries of the slider. When `false`, half of the thumb extend beyond the slider edges.
+A global property for all descendant sliders and panels. Determines whether the thumb is constrained within the boundaries of the slider. When `false`, half of the thumb extends beyond the slider edges.
 
 `type: boolean` · `default: false`
 
@@ -158,7 +158,7 @@ When enabled, color updates are announced using the format defined by [`colorAnn
 
 Defines the format used when announcing color values for accessibility.
 
-Accepts `hex`, `rgb`, `rgba`, `hsl`, `hsla`, `hsv`, `hsva`, `hwb` and `hwba`.
+Accepts `hex`, `rgb`, `rgba`, `hsl`, `hsla`, `hsv`, `hsva`, `hwb`, and `hwba`.
 
 `type: keyof ColorFormatsObject` · `default: "rgb"`
 

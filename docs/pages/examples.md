@@ -4,7 +4,7 @@ sidebar.order: 6
 
 # Examples
 
-- [Examples Shared Code - typescript](https://github.com/alabsi91/reanimated-color-picker/tree/main/ExamplesShared)
+- [Examples Shared Code - TypeScript](https://github.com/alabsi91/reanimated-color-picker/tree/main/ExamplesShared)
 - [Bare workflow](https://github.com/alabsi91/reanimated-color-picker/tree/main/ExampleLatest)
 - [Expo managed workflow](https://github.com/alabsi91/reanimated-color-picker/tree/main/ExampleExpoLatest)
 - [Expo snack](https://snack.expo.dev/@alabsi91/reanimated-color-picker)

@@ -81,7 +81,7 @@ sidebar.order: 5
 
 #### Color keywords
 
-Named colors implementation follows the [CSS3/SVG specification](https://www.w3.org/TR/css-color-3/#svg-color).
+The named colors implementation follows the [CSS3/SVG specification](https://www.w3.org/TR/css-color-3/#svg-color).
 
 - aliceblue (`#f0f8ff`)
 - antiquewhite (`#faebd7`)
@@ -120,7 +120,7 @@ colorKit.RGB(color: SupportedColorFormats).object(roundValues = true): { r: numb
 import { colorKit } from "reanimated-color-picker";
 
 colorKit.RGB("hsl(360, 100%, 100%)").string(); // rgb(255, 255, 255)
-colorKit.RGB("hsl(360, 100%, 100%)").string(true); // rgba(255, 255, 255, 1) force rbga
+colorKit.RGB("hsl(360, 100%, 100%)").string(true); // rgba(255, 255, 255, 1) force rgba
 colorKit.RGB("#f0ff").object(); // { r: 255, g: 0, b: 255, a: 1 }
 colorKit.RGB({ h: 360, s: 100, v: 50 }).array(); // [128, 0, 0, 1]
 ```
@@ -186,9 +186,9 @@ colorKit.HSV(color: SupportedColorFormats).object(roundValues = true): { h: numb
 ```js
 import { colorKit } from "reanimated-color-picker";
 
-colorKit.HSV("orange").string(true); // hsva(258, 49%, 48%, 1)
+colorKit.HSV("orange").string(true); // hsva(39, 100%, 100%, 1)
 colorKit.HSV("#503e7a").string(); // hsv(258, 49%, 48%)
-colorKit.HSV("rgb(114, 99, 29)").object(); // { h: 49, s: 75, l: 45, a: 1 }
+colorKit.HSV("rgb(114, 99, 29)").object(); // { h: 49, s: 75, v: 45, a: 1 }
 colorKit.HSV({ a: 1, h: 336, s: 44, v: 28 }).array(); // [336, 44, 28, 1]
 ```
 
@@ -209,9 +209,9 @@ colorKit.HWB(color: SupportedColorFormats).object(roundValues = true): { h: numb
 ```js
 import { colorKit } from "reanimated-color-picker";
 
-colorKit.HWB("orange").string(); // hwb(39, 0%, 0%)
-colorKit.HWB("#503e7a").string(true); // hwba(258, 24%, 52%, 1)
-colorKit.HWB("rgb(114, 99, 29)").object(); // { h: 49, w: 12, l: 55, a: 1 }
+colorKit.HWB("orange").string(); // hwb(39 0% 0%)
+colorKit.HWB("#503e7a").string(true); // hwb(258 24% 52% / 1)
+colorKit.HWB("rgb(114, 99, 29)").object(); // { h: 49, w: 11, b: 55, a: 1 }
 colorKit.HWB({ a: 1, h: 336, s: 44, v: 28 }).array(); // [336, 16, 72, 1]
 ```
 
@@ -234,13 +234,13 @@ colorKit.getFormat("hsla(224, 77%, 28%, 1)"); // hsla
 colorKit.getFormat({ h: 224, s: 77, l: 28 }); // hsl
 colorKit.getFormat({ h: 224, s: 77, l: 28, a: 1 }); // hsla
 
-colorKit.getFormat("hsva(289, 99%, 40%, 1)"); // hsv
-colorKit.getFormat("hsv(289, 99%, 40%)"); // hsva
+colorKit.getFormat("hsva(289, 99%, 40%, 1)"); // hsva
+colorKit.getFormat("hsv(289, 99%, 40%)"); // hsv
 colorKit.getFormat({ h: 289, s: 99, v: 40 }); // hsv
 colorKit.getFormat({ h: 289, s: 99, v: 40, a: 1 }); // hsva
 
-colorKit.getFormat("hwba(289, 99%, 40%, 1)"); // hwb
-colorKit.getFormat("hwb(289, 99%, 40%)"); // hwba
+colorKit.getFormat("hwba(289, 99%, 40%, 1)"); // hwba
+colorKit.getFormat("hwb(289, 99%, 40%)"); // hwb
 colorKit.getFormat({ h: 289, w: 99, b: 40 }); // hwb
 colorKit.getFormat({ h: 289, w: 99, b: 40, a: 1 }); // hwba
 
@@ -248,7 +248,7 @@ colorKit.getFormat("#fff"); // hex3
 colorKit.getFormat("#ffff"); // hex4
 colorKit.getFormat("#ffffffff"); // hex8
 
-colorKit.getFormat("rgb(211, 168, 151, 1)"); // null (should be "rgba(211, 168, 151, 1)")
+colorKit.getFormat("rgb(211, 168)"); // null (missing the blue channel)
 ```
 
 ### `getRed`
@@ -285,9 +285,9 @@ colorKit.getHue("#87c270"); // 103
 
 ### `getLuminance`
 
-Get color's HSL `luminosity` channel value.
+Get the color's HSL `luminosity` channel value.
 
-If you want the overall `luminosity` of a color use [`getLuminanceWCAG`](#getluminancewcag) method.
+If you want the overall `luminosity` of a color, use the [`getLuminanceWCAG`](#getluminancewcag) method.
 
 ```js
 colorKit.getLuminance({ r: 67, g: 59, b: 79, a: 1 }); // 27
@@ -357,7 +357,7 @@ colorKit.isLight("hsla(224, 77%, 28%, 1)"); // false
 Set the `red` value of a color to a specific amount.
 
 ```js
-colorKit.setRed("#a5a2a1", 150).hex(); // #c8a2a1
+colorKit.setRed("#a5a2a1", 150).hex(); // #96a2a1
 colorKit.setRed("#a5a2a1", 200).rgb().string(); // rgb(200, 162, 161)
 colorKit.setRed("#a5a2a1", 200).rgb().object(); // { r: 200, g: 162, b: 161, a: 1 }
 colorKit.setRed("#a5a2a1", 200).rgb().array(); // [200, 162, 161, 1]
@@ -365,7 +365,7 @@ colorKit.setRed("#a5a2a1", 200).hsl().string(); // hsl(2, 26%, 71%)
 colorKit.setRed("#a5a2a1", 200).hsl().object(); // { h: 2, s: 26, l: 71, a: 1 }
 colorKit.setRed("#a5a2a1", 200).hsl().array(); // [2, 26, 71, 1]
 colorKit.setRed("#a5a2a1", 200).hsv().string(); // hsv(2, 20%, 78%)
-colorKit.setRed("#a5a2a1", 200).hsv().object(); // { h: 2, s: 20, l: 78, a: 1 }
+colorKit.setRed("#a5a2a1", 200).hsv().object(); // { h: 2, s: 20, v: 78, a: 1 }
 colorKit.setRed("#a5a2a1", 200).hsv().array(); // [2, 20, 78, 1]
 ```
 
@@ -418,7 +418,7 @@ colorKit.decreaseGreen("#d7e2d0", "10%").hex(); // #d7cbd0
 Set the `blue` value of a color to a specific amount.
 
 ```js
-colorKit.setBlue("#5d8e92", 50).hex(); // #5d3292
+colorKit.setBlue("#5d8e92", 50).hex(); // #5d8e32
 ```
 
 ### `increaseBlue`
@@ -449,7 +449,7 @@ colorKit.setHue("#2c1a51", 50).hex(); // #51481a
 
 ### `increaseHue`
 
-Increase the `Hue` value of a color by the given percentage/amount.
+Increase the `hue` value of a color by the given percentage/amount.
 
 ```js
 colorKit.increaseHue("#2c1a51", 50).hex(); // #511a48
@@ -458,7 +458,7 @@ colorKit.increaseHue("#2c1a51", "50%").hex(); // #511a1a
 
 ### `decreaseHue`
 
-Decrease the `Hue` value of a color by the given percentage/amount.
+Decrease the `hue` value of a color by the given percentage/amount.
 
 ```js
 colorKit.decreaseHue("#2c1a51", 50).hex(); // #1a3651
@@ -514,7 +514,7 @@ Increase the `brightness` of the given color by a certain percentage/amount.
 
 ```js
 colorKit.brighten("#dadafc", 50).hex(); // #ffffff
-colorKit.brighten("#dadafc", "5%").hex(); // #f1f1fe
+colorKit.brighten("#dadafc", "5%").hex(); // #efeffe
 ```
 
 ### `darken`
@@ -536,7 +536,7 @@ colorKit.setBrightness("#dadafc", 50).hex(); // #6f6f80
 
 ### `increaseBrightness`
 
-Increase HSV's `value` (brightness) channel value of a color by the given percentage/amount
+Increase HSV's `value` (brightness) channel value of a color by the given percentage/amount.
 
 ```js
 colorKit.increaseBrightness("#dadafc", 50).hex(); // #dedeff
@@ -545,11 +545,11 @@ colorKit.increaseBrightness("#dadafc", "5%").hex(); // #dedeff
 
 ### `decreaseBrightness`
 
-Decrease HSV's `value` (brightness) channel value of a color by the given percentage/amount
+Decrease HSV's `value` (brightness) channel value of a color by the given percentage/amount.
 
 ```js
 colorKit.decreaseBrightness("#dadafc", 50).hex(); // #6d6d7d
-colorKit.decreaseBrightness("#dadafc", "50%").hex(); // #6f6f80
+colorKit.decreaseBrightness("#dadafc", "50%").hex(); // #6e6e7e
 ```
 
 ### `setAlpha`
@@ -594,7 +594,7 @@ colorKit.blend("red", "yellow", 50).hex(); // #ff8000
 
 ### `invert`
 
-Invert (negate) a color, black becomes white, white becomes black, blue becomes orange and so on.
+Invert (negate) a color: black becomes white, white becomes black, blue becomes orange, and so on.
 
 ```js
 colorKit.invert("#000").hex(); // #ffffff
@@ -602,7 +602,7 @@ colorKit.invert("#000").hex(); // #ffffff
 
 ### `grayscale`
 
-Completely desaturates a color into greyscale.
+Completely desaturates a color into grayscale.
 
 ```js
 colorKit.grayscale("#172140").hex(); // #212121
