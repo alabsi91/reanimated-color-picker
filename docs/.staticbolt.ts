@@ -58,7 +58,7 @@ export default defineConfig({
     plugins.convertImagePlugin({ preset: "drawing" }),
     plugins.copyAssetsPlugin({ exclude: ["sources/assets/manifest.json"] }),
     plugins.robotsTextPlugin({ rules: [{ userAgent: "*", allow: ["/"], disallow: [] }], sitemapUrl: `${siteUrl}/sitemap.xml` }),
-    plugins.sitemapPlugin({ sitemapUrl: `${siteUrl}/` }),
+    plugins.sitemapPlugin({ sitemapUrl: `${siteUrl}/`, exclude: ["google*.html"] }),
     theme.pagefindPlugin(),
     theme.llmsPlugin({
       siteUrl,
