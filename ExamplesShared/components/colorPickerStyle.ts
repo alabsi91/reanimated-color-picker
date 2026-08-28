@@ -1,9 +1,9 @@
-import { Platform, StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from "react-native";
 
 const shadow = Platform.select({
-  web: { boxShadow: 'rgba(0, 0, 0, 0.3) 0px 0px 2px' },
+  web: { boxShadow: "rgba(0, 0, 0, 0.3) 0px 0px 2px" },
   default: {
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 1,
@@ -17,18 +17,19 @@ const shadow = Platform.select({
 
 export const colorPickerStyle = StyleSheet.create({
   title: {
-    textAlign: 'center',
-    fontFamily: 'Quicksand',
-    fontWeight: 'bold',
+    textAlign: "center",
+    fontFamily: "Quicksand",
+    fontWeight: "bold",
     marginVertical: 20,
+    color: "gray",
   },
   picker: {
     gap: 20,
   },
   pickerContainer: {
-    alignSelf: 'center',
+    alignSelf: "center",
     width: 300,
-    backgroundColor: '#eee',
+    backgroundColor: "#eee",
     padding: 20,
     borderRadius: 20,
     ...shadow,
@@ -47,30 +48,30 @@ export const colorPickerStyle = StyleSheet.create({
     ...shadow,
   },
   sliderTitle: {
-    color: '#000',
-    fontWeight: 'bold',
+    color: "#000",
+    fontWeight: "bold",
     marginBottom: 5,
     paddingHorizontal: 4,
-    fontFamily: 'Quicksand',
+    fontFamily: "Quicksand",
   },
   previewStyle: {
     height: 40,
     borderRadius: 14,
   },
   previewTxt: {
-    color: '#707070',
-    fontFamily: 'Quicksand',
+    color: "#707070",
+    fontFamily: "Quicksand",
   },
   inputStyle: {
-    color: '#707070',
+    color: "#707070",
     paddingVertical: 2,
-    borderColor: '#707070',
+    borderColor: "#707070",
     fontSize: 12,
     marginLeft: 5,
   },
   swatchesContainer: {
-    alignItems: 'center',
-    flexWrap: 'nowrap',
+    alignItems: "center",
+    flexWrap: "nowrap",
     gap: 10,
   },
   swatchStyle: {

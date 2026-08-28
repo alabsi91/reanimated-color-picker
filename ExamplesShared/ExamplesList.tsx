@@ -20,39 +20,78 @@ import HorizontalRgbSliders from './RgbHorizontal';
 import VerticalRgbSliders from './RgbVertical';
 import WithReanimatedScrollView from './WithReanimatedScrollView';
 import WithRnghScrollView from './WithRnghScrollView';
+import BaseContainer from './components/BaseContainer';
 
 export default function ExamplesList() {
   return (
     <View style={{ flex: 1, paddingTop: 46, paddingBottom: 24, backgroundColor: '#202124' }}>
       <ScrollView contentContainerStyle={styles.container} fadingEdgeLength={20}>
-        <Panel1Example />
+        <BaseContainer name='Panel1'>
+          <Panel1Example />
+        </BaseContainer>
 
-        <Panel2Saturation />
-        <Panel2HslSaturation />
-        <Panel2Brightness />
+        <BaseContainer name='Panel2 Saturation'>
+          <Panel2Saturation />
+        </BaseContainer>
+        <BaseContainer name='Panel2 HSL Saturation'>
+          <Panel2HslSaturation />
+        </BaseContainer>
+        <BaseContainer name='Panel2 Brightness'>
+          <Panel2Brightness />
+        </BaseContainer>
 
-        <WheelSaturation />
-        <WheelHSLSaturation />
-        <WheelBrightness />
+        <BaseContainer name='Panel3 Saturation'>
+          <WheelSaturation />
+        </BaseContainer>
+        <BaseContainer name='Panel3 HSL Saturation'>
+          <WheelHSLSaturation />
+        </BaseContainer>
+        <BaseContainer name='Panel3 Brightness'>
+          <WheelBrightness />
+        </BaseContainer>
 
-        <Panel4Example />
+        <BaseContainer name='Panel4'>
+          <Panel4Example />
+        </BaseContainer>
 
-        <Panel5Example />
+        <BaseContainer name='Panel5 Grid'>
+          <Panel5Example />
+        </BaseContainer>
 
-        <CircularHue />
-        <LuminanceCircular />
+        <BaseContainer name='Circular Hue'>
+          <CircularHue />
+        </BaseContainer>
+        <BaseContainer name='Luminance Circular'>
+          <LuminanceCircular />
+        </BaseContainer>
 
-        <HorizontalHsbSliders />
-        <VerticalHsbSliders />
+        <BaseContainer name='HSB Horizontal'>
+          <HorizontalHsbSliders />
+        </BaseContainer>
+        <BaseContainer name='HSB Vertical'>
+          <VerticalHsbSliders />
+        </BaseContainer>
 
-        <HorizontalHslSliders />
-        <VerticalHslSliders />
+        <BaseContainer name='HSL Horizontal'>
+          <HorizontalHslSliders />
+        </BaseContainer>
+        <BaseContainer name='HSL Vertical'>
+          <VerticalHslSliders />
+        </BaseContainer>
 
-        <HorizontalRgbSliders />
-        <VerticalRgbSliders />
+        <BaseContainer name='RGB Horizontal'>
+          <HorizontalRgbSliders />
+        </BaseContainer>
+        <BaseContainer name='RGB Vertical'>
+          <VerticalRgbSliders />
+        </BaseContainer>
 
-        <WithRnghScrollView />
-        <WithReanimatedScrollView />
+        <BaseContainer name='With RNGH ScrollView'>
+          <WithRnghScrollView />
+        </BaseContainer>
+        <BaseContainer name='With Reanimated ScrollView'>
+          <WithReanimatedScrollView />
+        </BaseContainer>
       </ScrollView>
     </View>
   );

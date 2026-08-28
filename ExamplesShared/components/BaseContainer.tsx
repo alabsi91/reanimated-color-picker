@@ -1,15 +1,33 @@
-import React, { useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Modal, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
-import Animated, { useAnimatedStyle, type SharedValue } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useSharedValue, type SharedValue } from 'react-native-reanimated';
+
+type RegisterBackgroundColor = (color: SharedValue<string>) => void;
+
+const RegisterBackgroundColorContext = createContext<RegisterBackgroundColor | null>(null);
+
+/**
+ * The color the example follows, tinting the modal background while the example runs inside a `BaseContainer`.
+ *
+ * Rendered on its own, outside a container, it is an ordinary shared value and nothing paints with it.
+ */
+export function useContainerBackgroundColor(initialColor: string): SharedValue<string> {
+  const color = useSharedValue(initialColor);
+  const registerBackgroundColor = useContext(RegisterBackgroundColorContext);
+
+  useEffect(() => registerBackgroundColor?.(color), [registerBackgroundColor, color]);
+
+  return color;
+}
 
 type BaseContainerProps = {
   name: string;
   children: React.ReactNode;
-  backgroundColor?: SharedValue<string>;
 };
 
-export default function BaseContainer({ name, backgroundColor, children }: BaseContainerProps) {
+export default function BaseContainer({ name, children }: BaseContainerProps) {
   const [showModal, setShowModal] = useState(false);
+  const [backgroundColor, setBackgroundColor] = useState<SharedValue<string> | null>(null);
 
   const backgroundColorStyle = useAnimatedStyle(() => {
     return { backgroundColor: backgroundColor ? backgroundColor.value : '#aaa' };
@@ -23,7 +41,11 @@ export default function BaseContainer({ name, backgroundColor, children }: BaseC
 
       <Modal onRequestClose={() => setShowModal(false)} visible={showModal} animationType='slide'>
         <Animated.View style={[styles.wrapper, backgroundColorStyle]}>
-          <View style={styles.container}>{children}</View>
+          <View style={styles.container}>
+            <RegisterBackgroundColorContext.Provider value={setBackgroundColor}>
+              {children}
+            </RegisterBackgroundColorContext.Provider>
+          </View>
           <View style={styles.closeBtnContainer}>
             <Pressable style={styles.btn} onPress={() => setShowModal(false)}>
               <Text style={styles.btnTxt}>Close</Text>

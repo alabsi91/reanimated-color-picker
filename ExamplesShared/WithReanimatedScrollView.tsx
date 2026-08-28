@@ -6,7 +6,7 @@ import Animated, { useAnimatedProps, useSharedValue } from 'react-native-reanima
 import type { ColorFormatsObject } from 'reanimated-color-picker';
 import ColorPicker, { HSLSaturationSlider, HueSlider, LuminanceSlider, OpacitySlider } from 'reanimated-color-picker';
 
-import BaseContainer from './components/BaseContainer';
+import { useContainerBackgroundColor } from './components/BaseContainer';
 import { colorPickerStyle } from './components/colorPickerStyle';
 
 /*
@@ -15,7 +15,7 @@ import { colorPickerStyle } from './components/colorPickerStyle';
 export default function Example() {
   const [resultColor, setResultColor] = useState('#f00');
 
-  const currentColor = useSharedValue('#f00');
+  const currentColor = useContainerBackgroundColor('#f00');
 
   // runs on the ui thread on color change
   const onColorChange = (color: ColorFormatsObject) => {
@@ -42,49 +42,42 @@ export default function Example() {
   const animatedProps = useAnimatedProps(() => ({ scrollEnabled: isScrollEnabled.value }), [isScrollEnabled]);
 
   return (
-    <BaseContainer name='With Reanimated ScrollView' backgroundColor={currentColor}>
-      <Animated.ScrollView animatedProps={animatedProps} contentContainerStyle={{ height: '150%', justifyContent: 'center' }}>
-        <Text style={colorPickerStyle.title}>Color Picker in a Animated.ScrollView</Text>
+    <Animated.ScrollView animatedProps={animatedProps} contentContainerStyle={{ height: '150%', justifyContent: 'center' }}>
+      <Text style={colorPickerStyle.title}>Color Picker in a Animated.ScrollView</Text>
 
-        <View style={colorPickerStyle.pickerContainer}>
-          <ColorPicker
-            value={resultColor}
-            sliderThickness={30}
-            thumbSize={30}
-            onChange={onColorChange}
-            onCompleteJS={onColorPick}
-            style={colorPickerStyle.picker}
-            boundedThumb
-          >
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <View style={{ alignItems: 'center' }}>
-                <Text style={colorPickerStyle.sliderTitle}>H</Text>
-                <HueSlider gestures={[hueGesture]} style={colorPickerStyle.sliderVerticalStyle} vertical reverse />
-              </View>
-
-              <View style={{ alignItems: 'center' }}>
-                <Text style={colorPickerStyle.sliderTitle}>S</Text>
-                <HSLSaturationSlider
-                  gestures={[saturationGesture]}
-                  style={colorPickerStyle.sliderVerticalStyle}
-                  vertical
-                  reverse
-                />
-              </View>
-
-              <View style={{ alignItems: 'center' }}>
-                <Text style={colorPickerStyle.sliderTitle}>L</Text>
-                <LuminanceSlider gestures={[lumGesture]} style={colorPickerStyle.sliderVerticalStyle} vertical reverse />
-              </View>
-
-              <View style={{ alignItems: 'center' }}>
-                <Text style={colorPickerStyle.sliderTitle}>A</Text>
-                <OpacitySlider gestures={[opacityGesture]} style={colorPickerStyle.sliderVerticalStyle} vertical reverse />
-              </View>
+      <View style={colorPickerStyle.pickerContainer}>
+        <ColorPicker
+          value={resultColor}
+          sliderThickness={30}
+          thumbSize={30}
+          onChange={onColorChange}
+          onCompleteJS={onColorPick}
+          style={colorPickerStyle.picker}
+          boundedThumb
+        >
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <View style={{ alignItems: 'center' }}>
+              <Text style={colorPickerStyle.sliderTitle}>H</Text>
+              <HueSlider gestures={[hueGesture]} style={colorPickerStyle.sliderVerticalStyle} vertical reverse />
             </View>
-          </ColorPicker>
-        </View>
-      </Animated.ScrollView>
-    </BaseContainer>
+
+            <View style={{ alignItems: 'center' }}>
+              <Text style={colorPickerStyle.sliderTitle}>S</Text>
+              <HSLSaturationSlider gestures={[saturationGesture]} style={colorPickerStyle.sliderVerticalStyle} vertical reverse />
+            </View>
+
+            <View style={{ alignItems: 'center' }}>
+              <Text style={colorPickerStyle.sliderTitle}>L</Text>
+              <LuminanceSlider gestures={[lumGesture]} style={colorPickerStyle.sliderVerticalStyle} vertical reverse />
+            </View>
+
+            <View style={{ alignItems: 'center' }}>
+              <Text style={colorPickerStyle.sliderTitle}>A</Text>
+              <OpacitySlider gestures={[opacityGesture]} style={colorPickerStyle.sliderVerticalStyle} vertical reverse />
+            </View>
+          </View>
+        </ColorPicker>
+      </View>
+    </Animated.ScrollView>
   );
 }

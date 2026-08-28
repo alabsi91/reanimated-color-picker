@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { KeyboardAvoidingView, View } from 'react-native';
-import { useSharedValue } from 'react-native-reanimated';
 
 import type { ColorFormatsObject } from 'reanimated-color-picker';
 import ColorPicker, { colorKit, InputWidget, OpacitySlider, Panel2, SaturationSlider } from 'reanimated-color-picker';
 
-import BaseContainer from './components/BaseContainer';
+import { useContainerBackgroundColor } from './components/BaseContainer';
 import Divider from './components/Divider';
 import { colorPickerStyle } from './components/colorPickerStyle';
 
@@ -15,7 +14,7 @@ const initialColor = colorKit.randomRgbColor().hex();
 export default function Example() {
   const [resultColor, setResultColor] = useState(initialColor);
 
-  const currentColor = useSharedValue(initialColor);
+  const currentColor = useContainerBackgroundColor(initialColor);
 
   // runs on the ui thread on color change
   const onColorChange = (color: ColorFormatsObject) => {
@@ -29,27 +28,25 @@ export default function Example() {
   };
 
   return (
-    <BaseContainer name='Panel2 Brightness' backgroundColor={currentColor}>
-      <KeyboardAvoidingView behavior='position'>
-        <View style={colorPickerStyle.pickerContainer}>
-          <ColorPicker
-            value={resultColor}
-            sliderThickness={26}
-            thumbSize={13}
-            thumbShape='doubleTriangle'
-            onChange={onColorChange}
-            onCompleteJS={onColorPick}
-            style={colorPickerStyle.picker}
-            adaptSpectrum
-          >
-            <Panel2 style={colorPickerStyle.panelStyle} verticalChannel='brightness' thumbShape='ring' thumbSize={30} />
-            <SaturationSlider style={colorPickerStyle.sliderStyle} />
-            <OpacitySlider style={colorPickerStyle.sliderStyle} />
-            <Divider />
-            <InputWidget inputStyle={colorPickerStyle.inputStyle} iconColor='#707070' />
-          </ColorPicker>
-        </View>
-      </KeyboardAvoidingView>
-    </BaseContainer>
+    <KeyboardAvoidingView behavior='position'>
+      <View style={colorPickerStyle.pickerContainer}>
+        <ColorPicker
+          value={resultColor}
+          sliderThickness={26}
+          thumbSize={13}
+          thumbShape='doubleTriangle'
+          onChange={onColorChange}
+          onCompleteJS={onColorPick}
+          style={colorPickerStyle.picker}
+          adaptSpectrum
+        >
+          <Panel2 style={colorPickerStyle.panelStyle} verticalChannel='brightness' thumbShape='ring' thumbSize={30} />
+          <SaturationSlider style={colorPickerStyle.sliderStyle} />
+          <OpacitySlider style={colorPickerStyle.sliderStyle} />
+          <Divider />
+          <InputWidget inputStyle={colorPickerStyle.inputStyle} iconColor='#707070' />
+        </ColorPicker>
+      </View>
+    </KeyboardAvoidingView>
   );
 }
