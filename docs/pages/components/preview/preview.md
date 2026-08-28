@@ -9,7 +9,7 @@ sidebar.parent.order: 4
 A preview of the selected and initial color.
 
 > [!tip]
-> For a text-only preview, use the [`<PreviewText />`](~/api/preview/preview-text/) component instead.
+> For a text-only preview, use the [`<PreviewText />`](~/components/preview/preview-text/) component instead.
 
 ## Props
 

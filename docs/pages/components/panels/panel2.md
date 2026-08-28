@@ -1,17 +1,32 @@
 ---
-sidebar.order: 1
+sidebar.order: 2
 ---
 
-# `<Panel1 />`
+# `<Panel2 />`
 
-![panel1](@assets/images/panel1.png)
+A Windows-style square panel for adjusting hue and either saturation or brightness. Move the thumb horizontally to change hue, and vertically to adjust the channel set by `verticalChannel`.
 
-An Adobe-style square panel for adjusting color brightness and saturation. Move the handle horizontally to change saturation, and vertically to change brightness.
+![verticalChannel: "saturation"](@assets/images/panel2-saturation.png)  
+_`verticalChannel: "saturation"`_
+
+![verticalChannel: "brightness"](@assets/images/panel2-brightness.png)  
+_`verticalChannel: "brightness"`_
+
+![verticalChannel: "hsl-saturation"](@assets/images/panel2-hsl-saturation.png)  
+_`verticalChannel: "hsl-saturation"`_
 
 > [!tip]
-> Add a [`<HueSlider />`](~/api/sliders/hue/hue-slider/) to gain full control over all three color channels.
+> For more control, add a slider next to `Panel2` that adjusts the opposite channel. For example, if `verticalChannel` is `"saturation"`, pair it with a [`<BrightnessSlider />`](~/components/sliders/hsb/brightness-slider/), and vice versa.
 
 ## Props
+
+### `verticalChannel`
+
+Determines which color channel is adjusted when moving the thumb vertically.
+
+`type: "saturation" | "brightness" | "hsl-saturation"` · `default: "saturation"`
+
+---
 
 ### `boundedThumb`
 
@@ -90,6 +105,30 @@ The duration of the thumb scale animation when active.
 An array of gestures or composed gestures from `react-native-gesture-handler` that run simultaneously with the color picker's gestures.
 
 `type: Gesture[]` · `default: []`
+
+---
+
+### `adaptSpectrum`
+
+The slider background color spectrum adapts to changes in saturation and brightness.
+
+`type: boolean` · `default: false`
+
+---
+
+### `reverseHue`
+
+Reverses the hue direction.
+
+`type: boolean` · `default: false`
+
+---
+
+### `reverseVerticalChannel`
+
+Reverses the direction of the vertical channel (saturation or brightness).
+
+`type: boolean` · `default: false`
 
 ---
 

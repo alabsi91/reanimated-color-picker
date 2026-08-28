@@ -1,5 +1,6 @@
 ---
 sidebar.order: 1
+sidebar.parent.collapsed: true
 ---
 
 # `<ColorPicker />`

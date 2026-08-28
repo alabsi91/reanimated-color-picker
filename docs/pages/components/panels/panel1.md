@@ -1,48 +1,17 @@
 ---
-sidebar.order: 3
+sidebar.order: 1
 ---
 
-# `<Panel3 />`
+# `<Panel1 />`
 
-A wheel-style circular panel for adjusting hue and either saturation or brightness. Move the thumb around the center to change hue, and toward or away from the center to adjust the channel set by `centerChannel`.
+![panel1](@assets/images/panel1.png)
 
-![centerChannel: "saturation"](@assets/images/panel3-saturation.png)  
-_`centerChannel: "saturation"`_
-
-![centerChannel: "brightness"](@assets/images/panel3-brightness.png)  
-_`centerChannel: "brightness"`_
-
-![centerChannel: "hsl-saturation"](@assets/images/panel3-hsl-saturation.png)  
-_`centerChannel: "hsl-saturation"`_
+An Adobe-style square panel for adjusting color brightness and saturation. Move the handle horizontally to change saturation, and vertically to change brightness.
 
 > [!tip]
-> For more control, add a slider next to `Panel3` that adjusts the opposite channel. For example, if `centerChannel` is `"saturation"`, pair it with a [`<BrightnessSlider />`](~/api/sliders/hsb/brightness-slider/), and vice versa.
+> Add a [`<HueSlider />`](~/components/sliders/hue/hue-slider/) to gain full control over all three color channels.
 
 ## Props
-
-### `centerChannel`
-
-Determines which color channel is adjusted when moving the thumb toward or away from the center.
-
-`type: "saturation" | "brightness" | "hsl-saturation"` · `default: "saturation"`
-
----
-
-### `rotate`
-
-The degree of rotation applied to the hue circle.
-
-`type: number` · `default: 0`
-
----
-
-### `renderCenterLine`
-
-Controls whether a line is rendered from the center of the panel to the thumb.
-
-`type: boolean` · `default: false`
-
----
 
 ### `boundedThumb`
 
@@ -121,14 +90,6 @@ The duration of the thumb scale animation when active.
 An array of gestures or composed gestures from `react-native-gesture-handler` that run simultaneously with the color picker's gestures.
 
 `type: Gesture[]` · `default: []`
-
----
-
-### `adaptSpectrum`
-
-The slider background color spectrum adapts to changes in saturation and brightness.
-
-`type: boolean` · `default: false`
 
 ---
 
