@@ -8,15 +8,15 @@
       "@styles/*": ["./sources/styles/*"],
       "@layouts/*": ["./sources/layouts/*"],
       "@parts/*": ["./sources/parts/*"],
-      "@examples/*": ["../ExamplesShared/*"],
+      "@examples/*": ["./sources/examples/*"],
       "@components/*": ["./sources/components/*"],
       "@types": ["./sources/types"]
     },
-    "ignoreDeprecations": "6.0",
     "lib": ["dom", "dom.iterable", "esnext"],
     "strict": true,
     "alwaysStrict": true,
     "target": "ES2022",
+    "jsx": "react-jsx",
     "module": "Preserve",
     "noEmit": true,
     "allowJs": true,
@@ -24,5 +24,5 @@
     "esModuleInterop": true,
     "skipLibCheck": true
   },
-  "include": ["sources", ".staticbolt.ts"]
+  "include": ["sources", "examples", "plugins", ".staticbolt.ts"]
 }

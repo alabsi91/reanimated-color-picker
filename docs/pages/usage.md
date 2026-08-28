@@ -4,7 +4,8 @@ sidebar.order: 3
 
 # Usage
 
-You can add, remove, rearrange, or style the built-in components of the color picker. See the [Examples](~/examples/) page for working demos.
+You can add, remove, rearrange, or style the built-in components of the color picker. See [Panel1](~/examples/panel1/) and the
+examples beside it for working demos, or [Example Apps](~/examples/example-apps/) to run them yourself.
 
 > [!tip] Using inside a `ScrollView`
 >

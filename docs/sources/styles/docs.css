@@ -1,2 +1,60 @@
 @import url("@staticbolt/docs/styles/docs.css");
 @import url("@parts/social-icons/social-icons.style.css");
+@import url("./quicksand-fonts.css");
+
+.example-container {
+  display: flex;
+  justify-content: center;
+  padding: 2em;
+  margin-block: 2em;
+  border: solid 1px var(--sb-color-gray-5);
+  border-radius: 0.5em;
+}
+
+[data-react-native]:empty {
+  display: grid;
+  place-items: center;
+  inline-size: 100%;
+  min-block-size: 20em;
+}
+
+[data-react-native]:empty::after {
+  inline-size: 2em;
+  block-size: 2em;
+  content: "";
+  border: solid 2px var(--sb-color-gray-5);
+  border-block-start-color: transparent;
+  border-radius: 50%;
+  animation: example-spinner 0.8s linear infinite;
+}
+
+@keyframes example-spinner {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-react-native]:empty::after {
+    animation: none;
+  }
+}
+
+.example-container-scrollable {
+  block-size: 30em;
+
+  & > [data-react-native] {
+    display: flex;
+    flex-direction: column;
+    inline-size: 100%;
+  }
+
+  & ::-webkit-scrollbar {
+    inline-size: 0.5em;
+  }
+
+  & ::-webkit-scrollbar-thumb {
+    background-color: var(--sb-color-gray-5);
+    border-radius: 0.25em;
+  }
+}

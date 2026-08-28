@@ -1,8 +1,8 @@
 ---
-sidebar.order: 6
+sidebar.parent.collapsed: true
 ---
 
-# Examples
+# Example Apps
 
 - [Examples Shared Code - TypeScript](https://github.com/alabsi91/reanimated-color-picker/tree/main/ExamplesShared)
 - [Bare workflow](https://github.com/alabsi91/reanimated-color-picker/tree/main/ExampleLatest)
