@@ -3,6 +3,7 @@ import { useDerivedValue, useSharedValue } from 'react-native-reanimated';
 
 import colorKit from '@colorKit';
 import usePickerContext from '@context';
+import { getWebDependencies } from '@utils';
 import WidgetTextInput from './WidgetTextInput';
 
 import type { WidgetProps } from '@types';
@@ -26,16 +27,19 @@ export default function HexWidget(props: WidgetProps) {
 
   const hexColor = useSharedValue(initialHex);
 
-  useDerivedValue(() => {
-    const currentColor = {
-      h: hueValue.value,
-      s: saturationValue.value,
-      v: brightnessValue.value,
-      a: alphaValue.value,
-    };
+  useDerivedValue(
+    () => {
+      const currentColor = {
+        h: hueValue.value,
+        s: saturationValue.value,
+        v: brightnessValue.value,
+        a: alphaValue.value,
+      };
 
-    hexColor.value = colorResult(currentColor).hex;
-  }, [hueValue, saturationValue, brightnessValue, alphaValue]);
+      hexColor.value = colorResult(currentColor).hex;
+    },
+    getWebDependencies([hueValue, saturationValue, brightnessValue, alphaValue]),
+  );
 
   const onEndEditing = (text: string) => {
     text = text.startsWith('#') ? text : '#' + text;

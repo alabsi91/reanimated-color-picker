@@ -2,7 +2,7 @@ import React from 'react';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 
 import { styles } from '@styles';
-import { enableAndroidHardwareTextures } from '@utils';
+import { enableAndroidHardwareTextures, getWebDependencies } from '@utils';
 
 import type { BuiltinThumbsProps } from '@types';
 
@@ -18,17 +18,15 @@ export default function Hollow({
 }: BuiltinThumbsProps) {
   const computedStyle = { width, height, borderRadius, borderWidth: 2 };
 
-  const adaptiveColorStyle = useAnimatedStyle(() => {
-    return {
-      borderColor: thumbColor ?? adaptiveColor.value,
-    };
-  }, [thumbColor, adaptiveColor]);
+  const adaptiveColorStyle = useAnimatedStyle(
+    () => ({ borderColor: thumbColor ?? adaptiveColor.value }),
+    getWebDependencies([thumbColor, adaptiveColor]),
+  );
 
-  const adaptiveColorBgStyle = useAnimatedStyle(() => {
-    return {
-      backgroundColor: thumbColor ?? adaptiveColor.value,
-    };
-  }, [thumbColor, adaptiveColor]);
+  const adaptiveColorBgStyle = useAnimatedStyle(
+    () => ({ backgroundColor: thumbColor ?? adaptiveColor.value }),
+    getWebDependencies([thumbColor, adaptiveColor]),
+  );
 
   return (
     <Animated.View

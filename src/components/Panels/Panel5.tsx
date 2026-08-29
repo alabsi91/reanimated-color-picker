@@ -6,7 +6,7 @@ import colorKit from '@colorKit';
 import usePickerContext from '@context';
 import { PanelCore } from '@panels/PanelCore';
 import { styles } from '@styles';
-import { getStyle, isRtl } from '@utils';
+import { getStyle, getWebDependencies, isRtl } from '@utils';
 
 import type { Panel5Props } from '@types';
 
@@ -21,7 +21,7 @@ export function Panel5({ gestures = [], style = {}, selectionStyle = {}, accessi
   const adaptiveColor = useSharedValue('#000');
   const width = useSharedValue(0);
   const height = useSharedValue(0);
-  const squareSize = useDerivedValue(() => Math.max(width.value / 12, height.value / 10), [width, height]);
+  const squareSize = useDerivedValue(() => Math.max(width.value / 12, height.value / 10), getWebDependencies([width, height]));
 
   const setAdaptiveColor = (color: string) => {
     'worklet';
@@ -31,42 +31,48 @@ export function Panel5({ gestures = [], style = {}, selectionStyle = {}, accessi
 
   // Calculate the position of the selected square on color change.
   // Since color conversion is not 100% accurate, we need to find the closest color in the grid.
-  useDerivedValue(() => {
-    const hsvColor = {
-      h: hueValue.value,
-      s: saturationValue.value,
-      v: brightnessValue.value,
-    };
+  useDerivedValue(
+    () => {
+      const hsvColor = {
+        h: hueValue.value,
+        s: saturationValue.value,
+        v: brightnessValue.value,
+      };
 
-    for (let y = 0; y < GRID_COLORS.length; y++) {
-      for (let x = 0; x < GRID_COLORS[y].length; x++) {
-        const gridColor = GRID_COLORS[y][x];
+      for (let y = 0; y < GRID_COLORS.length; y++) {
+        for (let x = 0; x < GRID_COLORS[y].length; x++) {
+          const gridColor = GRID_COLORS[y][x];
 
-        const areColorsEqual = colorKit.runOnUI().areColorsEqual(gridColor, hsvColor, 5);
-        if (!areColorsEqual) continue;
+          const areColorsEqual = colorKit.runOnUI().areColorsEqual(gridColor, hsvColor, 5);
+          if (!areColorsEqual) continue;
 
-        row.value = y;
-        column.value = x;
-        setAdaptiveColor(gridColor);
+          row.value = y;
+          column.value = x;
+          setAdaptiveColor(gridColor);
 
-        break;
+          break;
+        }
       }
-    }
-  }, [hueValue, saturationValue, brightnessValue, row, column]);
+    },
+    getWebDependencies([hueValue, saturationValue, brightnessValue, row, column]),
+  );
 
-  const selectedStyle = useAnimatedStyle(() => {
-    const x = column.value * squareSize.value;
-    const y = row.value * squareSize.value;
+  const selectedStyle = useAnimatedStyle(
+    () => {
+      const x = column.value * squareSize.value;
+      const y = row.value * squareSize.value;
 
-    return {
-      width: squareSize.value,
-      height: squareSize.value,
-      top: y,
-      left: isRtl ? undefined : x,
-      right: isRtl ? x : undefined,
-      borderColor: adaptiveColor.value,
-    };
-  }, [squareSize, adaptiveColor, row, column]);
+      return {
+        width: squareSize.value,
+        height: squareSize.value,
+        top: y,
+        left: isRtl ? undefined : x,
+        right: isRtl ? x : undefined,
+        borderColor: adaptiveColor.value,
+      };
+    },
+    getWebDependencies([squareSize, adaptiveColor, row, column]),
+  );
 
   const onUpdate = (newColumn: number, newRow: number) => {
     'worklet';

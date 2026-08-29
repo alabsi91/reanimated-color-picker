@@ -3,7 +3,7 @@ import { useDerivedValue, useSharedValue } from 'react-native-reanimated';
 
 import colorKit from '@colorKit';
 import usePickerContext from '@context';
-import { clamp, ConditionalRendering } from '@utils';
+import { clamp, ConditionalRendering, getWebDependencies } from '@utils';
 import WidgetTextInput from './WidgetTextInput';
 
 import type { WidgetProps } from '@types';
@@ -31,21 +31,24 @@ export default function HslWidget(props: WidgetProps) {
   const l = useSharedValue(initialHsl.l.toString());
   const a = useSharedValue(initialHsl.a.toString());
 
-  useDerivedValue(() => {
-    const currentColor = {
-      h: hueValue.value,
-      s: saturationValue.value,
-      v: brightnessValue.value,
-      a: alphaValue.value,
-    };
+  useDerivedValue(
+    () => {
+      const currentColor = {
+        h: hueValue.value,
+        s: saturationValue.value,
+        v: brightnessValue.value,
+        a: alphaValue.value,
+      };
 
-    const hsl = colorKit.runOnUI().HSL(colorResult(currentColor).hsla).object(false);
+      const hsl = colorKit.runOnUI().HSL(colorResult(currentColor).hsla).object(false);
 
-    h.value = hsl.h.toString();
-    s.value = hsl.s.toString();
-    l.value = hsl.l.toString();
-    a.value = hsl.a.toString();
-  }, [hueValue, saturationValue, brightnessValue, alphaValue]);
+      h.value = hsl.h.toString();
+      s.value = hsl.s.toString();
+      l.value = hsl.l.toString();
+      a.value = hsl.a.toString();
+    },
+    getWebDependencies([hueValue, saturationValue, brightnessValue, alphaValue]),
+  );
 
   const onHueEndEditing = (text: string) => {
     const hue = clamp(+text, 360);

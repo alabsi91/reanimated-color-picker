@@ -2,7 +2,7 @@ import React from 'react';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 
 import { styles } from '@styles';
-import { enableAndroidHardwareTextures, isRtl } from '@utils';
+import { enableAndroidHardwareTextures, getWebDependencies, isRtl } from '@utils';
 
 import type { BuiltinThumbsProps } from '@types';
 import type { StyleProp, ViewStyle } from 'react-native';
@@ -30,11 +30,10 @@ export default function TriangleUp({
     transform: [{ rotate: vertical ? '90deg' : '0deg' }],
   };
 
-  const adaptiveColorStyle = useAnimatedStyle(() => {
-    return {
-      borderBottomColor: thumbColor ?? adaptiveColor.value,
-    };
-  }, [thumbColor, adaptiveColor]);
+  const adaptiveColorStyle = useAnimatedStyle(
+    () => ({ borderBottomColor: thumbColor ?? adaptiveColor.value }),
+    getWebDependencies([thumbColor, adaptiveColor]),
+  );
 
   return (
     <Animated.View

@@ -7,7 +7,7 @@ import usePickerContext from '@context';
 import { PanelCore } from '@panels/PanelCore';
 import { styles } from '@styles';
 import Thumb from '@thumb';
-import { clamp, ConditionalRendering } from '@utils';
+import { clamp, ConditionalRendering, getWebDependencies } from '@utils';
 import { Panel3ContextProvider } from './Panel3Context';
 
 import type { Panel3Props } from '@types';
@@ -43,91 +43,103 @@ export function Panel3({
 
   // We need to keep track of the HSL saturation value because, when the luminance is 0 or 100,
   // converting to/from HSV causes the previous saturation value to be lost.
-  const hsl = useDerivedValue(() => {
-    const hsvColor = { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
+  const hsl = useDerivedValue(
+    () => {
+      const hsvColor = { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
 
-    const { h, s, l } = colorKit.runOnUI().HSL(hsvColor).object(false);
-    if (l === 100 || l === 0) {
-      return {
-        h,
-        s: lastHslSaturationValue.value,
-        l,
-      };
-    }
-
-    lastHslSaturationValue.value = s;
-
-    return {
-      h,
-      s,
-      l,
-    };
-  }, [hueValue, saturationValue, brightnessValue]);
-
-  const centerChannelValue = useDerivedValue(() => {
-    if (centerChannel === 'brightness') {
-      return brightnessValue.value;
-    }
-
-    if (centerChannel === 'hsl-saturation') {
-      return hsl.value.s;
-    }
-
-    return saturationValue.value;
-  }, [brightnessValue, saturationValue, hsl]);
-
-  const thumbAnimatedStyle = useAnimatedStyle(() => {
-    const center = width.value / 2 - (boundedThumb ? thumbSize / 2 : 0);
-    const rotatedHue = (hueValue.value - rotate) % 360;
-    const distance = (centerChannelValue.value / 100) * (width.value / 2 - (boundedThumb ? thumbSize / 2 : 0));
-    const angle = (rotatedHue * Math.PI) / 180;
-    const posY = width.value - (Math.sin(angle) * distance + center) - (boundedThumb ? thumbSize : thumbSize / 2);
-    const posX = width.value - (Math.cos(angle) * distance + center) - (boundedThumb ? thumbSize : thumbSize / 2);
-
-    return {
-      transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }, { rotate: rotatedHue + 90 + 'deg' }],
-    };
-  }, [width, centerChannelValue, hueValue, handleScale, boundedThumb, thumbSize, rotate]);
-
-  const spectrumStyle = useAnimatedStyle(() => {
-    if (!adaptSpectrum) {
-      return {};
-    }
-
-    if (centerChannel === 'brightness') {
-      return { backgroundColor: `rgba(255, 255, 255, ${1 - saturationValue.value / 100})` };
-    }
-
-    if (centerChannel === 'hsl-saturation') {
-      if (hsl.value.l < 50) {
-        return { backgroundColor: `rgba(0, 0, 0, ${1 - hsl.value.l / 50})` };
+      const { h, s, l } = colorKit.runOnUI().HSL(hsvColor).object(false);
+      if (l === 100 || l === 0) {
+        return { h, s: lastHslSaturationValue.value, l };
       }
 
-      return { backgroundColor: `rgba(255, 255, 255, ${(hsl.value.l - 50) / 50})` };
-    }
+      lastHslSaturationValue.value = s;
 
-    return { backgroundColor: `rgba(0, 0, 0, ${1 - brightnessValue.value / 100})` };
-  }, [saturationValue, brightnessValue, hsl, adaptSpectrum, centerChannel]);
+      return { h, s, l };
+    },
+    getWebDependencies([hueValue, saturationValue, brightnessValue]),
+  );
 
-  const centerLineStyle = useAnimatedStyle(() => {
-    if (!renderCenterLine) {
-      return {};
-    }
+  const centerChannelValue = useDerivedValue(
+    () => {
+      if (centerChannel === 'brightness') {
+        return brightnessValue.value;
+      }
 
-    const lineThickness = 1;
-    const center = width.value / 2 - (boundedThumb ? thumbSize / 2 : 0);
-    const rotatedHue = (hueValue.value - rotate) % 360;
-    const distance = (centerChannelValue.value / 100) * center;
-    const angle = (rotatedHue + 180) % 360; // reversed angle
+      if (centerChannel === 'hsl-saturation') {
+        return hsl.value.s;
+      }
 
-    return {
-      top: (width.value - lineThickness) / 2,
-      left: (width.value - distance) / 2,
-      height: lineThickness,
-      width: distance,
-      transform: [{ rotate: angle + 'deg' }, { translateX: distance / 2 }],
-    };
-  }, [width, hueValue, centerChannelValue, renderCenterLine, boundedThumb, thumbSize, rotate]);
+      return saturationValue.value;
+    },
+    getWebDependencies([brightnessValue, saturationValue, hsl]),
+  );
+
+  const thumbAnimatedStyle = useAnimatedStyle(
+    () => {
+      const center = width.value / 2 - (boundedThumb ? thumbSize / 2 : 0);
+      const rotatedHue = (hueValue.value - rotate) % 360;
+      const distance = (centerChannelValue.value / 100) * (width.value / 2 - (boundedThumb ? thumbSize / 2 : 0));
+      const angle = (rotatedHue * Math.PI) / 180;
+      const posY = width.value - (Math.sin(angle) * distance + center) - (boundedThumb ? thumbSize : thumbSize / 2);
+      const posX = width.value - (Math.cos(angle) * distance + center) - (boundedThumb ? thumbSize : thumbSize / 2);
+
+      return {
+        transform: [
+          { translateX: posX },
+          { translateY: posY },
+          { scale: handleScale.value },
+          { rotate: rotatedHue + 90 + 'deg' },
+        ],
+      };
+    },
+    getWebDependencies([width, centerChannelValue, hueValue, handleScale, boundedThumb, thumbSize, rotate]),
+  );
+
+  const spectrumStyle = useAnimatedStyle(
+    () => {
+      if (!adaptSpectrum) {
+        return {};
+      }
+
+      if (centerChannel === 'brightness') {
+        return { backgroundColor: `rgba(255, 255, 255, ${1 - saturationValue.value / 100})` };
+      }
+
+      if (centerChannel === 'hsl-saturation') {
+        if (hsl.value.l < 50) {
+          return { backgroundColor: `rgba(0, 0, 0, ${1 - hsl.value.l / 50})` };
+        }
+
+        return { backgroundColor: `rgba(255, 255, 255, ${(hsl.value.l - 50) / 50})` };
+      }
+
+      return { backgroundColor: `rgba(0, 0, 0, ${1 - brightnessValue.value / 100})` };
+    },
+    getWebDependencies([saturationValue, brightnessValue, hsl, adaptSpectrum, centerChannel]),
+  );
+
+  const centerLineStyle = useAnimatedStyle(
+    () => {
+      if (!renderCenterLine) {
+        return {};
+      }
+
+      const lineThickness = 1;
+      const center = width.value / 2 - (boundedThumb ? thumbSize / 2 : 0);
+      const rotatedHue = (hueValue.value - rotate) % 360;
+      const distance = (centerChannelValue.value / 100) * center;
+      const angle = (rotatedHue + 180) % 360; // reversed angle
+
+      return {
+        top: (width.value - lineThickness) / 2,
+        left: (width.value - distance) / 2,
+        height: lineThickness,
+        width: distance,
+        transform: [{ rotate: angle + 'deg' }, { translateX: distance / 2 }],
+      };
+    },
+    getWebDependencies([width, hueValue, centerChannelValue, renderCenterLine, boundedThumb, thumbSize, rotate]),
+  );
 
   const onBegin = ({ x, y }: { x: number; y: number }) => {
     'worklet';

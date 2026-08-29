@@ -7,6 +7,7 @@ import usePickerContext from '@context';
 import { CircularSliderCore } from '@sliders/CircularSliderCore';
 import { styles } from '@styles';
 import Thumb from '@thumb';
+import { getWebDependencies } from '@utils';
 
 import type { LuminanceCircularProps } from '@types';
 
@@ -35,7 +36,7 @@ export function LuminanceCircular({
   const isGestureActive = useSharedValue(false);
   const width = useSharedValue(0);
   const borderRadius = useSharedValue(0);
-  const borderRadiusStyle = useAnimatedStyle(() => ({ borderRadius: borderRadius.value }), [borderRadius]);
+  const borderRadiusStyle = useAnimatedStyle(() => ({ borderRadius: borderRadius.value }), getWebDependencies([borderRadius]));
 
   const handleScale = useSharedValue(1);
   const thumbSide = useSharedValue<0 | 1>(0); // which side of the circle the thumb is on
@@ -46,55 +47,67 @@ export function LuminanceCircular({
   const hslSaturationValue = useSharedValue(0);
   const hslLuminanceValue = useSharedValue(0);
 
-  const hsl = useDerivedValue(() => {
-    const currentHsvColor = { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
-    const { h, s, l } = colorKit.runOnUI().HSL(currentHsvColor).object(false);
+  const hsl = useDerivedValue(
+    () => {
+      const currentHsvColor = { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
+      const { h, s, l } = colorKit.runOnUI().HSL(currentHsvColor).object(false);
 
-    hslLuminanceValue.value = l;
+      hslLuminanceValue.value = l;
 
-    // At l=0 (black) or l=100 (white), the conversion loses saturation information.
-    // Substitute the last known saturation so it's restored when luminance changes.
-    if (l === 100 || l === 0) {
-      return { h, s: hslSaturationValue.value, l };
-    }
+      // At l=0 (black) or l=100 (white), the conversion loses saturation information.
+      // Substitute the last known saturation so it's restored when luminance changes.
+      if (l === 100 || l === 0) {
+        return { h, s: hslSaturationValue.value, l };
+      }
 
-    hslSaturationValue.value = s;
-    return { h, s, l };
-  }, [hueValue, saturationValue, brightnessValue, hslLuminanceValue]);
+      hslSaturationValue.value = s;
+      return { h, s, l };
+    },
+    getWebDependencies([hueValue, saturationValue, brightnessValue, hslLuminanceValue]),
+  );
 
-  const thumbAnimatedStyle = useAnimatedStyle(() => {
-    const center = width.value / 2;
-    const distance = (width.value - sliderThickness) / 2;
-    const angle = (hsl.value.l / 100) * 180 + thumbSide.value * 180;
-    const mirroredAngle = ((thumbSide.value === 1 ? 180 - angle : angle) - rotate) % 360;
-    const posY = width.value - (Math.sin((mirroredAngle * Math.PI) / 180) * distance + center) - thumbSize / 2;
-    const posX = width.value - (Math.cos((mirroredAngle * Math.PI) / 180) * distance + center) - thumbSize / 2;
+  const thumbAnimatedStyle = useAnimatedStyle(
+    () => {
+      const center = width.value / 2;
+      const distance = (width.value - sliderThickness) / 2;
+      const angle = (hsl.value.l / 100) * 180 + thumbSide.value * 180;
+      const mirroredAngle = ((thumbSide.value === 1 ? 180 - angle : angle) - rotate) % 360;
+      const posY = width.value - (Math.sin((mirroredAngle * Math.PI) / 180) * distance + center) - thumbSize / 2;
+      const posX = width.value - (Math.cos((mirroredAngle * Math.PI) / 180) * distance + center) - thumbSize / 2;
 
-    return {
-      transform: [
-        { translateX: posX },
-        { translateY: posY },
-        { scale: handleScale.value },
-        { rotate: mirroredAngle + 90 + 'deg' },
-      ],
-    };
-  }, [width, hsl, handleScale, thumbSide, rotate]);
+      return {
+        transform: [
+          { translateX: posX },
+          { translateY: posY },
+          { scale: handleScale.value },
+          { rotate: mirroredAngle + 90 + 'deg' },
+        ],
+      };
+    },
+    getWebDependencies([width, hsl, handleScale, thumbSide, rotate]),
+  );
 
-  const activeColorStyle = useAnimatedStyle(() => {
-    return {
-      backgroundColor: `hsl(${hsl.value.h}, ${adaptSpectrum ? hsl.value.s : 100}%, ${50}%)`,
-      borderRadius: width.value / 2,
-    };
-  }, [hsl, width, adaptSpectrum]);
+  const activeColorStyle = useAnimatedStyle(
+    () => {
+      return {
+        backgroundColor: `hsl(${hsl.value.h}, ${adaptSpectrum ? hsl.value.s : 100}%, ${50}%)`,
+        borderRadius: width.value / 2,
+      };
+    },
+    getWebDependencies([hsl, width, adaptSpectrum]),
+  );
 
-  const clipViewStyle = useAnimatedStyle(() => {
-    return {
-      position: 'absolute',
-      width: width.value - sliderThickness * 2,
-      height: width.value - sliderThickness * 2,
-      borderRadius: width.value / 2,
-    };
-  }, [width, sliderThickness]);
+  const clipViewStyle = useAnimatedStyle(
+    () => {
+      return {
+        position: 'absolute',
+        width: width.value - sliderThickness * 2,
+        height: width.value - sliderThickness * 2,
+        borderRadius: width.value / 2,
+      };
+    },
+    getWebDependencies([width, sliderThickness]),
+  );
 
   const onBegin = ({ x, y }: { x: number; y: number }) => {
     'worklet';

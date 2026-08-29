@@ -6,6 +6,14 @@ import type { StyleProp, ViewStyle } from 'react-native';
 export const isRtl = I18nManager.isRTL;
 export const isWeb = Platform.OS === 'web';
 
+/**
+ * Reanimated ignores the dependency array on native (the Babel plugin collects the closure) and warns about it since 4.6. Old
+ * Reanimated versions still need it on web.
+ */
+export function getWebDependencies(dependencies: Array<unknown>): Array<unknown> | undefined {
+  return isWeb ? dependencies : undefined;
+}
+
 /** Get a specific property from a React Native style object */
 export function getStyle<T extends ViewStyle, K extends keyof T>(style: StyleProp<T>, property: K): T[K] | undefined {
   if (!style) {

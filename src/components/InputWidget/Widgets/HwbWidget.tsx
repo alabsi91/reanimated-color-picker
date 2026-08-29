@@ -3,7 +3,7 @@ import { useDerivedValue, useSharedValue } from 'react-native-reanimated';
 
 import colorKit from '@colorKit';
 import usePickerContext from '@context';
-import { clamp, ConditionalRendering } from '@utils';
+import { clamp, ConditionalRendering, getWebDependencies } from '@utils';
 import WidgetTextInput from './WidgetTextInput';
 
 import type { WidgetProps } from '@types';
@@ -31,21 +31,24 @@ export default function HwbWidget(props: WidgetProps) {
   const b = useSharedValue(initialHwb.b.toString());
   const a = useSharedValue(initialHwb.a.toString());
 
-  useDerivedValue(() => {
-    const currentColor = {
-      h: hueValue.value,
-      s: saturationValue.value,
-      v: brightnessValue.value,
-      a: alphaValue.value,
-    };
+  useDerivedValue(
+    () => {
+      const currentColor = {
+        h: hueValue.value,
+        s: saturationValue.value,
+        v: brightnessValue.value,
+        a: alphaValue.value,
+      };
 
-    const hwb = colorKit.runOnUI().HWB(colorResult(currentColor).hwba).object(false);
+      const hwb = colorKit.runOnUI().HWB(colorResult(currentColor).hwba).object(false);
 
-    h.value = hwb.h.toString();
-    w.value = hwb.w.toString();
-    b.value = hwb.b.toString();
-    a.value = hwb.a.toString();
-  }, [hueValue, saturationValue, brightnessValue, alphaValue]);
+      h.value = hwb.h.toString();
+      w.value = hwb.w.toString();
+      b.value = hwb.b.toString();
+      a.value = hwb.a.toString();
+    },
+    getWebDependencies([hueValue, saturationValue, brightnessValue, alphaValue]),
+  );
 
   const onHueEndEditing = (text: string) => {
     const hue = clamp(+text, 360);

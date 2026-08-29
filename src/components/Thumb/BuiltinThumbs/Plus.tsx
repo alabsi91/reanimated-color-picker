@@ -2,7 +2,7 @@ import React from 'react';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 
 import { styles } from '@styles';
-import { enableAndroidHardwareTextures } from '@utils';
+import { enableAndroidHardwareTextures, getWebDependencies } from '@utils';
 
 import type { BuiltinThumbsProps } from '@types';
 
@@ -39,17 +39,15 @@ export default function Plus({
     height: vertical ? '100%' : thickness,
   } as const;
 
-  const adaptiveColorStyle = useAnimatedStyle(() => {
-    return {
-      backgroundColor: thumbColor ?? adaptiveColor.value,
-    };
-  }, [thumbColor, adaptiveColor]);
+  const adaptiveColorStyle = useAnimatedStyle(
+    () => ({ backgroundColor: thumbColor ?? adaptiveColor.value }),
+    getWebDependencies([thumbColor, adaptiveColor]),
+  );
 
-  const adaptiveBorderColorStyle = useAnimatedStyle(() => {
-    return {
-      borderColor: thumbColor ?? adaptiveColor.value,
-    };
-  }, [thumbColor, adaptiveColor]);
+  const adaptiveBorderColorStyle = useAnimatedStyle(
+    () => ({ borderColor: thumbColor ?? adaptiveColor.value }),
+    getWebDependencies([thumbColor, adaptiveColor]),
+  );
 
   return (
     <Animated.View

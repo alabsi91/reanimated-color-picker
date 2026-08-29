@@ -6,7 +6,7 @@ import colorKit from '@colorKit';
 import usePickerContext from '@context';
 import { SliderCore } from '@sliders/SliderCore';
 import Thumb from '@thumb';
-import { getStyle, isRtl, isWeb, RenderNativeOnly } from '@utils';
+import { getStyle, getWebDependencies, isRtl, isWeb, RenderNativeOnly } from '@utils';
 
 import type { SliderProps } from '@types';
 
@@ -35,63 +35,73 @@ export function GreenSlider({ gestures = [], style = {}, vertical = false, rever
   const handleScale = useSharedValue(1);
   const greenValue = useSharedValue(0);
 
-  const rgb = useDerivedValue(() => {
-    const currentHsvColor = { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
-    const rgbColor = colorKit.runOnUI().RGB(currentHsvColor).object(false);
-    greenValue.value = rgbColor.g;
-    return rgbColor;
-  }, [hueValue, saturationValue, brightnessValue, greenValue]);
+  const rgb = useDerivedValue(
+    () => {
+      const currentHsvColor = { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
+      const rgbColor = colorKit.runOnUI().RGB(currentHsvColor).object(false);
+      greenValue.value = rgbColor.g;
+      return rgbColor;
+    },
+    getWebDependencies([hueValue, saturationValue, brightnessValue, greenValue]),
+  );
 
-  const thumbAnimatedStyle = useAnimatedStyle(() => {
-    const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0);
-    const percent = (rgb.value.g / 255) * length;
-    const pos = (reverse ? length - percent : percent) - (boundedThumb ? 0 : thumbSize / 2);
-    const posY = vertical ? pos : height.value / 2 - thumbSize / 2;
-    const posX = vertical ? width.value / 2 - thumbSize / 2 : pos;
+  const thumbAnimatedStyle = useAnimatedStyle(
+    () => {
+      const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0);
+      const percent = (rgb.value.g / 255) * length;
+      const pos = (reverse ? length - percent : percent) - (boundedThumb ? 0 : thumbSize / 2);
+      const posY = vertical ? pos : height.value / 2 - thumbSize / 2;
+      const posX = vertical ? width.value / 2 - thumbSize / 2 : pos;
 
-    return {
-      transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }],
-    };
-  }, [rgb, width, height, handleScale, vertical, reverse, boundedThumb, thumbSize]);
-
-  const imageStyle = useAnimatedStyle(() => {
-    if (isWeb) {
-      return {};
-    }
-
-    const imageRotate = vertical ? (reverse ? '90deg' : '270deg') : reverse ? '0deg' : '180deg';
-    const imageTranslateY = ((height.value - width.value) / 2) * ((reverse && isRtl) || (!reverse && !isRtl) ? -1 : 1);
-    const tintColor = adaptSpectrum ? `rgb(${Math.round(rgb.value.r)}, 255, ${Math.round(rgb.value.b)})` : 'rgb(0, 255, 0)';
-
-    return {
-      tintColor,
-      width: vertical ? height.value : '100%',
-      height: vertical ? width.value : '100%',
-      transform: [
-        { rotate: imageRotate },
-        { translateX: vertical ? ((height.value - width.value) / 2) * (reverse ? 1 : -1) : 0 },
-        { translateY: vertical ? imageTranslateY : 0 },
-      ],
-    };
-  }, [rgb, width, height, adaptSpectrum, vertical, reverse]);
-
-  const sliderBackground = useAnimatedStyle(() => {
-    const r = Math.round(rgb.value.r);
-    const b = Math.round(rgb.value.b);
-
-    if (isWeb) {
-      const deg = vertical ? (reverse ? 180 : 0) : reverse ? 90 : 270;
       return {
-        background: adaptSpectrum
-          ? `linear-gradient(${deg}deg, rgb(${r}, 255, ${b}) 0%, rgb(${r}, 0, ${b}) 100%)`
-          : `linear-gradient(${deg}deg, rgb(0, 255, 0) 0%, rgb(0, 0, 0) 100%)`,
+        transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }],
       };
-    }
+    },
+    getWebDependencies([rgb, width, height, handleScale, vertical, reverse, boundedThumb, thumbSize]),
+  );
 
-    return {
-      backgroundColor: adaptSpectrum ? `rgb(${r}, 0, ${b})` : 'rgb(0, 0, 0)',
-    };
-  }, [rgb, adaptSpectrum]);
+  const imageStyle = useAnimatedStyle(
+    () => {
+      if (isWeb) {
+        return {};
+      }
+
+      const imageRotate = vertical ? (reverse ? '90deg' : '270deg') : reverse ? '0deg' : '180deg';
+      const imageTranslateY = ((height.value - width.value) / 2) * ((reverse && isRtl) || (!reverse && !isRtl) ? -1 : 1);
+      const tintColor = adaptSpectrum ? `rgb(${Math.round(rgb.value.r)}, 255, ${Math.round(rgb.value.b)})` : 'rgb(0, 255, 0)';
+
+      return {
+        tintColor,
+        width: vertical ? height.value : '100%',
+        height: vertical ? width.value : '100%',
+        transform: [
+          { rotate: imageRotate },
+          { translateX: vertical ? ((height.value - width.value) / 2) * (reverse ? 1 : -1) : 0 },
+          { translateY: vertical ? imageTranslateY : 0 },
+        ],
+      };
+    },
+    getWebDependencies([rgb, width, height, adaptSpectrum, vertical, reverse]),
+  );
+
+  const sliderBackground = useAnimatedStyle(
+    () => {
+      const r = Math.round(rgb.value.r);
+      const b = Math.round(rgb.value.b);
+
+      if (isWeb) {
+        const deg = vertical ? (reverse ? 180 : 0) : reverse ? 90 : 270;
+        return {
+          background: adaptSpectrum
+            ? `linear-gradient(${deg}deg, rgb(${r}, 255, ${b}) 0%, rgb(${r}, 0, ${b}) 100%)`
+            : `linear-gradient(${deg}deg, rgb(0, 255, 0) 0%, rgb(0, 0, 0) 100%)`,
+        };
+      }
+
+      return { backgroundColor: adaptSpectrum ? `rgb(${r}, 0, ${b})` : 'rgb(0, 0, 0)' };
+    },
+    getWebDependencies([rgb, adaptSpectrum]),
+  );
 
   const onBegin = () => {
     'worklet';

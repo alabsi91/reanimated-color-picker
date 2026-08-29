@@ -3,7 +3,7 @@ import { Keyboard, Text, TextInput, View } from 'react-native';
 import Animated, { useAnimatedProps, useAnimatedRef, useDerivedValue } from 'react-native-reanimated';
 
 import { styles } from '@styles';
-import { isWeb } from '@utils';
+import { getWebDependencies, isWeb } from '@utils';
 
 import type { InputProps } from '@types';
 import type { BlurEvent, StyleProp, TextInputEndEditingEvent, TextStyle } from 'react-native';
@@ -39,7 +39,10 @@ export default function WidgetTextInput(props: WidgetTextInputProps) {
 
   const inputRef = useAnimatedRef<TextInput>();
 
-  const animatedProps = useAnimatedProps(() => ({ text: textValue.value, defaultValue: textValue.value }) as never, [textValue]);
+  const animatedProps = useAnimatedProps(
+    () => ({ text: textValue.value, defaultValue: textValue.value }) as never,
+    getWebDependencies([textValue]),
+  );
 
   const submit = (e: TextInputEndEditingEvent | BlurEvent) => {
     // @ts-expect-error `text` doesn't exist on BlurEvent (It does)
@@ -70,12 +73,15 @@ export default function WidgetTextInput(props: WidgetTextInputProps) {
   }, []);
 
   // For web platform only
-  useDerivedValue(() => {
-    if (!isWeb || !inputRef.current) return;
+  useDerivedValue(
+    () => {
+      if (!isWeb || !inputRef.current) return;
 
-    // @ts-expect-error value doesn't exist
-    inputRef.current.value = textValue.value;
-  }, [textValue]);
+      // @ts-expect-error value doesn't exist
+      inputRef.current.value = textValue.value;
+    },
+    getWebDependencies([textValue]),
+  );
 
   return (
     <View style={styles.inputsContainer}>

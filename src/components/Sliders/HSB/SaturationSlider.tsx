@@ -5,7 +5,7 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-na
 import usePickerContext from '@context';
 import { SliderCore } from '@sliders/SliderCore';
 import Thumb from '@thumb';
-import { ConditionalRendering, getStyle, HSVA2HSLA_string, isRtl } from '@utils';
+import { ConditionalRendering, getStyle, getWebDependencies, HSVA2HSLA_string, isRtl } from '@utils';
 
 import type { SliderProps } from '@types';
 
@@ -33,48 +33,54 @@ export function SaturationSlider({ gestures = [], style = {}, vertical = false, 
   const height = useSharedValue(!vertical ? sliderThickness : typeof heightStyle === 'number' ? heightStyle : 0);
   const handleScale = useSharedValue(1);
 
-  const thumbAnimatedStyle = useAnimatedStyle(() => {
-    const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0);
-    const percent = (saturationValue.value / 100) * length;
-    const pos = (reverse ? length - percent : percent) - (boundedThumb ? 0 : thumbSize / 2);
-    const posY = vertical ? pos : height.value / 2 - thumbSize / 2;
-    const posX = vertical ? width.value / 2 - thumbSize / 2 : pos;
+  const thumbAnimatedStyle = useAnimatedStyle(
+    () => {
+      const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0);
+      const percent = (saturationValue.value / 100) * length;
+      const pos = (reverse ? length - percent : percent) - (boundedThumb ? 0 : thumbSize / 2);
+      const posY = vertical ? pos : height.value / 2 - thumbSize / 2;
+      const posX = vertical ? width.value / 2 - thumbSize / 2 : pos;
 
-    return {
-      transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }],
-    };
-  }, [width, height, saturationValue, handleScale, vertical, reverse, boundedThumb, thumbSize]);
+      return {
+        transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }],
+      };
+    },
+    getWebDependencies([width, height, saturationValue, handleScale, vertical, reverse, boundedThumb, thumbSize]),
+  );
 
-  const activeColorStyle = useAnimatedStyle(() => {
-    return {
-      backgroundColor: HSVA2HSLA_string(hueValue.value, 100, 100),
-    };
-  }, [hueValue]);
+  const activeColorStyle = useAnimatedStyle(
+    () => ({ backgroundColor: HSVA2HSLA_string(hueValue.value, 100, 100) }),
+    getWebDependencies([hueValue]),
+  );
 
-  const activeBrightnessStyle = useAnimatedStyle(() => {
-    if (!adaptSpectrum) {
-      return {};
-    }
+  const activeBrightnessStyle = useAnimatedStyle(
+    () => {
+      if (!adaptSpectrum) {
+        return {};
+      }
 
-    return {
-      backgroundColor: HSVA2HSLA_string(0, 0, 0, 1 - brightnessValue.value / 100),
-    };
-  }, [adaptSpectrum, brightnessValue]);
+      return { backgroundColor: HSVA2HSLA_string(0, 0, 0, 1 - brightnessValue.value / 100) };
+    },
+    getWebDependencies([adaptSpectrum, brightnessValue]),
+  );
 
-  const imageStyle = useAnimatedStyle(() => {
-    const imageRotate = vertical ? (reverse ? '270deg' : '90deg') : reverse ? '180deg' : '0deg';
-    const imageTranslateY = ((height.value - width.value) / 2) * ((reverse && isRtl) || (!reverse && !isRtl) ? 1 : -1);
+  const imageStyle = useAnimatedStyle(
+    () => {
+      const imageRotate = vertical ? (reverse ? '270deg' : '90deg') : reverse ? '180deg' : '0deg';
+      const imageTranslateY = ((height.value - width.value) / 2) * ((reverse && isRtl) || (!reverse && !isRtl) ? 1 : -1);
 
-    return {
-      width: vertical ? height.value : '100%',
-      height: vertical ? width.value : '100%',
-      transform: [
-        { rotate: imageRotate },
-        { translateX: vertical ? ((height.value - width.value) / 2) * (reverse ? -1 : 1) : 0 },
-        { translateY: vertical ? imageTranslateY : 0 },
-      ],
-    };
-  }, [width, height, vertical, reverse]);
+      return {
+        width: vertical ? height.value : '100%',
+        height: vertical ? width.value : '100%',
+        transform: [
+          { rotate: imageRotate },
+          { translateX: vertical ? ((height.value - width.value) / 2) * (reverse ? -1 : 1) : 0 },
+          { translateY: vertical ? imageTranslateY : 0 },
+        ],
+      };
+    },
+    getWebDependencies([width, height, vertical, reverse]),
+  );
 
   const onBegin = () => {
     'worklet';

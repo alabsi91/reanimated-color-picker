@@ -3,7 +3,7 @@ import { useDerivedValue, useSharedValue } from 'react-native-reanimated';
 
 import colorKit from '@colorKit';
 import usePickerContext from '@context';
-import { clamp, ConditionalRendering } from '@utils';
+import { clamp, ConditionalRendering, getWebDependencies } from '@utils';
 import WidgetTextInput from './WidgetTextInput';
 
 import type { WidgetProps } from '@types';
@@ -31,21 +31,24 @@ export default function HsvWidget(props: WidgetProps) {
   const v = useSharedValue(initialHsv.v.toString());
   const a = useSharedValue(initialHsv.a.toString());
 
-  useDerivedValue(() => {
-    const currentColor = {
-      h: hueValue.value,
-      s: saturationValue.value,
-      v: brightnessValue.value,
-      a: alphaValue.value,
-    };
+  useDerivedValue(
+    () => {
+      const currentColor = {
+        h: hueValue.value,
+        s: saturationValue.value,
+        v: brightnessValue.value,
+        a: alphaValue.value,
+      };
 
-    const hsv = colorKit.runOnUI().HSV(colorResult(currentColor).hsva).object(false);
+      const hsv = colorKit.runOnUI().HSV(colorResult(currentColor).hsva).object(false);
 
-    h.value = hsv.h.toString();
-    s.value = hsv.s.toString();
-    v.value = hsv.v.toString();
-    a.value = hsv.a.toString();
-  }, [hueValue, saturationValue, brightnessValue, alphaValue]);
+      h.value = hsv.h.toString();
+      s.value = hsv.s.toString();
+      v.value = hsv.v.toString();
+      a.value = hsv.a.toString();
+    },
+    getWebDependencies([hueValue, saturationValue, brightnessValue, alphaValue]),
+  );
 
   const onHueEndEditing = (text: string) => {
     const hue = clamp(+text, 360);

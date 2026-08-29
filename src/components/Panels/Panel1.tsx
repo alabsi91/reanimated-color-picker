@@ -6,7 +6,7 @@ import usePickerContext from '@context';
 import { PanelCore } from '@panels/PanelCore';
 import { styles } from '@styles';
 import Thumb from '@thumb';
-import { clamp, getStyle, isRtl } from '@utils';
+import { clamp, getStyle, getWebDependencies, isRtl } from '@utils';
 
 import type { PanelProps } from '@types';
 
@@ -31,39 +31,48 @@ export function Panel1({ gestures = [], style = {}, ...props }: PanelProps) {
   const height = useSharedValue(0);
   const handleScale = useSharedValue(1);
 
-  const thumbAnimatedStyle = useAnimatedStyle(() => {
-    const length = {
-      x: width.value - (boundedThumb ? thumbSize : 0),
-      y: height.value - (boundedThumb ? thumbSize : 0),
-    };
-    const percentX = (saturationValue.value / 100) * length.x;
-    const posX = percentX - (boundedThumb ? 0 : thumbSize / 2);
-    const percentY = (brightnessValue.value / 100) * length.y;
-    const posY = length.y - percentY - (boundedThumb ? 0 : thumbSize / 2);
+  const thumbAnimatedStyle = useAnimatedStyle(
+    () => {
+      const length = {
+        x: width.value - (boundedThumb ? thumbSize : 0),
+        y: height.value - (boundedThumb ? thumbSize : 0),
+      };
+      const percentX = (saturationValue.value / 100) * length.x;
+      const posX = percentX - (boundedThumb ? 0 : thumbSize / 2);
+      const percentY = (brightnessValue.value / 100) * length.y;
+      const posY = length.y - percentY - (boundedThumb ? 0 : thumbSize / 2);
 
-    return {
-      transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }],
-    };
-  }, [handleScale, saturationValue, brightnessValue, width, height, boundedThumb, thumbSize]);
+      return {
+        transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }],
+      };
+    },
+    getWebDependencies([handleScale, saturationValue, brightnessValue, width, height, boundedThumb, thumbSize]),
+  );
 
-  const activeColorStyle = useAnimatedStyle(() => {
-    return {
-      backgroundColor: `hsl(${hueValue.value}, 100%, 50%)`,
-    };
-  }, [hueValue]);
+  const activeColorStyle = useAnimatedStyle(
+    () => {
+      return {
+        backgroundColor: `hsl(${hueValue.value}, 100%, 50%)`,
+      };
+    },
+    getWebDependencies([hueValue]),
+  );
 
-  const brightnessImageStyle = useAnimatedStyle(() => {
-    return {
-      // Width and height are intentionally swapped to correct dimensions after the 270° rotation
-      width: height.value,
-      height: width.value,
-      transform: [
-        { rotate: '270deg' },
-        { translateX: (width.value - height.value) / 2 },
-        { translateY: ((width.value - height.value) / 2) * (isRtl ? -1 : 1) },
-      ],
-    };
-  }, [width, height]);
+  const brightnessImageStyle = useAnimatedStyle(
+    () => {
+      return {
+        // Width and height are intentionally swapped to correct dimensions after the 270° rotation
+        width: height.value,
+        height: width.value,
+        transform: [
+          { rotate: '270deg' },
+          { translateX: (width.value - height.value) / 2 },
+          { translateY: ((width.value - height.value) / 2) * (isRtl ? -1 : 1) },
+        ],
+      };
+    },
+    getWebDependencies([width, height]),
+  );
 
   const onBegin = () => {
     'worklet';

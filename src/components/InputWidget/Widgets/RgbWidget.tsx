@@ -3,7 +3,7 @@ import { useDerivedValue, useSharedValue } from 'react-native-reanimated';
 
 import colorKit from '@colorKit';
 import usePickerContext from '@context';
-import { clamp, ConditionalRendering } from '@utils';
+import { clamp, ConditionalRendering, getWebDependencies } from '@utils';
 import WidgetTextInput from './WidgetTextInput';
 
 import type { WidgetProps } from '@types';
@@ -31,21 +31,24 @@ export default function RgbWidget(props: WidgetProps) {
   const b = useSharedValue(initialRgb.b.toString());
   const a = useSharedValue(initialRgb.a.toString());
 
-  useDerivedValue(() => {
-    const currentColor = {
-      h: hueValue.value,
-      s: saturationValue.value,
-      v: brightnessValue.value,
-      a: alphaValue.value,
-    };
+  useDerivedValue(
+    () => {
+      const currentColor = {
+        h: hueValue.value,
+        s: saturationValue.value,
+        v: brightnessValue.value,
+        a: alphaValue.value,
+      };
 
-    const rgb = colorKit.runOnUI().RGB(colorResult(currentColor).rgba).object(false);
+      const rgb = colorKit.runOnUI().RGB(colorResult(currentColor).rgba).object(false);
 
-    r.value = rgb.r.toString();
-    g.value = rgb.g.toString();
-    b.value = rgb.b.toString();
-    a.value = rgb.a.toString();
-  }, [hueValue, saturationValue, brightnessValue, alphaValue]);
+      r.value = rgb.r.toString();
+      g.value = rgb.g.toString();
+      b.value = rgb.b.toString();
+      a.value = rgb.a.toString();
+    },
+    getWebDependencies([hueValue, saturationValue, brightnessValue, alphaValue]),
+  );
 
   const onRedEndEditing = (text: string) => {
     const red = clamp(+text, 255);

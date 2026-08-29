@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 
 import { styles } from '@styles';
-import { enableAndroidHardwareTextures, isRtl } from '@utils';
+import { enableAndroidHardwareTextures, getWebDependencies, isRtl } from '@utils';
 
 import type { BuiltinThumbsProps } from '@types';
 import type { StyleProp, ViewStyle } from 'react-native';
@@ -38,11 +38,10 @@ export default function DoubleTriangle({
     transform: [{ rotate: vertical ? '270deg' : '180deg' }],
   };
 
-  const adaptiveColorStyle = useAnimatedStyle(() => {
-    return {
-      borderBottomColor: thumbColor ?? adaptiveColor.value,
-    };
-  }, [thumbColor, adaptiveColor]);
+  const adaptiveColorStyle = useAnimatedStyle(
+    () => ({ borderBottomColor: thumbColor ?? adaptiveColor.value }),
+    getWebDependencies([thumbColor, adaptiveColor]),
+  );
 
   return (
     <Animated.View

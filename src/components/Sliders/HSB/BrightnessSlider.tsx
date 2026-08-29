@@ -5,7 +5,7 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-na
 import usePickerContext from '@context';
 import { SliderCore } from '@sliders/SliderCore';
 import Thumb from '@thumb';
-import { getStyle, HSVA2HSLA_string, isRtl } from '@utils';
+import { getStyle, getWebDependencies, HSVA2HSLA_string, isRtl } from '@utils';
 
 import type { SliderProps } from '@types';
 
@@ -33,38 +33,43 @@ export function BrightnessSlider({ gestures = [], style = {}, vertical = false, 
   const height = useSharedValue(!vertical ? sliderThickness : typeof heightStyle === 'number' ? heightStyle : 0);
   const handleScale = useSharedValue(1);
 
-  const thumbAnimatedStyle = useAnimatedStyle(() => {
-    const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0);
-    const percent = (brightnessValue.value / 100) * length;
-    const pos = (reverse ? length - percent : percent) - (boundedThumb ? 0 : thumbSize / 2);
-    const posY = vertical ? pos : height.value / 2 - thumbSize / 2;
-    const posX = vertical ? width.value / 2 - thumbSize / 2 : pos;
+  const thumbAnimatedStyle = useAnimatedStyle(
+    () => {
+      const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0);
+      const percent = (brightnessValue.value / 100) * length;
+      const pos = (reverse ? length - percent : percent) - (boundedThumb ? 0 : thumbSize / 2);
+      const posY = vertical ? pos : height.value / 2 - thumbSize / 2;
+      const posX = vertical ? width.value / 2 - thumbSize / 2 : pos;
 
-    return {
-      transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }],
-    };
-  }, [height, width, brightnessValue, handleScale, vertical, reverse, boundedThumb, thumbSize]);
+      return {
+        transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }],
+      };
+    },
+    getWebDependencies([height, width, brightnessValue, handleScale, vertical, reverse, boundedThumb, thumbSize]),
+  );
 
-  const activeColorStyle = useAnimatedStyle(() => {
-    return {
-      backgroundColor: HSVA2HSLA_string(hueValue.value, adaptSpectrum ? saturationValue.value : 100, 100),
-    };
-  }, [hueValue, saturationValue, adaptSpectrum]);
+  const activeColorStyle = useAnimatedStyle(
+    () => ({ backgroundColor: HSVA2HSLA_string(hueValue.value, adaptSpectrum ? saturationValue.value : 100, 100) }),
+    getWebDependencies([hueValue, saturationValue, adaptSpectrum]),
+  );
 
-  const imageStyle = useAnimatedStyle(() => {
-    const imageRotate = vertical ? (reverse ? '270deg' : '90deg') : reverse ? '180deg' : '0deg';
-    const imageTranslateY = ((height.value - width.value) / 2) * ((reverse && isRtl) || (!reverse && !isRtl) ? 1 : -1);
+  const imageStyle = useAnimatedStyle(
+    () => {
+      const imageRotate = vertical ? (reverse ? '270deg' : '90deg') : reverse ? '180deg' : '0deg';
+      const imageTranslateY = ((height.value - width.value) / 2) * ((reverse && isRtl) || (!reverse && !isRtl) ? 1 : -1);
 
-    return {
-      width: vertical ? height.value : '100%',
-      height: vertical ? width.value : '100%',
-      transform: [
-        { rotate: imageRotate },
-        { translateX: vertical ? ((height.value - width.value) / 2) * (reverse ? -1 : 1) : 0 },
-        { translateY: vertical ? imageTranslateY : 0 },
-      ],
-    };
-  }, [height, width, vertical, reverse]);
+      return {
+        width: vertical ? height.value : '100%',
+        height: vertical ? width.value : '100%',
+        transform: [
+          { rotate: imageRotate },
+          { translateX: vertical ? ((height.value - width.value) / 2) * (reverse ? -1 : 1) : 0 },
+          { translateY: vertical ? imageTranslateY : 0 },
+        ],
+      };
+    },
+    getWebDependencies([height, width, vertical, reverse]),
+  );
 
   const onBegin = () => {
     'worklet';

@@ -2,7 +2,7 @@ import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { runOnUI, useAnimatedProps } from 'react-native-reanimated';
 
-import { clamp, isRtl, isWeb } from '@utils';
+import { clamp, getWebDependencies, isRtl, isWeb } from '@utils';
 
 import type { AccessibilityActionEvent, LayoutChangeEvent, StyleProp, ViewStyle } from 'react-native';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
@@ -249,21 +249,20 @@ export function SliderCore(props: SliderCoreProps) {
     }
   };
 
-  const animatedProps = useAnimatedProps(() => {
-    const rounded = step < 1 ? currentValue.value.toFixed(2) : Math.round(currentValue.value).toString();
+  const animatedProps = useAnimatedProps(
+    () => {
+      const rounded = step < 1 ? currentValue.value.toFixed(2) : Math.round(currentValue.value).toString();
 
-    if (isWeb) {
-      return { 'aria-valuetext': `${rounded} of ${maxValue}` } as never;
-    }
+      if (isWeb) {
+        return { 'aria-valuetext': `${rounded} of ${maxValue}` } as never;
+      }
 
-    return {
-      accessibilityValue: {
-        min: 0,
-        max: maxValue,
-        text: `${rounded} of ${maxValue}`,
-      },
-    };
-  }, [currentValue, maxValue, step]);
+      return {
+        accessibilityValue: { min: 0, max: maxValue, text: `${rounded} of ${maxValue}` },
+      };
+    },
+    getWebDependencies([currentValue, maxValue, step]),
+  );
 
   const thicknessStyle = vertical ? { width: sliderThickness } : { height: sliderThickness };
 

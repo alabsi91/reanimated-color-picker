@@ -3,7 +3,7 @@ import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 
 import colorKit from '@colorKit';
 import { styles } from '@styles';
-import { enableAndroidHardwareTextures, getStyle } from '@utils';
+import { enableAndroidHardwareTextures, getStyle, getWebDependencies } from '@utils';
 
 import type { BuiltinThumbsProps } from '@types';
 
@@ -27,12 +27,13 @@ export default function Ring({
   const borderColor = getStyle(style, 'borderColor');
   const ringBackgroundColor = getStyle(style, 'backgroundColor');
 
-  const adaptiveColorStyle = useAnimatedStyle(() => {
-    return {
+  const adaptiveColorStyle = useAnimatedStyle(
+    () => ({
       backgroundColor: ringBackgroundColor ?? colorKit.runOnUI().setAlpha(adaptiveColor.value, 0.5).hex(),
       borderColor: borderColor ?? adaptiveColor.value,
-    };
-  }, [borderColor, ringBackgroundColor, adaptiveColor]);
+    }),
+    getWebDependencies([borderColor, ringBackgroundColor, adaptiveColor]),
+  );
 
   // Make sure to match the parity (odd or even) of the parent width, to solve the centering issue
   const innerWidth = 0.75 * width;

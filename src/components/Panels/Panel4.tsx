@@ -6,7 +6,7 @@ import usePickerContext from '@context';
 import { PanelCore } from '@panels/PanelCore';
 import { styles } from '@styles';
 import Thumb from '@thumb';
-import { clamp, getStyle, isRtl } from '@utils';
+import { clamp, getStyle, getWebDependencies, isRtl } from '@utils';
 
 import type { Panel4Props } from '@types';
 
@@ -38,51 +38,60 @@ export function Panel4({
   const handleScale = useSharedValue(1);
 
   // combined brightness and saturation mapped to 0–200
-  const brightnessPlusSaturation = useDerivedValue(() => {
-    const base = (2 - saturationValue.value / 100) * brightnessValue.value;
-    return reverseHorizontalChannels ? base : 200 - base;
-  }, [brightnessValue, saturationValue, reverseHorizontalChannels]);
+  const brightnessPlusSaturation = useDerivedValue(
+    () => {
+      const base = (2 - saturationValue.value / 100) * brightnessValue.value;
+      return reverseHorizontalChannels ? base : 200 - base;
+    },
+    getWebDependencies([brightnessValue, saturationValue, reverseHorizontalChannels]),
+  );
 
-  const thumbAnimatedStyle = useAnimatedStyle(() => {
-    const length = { x: width.value - (boundedThumb ? thumbSize : 0), y: height.value - (boundedThumb ? thumbSize : 0) };
-    const thumbOffset = boundedThumb ? 0 : thumbSize / 2;
-    // brightness and saturation
-    const brightnessAndSaturation = (((2 - saturationValue.value / 100) * (brightnessValue.value / 100)) / 2) * 100;
-    const posPercentX = (brightnessAndSaturation / 100) * length.x;
-    const posX = (reverseHorizontalChannels ? posPercentX : length.x - posPercentX) - thumbOffset;
-    // hue
-    const percentY = (hueValue.value / 360) * length.y;
-    const posY = (reverseHue ? percentY : length.y - percentY) - thumbOffset;
+  const thumbAnimatedStyle = useAnimatedStyle(
+    () => {
+      const length = { x: width.value - (boundedThumb ? thumbSize : 0), y: height.value - (boundedThumb ? thumbSize : 0) };
+      const thumbOffset = boundedThumb ? 0 : thumbSize / 2;
+      // brightness and saturation
+      const brightnessAndSaturation = (((2 - saturationValue.value / 100) * (brightnessValue.value / 100)) / 2) * 100;
+      const posPercentX = (brightnessAndSaturation / 100) * length.x;
+      const posX = (reverseHorizontalChannels ? posPercentX : length.x - posPercentX) - thumbOffset;
+      // hue
+      const percentY = (hueValue.value / 360) * length.y;
+      const posY = (reverseHue ? percentY : length.y - percentY) - thumbOffset;
 
-    return {
-      transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }],
-    };
-  }, [
-    width,
-    height,
-    saturationValue,
-    brightnessValue,
-    hueValue,
-    handleScale,
-    boundedThumb,
-    thumbSize,
-    reverseHorizontalChannels,
-    reverseHue,
-  ]);
+      return {
+        transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }],
+      };
+    },
+    getWebDependencies([
+      width,
+      height,
+      saturationValue,
+      brightnessValue,
+      hueValue,
+      handleScale,
+      boundedThumb,
+      thumbSize,
+      reverseHorizontalChannels,
+      reverseHue,
+    ]),
+  );
 
-  const panelImageStyle = useAnimatedStyle(() => {
-    return {
-      // Width and height are intentionally swapped to correct dimensions after the rotation
-      width: height.value,
-      height: width.value,
-      transform: [
-        { scaleY: reverseHue ? -1 : 1 },
-        { rotate: '270deg' },
-        { translateX: ((width.value - height.value) / 2) * (reverseHue ? -1 : 1) },
-        { translateY: ((width.value - height.value) / 2) * (isRtl ? -1 : 1) },
-      ],
-    };
-  }, [height, width, reverseHue]);
+  const panelImageStyle = useAnimatedStyle(
+    () => {
+      return {
+        // Width and height are intentionally swapped to correct dimensions after the rotation
+        width: height.value,
+        height: width.value,
+        transform: [
+          { scaleY: reverseHue ? -1 : 1 },
+          { rotate: '270deg' },
+          { translateX: ((width.value - height.value) / 2) * (reverseHue ? -1 : 1) },
+          { translateY: ((width.value - height.value) / 2) * (isRtl ? -1 : 1) },
+        ],
+      };
+    },
+    getWebDependencies([height, width, reverseHue]),
+  );
 
   const onBegin = () => {
     'worklet';

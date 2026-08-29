@@ -3,7 +3,7 @@ import { AccessibilityInfo } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { runOnUI, useAnimatedProps, useAnimatedRef, useSharedValue } from 'react-native-reanimated';
 
-import { clamp, isRtl, isWeb } from '@utils';
+import { clamp, getWebDependencies, isRtl, isWeb } from '@utils';
 
 import type { AccessibilityActionEvent, LayoutChangeEvent, StyleProp, ViewStyle } from 'react-native';
 import type { PanGestureHandlerEventPayload } from 'react-native-gesture-handler';
@@ -261,21 +261,22 @@ export function PanelCore(props: PanelCoreProps) {
     setValue(nextX, nextY);
   };
 
-  const animatedProps = useAnimatedProps(() => {
-    const mode = currentMode.value;
-    const axisLabel = mode === 'x' ? labelX : labelY;
-    const axisValue = mode === 'x' ? currentXValue.value : currentYValue.value;
-    const maxValue = mode === 'x' ? maxXValue : maxYValue;
-    const text = `${axisLabel} ${Math.round(axisValue)}`;
+  const animatedProps = useAnimatedProps(
+    () => {
+      const mode = currentMode.value;
+      const axisLabel = mode === 'x' ? labelX : labelY;
+      const axisValue = mode === 'x' ? currentXValue.value : currentYValue.value;
+      const maxValue = mode === 'x' ? maxXValue : maxYValue;
+      const text = `${axisLabel} ${Math.round(axisValue)}`;
 
-    if (isWeb) {
-      return { 'aria-valuemax': maxValue.toString(), 'aria-valuetext': text } as never;
-    }
+      if (isWeb) {
+        return { 'aria-valuemax': maxValue.toString(), 'aria-valuetext': text } as never;
+      }
 
-    return {
-      accessibilityValue: { min: 0, max: maxValue, text },
-    };
-  }, [currentMode, currentXValue, currentYValue, maxXValue, maxYValue, labelX, labelY]);
+      return { accessibilityValue: { min: 0, max: maxValue, text } };
+    },
+    getWebDependencies([currentMode, currentXValue, currentYValue, maxXValue, maxYValue, labelX, labelY]),
+  );
 
   return (
     <GestureDetector gesture={composed}>

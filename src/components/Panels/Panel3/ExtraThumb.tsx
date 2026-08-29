@@ -4,7 +4,7 @@ import Animated, { runOnJS, useAnimatedStyle, useDerivedValue } from 'react-nati
 import usePickerContext from '@context';
 import { styles } from '@styles';
 import Thumb from '@thumb';
-import { ConditionalRendering, clamp } from '@utils';
+import { ConditionalRendering, clamp, getWebDependencies } from '@utils';
 import usePanel3Context from './Panel3Context';
 import colorKit from '@colorKit';
 
@@ -31,122 +31,143 @@ export function ExtraThumb({
   const thumbInnerStyle = props.thumbInnerStyle ?? ctx.thumbInnerStyle;
   const renderCenterLine = props.renderCenterLine ?? ctx.renderCenterLine;
 
-  const hsv = useDerivedValue(() => {
-    const currentColor = {
-      h: hueValue.value,
-      s: saturationValue.value,
-      v: brightnessValue.value,
-      a: alphaValue.value,
-    };
+  const hsv = useDerivedValue(
+    () => {
+      const currentColor = {
+        h: hueValue.value,
+        s: saturationValue.value,
+        v: brightnessValue.value,
+        a: alphaValue.value,
+      };
 
-    if (colorTransform) {
-      return colorTransform(currentColor);
-    }
+      if (colorTransform) {
+        return colorTransform(currentColor);
+      }
 
-    return currentColor;
-  }, [hueValue, saturationValue, brightnessValue, alphaValue, colorTransform]);
+      return currentColor;
+    },
+    getWebDependencies([hueValue, saturationValue, brightnessValue, alphaValue, colorTransform]),
+  );
 
-  const hue = useDerivedValue(() => {
-    if (colorTransform) {
-      return hsv.value.h;
-    }
+  const hue = useDerivedValue(
+    () => {
+      if (colorTransform) {
+        return hsv.value.h;
+      }
 
-    if (!hueTransform) {
-      return hueValue.value;
-    }
+      if (!hueTransform) {
+        return hueValue.value;
+      }
 
-    const changeAmount = typeof hueTransform === 'string' ? hueValue.value * (parseFloat(hueTransform) / 100) : hueTransform;
-    return (((hueValue.value + changeAmount) % 360) + 360) % 360;
-  }, [hsv, hueValue, hueTransform, colorTransform]);
+      const changeAmount = typeof hueTransform === 'string' ? hueValue.value * (parseFloat(hueTransform) / 100) : hueTransform;
+      return (((hueValue.value + changeAmount) % 360) + 360) % 360;
+    },
+    getWebDependencies([hsv, hueValue, hueTransform, colorTransform]),
+  );
 
   // Calculate saturation value
-  const saturation = useDerivedValue(() => {
-    if (colorTransform) {
-      return hsv.value.s;
-    }
+  const saturation = useDerivedValue(
+    () => {
+      if (colorTransform) {
+        return hsv.value.s;
+      }
 
-    if (!saturationTransform) {
-      return saturationValue.value;
-    }
+      if (!saturationTransform) {
+        return saturationValue.value;
+      }
 
-    const changeAmount =
-      typeof saturationTransform === 'string'
-        ? saturationValue.value * (parseFloat(saturationTransform) / 100)
-        : saturationTransform;
+      const changeAmount =
+        typeof saturationTransform === 'string'
+          ? saturationValue.value * (parseFloat(saturationTransform) / 100)
+          : saturationTransform;
 
-    return clamp(saturationValue.value + changeAmount, 100);
-  }, [hsv, saturationValue, saturationTransform, colorTransform]);
+      return clamp(saturationValue.value + changeAmount, 100);
+    },
+    getWebDependencies([hsv, saturationValue, saturationTransform, colorTransform]),
+  );
 
   // Calculate brightness value
-  const brightness = useDerivedValue(() => {
-    if (colorTransform) {
-      return hsv.value.v;
-    }
+  const brightness = useDerivedValue(
+    () => {
+      if (colorTransform) {
+        return hsv.value.v;
+      }
 
-    if (!brightnessTransform) {
-      return brightnessValue.value;
-    }
+      if (!brightnessTransform) {
+        return brightnessValue.value;
+      }
 
-    const changeAmount =
-      typeof brightnessTransform === 'string'
-        ? brightnessValue.value * (parseFloat(brightnessTransform) / 100)
-        : brightnessTransform;
+      const changeAmount =
+        typeof brightnessTransform === 'string'
+          ? brightnessValue.value * (parseFloat(brightnessTransform) / 100)
+          : brightnessTransform;
 
-    return clamp(brightnessValue.value + changeAmount, 100);
-  }, [hsv, brightnessValue, brightnessTransform, colorTransform]);
+      return clamp(brightnessValue.value + changeAmount, 100);
+    },
+    getWebDependencies([hsv, brightnessValue, brightnessTransform, colorTransform]),
+  );
 
   // Call onChange prop on every value change
-  useDerivedValue(() => {
-    if (!onChange && !onChangeJS) return;
+  useDerivedValue(
+    () => {
+      if (!onChange && !onChangeJS) return;
 
-    const colors = colorResult({
-      h: hue.value,
-      s: saturation.value,
-      v: brightness.value,
-      a: alphaValue.value,
-    });
+      const colors = colorResult({
+        h: hue.value,
+        s: saturation.value,
+        v: brightness.value,
+        a: alphaValue.value,
+      });
 
-    if (onChange) {
-      onChange(colors);
-    }
+      if (onChange) {
+        onChange(colors);
+      }
 
-    if (onChangeJS) {
-      runOnJS(onChangeJS)(colors);
-    }
-  }, [hue, saturation, brightness, alphaValue, colorResult, onChange, onChangeJS]);
+      if (onChangeJS) {
+        runOnJS(onChangeJS)(colors);
+      }
+    },
+    getWebDependencies([hue, saturation, brightness, alphaValue, colorResult, onChange, onChangeJS]),
+  );
 
-  const thumbAnimatedStyle = useAnimatedStyle(() => {
-    const center = width.value / 2 - (boundedThumb ? thumbSize / 2 : 0);
-    const rotatedHue = (hue.value - rotate) % 360;
-    const distance = (centerChannelValue.value / 100) * (width.value / 2 - (boundedThumb ? thumbSize / 2 : 0));
-    const angle = (rotatedHue * Math.PI) / 180;
-    const posY = width.value - (Math.sin(angle) * distance + center) - (boundedThumb ? thumbSize : thumbSize / 2);
-    const posX = width.value - (Math.cos(angle) * distance + center) - (boundedThumb ? thumbSize : thumbSize / 2);
+  const thumbAnimatedStyle = useAnimatedStyle(
+    () => {
+      const center = width.value / 2 - (boundedThumb ? thumbSize / 2 : 0);
+      const rotatedHue = (hue.value - rotate) % 360;
+      const distance = (centerChannelValue.value / 100) * (width.value / 2 - (boundedThumb ? thumbSize / 2 : 0));
+      const angle = (rotatedHue * Math.PI) / 180;
+      const posY = width.value - (Math.sin(angle) * distance + center) - (boundedThumb ? thumbSize : thumbSize / 2);
+      const posX = width.value - (Math.cos(angle) * distance + center) - (boundedThumb ? thumbSize : thumbSize / 2);
 
-    return {
-      transform: [{ translateX: posX }, { translateY: posY }, { rotate: rotatedHue + 90 + 'deg' }],
-    };
-  }, [thumbSize, boundedThumb, width, centerChannelValue, hue, rotate]);
+      return {
+        transform: [{ translateX: posX }, { translateY: posY }, { rotate: rotatedHue + 90 + 'deg' }],
+      };
+    },
+    getWebDependencies([thumbSize, boundedThumb, width, centerChannelValue, hue, rotate]),
+  );
 
-  const centerLineStyle = useAnimatedStyle(() => {
-    if (!renderCenterLine) {
-      return {};
-    }
+  const centerLineStyle = useAnimatedStyle(
+    () => {
+      if (!renderCenterLine) {
+        return {};
+      }
 
-    const lineThickness = 1;
-    const center = width.value / 2 - (boundedThumb ? thumbSize / 2 : 0);
-    const rotatedHue = (hue.value - rotate) % 360;
-    const distance = (centerChannelValue.value / 100) * center;
-    const angle = (rotatedHue + 180) % 360; // reversed angle
+      const lineThickness = 1;
+      const center = width.value / 2 - (boundedThumb ? thumbSize / 2 : 0);
+      const rotatedHue = (hue.value - rotate) % 360;
+      const distance = (centerChannelValue.value / 100) * center;
+      const angle = (rotatedHue + 180) % 360; // reversed angle
 
-    return {
-      top: (width.value - lineThickness) / 2,
-      left: (width.value - distance) / 2,
-      height: lineThickness,
-      width: distance,
-      transform: [{ rotate: angle + 'deg' }, { translateX: distance / 2 }],
-    };
-  }, [renderCenterLine, boundedThumb, thumbSize, width, hue, centerChannelValue, rotate]);
+      return {
+        top: (width.value - lineThickness) / 2,
+        left: (width.value - distance) / 2,
+        height: lineThickness,
+        width: distance,
+        transform: [{ rotate: angle + 'deg' }, { translateX: distance / 2 }],
+      };
+    },
+    getWebDependencies([renderCenterLine, boundedThumb, thumbSize, width, hue, centerChannelValue, rotate]),
+  );
 
   const getAdaptiveColor = (hsva: { h: number; s: number; v: number; a: number }) => {
     'worklet';

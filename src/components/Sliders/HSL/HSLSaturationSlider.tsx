@@ -6,7 +6,7 @@ import colorKit from '@colorKit';
 import usePickerContext from '@context';
 import { SliderCore } from '@sliders/SliderCore';
 import Thumb from '@thumb';
-import { ConditionalRendering, getStyle, isRtl } from '@utils';
+import { ConditionalRendering, getStyle, getWebDependencies, isRtl } from '@utils';
 
 import type { SliderProps } from '@types';
 
@@ -39,69 +39,76 @@ export function HSLSaturationSlider({ gestures = [], style = {}, vertical = fals
   // This shared value holds the last valid saturation so we can restore it when luminance moves away from the boundary.
   const hslSaturationValue = useSharedValue(0);
 
-  const hsl = useDerivedValue(() => {
-    const hsvColor = { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
-    const { h, s, l } = colorKit.runOnUI().HSL(hsvColor).object(false);
+  const hsl = useDerivedValue(
+    () => {
+      const hsvColor = { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
+      const { h, s, l } = colorKit.runOnUI().HSL(hsvColor).object(false);
 
-    // At l=0 (black) or l=100 (white), the conversion loses saturation information.
-    // Substitute the last known saturation so it's restored when luminance changes.
-    if (l === 0 || l === 100) {
-      return { h, s: hslSaturationValue.value, l };
-    }
+      // At l=0 (black) or l=100 (white), the conversion loses saturation information.
+      // Substitute the last known saturation so it's restored when luminance changes.
+      if (l === 0 || l === 100) {
+        return { h, s: hslSaturationValue.value, l };
+      }
 
-    hslSaturationValue.value = s;
-    return { h, s, l };
-  }, [hueValue, saturationValue, brightnessValue]);
+      hslSaturationValue.value = s;
+      return { h, s, l };
+    },
+    getWebDependencies([hueValue, saturationValue, brightnessValue]),
+  );
 
-  const thumbAnimatedStyle = useAnimatedStyle(() => {
-    const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0);
-    const percent = (hsl.value.s / 100) * length;
-    const pos = (reverse ? length - percent : percent) - (boundedThumb ? 0 : thumbSize / 2);
-    const posY = vertical ? pos : height.value / 2 - thumbSize / 2;
-    const posX = vertical ? width.value / 2 - thumbSize / 2 : pos;
+  const thumbAnimatedStyle = useAnimatedStyle(
+    () => {
+      const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0);
+      const percent = (hsl.value.s / 100) * length;
+      const pos = (reverse ? length - percent : percent) - (boundedThumb ? 0 : thumbSize / 2);
+      const posY = vertical ? pos : height.value / 2 - thumbSize / 2;
+      const posX = vertical ? width.value / 2 - thumbSize / 2 : pos;
 
-    return {
-      transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }],
-    };
-  }, [width, height, hsl, handleScale, vertical, reverse, boundedThumb, thumbSize]);
-
-  const activeColorStyle = useAnimatedStyle(() => {
-    return {
-      backgroundColor: `hsl(${hsl.value.h}, 100%, 50%)`,
-    };
-  }, [hsl]);
-
-  const activeBrightnessStyle = useAnimatedStyle(() => {
-    if (!adaptSpectrum) {
-      return {};
-    }
-
-    if (hsl.value.l < 50) {
       return {
-        backgroundColor: `rgba(0, 0, 0, ${1 - hsl.value.l / 50})`,
+        transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }],
       };
-    }
+    },
+    getWebDependencies([width, height, hsl, handleScale, vertical, reverse, boundedThumb, thumbSize]),
+  );
 
-    return {
-      backgroundColor: `rgba(255, 255, 255, ${(hsl.value.l - 50) / 50})`,
-    };
-  }, [hsl, adaptSpectrum]);
+  const activeColorStyle = useAnimatedStyle(
+    () => ({ backgroundColor: `hsl(${hsl.value.h}, 100%, 50%)` }),
+    getWebDependencies([hsl]),
+  );
 
-  const imageStyle = useAnimatedStyle(() => {
-    const imageRotate = vertical ? (reverse ? '270deg' : '90deg') : reverse ? '180deg' : '0deg';
-    const imageTranslateY = ((height.value - width.value) / 2) * ((reverse && isRtl) || (!reverse && !isRtl) ? 1 : -1);
+  const activeBrightnessStyle = useAnimatedStyle(
+    () => {
+      if (!adaptSpectrum) {
+        return {};
+      }
 
-    return {
-      // Width and height are intentionally swapped to correct dimensions after the rotation
-      width: vertical ? height.value : '100%',
-      height: vertical ? width.value : '100%',
-      transform: [
-        { rotate: imageRotate },
-        { translateX: vertical ? ((height.value - width.value) / 2) * (reverse ? -1 : 1) : 0 },
-        { translateY: vertical ? imageTranslateY : 0 },
-      ],
-    };
-  }, [width, height, vertical, reverse]);
+      if (hsl.value.l < 50) {
+        return { backgroundColor: `rgba(0, 0, 0, ${1 - hsl.value.l / 50})` };
+      }
+
+      return { backgroundColor: `rgba(255, 255, 255, ${(hsl.value.l - 50) / 50})` };
+    },
+    getWebDependencies([hsl, adaptSpectrum]),
+  );
+
+  const imageStyle = useAnimatedStyle(
+    () => {
+      const imageRotate = vertical ? (reverse ? '270deg' : '90deg') : reverse ? '180deg' : '0deg';
+      const imageTranslateY = ((height.value - width.value) / 2) * ((reverse && isRtl) || (!reverse && !isRtl) ? 1 : -1);
+
+      return {
+        // Width and height are intentionally swapped to correct dimensions after the rotation
+        width: vertical ? height.value : '100%',
+        height: vertical ? width.value : '100%',
+        transform: [
+          { rotate: imageRotate },
+          { translateX: vertical ? ((height.value - width.value) / 2) * (reverse ? -1 : 1) : 0 },
+          { translateY: vertical ? imageTranslateY : 0 },
+        ],
+      };
+    },
+    getWebDependencies([width, height, vertical, reverse]),
+  );
 
   const onBegin = () => {
     'worklet';

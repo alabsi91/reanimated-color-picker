@@ -4,6 +4,7 @@ import { useAnimatedStyle, useDerivedValue } from 'react-native-reanimated';
 import colorKit from '@colorKit';
 import usePickerContext from '@context';
 import { styles } from '@styles';
+import { getWebDependencies } from '@utils';
 import BuiltinThumbs from './BuiltinThumbs/index';
 
 import type { BuiltinThumbsProps, ThumbProps } from '@types';
@@ -28,25 +29,32 @@ export default function Thumb({
   const brightness = overrideHSV?.brightness ?? brightnessValue;
   const alpha = overrideHSV?.alpha ?? alphaValue;
 
-  const currentColor = useDerivedValue(() => {
-    return colorKit.runOnUI().HEX({ h: hue.value, s: saturation.value, v: brightness.value });
-  }, [hue, saturation, brightness]);
+  const currentColor = useDerivedValue(
+    () => colorKit.runOnUI().HEX({ h: hue.value, s: saturation.value, v: brightness.value }),
+    getWebDependencies([hue, saturation, brightness]),
+  );
 
-  const solidColor = useAnimatedStyle(() => ({ backgroundColor: thumbColor ?? currentColor.value }), [thumbColor, currentColor]);
+  const solidColor = useAnimatedStyle(
+    () => ({ backgroundColor: thumbColor ?? currentColor.value }),
+    getWebDependencies([thumbColor, currentColor]),
+  );
 
-  const adaptiveColor = useDerivedValue<string>(() => {
-    const currentcolor = {
-      h: hue.value,
-      s: saturation.value,
-      v: brightness.value,
-      a: alpha.value,
-    };
+  const adaptiveColor = useDerivedValue<string>(
+    () => {
+      const currentcolor = {
+        h: hue.value,
+        s: saturation.value,
+        v: brightness.value,
+        a: alpha.value,
+      };
 
-    const compareColor = getAdaptiveColor?.(currentcolor) || currentcolor;
-    const isDark = colorKit.runOnUI().isDark(compareColor);
+      const compareColor = getAdaptiveColor?.(currentcolor) || currentcolor;
+      const isDark = colorKit.runOnUI().isDark(compareColor);
 
-    return isDark ? '#ffffff' : '#000000';
-  }, [hue, saturation, brightness, alpha, getAdaptiveColor]);
+      return isDark ? '#ffffff' : '#000000';
+    },
+    getWebDependencies([hue, saturation, brightness, alpha, getAdaptiveColor]),
+  );
 
   const thumbProps: BuiltinThumbsProps = {
     width,

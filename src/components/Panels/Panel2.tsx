@@ -7,7 +7,7 @@ import usePickerContext from '@context';
 import { PanelCore } from '@panels/PanelCore';
 import { styles } from '@styles';
 import Thumb from '@thumb';
-import { clamp, ConditionalRendering, getStyle, isRtl } from '@utils';
+import { clamp, ConditionalRendering, getStyle, getWebDependencies, isRtl } from '@utils';
 
 import type { Panel2Props } from '@types';
 
@@ -45,86 +45,103 @@ export function Panel2({
   // This shared value holds the last valid saturation so we can restore it when luminance moves away from the boundary.
   const hslSaturationValue = useSharedValue(0);
 
-  const hsl = useDerivedValue(() => {
-    const hsvColor = { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
-    const { h, s, l } = colorKit.runOnUI().HSL(hsvColor).object(false);
+  const hsl = useDerivedValue(
+    () => {
+      const hsvColor = { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
+      const { h, s, l } = colorKit.runOnUI().HSL(hsvColor).object(false);
 
-    // At l=0 (black) or l=100 (white), the conversion loses saturation information.
-    // Substitute the last known saturation so it's restored when luminance changes.
-    if (l === 100 || l === 0) {
-      return { h, s: hslSaturationValue.value, l };
-    }
-
-    hslSaturationValue.value = s;
-
-    return { h, s, l };
-  }, [hueValue, saturationValue, brightnessValue]);
-
-  const verticalChannelValue = useDerivedValue(() => {
-    if (verticalChannel === 'brightness') {
-      return brightnessValue.value;
-    }
-
-    if (verticalChannel === 'hsl-saturation') {
-      return hsl.value.s;
-    }
-
-    return saturationValue.value;
-  }, [brightnessValue, saturationValue, hsl]);
-
-  const thumbAnimatedStyle = useAnimatedStyle(() => {
-    const length = {
-      x: width.value - (boundedThumb ? thumbSize : 0),
-      y: height.value - (boundedThumb ? thumbSize : 0),
-    };
-    const percentX = (hueValue.value / 360) * length.x;
-    const posX = (reverseHue ? length.x - percentX : percentX) - (boundedThumb ? 0 : thumbSize / 2);
-    const percentY = (verticalChannelValue.value / 100) * length.y;
-    const posY = (reverseVerticalChannel ? percentY : length.y - percentY) - (boundedThumb ? 0 : thumbSize / 2);
-
-    return {
-      transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }],
-    };
-  }, [width, height, hueValue, verticalChannelValue, handleScale, reverseHue, reverseVerticalChannel, boundedThumb, thumbSize]);
-
-  const spectrumStyle = useAnimatedStyle(() => {
-    if (!adaptSpectrum) return {};
-
-    if (verticalChannel === 'brightness') {
-      return {
-        backgroundColor: `rgba(255, 255, 255, ${1 - saturationValue.value / 100})`,
-      };
-    }
-
-    if (verticalChannel === 'hsl-saturation') {
-      if (hsl.value.l < 50) {
-        return {
-          backgroundColor: `rgba(0, 0, 0, ${1 - hsl.value.l / 50})`,
-        };
+      // At l=0 (black) or l=100 (white), the conversion loses saturation information.
+      // Substitute the last known saturation so it's restored when luminance changes.
+      if (l === 100 || l === 0) {
+        return { h, s: hslSaturationValue.value, l };
       }
 
-      return {
-        backgroundColor: `rgba(255, 255, 255, ${(hsl.value.l - 50) / 50})`,
+      hslSaturationValue.value = s;
+
+      return { h, s, l };
+    },
+    getWebDependencies([hueValue, saturationValue, brightnessValue]),
+  );
+
+  const verticalChannelValue = useDerivedValue(
+    () => {
+      if (verticalChannel === 'brightness') {
+        return brightnessValue.value;
+      }
+
+      if (verticalChannel === 'hsl-saturation') {
+        return hsl.value.s;
+      }
+
+      return saturationValue.value;
+    },
+    getWebDependencies([brightnessValue, saturationValue, hsl]),
+  );
+
+  const thumbAnimatedStyle = useAnimatedStyle(
+    () => {
+      const length = {
+        x: width.value - (boundedThumb ? thumbSize : 0),
+        y: height.value - (boundedThumb ? thumbSize : 0),
       };
-    }
+      const percentX = (hueValue.value / 360) * length.x;
+      const posX = (reverseHue ? length.x - percentX : percentX) - (boundedThumb ? 0 : thumbSize / 2);
+      const percentY = (verticalChannelValue.value / 100) * length.y;
+      const posY = (reverseVerticalChannel ? percentY : length.y - percentY) - (boundedThumb ? 0 : thumbSize / 2);
 
-    return {
-      backgroundColor: `rgba(0, 0, 0, ${1 - brightnessValue.value / 100})`,
-    };
-  }, [saturationValue, brightnessValue, hsl, adaptSpectrum, verticalChannel]);
+      return {
+        transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }],
+      };
+    },
+    getWebDependencies([
+      width,
+      height,
+      hueValue,
+      verticalChannelValue,
+      handleScale,
+      reverseHue,
+      reverseVerticalChannel,
+      boundedThumb,
+      thumbSize,
+    ]),
+  );
 
-  const panelImageStyle = useAnimatedStyle(() => {
-    return {
-      // Width and height are intentionally swapped to correct dimensions after the rotation
-      width: height.value,
-      height: width.value,
-      transform: [
-        { rotate: reverseVerticalChannel ? '90deg' : '270deg' },
-        { translateX: ((width.value - height.value) / 2) * (reverseVerticalChannel ? -1 : 1) },
-        { translateY: ((width.value - height.value) / 2) * (isRtl ? -1 : 1) * (reverseVerticalChannel ? -1 : 1) },
-      ],
-    };
-  }, [width, height, reverseVerticalChannel]);
+  const spectrumStyle = useAnimatedStyle(
+    () => {
+      if (!adaptSpectrum) return {};
+
+      if (verticalChannel === 'brightness') {
+        return { backgroundColor: `rgba(255, 255, 255, ${1 - saturationValue.value / 100})` };
+      }
+
+      if (verticalChannel === 'hsl-saturation') {
+        if (hsl.value.l < 50) {
+          return { backgroundColor: `rgba(0, 0, 0, ${1 - hsl.value.l / 50})` };
+        }
+
+        return { backgroundColor: `rgba(255, 255, 255, ${(hsl.value.l - 50) / 50})` };
+      }
+
+      return { backgroundColor: `rgba(0, 0, 0, ${1 - brightnessValue.value / 100})` };
+    },
+    getWebDependencies([saturationValue, brightnessValue, hsl, adaptSpectrum, verticalChannel]),
+  );
+
+  const panelImageStyle = useAnimatedStyle(
+    () => {
+      return {
+        // Width and height are intentionally swapped to correct dimensions after the rotation
+        width: height.value,
+        height: width.value,
+        transform: [
+          { rotate: reverseVerticalChannel ? '90deg' : '270deg' },
+          { translateX: ((width.value - height.value) / 2) * (reverseVerticalChannel ? -1 : 1) },
+          { translateY: ((width.value - height.value) / 2) * (isRtl ? -1 : 1) * (reverseVerticalChannel ? -1 : 1) },
+        ],
+      };
+    },
+    getWebDependencies([width, height, reverseVerticalChannel]),
+  );
 
   const onBegin = () => {
     'worklet';

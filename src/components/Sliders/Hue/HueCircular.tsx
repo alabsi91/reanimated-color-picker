@@ -6,7 +6,7 @@ import usePickerContext from '@context';
 import { CircularSliderCore } from '@sliders/CircularSliderCore';
 import { styles } from '@styles';
 import Thumb from '@thumb';
-import { ConditionalRendering, HSVA2HSLA_string } from '@utils';
+import { ConditionalRendering, getWebDependencies, HSVA2HSLA_string } from '@utils';
 
 import type { HueCircularProps } from '@types';
 
@@ -35,51 +35,64 @@ export function HueCircular({
   const isGestureActive = useSharedValue(false);
   const width = useSharedValue(0);
   const borderRadius = useSharedValue(0);
-  const borderRadiusStyle = useAnimatedStyle(() => ({ borderRadius: borderRadius.value }), [borderRadius]);
+  const borderRadiusStyle = useAnimatedStyle(() => ({ borderRadius: borderRadius.value }), getWebDependencies([borderRadius]));
 
   const handleScale = useSharedValue(1);
 
-  const thumbAnimatedStyle = useAnimatedStyle(() => {
-    const center = width.value / 2;
-    const rotatedHue = (hueValue.value - rotate) % 360;
-    const distance = (width.value - sliderThickness) / 2;
-    const angle = (rotatedHue * Math.PI) / 180;
-    const posY = width.value - (Math.sin(angle) * distance + center) - thumbSize / 2;
-    const posX = width.value - (Math.cos(angle) * distance + center) - thumbSize / 2;
+  const thumbAnimatedStyle = useAnimatedStyle(
+    () => {
+      const center = width.value / 2;
+      const rotatedHue = (hueValue.value - rotate) % 360;
+      const distance = (width.value - sliderThickness) / 2;
+      const angle = (rotatedHue * Math.PI) / 180;
+      const posY = width.value - (Math.sin(angle) * distance + center) - thumbSize / 2;
+      const posX = width.value - (Math.cos(angle) * distance + center) - thumbSize / 2;
 
-    return {
-      transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }, { rotate: rotatedHue + 90 + 'deg' }],
-    };
-  }, [width, hueValue, handleScale, thumbSize, sliderThickness, rotate]);
+      return {
+        transform: [
+          { translateX: posX },
+          { translateY: posY },
+          { scale: handleScale.value },
+          { rotate: rotatedHue + 90 + 'deg' },
+        ],
+      };
+    },
+    getWebDependencies([width, hueValue, handleScale, thumbSize, sliderThickness, rotate]),
+  );
 
-  const activeSaturationStyle = useAnimatedStyle(() => {
-    if (!adaptSpectrum) {
-      return {};
-    }
+  const activeSaturationStyle = useAnimatedStyle(
+    () => {
+      if (!adaptSpectrum) {
+        return {};
+      }
 
-    return {
-      backgroundColor: HSVA2HSLA_string(0, 0, brightnessValue.value, 1 - saturationValue.value / 100),
-    };
-  }, [brightnessValue, saturationValue, adaptSpectrum]);
+      return { backgroundColor: HSVA2HSLA_string(0, 0, brightnessValue.value, 1 - saturationValue.value / 100) };
+    },
+    getWebDependencies([brightnessValue, saturationValue, adaptSpectrum]),
+  );
 
-  const activeBrightnessStyle = useAnimatedStyle(() => {
-    if (!adaptSpectrum) {
-      return {};
-    }
+  const activeBrightnessStyle = useAnimatedStyle(
+    () => {
+      if (!adaptSpectrum) {
+        return {};
+      }
 
-    return {
-      backgroundColor: HSVA2HSLA_string(0, 0, 0, 1 - brightnessValue.value / 100),
-    };
-  }, [brightnessValue, adaptSpectrum]);
+      return { backgroundColor: HSVA2HSLA_string(0, 0, 0, 1 - brightnessValue.value / 100) };
+    },
+    getWebDependencies([brightnessValue, adaptSpectrum]),
+  );
 
-  const clipViewStyle = useAnimatedStyle(() => {
-    return {
-      position: 'absolute',
-      width: width.value - sliderThickness * 2,
-      height: width.value - sliderThickness * 2,
-      borderRadius: width.value / 2,
-    };
-  }, [width, sliderThickness]);
+  const clipViewStyle = useAnimatedStyle(
+    () => {
+      return {
+        position: 'absolute',
+        width: width.value - sliderThickness * 2,
+        height: width.value - sliderThickness * 2,
+        borderRadius: width.value / 2,
+      };
+    },
+    getWebDependencies([width, sliderThickness]),
+  );
 
   const onBegin = ({ x, y }: { x: number; y: number }) => {
     'worklet';

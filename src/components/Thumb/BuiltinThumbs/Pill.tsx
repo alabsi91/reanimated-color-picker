@@ -2,7 +2,7 @@ import React from 'react';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 
 import { styles } from '@styles';
-import { enableAndroidHardwareTextures } from '@utils';
+import { enableAndroidHardwareTextures, getWebDependencies } from '@utils';
 
 import type { BuiltinThumbsProps } from '@types';
 
@@ -17,10 +17,7 @@ export default function Pill({
   style,
   vertical,
 }: BuiltinThumbsProps) {
-  const computedStyle = {
-    width,
-    height,
-  };
+  const computedStyle = { width, height };
 
   const pillStyle = {
     borderRadius,
@@ -30,11 +27,10 @@ export default function Pill({
     height: vertical ? 10 : '100%',
   } as const;
 
-  const adaptiveColorStyle = useAnimatedStyle(() => {
-    return {
-      borderColor: thumbColor ?? adaptiveColor.value,
-    };
-  }, [thumbColor, adaptiveColor]);
+  const adaptiveColorStyle = useAnimatedStyle(
+    () => ({ borderColor: thumbColor ?? adaptiveColor.value }),
+    getWebDependencies([thumbColor, adaptiveColor]),
+  );
 
   return (
     <Animated.View

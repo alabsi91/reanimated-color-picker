@@ -7,7 +7,7 @@ import usePickerContext from '@context';
 import { SliderCore } from '@sliders/SliderCore';
 import { styles } from '@styles';
 import Thumb from '@thumb';
-import { enableAndroidHardwareTextures, getStyle, isRtl } from '@utils';
+import { enableAndroidHardwareTextures, getStyle, getWebDependencies, isRtl } from '@utils';
 
 import type { SliderProps } from '@types';
 
@@ -41,55 +41,63 @@ export function LuminanceSlider({ gestures = [], style = {}, vertical = false, r
   const hslSaturationValue = useSharedValue(0);
   const hslLuminanceValue = useSharedValue(0);
 
-  const hsl = useDerivedValue(() => {
-    const hsvColor = { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
-    const { h, s, l } = colorKit.runOnUI().HSL(hsvColor).object(false);
+  const hsl = useDerivedValue(
+    () => {
+      const hsvColor = { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
+      const { h, s, l } = colorKit.runOnUI().HSL(hsvColor).object(false);
 
-    hslLuminanceValue.value = l;
+      hslLuminanceValue.value = l;
 
-    // At l=0 (black) or l=100 (white), the conversion loses saturation information.
-    // Substitute the last known saturation so it's restored when luminance changes.
-    if (l === 100 || l === 0) {
-      return { h, s: hslSaturationValue.value, l };
-    }
+      // At l=0 (black) or l=100 (white), the conversion loses saturation information.
+      // Substitute the last known saturation so it's restored when luminance changes.
+      if (l === 100 || l === 0) {
+        return { h, s: hslSaturationValue.value, l };
+      }
 
-    hslSaturationValue.value = s;
-    return { h, s, l };
-  }, [hueValue, saturationValue, brightnessValue, hslLuminanceValue]);
+      hslSaturationValue.value = s;
+      return { h, s, l };
+    },
+    getWebDependencies([hueValue, saturationValue, brightnessValue, hslLuminanceValue]),
+  );
 
-  const thumbAnimatedStyle = useAnimatedStyle(() => {
-    const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0);
-    const percent = (hsl.value.l / 100) * length;
-    const pos = (reverse ? length - percent : percent) - (boundedThumb ? 0 : thumbSize / 2);
-    const posY = vertical ? pos : height.value / 2 - thumbSize / 2;
-    const posX = vertical ? width.value / 2 - thumbSize / 2 : pos;
+  const thumbAnimatedStyle = useAnimatedStyle(
+    () => {
+      const length = (vertical ? height.value : width.value) - (boundedThumb ? thumbSize : 0);
+      const percent = (hsl.value.l / 100) * length;
+      const pos = (reverse ? length - percent : percent) - (boundedThumb ? 0 : thumbSize / 2);
+      const posY = vertical ? pos : height.value / 2 - thumbSize / 2;
+      const posX = vertical ? width.value / 2 - thumbSize / 2 : pos;
 
-    return {
-      transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }],
-    };
-  }, [height, width, hsl, handleScale, vertical, reverse, boundedThumb, thumbSize]);
+      return {
+        transform: [{ translateY: posY }, { translateX: posX }, { scale: handleScale.value }],
+      };
+    },
+    getWebDependencies([height, width, hsl, handleScale, vertical, reverse, boundedThumb, thumbSize]),
+  );
 
-  const activeColorStyle = useAnimatedStyle(() => {
-    return {
-      backgroundColor: `hsl(${hsl.value.h}, ${adaptSpectrum ? hsl.value.s : 100}%, ${50}%)`,
-    };
-  }, [hsl, adaptSpectrum]);
+  const activeColorStyle = useAnimatedStyle(
+    () => ({ backgroundColor: `hsl(${hsl.value.h}, ${adaptSpectrum ? hsl.value.s : 100}%, ${50}%)` }),
+    getWebDependencies([hsl, adaptSpectrum]),
+  );
 
-  const imageStyle = useAnimatedStyle(() => {
-    const imageRotate = vertical ? (reverse ? '90deg' : '270deg') : reverse ? '0deg' : '180deg';
-    const imageTranslateY = ((height.value - width.value) / 2) * ((!reverse && isRtl) || (reverse && !isRtl) ? 1 : -1);
+  const imageStyle = useAnimatedStyle(
+    () => {
+      const imageRotate = vertical ? (reverse ? '90deg' : '270deg') : reverse ? '0deg' : '180deg';
+      const imageTranslateY = ((height.value - width.value) / 2) * ((!reverse && isRtl) || (reverse && !isRtl) ? 1 : -1);
 
-    return {
-      width: vertical ? height.value : '100%',
-      height: vertical ? width.value : '100%',
-      borderRadius,
-      transform: [
-        { rotate: imageRotate },
-        { translateX: vertical ? ((height.value - width.value) / 2) * (reverse ? 1 : -1) : 0 },
-        { translateY: vertical ? imageTranslateY : 0 },
-      ],
-    };
-  }, [height, width, borderRadius, reverse, vertical]);
+      return {
+        width: vertical ? height.value : '100%',
+        height: vertical ? width.value : '100%',
+        borderRadius,
+        transform: [
+          { rotate: imageRotate },
+          { translateX: vertical ? ((height.value - width.value) / 2) * (reverse ? 1 : -1) : 0 },
+          { translateY: vertical ? imageTranslateY : 0 },
+        ],
+      };
+    },
+    getWebDependencies([height, width, borderRadius, reverse, vertical]),
+  );
 
   const onBegin = () => {
     'worklet';

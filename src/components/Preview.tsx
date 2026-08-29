@@ -5,7 +5,7 @@ import Animated, { useAnimatedStyle, useDerivedValue } from 'react-native-reanim
 import colorKit from '@colorKit';
 import usePickerContext from '@context';
 import { styles } from '@styles';
-import { ConditionalRendering, getStyle, isWeb } from '@utils';
+import { ConditionalRendering, getStyle, getWebDependencies, isWeb } from '@utils';
 import { PreviewText } from './PreviewText';
 
 import type { PreviewProps } from '@types';
@@ -35,34 +35,40 @@ export function Preview({
     return colorKit.isDark(value) ? '#ffffff' : '#000000';
   }, [value]);
 
-  const previewColor = useDerivedValue(() => {
-    return colorKit.runOnUI().HEX({
-      h: hueValue.value,
-      s: saturationValue.value,
-      v: brightnessValue.value,
-      a: alphaValue.value,
-    });
-  }, [hueValue, saturationValue, brightnessValue, alphaValue]);
+  const previewColor = useDerivedValue(
+    () => {
+      return colorKit.runOnUI().HEX({
+        h: hueValue.value,
+        s: saturationValue.value,
+        v: brightnessValue.value,
+        a: alphaValue.value,
+      });
+    },
+    getWebDependencies([hueValue, saturationValue, brightnessValue, alphaValue]),
+  );
 
-  const previewColorStyle = useAnimatedStyle(() => ({ backgroundColor: previewColor.value }), [previewColor]);
+  const previewColorStyle = useAnimatedStyle(() => ({ backgroundColor: previewColor.value }), getWebDependencies([previewColor]));
 
-  const previewTextColor = useDerivedValue(() => {
-    if (alphaValue.value < 0.5) {
-      return '#000000';
-    }
+  const previewTextColor = useDerivedValue(
+    () => {
+      if (alphaValue.value < 0.5) {
+        return '#000000';
+      }
 
-    const currentColor = {
-      h: hueValue.value,
-      s: saturationValue.value,
-      v: brightnessValue.value,
-      a: alphaValue.value,
-    };
+      const currentColor = {
+        h: hueValue.value,
+        s: saturationValue.value,
+        v: brightnessValue.value,
+        a: alphaValue.value,
+      };
 
-    const isDark = colorKit.runOnUI().isDark(currentColor);
-    return isDark ? '#ffffff' : '#000000';
-  }, [hueValue, saturationValue, brightnessValue, alphaValue]);
+      const isDark = colorKit.runOnUI().isDark(currentColor);
+      return isDark ? '#ffffff' : '#000000';
+    },
+    getWebDependencies([hueValue, saturationValue, brightnessValue, alphaValue]),
+  );
 
-  const previewTextStyle = useAnimatedStyle(() => ({ color: previewTextColor.value }), [previewTextColor]);
+  const previewTextStyle = useAnimatedStyle(() => ({ color: previewTextColor.value }), getWebDependencies([previewTextColor]));
 
   return (
     <Wrapper disableTexture={disableOpacityTexture} style={style}>
