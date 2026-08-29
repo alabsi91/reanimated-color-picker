@@ -216,7 +216,7 @@ Fires when the user releases the slider handle or taps a swatch. Accepts regular
 
 Sets the displayed color without triggering `onChange` or `onComplete`. Useful for updating the picker color independently of the `value` prop.
 
-`type: (color: string, duration?: number) => void`
+`type: (color: SupportedColorFormats, duration?: number) => void`
 
 ```tsx
 import ColorPicker from "reanimated-color-picker";

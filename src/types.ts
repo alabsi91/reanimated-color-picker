@@ -388,7 +388,7 @@ export interface ColorPickerProps {
 
 export interface ColorPickerRef {
   /** Programmatically applies a color to the color picker. */
-  setColor: (color: string, duration?: number) => void;
+  setColor: (color: SupportedColorFormats, duration?: number) => void;
 }
 
 export interface SwatchesProps {
