@@ -15,3 +15,5 @@ straight to a color.
     <inline-text src="@examples/Panel1.tsx"></inline-text>
   </code-block>
 </div>
+
+<markdown src="@parts/markdown/color-picker-style.md"></markdown>

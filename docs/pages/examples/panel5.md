@@ -14,3 +14,5 @@ still slides freely, and `adaptSpectrum` keeps its track showing the selected co
     <inline-text src="@examples/Panel5.tsx"></inline-text>
   </code-block>
 </div>
+
+<markdown src="@parts/markdown/color-picker-style.md"></markdown>

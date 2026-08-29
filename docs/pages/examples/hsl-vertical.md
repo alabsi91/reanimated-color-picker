@@ -14,3 +14,5 @@ currently selected, so the gradients update as you move any of the others.
     <inline-text src="@examples/HslVertical.tsx"></inline-text>
   </code-block>
 </div>
+
+<markdown src="@parts/markdown/color-picker-style.md"></markdown>

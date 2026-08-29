@@ -14,3 +14,5 @@ short travel of a vertical slider.
     <inline-text src="@examples/RgbVertical.tsx"></inline-text>
   </code-block>
 </div>
+
+<markdown src="@parts/markdown/color-picker-style.md"></markdown>

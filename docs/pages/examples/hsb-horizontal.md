@@ -14,3 +14,5 @@ none, which is worth knowing when you want a slider to read in the other directi
     <inline-text src="@examples/HsbHorizontal.tsx"></inline-text>
   </code-block>
 </div>
+
+<markdown src="@parts/markdown/color-picker-style.md"></markdown>

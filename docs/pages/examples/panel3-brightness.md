@@ -14,3 +14,5 @@ the other two wheel examples — only `centerChannel` and the slider change.
     <inline-text src="@examples/Panel3Brightness.tsx"></inline-text>
   </code-block>
 </div>
+
+<markdown src="@parts/markdown/color-picker-style.md"></markdown>

@@ -14,3 +14,5 @@ one. `thumbScaleAnimationValue={1}` holds the ring's thumb at a fixed size while
     <inline-text src="@examples/LuminanceCircular.tsx"></inline-text>
   </code-block>
 </div>
+
+<markdown src="@parts/markdown/color-picker-style.md"></markdown>

@@ -14,3 +14,5 @@ Dragging a slider inside a scroll view usually fights the scroll. The fix is to 
     <inline-text src="@examples/WithRnghScrollView.tsx"></inline-text>
   </code-block>
 </div>
+
+<markdown src="@parts/markdown/color-picker-style.md"></markdown>

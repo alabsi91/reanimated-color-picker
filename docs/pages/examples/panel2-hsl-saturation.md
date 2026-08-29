@@ -14,3 +14,5 @@ The same Windows-style panel driven in HSL instead: hue horizontally, HSL satura
     <inline-text src="@examples/Panel2HslSaturation.tsx"></inline-text>
   </code-block>
 </div>
+
+<markdown src="@parts/markdown/color-picker-style.md"></markdown>

@@ -14,3 +14,5 @@ slider is being dragged. Each slider gets its own `Gesture.Pan()` — one gestur
     <inline-text src="@examples/WithReanimatedScrollView.tsx"></inline-text>
   </code-block>
 </div>
+
+<markdown src="@parts/markdown/color-picker-style.md"></markdown>

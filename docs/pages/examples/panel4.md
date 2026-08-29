@@ -14,3 +14,5 @@ slider of its own. Its color range is limited, so the thumb cannot land on every
     <inline-text src="@examples/Panel4.tsx"></inline-text>
   </code-block>
 </div>
+
+<markdown src="@parts/markdown/color-picker-style.md"></markdown>

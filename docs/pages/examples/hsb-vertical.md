@@ -14,3 +14,5 @@ them out in a row and letting each one grow downward.
     <inline-text src="@examples/HsbVertical.tsx"></inline-text>
   </code-block>
 </div>
+
+<markdown src="@parts/markdown/color-picker-style.md"></markdown>

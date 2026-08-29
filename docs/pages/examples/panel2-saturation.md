@@ -14,3 +14,5 @@ widget lets you type a color in any format or switch between them.
     <inline-text src="@examples/Panel2Saturation.tsx"></inline-text>
   </code-block>
 </div>
+
+<markdown src="@parts/markdown/color-picker-style.md"></markdown>

@@ -14,3 +14,5 @@ saturation and HSL saturation are different channels, so they have a component e
     <inline-text src="@examples/HslHorizontal.tsx"></inline-text>
   </code-block>
 </div>
+
+<markdown src="@parts/markdown/color-picker-style.md"></markdown>

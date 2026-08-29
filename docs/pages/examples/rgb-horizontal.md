@@ -14,3 +14,5 @@ components for — no panel and no hue slider needed.
     <inline-text src="@examples/RgbHorizontal.tsx"></inline-text>
   </code-block>
 </div>
+
+<markdown src="@parts/markdown/color-picker-style.md"></markdown>

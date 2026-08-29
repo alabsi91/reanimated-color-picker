@@ -14,3 +14,5 @@ shows the color before and after the current gesture, so you can see what you ar
     <inline-text src="@examples/Panel3HslSaturation.tsx"></inline-text>
   </code-block>
 </div>
+
+<markdown src="@parts/markdown/color-picker-style.md"></markdown>

@@ -14,3 +14,5 @@ A hue ring wrapped around a `<Panel1 />`, so the panel sits inside the slider ra
     <inline-text src="@examples/CircularHue.tsx"></inline-text>
   </code-block>
 </div>
+
+<markdown src="@parts/markdown/color-picker-style.md"></markdown>

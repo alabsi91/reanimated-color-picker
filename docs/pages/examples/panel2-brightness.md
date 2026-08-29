@@ -14,3 +14,5 @@ panel keeps a `ring`, so each control can carry the shape that suits it.
     <inline-text src="@examples/Panel2Brightness.tsx"></inline-text>
   </code-block>
 </div>
+
+<markdown src="@parts/markdown/color-picker-style.md"></markdown>
