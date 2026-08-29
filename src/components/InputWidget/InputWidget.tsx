@@ -16,6 +16,14 @@ import type { SupportedColorFormats } from '../../colorKit/types';
 
 const defaultFormats = ['HEX', 'RGB', 'HSL', 'HWB', 'HSV'] as const;
 
+const widgets = {
+  HEX: HexWidget,
+  RGB: RgbWidget,
+  HSL: HslWidget,
+  HWB: HwbWidget,
+  HSV: HsvWidget,
+};
+
 /** @see [InputWidget](https://alabsi91.github.io/reanimated-color-picker/components/preview/input-widget/) */
 export function InputWidget(props: InputWidgetProps) {
   const {
@@ -71,20 +79,7 @@ export function InputWidget(props: InputWidgetProps) {
     disableAlphaChannel,
   };
 
-  const Input = () => {
-    switch (format) {
-      case 'HEX':
-        return <HexWidget {...inputsProps} />;
-      case 'RGB':
-        return <RgbWidget {...inputsProps} />;
-      case 'HSL':
-        return <HslWidget {...inputsProps} />;
-      case 'HWB':
-        return <HwbWidget {...inputsProps} />;
-      case 'HSV':
-        return <HsvWidget {...inputsProps} />;
-    }
-  };
+  const Widget = widgets[format];
 
   const gap = getStyle(containerStyle, 'gap') ?? 5;
   const iconWidth = getStyle(iconStyle, 'width') ?? 24;
@@ -93,7 +88,7 @@ export function InputWidget(props: InputWidgetProps) {
   return (
     <View style={[styles.container, containerStyle]}>
       <View style={[styles.inputsWrapper, { gap }]}>
-        <Input />
+        <Widget {...inputsProps} />
       </View>
 
       <ConditionalRendering if={formats.length > 1}>
