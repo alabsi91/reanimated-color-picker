@@ -206,7 +206,7 @@ export function Panel2({
   return (
     <PanelCore
       style={[styles.panelContainer, style, { position: 'relative', height: heightStyle, borderWidth: 0, padding: 0 }]}
-      label={props.accessibilityHint ?? `Hue and ${verticalChannel} 2D slider`}
+      label={props.accessibilityLabel ?? `Hue and ${verticalChannel} 2D slider`}
       hint={props.accessibilityHint ?? `Double tap to switch between hue and ${verticalChannel}`}
       labelX='Hue'
       currentXValue={hueValue}

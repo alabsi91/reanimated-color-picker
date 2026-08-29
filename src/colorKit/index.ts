@@ -1417,7 +1417,7 @@ export const colorKitUI = () => {
    */
   const spin = (color: SupportedColorFormats, degree: number | string): ConversionMethods => {
     const { h, s, l, a } = HSL(color).object();
-    const spinDegree = typeof degree === 'string' ? s * (parseFloat(degree) / 100) : degree;
+    const spinDegree = typeof degree === 'string' ? h * (parseFloat(degree) / 100) : degree;
     const newColor = { h: Math.round((h + spinDegree) % 360), s, l, a };
 
     return returnColorObject(newColor);
