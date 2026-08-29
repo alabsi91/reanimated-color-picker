@@ -31,8 +31,8 @@ export default defineConfig({
     }),
 
     plugins.bundlePackagesPlugin({
-      warnDuplicates: false,
       alias: { "react-native": "react-native-web" },
+      assetsDir: "sources/assets",
       define: { global: "globalThis", "process.env": "{}", __DEV__: "false" },
       babel: [
         {
@@ -61,7 +61,7 @@ export default defineConfig({
       exclude: ["pages/examples-all.md"],
       baseDirectory: "pages",
       collapsed: false,
-      layouts: { default: "@layouts/document-layout/document.layout.html" },
+      layouts: { default: "@layouts/document.layout.html" },
       customizations: {
         "./pages/examples/example-apps.md": {},
         "./pages/examples/panel1.md": {},

@@ -1,5 +1,5 @@
 ---
-layout: "@layouts/document-layout/document.layout.html"
+layout: "@layouts/document.layout.html"
 ---
 
 # All Examples
