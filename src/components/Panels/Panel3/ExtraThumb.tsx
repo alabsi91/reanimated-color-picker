@@ -44,7 +44,7 @@ export function ExtraThumb({
     }
 
     return currentColor;
-  }, [hueValue, saturationValue, brightnessValue, alphaValue]);
+  }, [hueValue, saturationValue, brightnessValue, alphaValue, colorTransform]);
 
   const hue = useDerivedValue(() => {
     if (colorTransform) {
@@ -57,7 +57,7 @@ export function ExtraThumb({
 
     const changeAmount = typeof hueTransform === 'string' ? hueValue.value * (parseFloat(hueTransform) / 100) : hueTransform;
     return (((hueValue.value + changeAmount) % 360) + 360) % 360;
-  }, [hsv, hueValue, hueTransform]);
+  }, [hsv, hueValue, hueTransform, colorTransform]);
 
   // Calculate saturation value
   const saturation = useDerivedValue(() => {
@@ -75,7 +75,7 @@ export function ExtraThumb({
         : saturationTransform;
 
     return clamp(saturationValue.value + changeAmount, 100);
-  }, [hsv, saturationValue, saturationTransform]);
+  }, [hsv, saturationValue, saturationTransform, colorTransform]);
 
   // Calculate brightness value
   const brightness = useDerivedValue(() => {
@@ -93,7 +93,7 @@ export function ExtraThumb({
         : brightnessTransform;
 
     return clamp(brightnessValue.value + changeAmount, 100);
-  }, [hsv, brightnessValue, brightnessTransform]);
+  }, [hsv, brightnessValue, brightnessTransform, colorTransform]);
 
   // Call onChange prop on every value change
   useDerivedValue(() => {
@@ -113,7 +113,7 @@ export function ExtraThumb({
     if (onChangeJS) {
       runOnJS(onChangeJS)(colors);
     }
-  }, [hue, saturation, brightness, alphaValue]);
+  }, [hue, saturation, brightness, alphaValue, colorResult, onChange, onChangeJS]);
 
   const thumbAnimatedStyle = useAnimatedStyle(() => {
     const center = width.value / 2 - (boundedThumb ? thumbSize / 2 : 0);
