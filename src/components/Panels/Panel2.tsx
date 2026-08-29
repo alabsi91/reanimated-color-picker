@@ -1,5 +1,5 @@
 import React from 'react';
-import { ImageBackground, StyleSheet } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import Animated, { useAnimatedStyle, useDerivedValue, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import colorKit from '@colorKit';
@@ -240,12 +240,12 @@ export function Panel2({
       onUpdate={onUpdate}
       onEnd={onEnd}
     >
-      <ImageBackground
-        source={require('@assets/Hue.png')}
+      <View
         style={[styles.panelImage, { position: 'relative', borderRadius, transform: [{ scaleX: reverseHue ? -1 : 1 }] }]}
-        resizeMode='stretch'
         aria-hidden
       >
+        <Image source={require('@assets/Hue.png')} style={styles.panelImage} resizeMode='stretch' />
+
         <ConditionalRendering if={adaptSpectrum && verticalChannel === 'brightness'}>
           <Animated.View style={[spectrumStyle, StyleSheet.absoluteFill]} />
         </ConditionalRendering>
@@ -260,7 +260,7 @@ export function Panel2({
         <ConditionalRendering if={adaptSpectrum && (verticalChannel === 'saturation' || verticalChannel === 'hsl-saturation')}>
           <Animated.View style={[spectrumStyle, StyleSheet.absoluteFill]} />
         </ConditionalRendering>
-      </ImageBackground>
+      </View>
 
       <Thumb
         thumbShape={thumbShape}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, ImageBackground, StyleSheet } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import Animated, { useAnimatedStyle, useDerivedValue, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import colorKit from '@colorKit';
@@ -269,13 +269,13 @@ export function Panel3({
         onUpdate={onUpdate}
         onEnd={onEnd}
       >
-        <ImageBackground
-          source={require('@assets/circularHue.png')}
-          style={styles.panelImage}
-          imageStyle={{ transform: [{ rotate: -rotate + 'deg' }] }}
-          resizeMode='stretch'
-          aria-hidden
-        >
+        <View style={styles.panelImage} aria-hidden>
+          <Image
+            source={require('@assets/circularHue.png')}
+            style={[styles.panelImage, { transform: [{ rotate: -rotate + 'deg' }] }]}
+            resizeMode='stretch'
+          />
+
           <ConditionalRendering if={adaptSpectrum && centerChannel === 'brightness'}>
             <Animated.View style={[{ borderRadius }, spectrumStyle, StyleSheet.absoluteFill]} />
           </ConditionalRendering>
@@ -290,7 +290,7 @@ export function Panel3({
           <ConditionalRendering if={adaptSpectrum && (centerChannel === 'saturation' || centerChannel === 'hsl-saturation')}>
             <Animated.View style={[{ borderRadius }, spectrumStyle, StyleSheet.absoluteFill]} />
           </ConditionalRendering>
-        </ImageBackground>
+        </View>
 
         <ConditionalRendering if={renderCenterLine}>
           <Animated.View style={[styles.panel3Line, centerLineStyle]} aria-hidden />

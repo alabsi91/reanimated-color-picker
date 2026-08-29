@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { ImageBackground, View } from 'react-native';
+import { Image, View } from 'react-native';
 import Animated, { useAnimatedStyle, useDerivedValue } from 'react-native-reanimated';
 
 import colorKit from '@colorKit';
@@ -107,14 +107,10 @@ function Wrapper({ children, disableTexture, style }: WrapperProps) {
   }
 
   return (
-    <ImageBackground
-      source={require('@assets/transparent-texture.png')}
-      imageStyle={{ width: '100%', height: '100%' }}
-      resizeMode='repeat'
-      style={[styles.previewWrapper, style]}
-    >
+    <View style={[styles.previewWrapper, style]}>
+      <Image source={require('@assets/transparent-texture.png')} style={styles.panelImage} resizeMode='repeat' />
       {children}
-    </ImageBackground>
+    </View>
   );
 }
 

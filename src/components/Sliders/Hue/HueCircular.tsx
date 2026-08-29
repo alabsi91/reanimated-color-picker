@@ -1,5 +1,5 @@
 import React from 'react';
-import { ImageBackground, StyleSheet } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import usePickerContext from '@context';
@@ -184,17 +184,18 @@ export function HueCircular({
       onUpdate={onUpdate}
       onEnd={onEnd}
     >
-      <ImageBackground
-        source={require('@assets/circularHue.png')}
-        style={[styles.panelImage, { transform: [{ rotate: -rotate + 'deg' }] }]}
-        resizeMode='stretch'
-        aria-hidden
-      >
+      <View style={styles.panelImage} aria-hidden>
+        <Image
+          source={require('@assets/circularHue.png')}
+          style={[styles.panelImage, { transform: [{ rotate: -rotate + 'deg' }] }]}
+          resizeMode='stretch'
+        />
+
         <ConditionalRendering if={adaptSpectrum}>
           <Animated.View style={[borderRadiusStyle, activeBrightnessStyle, StyleSheet.absoluteFill]} />
           <Animated.View style={[borderRadiusStyle, activeSaturationStyle, StyleSheet.absoluteFill]} />
         </ConditionalRendering>
-      </ImageBackground>
+      </View>
 
       <Animated.View style={[clipViewStyle, { backgroundColor: '#fff' }, containerStyle]}>{children}</Animated.View>
 
