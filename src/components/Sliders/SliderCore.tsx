@@ -236,7 +236,7 @@ export function SliderCore(props: SliderCoreProps) {
     return () => {
       div.removeEventListener('keydown', onKeyDown);
     };
-  }, [vertical, reverse, currentValue, step, maxValue]);
+  }, [vertical, reverse, currentValue, step, maxValue, setValue]);
 
   const onAccessibilityAction = (event: AccessibilityActionEvent) => {
     switch (event.nativeEvent.actionName) {

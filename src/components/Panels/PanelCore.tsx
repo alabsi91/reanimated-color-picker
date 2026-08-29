@@ -223,7 +223,7 @@ export function PanelCore(props: PanelCoreProps) {
     return () => {
       div.removeEventListener('keydown', onKeyDown);
     };
-  }, [currentXValue, currentYValue, maxXValue, maxYValue, reverseX, reverseY, step]);
+  }, [currentXValue, currentYValue, maxXValue, maxYValue, reverseX, reverseY, step, setValue]);
 
   const onAccessibilityAction = (event: AccessibilityActionEvent) => {
     const valueX = currentXValue.value;

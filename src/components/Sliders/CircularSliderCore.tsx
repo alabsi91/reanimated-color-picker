@@ -187,7 +187,7 @@ export function CircularSliderCore(props: CircularSliderCoreProps) {
     return () => {
       div.removeEventListener('keydown', onKeyDown);
     };
-  }, [currentValue, step, maxValue]);
+  }, [currentValue, step, maxValue, setValue]);
 
   const onAccessibilityAction = (event: AccessibilityActionEvent) => {
     switch (event.nativeEvent.actionName) {
