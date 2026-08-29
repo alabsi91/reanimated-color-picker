@@ -1,28 +1,30 @@
 ### `renderThumb`
 
-A function that receives `ThumbProps` and returns a custom thumb component. Overrides `thumbShape`.
+A function that receives `RenderThumbProps` and returns a custom thumb component. Overrides `thumbShape`.
 
-`type: (props: ThumbProps) => ReactElement`
+`type: (props: RenderThumbProps) => ReactElement`
 
-#### ThumbProps
+```ts
+interface RenderThumbProps {
+  /** Positions the thumb. Must be applied to a Reanimated component. */
+  positionStyle: StyleProp<AnimatedStyle<ViewStyle>>;
 
-**`positionStyle`** `StyleProp`
-Determines the position of the thumb — must be included in the component's style.
+  /** The thumb's width in pixels, taken from `thumbSize`. */
+  width: number;
 
-**`width`** `number`
-Extracted from `thumbSize`, used for thumb position calculation.
+  /** The thumb's height in pixels, taken from `thumbSize`. */
+  height: number;
 
-**`height`** `number`
-Extracted from `thumbSize`, used for thumb position calculation.
+  /** `"white"` or `"black"`, whichever contrasts with the current color. */
+  adaptiveColor: SharedValue<string>;
 
-**`adaptiveColor`** `SharedValue<string>`
-White or black based on the contrast ratio of the current color.
+  /** The current color without the alpha channel. Updates whenever the color changes. */
+  currentColor: SharedValue<string>;
 
-**`currentColor`** `SharedValue<string>`
-Updates whenever the color changes.
-
-**`initialColor`** `string`
-The initial color value.
+  /** The initial color passed to the color picker. */
+  initialColor: string;
+}
+```
 
 #### Example
 
