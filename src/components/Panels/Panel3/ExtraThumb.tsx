@@ -56,7 +56,7 @@ export function ExtraThumb({
     }
 
     const changeAmount = typeof hueTransform === 'string' ? hueValue.value * (parseFloat(hueTransform) / 100) : hueTransform;
-    return clamp((hueValue.value + changeAmount) % 360, 360);
+    return (((hueValue.value + changeAmount) % 360) + 360) % 360;
   }, [hsv, hueValue, hueTransform]);
 
   // Calculate saturation value
