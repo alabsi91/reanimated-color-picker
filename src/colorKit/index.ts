@@ -300,12 +300,7 @@ export const colorKitUI = () => {
     for (const regex of regexArray) {
       const matches = color.match(regex);
       if (matches) {
-        return [
-          parseInt(matches[1], 10),
-          parseInt(matches[2], 10),
-          parseInt(matches[3], 10),
-          parseFloat(matches[4] ?? '1'),
-        ] as const;
+        return [parseInt(matches[1], 10), parseFloat(matches[2]), parseFloat(matches[3]), parseFloat(matches[4] ?? '1')] as const;
       }
     }
   };

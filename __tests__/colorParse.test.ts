@@ -125,6 +125,10 @@ describe('parse — HSL', () => {
   test('space-separated with "deg": hsl(360deg 100% 100%)', () => {
     expectParse('hsl(360deg 100% 100%)').toMatchObject(expected);
   });
+
+  test('decimal percentages: hsl(360, 50.5%, 99.9%)', () => {
+    expectParse('hsl(360, 50.5%, 99.9%)').toMatchObject({ format: 'hsl', value: { h: 360, s: 50.5, l: 99.9 } });
+  });
 });
 
 describe('parse — HSLA', () => {
