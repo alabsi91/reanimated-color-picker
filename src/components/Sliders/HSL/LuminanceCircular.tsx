@@ -144,8 +144,8 @@ export function LuminanceCircular({
     const center = width.value / 2;
     const dx = center - x;
     const dy = center - y;
-    const theta = (Math.atan2(dy, dx) + rotate * (Math.PI / 180)) * (180 / Math.PI); // [0 - 180] range
-    const angle = theta < 0 ? 360 + theta : theta; // [0 - 360] range
+    const theta = Math.atan2(dy, dx) * (180 / Math.PI) + rotate;
+    const angle = ((theta % 360) + 360) % 360;
     const mirroredAngle = angle <= 180 ? angle : 360 - angle;
     const newLuminanceValue = (mirroredAngle / 180) * 100;
 
