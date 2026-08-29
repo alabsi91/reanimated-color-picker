@@ -60,7 +60,7 @@ export function OpacitySlider({ gestures = [], style = {}, vertical = false, rev
     return {
       background: `linear-gradient(${deg}deg, transparent 0%, ${color} 100%)`,
     };
-  }, [hueValue, saturationValue, brightnessValue, vertical, reverse]);
+  }, [hueValue, saturationValue, brightnessValue, adaptSpectrum, vertical, reverse]);
 
   const imageStyle = useAnimatedStyle(() => {
     if (isWeb) {

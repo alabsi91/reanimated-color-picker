@@ -85,7 +85,7 @@ export function Panel2({
     return {
       transform: [{ translateX: posX }, { translateY: posY }, { scale: handleScale.value }],
     };
-  }, [[width, height, hueValue, verticalChannelValue, handleScale, reverseHue, reverseVerticalChannel, boundedThumb, thumbSize]]);
+  }, [width, height, hueValue, verticalChannelValue, handleScale, reverseHue, reverseVerticalChannel, boundedThumb, thumbSize]);
 
   const spectrumStyle = useAnimatedStyle(() => {
     if (!adaptSpectrum) return {};
