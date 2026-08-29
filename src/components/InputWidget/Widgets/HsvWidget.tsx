@@ -1,7 +1,8 @@
-import React, { useRef } from 'react';
+import React, { useMemo } from 'react';
 import { useDerivedValue, useSharedValue } from 'react-native-reanimated';
 
 import colorKit from '@colorKit';
+import usePickerContext from '@context';
 import { clamp, ConditionalRendering } from '@utils';
 import WidgetTextInput from './WidgetTextInput';
 
@@ -21,12 +22,14 @@ export default function HsvWidget(props: WidgetProps) {
     disableAlphaChannel,
   } = props;
 
-  const hsv = useRef(colorKit.HSV(colorResult().hsva).object(false));
+  const { value } = usePickerContext();
 
-  const h = useSharedValue(hsv.current.h.toString());
-  const s = useSharedValue(hsv.current.s.toString());
-  const v = useSharedValue(hsv.current.v.toString());
-  const a = useSharedValue(hsv.current.a.toString());
+  const initialHsv = useMemo(() => colorKit.HSV(value).object(), [value]);
+
+  const h = useSharedValue(initialHsv.h.toString());
+  const s = useSharedValue(initialHsv.s.toString());
+  const v = useSharedValue(initialHsv.v.toString());
+  const a = useSharedValue(initialHsv.a.toString());
 
   useDerivedValue(() => {
     const currentColor = {
@@ -36,12 +39,12 @@ export default function HsvWidget(props: WidgetProps) {
       a: alphaValue.value,
     };
 
-    hsv.current = colorKit.runOnUI().HSV(colorResult(currentColor).hsva).object(false);
+    const hsv = colorKit.runOnUI().HSV(colorResult(currentColor).hsva).object(false);
 
-    h.value = hsv.current.h.toString();
-    s.value = hsv.current.s.toString();
-    v.value = hsv.current.v.toString();
-    a.value = hsv.current.a.toString();
+    h.value = hsv.h.toString();
+    s.value = hsv.s.toString();
+    v.value = hsv.v.toString();
+    a.value = hsv.a.toString();
   }, [hueValue, saturationValue, brightnessValue, alphaValue]);
 
   const onHueEndEditing = (text: string) => {
@@ -60,9 +63,9 @@ export default function HsvWidget(props: WidgetProps) {
   };
 
   const onValueEndEditing = (text: string) => {
-    const value = clamp(+text, 100);
+    const brightness = clamp(+text, 100);
     v.value = '';
-    onChange({ h: +h.value, s: +s.value, v: value, a: +a.value });
+    onChange({ h: +h.value, s: +s.value, v: brightness, a: +a.value });
   };
 
   const onAlphaEndEditing = (text: string) => {

@@ -1,7 +1,8 @@
-import React, { useRef } from 'react';
+import React, { useMemo } from 'react';
 import { useDerivedValue, useSharedValue } from 'react-native-reanimated';
 
 import colorKit from '@colorKit';
+import usePickerContext from '@context';
 import { clamp, ConditionalRendering } from '@utils';
 import WidgetTextInput from './WidgetTextInput';
 
@@ -21,12 +22,14 @@ export default function RgbWidget(props: WidgetProps) {
     disableAlphaChannel,
   } = props;
 
-  const rgb = useRef(colorKit.RGB(colorResult().rgba).object(false));
+  const { value } = usePickerContext();
 
-  const r = useSharedValue(rgb.current.r.toString());
-  const g = useSharedValue(rgb.current.g.toString());
-  const b = useSharedValue(rgb.current.b.toString());
-  const a = useSharedValue(rgb.current.a.toString());
+  const initialRgb = useMemo(() => colorKit.RGB(value).object(), [value]);
+
+  const r = useSharedValue(initialRgb.r.toString());
+  const g = useSharedValue(initialRgb.g.toString());
+  const b = useSharedValue(initialRgb.b.toString());
+  const a = useSharedValue(initialRgb.a.toString());
 
   useDerivedValue(() => {
     const currentColor = {
@@ -36,13 +39,13 @@ export default function RgbWidget(props: WidgetProps) {
       a: alphaValue.value,
     };
 
-    rgb.current = colorKit.runOnUI().RGB(colorResult(currentColor).rgba).object(false);
+    const rgb = colorKit.runOnUI().RGB(colorResult(currentColor).rgba).object(false);
 
-    r.value = rgb.current.r.toString();
-    g.value = rgb.current.g.toString();
-    b.value = rgb.current.b.toString();
-    a.value = rgb.current.a.toString();
-  }, [hueValue, saturationValue, brightnessValue, alphaValue]); // track changes on WEB
+    r.value = rgb.r.toString();
+    g.value = rgb.g.toString();
+    b.value = rgb.b.toString();
+    a.value = rgb.a.toString();
+  }, [hueValue, saturationValue, brightnessValue, alphaValue]);
 
   const onRedEndEditing = (text: string) => {
     const red = clamp(+text, 255);

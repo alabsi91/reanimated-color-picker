@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useDerivedValue, useSharedValue } from 'react-native-reanimated';
 
 import colorKit from '@colorKit';
+import usePickerContext from '@context';
 import WidgetTextInput from './WidgetTextInput';
 
 import type { WidgetProps } from '@types';
@@ -19,7 +20,11 @@ export default function HexWidget(props: WidgetProps) {
     inputProps,
   } = props;
 
-  const hexColor = useSharedValue(colorResult().hex);
+  const { value } = usePickerContext();
+
+  const initialHex = useMemo(() => colorKit.HEX(value), [value]);
+
+  const hexColor = useSharedValue(initialHex);
 
   useDerivedValue(() => {
     const currentColor = {

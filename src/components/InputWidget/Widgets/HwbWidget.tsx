@@ -1,7 +1,8 @@
-import React, { useRef } from 'react';
+import React, { useMemo } from 'react';
 import { useDerivedValue, useSharedValue } from 'react-native-reanimated';
 
 import colorKit from '@colorKit';
+import usePickerContext from '@context';
 import { clamp, ConditionalRendering } from '@utils';
 import WidgetTextInput from './WidgetTextInput';
 
@@ -21,12 +22,14 @@ export default function HwbWidget(props: WidgetProps) {
     disableAlphaChannel,
   } = props;
 
-  const hwb = useRef(colorKit.HWB(colorResult().hwba).object(false));
+  const { value } = usePickerContext();
 
-  const h = useSharedValue(hwb.current.h.toString());
-  const w = useSharedValue(hwb.current.w.toString());
-  const b = useSharedValue(hwb.current.b.toString());
-  const a = useSharedValue(hwb.current.a.toString());
+  const initialHwb = useMemo(() => colorKit.HWB(value).object(), [value]);
+
+  const h = useSharedValue(initialHwb.h.toString());
+  const w = useSharedValue(initialHwb.w.toString());
+  const b = useSharedValue(initialHwb.b.toString());
+  const a = useSharedValue(initialHwb.a.toString());
 
   useDerivedValue(() => {
     const currentColor = {
@@ -36,12 +39,12 @@ export default function HwbWidget(props: WidgetProps) {
       a: alphaValue.value,
     };
 
-    hwb.current = colorKit.runOnUI().HWB(colorResult(currentColor).hwba).object(false);
+    const hwb = colorKit.runOnUI().HWB(colorResult(currentColor).hwba).object(false);
 
-    h.value = hwb.current.h.toString();
-    w.value = hwb.current.w.toString();
-    b.value = hwb.current.b.toString();
-    a.value = hwb.current.a.toString();
+    h.value = hwb.h.toString();
+    w.value = hwb.w.toString();
+    b.value = hwb.b.toString();
+    a.value = hwb.a.toString();
   }, [hueValue, saturationValue, brightnessValue, alphaValue]);
 
   const onHueEndEditing = (text: string) => {

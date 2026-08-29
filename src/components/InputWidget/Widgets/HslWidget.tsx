@@ -1,7 +1,8 @@
-import React, { useRef } from 'react';
+import React, { useMemo } from 'react';
 import { useDerivedValue, useSharedValue } from 'react-native-reanimated';
 
 import colorKit from '@colorKit';
+import usePickerContext from '@context';
 import { clamp, ConditionalRendering } from '@utils';
 import WidgetTextInput from './WidgetTextInput';
 
@@ -21,12 +22,14 @@ export default function HslWidget(props: WidgetProps) {
     disableAlphaChannel,
   } = props;
 
-  const hsl = useRef(colorKit.HSL(colorResult().hsla).object(false));
+  const { value } = usePickerContext();
 
-  const h = useSharedValue(hsl.current.h.toString());
-  const s = useSharedValue(hsl.current.s.toString());
-  const l = useSharedValue(hsl.current.l.toString());
-  const a = useSharedValue(hsl.current.a.toString());
+  const initialHsl = useMemo(() => colorKit.HSL(value).object(), [value]);
+
+  const h = useSharedValue(initialHsl.h.toString());
+  const s = useSharedValue(initialHsl.s.toString());
+  const l = useSharedValue(initialHsl.l.toString());
+  const a = useSharedValue(initialHsl.a.toString());
 
   useDerivedValue(() => {
     const currentColor = {
@@ -36,12 +39,12 @@ export default function HslWidget(props: WidgetProps) {
       a: alphaValue.value,
     };
 
-    hsl.current = colorKit.runOnUI().HSL(colorResult(currentColor).hsla).object(false);
+    const hsl = colorKit.runOnUI().HSL(colorResult(currentColor).hsla).object(false);
 
-    h.value = hsl.current.h.toString();
-    s.value = hsl.current.s.toString();
-    l.value = hsl.current.l.toString();
-    a.value = hsl.current.a.toString();
+    h.value = hsl.h.toString();
+    s.value = hsl.s.toString();
+    l.value = hsl.l.toString();
+    a.value = hsl.a.toString();
   }, [hueValue, saturationValue, brightnessValue, alphaValue]);
 
   const onHueEndEditing = (text: string) => {
