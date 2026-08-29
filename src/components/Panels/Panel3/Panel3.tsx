@@ -12,7 +12,7 @@ import { Panel3ContextProvider } from './Panel3Context';
 
 import type { Panel3Props } from '@types';
 
-/** @see [Panel3](https://alabsi91.github.io/reanimated-color-picker/api/panels/panel3/) */
+/** @see [Panel3](https://alabsi91.github.io/reanimated-color-picker/components/panels/panel3/) */
 export function Panel3({
   renderCenterLine = false,
   centerChannel = 'saturation',
@@ -157,18 +157,19 @@ export function Panel3({
     hueValue.value = newXValue;
 
     if (centerChannel === 'hsl-saturation') {
-      // To prevent locking this slider when the luminance is 0 or 100,
-      // this should not affect the resulting color, as the value will be rounded.
+      // Converting back from HSL→HSV at l=0 or l=100 would zero out HSV saturation and brightness,
+      // locking the panel. Nudging l by ±0.01 keeps the conversion well-behaved without any
+      // visible effect on the output color (values are rounded before use).
       const l = hsl.value.l === 0 ? 0.01 : hsl.value.l === 100 ? 99.99 : hsl.value.l;
       const { s, v } = colorKit.runOnUI().HSV({ h: hsl.value.h, s: newYValue, l }).object(false);
       saturationValue.value = s;
       brightnessValue.value = v;
     }
-    // Vertical channel is brightness
+    // Center channel is brightness
     else if (centerChannel === 'brightness') {
       brightnessValue.value = newYValue;
     }
-    // Vertical channel is saturation
+    // Center channel is saturation
     else {
       saturationValue.value = newYValue;
     }

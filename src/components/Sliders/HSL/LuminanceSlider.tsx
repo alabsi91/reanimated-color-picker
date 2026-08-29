@@ -11,7 +11,7 @@ import { enableAndroidHardwareTextures, getStyle, isRtl } from '@utils';
 
 import type { SliderProps } from '@types';
 
-/** @see [LuminanceSlider](https://alabsi91.github.io/reanimated-color-picker/api/sliders/hsl/luminance-slider/) */
+/** @see [LuminanceSlider](https://alabsi91.github.io/reanimated-color-picker/components/sliders/hsl/luminance-slider/) */
 export function LuminanceSlider({ gestures = [], style = {}, vertical = false, reverse = false, ...props }: SliderProps) {
   const { hueValue, saturationValue, brightnessValue, onGestureChange, onGestureEnd, ...ctx } = usePickerContext();
 
@@ -37,7 +37,7 @@ export function LuminanceSlider({ gestures = [], style = {}, vertical = false, r
 
   // HSL saturation is mathematically undefined (collapses to 0) when luminance is 0 or 100,
   // because those represent pure black and white regardless of saturation.
-  // This ref holds the last valid saturation so we can restore it when luminance moves away from the boundary.
+  // This shared value holds the last valid saturation so we can restore it when luminance moves away from the boundary.
   const hslSaturationValue = useSharedValue(0);
   const hslLuminanceValue = useSharedValue(0);
 

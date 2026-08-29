@@ -10,7 +10,7 @@ import { clamp, getStyle, isRtl } from '@utils';
 
 import type { Panel4Props } from '@types';
 
-/** @see [Panel4](https://alabsi91.github.io/reanimated-color-picker/api/panels/panel4/) */
+/** @see [Panel4](https://alabsi91.github.io/reanimated-color-picker/components/panels/panel4/) */
 export function Panel4({
   reverseHue = false,
   reverseHorizontalChannels = false,

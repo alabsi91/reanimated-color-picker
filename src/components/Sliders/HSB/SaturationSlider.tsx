@@ -9,7 +9,7 @@ import { ConditionalRendering, getStyle, HSVA2HSLA_string, isRtl } from '@utils'
 
 import type { SliderProps } from '@types';
 
-/** @see [SaturationSlider](https://alabsi91.github.io/reanimated-color-picker/api/sliders/hsb/saturation-slider/) */
+/** @see [SaturationSlider](https://alabsi91.github.io/reanimated-color-picker/components/sliders/hsb/saturation-slider/) */
 export function SaturationSlider({ gestures = [], style = {}, vertical = false, reverse = false, ...props }: SliderProps) {
   const { hueValue, saturationValue, brightnessValue, onGestureChange, onGestureEnd, ...ctx } = usePickerContext();
 

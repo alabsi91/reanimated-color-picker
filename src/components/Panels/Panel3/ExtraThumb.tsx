@@ -10,7 +10,7 @@ import colorKit from '@colorKit';
 
 import type { ExtraThumbProps } from '@types';
 
-/** @see [ExtraThumb](https://alabsi91.github.io/reanimated-color-picker/api/preview/extra-thumb/) */
+/** @see [ExtraThumb](https://alabsi91.github.io/reanimated-color-picker/components/preview/extra-thumb/) */
 export function ExtraThumb({
   onChange,
   onChangeJS,

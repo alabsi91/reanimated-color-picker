@@ -10,7 +10,7 @@ import { getStyle, isRtl } from '@utils';
 
 import type { Panel5Props } from '@types';
 
-/** @see [Panel5](https://alabsi91.github.io/reanimated-color-picker/api/panels/panel5/) */
+/** @see [Panel5](https://alabsi91.github.io/reanimated-color-picker/components/panels/panel5/) */
 export function Panel5({ gestures = [], style = {}, selectionStyle = {}, accessibilityLabel, accessibilityHint }: Panel5Props) {
   const { hueValue, saturationValue, brightnessValue, onGestureChange, onGestureEnd } = usePickerContext();
 

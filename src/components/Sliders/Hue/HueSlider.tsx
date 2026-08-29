@@ -9,7 +9,7 @@ import { ConditionalRendering, getStyle, HSVA2HSLA_string, isRtl } from '@utils'
 
 import type { SliderProps } from '@types';
 
-/** @see [HueSlider](https://alabsi91.github.io/reanimated-color-picker/api/sliders/hue/hue-slider/) */
+/** @see [HueSlider](https://alabsi91.github.io/reanimated-color-picker/components/sliders/hue/hue-slider/) */
 export function HueSlider({ gestures = [], style = {}, vertical = false, reverse = false, ...props }: SliderProps) {
   const { hueValue, saturationValue, brightnessValue, onGestureChange, onGestureEnd, ...ctx } = usePickerContext();
 

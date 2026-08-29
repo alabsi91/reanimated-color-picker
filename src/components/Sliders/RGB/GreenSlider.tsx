@@ -10,7 +10,7 @@ import { getStyle, isRtl, isWeb, RenderNativeOnly } from '@utils';
 
 import type { SliderProps } from '@types';
 
-/** @see [GreenSlider](https://alabsi91.github.io/reanimated-color-picker/api/sliders/rgb/green-slider/) */
+/** @see [GreenSlider](https://alabsi91.github.io/reanimated-color-picker/components/sliders/rgb/green-slider/) */
 export function GreenSlider({ gestures = [], style = {}, vertical = false, reverse = false, ...props }: SliderProps) {
   const { hueValue, saturationValue, brightnessValue, onGestureChange, onGestureEnd, ...ctx } = usePickerContext();
 

@@ -9,7 +9,7 @@ import { getStyle, HSVA2HSLA_string, isRtl, isWeb, RenderNativeOnly, RenderWebOn
 
 import type { SliderProps } from '@types';
 
-/** @see [OpacitySlider](https://alabsi91.github.io/reanimated-color-picker/api/sliders/opacity-slider/) */
+/** @see [OpacitySlider](https://alabsi91.github.io/reanimated-color-picker/components/sliders/opacity-slider/) */
 export function OpacitySlider({ gestures = [], style = {}, vertical = false, reverse = false, ...props }: SliderProps) {
   const { hueValue, saturationValue, brightnessValue, alphaValue, onGestureChange, onGestureEnd, ...ctx } = usePickerContext();
 

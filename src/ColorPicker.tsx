@@ -146,8 +146,8 @@ function ColorPickerWrapper(props: ColorPickerProps, ref: React.ForwardedRef<Col
 
   // Prevent color shift caused by precision loss during format conversion.
   // The color picker operates in HSV internally, so any incoming color is converted
-  // to HSV and back to the target format on every render. This round-trip can produce
-  // slightly different values than the original, causing sliders to drift. Before
+  // to HSV and back to the target format whenever the `value` prop changes. This round-trip
+  // can produce slightly different values than the original, causing sliders to drift. Before
   // calling setColor, we convert the current color to the incoming format and compare
   // channel values — if they match, the colors are perceptually identical and we skip
   // the update.
@@ -210,7 +210,7 @@ function ColorPickerWrapper(props: ColorPickerProps, ref: React.ForwardedRef<Col
   );
 }
 
-/** @see [ColorPicker](https://alabsi91.github.io/reanimated-color-picker/api/color-picker-wrapper/) */
+/** @see [ColorPicker](https://alabsi91.github.io/reanimated-color-picker/components/color-picker-wrapper/) */
 const ColorPicker = forwardRef<ColorPickerRef, ColorPickerProps>(ColorPickerWrapper);
 
 export default ColorPicker;

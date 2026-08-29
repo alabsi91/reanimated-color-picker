@@ -141,7 +141,7 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'black',
     padding: 0,
-    pointerEvents: 'none', // use along side the prop to be compatible with web platform
+    pointerEvents: 'none', // used alongside the prop to be compatible with the web platform
   },
 
   // Panel3 line

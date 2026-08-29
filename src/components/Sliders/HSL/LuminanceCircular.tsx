@@ -10,7 +10,7 @@ import Thumb from '@thumb';
 
 import type { LuminanceCircularProps } from '@types';
 
-/** @see [LuminanceCircular](https://alabsi91.github.io/reanimated-color-picker/api/sliders/hsl/luminance-circular-slider/) */
+/** @see [LuminanceCircular](https://alabsi91.github.io/reanimated-color-picker/components/sliders/hsl/luminance-circular-slider/) */
 export function LuminanceCircular({
   children,
   gestures = [],
@@ -38,11 +38,11 @@ export function LuminanceCircular({
   const borderRadiusStyle = useAnimatedStyle(() => ({ borderRadius: borderRadius.value }), [borderRadius]);
 
   const handleScale = useSharedValue(1);
-  const thumbSide = useSharedValue<0 | 1>(0); // to determine in which side of the circle the thumb is
+  const thumbSide = useSharedValue<0 | 1>(0); // which side of the circle the thumb is on
 
   // HSL saturation is mathematically undefined (collapses to 0) when luminance is 0 or 100,
   // because those represent pure black and white regardless of saturation.
-  // This ref holds the last valid saturation so we can restore it when luminance moves away from the boundary.
+  // This shared value holds the last valid saturation so we can restore it when luminance moves away from the boundary.
   const hslSaturationValue = useSharedValue(0);
   const hslLuminanceValue = useSharedValue(0);
 
@@ -110,7 +110,7 @@ export function LuminanceCircular({
       return;
     }
 
-    // check if the press inside the circle (not on the actual slider)
+    // Check if the press is inside the inner circle (not on the actual slider)
     const innerR = width.value / 2 - sliderThickness;
     if (pressDistance < innerR) {
       isGestureActive.value = false;

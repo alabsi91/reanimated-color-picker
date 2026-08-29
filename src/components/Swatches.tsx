@@ -28,7 +28,7 @@ const SWATCHES_COLORS = [
   '#607D8B',
 ];
 
-/** @see [Swatches](https://alabsi91.github.io/reanimated-color-picker/api/preview/swatches/) */
+/** @see [Swatches](https://alabsi91.github.io/reanimated-color-picker/components/preview/swatches/) */
 export function Swatches({ colors = SWATCHES_COLORS, style = {}, swatchStyle = {} }: SwatchesProps) {
   const { setColor, onGestureChange, onGestureEnd } = usePickerContext();
 

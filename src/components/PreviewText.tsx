@@ -10,7 +10,7 @@ import type { PreviewTextProps } from '@types';
 Animated.addWhitelistedNativeProps({ text: true });
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
 
-/** @see [PreviewText](https://alabsi91.github.io/reanimated-color-picker/api/preview/preview-text/) */
+/** @see [PreviewText](https://alabsi91.github.io/reanimated-color-picker/components/preview/preview-text/) */
 export function PreviewText({ style = {}, colorFormat = 'hex' }: PreviewTextProps) {
   const { colorResult: returnedResults, hueValue, saturationValue, brightnessValue, alphaValue } = usePickerContext();
 

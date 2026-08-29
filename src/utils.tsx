@@ -6,7 +6,7 @@ import type { StyleProp, ViewStyle } from 'react-native';
 export const isRtl = I18nManager.isRTL;
 export const isWeb = Platform.OS === 'web';
 
-/** Get a specific property from a react native style object */
+/** Get a specific property from a React Native style object */
 export function getStyle<T extends ViewStyle, K extends keyof T>(style: StyleProp<T>, property: K): T[K] | undefined {
   if (!style) {
     return undefined;
@@ -28,7 +28,7 @@ export const clamp = (v: number, max: number) => {
 };
 
 /**
- * Convert `HSV` color to an `HSLA` string representation.
+ * Convert an `HSVA` color to an `HSLA` string representation.
  *
  * @worklet
  */
@@ -46,7 +46,7 @@ export const HSVA2HSLA_string = (h: number, s: number, v: number, a = 1) => {
   return `hsla(${h}, ${sln * 100}%, ${l * 100}%, ${a})`;
 };
 
-/** Render children only if the `render` property is `true` */
+/** Render children only if the `if` property is `true` */
 export function ConditionalRendering(props: { children: React.ReactNode; if: boolean }) {
   if (!props.if) {
     return null;
@@ -55,7 +55,7 @@ export function ConditionalRendering(props: { children: React.ReactNode; if: boo
   return <>{props.children}</>;
 }
 
-/** Render children for native platforms only (Android, IOS) */
+/** Render children for native platforms only (Android, iOS) */
 export function RenderNativeOnly({ children }: { children: React.ReactNode }) {
   if (isWeb) {
     return null;
@@ -64,7 +64,7 @@ export function RenderNativeOnly({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
-/** Render children for Web platform only */
+/** Render children for the web platform only */
 export function RenderWebOnly({ children }: { children: React.ReactNode }) {
   if (!isWeb) {
     return null;
@@ -74,8 +74,8 @@ export function RenderWebOnly({ children }: { children: React.ReactNode }) {
 }
 
 /**
- * Enable Android hardware texture rendering for Android Nougat(API 24) to Pie(API 28) to address an issue when applying a
- * transform on a View with a border radius > 0.
+ * Enable Android hardware texture rendering for Android Nougat (API 24) to Pie (API 28) to address an issue when applying a
+ * transform to a View with a border radius > 0.
  *
  * See: https://github.com/facebook/react-native/issues/18266
  */

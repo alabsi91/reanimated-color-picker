@@ -12,7 +12,7 @@ import type { PreviewProps } from '@types';
 import type { ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 
-/** @see [Preview](https://alabsi91.github.io/reanimated-color-picker/api/preview/preview/) */
+/** @see [Preview](https://alabsi91.github.io/reanimated-color-picker/components/preview/preview/) */
 export function Preview({
   style = {},
   textStyle = {},

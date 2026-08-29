@@ -10,7 +10,7 @@ import { clamp, getStyle, isRtl } from '@utils';
 
 import type { PanelProps } from '@types';
 
-/** @see [Panel1](https://alabsi91.github.io/reanimated-color-picker/api/panels/panel1/) */
+/** @see [Panel1](https://alabsi91.github.io/reanimated-color-picker/components/panels/panel1/) */
 export function Panel1({ gestures = [], style = {}, ...props }: PanelProps) {
   const { hueValue, saturationValue, brightnessValue, onGestureChange, onGestureEnd, ...ctx } = usePickerContext();
 

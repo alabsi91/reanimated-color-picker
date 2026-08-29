@@ -16,7 +16,7 @@ import type { SupportedColorFormats } from '../../colorKit/types';
 
 const defaultFormats = ['HEX', 'RGB', 'HSL', 'HWB', 'HSV'] as const;
 
-/** @see [InputWidget](https://alabsi91.github.io/reanimated-color-picker/api/preview/input-widget/) */
+/** @see [InputWidget](https://alabsi91.github.io/reanimated-color-picker/components/preview/input-widget/) */
 export function InputWidget(props: InputWidgetProps) {
   const {
     defaultFormat = 'HEX',

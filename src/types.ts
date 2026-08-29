@@ -114,7 +114,7 @@ export interface ExtraThumbProps {
   /** The thumb's inner `View` style. */
   thumbInnerStyle?: StyleProp<ViewStyle>;
 
-  /** A function that receives `ThumbProps` and renders a custom thumb. */
+  /** A function that receives `RenderThumbProps` and renders a custom thumb. */
   renderThumb?: RenderThumbType;
 
   /**
@@ -273,7 +273,7 @@ export interface Panel3Context {
   /** The thumb's inner `View` style. */
   thumbInnerStyle: StyleProp<ViewStyle>;
 
-  /** A function that receives `ThumbProps` and renders a custom thumb. */
+  /** A function that receives `RenderThumbProps` and renders a custom thumb. */
   renderThumb?: RenderThumbType;
 
   /**
@@ -373,7 +373,6 @@ export interface ColorPickerProps {
    * Called when the user lifts their finger off the sliders. Accepts `worklet` functions only. For regular functions, use
    * `onCompleteJS`.
    *
-   * @caution As of `react-native-gesture-handler@2.9.0`, the new web implementation does not support the events that trigger this callback.
    * @worklet
    */
   onComplete?: (colors: ColorFormatsObject) => void;
@@ -381,8 +380,6 @@ export interface ColorPickerProps {
   /**
    * Called when the user lifts their finger off the sliders. Accepts regular (non-`worklet`) functions only. For `worklet`
    * functions, use `onComplete`.
-   *
-   * @caution As of `react-native-gesture-handler@2.9.0`, the new web implementation does not support the events that trigger this callback.
    */
   onCompleteJS?: (colors: ColorFormatsObject) => void;
 
@@ -461,7 +458,7 @@ export interface PanelProps {
   /** The thumb's inner `View` style. */
   thumbInnerStyle?: StyleProp<ViewStyle>;
 
-  /** A function that receives `ThumbProps` and renders a custom thumb. */
+  /** A function that receives `RenderThumbProps` and renders a custom thumb. */
   renderThumb?: RenderThumbType;
 
   /** The scale factor applied to the thumb when it is active. Default: `1.2` */
@@ -560,7 +557,7 @@ export interface SliderProps {
   /** The thumb's inner `View` style. */
   thumbInnerStyle?: StyleProp<ViewStyle>;
 
-  /** A function that receives `ThumbProps` and renders a custom thumb. */
+  /** A function that receives `RenderThumbProps` and renders a custom thumb. */
   renderThumb?: RenderThumbType;
 
   /** The scale factor applied to the thumb when it is active. Default: `1.2` */

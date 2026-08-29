@@ -8,7 +8,7 @@ import { useContainerBackgroundColor } from './components/BaseContainer';
 import Divider from './components/Divider';
 import { colorPickerStyle } from './components/colorPickerStyle';
 
-// initial random color; in the range thats the `Panel4` can display
+// initial random color, within the range that `Panel4` can display
 const initialColor = colorKit.randomHsvColor({ s: [100, 100], v: [100, 100] }).hex();
 
 export default function Example() {

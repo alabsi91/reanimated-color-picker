@@ -10,7 +10,7 @@ import { getStyle, isRtl, isWeb, RenderNativeOnly } from '@utils';
 
 import type { SliderProps } from '@types';
 
-/** @see [BlueSlider](https://alabsi91.github.io/reanimated-color-picker/api/sliders/rgb/blue-slider/) */
+/** @see [BlueSlider](https://alabsi91.github.io/reanimated-color-picker/components/sliders/rgb/blue-slider/) */
 export function BlueSlider({ gestures = [], style = {}, vertical = false, reverse = false, ...props }: SliderProps) {
   const { hueValue, saturationValue, brightnessValue, onGestureChange, onGestureEnd, ...ctx } = usePickerContext();
 

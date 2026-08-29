@@ -11,7 +11,7 @@ import { clamp, ConditionalRendering, getStyle, isRtl } from '@utils';
 
 import type { Panel2Props } from '@types';
 
-/** @see [Panel2](https://alabsi91.github.io/reanimated-color-picker/api/panels/panel2/) */
+/** @see [Panel2](https://alabsi91.github.io/reanimated-color-picker/components/panels/panel2/) */
 export function Panel2({
   verticalChannel = 'saturation',
   reverseHue = false,
@@ -42,7 +42,7 @@ export function Panel2({
 
   // HSL saturation is mathematically undefined (collapses to 0) when luminance is 0 or 100,
   // because those represent pure black and white regardless of saturation.
-  // This ref holds the last valid saturation so we can restore it when luminance moves away from the boundary.
+  // This shared value holds the last valid saturation so we can restore it when luminance moves away from the boundary.
   const hslSaturationValue = useSharedValue(0);
 
   const hsl = useDerivedValue(() => {

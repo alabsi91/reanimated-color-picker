@@ -10,7 +10,7 @@ import { ConditionalRendering, HSVA2HSLA_string } from '@utils';
 
 import type { HueCircularProps } from '@types';
 
-/** @see [HueCircular](https://alabsi91.github.io/reanimated-color-picker/api/sliders/hue/hue-circular-slider/) */
+/** @see [HueCircular](https://alabsi91.github.io/reanimated-color-picker/components/sliders/hue/hue-circular-slider/) */
 export function HueCircular({
   children,
   gestures = [],
@@ -95,7 +95,7 @@ export function HueCircular({
       return;
     }
 
-    // check if the press inside the circle (not on the actual slider)
+    // Check if the press is inside the inner circle (not on the actual slider)
     const innerR = width.value / 2 - sliderThickness;
     if (pressDistance < innerR) {
       isGestureActive.value = false;
