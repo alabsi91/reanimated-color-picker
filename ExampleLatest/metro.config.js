@@ -43,8 +43,9 @@ const config = {
   watchFolders: [root],
 
   resolver: {
-    blacklistRE: exclusionList([
+    blockList: exclusionList([
       createRegExp('react-native-reanimated'),
+      createRegExp('react-native-worklets'),
       createRegExp('react-native-gesture-handler'),
       createRegExp('react-native'),
       createRegExp('react'),
@@ -52,6 +53,7 @@ const config = {
 
     extraNodeModules: {
       ...createPkgEntry('react-native-reanimated'),
+      ...createPkgEntry('react-native-worklets'),
       ...createPkgEntry('react-native-gesture-handler'),
       ...createPkgEntry('react-native'),
       ...createPkgEntry('react'),
