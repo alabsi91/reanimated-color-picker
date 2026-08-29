@@ -39,7 +39,7 @@ export default function Example() {
           onCompleteJS={onColorPick}
           style={colorPickerStyle.picker}
         >
-          <Panel2 style={colorPickerStyle.panelStyle} thumbShape='ring' reverseVerticalChannel />
+          <Panel2 style={colorPickerStyle.panelStyle} thumbShape='ring' reverseVerticalChannel reverseHue />
           <BrightnessSlider style={colorPickerStyle.sliderStyle} />
           <OpacitySlider style={colorPickerStyle.sliderStyle} />
           <Divider />
