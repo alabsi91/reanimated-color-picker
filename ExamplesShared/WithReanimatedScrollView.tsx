@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View } from 'react-native';
+import { Platform, Text, View } from 'react-native';
 import { Gesture } from 'react-native-gesture-handler';
 import Animated, { useAnimatedProps, useSharedValue } from 'react-native-reanimated';
 
@@ -39,7 +39,10 @@ export default function Example() {
       .onFinalize(() => (isScrollEnabled.value = true)),
   );
 
-  const animatedProps = useAnimatedProps(() => ({ scrollEnabled: isScrollEnabled.value }), [isScrollEnabled]);
+  const animatedProps = useAnimatedProps(
+    () => ({ scrollEnabled: isScrollEnabled.value }),
+    Platform.OS === 'web' ? [isScrollEnabled] : undefined,
+  );
 
   return (
     <Animated.ScrollView animatedProps={animatedProps} contentContainerStyle={{ height: '150%', justifyContent: 'center' }}>
