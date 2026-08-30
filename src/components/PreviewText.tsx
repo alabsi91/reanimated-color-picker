@@ -7,7 +7,8 @@ import Animated, { useAnimatedProps, useAnimatedRef, useDerivedValue } from 'rea
 
 import type { PreviewTextProps } from '@types';
 
-Animated.addWhitelistedNativeProps({ text: true });
+// Reanimated 3 needs `text` allowlisted for animated props; Reanimated 4 made this a no-op.
+Animated.addWhitelistedNativeProps?.({ text: true });
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
 
 /** @see [PreviewText](https://alabsi91.github.io/reanimated-color-picker/components/preview/preview-text/) */

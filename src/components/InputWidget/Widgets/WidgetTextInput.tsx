@@ -21,7 +21,8 @@ interface WidgetTextInputProps {
   onEndEditing: (text: string) => void;
 }
 
-Animated.addWhitelistedNativeProps({ text: true });
+// Reanimated 3 needs `text` allowlisted for animated props; Reanimated 4 made this a no-op.
+Animated.addWhitelistedNativeProps?.({ text: true });
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
 
 export default function WidgetTextInput(props: WidgetTextInputProps) {
