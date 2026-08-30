@@ -2,6 +2,8 @@
 sidebar.order: 5
 ---
 
+# ColorKit
+
 `colorKit` is a collection of color tools that are utilized internally within the `ColorPicker`.
 
 ## Supported Colors

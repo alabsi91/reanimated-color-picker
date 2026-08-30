@@ -18,6 +18,7 @@ examples beside it for working demos, or [Example Apps](~/examples/example-apps/
 ## Example
 
 ```jsx
+// App.tsx
 import React, { useState } from "react";
 import { Button, Modal, StyleSheet, View } from "react-native";
 import ColorPicker, { Panel1, Swatches, Preview, OpacitySlider, HueSlider } from "reanimated-color-picker";
