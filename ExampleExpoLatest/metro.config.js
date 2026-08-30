@@ -36,14 +36,16 @@ function createPkgEntry(pkg) {
 const config = getDefaultConfig(__dirname);
 
 config.watchFolders = [root];
-config.resolver.blacklistRE = exclusionList([
+config.resolver.blockList = exclusionList([
   createRegExp('react-native-reanimated'),
+  createRegExp('react-native-worklets'),
   createRegExp('react-native-gesture-handler'),
   createRegExp('react-native'),
   createRegExp('react'),
 ]);
 config.resolver.extraNodeModules = {
   ...createPkgEntry('react-native-reanimated'),
+  ...createPkgEntry('react-native-worklets'),
   ...createPkgEntry('react-native-gesture-handler'),
   ...createPkgEntry('react-native'),
   ...createPkgEntry('react'),
