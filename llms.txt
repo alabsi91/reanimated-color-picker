@@ -1,0 +1,38 @@
+# Reanimated Color Picker
+
+> A pure JavaScript color picker for React Native, supporting iOS, Android, Expo, Web and RTL layouts.
+
+Every link below points to the page's Markdown source.
+
+## Overview
+
+- [Reanimated Color Picker](https://alabsi91.github.io/reanimated-color-picker/index.md)
+- [ColorKit](https://alabsi91.github.io/reanimated-color-picker/colorkit/index.md): `colorKit` is a collection of color tools that are utilized internally within the `ColorPicker`.
+- [All Examples](https://alabsi91.github.io/reanimated-color-picker/examples-all/index.md): The full source of every example app, shared by the bare and Expo workflows.
+- [Installation](https://alabsi91.github.io/reanimated-color-picker/installation/index.md)
+- [Usage](https://alabsi91.github.io/reanimated-color-picker/usage/index.md): You can add, remove, rearrange, or style the built-in components of the color picker. See Panel1 and the examples beside it for working demos, or Example Apps to run them yourself.
+
+## Components
+
+- [`<ColorPicker />`](https://alabsi91.github.io/reanimated-color-picker/components/color-picker-wrapper/index.md): The `ColorPicker` component is responsible for managing all built-in components.
+- [`<Panel1 />`](https://alabsi91.github.io/reanimated-color-picker/components/panels/panel1/index.md): An Adobe-style square panel for adjusting color brightness and saturation. Move the handle horizontally to change saturation, and vertically to change brightness.
+- [`<Panel2 />`](https://alabsi91.github.io/reanimated-color-picker/components/panels/panel2/index.md): A Windows-style square panel for adjusting hue and either saturation or brightness. Move the thumb horizontally to change hue, and vertically to adjust the channel set by `verticalChannel`.
+- [`<Panel3 />`](https://alabsi91.github.io/reanimated-color-picker/components/panels/panel3/index.md): A wheel-style circular panel for adjusting hue and either saturation or brightness. Move the thumb around the center to change hue, and toward or away from the center to adjust the channel set by `centerChannel`.
+- [`<Panel4 />`](https://alabsi91.github.io/reanimated-color-picker/components/panels/panel4/index.md): A square panel for adjusting hue, saturation, and brightness. Move the handle horizontally to change saturation and brightness, and vertically to change hue.
+- [`<Panel5 />`](https://alabsi91.github.io/reanimated-color-picker/components/panels/panel5/index.md): A grid of 120 colors arranged in 12 columns and 10 rows.
+- [`<ExtraThumb />`](https://alabsi91.github.io/reanimated-color-picker/components/preview/extra-thumb/index.md): Adds an extra thumb to the `Panel3` component. Used exclusively as a color indicator — it does not respond to gestures.
+- [`<InputWidget />`](https://alabsi91.github.io/reanimated-color-picker/components/preview/input-widget/index.md): An input component for entering color values in RGB, HEX, HSL, HWB, and HSV formats. Includes a cycle button to switch between formats.
+- [`<Preview />`](https://alabsi91.github.io/reanimated-color-picker/components/preview/preview/index.md): A preview of the selected and initial color.
+- [`<PreviewText />`](https://alabsi91.github.io/reanimated-color-picker/components/preview/preview-text/index.md): A React Native `<Text>` component that displays the current color as text.
+- [`<Swatches />`](https://alabsi91.github.io/reanimated-color-picker/components/preview/swatches/index.md): A list of color swatches for quick color selection.
+- [`<OpacitySlider />`](https://alabsi91.github.io/reanimated-color-picker/components/sliders/opacity-slider/index.md): A slider for adjusting the color's opacity.
+- [`<BrightnessSlider />`](https://alabsi91.github.io/reanimated-color-picker/components/sliders/hsb/brightness-slider/index.md): A slider for adjusting the color's brightness channel in the HSV color space.
+- [`<SaturationSlider />`](https://alabsi91.github.io/reanimated-color-picker/components/sliders/hsb/saturation-slider/index.md): A slider for adjusting the color's saturation channel in the HSV color space.
+- [`<LuminanceCircular />`](https://alabsi91.github.io/reanimated-color-picker/components/sliders/hsl/luminance-circular-slider/index.md): A circular slider for adjusting the color's luminance channel in the HSL color space.
+- [`<LuminanceSlider />`](https://alabsi91.github.io/reanimated-color-picker/components/sliders/hsl/luminance-slider/index.md): A slider for adjusting the color's luminance channel in the HSL color space.
+- [`<HSLSaturationSlider />`](https://alabsi91.github.io/reanimated-color-picker/components/sliders/hsl/saturation-slider/index.md): A slider for adjusting the color's saturation channel in the HSL color space.
+- [`<HueCircular />`](https://alabsi91.github.io/reanimated-color-picker/components/sliders/hue/hue-circular-slider/index.md): A circular slider for adjusting the color's hue.
+- [`<HueSlider />`](https://alabsi91.github.io/reanimated-color-picker/components/sliders/hue/hue-slider/index.md): A slider for adjusting the color's hue.
+- [`<BlueSlider />`](https://alabsi91.github.io/reanimated-color-picker/components/sliders/rgb/blue-slider/index.md): A slider for adjusting the color's blue channel.
+- [`<GreenSlider />`](https://alabsi91.github.io/reanimated-color-picker/components/sliders/rgb/green-slider/index.md): A slider for adjusting the color's green channel.
+- [`<RedSlider />`](https://alabsi91.github.io/reanimated-color-picker/components/sliders/rgb/red-slider/index.md): A slider for adjusting the color's red channel.
