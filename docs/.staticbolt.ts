@@ -29,7 +29,6 @@ export default defineConfig({
       plugins: [workletsBabelPlugin],
       define: { global: "globalThis", __DEV__: "false" },
     }),
-
     plugins.bundlePackagesPlugin({
       alias: { "react-native": "react-native-web" },
       assetsDir: "sources/assets",
@@ -93,20 +92,18 @@ export default defineConfig({
     plugins.htmlLayoutPlugin(),
     plugins.htmlPagesPlugin(),
     plugins.htmlInsertPlugin(),
-
     reactNativePlugin(),
-
-    plugins.htmlInlineScriptPlugin(),
     plugins.htmlBundleStylePlugin(),
-    plugins.htmlInlineStylePlugin(),
+    plugins.htmlBundleScriptPlugin(),
+    // plugins.htmlInlineScriptPlugin(),
+    // plugins.htmlInlineStylePlugin(),
     plugins.htmlInlineTextPlugin(),
     theme.htmlCodeBlockPlugin({ rehypeExpressiveCodeOptions }),
-    plugins.htmlSvgoPlugin(),
-    plugins.htmlBundleScriptPlugin(),
-    plugins.htmlIifeScriptPlugin(),
+    // plugins.htmlSvgoPlugin(),
+    // plugins.htmlIifeScriptPlugin(),
     plugins.htmlMarkdownPlugin(),
-    plugins.htmlPreloadPlugin(),
-    plugins.htmlFragmentPlugin(),
+    // plugins.htmlPreloadPlugin(),
+    // plugins.htmlFragmentPlugin(),
     plugins.htmlMergeStylesPlugin(),
     plugins.htmlBuildTimeScript(),
 
@@ -125,16 +122,7 @@ export default defineConfig({
     }),
     plugins.analyzeOutputPlugin({
       deleteUnused: true,
-      exclude: [
-        "pagefind/**",
-        "manifest.json",
-        "**/index.md",
-        "**/llms.txt",
-        "**/llms-full.txt",
-        "robots.txt",
-        "sitemap.xml",
-        "sw.js",
-      ],
+      exclude: ["pagefind/**", "manifest.json", "**/index.md", "**/*.txt", "sitemap.xml", "sw.js"],
     }),
 
     // After cleanup to prevent caching unneeded files
