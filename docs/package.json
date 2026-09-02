@@ -54,8 +54,8 @@
   },
   "dependencies": {
     "@pagefind/component-ui": "^1.5.2",
-    "@staticbolt/docs": "beta",
     "@staticbolt/core": "beta",
+    "@staticbolt/docs": "beta",
     "@staticbolt/lsp": "beta",
     "@staticview/ui": "beta",
     "react": "^19.2.6",
