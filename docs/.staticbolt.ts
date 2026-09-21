@@ -120,7 +120,7 @@ export default defineConfig({
       exclude: ["pages/examples/**"],
     }),
     plugins.analyzeOutputPlugin({
-      deleteUnused: true,
+      skipUnusedFiles: true,
       exclude: ["pagefind/**", "manifest.json", "**/index.md", "**/*.txt", "sitemap.xml", "sw.js"],
     }),
 
