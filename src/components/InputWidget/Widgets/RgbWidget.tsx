@@ -11,7 +11,6 @@ import type { WidgetProps } from '@types';
 export default function RgbWidget(props: WidgetProps) {
   const {
     onChange,
-    colorResult,
     hueValue,
     saturationValue,
     brightnessValue,
@@ -40,7 +39,7 @@ export default function RgbWidget(props: WidgetProps) {
         a: alphaValue.value,
       };
 
-      const rgb = colorKit.runOnUI().RGB(colorResult(currentColor).rgba).object(false);
+      const rgb = colorKit.runOnUI().RGB(currentColor).object();
 
       r.value = rgb.r.toString();
       g.value = rgb.g.toString();

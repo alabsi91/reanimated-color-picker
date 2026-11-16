@@ -11,7 +11,6 @@ import type { WidgetProps } from '@types';
 export default function HsvWidget(props: WidgetProps) {
   const {
     onChange,
-    colorResult,
     hueValue,
     saturationValue,
     brightnessValue,
@@ -40,7 +39,7 @@ export default function HsvWidget(props: WidgetProps) {
         a: alphaValue.value,
       };
 
-      const hsv = colorKit.runOnUI().HSV(colorResult(currentColor).hsva).object(false);
+      const hsv = colorKit.runOnUI().HSV(currentColor).object();
 
       h.value = hsv.h.toString();
       s.value = hsv.s.toString();

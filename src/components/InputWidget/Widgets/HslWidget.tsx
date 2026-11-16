@@ -11,7 +11,6 @@ import type { WidgetProps } from '@types';
 export default function HslWidget(props: WidgetProps) {
   const {
     onChange,
-    colorResult,
     hueValue,
     saturationValue,
     brightnessValue,
@@ -40,7 +39,7 @@ export default function HslWidget(props: WidgetProps) {
         a: alphaValue.value,
       };
 
-      const hsl = colorKit.runOnUI().HSL(colorResult(currentColor).hsla).object(false);
+      const hsl = colorKit.runOnUI().HSL(currentColor).object();
 
       h.value = hsl.h.toString();
       s.value = hsl.s.toString();
