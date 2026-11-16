@@ -2,6 +2,12 @@
 @import url("@parts/social-icons/social-icons.style.css");
 @import url("./quicksand-fonts.css");
 
+:root {
+  @media (max-width: 420px) {
+    --sb-header-title-size: var(--sb-text-base);
+  }
+}
+
 .example-container {
   display: flex;
   justify-content: center;
@@ -9,6 +15,13 @@
   margin-block: 2em;
   border: solid 1px var(--sb-color-gray-5);
   border-radius: 0.5em;
+
+  @media (max-width: 420px) {
+    padding-inline: 0;
+    margin-inline: -1em;
+    border-inline: 0;
+    border-radius: 0;
+  }
 }
 
 [data-react-native]:empty {

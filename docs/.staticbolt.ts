@@ -6,12 +6,12 @@ import { rehypeExpressiveCodeOptions as themeCodeOptions } from "@staticbolt/doc
 import * as theme from "@staticbolt/docs/plugins";
 import { toString } from "hast-util-to-string";
 import postcssPresetEnv from "postcss-preset-env";
-import workletsBabelPlugin from "react-native-worklets/plugin/index.js";
 import rehypeAutolinkHeadings, { type Options as RehypeAutolinkHeadingsOptions } from "rehype-autolink-headings";
 import rehypeCallouts, { type UserOptions as RehypeCalloutsOptions } from "rehype-callouts";
 import remarkFlexibleMarkers, { type FlexibleMarkerOptions } from "remark-flexible-markers";
 
 import { reactNativePlugin } from "./plugins/react-native.ts";
+import { workletsBabel8Plugin } from "./plugins/worklets-babel-8.ts";
 
 const siteUrl = "https://alabsi91.github.io/reanimated-color-picker";
 
@@ -26,7 +26,7 @@ export default defineConfig({
     plugins.transformCssPlugin({ plugins: [postcssPresetEnv()] }),
     plugins.transformJsPlugin({
       presets: [[babelPresetReact, { runtime: "automatic", development: false }]],
-      plugins: [workletsBabelPlugin],
+      plugins: [workletsBabel8Plugin],
       define: { global: "globalThis", __DEV__: "false" },
     }),
     plugins.bundlePackagesPlugin({
@@ -37,7 +37,7 @@ export default defineConfig({
         {
           include: ["reanimated-color-picker"],
           filter: /\/lib\/module\//,
-          plugins: [[workletsBabelPlugin, { omitNativeOnlyData: true }]],
+          plugins: [[workletsBabel8Plugin, { omitNativeOnlyData: true }]],
         },
       ],
       chunks: {

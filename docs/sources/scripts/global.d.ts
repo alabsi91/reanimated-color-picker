@@ -2,6 +2,7 @@ import type { ImageFormat, import_as_string, CssLinear } from "@staticbolt/core/
 
 declare global {
   /** True in production */
+  // eslint-disable-next-line unicorn/consistent-boolean-name -- staticbolt defines this global name
   const _production: boolean;
 
   /**

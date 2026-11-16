@@ -56,6 +56,8 @@ export default defineConfig(
       "unicorn/prefer-string-replace-all": "off",
       "unicorn/switch-case-braces": "off",
       "unicorn/require-module-specifiers": "off",
+      "unicorn/single-line-block-comment-style": "off",
+      "unicorn/no-asterisk-prefix-in-documentation-comments": "off",
       "unicorn/filename-case": ["error", { case: "kebabCase" }],
     },
   },
