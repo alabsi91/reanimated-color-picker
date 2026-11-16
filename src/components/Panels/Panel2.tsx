@@ -11,6 +11,8 @@ import { clamp, ConditionalRendering, getStyle, getWebDependencies, isRtl } from
 
 import type { Panel2Props } from '@types';
 
+const UNUSED_HSL_COLOR = { h: 0, s: 0, l: 0 };
+
 /** @see [Panel2](https://alabsi91.github.io/reanimated-color-picker/components/panels/panel2/) */
 export function Panel2({
   verticalChannel = 'saturation',
@@ -47,6 +49,11 @@ export function Panel2({
 
   const hsl = useDerivedValue(
     () => {
+      // Only the 'hsl-saturation' channel reads this value
+      if (verticalChannel !== 'hsl-saturation') {
+        return UNUSED_HSL_COLOR;
+      }
+
       const hsvColor = { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
       const { h, s, l } = colorKit.runOnUI().HSL(hsvColor).object(false);
 
@@ -60,7 +67,7 @@ export function Panel2({
 
       return { h, s, l };
     },
-    getWebDependencies([hueValue, saturationValue, brightnessValue]),
+    getWebDependencies([hueValue, saturationValue, brightnessValue, verticalChannel]),
   );
 
   const verticalChannelValue = useDerivedValue(
