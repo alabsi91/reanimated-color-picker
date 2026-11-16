@@ -19,17 +19,7 @@ export interface ColorFormatsObject {
 
 /** The shape of the slider or panel thumb. */
 export type ThumbShapeType =
-  | 'ring'
-  | 'solid'
-  | 'hollow'
-  | 'line'
-  | 'plus'
-  | 'pill'
-  | 'triangleUp'
-  | 'triangleDown'
-  | 'doubleTriangle'
-  | 'rect'
-  | 'circle';
+  'ring' | 'solid' | 'hollow' | 'line' | 'plus' | 'pill' | 'triangleUp' | 'triangleDown' | 'doubleTriangle' | 'rect' | 'circle';
 
 /** A color represented in the HSV color space, including an alpha channel. */
 export interface HSVObject {
