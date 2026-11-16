@@ -33,25 +33,19 @@ export function Panel5({ gestures = [], style = {}, selectionStyle = {}, accessi
   // Since color conversion is not 100% accurate, we need to find the closest color in the grid.
   useDerivedValue(
     () => {
-      const hsvColor = {
-        h: hueValue.value,
-        s: saturationValue.value,
-        v: brightnessValue.value,
-      };
+      const uiColorKit = colorKit.runOnUI();
+      const currentRgbColor = uiColorKit.RGB({ h: hueValue.value, s: saturationValue.value, v: brightnessValue.value }).object();
 
-      for (let y = 0; y < GRID_COLORS.length; y++) {
-        for (let x = 0; x < GRID_COLORS[y].length; x++) {
-          const gridColor = GRID_COLORS[y][x];
+      // The bottom-most match is the selected square.
+      for (let y = GRID_COLORS.length - 1; y >= 0; y--) {
+        const x = GRID_COLORS[y].findIndex(gridColor => uiColorKit.areColorsEqual(gridColor, currentRgbColor, 5));
+        if (x === -1) continue;
 
-          const areColorsEqual = colorKit.runOnUI().areColorsEqual(gridColor, hsvColor, 5);
-          if (!areColorsEqual) continue;
+        row.value = y;
+        column.value = x;
+        setAdaptiveColor(GRID_COLORS[y][x]);
 
-          row.value = y;
-          column.value = x;
-          setAdaptiveColor(gridColor);
-
-          break;
-        }
+        return;
       }
     },
     getWebDependencies([hueValue, saturationValue, brightnessValue, row, column]),
