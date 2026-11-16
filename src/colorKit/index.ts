@@ -23,7 +23,7 @@ import type {
 // this transformation can lead to a slow initial execution.
 // To address this issue, I consolidated them into a single worklet function.
 
-export const colorKitUI = () => {
+const createColorKit = () => {
   'worklet';
 
   const NAMED_COLORS = {
@@ -1884,7 +1884,25 @@ export const colorKitUI = () => {
   };
 };
 
-type ColorKit = ReturnType<typeof colorKitUI> & {
+type ColorKitMethods = ReturnType<typeof createColorKit>;
+
+/**
+ * Returns the colorKit methods for the current runtime. The methods are created on the first call and stored on the runtime's
+ * global object.
+ */
+export const colorKitUI = (): ColorKitMethods => {
+  'worklet';
+
+  const runtimeGlobal = globalThis as typeof globalThis & { __reanimatedColorPickerColorKit?: ColorKitMethods };
+
+  if (!runtimeGlobal.__reanimatedColorPickerColorKit) {
+    runtimeGlobal.__reanimatedColorPickerColorKit = createColorKit();
+  }
+
+  return runtimeGlobal.__reanimatedColorPickerColorKit;
+};
+
+type ColorKit = ColorKitMethods & {
   /** Initiates the asynchronous execution of a workletized colorKit function on the UI thread. */
   runOnUI: typeof colorKitUI;
 };
