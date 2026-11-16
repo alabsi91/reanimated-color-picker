@@ -1,7 +1,6 @@
 import React from 'react';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 
-import colorKit from '@colorKit';
 import { styles } from '@styles';
 import { enableAndroidHardwareTextures, getStyle, getWebDependencies } from '@utils';
 
@@ -29,7 +28,7 @@ export default function Ring({
 
   const adaptiveColorStyle = useAnimatedStyle(
     () => ({
-      backgroundColor: ringBackgroundColor ?? colorKit.runOnUI().setAlpha(adaptiveColor.value, 0.5).hex(),
+      backgroundColor: ringBackgroundColor ?? `${adaptiveColor.value}80`,
       borderColor: borderColor ?? adaptiveColor.value,
     }),
     getWebDependencies([borderColor, ringBackgroundColor, adaptiveColor]),
