@@ -12,8 +12,7 @@ function escapeRegExp(pattern) {
   }
 
   if (typeof pattern === 'string') {
-    const escaped = pattern.replace(/[\-\[\]\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
-    return escaped.replaceAll('/', '\\' + path.sep);
+    return escape(pattern).replaceAll('/', '\\' + path.sep);
   }
 
   throw new Error('Unexpected exclusion pattern: ' + pattern);
@@ -47,6 +46,7 @@ const config = {
       createRegExp('react-native-reanimated'),
       createRegExp('react-native-worklets'),
       createRegExp('react-native-gesture-handler'),
+      createRegExp('react-native-safe-area-context'),
       createRegExp('react-native'),
       createRegExp('react'),
     ]),
@@ -55,6 +55,7 @@ const config = {
       ...createPkgEntry('react-native-reanimated'),
       ...createPkgEntry('react-native-worklets'),
       ...createPkgEntry('react-native-gesture-handler'),
+      ...createPkgEntry('react-native-safe-area-context'),
       ...createPkgEntry('react-native'),
       ...createPkgEntry('react'),
     },

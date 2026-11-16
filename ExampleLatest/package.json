@@ -10,11 +10,12 @@
     "test": "jest"
   },
   "dependencies": {
-    "react": "19.2.3",
-    "react-native": "0.87.1",
-    "react-native-gesture-handler": "^3.2.1",
-    "react-native-reanimated": "^4.6.0",
-    "react-native-worklets": "^0.12.1"
+    "react": "19.3.0",
+    "react-native": "0.88.1",
+    "react-native-gesture-handler": "^3.5.0",
+    "react-native-reanimated": "^4.7.1",
+    "react-native-safe-area-context": "^5.11.1",
+    "react-native-worklets": "^0.13.1"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",
@@ -23,20 +24,20 @@
     "@react-native-community/cli": "20.2.0",
     "@react-native-community/cli-platform-android": "20.2.0",
     "@react-native-community/cli-platform-ios": "20.2.0",
-    "@react-native/babel-preset": "0.87.1",
-    "@react-native/eslint-config": "0.87.1",
-    "@react-native/metro-config": "0.87.1",
-    "@react-native/typescript-config": "0.87.1",
-    "@react-native/jest-preset": "0.87.1",
+    "@react-native/babel-preset": "0.88.1",
+    "@react-native/eslint-config": "0.88.1",
+    "@react-native/jest-preset": "0.88.1",
+    "@react-native/metro-config": "0.88.1",
+    "@react-native/typescript-config": "0.88.1",
     "@types/jest": "^29.5.14",
     "@types/react": "^19.2.0",
     "@types/react-test-renderer": "^19.1.0",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^10.1.1",
-    "react-test-renderer": "19.2.3",
     "eslint-plugin-prettier": "^5.2.6",
     "jest": "^29.6.3",
     "prettier": "3.8.3",
+    "react-test-renderer": "19.3.0",
     "typescript": "^6.0.3"
   },
   "codegenConfig": {

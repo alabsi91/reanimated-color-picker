@@ -3,7 +3,6 @@ module.exports = {
   extends: ['@react-native', 'plugin:prettier/recommended'],
   rules: {
     'prefer-const': 1,
-    '@typescript-eslint/consistent-type-imports': 1,
     '@typescript-eslint/no-non-null-assertion': 0,
     'react-native/no-inline-styles': 0,
     'react-native/no-single-element-style-arrays': 1,
@@ -17,4 +16,14 @@ module.exports = {
     'no-bitwise': 0,
     'object-shorthand': 1,
   },
+  overrides: [
+    {
+      files: ['*.ts', '*.tsx'],
+      rules: { '@typescript-eslint/consistent-type-imports': 1 },
+    },
+    {
+      files: ['jest.setup.js'],
+      env: { jest: true },
+    },
+  ],
 };

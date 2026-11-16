@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Modal, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, type SharedValue } from 'react-native-reanimated';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type RegisterBackgroundColor = (color: SharedValue<string>) => void;
 
@@ -41,16 +42,18 @@ export default function BaseContainer({ name, children }: BaseContainerProps) {
 
       <Modal onRequestClose={() => setShowModal(false)} visible={showModal} animationType='slide'>
         <Animated.View style={[styles.wrapper, backgroundColorStyle]}>
-          <View style={styles.container}>
-            <RegisterBackgroundColorContext.Provider value={setBackgroundColor}>
-              {children}
-            </RegisterBackgroundColorContext.Provider>
-          </View>
-          <View style={styles.closeBtnContainer}>
-            <Pressable style={styles.btn} onPress={() => setShowModal(false)}>
-              <Text style={styles.btnTxt}>Close</Text>
-            </Pressable>
-          </View>
+          <SafeAreaView style={styles.wrapper}>
+            <View style={styles.container}>
+              <RegisterBackgroundColorContext.Provider value={setBackgroundColor}>
+                {children}
+              </RegisterBackgroundColorContext.Provider>
+            </View>
+            <View style={styles.closeBtnContainer}>
+              <Pressable style={styles.btn} onPress={() => setShowModal(false)}>
+                <Text style={styles.btnTxt}>Close</Text>
+              </Pressable>
+            </View>
+          </SafeAreaView>
         </Animated.View>
       </Modal>
     </>

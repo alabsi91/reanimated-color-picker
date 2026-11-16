@@ -12,6 +12,7 @@
 		532427D8262148AFAB1EEF27 /* Quicksand-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C6C7AE4F6F8B43508C70DBF3 /* Quicksand-Medium.ttf */; };
 		702B0EF8EADB4F2CB6ABC0BE /* BungeeSpice-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0D939843AD4B4BF69B0A35D4 /* BungeeSpice-Regular.ttf */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
+		761780EF2CA45674006654EF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EE2CA45674006654EF /* SceneDelegate.swift */; };
 		808EE75916D04C71A7965CBF /* Quicksand-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E87FD638A4A94148AAAA9F68 /* Quicksand-Bold.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		8B7E3A5A498F45439015505C /* Quicksand-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 515E76D0F9F540DB8F66DA3C /* Quicksand-Light.ttf */; };
@@ -35,6 +36,7 @@
 		5709B34CF0A7D63546082F79 /* Pods-ExampleLatest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ExampleLatest.release.xcconfig"; path = "Target Support Files/Pods-ExampleLatest/Pods-ExampleLatest.release.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-ExampleLatest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ExampleLatest.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = ExampleLatest/AppDelegate.swift; sourceTree = "<group>"; };
+		761780EE2CA45674006654EF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SceneDelegate.swift; path = ExampleLatest/SceneDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = ExampleLatest/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C6C7AE4F6F8B43508C70DBF3 /* Quicksand-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Quicksand-Medium.ttf"; path = "../src/assets/fonts/Quicksand-Medium.ttf"; sourceTree = "<group>"; };
 		CFB9E4F910274975985E9D52 /* Quicksand-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Quicksand-Regular.ttf"; path = "../src/assets/fonts/Quicksand-Regular.ttf"; sourceTree = "<group>"; };
@@ -68,6 +70,7 @@
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */,
 				761780EC2CA45674006654EE /* AppDelegate.swift */,
+				761780EE2CA45674006654EF /* SceneDelegate.swift */,
 			);
 			name = ExampleLatest;
 			sourceTree = "<group>";
@@ -300,6 +303,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				761780ED2CA45674006654EE /* AppDelegate.swift in Sources */,
+				761780EF2CA45674006654EF /* SceneDelegate.swift in Sources */,
 				D9E0C1322DAC1D2200E3AF71 /* RCTNativeSplashScreen.mm in Sources */,
 				D9E0C1342DAC1E9E00E3AF71 /* RCTNativeSplashScreen.swift in Sources */,
 				D9CD87812DAFA56400110CB4 /* SplashScreenView.swift in Sources */,

@@ -1,6 +1,5 @@
 import { useFonts } from 'expo-font';
 import React from 'react';
-import { StatusBar } from 'react-native';
 
 import ExamplesList from '../../../ExamplesShared/ExamplesList';
 
@@ -13,10 +12,5 @@ export default function App() {
     return null;
   }
 
-  return (
-    <>
-      <StatusBar backgroundColor='transparent' translucent />
-      <ExamplesList />
-    </>
-  );
+  return <ExamplesList />;
 }

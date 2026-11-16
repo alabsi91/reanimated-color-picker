@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { StatusBar } from 'react-native';
 
 import ExamplesList from '../../ExamplesShared/ExamplesList';
 import NativeSplashScreen from '../specs/NativeSplashScreen';
@@ -9,10 +8,5 @@ export default function App() {
     setTimeout(() => NativeSplashScreen.hide(), 500);
   }, []);
 
-  return (
-    <>
-      <StatusBar backgroundColor='transparent' translucent />
-      <ExamplesList />
-    </>
-  );
+  return <ExamplesList />;
 }

@@ -49,6 +49,7 @@ export default defineConfig({
             "react-native-web",
             "react-native-reanimated",
             "react-native-gesture-handler",
+            "react-native-safe-area-context",
             "reanimated-color-picker",
           ],
         },

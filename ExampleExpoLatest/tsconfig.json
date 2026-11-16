@@ -3,6 +3,7 @@
   "compilerOptions": {
     "strict": true,
     "paths": {
+      "@/*": ["./*"],
       "reanimated-color-picker": ["../src/index"],
       "@sliders/*": ["../src/components/Sliders/*"],
       "@panels/*": ["../src/components/Panels/*"],

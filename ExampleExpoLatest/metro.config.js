@@ -40,6 +40,7 @@ config.resolver.blockList = exclusionList([
   createRegExp('react-native-reanimated'),
   createRegExp('react-native-worklets'),
   createRegExp('react-native-gesture-handler'),
+  createRegExp('react-native-safe-area-context'),
   createRegExp('react-native'),
   createRegExp('react'),
 ]);
@@ -47,6 +48,7 @@ config.resolver.extraNodeModules = {
   ...createPkgEntry('react-native-reanimated'),
   ...createPkgEntry('react-native-worklets'),
   ...createPkgEntry('react-native-gesture-handler'),
+  ...createPkgEntry('react-native-safe-area-context'),
   ...createPkgEntry('react-native'),
   ...createPkgEntry('react'),
 };

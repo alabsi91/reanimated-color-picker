@@ -69,6 +69,7 @@
     "patch-package": "^8.0.1",
     "prettier": "3.10.1",
     "prettier-plugin-jsdoc": "^1.8.1",
+    "react-native-safe-area-context": "^5.11.1",
     "resolve-tspaths": "^0.8.23",
     "ts-node": "^10.9.2",
     "typescript": "5.5"
