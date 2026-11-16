@@ -276,25 +276,6 @@ const createColorKit = () => {
     return p;
   };
 
-  /** Convert any `HEX` color to an 8-digit `HEX` color (#rrggbbaa) */
-  const normalize_HEX = (color: string): string => {
-    const parts = color.replace(/^#/, '').split('');
-
-    if (parts.length === 3) {
-      return `#${parts.map(x => x + x).join('')}ff`;
-    }
-
-    if (parts.length === 4) {
-      return `#${parts.map(x => x + x).join('')}`;
-    }
-
-    if (parts.length === 6) {
-      return `#${parts.join('')}ff`;
-    }
-
-    return color;
-  };
-
   /** Does not work for hex (base 16) */
   const matchColorRegex = (color: string, regexArray: RegExp[]) => {
     for (const regex of regexArray) {
@@ -309,17 +290,20 @@ const createColorKit = () => {
   const matchHexRegex = (color: string, regex: RegExp) => {
     if (!regex.test(color)) return;
 
-    const hex8 = normalize_HEX(color);
+    const hexDigits = color.slice(1);
+    const isShortHex = hexDigits.length <= 4;
+    const channelLength = isShortHex ? 1 : 2;
 
-    const matches = hex8.match(COLORS_REGEX.hex8);
-    if (!matches) return;
+    // A short hex digit stands for two: `f` is `ff`, which is 15 * 17
+    const getChannel = (index: number) => {
+      const channelDigits = hexDigits.slice(index * channelLength, (index + 1) * channelLength);
+      return parseInt(channelDigits, 16) * (isShortHex ? 17 : 1);
+    };
 
-    return [
-      parseInt(matches[1], 16),
-      parseInt(matches[2], 16),
-      parseInt(matches[3], 16),
-      parseInt(matches[4], 16) / 255,
-    ] as const;
+    const hasAlpha = hexDigits.length === 4 || hexDigits.length === 8;
+    const alpha = hasAlpha ? getChannel(3) / 255 : 1;
+
+    return [getChannel(0), getChannel(1), getChannel(2), alpha] as const;
   };
 
   /** Check if a color object has all the required keys */
@@ -329,8 +313,11 @@ const createColorKit = () => {
 
   const clampColorObject = <T extends ColorObject>(color: T): T => {
     const castColor = color as unknown as Record<string, number>;
+    const isHwbColor = 'w' in castColor;
 
-    for (const [key, value] of Object.entries(castColor)) {
+    for (const key of Object.keys(castColor)) {
+      const value = castColor[key];
+
       // 'r' and 'g' are red and green (0-255) in RGB
       if (key === 'r' || key === 'g') {
         castColor[key] = clampRGB(value);
@@ -339,7 +326,7 @@ const createColorKit = () => {
 
       // 'b' is blue (0-255) in RGB, blackness (0-100) in HWB
       if (key === 'b') {
-        castColor[key] = 'w' in castColor ? clamp100(value) : clampRGB(value);
+        castColor[key] = isHwbColor ? clamp100(value) : clampRGB(value);
         continue;
       }
 
@@ -1130,8 +1117,13 @@ const createColorKit = () => {
   /** Returns the perceived `luminance` of a color, from `0-1` as defined by Web Content Accessibility Guidelines (Version 2.0). */
   const getLuminanceWCAG = (color: SupportedColorFormats): number => {
     const { r, g, b } = RGB(color).object(false);
-    const a = [r, g, b].map(v => (v / 255 <= 0.03928 ? v / 255 / 12.92 : Math.pow((v / 255 + 0.055) / 1.055, 2.4)));
-    return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
+
+    const linearizeChannel = (value: number) => {
+      const channel = value / 255;
+      return channel <= 0.03928 ? channel / 12.92 : Math.pow((channel + 0.055) / 1.055, 2.4);
+    };
+
+    return linearizeChannel(r) * 0.2126 + linearizeChannel(g) * 0.7152 + linearizeChannel(b) * 0.0722;
   };
 
   /** Returns a boolean indicating whether the color is considered "dark" or not */
@@ -1536,6 +1528,15 @@ const createColorKit = () => {
   // #endregion
 
   // #region Color Utilities
+  const RGBA_KEYS: (keyof RgbaT)[] = ['r', 'g', 'b', 'a'];
+  const RGB_KEYS: (keyof RgbT)[] = ['r', 'g', 'b'];
+  const HSLA_KEYS: (keyof HslaT)[] = ['h', 's', 'l', 'a'];
+  const HSL_KEYS: (keyof HslT)[] = ['h', 's', 'l'];
+  const HSVA_KEYS: (keyof HsvaT)[] = ['h', 's', 'v', 'a'];
+  const HSV_KEYS: (keyof HsvT)[] = ['h', 's', 'v'];
+  const HWBA_KEYS: (keyof HwbaT)[] = ['h', 'w', 'b', 'a'];
+  const HWB_KEYS: (keyof HwbT)[] = ['h', 'w', 'b'];
+
   /**
    * Parses any supported color format into a typed `{ format, value }` result.
    *
@@ -1646,43 +1647,35 @@ const createColorKit = () => {
     }
 
     // Color object
-    const rgbaKeys: (keyof RgbaT)[] = ['r', 'g', 'b', 'a'];
-    if (isColorObject(color, rgbaKeys)) {
+    if (isColorObject(color, RGBA_KEYS)) {
       return { format: 'rgba', value: color };
     }
 
-    const rgbKeys: (keyof RgbT)[] = ['r', 'g', 'b'];
-    if (isColorObject(color, rgbKeys)) {
+    if (isColorObject(color, RGB_KEYS)) {
       return { format: 'rgb', value: color };
     }
 
-    const hslaKeys: (keyof HslaT)[] = ['h', 's', 'l', 'a'];
-    if (isColorObject(color, hslaKeys)) {
+    if (isColorObject(color, HSLA_KEYS)) {
       return { format: 'hsla', value: color };
     }
 
-    const hslKeys: (keyof HslT)[] = ['h', 's', 'l'];
-    if (isColorObject(color, hslKeys)) {
+    if (isColorObject(color, HSL_KEYS)) {
       return { format: 'hsl', value: color };
     }
 
-    const hsvaKeys: (keyof HsvaT)[] = ['h', 's', 'v', 'a'];
-    if (isColorObject(color, hsvaKeys)) {
+    if (isColorObject(color, HSVA_KEYS)) {
       return { format: 'hsva', value: color };
     }
 
-    const hsvKeys: (keyof HsvT)[] = ['h', 's', 'v'];
-    if (isColorObject(color, hsvKeys)) {
+    if (isColorObject(color, HSV_KEYS)) {
       return { format: 'hsv', value: color };
     }
 
-    const hwbaKeys: (keyof HwbaT)[] = ['h', 'w', 'b', 'a'];
-    if (isColorObject(color, hwbaKeys)) {
+    if (isColorObject(color, HWBA_KEYS)) {
       return { format: 'hwba', value: color };
     }
 
-    const hwbKeys: (keyof HwbT)[] = ['h', 'w', 'b'];
-    if (isColorObject(color, hwbKeys)) {
+    if (isColorObject(color, HWB_KEYS)) {
       return { format: 'hwb', value: color };
     }
   };
