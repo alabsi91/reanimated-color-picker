@@ -11,7 +11,6 @@ import type { WidgetProps } from '@types';
 export default function HwbWidget(props: WidgetProps) {
   const {
     onChange,
-    colorResult,
     hueValue,
     saturationValue,
     brightnessValue,
@@ -40,7 +39,7 @@ export default function HwbWidget(props: WidgetProps) {
         a: alphaValue.value,
       };
 
-      const hwb = colorKit.runOnUI().HWB(colorResult(currentColor).hwba).object(false);
+      const hwb = colorKit.runOnUI().HWB(currentColor).object();
 
       h.value = hwb.h.toString();
       w.value = hwb.w.toString();
