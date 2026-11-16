@@ -171,6 +171,9 @@ export interface ColorPickerContext {
   /** The alpha channel value shared across all descendant components. */
   alphaValue: SharedValue<number>;
 
+  /** Whether a screen reader is on. Always `false` on web. */
+  isScreenReaderEnabled: SharedValue<boolean>;
+
   /** When enabled, the color spectrum adapts to changes in brightness and saturation across all descendant slider components. */
   adaptSpectrum: boolean;
 

@@ -2,6 +2,7 @@ import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { runOnUI, useAnimatedProps } from 'react-native-reanimated';
 
+import usePickerContext from '@context';
 import { clamp, getWebDependencies, isRtl, isWeb } from '@utils';
 
 import type { AccessibilityActionEvent, LayoutChangeEvent, StyleProp, ViewStyle } from 'react-native';
@@ -249,8 +250,16 @@ export function SliderCore(props: SliderCoreProps) {
     }
   };
 
+  const { isScreenReaderEnabled } = usePickerContext();
+  const accessibilityPropsWithoutText = { accessibilityValue: { min: 0, max: maxValue } };
+
   const animatedProps = useAnimatedProps(
     () => {
+      // Skip the native prop update on each frame when nothing reads the value
+      if (!isWeb && !isScreenReaderEnabled.value) {
+        return accessibilityPropsWithoutText;
+      }
+
       const rounded = step < 1 ? currentValue.value.toFixed(2) : Math.round(currentValue.value).toString();
 
       if (isWeb) {
@@ -261,7 +270,7 @@ export function SliderCore(props: SliderCoreProps) {
         accessibilityValue: { min: 0, max: maxValue, text: `${rounded} of ${maxValue}` },
       };
     },
-    getWebDependencies([currentValue, maxValue, step]),
+    getWebDependencies([currentValue, maxValue, step, isScreenReaderEnabled]),
   );
 
   const thicknessStyle = vertical ? { width: sliderThickness } : { height: sliderThickness };

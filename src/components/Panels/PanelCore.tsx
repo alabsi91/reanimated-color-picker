@@ -3,6 +3,7 @@ import { AccessibilityInfo } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { runOnUI, useAnimatedProps, useAnimatedRef, useSharedValue } from 'react-native-reanimated';
 
+import usePickerContext from '@context';
 import { clamp, getWebDependencies, isRtl, isWeb } from '@utils';
 
 import type { AccessibilityActionEvent, LayoutChangeEvent, StyleProp, ViewStyle } from 'react-native';
@@ -261,8 +262,16 @@ export function PanelCore(props: PanelCoreProps) {
     setValue(nextX, nextY);
   };
 
+  const { isScreenReaderEnabled } = usePickerContext();
+  const accessibilityPropsWithoutText = { accessibilityValue: { min: 0, max: maxXValue } };
+
   const animatedProps = useAnimatedProps(
     () => {
+      // Skip the native prop update on each frame when nothing reads the value
+      if (!isWeb && !isScreenReaderEnabled.value) {
+        return accessibilityPropsWithoutText;
+      }
+
       const mode = currentMode.value;
       const axisLabel = mode === 'x' ? labelX : labelY;
       const axisValue = mode === 'x' ? currentXValue.value : currentYValue.value;
@@ -275,7 +284,7 @@ export function PanelCore(props: PanelCoreProps) {
 
       return { accessibilityValue: { min: 0, max: maxValue, text } };
     },
-    getWebDependencies([currentMode, currentXValue, currentYValue, maxXValue, maxYValue, labelX, labelY]),
+    getWebDependencies([currentMode, currentXValue, currentYValue, maxXValue, maxYValue, labelX, labelY, isScreenReaderEnabled]),
   );
 
   return (

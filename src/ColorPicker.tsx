@@ -46,6 +46,22 @@ function ColorPickerWrapper(props: ColorPickerProps, ref: React.ForwardedRef<Col
   const saturationValue = useSharedValue(initialColor.s);
   const brightnessValue = useSharedValue(initialColor.v);
   const alphaValue = useSharedValue(initialColor.a);
+  const isScreenReaderEnabled = useSharedValue(false);
+
+  useEffect(() => {
+    if (isWeb) return;
+
+    const setIsScreenReaderEnabled = (isEnabled: boolean) => {
+      isScreenReaderEnabled.value = isEnabled;
+    };
+
+    AccessibilityInfo.isScreenReaderEnabled().then(setIsScreenReaderEnabled);
+    const screenReaderSubscription = AccessibilityInfo.addEventListener('screenReaderChanged', setIsScreenReaderEnabled);
+
+    return () => {
+      screenReaderSubscription.remove();
+    };
+  }, []);
 
   /**
    * Returns lazy getters for the provided color in multiple formats.
@@ -181,6 +197,7 @@ function ColorPickerWrapper(props: ColorPickerProps, ref: React.ForwardedRef<Col
     saturationValue,
     brightnessValue,
     alphaValue,
+    isScreenReaderEnabled,
 
     adaptSpectrum,
 
