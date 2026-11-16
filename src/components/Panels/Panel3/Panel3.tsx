@@ -12,6 +12,8 @@ import { Panel3ContextProvider } from './Panel3Context';
 
 import type { Panel3Props } from '@types';
 
+const UNUSED_HSL_COLOR = { h: 0, s: 0, l: 0 };
+
 /** @see [Panel3](https://alabsi91.github.io/reanimated-color-picker/components/panels/panel3/) */
 export function Panel3({
   renderCenterLine = false,
@@ -45,6 +47,11 @@ export function Panel3({
   // converting to/from HSV causes the previous saturation value to be lost.
   const hsl = useDerivedValue(
     () => {
+      // Only the 'hsl-saturation' channel reads this value
+      if (centerChannel !== 'hsl-saturation') {
+        return UNUSED_HSL_COLOR;
+      }
+
       const hsvColor = { h: hueValue.value, s: saturationValue.value, v: brightnessValue.value };
 
       const { h, s, l } = colorKit.runOnUI().HSL(hsvColor).object(false);
@@ -56,7 +63,7 @@ export function Panel3({
 
       return { h, s, l };
     },
-    getWebDependencies([hueValue, saturationValue, brightnessValue]),
+    getWebDependencies([hueValue, saturationValue, brightnessValue, centerChannel]),
   );
 
   const centerChannelValue = useDerivedValue(
