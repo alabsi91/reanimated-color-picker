@@ -90,11 +90,11 @@ The style of the cycle button icon.
 The style of the cycle button. Add padding to grow the tap area,
 or set `display: 'none'` to hide the button.
 
-`type: ViewStyle` · `default: { marginLeft: 10 }`
+`type: ViewStyle` · `default: { alignSelf: 'stretch', justifyContent: 'center', paddingLeft: 10 }`
 
 > [!tip]
 > To move the button to the other side, set `containerStyle={{ flexDirection: 'row-reverse' }}`
-> and `cycleButtonStyle={{ marginLeft: 0, marginRight: 10 }}`.
+> and `cycleButtonStyle={{ paddingLeft: 0, paddingRight: 10 }}`.
 
 ---
 
@@ -143,6 +143,8 @@ hide the cycle button with `cycleButtonStyle` and call `cycleFormat` on press.
 `type: () => void`
 
 ```tsx
+import { useRef } from "react";
+import { Button } from "react-native";
 import ColorPicker, { InputWidget } from "reanimated-color-picker";
 
 import type { InputWidgetRef } from "reanimated-color-picker";

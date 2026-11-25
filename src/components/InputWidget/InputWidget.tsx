@@ -99,7 +99,6 @@ function InputWidgetWrapper(props: InputWidgetProps, ref: React.ForwardedRef<Inp
       <ConditionalRendering if={formats.length > 1}>
         <Pressable
           onPress={cycleFormat}
-          hitSlop={10}
           style={[styles.cycleButton, cycleButtonStyle]}
           accessibilityLabel={cycleButtonAccessibilityLabel}
           accessibilityHint={cycleButtonAccessibilityHint}
