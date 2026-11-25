@@ -61,9 +61,10 @@ function InputWidgetWrapper(props: InputWidgetProps, ref: React.ForwardedRef<Inp
     onGestureEnd(color);
   };
 
-  const cycleFormat = () => {
+  const cycleFormat: InputWidgetRef['cycleFormat'] = ({ reversed = false } = {}) => {
+    const step = reversed ? formats.length - 1 : 1;
     const index = formats.indexOf(format);
-    const nextFormat = formats[(index + 1) % formats.length];
+    const nextFormat = formats[(index + step) % formats.length];
 
     setFormat(nextFormat);
     onFormatChange?.(nextFormat);
@@ -98,7 +99,7 @@ function InputWidgetWrapper(props: InputWidgetProps, ref: React.ForwardedRef<Inp
 
       <ConditionalRendering if={formats.length > 1}>
         <Pressable
-          onPress={cycleFormat}
+          onPress={() => cycleFormat()}
           style={[styles.cycleButton, cycleButtonStyle]}
           accessibilityLabel={cycleButtonAccessibilityLabel}
           accessibilityHint={cycleButtonAccessibilityHint}

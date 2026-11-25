@@ -703,6 +703,10 @@ export interface InputWidgetProps {
 }
 
 export interface InputWidgetRef {
-  /** Switches the inputs to the next color format in `formats`. */
-  cycleFormat: () => void;
+  /**
+   * Switches the inputs to the next color format in `formats`, or to the previous one when `reversed` is `true`.
+   *
+   * @param options.reversed Default: `false`.
+   */
+  cycleFormat: (options?: { reversed?: boolean }) => void;
 }
