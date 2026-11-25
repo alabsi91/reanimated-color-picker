@@ -66,7 +66,9 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   cycleButton: {
-    marginLeft: 10,
+    alignSelf: 'stretch',
+    justifyContent: 'center',
+    paddingLeft: 10,
   },
   arrowButton: {
     width: 24,

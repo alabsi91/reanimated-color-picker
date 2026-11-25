@@ -682,7 +682,7 @@ export interface InputWidgetProps {
 
   /**
    * The style of the cycle button (`Pressable` component). Add padding to grow the tap area, or set `display: 'none'` to hide the
-   * button. Default: `{ marginLeft: 10 }`.
+   * button. Default: `{ alignSelf: 'stretch', justifyContent: 'center', paddingLeft: 10 }`.
    */
   cycleButtonStyle?: StyleProp<ViewStyle>;
 
