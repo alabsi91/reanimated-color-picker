@@ -4,7 +4,10 @@ sidebar.order: 3
 
 # `<InputWidget />`
 
-![InputWidget](@assets/images/InputWidgets.png)
+<p>
+  <img src="@assets/images/InputWidgets.png" alt="InputWidget" class="light-scheme-only" />
+  <img src="@assets/images/InputWidgets-dark.png" alt="InputWidget" class="dark-scheme-only" />
+</p>
 
 An input component for entering color values in RGB, HEX, HSL, HWB, and HSV formats. Includes a cycle button to switch between formats.
 

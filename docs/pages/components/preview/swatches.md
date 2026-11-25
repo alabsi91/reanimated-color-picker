@@ -4,7 +4,10 @@ sidebar.order: 4
 
 # `<Swatches />`
 
-![swatches](@assets/images/swatches.png)
+<p>
+  <img src="@assets/images/swatches.png" alt="swatches" class="light-scheme-only" />
+  <img src="@assets/images/swatches-dark.png" alt="swatches" class="dark-scheme-only" />
+</p>
 
 A list of color swatches for quick color selection.
 

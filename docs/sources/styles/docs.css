@@ -71,3 +71,8 @@
     border-radius: 0.25em;
   }
 }
+
+[data-color-scheme="dark"] .light-scheme-only,
+[data-color-scheme="light"] .dark-scheme-only {
+  display: none;
+}
