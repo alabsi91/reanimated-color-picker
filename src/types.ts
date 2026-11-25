@@ -680,9 +680,29 @@ export interface InputWidgetProps {
   /** The style of the cycle button icon (`Image` component). */
   iconStyle?: StyleProp<ImageStyle>;
 
+  /**
+   * The style of the cycle button (`Pressable` component). Add padding to grow the tap area, or set `display: 'none'` to hide the
+   * button. Default: `{ marginLeft: 10 }`.
+   */
+  cycleButtonStyle?: StyleProp<ViewStyle>;
+
+  /**
+   * Replaces the cycle button icon with your own content, or keeps the default icon when it returns `null`. Since the button
+   * still handles the press, your content needs no `onPress`.
+   */
+  renderCycleButton?: (state: { format: DefaultFormats }) => ReactNode;
+
+  /** Called with the new format when the cycle button or `cycleFormat` changes it. */
+  onFormatChange?: (format: DefaultFormats) => void;
+
   /** Accessibility label for the cycle button, used by screen readers to identify the button. */
   cycleButtonAccessibilityLabel?: string;
 
   /** Accessibility hint for the cycle button, describing what happens when the user activates it. */
   cycleButtonAccessibilityHint?: string;
+}
+
+export interface InputWidgetRef {
+  /** Switches the inputs to the next color format in `formats`. */
+  cycleFormat: () => void;
 }

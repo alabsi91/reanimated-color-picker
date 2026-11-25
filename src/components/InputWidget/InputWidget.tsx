@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { forwardRef, useImperativeHandle, useState } from 'react';
 import { AccessibilityInfo, Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import colorKit from '@colorKit';
@@ -11,7 +11,7 @@ import HsvWidget from './Widgets/HsvWidget';
 import HwbWidget from './Widgets/HwbWidget';
 import RgbWidget from './Widgets/RgbWidget';
 
-import type { InputWidgetProps } from '@types';
+import type { InputWidgetProps, InputWidgetRef } from '@types';
 import type { SupportedColorFormats } from '../../colorKit/types';
 
 const defaultFormats = ['HEX', 'RGB', 'HSL', 'HWB', 'HSV'] as const;
@@ -24,8 +24,7 @@ const widgets = {
   HSV: HsvWidget,
 };
 
-/** @see [InputWidget](https://alabsi91.github.io/reanimated-color-picker/components/preview/input-widget/) */
-export function InputWidget(props: InputWidgetProps) {
+function InputWidgetWrapper(props: InputWidgetProps, ref: React.ForwardedRef<InputWidgetRef>) {
   const {
     defaultFormat = 'HEX',
     formats = defaultFormats,
@@ -35,6 +34,9 @@ export function InputWidget(props: InputWidgetProps) {
     inputStyle = {},
     inputTitleStyle = {},
     iconStyle = {},
+    cycleButtonStyle,
+    renderCycleButton,
+    onFormatChange,
     inputProps = {},
     cycleButtonAccessibilityHint,
     cycleButtonAccessibilityLabel = 'Cycle inputs color format',
@@ -59,12 +61,16 @@ export function InputWidget(props: InputWidgetProps) {
     onGestureEnd(color);
   };
 
-  const cycle = () => {
+  const cycleFormat = () => {
     const index = formats.indexOf(format);
-    const nextIndex = (index + 1) % formats.length;
-    setFormat(formats[nextIndex]);
-    AccessibilityInfo.announceForAccessibility(formats[nextIndex]);
+    const nextFormat = formats[(index + 1) % formats.length];
+
+    setFormat(nextFormat);
+    onFormatChange?.(nextFormat);
+    AccessibilityInfo.announceForAccessibility(nextFormat);
   };
+
+  useImperativeHandle(ref, () => ({ cycleFormat }));
 
   const inputsProps = {
     onChange,
@@ -82,7 +88,6 @@ export function InputWidget(props: InputWidgetProps) {
   const Widget = widgets[format];
 
   const gap = getStyle(containerStyle, 'gap') ?? 5;
-  const iconWidth = getStyle(iconStyle, 'width') ?? 24;
   const buttonIconStyle = StyleSheet.flatten([styles.arrowButton, iconStyle]);
 
   return (
@@ -92,20 +97,25 @@ export function InputWidget(props: InputWidgetProps) {
       </View>
 
       <ConditionalRendering if={formats.length > 1}>
-        <View style={{ width: iconWidth, marginLeft: 10 }}>
-          <Pressable
-            onPress={cycle}
-            accessibilityLabel={cycleButtonAccessibilityLabel}
-            accessibilityHint={cycleButtonAccessibilityHint}
-          >
+        <Pressable
+          onPress={cycleFormat}
+          hitSlop={10}
+          style={[styles.cycleButton, cycleButtonStyle]}
+          accessibilityLabel={cycleButtonAccessibilityLabel}
+          accessibilityHint={cycleButtonAccessibilityHint}
+        >
+          {renderCycleButton?.({ format }) ?? (
             <Image style={buttonIconStyle} tintColor={iconColor} source={require('@assets/arrow-icon.png')} />
-          </Pressable>
+          )}
 
           <Text style={styles.inputTitle} aria-hidden>
             {' '}
           </Text>
-        </View>
+        </Pressable>
       </ConditionalRendering>
     </View>
   );
 }
+
+/** @see [InputWidget](https://alabsi91.github.io/reanimated-color-picker/components/preview/input-widget/) */
+export const InputWidget = forwardRef<InputWidgetRef, InputWidgetProps>(InputWidgetWrapper);

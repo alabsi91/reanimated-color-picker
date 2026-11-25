@@ -65,10 +65,12 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  cycleButton: {
+    marginLeft: 10,
+  },
   arrowButton: {
     width: 24,
     height: 24,
-    // marginLeft: 10,
   },
   inputsWrapper: {
     flex: 1,
