@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Keyboard, Text, TextInput, View } from 'react-native';
+import { Keyboard, Platform, Text, TextInput, View } from 'react-native';
 import Animated, { useAnimatedProps, useAnimatedRef, useDerivedValue } from 'react-native-reanimated';
 
 import { styles } from '@styles';
@@ -63,7 +63,10 @@ export default function WidgetTextInput(props: WidgetTextInputProps) {
     onEndEditing(text);
   };
 
+  // Android hides the keyboard on the back button without a blur
   useEffect(() => {
+    if (Platform.OS !== 'android') return;
+
     const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
       if (inputRef.current) {
         inputRef.current.blur();
