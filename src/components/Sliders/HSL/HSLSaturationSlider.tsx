@@ -83,10 +83,10 @@ export function HSLSaturationSlider({ gestures = [], style = {}, vertical = fals
       }
 
       if (hsl.value.l < 50) {
-        return { backgroundColor: `rgba(0, 0, 0, ${1 - hsl.value.l / 50})` };
+        return { backgroundColor: `rgba(0, 0, 0, ${(1 - hsl.value.l / 50).toFixed(3)})` };
       }
 
-      return { backgroundColor: `rgba(255, 255, 255, ${(hsl.value.l - 50) / 50})` };
+      return { backgroundColor: `rgba(255, 255, 255, ${((hsl.value.l - 50) / 50).toFixed(3)})` };
     },
     getWebDependencies([hsl, adaptSpectrum]),
   );
