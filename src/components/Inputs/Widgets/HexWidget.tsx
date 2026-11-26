@@ -8,7 +8,11 @@ import WidgetTextInput from './WidgetTextInput';
 
 import type { WidgetProps } from '@types';
 
-export default function HexWidget(props: WidgetProps) {
+interface HexWidgetProps extends WidgetProps {
+  isTitleHidden?: boolean;
+}
+
+export default function HexWidget(props: HexWidgetProps) {
   const {
     onChange,
     colorResult,
@@ -19,6 +23,7 @@ export default function HexWidget(props: WidgetProps) {
     inputStyle,
     inputTitleStyle,
     inputProps,
+    isTitleHidden,
   } = props;
 
   const { value } = usePickerContext();
@@ -59,6 +64,7 @@ export default function HexWidget(props: WidgetProps) {
       textStyle={inputTitleStyle}
       textValue={hexColor}
       title='HEX'
+      isTitleHidden={isTitleHidden}
       label='Hex color input'
       onEndEditing={onEndEditing}
       inputProps={inputProps}

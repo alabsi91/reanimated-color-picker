@@ -49,6 +49,7 @@ config.resolver.extraNodeModules = {
   ...createPkgEntry('react-native-worklets'),
   ...createPkgEntry('react-native-gesture-handler'),
   ...createPkgEntry('react-native-safe-area-context'),
+  ...createPkgEntry('@swmansion/react-native-bottom-sheet'),
   ...createPkgEntry('react-native'),
   ...createPkgEntry('react'),
 };

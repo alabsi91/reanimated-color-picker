@@ -99,6 +99,36 @@ export const styles = StyleSheet.create({
     ...Platform.select({ web: { userSelect: 'none' }, default: {} }),
   },
 
+  // ColorInput
+  colorInputContainer: {
+    flexDirection: 'row',
+  },
+  colorInputSwatchButton: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    justifyContent: 'center',
+    paddingHorizontal: 6,
+  },
+  colorInputSwatch: {
+    width: 24,
+    height: 24,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: 'rgba(0, 0, 0, 0.3)',
+    borderRadius: 4,
+    overflow: 'hidden',
+  },
+  colorInputText: {
+    includeFontPadding: false,
+    textAlignVertical: 'center',
+    height: 36,
+    paddingVertical: 0,
+    paddingLeft: 38,
+    borderRadius: 8,
+    textAlign: 'left',
+  },
+
   // Swatches
   swatchesContainer: {
     flexDirection: 'row',

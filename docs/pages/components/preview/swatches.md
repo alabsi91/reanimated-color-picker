@@ -1,5 +1,5 @@
 ---
-sidebar.order: 4
+sidebar.order: 3
 ---
 
 # `<Swatches />`

@@ -1,5 +1,6 @@
 ---
-sidebar.order: 3
+sidebar.order: 1
+sidebar.parent.order: 5
 ---
 
 # `<InputWidget />`

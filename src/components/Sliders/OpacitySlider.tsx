@@ -7,6 +7,8 @@ import { SliderCore } from '@sliders/SliderCore';
 import Thumb from '@thumb';
 import { getStyle, getWebDependencies, HSVA2HSLA_string, isRtl, isWeb, RenderNativeOnly, RenderWebOnly } from '@utils';
 
+import { opacityTextureWebStyle } from '../OpacityTextureView';
+
 import type { SliderProps } from '@types';
 
 /** @see [OpacitySlider](https://alabsi91.github.io/reanimated-color-picker/components/sliders/opacity-slider/) */
@@ -187,9 +189,6 @@ export function OpacitySlider({ gestures = [], style = {}, vertical = false, rev
 }
 
 const webTransparentTexture = {
+  ...opacityTextureWebStyle,
   flex: undefined,
-  backgroundImage:
-    'repeating-linear-gradient(45deg, #c1c1c1 25%, transparent 25%, transparent 75%, #c1c1c1 75%, #c1c1c1), repeating-linear-gradient(45deg, #c1c1c1 25%, #fff 25%, #fff 75%, #c1c1c1 75%, #c1c1c1)',
-  backgroundPosition: '0px 0px, 8px 8px',
-  backgroundSize: '16px 16px',
 };

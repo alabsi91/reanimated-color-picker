@@ -10,6 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@swmansion/react-native-bottom-sheet": "^1.1.0",
     "react": "19.3.0",
     "react-native": "0.88.1",
     "react-native-gesture-handler": "^3.5.0",
