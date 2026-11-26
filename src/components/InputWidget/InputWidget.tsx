@@ -45,9 +45,8 @@ function InputWidgetWrapper(props: InputWidgetProps, ref: React.ForwardedRef<Inp
   const { setColor, colorResult, hueValue, saturationValue, brightnessValue, alphaValue, onGestureChange, onGestureEnd } =
     usePickerContext();
 
-  const [format, setFormat] = useState<typeof defaultFormat>(
-    formats.includes(defaultFormat) ? defaultFormat : (formats[0] ?? 'HEX'),
-  );
+  const [selectedFormat, setSelectedFormat] = useState<typeof defaultFormat>(defaultFormat);
+  const format = formats.includes(selectedFormat) ? selectedFormat : (formats[0] ?? 'HEX');
 
   const onChange = (color: SupportedColorFormats) => {
     const isHex = colorKit.getFormat(color)?.includes('hex');
@@ -64,11 +63,11 @@ function InputWidgetWrapper(props: InputWidgetProps, ref: React.ForwardedRef<Inp
   const cycleFormat: InputWidgetRef['cycleFormat'] = ({ reversed = false } = {}) => {
     const step = reversed ? formats.length - 1 : 1;
     const index = formats.indexOf(format);
-    const nextFormat = formats[(index + step) % formats.length];
+    const newFormat = formats[(index + step) % formats.length];
 
-    setFormat(nextFormat);
-    onFormatChange?.(nextFormat);
-    AccessibilityInfo.announceForAccessibility(nextFormat);
+    setSelectedFormat(newFormat);
+    onFormatChange?.(newFormat);
+    AccessibilityInfo.announceForAccessibility(newFormat);
   };
 
   useImperativeHandle(ref, () => ({ cycleFormat }));
