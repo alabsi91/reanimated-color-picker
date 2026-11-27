@@ -1,10 +1,10 @@
 import React, { forwardRef, useImperativeHandle, useState } from 'react';
 import { AccessibilityInfo, Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
-import colorKit from '@colorKit';
 import usePickerContext from '@context';
 import { styles } from '@styles';
 import { ConditionalRendering, getStyle } from '@utils';
+import { useApplyTypedColor } from './useApplyTypedColor';
 import HexWidget from './Widgets/HexWidget';
 import HslWidget from './Widgets/HslWidget';
 import HsvWidget from './Widgets/HsvWidget';
@@ -12,7 +12,6 @@ import HwbWidget from './Widgets/HwbWidget';
 import RgbWidget from './Widgets/RgbWidget';
 
 import type { InputWidgetProps, InputWidgetRef } from '@types';
-import type { SupportedColorFormats } from '../../colorKit/types';
 
 const defaultFormats = ['HEX', 'RGB', 'HSL', 'HWB', 'HSV'] as const;
 
@@ -42,24 +41,13 @@ function InputWidgetWrapper(props: InputWidgetProps, ref: React.ForwardedRef<Inp
     cycleButtonAccessibilityLabel = 'Cycle inputs color format',
   } = props;
 
-  const { setColor, colorResult, hueValue, saturationValue, brightnessValue, alphaValue, onGestureChange, onGestureEnd } =
-    usePickerContext();
+  const { colorResult, hueValue, saturationValue, brightnessValue, alphaValue } = usePickerContext();
 
   const [format, setFormat] = useState<typeof defaultFormat>(
     formats.includes(defaultFormat) ? defaultFormat : (formats[0] ?? 'HEX'),
   );
 
-  const onChange = (color: SupportedColorFormats) => {
-    const isHex = colorKit.getFormat(color)?.includes('hex');
-
-    if (disableAlphaChannel && isHex) {
-      color = colorKit.setAlpha(color, 1).hsv().object(false);
-    }
-
-    setColor(color, 0);
-    onGestureChange(color);
-    onGestureEnd(color);
-  };
+  const onChange = useApplyTypedColor(disableAlphaChannel);
 
   const cycleFormat = () => {
     const index = formats.indexOf(format);
@@ -116,5 +104,5 @@ function InputWidgetWrapper(props: InputWidgetProps, ref: React.ForwardedRef<Inp
   );
 }
 
-/** @see [InputWidget](https://alabsi91.github.io/reanimated-color-picker/components/preview/input-widget/) */
+/** @see [InputWidget](https://alabsi91.github.io/reanimated-color-picker/components/inputs/input-widget/) */
 export const InputWidget = forwardRef<InputWidgetRef, InputWidgetProps>(InputWidgetWrapper);

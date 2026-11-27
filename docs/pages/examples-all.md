@@ -90,6 +90,14 @@ Every example below imports these from `./components`.
 
 <code-block lang="tsx" collapsible><inline-text src="@examples/RgbVertical.tsx"></inline-text></code-block>
 
+## `ColorInput` With a Modal
+
+<code-block lang="tsx" collapsible><inline-text src="@examples/ColorInputWithModal.tsx"></inline-text></code-block>
+
+## `ColorInput` With a Bottom Sheet
+
+<code-block lang="tsx" collapsible><inline-text src="@examples/ColorInputWithBottomSheet.tsx"></inline-text></code-block>
+
 ## Inside a Gesture Handler `ScrollView`
 
 <code-block lang="tsx" collapsible><inline-text src="@examples/WithRnghScrollView.tsx"></inline-text></code-block>

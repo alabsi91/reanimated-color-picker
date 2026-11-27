@@ -1,5 +1,5 @@
 ---
-sidebar.order: 5
+sidebar.order: 4
 ---
 
 # `<ExtraThumb />`

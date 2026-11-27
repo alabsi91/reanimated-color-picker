@@ -30,7 +30,10 @@ export { RedSlider } from '@sliders/RGB/RedSlider';
 export { OpacitySlider } from '@sliders/OpacitySlider';
 
 export { ExtraThumb } from '@panels/Panel3/ExtraThumb';
-export { InputWidget } from './components/InputWidget/InputWidget';
+
+export { ColorInput } from './components/Inputs/ColorInput';
+export { InputWidget } from './components/Inputs/InputWidget';
+
 export { Preview } from './components/Preview';
 export { PreviewText } from './components/PreviewText';
 export { Swatches } from './components/Swatches';
