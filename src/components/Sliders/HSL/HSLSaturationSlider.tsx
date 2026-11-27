@@ -72,7 +72,7 @@ export function HSLSaturationSlider({ gestures = [], style = {}, vertical = fals
   );
 
   const activeColorStyle = useAnimatedStyle(
-    () => ({ backgroundColor: `hsl(${hsl.value.h}, 100%, 50%)` }),
+    () => ({ backgroundColor: `hsl(${hsl.value.h.toFixed(3)}, 100%, 50%)` }),
     getWebDependencies([hsl]),
   );
 

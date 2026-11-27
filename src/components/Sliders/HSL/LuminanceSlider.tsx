@@ -76,7 +76,7 @@ export function LuminanceSlider({ gestures = [], style = {}, vertical = false, r
   );
 
   const activeColorStyle = useAnimatedStyle(
-    () => ({ backgroundColor: `hsl(${hsl.value.h}, ${adaptSpectrum ? hsl.value.s : 100}%, ${50}%)` }),
+    () => ({ backgroundColor: `hsl(${hsl.value.h.toFixed(3)}, ${adaptSpectrum ? hsl.value.s.toFixed(3) : 100}%, 50%)` }),
     getWebDependencies([hsl, adaptSpectrum]),
   );
 

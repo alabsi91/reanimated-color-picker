@@ -90,7 +90,7 @@ export function LuminanceCircular({
   const activeColorStyle = useAnimatedStyle(
     () => {
       return {
-        backgroundColor: `hsl(${hsl.value.h}, ${adaptSpectrum ? hsl.value.s : 100}%, ${50}%)`,
+        backgroundColor: `hsl(${hsl.value.h.toFixed(3)}, ${adaptSpectrum ? hsl.value.s.toFixed(3) : 100}%, 50%)`,
         borderRadius: width.value / 2,
       };
     },
