@@ -6,7 +6,14 @@ import colorKit from '@colorKit';
 import usePickerContext from '@context';
 import { SliderCore } from '@sliders/SliderCore';
 import Thumb from '@thumb';
-import { ConditionalRendering, getStyle, getWebDependencies, isRtl } from '@utils';
+import {
+  ConditionalRendering,
+  createSliderGradientStyle,
+  getStyle,
+  getWebDependencies,
+  isLinearGradientSupported,
+  isRtl,
+} from '@utils';
 
 import type { SliderProps } from '@types';
 
@@ -71,14 +78,25 @@ export function HSLSaturationSlider({ gestures = [], style = {}, vertical = fals
     getWebDependencies([width, height, hsl, handleScale, vertical, reverse, boundedThumb, thumbSize]),
   );
 
-  const activeColorStyle = useAnimatedStyle(
-    () => ({ backgroundColor: `hsl(${hsl.value.h.toFixed(3)}, 100%, 50%)` }),
-    getWebDependencies([hsl]),
+  const sliderBackgroundStyle = useAnimatedStyle(
+    () => {
+      const hue = hsl.value.h.toFixed(3);
+
+      if (isLinearGradientSupported) {
+        const luminance = adaptSpectrum ? hsl.value.l.toFixed(3) : 50;
+        const colorStops = [`hsl(${hue}, 0%, ${luminance}%)`, `hsl(${hue}, 100%, ${luminance}%)`];
+
+        return createSliderGradientStyle(colorStops, vertical, reverse);
+      }
+
+      return { backgroundColor: `hsl(${hue}, 100%, 50%)` };
+    },
+    getWebDependencies([hsl, adaptSpectrum, vertical, reverse]),
   );
 
   const activeBrightnessStyle = useAnimatedStyle(
     () => {
-      if (!adaptSpectrum) {
+      if (!adaptSpectrum || isLinearGradientSupported) {
         return {};
       }
 
@@ -153,7 +171,7 @@ export function HSLSaturationSlider({ gestures = [], style = {}, vertical = fals
 
   return (
     <SliderCore
-      style={[style, { position: 'relative', borderRadius, borderWidth: 0, padding: 0 }, activeColorStyle]}
+      style={[style, { position: 'relative', borderRadius, borderWidth: 0, padding: 0 }, sliderBackgroundStyle]}
       label={props.accessibilityLabel ?? 'HSL Saturation Slider'}
       hint={props.accessibilityHint}
       currentValue={hslSaturationValue}
@@ -169,12 +187,14 @@ export function HSLSaturationSlider({ gestures = [], style = {}, vertical = fals
       onUpdate={onUpdate}
       onEnd={onEnd}
     >
-      <View style={{ flex: 1, borderRadius, overflow: 'hidden' }} aria-hidden>
-        <Animated.Image source={require('@assets/blackGradient.png')} style={imageStyle} tintColor='#888' />
-      </View>
+      <ConditionalRendering if={!isLinearGradientSupported}>
+        <View style={{ flex: 1, borderRadius, overflow: 'hidden' }} aria-hidden>
+          <Animated.Image source={require('@assets/blackGradient.png')} style={imageStyle} tintColor='#888' />
+        </View>
 
-      <ConditionalRendering if={adaptSpectrum}>
-        <Animated.View style={[{ borderRadius }, activeBrightnessStyle, StyleSheet.absoluteFill]} aria-hidden />
+        <ConditionalRendering if={adaptSpectrum}>
+          <Animated.View style={[{ borderRadius }, activeBrightnessStyle, StyleSheet.absoluteFill]} aria-hidden />
+        </ConditionalRendering>
       </ConditionalRendering>
 
       <Thumb

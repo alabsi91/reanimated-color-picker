@@ -5,7 +5,16 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-na
 import usePickerContext from '@context';
 import { SliderCore } from '@sliders/SliderCore';
 import Thumb from '@thumb';
-import { ConditionalRendering, getStyle, getWebDependencies, HSVA2HSLA_string, isRtl } from '@utils';
+import {
+  ConditionalRendering,
+  createSliderGradientStyle,
+  getStyle,
+  getWebDependencies,
+  HSVA2HSLA_string,
+  hueSpectrumColorStops,
+  isLinearGradientSupported,
+  isRtl,
+} from '@utils';
 
 import type { SliderProps } from '@types';
 
@@ -48,9 +57,28 @@ export function HueSlider({ gestures = [], style = {}, vertical = false, reverse
     getWebDependencies([width, height, hueValue, handleScale, vertical, reverse, boundedThumb, thumbSize]),
   );
 
+  const sliderBackgroundStyle = useAnimatedStyle(
+    () => {
+      if (!isLinearGradientSupported) {
+        return {};
+      }
+
+      if (!adaptSpectrum) {
+        return createSliderGradientStyle(hueSpectrumColorStops, vertical, reverse);
+      }
+
+      const colorStops = [0, 60, 120, 180, 240, 300, 360].map(hue =>
+        HSVA2HSLA_string(hue, saturationValue.value, brightnessValue.value),
+      );
+
+      return createSliderGradientStyle(colorStops, vertical, reverse);
+    },
+    getWebDependencies([saturationValue, brightnessValue, adaptSpectrum, vertical, reverse]),
+  );
+
   const activeSaturationStyle = useAnimatedStyle(
     () => {
-      if (!adaptSpectrum) {
+      if (!adaptSpectrum || isLinearGradientSupported) {
         return {};
       }
 
@@ -61,7 +89,7 @@ export function HueSlider({ gestures = [], style = {}, vertical = false, reverse
 
   const activeBrightnessStyle = useAnimatedStyle(
     () => {
-      if (!adaptSpectrum) {
+      if (!adaptSpectrum || isLinearGradientSupported) {
         return {};
       }
 
@@ -123,7 +151,7 @@ export function HueSlider({ gestures = [], style = {}, vertical = false, reverse
 
   return (
     <SliderCore
-      style={[style, { position: 'relative', borderRadius, borderWidth: 0, padding: 0 }]}
+      style={[style, { position: 'relative', borderRadius, borderWidth: 0, padding: 0 }, sliderBackgroundStyle]}
       maxValue={360}
       label={props.accessibilityLabel ?? 'Hue Slider'}
       hint={props.accessibilityHint}
@@ -140,13 +168,15 @@ export function HueSlider({ gestures = [], style = {}, vertical = false, reverse
       onUpdate={onUpdate}
       onEnd={onEnd}
     >
-      <View style={{ flex: 1, borderRadius, overflow: 'hidden' }} aria-hidden>
-        <Animated.Image source={require('@assets/Hue.png')} style={imageStyle} />
-      </View>
+      <ConditionalRendering if={!isLinearGradientSupported}>
+        <View style={{ flex: 1, borderRadius, overflow: 'hidden' }} aria-hidden>
+          <Animated.Image source={require('@assets/Hue.png')} style={imageStyle} />
+        </View>
 
-      <ConditionalRendering if={adaptSpectrum}>
-        <Animated.View style={[{ borderRadius }, activeBrightnessStyle, StyleSheet.absoluteFill]} aria-hidden />
-        <Animated.View style={[{ borderRadius }, activeSaturationStyle, StyleSheet.absoluteFill]} aria-hidden />
+        <ConditionalRendering if={adaptSpectrum}>
+          <Animated.View style={[{ borderRadius }, activeBrightnessStyle, StyleSheet.absoluteFill]} aria-hidden />
+          <Animated.View style={[{ borderRadius }, activeSaturationStyle, StyleSheet.absoluteFill]} aria-hidden />
+        </ConditionalRendering>
       </ConditionalRendering>
 
       <Thumb

@@ -7,7 +7,17 @@ import usePickerContext from '@context';
 import { PanelCore } from '@panels/PanelCore';
 import { styles } from '@styles';
 import Thumb from '@thumb';
-import { clamp, ConditionalRendering, getStyle, getWebDependencies, isRtl } from '@utils';
+import {
+  clamp,
+  ConditionalRendering,
+  createBackgroundImageStyle,
+  createLinearGradient,
+  getStyle,
+  getWebDependencies,
+  hueSpectrumColorStops,
+  isLinearGradientSupported,
+  isRtl,
+} from '@utils';
 
 import type { Panel2Props } from '@types';
 
@@ -113,25 +123,64 @@ export function Panel2({
     ]),
   );
 
-  const spectrumStyle = useAnimatedStyle(
+  const spectrumColor = useDerivedValue(
     () => {
-      if (!adaptSpectrum) return {};
+      if (!adaptSpectrum) {
+        return '#0000';
+      }
 
       if (verticalChannel === 'brightness') {
-        return { backgroundColor: `rgba(255, 255, 255, ${(1 - saturationValue.value / 100).toFixed(3)})` };
+        return `rgba(255, 255, 255, ${(1 - saturationValue.value / 100).toFixed(3)})`;
       }
 
       if (verticalChannel === 'hsl-saturation') {
         if (hsl.value.l < 50) {
-          return { backgroundColor: `rgba(0, 0, 0, ${(1 - hsl.value.l / 50).toFixed(3)})` };
+          return `rgba(0, 0, 0, ${(1 - hsl.value.l / 50).toFixed(3)})`;
         }
 
-        return { backgroundColor: `rgba(255, 255, 255, ${((hsl.value.l - 50) / 50).toFixed(3)})` };
+        return `rgba(255, 255, 255, ${((hsl.value.l - 50) / 50).toFixed(3)})`;
       }
 
-      return { backgroundColor: `rgba(0, 0, 0, ${(1 - brightnessValue.value / 100).toFixed(3)})` };
+      return `rgba(0, 0, 0, ${(1 - brightnessValue.value / 100).toFixed(3)})`;
     },
     getWebDependencies([saturationValue, brightnessValue, hsl, adaptSpectrum, verticalChannel]),
+  );
+
+  const spectrumStyle = useAnimatedStyle(
+    () => {
+      if (!adaptSpectrum || isLinearGradientSupported) {
+        return {};
+      }
+
+      return { backgroundColor: spectrumColor.value };
+    },
+    getWebDependencies([spectrumColor, adaptSpectrum]),
+  );
+
+  const panelBackgroundStyle = useAnimatedStyle(
+    () => {
+      if (!isLinearGradientSupported) {
+        return {};
+      }
+
+      const hueGradient = createLinearGradient(reverseHue ? 270 : 90, hueSpectrumColorStops);
+      const spectrumGradients = adaptSpectrum ? [createLinearGradient(0, [spectrumColor.value, spectrumColor.value])] : [];
+
+      const verticalChannelRgb =
+        verticalChannel === 'brightness' ? '0, 0, 0' : verticalChannel === 'hsl-saturation' ? '128, 128, 128' : '255, 255, 255';
+      const verticalChannelGradient = createLinearGradient(reverseVerticalChannel ? 180 : 0, [
+        `rgba(${verticalChannelRgb}, 1)`,
+        `rgba(${verticalChannelRgb}, 0)`,
+      ]);
+
+      // The black brightness gradient covers the saturation tint
+      if (verticalChannel === 'brightness') {
+        return createBackgroundImageStyle([verticalChannelGradient, ...spectrumGradients, hueGradient]);
+      }
+
+      return createBackgroundImageStyle([...spectrumGradients, verticalChannelGradient, hueGradient]);
+    },
+    getWebDependencies([spectrumColor, adaptSpectrum, verticalChannel, reverseHue, reverseVerticalChannel]),
   );
 
   const panelImageStyle = useAnimatedStyle(
@@ -229,7 +278,12 @@ export function Panel2({
 
   return (
     <PanelCore
-      style={[styles.panelContainer, style, { position: 'relative', height: heightStyle, borderWidth: 0, padding: 0 }]}
+      style={[
+        styles.panelContainer,
+        style,
+        { position: 'relative', height: heightStyle, borderWidth: 0, padding: 0 },
+        panelBackgroundStyle,
+      ]}
       label={props.accessibilityLabel ?? `Hue and ${verticalChannel} 2D slider`}
       hint={props.accessibilityHint ?? `Double tap to switch between hue and ${verticalChannel}`}
       labelX='Hue'
@@ -247,27 +301,29 @@ export function Panel2({
       onUpdate={onUpdate}
       onEnd={onEnd}
     >
-      <View
-        style={[styles.panelImage, { position: 'relative', borderRadius, transform: [{ scaleX: reverseHue ? -1 : 1 }] }]}
-        aria-hidden
-      >
-        <Image source={require('@assets/Hue.png')} style={styles.panelImage} resizeMode='stretch' />
+      <ConditionalRendering if={!isLinearGradientSupported}>
+        <View
+          style={[styles.panelImage, { position: 'relative', borderRadius, transform: [{ scaleX: reverseHue ? -1 : 1 }] }]}
+          aria-hidden
+        >
+          <Image source={require('@assets/Hue.png')} style={styles.panelImage} resizeMode='stretch' />
 
-        <ConditionalRendering if={adaptSpectrum && verticalChannel === 'brightness'}>
-          <Animated.View style={[spectrumStyle, StyleSheet.absoluteFill]} />
-        </ConditionalRendering>
+          <ConditionalRendering if={adaptSpectrum && verticalChannel === 'brightness'}>
+            <Animated.View style={[spectrumStyle, StyleSheet.absoluteFill]} />
+          </ConditionalRendering>
 
-        <Animated.Image
-          source={require('@assets/blackGradient.png')}
-          style={[styles.panelImage, panelImageStyle]}
-          tintColor={verticalChannel === 'saturation' ? '#fff' : verticalChannel === 'hsl-saturation' ? '#888' : undefined}
-          resizeMode='stretch'
-        />
+          <Animated.Image
+            source={require('@assets/blackGradient.png')}
+            style={[styles.panelImage, panelImageStyle]}
+            tintColor={verticalChannel === 'saturation' ? '#fff' : verticalChannel === 'hsl-saturation' ? '#888' : undefined}
+            resizeMode='stretch'
+          />
 
-        <ConditionalRendering if={adaptSpectrum && (verticalChannel === 'saturation' || verticalChannel === 'hsl-saturation')}>
-          <Animated.View style={[spectrumStyle, StyleSheet.absoluteFill]} />
-        </ConditionalRendering>
-      </View>
+          <ConditionalRendering if={adaptSpectrum && (verticalChannel === 'saturation' || verticalChannel === 'hsl-saturation')}>
+            <Animated.View style={[spectrumStyle, StyleSheet.absoluteFill]} />
+          </ConditionalRendering>
+        </View>
+      </ConditionalRendering>
 
       <Thumb
         thumbShape={thumbShape}

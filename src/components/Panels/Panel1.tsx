@@ -6,7 +6,16 @@ import usePickerContext from '@context';
 import { PanelCore } from '@panels/PanelCore';
 import { styles } from '@styles';
 import Thumb from '@thumb';
-import { clamp, getStyle, getWebDependencies, isRtl } from '@utils';
+import {
+  clamp,
+  ConditionalRendering,
+  createBackgroundImageStyle,
+  createLinearGradient,
+  getStyle,
+  getWebDependencies,
+  isLinearGradientSupported,
+  isRtl,
+} from '@utils';
 
 import type { PanelProps } from '@types';
 
@@ -49,11 +58,18 @@ export function Panel1({ gestures = [], style = {}, ...props }: PanelProps) {
     getWebDependencies([handleScale, saturationValue, brightnessValue, width, height, boundedThumb, thumbSize]),
   );
 
-  const activeColorStyle = useAnimatedStyle(
+  const panelBackgroundStyle = useAnimatedStyle(
     () => {
-      return {
-        backgroundColor: `hsl(${hueValue.value.toFixed(3)}, 100%, 50%)`,
-      };
+      const activeColor = `hsl(${hueValue.value.toFixed(3)}, 100%, 50%)`;
+
+      if (isLinearGradientSupported) {
+        const brightnessGradient = createLinearGradient(0, ['#000', '#0000']);
+        const saturationGradient = createLinearGradient(90, ['#fff', activeColor]);
+
+        return createBackgroundImageStyle([brightnessGradient, saturationGradient]);
+      }
+
+      return { backgroundColor: activeColor };
     },
     getWebDependencies([hueValue]),
   );
@@ -119,7 +135,7 @@ export function Panel1({ gestures = [], style = {}, ...props }: PanelProps) {
         styles.panelContainer,
         style,
         { position: 'relative', height: heightStyle, borderWidth: 0, padding: 0 },
-        activeColorStyle,
+        panelBackgroundStyle,
       ]}
       label={props.accessibilityLabel ?? 'Saturation and brightness 2D slider'}
       hint={props.accessibilityHint ?? 'Double tap to switch between brightness and saturation'}
@@ -135,14 +151,16 @@ export function Panel1({ gestures = [], style = {}, ...props }: PanelProps) {
       onUpdate={onUpdate}
       onEnd={onEnd}
     >
-      <View style={[styles.panelImage, { borderRadius }]} aria-hidden>
-        <Image source={require('@assets/blackGradient.png')} style={styles.panelImage} tintColor='#fff' resizeMode='stretch' />
-        <Animated.Image
-          source={require('@assets/blackGradient.png')}
-          style={[styles.panelImage, brightnessImageStyle]}
-          resizeMode='stretch'
-        />
-      </View>
+      <ConditionalRendering if={!isLinearGradientSupported}>
+        <View style={[styles.panelImage, { borderRadius }]} aria-hidden>
+          <Image source={require('@assets/blackGradient.png')} style={styles.panelImage} tintColor='#fff' resizeMode='stretch' />
+          <Animated.Image
+            source={require('@assets/blackGradient.png')}
+            style={[styles.panelImage, brightnessImageStyle]}
+            resizeMode='stretch'
+          />
+        </View>
+      </ConditionalRendering>
 
       <Thumb
         thumbShape={thumbShape}
