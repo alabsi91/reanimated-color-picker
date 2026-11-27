@@ -59,7 +59,7 @@
     "@react-native/eslint-config": "^0.85.3",
     "@swmansion/react-native-bottom-sheet": "^1.1.0",
     "@types/react": "^19.3.0",
-    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/eslint-plugin": "^8.74.0",
     "babel-jest": "^30.5.2",
     "babel-plugin-module-resolver": "^5.0.3",
     "eslint": "^8.57.1",
@@ -73,7 +73,7 @@
     "react-native-safe-area-context": "^5.11.1",
     "resolve-tspaths": "^0.8.23",
     "ts-node": "^10.9.2",
-    "typescript": "5.5"
+    "typescript": "5.9"
   },
   "peerDependencies": {
     "expo": ">=44.0.0",
@@ -106,6 +106,14 @@
       "prefer-const": 1,
       "@typescript-eslint/consistent-type-imports": 1,
       "@typescript-eslint/no-non-null-assertion": 0,
+      "@typescript-eslint/no-require-imports": [
+        2,
+        {
+          "allow": [
+            "\\.png$"
+          ]
+        }
+      ],
       "react-native/no-inline-styles": 0,
       "react-native/no-single-element-style-arrays": 1,
       "react-native/no-unused-styles": 1,
