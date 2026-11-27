@@ -35,7 +35,7 @@ export default function Circle({
       style={[styles.handle, style, computedStyle, thumbAnimatedStyle]}
       renderToHardwareTextureAndroid={enableAndroidHardwareTextures}
     >
-      <Animated.View style={[circleStyle, styles.shadow, adaptiveColorStyle, solidColor, innerStyle]} />
+      <Animated.View style={[circleStyle, adaptiveColorStyle, solidColor, innerStyle]} />
     </Animated.View>
   );
 }

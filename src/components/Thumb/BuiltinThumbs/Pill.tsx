@@ -37,7 +37,7 @@ export default function Pill({
       style={[styles.handle, computedStyle, style, thumbAnimatedStyle]}
       renderToHardwareTextureAndroid={enableAndroidHardwareTextures}
     >
-      <Animated.View style={[pillStyle, styles.shadow, adaptiveColorStyle, innerStyle]} />
+      <Animated.View style={[pillStyle, adaptiveColorStyle, innerStyle]} />
     </Animated.View>
   );
 }

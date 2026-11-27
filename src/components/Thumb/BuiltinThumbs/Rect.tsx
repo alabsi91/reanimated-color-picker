@@ -36,7 +36,7 @@ export default function Rect({
       style={[styles.handle, style, computedStyle, thumbAnimatedStyle]}
       renderToHardwareTextureAndroid={enableAndroidHardwareTextures}
     >
-      <Animated.View style={[pillStyle, styles.shadow, adaptiveColorStyle, solidColor, innerStyle]} />
+      <Animated.View style={[pillStyle, adaptiveColorStyle, solidColor, innerStyle]} />
     </Animated.View>
   );
 }

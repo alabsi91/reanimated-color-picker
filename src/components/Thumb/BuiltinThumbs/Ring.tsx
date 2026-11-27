@@ -43,9 +43,7 @@ export default function Ring({
       style={[styles.handle, ringStyle, adaptiveColorStyle, style, thumbAnimatedStyle]}
       renderToHardwareTextureAndroid={enableAndroidHardwareTextures}
     >
-      <Animated.View
-        style={[styles.shadow, { borderRadius, zIndex: 100, width: innerSize, height: innerSize }, solidColor, innerStyle]}
-      />
+      <Animated.View style={[{ borderRadius, zIndex: 100, width: innerSize, height: innerSize }, solidColor, innerStyle]} />
     </Animated.View>
   );
 }

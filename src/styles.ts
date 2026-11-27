@@ -141,20 +141,8 @@ export const styles = StyleSheet.create({
     borderRadius: 15,
     marginHorizontal: 5,
     marginBottom: 15,
-    ...Platform.select({
-      web: { boxShadow: 'rgba(0, 0, 0, 0.3) 0px 0px 7px' },
-      default: {
-        shadowColor: '#000',
-        shadowOffset: {
-          width: 0,
-          height: 1,
-        },
-        shadowOpacity: 0.2,
-        shadowRadius: 1.41,
-
-        elevation: 2,
-      },
-    }),
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: 'rgba(0, 0, 0, 0.15)',
   },
 
   // Preview
