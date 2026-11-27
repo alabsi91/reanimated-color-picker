@@ -702,6 +702,32 @@ export interface InputWidgetProps {
   cycleButtonAccessibilityHint?: string;
 }
 
+export interface ColorInputProps {
+  /** Called when the user presses the swatch. Use it to open the color picker, for example in a bottom sheet. */
+  onSwatchPress?: () => void;
+
+  /** When enabled, prevents the user from modifying the alpha channel. */
+  disableAlphaChannel?: boolean;
+
+  /** The style of the `View` wrapping the swatch and the hex input. */
+  style?: StyleProp<ViewStyle>;
+
+  /** The style of the swatch. */
+  swatchStyle?: StyleProp<ViewStyle>;
+
+  /** The style of the hex `TextInput` component. */
+  inputStyle?: StyleProp<TextStyle>;
+
+  /** Additional props forwarded to the hex `TextInput` component. */
+  inputProps?: InputProps;
+
+  /** Accessibility label for the swatch, used by screen readers to identify the button. */
+  swatchAccessibilityLabel?: string;
+
+  /** Accessibility hint for the swatch, describing what happens when the user activates it. */
+  swatchAccessibilityHint?: string;
+}
+
 export interface InputWidgetRef {
   /**
    * Switches the inputs to the next color format in `formats`, or to the previous one when `reversed` is `true`.

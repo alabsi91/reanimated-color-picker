@@ -1,16 +1,15 @@
 import React, { useMemo } from 'react';
-import { Image, View } from 'react-native';
+import { View } from 'react-native';
 import Animated, { useAnimatedStyle, useDerivedValue } from 'react-native-reanimated';
 
 import colorKit from '@colorKit';
 import usePickerContext from '@context';
 import { styles } from '@styles';
-import { ConditionalRendering, getStyle, getWebDependencies, isWeb } from '@utils';
+import { ConditionalRendering, getStyle, getWebDependencies } from '@utils';
+import { OpacityTextureView } from './OpacityTextureView';
 import { PreviewText } from './PreviewText';
 
 import type { PreviewProps } from '@types';
-import type { ReactNode } from 'react';
-import type { StyleProp, ViewStyle } from 'react-native';
 
 /** @see [Preview](https://alabsi91.github.io/reanimated-color-picker/components/preview/preview/) */
 export function Preview({
@@ -71,7 +70,7 @@ export function Preview({
   const previewTextStyle = useAnimatedStyle(() => ({ color: previewTextColor.value }), getWebDependencies([previewTextColor]));
 
   return (
-    <Wrapper disableTexture={disableOpacityTexture} style={style}>
+    <OpacityTextureView isTextureDisabled={disableOpacityTexture} style={[styles.previewWrapper, style]}>
       <ConditionalRendering if={!hideInitialColor}>
         <View style={[styles.previewContainer, { backgroundColor: value, justifyContent }]}>
           <ConditionalRendering if={!hideText}>
@@ -87,36 +86,6 @@ export function Preview({
           <PreviewText colorFormat={colorFormat} style={[textStyle, previewTextStyle]} />
         </ConditionalRendering>
       </Animated.View>
-    </Wrapper>
+    </OpacityTextureView>
   );
 }
-
-type WrapperProps = {
-  children: ReactNode;
-  disableTexture: boolean;
-  style: StyleProp<ViewStyle>;
-};
-
-function Wrapper({ children, disableTexture, style }: WrapperProps) {
-  if (disableTexture) {
-    return <View style={[styles.previewWrapper, style]}>{children}</View>;
-  }
-
-  if (isWeb) {
-    return <View style={[styles.previewWrapper, previewWrapperWebStyle, style]}>{children}</View>;
-  }
-
-  return (
-    <View style={[styles.previewWrapper, style]}>
-      <Image source={require('@assets/transparent-texture.png')} style={styles.panelImage} resizeMode='repeat' />
-      {children}
-    </View>
-  );
-}
-
-const previewWrapperWebStyle = {
-  backgroundImage:
-    'repeating-linear-gradient(45deg, #c1c1c1 25%, transparent 25%, transparent 75%, #c1c1c1 75%, #c1c1c1), repeating-linear-gradient(45deg, #c1c1c1 25%, #fff 25%, #fff 75%, #c1c1c1 75%, #c1c1c1)',
-  backgroundPosition: '0px 0px, 8px 8px',
-  backgroundSize: '16px 16px',
-} as StyleProp<ViewStyle>;

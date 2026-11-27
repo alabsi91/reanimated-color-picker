@@ -1,7 +1,9 @@
 import React from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { Platform, ScrollView, StyleSheet, View } from 'react-native';
 
 import CircularHue from './CircularHue';
+import ColorInputWithBottomSheet from './ColorInputWithBottomSheet';
+import ColorInputWithModal from './ColorInputWithModal';
 import HorizontalHsbSliders from './HsbHorizontal';
 import VerticalHsbSliders from './HsbVertical';
 import HorizontalHslSliders from './HslHorizontal';
@@ -21,6 +23,9 @@ import VerticalRgbSliders from './RgbVertical';
 import WithReanimatedScrollView from './WithReanimatedScrollView';
 import WithRnghScrollView from './WithRnghScrollView';
 import BaseContainer from './components/BaseContainer';
+
+// The bottom sheet supports only the New Architecture and the web.
+const isBottomSheetSupported = Platform.OS === 'web' || 'nativeFabricUIManager' in globalThis;
 
 export default function ExamplesList() {
   return (
@@ -85,6 +90,15 @@ export default function ExamplesList() {
         <BaseContainer name='RGB Vertical'>
           <VerticalRgbSliders />
         </BaseContainer>
+
+        <BaseContainer name='ColorInput With Modal'>
+          <ColorInputWithModal />
+        </BaseContainer>
+        {isBottomSheetSupported && (
+          <BaseContainer name='ColorInput With Bottom Sheet'>
+            <ColorInputWithBottomSheet />
+          </BaseContainer>
+        )}
 
         <BaseContainer name='With RNGH ScrollView'>
           <WithRnghScrollView />
