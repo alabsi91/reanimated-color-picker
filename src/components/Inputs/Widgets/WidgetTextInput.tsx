@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Keyboard, Platform, Text, TextInput, View } from 'react-native';
 import Animated, { useAnimatedProps, useAnimatedRef, useDerivedValue } from 'react-native-reanimated';
 
@@ -26,6 +26,8 @@ interface WidgetTextInputProps {
 Animated.addWhitelistedNativeProps?.({ text: true });
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
 
+let createdInputCount = 0;
+
 export default function WidgetTextInput(props: WidgetTextInputProps) {
   const {
     textValue,
@@ -40,6 +42,8 @@ export default function WidgetTextInput(props: WidgetTextInputProps) {
     onEndEditing,
   } = props;
 
+  const inputIdRef = useRef<string | null>(null);
+  inputIdRef.current ??= `_c_${createdInputCount++}`;
   const inputRef = useAnimatedRef<TextInput>();
 
   const animatedProps = useAnimatedProps(
@@ -93,6 +97,7 @@ export default function WidgetTextInput(props: WidgetTextInputProps) {
     <View style={styles.inputsContainer}>
       <AnimatedTextInput
         ref={inputRef}
+        id={inputIdRef.current}
         style={[styles.input, inputStyle]}
         maxLength={decimal ? 4 : textKeyboard ? 9 : 3} // length example: Alpha (1.55), RGB (255), Hue (360), Brightness (100), hex (#00000000)
         onEndEditing={submit}
