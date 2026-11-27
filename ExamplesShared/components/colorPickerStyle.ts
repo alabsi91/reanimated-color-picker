@@ -22,6 +22,7 @@ export const colorPickerStyle = StyleSheet.create({
     backgroundColor: '#eae5f1',
     padding: 20,
     borderRadius: 20,
+    ...border,
   },
   panelStyle: {
     borderRadius: 16,
@@ -84,9 +85,5 @@ export const colorPickerStyle = StyleSheet.create({
     marginBottom: 0,
     marginHorizontal: 0,
     marginVertical: 0,
-    boxShadow: 'none',
-    shadowOpacity: 0,
-    elevation: 0,
-    ...border,
   },
 });
