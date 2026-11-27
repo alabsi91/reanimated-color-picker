@@ -43,19 +43,19 @@ function InputWidgetWrapper(props: InputWidgetProps, ref: React.ForwardedRef<Inp
 
   const { colorResult, hueValue, saturationValue, brightnessValue, alphaValue } = usePickerContext();
 
-  const [format, setFormat] = useState<typeof defaultFormat>(
-    formats.includes(defaultFormat) ? defaultFormat : (formats[0] ?? 'HEX'),
-  );
+  const [selectedFormat, setSelectedFormat] = useState<typeof defaultFormat>(defaultFormat);
+  const format = formats.includes(selectedFormat) ? selectedFormat : (formats[0] ?? 'HEX');
 
   const onChange = useApplyTypedColor(disableAlphaChannel);
 
-  const cycleFormat = () => {
+  const cycleFormat: InputWidgetRef['cycleFormat'] = ({ reversed = false } = {}) => {
+    const step = reversed ? formats.length - 1 : 1;
     const index = formats.indexOf(format);
-    const nextFormat = formats[(index + 1) % formats.length];
+    const newFormat = formats[(index + step) % formats.length];
 
-    setFormat(nextFormat);
-    onFormatChange?.(nextFormat);
-    AccessibilityInfo.announceForAccessibility(nextFormat);
+    setSelectedFormat(newFormat);
+    onFormatChange?.(newFormat);
+    AccessibilityInfo.announceForAccessibility(newFormat);
   };
 
   useImperativeHandle(ref, () => ({ cycleFormat }));
@@ -86,7 +86,7 @@ function InputWidgetWrapper(props: InputWidgetProps, ref: React.ForwardedRef<Inp
 
       <ConditionalRendering if={formats.length > 1}>
         <Pressable
-          onPress={cycleFormat}
+          onPress={() => cycleFormat()}
           style={[styles.cycleButton, cycleButtonStyle]}
           accessibilityLabel={cycleButtonAccessibilityLabel}
           accessibilityHint={cycleButtonAccessibilityHint}

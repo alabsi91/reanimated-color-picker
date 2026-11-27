@@ -138,10 +138,11 @@ Fires when the cycle button or [`cycleFormat`](#cycleformat) changes the format.
 
 ### `cycleFormat`
 
-Switches the inputs to the next color format in [`formats`](#formats). To use your own button,
-hide the cycle button with `cycleButtonStyle` and call `cycleFormat` on press.
+Switches the inputs to the next color format in [`formats`](#formats), or to the previous one
+when `reversed` is `true`. To use your own button, hide the cycle button with `cycleButtonStyle`
+and call `cycleFormat` on press.
 
-`type: () => void`
+`type: (options?: { reversed?: boolean }) => void` · `default: { reversed: false }`
 
 ```tsx
 import { useRef } from "react";
@@ -157,6 +158,7 @@ function MyComponent() {
     <ColorPicker>
       <InputWidget ref={inputWidgetRef} cycleButtonStyle={{ display: "none" }} />
 
+      <Button title="Previous format" onPress={() => inputWidgetRef.current?.cycleFormat({ reversed: true })} />
       <Button title="Next format" onPress={() => inputWidgetRef.current?.cycleFormat()} />
     </ColorPicker>
   );
