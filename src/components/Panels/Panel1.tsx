@@ -52,7 +52,7 @@ export function Panel1({ gestures = [], style = {}, ...props }: PanelProps) {
   const activeColorStyle = useAnimatedStyle(
     () => {
       return {
-        backgroundColor: `hsl(${hueValue.value}, 100%, 50%)`,
+        backgroundColor: `hsl(${hueValue.value.toFixed(3)}, 100%, 50%)`,
       };
     },
     getWebDependencies([hueValue]),

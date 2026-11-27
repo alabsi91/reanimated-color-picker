@@ -51,7 +51,7 @@ export const HSVA2HSLA_string = (h: number, s: number, v: number, a = 1) => {
   const sl = s * v;
   const sln = l !== 0 && l !== 1 ? sl / (l < 0.5 ? l * 2 : 2 - l * 2) : sl;
 
-  return `hsla(${h}, ${sln * 100}%, ${l * 100}%, ${a})`;
+  return `hsla(${h.toFixed(3)}, ${(sln * 100).toFixed(3)}%, ${(l * 100).toFixed(3)}%, ${a})`;
 };
 
 /** Render children only if the `if` property is `true` */
