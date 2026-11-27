@@ -1,10 +1,21 @@
 import React from 'react';
 import { I18nManager, Platform, StyleSheet } from 'react-native';
+import { reanimatedVersion } from 'react-native-reanimated';
 
 import type { StyleProp, ViewStyle } from 'react-native';
 
 export const isRtl = I18nManager.isRTL;
 export const isWeb = Platform.OS === 'web';
+
+const [reanimatedMajorVersion, reanimatedMinorVersion] = (reanimatedVersion ?? '0.0').split('.').map(Number);
+
+/** Reanimated animates `backgroundImage` from version 4.7. */
+export const isLinearGradientSupported =
+  isWeb || reanimatedMajorVersion > 4 || (reanimatedMajorVersion === 4 && reanimatedMinorVersion >= 7);
+
+// React Native 0.87 adds `backgroundImage` as the stable name of `experimental_backgroundImage`
+const reactNativeVersion = isWeb ? undefined : Platform.constants.reactNativeVersion;
+const isBackgroundImageStable = !!reactNativeVersion && (reactNativeVersion.major > 0 || reactNativeVersion.minor >= 87);
 
 /**
  * Reanimated ignores the dependency array on native (the Babel plugin collects the closure) and warns about it since 4.6. Old
@@ -54,6 +65,48 @@ export const HSVA2HSLA_string = (h: number, s: number, v: number, a = 1) => {
   return `hsla(${h.toFixed(3)}, ${(sln * 100).toFixed(3)}%, ${(l * 100).toFixed(3)}%, ${a})`;
 };
 
+export const hueSpectrumColorStops = ['#f00', '#ff0', '#0f0', '#0ff', '#00f', '#f0f', '#f00'];
+
+/**
+ * Create a CSS linear gradient. The angle is physical and does not flip in RTL.
+ *
+ * @worklet
+ */
+export const createLinearGradient = (angle: number, colorStops: string[]) => {
+  'worklet';
+
+  return `linear-gradient(${angle}deg, ${colorStops.join(', ')})`;
+};
+
+/**
+ * Create a style that paints linear gradients as one background. The first gradient is on top.
+ *
+ * @worklet
+ */
+export const createBackgroundImageStyle = (linearGradients: string[]) => {
+  'worklet';
+
+  const backgroundImage = linearGradients.join(', ');
+
+  if (isWeb) {
+    return { background: backgroundImage };
+  }
+
+  return isBackgroundImageStable ? { backgroundImage } : { experimental_backgroundImage: backgroundImage };
+};
+
+/**
+ * Create a style that paints a linear gradient along a slider, from its minimum value to its maximum value.
+ *
+ * @worklet
+ */
+export const createSliderGradientStyle = (colorStops: string[], vertical: boolean, reverse: boolean) => {
+  'worklet';
+
+  const angle = vertical ? (reverse ? 0 : 180) : reverse ? 270 : 90;
+  return createBackgroundImageStyle([createLinearGradient(angle, colorStops)]);
+};
+
 /** Render children only if the `if` property is `true` */
 export function ConditionalRendering(props: { children: React.ReactNode; if: boolean }) {
   if (!props.if) {
@@ -66,15 +119,6 @@ export function ConditionalRendering(props: { children: React.ReactNode; if: boo
 /** Render children for native platforms only (Android, iOS) */
 export function RenderNativeOnly({ children }: { children: React.ReactNode }) {
   if (isWeb) {
-    return null;
-  }
-
-  return <>{children}</>;
-}
-
-/** Render children for the web platform only */
-export function RenderWebOnly({ children }: { children: React.ReactNode }) {
-  if (!isWeb) {
     return null;
   }
 

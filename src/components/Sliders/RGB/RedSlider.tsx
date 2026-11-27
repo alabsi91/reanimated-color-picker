@@ -6,7 +6,14 @@ import colorKit from '@colorKit';
 import usePickerContext from '@context';
 import { SliderCore } from '@sliders/SliderCore';
 import Thumb from '@thumb';
-import { getStyle, getWebDependencies, isRtl, isWeb, RenderNativeOnly } from '@utils';
+import {
+  ConditionalRendering,
+  createSliderGradientStyle,
+  getStyle,
+  getWebDependencies,
+  isLinearGradientSupported,
+  isRtl,
+} from '@utils';
 
 import type { SliderProps } from '@types';
 
@@ -62,7 +69,7 @@ export function RedSlider({ gestures = [], style = {}, vertical = false, reverse
 
   const imageStyle = useAnimatedStyle(
     () => {
-      if (isWeb) {
+      if (isLinearGradientSupported) {
         return {};
       }
 
@@ -84,21 +91,16 @@ export function RedSlider({ gestures = [], style = {}, vertical = false, reverse
     getWebDependencies([rgb, width, height, adaptSpectrum, vertical, reverse]),
   );
 
-  const sliderBackground = useAnimatedStyle(
+  const sliderBackgroundStyle = useAnimatedStyle(
     () => {
-      const g = Math.round(rgb.value.g);
-      const b = Math.round(rgb.value.b);
+      const g = adaptSpectrum ? Math.round(rgb.value.g) : 0;
+      const b = adaptSpectrum ? Math.round(rgb.value.b) : 0;
 
-      if (isWeb) {
-        const deg = vertical ? (reverse ? 180 : 0) : reverse ? 90 : 270;
-        return {
-          background: adaptSpectrum
-            ? `linear-gradient(${deg}deg, rgb(255, ${g}, ${b}) 0%, rgb(0, ${g}, ${b}) 100%)`
-            : `linear-gradient(${deg}deg, rgb(255, 0, 0) 0%, rgb(0, 0, 0) 100%)`,
-        };
+      if (isLinearGradientSupported) {
+        return createSliderGradientStyle([`rgb(0, ${g}, ${b})`, `rgb(255, ${g}, ${b})`], vertical, reverse);
       }
 
-      return { backgroundColor: adaptSpectrum ? `rgb(0, ${g}, ${b})` : 'rgb(0, 0, 0)' };
+      return { backgroundColor: `rgb(0, ${g}, ${b})` };
     },
     getWebDependencies([rgb, adaptSpectrum, reverse, vertical]),
   );
@@ -142,7 +144,7 @@ export function RedSlider({ gestures = [], style = {}, vertical = false, reverse
 
   return (
     <SliderCore
-      style={[style, { position: 'relative', borderRadius, borderWidth: 0, padding: 0 }, sliderBackground]}
+      style={[style, { position: 'relative', borderRadius, borderWidth: 0, padding: 0 }, sliderBackgroundStyle]}
       maxValue={255}
       label={props.accessibilityLabel ?? 'Red Slider'}
       hint={props.accessibilityHint}
@@ -159,11 +161,11 @@ export function RedSlider({ gestures = [], style = {}, vertical = false, reverse
       onUpdate={onUpdate}
       onEnd={onEnd}
     >
-      <RenderNativeOnly>
+      <ConditionalRendering if={!isLinearGradientSupported}>
         <View style={{ flex: 1, borderRadius, overflow: 'hidden' }} aria-hidden>
           <Animated.Image source={require('@assets/blackGradient.png')} style={imageStyle} />
         </View>
-      </RenderNativeOnly>
+      </ConditionalRendering>
 
       <Thumb
         thumbShape={thumbShape}

@@ -5,7 +5,15 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-na
 import usePickerContext from '@context';
 import { SliderCore } from '@sliders/SliderCore';
 import Thumb from '@thumb';
-import { getStyle, getWebDependencies, HSVA2HSLA_string, isRtl } from '@utils';
+import {
+  ConditionalRendering,
+  createSliderGradientStyle,
+  getStyle,
+  getWebDependencies,
+  HSVA2HSLA_string,
+  isLinearGradientSupported,
+  isRtl,
+} from '@utils';
 
 import type { SliderProps } from '@types';
 
@@ -48,9 +56,17 @@ export function BrightnessSlider({ gestures = [], style = {}, vertical = false, 
     getWebDependencies([height, width, brightnessValue, handleScale, vertical, reverse, boundedThumb, thumbSize]),
   );
 
-  const activeColorStyle = useAnimatedStyle(
-    () => ({ backgroundColor: HSVA2HSLA_string(hueValue.value, adaptSpectrum ? saturationValue.value : 100, 100) }),
-    getWebDependencies([hueValue, saturationValue, adaptSpectrum]),
+  const sliderBackgroundStyle = useAnimatedStyle(
+    () => {
+      const activeColor = HSVA2HSLA_string(hueValue.value, adaptSpectrum ? saturationValue.value : 100, 100);
+
+      if (isLinearGradientSupported) {
+        return createSliderGradientStyle(['#000', activeColor], vertical, reverse);
+      }
+
+      return { backgroundColor: activeColor };
+    },
+    getWebDependencies([hueValue, saturationValue, adaptSpectrum, vertical, reverse]),
   );
 
   const imageStyle = useAnimatedStyle(
@@ -106,7 +122,7 @@ export function BrightnessSlider({ gestures = [], style = {}, vertical = false, 
 
   return (
     <SliderCore
-      style={[style, { position: 'relative', borderRadius, borderWidth: 0, padding: 0 }, activeColorStyle]}
+      style={[style, { position: 'relative', borderRadius, borderWidth: 0, padding: 0 }, sliderBackgroundStyle]}
       label={props.accessibilityLabel ?? 'Brightness Slider'}
       hint={props.accessibilityHint}
       currentValue={brightnessValue}
@@ -122,9 +138,11 @@ export function BrightnessSlider({ gestures = [], style = {}, vertical = false, 
       onUpdate={onUpdate}
       onEnd={onEnd}
     >
-      <View style={{ flex: 1, borderRadius, overflow: 'hidden' }} aria-hidden>
-        <Animated.Image source={require('@assets/blackGradient.png')} style={imageStyle} />
-      </View>
+      <ConditionalRendering if={!isLinearGradientSupported}>
+        <View style={{ flex: 1, borderRadius, overflow: 'hidden' }} aria-hidden>
+          <Animated.Image source={require('@assets/blackGradient.png')} style={imageStyle} />
+        </View>
+      </ConditionalRendering>
 
       <Thumb
         thumbShape={thumbShape}

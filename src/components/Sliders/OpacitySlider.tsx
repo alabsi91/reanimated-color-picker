@@ -5,7 +5,17 @@ import Animated, { useAnimatedProps, useAnimatedStyle, useSharedValue, withTimin
 import usePickerContext from '@context';
 import { SliderCore } from '@sliders/SliderCore';
 import Thumb from '@thumb';
-import { getStyle, getWebDependencies, HSVA2HSLA_string, isRtl, isWeb, RenderNativeOnly, RenderWebOnly } from '@utils';
+import {
+  ConditionalRendering,
+  createSliderGradientStyle,
+  getStyle,
+  getWebDependencies,
+  HSVA2HSLA_string,
+  isLinearGradientSupported,
+  isRtl,
+  isWeb,
+  RenderNativeOnly,
+} from '@utils';
 
 import { opacityTextureWebStyle } from '../OpacityTextureView';
 
@@ -50,27 +60,27 @@ export function OpacitySlider({ gestures = [], style = {}, vertical = false, rev
     getWebDependencies([width, height, alphaValue, handleScale, vertical, reverse, boundedThumb, thumbSize]),
   );
 
-  const activeColorStyle = useAnimatedStyle(
+  const gradientStyle = useAnimatedStyle(
     () => {
-      if (!isWeb) {
-        return { backgroundColor: '#0000' };
+      if (!isLinearGradientSupported) {
+        return {};
       }
 
-      const deg = vertical ? (reverse ? 1 : 180) : reverse ? 270 : 90;
-      const color = HSVA2HSLA_string(
-        hueValue.value,
-        adaptSpectrum ? saturationValue.value : 100,
-        adaptSpectrum ? brightnessValue.value : 100,
-      );
+      const saturation = adaptSpectrum ? saturationValue.value : 100;
+      const brightness = adaptSpectrum ? brightnessValue.value : 100;
+      const colorStops = [
+        HSVA2HSLA_string(hueValue.value, saturation, brightness, 0),
+        HSVA2HSLA_string(hueValue.value, saturation, brightness),
+      ];
 
-      return { background: `linear-gradient(${deg}deg, transparent 0%, ${color} 100%)` };
+      return createSliderGradientStyle(colorStops, vertical, reverse);
     },
     getWebDependencies([hueValue, saturationValue, brightnessValue, adaptSpectrum, vertical, reverse]),
   );
 
   const imageStyle = useAnimatedStyle(
     () => {
-      if (isWeb) {
+      if (isLinearGradientSupported) {
         return {};
       }
 
@@ -90,8 +100,12 @@ export function OpacitySlider({ gestures = [], style = {}, vertical = false, rev
     getWebDependencies([width, height, vertical, reverse]),
   );
 
-  const imageTintColorProp = useAnimatedProps(
+  const imageTintColorProp = useAnimatedProps<{ tintColor: string }>(
     () => {
+      if (isLinearGradientSupported) {
+        return {};
+      }
+
       return {
         tintColor: HSVA2HSLA_string(
           hueValue.value,
@@ -158,7 +172,13 @@ export function OpacitySlider({ gestures = [], style = {}, vertical = false, rev
           resizeMode='repeat'
           aria-hidden
         />
+      </RenderNativeOnly>
 
+      <ConditionalRendering if={isLinearGradientSupported}>
+        <Animated.View style={[{ flex: 1, borderRadius }, gradientStyle]} aria-hidden />
+      </ConditionalRendering>
+
+      <ConditionalRendering if={!isLinearGradientSupported}>
         <View style={{ flex: 1, borderRadius, overflow: 'hidden' }} aria-hidden>
           <Animated.Image
             source={require('@assets/blackGradient.png')}
@@ -167,11 +187,7 @@ export function OpacitySlider({ gestures = [], style = {}, vertical = false, rev
             animatedProps={imageTintColorProp}
           />
         </View>
-      </RenderNativeOnly>
-
-      <RenderWebOnly>
-        <Animated.View style={[{ flex: 1, borderRadius }, activeColorStyle]} aria-hidden />
-      </RenderWebOnly>
+      </ConditionalRendering>
 
       <Thumb
         thumbShape={thumbShape}

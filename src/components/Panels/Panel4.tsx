@@ -6,7 +6,17 @@ import usePickerContext from '@context';
 import { PanelCore } from '@panels/PanelCore';
 import { styles } from '@styles';
 import Thumb from '@thumb';
-import { clamp, getStyle, getWebDependencies, isRtl } from '@utils';
+import {
+  clamp,
+  ConditionalRendering,
+  createBackgroundImageStyle,
+  createLinearGradient,
+  getStyle,
+  getWebDependencies,
+  hueSpectrumColorStops,
+  isLinearGradientSupported,
+  isRtl,
+} from '@utils';
 
 import type { Panel4Props } from '@types';
 
@@ -93,6 +103,17 @@ export function Panel4({
     getWebDependencies([height, width, reverseHue]),
   );
 
+  const saturationAndBrightnessGradient = createLinearGradient(reverseHorizontalChannels ? 270 : 90, [
+    '#fff',
+    '#fff0 50%',
+    '#0000 50%',
+    '#000',
+  ]);
+  const hueGradient = createLinearGradient(reverseHue ? 180 : 0, hueSpectrumColorStops);
+  const panelBackgroundStyle = isLinearGradientSupported
+    ? createBackgroundImageStyle([saturationAndBrightnessGradient, hueGradient])
+    : {};
+
   const onBegin = () => {
     'worklet';
     handleScale.value = withTiming(thumbScaleAnimationValue, { duration: thumbScaleAnimationDuration });
@@ -144,7 +165,12 @@ export function Panel4({
 
   return (
     <PanelCore
-      style={[styles.panelContainer, style, { position: 'relative', height: heightStyle, borderWidth: 0, padding: 0 }]}
+      style={[
+        styles.panelContainer,
+        style,
+        { position: 'relative', height: heightStyle, borderWidth: 0, padding: 0 },
+        panelBackgroundStyle,
+      ]}
       label={props.accessibilityLabel ?? 'Hue, saturation, and brightness 2D slider'}
       hint={props.accessibilityHint ?? 'Double tap to switch between hue and saturation/brightness'}
       labelX='Saturation/Brightness'
@@ -163,28 +189,30 @@ export function Panel4({
       onUpdate={onUpdate}
       onEnd={onEnd}
     >
-      <View style={{ flex: 1, borderRadius, overflow: 'hidden' }} aria-hidden>
-        <Animated.Image source={require('@assets/Hue.png')} style={[styles.panelImage, panelImageStyle]} resizeMode='stretch' />
-      </View>
+      <ConditionalRendering if={!isLinearGradientSupported}>
+        <View style={{ flex: 1, borderRadius, overflow: 'hidden' }} aria-hidden>
+          <Animated.Image source={require('@assets/Hue.png')} style={[styles.panelImage, panelImageStyle]} resizeMode='stretch' />
+        </View>
 
-      <View
-        style={[
-          styles.panelImage,
-          {
-            borderRadius,
-            flexDirection: isRtl ? 'row-reverse' : 'row',
-            transform: [{ scaleX: reverseHorizontalChannels ? -1 : 1 }],
-          },
-        ]}
-        aria-hidden
-      >
-        <Image source={require('@assets/blackGradient.png')} style={{ flex: 1 }} tintColor='#fff' resizeMode='stretch' />
-        <Image
-          source={require('@assets/blackGradient.png')}
-          style={{ flex: 1, transform: [{ scaleX: -1 }] }}
-          resizeMode='stretch'
-        />
-      </View>
+        <View
+          style={[
+            styles.panelImage,
+            {
+              borderRadius,
+              flexDirection: isRtl ? 'row-reverse' : 'row',
+              transform: [{ scaleX: reverseHorizontalChannels ? -1 : 1 }],
+            },
+          ]}
+          aria-hidden
+        >
+          <Image source={require('@assets/blackGradient.png')} style={{ flex: 1 }} tintColor='#fff' resizeMode='stretch' />
+          <Image
+            source={require('@assets/blackGradient.png')}
+            style={{ flex: 1, transform: [{ scaleX: -1 }] }}
+            resizeMode='stretch'
+          />
+        </View>
+      </ConditionalRendering>
 
       <Thumb
         thumbShape={thumbShape}

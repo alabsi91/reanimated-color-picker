@@ -5,7 +5,15 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-na
 import usePickerContext from '@context';
 import { SliderCore } from '@sliders/SliderCore';
 import Thumb from '@thumb';
-import { ConditionalRendering, getStyle, getWebDependencies, HSVA2HSLA_string, isRtl } from '@utils';
+import {
+  ConditionalRendering,
+  createSliderGradientStyle,
+  getStyle,
+  getWebDependencies,
+  HSVA2HSLA_string,
+  isLinearGradientSupported,
+  isRtl,
+} from '@utils';
 
 import type { SliderProps } from '@types';
 
@@ -48,14 +56,23 @@ export function SaturationSlider({ gestures = [], style = {}, vertical = false, 
     getWebDependencies([width, height, saturationValue, handleScale, vertical, reverse, boundedThumb, thumbSize]),
   );
 
-  const activeColorStyle = useAnimatedStyle(
-    () => ({ backgroundColor: HSVA2HSLA_string(hueValue.value, 100, 100) }),
-    getWebDependencies([hueValue]),
+  const sliderBackgroundStyle = useAnimatedStyle(
+    () => {
+      if (isLinearGradientSupported) {
+        const brightness = adaptSpectrum ? brightnessValue.value : 100;
+        const colorStops = [HSVA2HSLA_string(hueValue.value, 0, brightness), HSVA2HSLA_string(hueValue.value, 100, brightness)];
+
+        return createSliderGradientStyle(colorStops, vertical, reverse);
+      }
+
+      return { backgroundColor: HSVA2HSLA_string(hueValue.value, 100, 100) };
+    },
+    getWebDependencies([hueValue, brightnessValue, adaptSpectrum, vertical, reverse]),
   );
 
   const activeBrightnessStyle = useAnimatedStyle(
     () => {
-      if (!adaptSpectrum) {
+      if (!adaptSpectrum || isLinearGradientSupported) {
         return {};
       }
 
@@ -117,7 +134,7 @@ export function SaturationSlider({ gestures = [], style = {}, vertical = false, 
 
   return (
     <SliderCore
-      style={[style, { position: 'relative', borderRadius, borderWidth: 0, padding: 0 }, activeColorStyle]}
+      style={[style, { position: 'relative', borderRadius, borderWidth: 0, padding: 0 }, sliderBackgroundStyle]}
       label={props.accessibilityLabel ?? 'Saturation Slider'}
       hint={props.accessibilityHint}
       currentValue={saturationValue}
@@ -133,12 +150,14 @@ export function SaturationSlider({ gestures = [], style = {}, vertical = false, 
       onUpdate={onUpdate}
       onEnd={onEnd}
     >
-      <View style={{ flex: 1, borderRadius, overflow: 'hidden' }} aria-hidden>
-        <Animated.Image source={require('@assets/blackGradient.png')} style={imageStyle} tintColor='#fff' />
-      </View>
+      <ConditionalRendering if={!isLinearGradientSupported}>
+        <View style={{ flex: 1, borderRadius, overflow: 'hidden' }} aria-hidden>
+          <Animated.Image source={require('@assets/blackGradient.png')} style={imageStyle} tintColor='#fff' />
+        </View>
 
-      <ConditionalRendering if={adaptSpectrum}>
-        <Animated.View style={[{ borderRadius }, activeBrightnessStyle, StyleSheet.absoluteFill]} aria-hidden />
+        <ConditionalRendering if={adaptSpectrum}>
+          <Animated.View style={[{ borderRadius }, activeBrightnessStyle, StyleSheet.absoluteFill]} aria-hidden />
+        </ConditionalRendering>
       </ConditionalRendering>
 
       <Thumb

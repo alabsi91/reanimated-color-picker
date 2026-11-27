@@ -7,7 +7,15 @@ import usePickerContext from '@context';
 import { SliderCore } from '@sliders/SliderCore';
 import { styles } from '@styles';
 import Thumb from '@thumb';
-import { enableAndroidHardwareTextures, getStyle, getWebDependencies, isRtl } from '@utils';
+import {
+  ConditionalRendering,
+  createSliderGradientStyle,
+  enableAndroidHardwareTextures,
+  getStyle,
+  getWebDependencies,
+  isLinearGradientSupported,
+  isRtl,
+} from '@utils';
 
 import type { SliderProps } from '@types';
 
@@ -75,9 +83,17 @@ export function LuminanceSlider({ gestures = [], style = {}, vertical = false, r
     getWebDependencies([height, width, hsl, handleScale, vertical, reverse, boundedThumb, thumbSize]),
   );
 
-  const activeColorStyle = useAnimatedStyle(
-    () => ({ backgroundColor: `hsl(${hsl.value.h.toFixed(3)}, ${adaptSpectrum ? hsl.value.s.toFixed(3) : 100}%, 50%)` }),
-    getWebDependencies([hsl, adaptSpectrum]),
+  const sliderBackgroundStyle = useAnimatedStyle(
+    () => {
+      const activeColor = `hsl(${hsl.value.h.toFixed(3)}, ${adaptSpectrum ? hsl.value.s.toFixed(3) : 100}%, 50%)`;
+
+      if (isLinearGradientSupported) {
+        return createSliderGradientStyle(['#000', activeColor, '#fff'], vertical, reverse);
+      }
+
+      return { backgroundColor: activeColor };
+    },
+    getWebDependencies([hsl, adaptSpectrum, vertical, reverse]),
   );
 
   const imageStyle = useAnimatedStyle(
@@ -133,7 +149,7 @@ export function LuminanceSlider({ gestures = [], style = {}, vertical = false, r
 
   return (
     <SliderCore
-      style={[style, { position: 'relative', borderRadius, borderWidth: 0, padding: 0 }, activeColorStyle]}
+      style={[style, { position: 'relative', borderRadius, borderWidth: 0, padding: 0 }, sliderBackgroundStyle]}
       label={props.accessibilityLabel ?? 'Luminance Slider'}
       hint={props.accessibilityHint}
       currentValue={hslLuminanceValue}
@@ -149,18 +165,20 @@ export function LuminanceSlider({ gestures = [], style = {}, vertical = false, r
       onUpdate={onUpdate}
       onEnd={onEnd}
     >
-      <Animated.View
-        style={[styles.panelImage, imageStyle, { borderRadius, flexDirection: isRtl ? 'row-reverse' : 'row' }]}
-        renderToHardwareTextureAndroid={enableAndroidHardwareTextures}
-        aria-hidden
-      >
-        <Image source={require('@assets/blackGradient.png')} style={{ flex: 1 }} tintColor='#fff' resizeMode='stretch' />
-        <Image
-          source={require('@assets/blackGradient.png')}
-          style={{ flex: 1, transform: [{ scaleX: -1 }] }}
-          resizeMode='stretch'
-        />
-      </Animated.View>
+      <ConditionalRendering if={!isLinearGradientSupported}>
+        <Animated.View
+          style={[styles.panelImage, imageStyle, { borderRadius, flexDirection: isRtl ? 'row-reverse' : 'row' }]}
+          renderToHardwareTextureAndroid={enableAndroidHardwareTextures}
+          aria-hidden
+        >
+          <Image source={require('@assets/blackGradient.png')} style={{ flex: 1 }} tintColor='#fff' resizeMode='stretch' />
+          <Image
+            source={require('@assets/blackGradient.png')}
+            style={{ flex: 1, transform: [{ scaleX: -1 }] }}
+            resizeMode='stretch'
+          />
+        </Animated.View>
+      </ConditionalRendering>
 
       <Thumb
         thumbShape={thumbShape}
