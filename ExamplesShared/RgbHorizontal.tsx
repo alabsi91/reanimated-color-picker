@@ -51,22 +51,30 @@ export default function Example() {
       >
         <View>
           <Text style={colorPickerStyle.sliderTitle}>Red</Text>
-          <RedSlider style={colorPickerStyle.sliderStyle} />
+          <View style={colorPickerStyle.sliderBorderContainer}>
+            <RedSlider style={colorPickerStyle.sliderStyle} />
+          </View>
         </View>
 
         <View>
           <Text style={colorPickerStyle.sliderTitle}>Green</Text>
-          <GreenSlider style={colorPickerStyle.sliderStyle} />
+          <View style={colorPickerStyle.sliderBorderContainer}>
+            <GreenSlider style={colorPickerStyle.sliderStyle} />
+          </View>
         </View>
 
         <View>
           <Text style={colorPickerStyle.sliderTitle}>Blue</Text>
-          <BlueSlider style={colorPickerStyle.sliderStyle} />
+          <View style={colorPickerStyle.sliderBorderContainer}>
+            <BlueSlider style={colorPickerStyle.sliderStyle} />
+          </View>
         </View>
 
         <View>
           <Text style={colorPickerStyle.sliderTitle}>Opacity</Text>
-          <OpacitySlider style={colorPickerStyle.sliderStyle} />
+          <View style={colorPickerStyle.sliderBorderContainer}>
+            <OpacitySlider style={colorPickerStyle.sliderStyle} />
+          </View>
         </View>
 
         <Divider />

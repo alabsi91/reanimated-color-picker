@@ -1,19 +1,9 @@
-import { Platform, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
-const shadow = Platform.select({
-  web: { boxShadow: 'rgba(0, 0, 0, 0.3) 0px 0px 2px' },
-  default: {
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-
-    elevation: 2,
-  },
-});
+const border = {
+  borderWidth: StyleSheet.hairlineWidth,
+  borderColor: 'rgba(0, 0, 0, 0.15)',
+};
 
 export const colorPickerStyle = StyleSheet.create({
   title: {
@@ -32,20 +22,32 @@ export const colorPickerStyle = StyleSheet.create({
     backgroundColor: '#eae5f1',
     padding: 20,
     borderRadius: 20,
-    ...shadow,
   },
   panelStyle: {
     borderRadius: 16,
-    ...shadow,
   },
   sliderStyle: {
     borderRadius: 20,
-    ...shadow,
   },
   sliderVerticalStyle: {
     borderRadius: 20,
     height: 300,
-    ...shadow,
+  },
+  sliderBorderContainer: {
+    borderRadius: 20 + StyleSheet.hairlineWidth,
+    ...border,
+  },
+  panelBorderContainer: {
+    borderRadius: 16 + StyleSheet.hairlineWidth,
+    ...border,
+  },
+  gridPanelBorderContainer: {
+    borderRadius: 4 + StyleSheet.hairlineWidth,
+    ...border,
+  },
+  wheelPanelBorderContainer: {
+    borderRadius: 2000,
+    ...border,
   },
   sliderTitle: {
     color: '#000',
@@ -82,5 +84,9 @@ export const colorPickerStyle = StyleSheet.create({
     marginBottom: 0,
     marginHorizontal: 0,
     marginVertical: 0,
+    boxShadow: 'none',
+    shadowOpacity: 0,
+    elevation: 0,
+    ...border,
   },
 });

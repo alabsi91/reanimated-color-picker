@@ -38,8 +38,12 @@ export default function Example() {
         onCompleteJS={onColorPick}
         style={colorPickerStyle.picker}
       >
-        <Panel5 style={[colorPickerStyle.panelStyle, { borderRadius: 4 }]} />
-        <OpacitySlider style={colorPickerStyle.sliderStyle} adaptSpectrum />
+        <View style={colorPickerStyle.gridPanelBorderContainer}>
+          <Panel5 style={[colorPickerStyle.panelStyle, { borderRadius: 4 }]} />
+        </View>
+        <View style={colorPickerStyle.sliderBorderContainer}>
+          <OpacitySlider style={colorPickerStyle.sliderStyle} adaptSpectrum />
+        </View>
         <Divider />
         <PreviewText style={colorPickerStyle.previewTxt} colorFormat='hsla' />
       </ColorPicker>

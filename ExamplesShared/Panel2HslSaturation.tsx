@@ -40,9 +40,15 @@ export default function Example() {
           style={colorPickerStyle.picker}
           adaptSpectrum
         >
-          <Panel2 style={colorPickerStyle.panelStyle} thumbShape='ring' verticalChannel='hsl-saturation' />
-          <LuminanceSlider style={colorPickerStyle.sliderStyle} />
-          <OpacitySlider style={colorPickerStyle.sliderStyle} />
+          <View style={colorPickerStyle.panelBorderContainer}>
+            <Panel2 style={colorPickerStyle.panelStyle} thumbShape='ring' verticalChannel='hsl-saturation' />
+          </View>
+          <View style={colorPickerStyle.sliderBorderContainer}>
+            <LuminanceSlider style={colorPickerStyle.sliderStyle} />
+          </View>
+          <View style={colorPickerStyle.sliderBorderContainer}>
+            <OpacitySlider style={colorPickerStyle.sliderStyle} />
+          </View>
           <Divider />
           <InputWidget inputStyle={colorPickerStyle.inputStyle} iconColor='#707070' />
         </ColorPicker>

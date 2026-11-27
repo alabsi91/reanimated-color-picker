@@ -50,9 +50,15 @@ export default function Example() {
           <Pressable style={StyleSheet.absoluteFill} onPress={() => setIsModalOpen(false)} aria-label='Close color picker' />
 
           <View style={[colorPickerStyle.pickerContainer, colorPickerStyle.picker]}>
-            <Panel1 style={colorPickerStyle.panelStyle} />
-            <HueSlider style={colorPickerStyle.sliderStyle} />
-            <OpacitySlider style={colorPickerStyle.sliderStyle} />
+            <View style={colorPickerStyle.panelBorderContainer}>
+              <Panel1 style={colorPickerStyle.panelStyle} />
+            </View>
+            <View style={colorPickerStyle.sliderBorderContainer}>
+              <HueSlider style={colorPickerStyle.sliderStyle} />
+            </View>
+            <View style={colorPickerStyle.sliderBorderContainer}>
+              <OpacitySlider style={colorPickerStyle.sliderStyle} />
+            </View>
 
             <Divider />
             <Swatches

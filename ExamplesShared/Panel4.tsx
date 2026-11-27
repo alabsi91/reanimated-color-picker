@@ -38,8 +38,12 @@ export default function Example() {
         onCompleteJS={onColorPick}
         style={colorPickerStyle.picker}
       >
-        <Panel4 style={colorPickerStyle.panelStyle} thumbShape='ring' />
-        <OpacitySlider style={colorPickerStyle.sliderStyle} />
+        <View style={colorPickerStyle.panelBorderContainer}>
+          <Panel4 style={colorPickerStyle.panelStyle} thumbShape='ring' />
+        </View>
+        <View style={colorPickerStyle.sliderBorderContainer}>
+          <OpacitySlider style={colorPickerStyle.sliderStyle} />
+        </View>
         <Divider />
         <PreviewText style={colorPickerStyle.previewTxt} colorFormat='hwba' />
       </ColorPicker>

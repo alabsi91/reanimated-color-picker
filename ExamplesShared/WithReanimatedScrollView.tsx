@@ -61,22 +61,35 @@ export default function Example() {
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <View style={{ alignItems: 'center' }}>
               <Text style={colorPickerStyle.sliderTitle}>H</Text>
-              <HueSlider gestures={[hueGesture]} style={colorPickerStyle.sliderVerticalStyle} vertical reverse />
+              <View style={colorPickerStyle.sliderBorderContainer}>
+                <HueSlider gestures={[hueGesture]} style={colorPickerStyle.sliderVerticalStyle} vertical reverse />
+              </View>
             </View>
 
             <View style={{ alignItems: 'center' }}>
               <Text style={colorPickerStyle.sliderTitle}>S</Text>
-              <HSLSaturationSlider gestures={[saturationGesture]} style={colorPickerStyle.sliderVerticalStyle} vertical reverse />
+              <View style={colorPickerStyle.sliderBorderContainer}>
+                <HSLSaturationSlider
+                  gestures={[saturationGesture]}
+                  style={colorPickerStyle.sliderVerticalStyle}
+                  vertical
+                  reverse
+                />
+              </View>
             </View>
 
             <View style={{ alignItems: 'center' }}>
               <Text style={colorPickerStyle.sliderTitle}>L</Text>
-              <LuminanceSlider gestures={[lumGesture]} style={colorPickerStyle.sliderVerticalStyle} vertical reverse />
+              <View style={colorPickerStyle.sliderBorderContainer}>
+                <LuminanceSlider gestures={[lumGesture]} style={colorPickerStyle.sliderVerticalStyle} vertical reverse />
+              </View>
             </View>
 
             <View style={{ alignItems: 'center' }}>
               <Text style={colorPickerStyle.sliderTitle}>A</Text>
-              <OpacitySlider gestures={[opacityGesture]} style={colorPickerStyle.sliderVerticalStyle} vertical reverse />
+              <View style={colorPickerStyle.sliderBorderContainer}>
+                <OpacitySlider gestures={[opacityGesture]} style={colorPickerStyle.sliderVerticalStyle} vertical reverse />
+              </View>
             </View>
           </View>
         </ColorPicker>

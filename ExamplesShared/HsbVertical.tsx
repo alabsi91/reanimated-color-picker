@@ -51,22 +51,30 @@ export default function Example() {
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <View style={{ alignItems: 'center' }}>
             <Text style={colorPickerStyle.sliderTitle}>H</Text>
-            <HueSlider style={colorPickerStyle.sliderVerticalStyle} vertical reverse />
+            <View style={colorPickerStyle.sliderBorderContainer}>
+              <HueSlider style={colorPickerStyle.sliderVerticalStyle} vertical reverse />
+            </View>
           </View>
 
           <View style={{ alignItems: 'center' }}>
             <Text style={colorPickerStyle.sliderTitle}>S</Text>
-            <SaturationSlider style={colorPickerStyle.sliderVerticalStyle} vertical reverse />
+            <View style={colorPickerStyle.sliderBorderContainer}>
+              <SaturationSlider style={colorPickerStyle.sliderVerticalStyle} vertical reverse />
+            </View>
           </View>
 
           <View style={{ alignItems: 'center' }}>
             <Text style={colorPickerStyle.sliderTitle}>B</Text>
-            <BrightnessSlider style={colorPickerStyle.sliderVerticalStyle} vertical reverse />
+            <View style={colorPickerStyle.sliderBorderContainer}>
+              <BrightnessSlider style={colorPickerStyle.sliderVerticalStyle} vertical reverse />
+            </View>
           </View>
 
           <View style={{ alignItems: 'center' }}>
             <Text style={colorPickerStyle.sliderTitle}>A</Text>
-            <OpacitySlider style={colorPickerStyle.sliderVerticalStyle} vertical reverse />
+            <View style={colorPickerStyle.sliderBorderContainer}>
+              <OpacitySlider style={colorPickerStyle.sliderVerticalStyle} vertical reverse />
+            </View>
           </View>
         </View>
 

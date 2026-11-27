@@ -67,9 +67,15 @@ export default function Example() {
         <GestureHandlerRootView style={styles.sheetContent}>
           <View style={styles.sheetHandle} />
 
-          <Panel1 gestures={[panelGesture]} style={colorPickerStyle.panelStyle} />
-          <HueSlider gestures={[hueGesture]} style={colorPickerStyle.sliderStyle} />
-          <OpacitySlider gestures={[opacityGesture]} style={colorPickerStyle.sliderStyle} />
+          <View style={colorPickerStyle.panelBorderContainer}>
+            <Panel1 gestures={[panelGesture]} style={colorPickerStyle.panelStyle} />
+          </View>
+          <View style={colorPickerStyle.sliderBorderContainer}>
+            <HueSlider gestures={[hueGesture]} style={colorPickerStyle.sliderStyle} />
+          </View>
+          <View style={colorPickerStyle.sliderBorderContainer}>
+            <OpacitySlider gestures={[opacityGesture]} style={colorPickerStyle.sliderStyle} />
+          </View>
 
           <Divider />
           <Swatches

@@ -47,17 +47,23 @@ export default function Example() {
       >
         <Preview style={colorPickerStyle.previewStyle} textStyle={colorPickerStyle.previewTxt} />
         <Divider />
-        <Panel3 style={colorPickerStyle.panelStyle} renderCenterLine adaptSpectrum>
-          <ExtraThumb thumbShape='circle' hueTransform={120} />
-          <ExtraThumb thumbShape='circle' hueTransform={140} />
-          <ExtraThumb thumbShape='circle' hueTransform={160} />
-          <ExtraThumb thumbShape='circle' hueTransform={180} />
-          <ExtraThumb thumbShape='circle' hueTransform={200} />
-          <ExtraThumb thumbShape='circle' hueTransform={220} />
-          <ExtraThumb thumbShape='circle' hueTransform={240} />
-        </Panel3>
-        <BrightnessSlider style={colorPickerStyle.sliderStyle} />
-        <OpacitySlider style={colorPickerStyle.sliderStyle} />
+        <View style={colorPickerStyle.wheelPanelBorderContainer}>
+          <Panel3 style={colorPickerStyle.panelStyle} renderCenterLine adaptSpectrum>
+            <ExtraThumb thumbShape='circle' hueTransform={120} />
+            <ExtraThumb thumbShape='circle' hueTransform={140} />
+            <ExtraThumb thumbShape='circle' hueTransform={160} />
+            <ExtraThumb thumbShape='circle' hueTransform={180} />
+            <ExtraThumb thumbShape='circle' hueTransform={200} />
+            <ExtraThumb thumbShape='circle' hueTransform={220} />
+            <ExtraThumb thumbShape='circle' hueTransform={240} />
+          </Panel3>
+        </View>
+        <View style={colorPickerStyle.sliderBorderContainer}>
+          <BrightnessSlider style={colorPickerStyle.sliderStyle} />
+        </View>
+        <View style={colorPickerStyle.sliderBorderContainer}>
+          <OpacitySlider style={colorPickerStyle.sliderStyle} />
+        </View>
         <Divider />
         <Swatches style={colorPickerStyle.swatchesContainer} swatchStyle={colorPickerStyle.swatchStyle} colors={customSwatches} />
       </ColorPicker>

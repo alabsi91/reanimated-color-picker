@@ -39,9 +39,15 @@ export default function Example() {
         style={colorPickerStyle.picker}
         boundedThumb
       >
-        <Panel1 style={colorPickerStyle.panelStyle} />
-        <HueSlider style={colorPickerStyle.sliderStyle} />
-        <OpacitySlider style={colorPickerStyle.sliderStyle} />
+        <View style={colorPickerStyle.panelBorderContainer}>
+          <Panel1 style={colorPickerStyle.panelStyle} />
+        </View>
+        <View style={colorPickerStyle.sliderBorderContainer}>
+          <HueSlider style={colorPickerStyle.sliderStyle} />
+        </View>
+        <View style={colorPickerStyle.sliderBorderContainer}>
+          <OpacitySlider style={colorPickerStyle.sliderStyle} />
+        </View>
 
         <Divider />
         <Swatches style={colorPickerStyle.swatchesContainer} swatchStyle={colorPickerStyle.swatchStyle} colors={customSwatches} />

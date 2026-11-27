@@ -39,9 +39,15 @@ export default function Example() {
           onCompleteJS={onColorPick}
           style={colorPickerStyle.picker}
         >
-          <Panel2 style={colorPickerStyle.panelStyle} thumbShape='ring' reverseVerticalChannel reverseHue />
-          <BrightnessSlider style={colorPickerStyle.sliderStyle} />
-          <OpacitySlider style={colorPickerStyle.sliderStyle} />
+          <View style={colorPickerStyle.panelBorderContainer}>
+            <Panel2 style={colorPickerStyle.panelStyle} thumbShape='ring' reverseVerticalChannel reverseHue />
+          </View>
+          <View style={colorPickerStyle.sliderBorderContainer}>
+            <BrightnessSlider style={colorPickerStyle.sliderStyle} />
+          </View>
+          <View style={colorPickerStyle.sliderBorderContainer}>
+            <OpacitySlider style={colorPickerStyle.sliderStyle} />
+          </View>
           <Divider />
           <InputWidget inputStyle={colorPickerStyle.inputStyle} iconColor='#707070' />
         </ColorPicker>

@@ -51,22 +51,30 @@ export default function Example() {
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <View style={{ alignItems: 'center' }}>
             <Text style={colorPickerStyle.sliderTitle}>R</Text>
-            <RedSlider style={colorPickerStyle.sliderVerticalStyle} vertical reverse />
+            <View style={colorPickerStyle.sliderBorderContainer}>
+              <RedSlider style={colorPickerStyle.sliderVerticalStyle} vertical reverse />
+            </View>
           </View>
 
           <View style={{ alignItems: 'center' }}>
             <Text style={colorPickerStyle.sliderTitle}>G</Text>
-            <GreenSlider style={colorPickerStyle.sliderVerticalStyle} vertical reverse />
+            <View style={colorPickerStyle.sliderBorderContainer}>
+              <GreenSlider style={colorPickerStyle.sliderVerticalStyle} vertical reverse />
+            </View>
           </View>
 
           <View style={{ alignItems: 'center' }}>
             <Text style={colorPickerStyle.sliderTitle}>B</Text>
-            <BlueSlider style={colorPickerStyle.sliderVerticalStyle} vertical reverse />
+            <View style={colorPickerStyle.sliderBorderContainer}>
+              <BlueSlider style={colorPickerStyle.sliderVerticalStyle} vertical reverse />
+            </View>
           </View>
 
           <View style={{ alignItems: 'center' }}>
             <Text style={colorPickerStyle.sliderTitle}>A</Text>
-            <OpacitySlider style={colorPickerStyle.sliderVerticalStyle} vertical reverse />
+            <View style={colorPickerStyle.sliderBorderContainer}>
+              <OpacitySlider style={colorPickerStyle.sliderVerticalStyle} vertical reverse />
+            </View>
           </View>
         </View>
 

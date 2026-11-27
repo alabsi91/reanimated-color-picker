@@ -50,22 +50,30 @@ export default function Example() {
       >
         <View>
           <Text style={colorPickerStyle.sliderTitle}>Hue</Text>
-          <HueSlider style={colorPickerStyle.sliderStyle} />
+          <View style={colorPickerStyle.sliderBorderContainer}>
+            <HueSlider style={colorPickerStyle.sliderStyle} />
+          </View>
         </View>
 
         <View>
           <Text style={colorPickerStyle.sliderTitle}>Saturation</Text>
-          <HSLSaturationSlider style={colorPickerStyle.sliderStyle} reverse />
+          <View style={colorPickerStyle.sliderBorderContainer}>
+            <HSLSaturationSlider style={colorPickerStyle.sliderStyle} reverse />
+          </View>
         </View>
 
         <View>
           <Text style={colorPickerStyle.sliderTitle}>Luminance</Text>
-          <LuminanceSlider style={colorPickerStyle.sliderStyle} />
+          <View style={colorPickerStyle.sliderBorderContainer}>
+            <LuminanceSlider style={colorPickerStyle.sliderStyle} />
+          </View>
         </View>
 
         <View>
           <Text style={colorPickerStyle.sliderTitle}>Opacity</Text>
-          <OpacitySlider style={colorPickerStyle.sliderStyle} />
+          <View style={colorPickerStyle.sliderBorderContainer}>
+            <OpacitySlider style={colorPickerStyle.sliderStyle} />
+          </View>
         </View>
 
         <Divider />

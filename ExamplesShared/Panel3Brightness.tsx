@@ -41,9 +41,15 @@ export default function Example() {
       >
         <Preview style={colorPickerStyle.previewStyle} textStyle={colorPickerStyle.previewTxt} />
         <Divider />
-        <Panel3 style={colorPickerStyle.panelStyle} centerChannel='brightness' />
-        <SaturationSlider style={colorPickerStyle.sliderStyle} />
-        <OpacitySlider style={colorPickerStyle.sliderStyle} />
+        <View style={colorPickerStyle.wheelPanelBorderContainer}>
+          <Panel3 style={colorPickerStyle.panelStyle} centerChannel='brightness' />
+        </View>
+        <View style={colorPickerStyle.sliderBorderContainer}>
+          <SaturationSlider style={colorPickerStyle.sliderStyle} />
+        </View>
+        <View style={colorPickerStyle.sliderBorderContainer}>
+          <OpacitySlider style={colorPickerStyle.sliderStyle} />
+        </View>
         <Divider />
         <Swatches style={colorPickerStyle.swatchesContainer} swatchStyle={colorPickerStyle.swatchStyle} colors={customSwatches} />
       </ColorPicker>
